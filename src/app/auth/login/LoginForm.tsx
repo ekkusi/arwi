@@ -18,8 +18,6 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    // const csrfToken = await getCsrfToken();
-    console.log("Submitting form with data: ", values);
     await signIn("credentials", { ...values, callbackUrl: "/" });
   };
   return (

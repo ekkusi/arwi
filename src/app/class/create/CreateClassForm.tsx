@@ -59,10 +59,6 @@ export default function CreateClassForm({
   ...rest
 }: CreateClassFormProps) {
   const router = useRouter();
-  const session = useSession();
-  console.log(session);
-
-  console.log(process.env.NEXT_PUBLIC_GRAFBASE_API_URL);
   const validateName = (value: string) => {
     let error;
     if (value.length === 0) error = "Nimi ei saa olla tyhjä";
@@ -70,7 +66,6 @@ export default function CreateClassForm({
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    console.log("Submitting form with data: ", values);
     try {
       const { classCreate } = await graphqlClient.request(
         CreateClassForm_CreateClassMutation,
@@ -81,7 +76,7 @@ export default function CreateClassForm({
       );
       router.push("/");
     } catch (error) {
-      console.log("Error happened:", error);
+      console.error("Error happened:", error);
     }
   };
 
