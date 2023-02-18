@@ -11,6 +11,8 @@ import {
   TextProps,
   ListProps,
   List as ChakraList,
+  UnorderedList as ChakraUnorderedList,
+  OrderedList as ChakraOrderedList,
   ListItemProps,
   ListItem as ChakraListItem,
   Button as ChakraButton,
@@ -40,6 +42,12 @@ export const Text = forwardRef<TextProps, "p">((props, ref) => (
 ));
 export const List = forwardRef<ListProps, "ul">((props, ref) => (
   <ChakraList ref={ref} {...props} />
+));
+export const OrderedList = forwardRef<ListProps, "ol">((props, ref) => (
+  <ChakraOrderedList ref={ref} {...props} />
+));
+export const UnorderedList = forwardRef<ListProps, "ul">((props, ref) => (
+  <ChakraUnorderedList ref={ref} {...props} />
 ));
 export const ListItem = forwardRef<ListItemProps, "li">((props, ref) => (
   <ChakraListItem ref={ref} {...props} />

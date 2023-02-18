@@ -5,17 +5,22 @@ import {
   theme as baseTheme,
   withDefaultColorScheme,
 } from "@chakra-ui/react";
-import { Button, Input } from "./components";
+import { Button, FormLabel, Input } from "./components";
 
 const colors = {
   "light-gray": baseTheme.colors.gray["100"],
   "medium-gray": baseTheme.colors.gray["200"],
+  // TODO: Should probably configure other reds as well, this only changes red.500 (which is used in errors)
+  red: {
+    500: baseTheme.colors.red["700"],
+  },
 };
 
 const theme = extendTheme(
   {
     fonts: {
-      // heading: "Oxygen",
+      heading: `Raleway, sans-serif`,
+      body: `'Open Sans', sans-serif`,
       // body: "Raleway",
     },
     fontSizes: {
@@ -46,14 +51,17 @@ const theme = extendTheme(
         body: {
           fontSize: { base: "md", md: "lg" },
         },
-        h1: {
-          fontSize: { base: "4xl", md: "6xl" },
+        "h1, h2, h3": {
+          fontFamily: theme.fonts.heading,
         },
-        h2: {
+        h1: {
           fontSize: { base: "3xl", md: "4xl" },
         },
-        h3: {
+        h2: {
           fontSize: { base: "2xl", md: "3xl" },
+        },
+        h3: {
+          fontSize: { base: "xl", md: "2xl" },
         },
       }),
     },
@@ -63,6 +71,7 @@ const theme = extendTheme(
     components: {
       Button,
       Input,
+      FormLabel,
     },
   },
   withDefaultColorScheme({ colorScheme: "green" })

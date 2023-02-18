@@ -10,7 +10,7 @@ import {
   Text,
 } from "@/components/chakra";
 import FormField from "@/components/FormField";
-import { BoxProps } from "@chakra-ui/react";
+import { BoxProps, Heading } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 
 type CreateClassFormProps = BoxProps & {
@@ -38,9 +38,11 @@ export default function CreateClassForm({
   return (
     <Formik initialValues={{ name: "" }} onSubmit={handleSubmit}>
       {() => (
-        <Flex as={Form} flexDirection="column" bg="white" {...rest}>
+        <Flex as={Form} flex="1" flexDirection="column" bg="white" {...rest}>
+          <Text as="h1" textAlign="center">
+            Uusi luokka
+          </Text>
           <FormField name="name" label="Luokan nimi" validate={validateName} />
-          {/* <Field as={Input} type="text" name="name" /> */}
           <Button type="submit" marginTop="auto">
             Luo luokka
           </Button>

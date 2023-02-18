@@ -3,11 +3,11 @@ import {
   SystemStyleInterpolation,
 } from "@chakra-ui/react";
 
-const inputBaseStyle: SystemStyleInterpolation = ({ colorScheme }) => {
+const inputBaseStyle: SystemStyleInterpolation = ({ colorScheme, theme }) => {
   const focusStyles = {
-    border: "2px",
+    border: "1px",
     borderColor: `${colorScheme}.200`,
-    boxShadow: `0 0 0 1px ${colorScheme}.200`,
+    boxShadow: `0 0 0 1px ${theme.colors[colorScheme]["200"]}`,
   };
   return {
     field: {

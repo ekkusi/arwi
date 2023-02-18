@@ -14,6 +14,8 @@
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@fontsource/open-sans": "^4.5.14",
+    "@fontsource/raleway": "^4.5.12",
     "@next/font": "13.1.6",
     "@types/node": "18.13.0",
     "@types/react": "18.0.28",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^3.0.0",
     "@graphql-codegen/client-preset": "^2.0.0",
+    "@netlify/plugin-nextjs": "^4.29.5-appdir.0",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
     "eslint": "^8.34.0",

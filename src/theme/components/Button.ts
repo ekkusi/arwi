@@ -9,10 +9,17 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
     // border: "2px",
     borderRadius: "3xl",
     py: 5,
-    px: 8,
+    px: 10,
+    fontWeight: "bold",
   },
   variants: {
     outline: ({ colorScheme }) => ({
+      border: "2px",
+      borderColor: `${colorScheme}.800`,
+      color: `${colorScheme}.800`,
+      bg: "inherit",
+    }),
+    solid: ({ colorScheme }) => ({
       border: "2px",
       borderColor: "black",
       boxShadow: "custom",
@@ -20,8 +27,14 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       bg: `${colorScheme}.100`,
     }),
   },
+  sizes: {
+    md: {
+      py: 5,
+      px: 10,
+    },
+  },
   defaultProps: {
-    variant: "outline",
+    variant: "solid",
   },
 });
 
