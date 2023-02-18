@@ -3,13 +3,16 @@ type Teacher @model {
   name: String!
   email: Email! @unique
   class: [Class!]
+  passwordHash: String!
 }
 
 type Class @model {
   id: ID!
   name: String!
   lessons: [Lesson!]
+  students: [Student!]
   lessonTypes: [String!]
+  teacher: Teacher!
 }
 
 type Lesson @model {

@@ -18,6 +18,7 @@ const colors = {
 
 const theme = extendTheme(
   {
+    // TODO: Configure fonts by using @next/font to optimize performance
     fonts: {
       heading: `Raleway, sans-serif`,
       body: `'Open Sans', sans-serif`,
@@ -62,6 +63,9 @@ const theme = extendTheme(
         },
         h3: {
           fontSize: { base: "xl", md: "2xl" },
+        },
+        a: {
+          color: "green.800",
         },
       }),
     },

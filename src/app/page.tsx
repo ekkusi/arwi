@@ -1,6 +1,15 @@
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
-import { Button, NextLink, Text } from "@/components/chakra";
+import {
+  Box,
+  Button,
+  List,
+  ListItem,
+  NextLink,
+  Text,
+} from "@/components/chakra";
+import LogoutButton from "./auth/register/LogoutButton";
+import PageWrapper from "./(components)/PageWrapper";
 
 const MainPage_Query = graphql(`
   query MainPage_Query($teacherEmail: Email!) {
@@ -23,17 +32,35 @@ export default async function Home() {
     teacherEmail: "testi@email.com",
   });
 
+  const classEdges = teacher?.class?.edges;
+
   return (
-    <main>
-      <h1>Ratify</h1>
+    <PageWrapper display="flex" flexDirection="column">
+      <Text as="h1" mb="5" textAlign="center">
+        Ratify
+      </Text>
       {teacher ? (
-        <Text as="h2">Opettaja: {teacher.name}</Text>
+        <>
+          <Box mb="5">
+            <Text as="h2">Luokat:</Text>
+            {classEdges && classEdges.length > 0 ? (
+              <List>
+                {classEdges.map(
+                  (edge) => edge && <ListItem>{edge.node.name}</ListItem>
+                )}
+              </List>
+            ) : (
+              <Text>Et vielä ole tehnyt luokkia</Text>
+            )}
+          </Box>
+          <Button as={NextLink} href="/class/create">
+            Luo luokka
+          </Button>
+        </>
       ) : (
-        <Text>Opettajaa ei löytynyt</Text>
+        <Text>Terve</Text>
       )}
-      <Button as={NextLink} href="/class/create">
-        Luo luokka
-      </Button>
-    </main>
+      <LogoutButton mt="auto">Logout</LogoutButton>
+    </PageWrapper>
   );
 }

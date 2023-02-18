@@ -47,12 +47,23 @@ export type Class = {
   lessonTypes?: Maybe<Array<Scalars['String']>>;
   lessons?: Maybe<LessonConnection>;
   name: Scalars['String'];
+  students?: Maybe<StudentConnection>;
+  teacher: Teacher;
   /** when the model was updated */
   updatedAt: Scalars['DateTime'];
 };
 
 
 export type ClassLessonsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ClassOrderByInput>;
+};
+
+
+export type ClassStudentsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -76,6 +87,8 @@ export type ClassCreateInput = {
   lessonTypes?: InputMaybe<Array<Scalars['String']>>;
   lessons?: InputMaybe<Array<ClassToLessonCreateLessonRelation>>;
   name: Scalars['String'];
+  students?: InputMaybe<Array<ClassToStudentCreateStudentRelation>>;
+  teacher: ClassToTeacherCreateTeacherRelation;
 };
 
 export type ClassCreatePayload = {
@@ -103,6 +116,8 @@ export type ClassToLessonCreateClass = {
   lessonTypes?: InputMaybe<Array<Scalars['String']>>;
   lessons?: InputMaybe<Array<ClassToLessonCreateLessonRelation>>;
   name: Scalars['String'];
+  students?: InputMaybe<Array<ClassToStudentCreateStudentRelation>>;
+  teacher: ClassToTeacherCreateTeacherRelation;
 };
 
 /** Input to link to or create a Class for the ClassToLesson relation of Lesson */
@@ -144,11 +159,25 @@ export type ClassToStudentCreateClass = {
   lessonTypes?: InputMaybe<Array<Scalars['String']>>;
   lessons?: InputMaybe<Array<ClassToLessonCreateLessonRelation>>;
   name: Scalars['String'];
+  students?: InputMaybe<Array<ClassToStudentCreateStudentRelation>>;
+  teacher: ClassToTeacherCreateTeacherRelation;
 };
 
 /** Input to link to or create a Class for the ClassToStudent relation of Student */
 export type ClassToStudentCreateClassRelation = {
   create?: InputMaybe<ClassToStudentCreateClass>;
+  link?: InputMaybe<Scalars['ID']>;
+};
+
+/** Input to create a Student for the ClassToStudent relation of Class */
+export type ClassToStudentCreateStudent = {
+  evaluations?: InputMaybe<Array<EvaluationToStudentCreateEvaluationRelation>>;
+  name: Scalars['String'];
+};
+
+/** Input to link to or create a Student for the ClassToStudent relation of Class */
+export type ClassToStudentCreateStudentRelation = {
+  create?: InputMaybe<ClassToStudentCreateStudent>;
   link?: InputMaybe<Scalars['ID']>;
 };
 
@@ -159,16 +188,38 @@ export type ClassToStudentUpdateClassRelation = {
   unlink?: InputMaybe<Scalars['ID']>;
 };
 
+/** Input to link/unlink to or create a Student for the ClassToStudent relation of Class */
+export type ClassToStudentUpdateStudentRelation = {
+  create?: InputMaybe<ClassToStudentCreateStudent>;
+  link?: InputMaybe<Scalars['ID']>;
+  unlink?: InputMaybe<Scalars['ID']>;
+};
+
 /** Input to create a Class for the ClassToTeacher relation of Teacher */
 export type ClassToTeacherCreateClass = {
   lessonTypes?: InputMaybe<Array<Scalars['String']>>;
   lessons?: InputMaybe<Array<ClassToLessonCreateLessonRelation>>;
   name: Scalars['String'];
+  students?: InputMaybe<Array<ClassToStudentCreateStudentRelation>>;
 };
 
 /** Input to link to or create a Class for the ClassToTeacher relation of Teacher */
 export type ClassToTeacherCreateClassRelation = {
   create?: InputMaybe<ClassToTeacherCreateClass>;
+  link?: InputMaybe<Scalars['ID']>;
+};
+
+/** Input to create a Teacher for the ClassToTeacher relation of Class */
+export type ClassToTeacherCreateTeacher = {
+  class?: InputMaybe<Array<ClassToTeacherCreateClassRelation>>;
+  email: Scalars['Email'];
+  name: Scalars['String'];
+  passwordHash: Scalars['String'];
+};
+
+/** Input to link to or create a Teacher for the ClassToTeacher relation of Class */
+export type ClassToTeacherCreateTeacherRelation = {
+  create?: InputMaybe<ClassToTeacherCreateTeacher>;
   link?: InputMaybe<Scalars['ID']>;
 };
 
@@ -179,11 +230,20 @@ export type ClassToTeacherUpdateClassRelation = {
   unlink?: InputMaybe<Scalars['ID']>;
 };
 
+/** Input to link/unlink to or create a Teacher for the ClassToTeacher relation of Class */
+export type ClassToTeacherUpdateTeacherRelation = {
+  create?: InputMaybe<ClassToTeacherCreateTeacher>;
+  link?: InputMaybe<Scalars['ID']>;
+  unlink?: InputMaybe<Scalars['ID']>;
+};
+
 /** Input to update a Class */
 export type ClassUpdateInput = {
   lessonTypes?: InputMaybe<Array<Scalars['String']>>;
   lessons?: InputMaybe<Array<ClassToLessonUpdateLessonRelation>>;
   name?: InputMaybe<Scalars['String']>;
+  students?: InputMaybe<Array<ClassToStudentUpdateStudentRelation>>;
+  teacher?: InputMaybe<ClassToTeacherUpdateTeacherRelation>;
 };
 
 export type ClassUpdatePayload = {
@@ -731,6 +791,7 @@ export type Teacher = {
   /** Unique identifier */
   id: Scalars['ID'];
   name: Scalars['String'];
+  passwordHash: Scalars['String'];
   /** when the model was updated */
   updatedAt: Scalars['DateTime'];
 };
@@ -761,6 +822,7 @@ export type TeacherCreateInput = {
   class?: InputMaybe<Array<ClassToTeacherCreateClassRelation>>;
   email: Scalars['Email'];
   name: Scalars['String'];
+  passwordHash: Scalars['String'];
 };
 
 export type TeacherCreatePayload = {
@@ -788,6 +850,7 @@ export type TeacherUpdateInput = {
   class?: InputMaybe<Array<ClassToTeacherUpdateClassRelation>>;
   email?: InputMaybe<Scalars['Email']>;
   name?: InputMaybe<Scalars['String']>;
+  passwordHash?: InputMaybe<Scalars['String']>;
 };
 
 export type TeacherUpdatePayload = {
@@ -802,6 +865,21 @@ export type ClassOverviewPage_QueryQueryVariables = Exact<{
 
 export type ClassOverviewPage_QueryQuery = { __typename?: 'Query', class?: { __typename?: 'Class', name: string, lessons?: { __typename?: 'LessonConnection', edges?: Array<{ __typename?: 'LessonEdge', node: { __typename?: 'Lesson', date: any, description?: string | null, type: string, evaluations?: { __typename?: 'EvaluationConnection', edges?: Array<{ __typename?: 'EvaluationEdge', node: { __typename?: 'Evaluation', behaviourRating?: number | null, skillsRating?: number | null, notes?: string | null, student: { __typename?: 'Student', name: string } } } | null> | null } | null } } | null> | null } | null } | null };
 
+export type CreateClassMutationVariables = Exact<{
+  name: Scalars['String'];
+  teacherID: Scalars['ID'];
+}>;
+
+
+export type CreateClassMutation = { __typename?: 'Mutation', classCreate?: { __typename?: 'ClassCreatePayload', class?: { __typename?: 'Class', id: string, name: string } | null } | null };
+
+export type CreateClassFormQueryQueryVariables = Exact<{
+  teacherEmail: Scalars['Email'];
+}>;
+
+
+export type CreateClassFormQueryQuery = { __typename?: 'Query', teacher?: { __typename?: 'Teacher', email: any, name: string, passwordHash: string, class?: { __typename?: 'ClassConnection', edges?: Array<{ __typename?: 'ClassEdge', node: { __typename?: 'Class', name: string } } | null> | null } | null } | null };
+
 export type MainPage_QueryQueryVariables = Exact<{
   teacherEmail: Scalars['Email'];
 }>;
@@ -809,6 +887,26 @@ export type MainPage_QueryQueryVariables = Exact<{
 
 export type MainPage_QueryQuery = { __typename?: 'Query', teacher?: { __typename?: 'Teacher', email: any, name: string, class?: { __typename?: 'ClassConnection', edges?: Array<{ __typename?: 'ClassEdge', node: { __typename?: 'Class', name: string } } | null> | null } | null } | null };
 
+export type GetTeacherQueryVariables = Exact<{
+  email: Scalars['Email'];
+}>;
+
+
+export type GetTeacherQuery = { __typename?: 'Query', teacher?: { __typename?: 'Teacher', id: string, email: any, name: string, passwordHash: string } | null };
+
+export type CreateTeacherMutationVariables = Exact<{
+  name: Scalars['String'];
+  email: Scalars['Email'];
+  passwordHash: Scalars['String'];
+}>;
+
+
+export type CreateTeacherMutation = { __typename?: 'Mutation', teacherCreate?: { __typename?: 'TeacherCreatePayload', teacher?: { __typename?: 'Teacher', id: string, email: any, name: string, passwordHash: string } | null } | null };
+
 
 export const ClassOverviewPage_QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ClassOverviewPage_Query"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"classID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"class"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"classID"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"lessons"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"evaluations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"behaviourRating"}},{"kind":"Field","name":{"kind":"Name","value":"skillsRating"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<ClassOverviewPage_QueryQuery, ClassOverviewPage_QueryQueryVariables>;
+export const CreateClassDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateClass"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"teacherID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"classCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"teacher"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"link"},"value":{"kind":"Variable","name":{"kind":"Name","value":"teacherID"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"class"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<CreateClassMutation, CreateClassMutationVariables>;
+export const CreateClassFormQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CreateClassFormQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"teacherEmail"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Email"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"teacher"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"teacherEmail"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"passwordHash"}},{"kind":"Field","name":{"kind":"Name","value":"class"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<CreateClassFormQueryQuery, CreateClassFormQueryQueryVariables>;
 export const MainPage_QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MainPage_Query"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"teacherEmail"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Email"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"teacher"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"teacherEmail"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"class"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<MainPage_QueryQuery, MainPage_QueryQueryVariables>;
+export const GetTeacherDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTeacher"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Email"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"teacher"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"passwordHash"}}]}}]}}]} as unknown as DocumentNode<GetTeacherQuery, GetTeacherQueryVariables>;
+export const CreateTeacherDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateTeacher"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Email"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"passwordHash"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"teacherCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"passwordHash"},"value":{"kind":"Variable","name":{"kind":"Name","value":"passwordHash"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"teacher"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"passwordHash"}}]}}]}}]}}]} as unknown as DocumentNode<CreateTeacherMutation, CreateTeacherMutationVariables>;

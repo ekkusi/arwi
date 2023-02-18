@@ -28,6 +28,8 @@ import {
   Spinner as ChakraSpinner,
   Input as ChakraInput,
   InputProps,
+  FormLabel as ChakraFormLabel,
+  FormLabelProps,
 } from "@chakra-ui/react";
 import { HTMLMotionProps, motion } from "framer-motion";
 
@@ -69,6 +71,9 @@ export const Spinner = forwardRef<SpinnerProps, "div">((props, ref) => (
 ));
 export const NextLink = forwardRef<ChakraNextLinkProps, "a">((props, ref) => (
   <ChakraNextLink ref={ref} {...props} />
+));
+export const FormLabel = forwardRef<FormLabelProps, "a">((props, ref) => (
+  <ChakraFormLabel ref={ref} {...props} />
 ));
 
 // ##### MOTION CHAKRA COMBINATIONS ######
