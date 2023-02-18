@@ -1,0 +1,38 @@
+type Teacher @model {
+  id: ID!
+  name: String!
+  email: Email! @unique
+  class: [Class!]
+}
+
+type Class @model {
+  id: ID!
+  name: String!
+  lessons: [Lesson!]
+  lessonTypes: [String!]
+}
+
+type Lesson @model {
+  id: ID!
+  date: Date!
+  type: String!
+  description: String
+  evaluations: [Evaluation!]
+  class: Class!
+}
+
+type Evaluation @model {
+  id: ID!
+  student: Student!
+  skillsRating: Int
+  behaviourRating: Int
+  notes: String
+  lesson: Lesson!
+}
+
+type Student @model {
+  id: ID!
+  name: String!
+  class: Class!
+  evaluations: [Evaluation!]
+}
