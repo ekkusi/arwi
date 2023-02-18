@@ -9,7 +9,7 @@ type ClassOverviewPageProps = {
   };
 };
 
-export const ClassOverviewPage_Query = graphql(`
+const ClassOverviewPage_Query = graphql(`
   query ClassOverviewPage_Query($classID: ID!) {
     class(by: { id: $classID }) {
       name
