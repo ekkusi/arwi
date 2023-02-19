@@ -8,6 +8,8 @@ import type {
 } from "next";
 import { getCsrfToken } from "next-auth/react";
 
+const testCommit = "Terve";
+
 export default function SignIn({
   csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
