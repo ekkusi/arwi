@@ -4,6 +4,7 @@ import { Box, Button, NextLink, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { Form, Formik } from "formik";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const initialValues = {
   email: "",
@@ -11,6 +12,7 @@ const initialValues = {
 };
 
 export default function LoginForm() {
+  const router = useRouter();
   const validateString = (value: string) => {
     let error;
     if (value.length === 0) error = "Ei saa olla tyhjä";
@@ -18,11 +20,14 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    const callbackUrl = `${window.location.host}/`;
     try {
       const response = await signIn("credentials", {
         ...values,
-        callbackUrl: "/",
+        callbackUrl,
+        redirect: false,
       });
+      router.push("/");
       if (response) {
         console.warn(response);
       }

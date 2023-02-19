@@ -9,7 +9,7 @@ import {
   NextLink,
   Text,
 } from "@/components/chakra";
-import { getSession } from "@/utils/sessionUtils";
+import { getServerSession } from "next-auth";
 import LogoutButton from "./auth/register/LogoutButton";
 import PageWrapper from "./(components)/PageWrapper";
 
@@ -30,7 +30,8 @@ const MainPage_Query = graphql(`
 `);
 
 export default async function Home() {
-  const session = await getSession();
+  const session = await getServerSession();
+
   if (!session) {
     throw new Error("No session found, something is wrong");
   }
