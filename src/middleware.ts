@@ -42,11 +42,6 @@ console.log(
 
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
-  function middleware(req) {
-    console.log("Running next auth middleware");
-
-    console.log("Token: ", req.nextauth.token);
-  },
   {
     callbacks: {
       authorized: ({ token }) => {
