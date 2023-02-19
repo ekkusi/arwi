@@ -1,21 +1,11 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  List,
-  ListItem,
-  Text,
-} from "@/components/chakra";
+import { Button, Flex, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
-import { BoxProps, Heading } from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
-import { GraphQLError } from "graphql";
-import { useSession } from "next-auth/react";
+import { BoxProps } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 
 type CreateClassFormProps = BoxProps & {
@@ -37,23 +27,6 @@ const CreateClassForm_CreateClassMutation = graphql(`
   }
 `);
 
-const CreateClassForm_Query = graphql(`
-  query CreateClassFormQuery($teacherEmail: Email!) {
-    teacher(by: { email: $teacherEmail }) {
-      email
-      name
-      passwordHash
-      class(first: 10) {
-        edges {
-          node {
-            name
-          }
-        }
-      }
-    }
-  }
-`);
-
 export default function CreateClassForm({
   onClassCreated,
   ...rest
@@ -67,13 +40,10 @@ export default function CreateClassForm({
 
   const handleSubmit = async (values: typeof initialValues) => {
     try {
-      const { classCreate } = await graphqlClient.request(
-        CreateClassForm_CreateClassMutation,
-        {
-          name: values.name,
-          teacherID: "someID",
-        }
-      );
+      await graphqlClient.request(CreateClassForm_CreateClassMutation, {
+        name: values.name,
+        teacherID: "someID",
+      });
       router.push("/");
     } catch (error) {
       console.error("Error happened:", error);

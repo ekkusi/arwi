@@ -1,7 +1,6 @@
 "use client";
 
 import { MotionBox, MotionBoxProps } from "@/components/chakra";
-import { motion } from "framer-motion";
 
 type PageWrapperProps = MotionBoxProps & {
   children: React.ReactNode;
