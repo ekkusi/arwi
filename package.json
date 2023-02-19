@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen": "graphql-codegen --watch"
+    "codegen": "graphql-codegen --watch",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.0.1",
@@ -50,6 +51,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.1.2",
     "prettier": "^2.8.4"
   }
 }
