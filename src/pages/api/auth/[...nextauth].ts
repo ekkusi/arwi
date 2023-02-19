@@ -120,6 +120,11 @@ export const authOptions: AuthOptions = {
         expires: session.expires,
       };
     },
+    async redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl)
+        ? Promise.resolve(url)
+        : Promise.resolve(baseUrl);
+    },
   },
   debug: true,
   secret: process.env.NEXTAUTH_SECRET,

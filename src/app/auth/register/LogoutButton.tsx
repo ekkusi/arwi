@@ -10,7 +10,7 @@ type LogoutButtonProps = ButtonProps;
 export default function LogoutButton({ children, ...rest }: LogoutButtonProps) {
   const router = useRouter();
   const handleSignOut = async () => {
-    const callbackUrl = `${window.location.host}/auth/login`;
+    const callbackUrl = `/auth/login`;
     await signOut({ callbackUrl, redirect: false });
 
     router.push("/auth/login");

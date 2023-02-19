@@ -20,11 +20,10 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    const callbackUrl = `${window.location.host}/`;
     try {
       const response = await signIn("credentials", {
         ...values,
-        callbackUrl,
+        callbackUrl: "/",
         redirect: false,
       });
       router.push("/");
