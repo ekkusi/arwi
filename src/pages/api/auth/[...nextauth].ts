@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { compare, hash } from "bcrypt";
@@ -37,6 +38,11 @@ const CreateTeacher = graphql(`
 export const BRCRYT_SALT_ROUNDS = 12;
 
 export const authOptions: AuthOptions = {
+  useSecureCookies:
+    process.env.NODE_ENV && process.env.NODE_ENV === "production",
+  session: {
+    maxAge: 30 * 24 * 60 * 60,
+  },
   providers: [
     Credentials({
       name: "Credentials",
@@ -83,12 +89,38 @@ export const authOptions: AuthOptions = {
           throw new Error("Wrong credentials. Try again.");
         }
 
-        return teacher;
+        const { passwordHash, ...returnData } = teacher;
+
+        return returnData;
       },
     }),
   ],
   pages: {
     signIn: "/auth/login",
+  },
+  callbacks: {
+    async signIn({ user, account, profile, credentials }) {
+      console.log("Signin callback, user: ", user);
+      console.log("Signin callback, account: ", user);
+      console.log("Signin callback, profile: ", user);
+      console.log("Signin callback, credentials: ", user);
+      return true;
+    },
+    async session({ session, user, token }) {
+      console.log("Session callback, session: ", session);
+      console.log("Session callback, token: ", token);
+      console.log("Session callback, user: ", user);
+      // session.user
+
+      return {
+        user: {
+          email: token.email,
+          name: token.name,
+          id: token.sub,
+        },
+        expires: session.expires,
+      };
+    },
   },
 };
 

@@ -9,6 +9,7 @@ import {
   NextLink,
   Text,
 } from "@/components/chakra";
+import { getSession } from "@/utils/sessionUtils";
 import LogoutButton from "./auth/register/LogoutButton";
 import PageWrapper from "./(components)/PageWrapper";
 
@@ -29,20 +30,34 @@ const MainPage_Query = graphql(`
 `);
 
 export default async function Home() {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("No session found, something is wrong");
+  }
+  const { user } = session;
+
   const { teacher } = await graphqlClient.request(MainPage_Query, {
-    teacherEmail: "testi@email.com",
+    teacherEmail: user.email,
   });
 
   const classEdges = teacher?.class?.edges;
 
   return (
     <PageWrapper display="flex" flexDirection="column">
-      <NextLink href="/design" display="block">
+      <NextLink href="/design" display="block" mb="5">
         To design page
       </NextLink>
-      <Text as="h1" mb="5" textAlign="center">
+      <Text as="h1" mb="0" textAlign="center">
         Ratify
       </Text>
+      <Box textAlign="center" mb="5">
+        <Text as="span" mr="1">
+          Kirjautunut käyttäjänä:
+        </Text>
+        <Text as="span" fontStyle="italic">
+          {user.email}
+        </Text>
+      </Box>
       <Box>
         {teacher ? (
           <>

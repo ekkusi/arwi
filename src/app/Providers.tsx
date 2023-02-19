@@ -6,7 +6,7 @@ import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
 type ProvidersProps = React.ComponentProps<"div"> & {
-  session: Session;
+  session: Session | null;
 };
 
 export default function Providers({ children, session }: ProvidersProps) {

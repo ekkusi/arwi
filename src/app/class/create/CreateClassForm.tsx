@@ -58,7 +58,7 @@ export default function CreateClassForm({
             Uusi luokka
           </Text>
           <FormField name="name" label="Luokan nimi" validate={validateName} />
-          <Button type="submit" marginTop="auto">
+          <Button type="submit" marginTop="auto" isDisabled>
             Luo luokka
           </Button>
         </Flex>
