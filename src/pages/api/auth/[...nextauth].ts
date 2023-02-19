@@ -101,15 +101,10 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user, account, profile, credentials }) {
       console.log("Signin callback, user: ", user);
-      console.log("Signin callback, account: ", user);
-      console.log("Signin callback, profile: ", user);
-      console.log("Signin callback, credentials: ", user);
       return true;
     },
     async session({ session, user, token }) {
       console.log("Session callback, session: ", session);
-      console.log("Session callback, token: ", token);
-      console.log("Session callback, user: ", user);
       // session.user
 
       return {
