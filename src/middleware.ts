@@ -32,8 +32,25 @@
 //   return undefined;
 // }
 
-export { default } from "next-auth/middleware";
+/* eslint-disable */
+import { withAuth } from "next-auth/middleware";
 
+export default withAuth(
+  // `withAuth` augments your `Request` with the user's token.
+  function middleware(req) {
+    console.log("Running next auth middleware");
+
+    console.log("Token: ", req.nextauth.token);
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => {
+        console.log("Authorized callback, token: ", token);
+        return true;
+      },
+    },
+  }
+);
 export const config = {
   matcher: ["/((?!auth|api/register).*)"],
 };
