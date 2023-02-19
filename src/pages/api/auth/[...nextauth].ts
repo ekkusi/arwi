@@ -122,6 +122,7 @@ export const authOptions: AuthOptions = {
       };
     },
   },
+  debug: true,
 };
 
 export default NextAuth(authOptions);
