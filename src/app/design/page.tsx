@@ -3,6 +3,7 @@ import {
   Button,
   List,
   ListItem,
+  NextLink,
   OrderedList,
   Text,
   UnorderedList,
@@ -29,6 +30,7 @@ export default function DesignPage() {
   const fontTestSize = "lg";
   return (
     <PageWrapper>
+      <NextLink href="/">To front page</NextLink>
       <Text as="h1" textAlign="center" mb="5">
         Design
       </Text>

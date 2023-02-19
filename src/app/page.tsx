@@ -35,7 +35,8 @@ export default async function Home() {
   const classEdges = teacher?.class?.edges;
 
   return (
-    <PageWrapper display="flex" flexDirection="column">
+    <PageWrapper>
+      <NextLink href="/design">To design page</NextLink>
       <Text as="h1" mb="5" textAlign="center">
         Ratify
       </Text>

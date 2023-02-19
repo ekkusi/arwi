@@ -1,20 +1,12 @@
-"use client";
+import { Box } from "@/components/chakra";
+import { BoxProps } from "@chakra-ui/react";
 
-import { MotionBox, MotionBoxProps } from "@/components/chakra";
-
-type PageWrapperProps = MotionBoxProps & {
-  children: React.ReactNode;
-};
+type PageWrapperProps = BoxProps;
 
 function PageWrapper({ children, ...rest }: PageWrapperProps) {
   return (
-    <MotionBox
-      initial={{ x: 300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: 300, opacity: 0 }}
-      transition={{
-        duration: 0.5,
-      }}
+    <Box
+      as="main"
       p="5"
       bg="light-gray"
       minHeight="100vh"
@@ -22,7 +14,7 @@ function PageWrapper({ children, ...rest }: PageWrapperProps) {
       {...rest}
     >
       {children}
-    </MotionBox>
+    </Box>
   );
 }
 
