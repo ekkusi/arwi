@@ -11,6 +11,7 @@ function PageWrapper({ children, ...rest }: PageWrapperProps) {
       bg="light-gray"
       minHeight="100vh"
       width="100%"
+      position="relative"
       {...rest}
     >
       {children}

@@ -34,6 +34,8 @@ const CreateTeacher = graphql(`
   }
 `);
 
+export const BRCRYT_SALT_ROUNDS = 12;
+
 export const authOptions: AuthOptions = {
   providers: [
     Credentials({
@@ -61,7 +63,7 @@ export const authOptions: AuthOptions = {
           const { teacherCreate } = await graphqlClient.request(CreateTeacher, {
             email,
             name,
-            passwordHash: await hash(password, 12),
+            passwordHash: await hash(password, BRCRYT_SALT_ROUNDS),
           });
 
           if (!teacherCreate?.teacher) {

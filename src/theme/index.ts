@@ -7,13 +7,16 @@ import {
 } from "@chakra-ui/react";
 import { Button, FormLabel, Input } from "./components";
 
+const errorColor = baseTheme.colors.red["700"];
+
 const colors = {
   "light-gray": baseTheme.colors.gray["100"],
   "medium-gray": baseTheme.colors.gray["200"],
   // TODO: Should probably configure other reds as well, this only changes red.500 (which is used in errors)
   red: {
-    500: baseTheme.colors.red["700"],
+    500: errorColor,
   },
+  error: errorColor,
 };
 
 const theme = extendTheme(
@@ -57,12 +60,15 @@ const theme = extendTheme(
         },
         h1: {
           fontSize: { base: "3xl", md: "4xl" },
+          mb: 5,
         },
         h2: {
           fontSize: { base: "2xl", md: "3xl" },
+          mb: 2,
         },
         h3: {
           fontSize: { base: "xl", md: "2xl" },
+          mb: 2,
         },
         a: {
           color: "green.800",
