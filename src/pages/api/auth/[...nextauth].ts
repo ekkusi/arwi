@@ -105,6 +105,10 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, user, token }) {
       console.log("Session callback, session: ", session);
+      console.log(
+        "session callback, NEXTAUTH_SECRET: ",
+        process.env.NEXTAUTH_SECRET
+      );
       // session.user
 
       return {

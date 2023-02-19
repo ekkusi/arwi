@@ -35,6 +35,11 @@
 /* eslint-disable */
 import { withAuth } from "next-auth/middleware";
 
+console.log(
+  "Configuring middleware, NEXTAUTH_SECRET: ",
+  process.env.NEXTAUTH_SECRET
+);
+
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   function middleware(req) {
