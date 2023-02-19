@@ -47,11 +47,18 @@ export default function RegisterForm() {
       );
       // If register was ok -> sign in
       if (result.ok) {
-        await signIn("credentials", {
-          email: data.email,
-          password: data.password,
-          callbackUrl: "/welcome",
-        });
+        try {
+          const response = await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            callbackUrl: "/welcome",
+          });
+          if (response) {
+            console.warn(response);
+          }
+        } catch (error) {
+          console.error(error);
+        }
         return;
       }
       // If not -> show error messages

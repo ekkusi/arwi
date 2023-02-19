@@ -18,7 +18,17 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    await signIn("credentials", { ...values, callbackUrl: "/" });
+    try {
+      const response = await signIn("credentials", {
+        ...values,
+        callbackUrl: "/",
+      });
+      if (response) {
+        console.warn(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
