@@ -35,13 +35,16 @@ export default function RegisterForm() {
     const { passwordConfirm, ...data } = values;
     try {
       // Register teacher
-      const result = await fetch("/api/register", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      const result = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/register`,
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
       // If register was ok -> sign in
       if (result.ok) {
         await signIn("credentials", {

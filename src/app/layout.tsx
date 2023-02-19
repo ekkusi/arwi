@@ -11,7 +11,7 @@ import Providers from "./Providers";
 
 async function getSession(cookie: string): Promise<Session> {
   const response = await fetch(
-    `${process.env.LOCAL_AUTH_URL}/api/auth/session`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/session`,
     {
       headers: {
         cookie,
