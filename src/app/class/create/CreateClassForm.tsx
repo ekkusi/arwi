@@ -1,11 +1,12 @@
 "use client";
 
-import { Button, Flex, Text } from "@/components/chakra";
+import { Button, Flex, Spinner, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { BoxProps } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 type CreateClassFormProps = BoxProps & {
@@ -32,6 +33,7 @@ export default function CreateClassForm({
   ...rest
 }: CreateClassFormProps) {
   const router = useRouter();
+  const { data } = useSession();
   const validateName = (value: string) => {
     let error;
     if (value.length === 0) error = "Nimi ei saa olla tyhjä";
@@ -39,10 +41,13 @@ export default function CreateClassForm({
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    if (!data?.user) {
+      throw new Error("Cant find session");
+    }
     try {
       await graphqlClient.request(CreateClassForm_CreateClassMutation, {
         name: values.name,
-        teacherID: "someID",
+        teacherID: data.user.id,
       });
       router.push("/");
     } catch (error) {
@@ -50,7 +55,7 @@ export default function CreateClassForm({
     }
   };
 
-  return (
+  return data?.user ? (
     <Formik initialValues={{ name: "" }} onSubmit={handleSubmit}>
       {() => (
         <Flex as={Form} flex="1" flexDirection="column" bg="white" {...rest}>
@@ -58,11 +63,15 @@ export default function CreateClassForm({
             Uusi luokka
           </Text>
           <FormField name="name" label="Luokan nimi" validate={validateName} />
-          <Button type="submit" marginTop="auto" isDisabled>
+          <Button type="submit" marginTop="auto">
             Luo luokka
           </Button>
         </Flex>
       )}
     </Formik>
+  ) : (
+    <Text>
+      Loading... <Spinner />
+    </Text>
   );
 }

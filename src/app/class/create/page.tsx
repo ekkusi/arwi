@@ -3,7 +3,7 @@ import CreateClassForm from "./CreateClassForm";
 
 export default async function CreateClassPage() {
   return (
-    <PageWrapper display="flex" justifyContent="column">
+    <PageWrapper display="flex" flexDirection="column">
       <CreateClassForm
         p="4"
         flex="1"
