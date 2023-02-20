@@ -49,7 +49,7 @@ export default async function Home() {
         To design page
       </NextLink>
       <Text as="h1" mb="0" textAlign="center">
-        Ratify
+        Arwi
       </Text>
       <Box textAlign="center" mb="5">
         <Text as="span" mr="1">
