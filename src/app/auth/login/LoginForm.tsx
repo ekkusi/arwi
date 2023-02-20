@@ -12,6 +12,7 @@ const initialValues = {
   password: "",
 };
 
+// TODO: Restore password or some other action, if credentials are forgotten
 export default function LoginForm() {
   const router = useRouter();
   const [generalError, setGeneralError] = useState<string | undefined>();
@@ -32,7 +33,7 @@ export default function LoginForm() {
       });
       setLoading(false);
       if (response && response.status === 401) {
-        setGeneralError("Väärä salasana:(");
+        setGeneralError("Väärä salasana tai käyttäjätunnus");
       } else {
         router.push("/");
       }

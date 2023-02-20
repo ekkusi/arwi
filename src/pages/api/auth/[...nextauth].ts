@@ -65,28 +65,13 @@ export const authOptions: AuthOptions = {
         });
 
         if (!teacher) {
-          const name = "Masa Matittaja";
-          const { teacherCreate } = await graphqlClient.request(CreateTeacher, {
-            email,
-            name,
-            passwordHash: await hash(password, BRCRYT_SALT_ROUNDS),
-          });
-
-          if (!teacherCreate?.teacher) {
-            throw new Error("Something wrong in creating teacher. Try again.");
-          }
-
-          return {
-            id: teacherCreate.teacher.id,
-            email,
-            name,
-          };
+          throw new Error("Given user doesn't exist.");
         }
 
         const isValid = await compare(password, teacher.passwordHash);
 
         if (!isValid) {
-          throw new Error("Wrong credentials. Try again.");
+          throw new Error("Incorrect password.");
         }
 
         const { passwordHash, ...returnData } = teacher;
