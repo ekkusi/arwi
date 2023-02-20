@@ -29,6 +29,15 @@ const CreateClassForm_CreateClassMutation = graphql(`
   }
 `);
 
+const CreateClassForm_GetTeacherQuery = graphql(`
+  query CreateClassForm_GetTeacherQuery($teacherEmail: Email!) {
+    teacher(by: { email: $teacherEmail }) {
+      email
+      name
+    }
+  }
+`);
+
 export default function CreateClassForm({
   onClassCreated,
   ...rest
@@ -40,6 +49,24 @@ export default function CreateClassForm({
     let error;
     if (value.length === 0) error = "Nimi ei saa olla tyhjä";
     return error;
+  };
+
+  const getTeacher = async () => {
+    if (!data?.user) {
+      throw new Error("Cant find session");
+    }
+
+    setLoading(true);
+
+    const result = await graphqlClient.request(
+      CreateClassForm_GetTeacherQuery,
+      {
+        teacherEmail: data.user.email,
+      }
+    );
+    setLoading(false);
+    // eslint-disable-next-line
+    console.log(result);
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -72,6 +99,10 @@ export default function CreateClassForm({
           <FormField name="name" label="Luokan nimi" validate={validateName} />
           <Button type="submit" marginTop="auto" isLoading={loading}>
             Luo luokka
+          </Button>
+          <Text my="5">Tää alla on mun oma testi, älkää ihmetelkö</Text>
+          <Button isLoading={loading} onClick={getTeacher}>
+            Hae ope
           </Button>
         </Flex>
       )}

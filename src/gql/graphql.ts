@@ -884,6 +884,15 @@ export type CreateClassMutation = {
   } | null;
 };
 
+export type CreateClassForm_GetTeacherQueryQueryVariables = Exact<{
+  teacherEmail: Scalars["Email"];
+}>;
+
+export type CreateClassForm_GetTeacherQueryQuery = {
+  __typename?: "Query";
+  teacher?: { __typename?: "Teacher"; email: any; name: string } | null;
+};
+
 export type MainPage_QueryQueryVariables = Exact<{
   teacherEmail: Scalars["Email"];
 }>;
@@ -1264,6 +1273,67 @@ export const CreateClassDocument = {
     },
   ],
 } as unknown as DocumentNode<CreateClassMutation, CreateClassMutationVariables>;
+export const CreateClassForm_GetTeacherQueryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "CreateClassForm_GetTeacherQuery" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "teacherEmail" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Email" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "teacher" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "by" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "email" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "teacherEmail" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateClassForm_GetTeacherQueryQuery,
+  CreateClassForm_GetTeacherQueryQueryVariables
+>;
 export const MainPage_QueryDocument = {
   kind: "Document",
   definitions: [
