@@ -28,9 +28,10 @@ export default function LoginForm() {
         callbackUrl: "/",
         redirect: false,
       });
-      router.push("/");
       if (response && response.status === 401) {
         setGeneralError("Väärä salasana:(");
+      } else {
+        router.push("/");
       }
     } catch (e) {
       console.error(e);

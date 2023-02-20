@@ -4,6 +4,7 @@ import { Box, Button, NextLink, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { Form, Formik } from "formik";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const initialValues = {
@@ -15,6 +16,7 @@ const initialValues = {
 
 export default function RegisterForm() {
   const [generalError, setGeneralError] = useState<string | undefined>();
+  const router = useRouter();
   const validateString = (value: string) => {
     let error;
     if (value.length === 0) error = "Ei saa olla tyhjä";
@@ -52,10 +54,12 @@ export default function RegisterForm() {
             email: data.email,
             password: data.password,
             callbackUrl: "/welcome",
+            redirect: false,
           });
           if (response) {
             console.warn(response);
           }
+          router.push("/welcome");
         } catch (error) {
           console.error(error);
         }
