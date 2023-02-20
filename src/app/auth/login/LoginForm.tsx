@@ -15,6 +15,7 @@ const initialValues = {
 export default function LoginForm() {
   const router = useRouter();
   const [generalError, setGeneralError] = useState<string | undefined>();
+  const [loading, setLoading] = useState(false);
   const validateString = (value: string) => {
     let error;
     if (value.length === 0) error = "Ei saa olla tyhjä";
@@ -22,18 +23,21 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setLoading(true);
     try {
       const response = await signIn("credentials", {
         ...values,
         callbackUrl: "/",
         redirect: false,
       });
+      setLoading(false);
       if (response && response.status === 401) {
         setGeneralError("Väärä salasana:(");
       } else {
         router.push("/");
       }
     } catch (e) {
+      setLoading(false);
       console.error(e);
     }
   };
@@ -60,7 +64,7 @@ export default function LoginForm() {
               {generalError}
             </Text>
           )}
-          <Button type="submit" marginTop="auto">
+          <Button type="submit" marginTop="auto" isLoading={loading}>
             Kirjaudu sisään
           </Button>
           <Box mt="2">

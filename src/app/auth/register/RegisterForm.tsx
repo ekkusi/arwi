@@ -16,6 +16,7 @@ const initialValues = {
 
 export default function RegisterForm() {
   const [generalError, setGeneralError] = useState<string | undefined>();
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const validateString = (value: string) => {
     let error;
@@ -34,6 +35,7 @@ export default function RegisterForm() {
 
   const handleSubmit = async (values: typeof initialValues) => {
     setGeneralError(undefined);
+    setLoading(true);
     const { passwordConfirm, ...data } = values;
     try {
       // Register teacher
@@ -63,10 +65,12 @@ export default function RegisterForm() {
         } catch (error) {
           console.error(error);
         }
+        setLoading(false);
         return;
       }
       // If not -> show error messages
       const json = await result.json();
+      setLoading(false);
       if (json.message) {
         setGeneralError(json.message);
         return;
@@ -116,7 +120,7 @@ export default function RegisterForm() {
               validatePasswordConfirm(values.password, value)
             }
           />
-          <Button type="submit" marginTop="auto">
+          <Button type="submit" marginTop="auto" isLoading={loading}>
             Rekisteröidy
           </Button>
           <Box mt="2">
