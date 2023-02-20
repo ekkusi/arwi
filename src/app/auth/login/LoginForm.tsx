@@ -24,6 +24,7 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setGeneralError(undefined);
     setLoading(true);
     try {
       const response = await signIn("credentials", {
