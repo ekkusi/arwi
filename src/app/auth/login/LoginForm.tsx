@@ -5,6 +5,7 @@ import FormField from "@/components/FormField";
 import { Form, Formik } from "formik";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const initialValues = {
   email: "",
@@ -13,6 +14,7 @@ const initialValues = {
 
 export default function LoginForm() {
   const router = useRouter();
+  const [generalError, setGeneralError] = useState<string | undefined>();
   const validateString = (value: string) => {
     let error;
     if (value.length === 0) error = "Ei saa olla tyhjä";
@@ -27,11 +29,11 @@ export default function LoginForm() {
         redirect: false,
       });
       router.push("/");
-      if (response) {
-        console.warn(response);
+      if (response && response.status === 401) {
+        setGeneralError("Väärä salasana:(");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      console.error(e);
     }
   };
   return (
@@ -52,6 +54,11 @@ export default function LoginForm() {
             type="password"
             validate={validateString}
           />
+          {generalError && (
+            <Text color="error" mb="4" mt="-3">
+              {generalError}
+            </Text>
+          )}
           <Button type="submit" marginTop="auto">
             Kirjaudu sisään
           </Button>
