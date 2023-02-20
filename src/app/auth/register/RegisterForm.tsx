@@ -58,8 +58,10 @@ export default function RegisterForm() {
             callbackUrl: "/welcome",
             redirect: false,
           });
-          if (response) {
+          if (response && response.status !== 200) {
             console.warn(response);
+            setGeneralError(response.error);
+            return;
           }
           router.push("/welcome");
         } catch (error) {
