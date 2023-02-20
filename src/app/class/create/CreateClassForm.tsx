@@ -8,6 +8,7 @@ import { BoxProps } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type CreateClassFormProps = BoxProps & {
   onClassCreated?: (createdClass: string) => void;
@@ -34,6 +35,7 @@ export default function CreateClassForm({
 }: CreateClassFormProps) {
   const router = useRouter();
   const { data } = useSession();
+  const [loading, setLoading] = useState(false);
   const validateName = (value: string) => {
     let error;
     if (value.length === 0) error = "Nimi ei saa olla tyhjä";
@@ -44,13 +46,18 @@ export default function CreateClassForm({
     if (!data?.user) {
       throw new Error("Cant find session");
     }
+
+    setLoading(true);
+
     try {
       await graphqlClient.request(CreateClassForm_CreateClassMutation, {
         name: values.name,
         teacherID: data.user.id,
       });
+      setLoading(false);
       router.push("/");
     } catch (error) {
+      setLoading(false);
       console.error("Error happened:", error);
     }
   };
@@ -63,7 +70,7 @@ export default function CreateClassForm({
             Uusi luokka
           </Text>
           <FormField name="name" label="Luokan nimi" validate={validateName} />
-          <Button type="submit" marginTop="auto">
+          <Button type="submit" marginTop="auto" isLoading={loading}>
             Luo luokka
           </Button>
         </Flex>
