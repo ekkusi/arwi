@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "kill -9 $(lsof -t -i:3000) && next dev",
+    "dev": "npm run kill && next dev",
+    "kill": "bash ./scripts/kill-process.sh",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
