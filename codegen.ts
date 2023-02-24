@@ -11,7 +11,13 @@ const config: CodegenConfig = {
   generates: {
     "./src/gql/": {
       preset: "client",
-      plugins: [],
+      plugins: [
+        {
+          add: {
+            content: "/* eslint-disable */",
+          },
+        },
+      ],
     },
     "./src/graphql-server/types/index.ts": {
       plugins: [
@@ -25,9 +31,18 @@ const config: CodegenConfig = {
       ],
       config: {
         scalars: {
-          Date: "string",
+          Date: "Date",
           EmailAddress: "string",
         },
+        mapperTypeSuffix: "Prisma",
+        mappers: {
+          Teacher: "@prisma/client#Teacher",
+          EvaluationCollection: "@prisma/client#EvaluationCollection",
+          Evaluation: "@prisma/client#Evaluation",
+          Class: "@prisma/client#Class",
+          Student: "@prisma/client#Student",
+        },
+        contextType: "./contextTypes#CustomContext",
       },
     },
   },

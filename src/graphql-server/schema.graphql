@@ -1,31 +1,33 @@
 type Query {
-  greetings: String!
   getTeacher(id: ID!): Teacher!
-  getClasses(teacherID: ID!): [Class!]
+  getClasses(teacherId: ID!): [Class!]
 }
 
 type Mutation {
   createTeacher(data: CreateTeacherInput!): Teacher!
+  createClass(data: CreateClassInput!): Class!
+  createCollection(data: CreateCollectionInput!, classId: ID!): EvaluationCollection!
+  addEvaluations(data: [CreateEvaluationInput!]!, collectionId: ID!): Int!
 }
 
 type Teacher {
   id: ID!
   name: String!
   email: EmailAddress!
-  class: [Class!]
+  classes: [Class!]
 }
 
 
 type Class {
   id: ID!
   name: String!
-  lessons: [Lesson!]
+  evalationCollections: [EvaluationCollection!]
   students: [Student!]
-  lessonTypes: [String!]
+  evaluationTypes: [String!]
   teacher: Teacher!
 }
 
-type Lesson {
+type EvaluationCollection {
   id: ID!
   date: Date!
   type: String!
@@ -40,7 +42,7 @@ type Evaluation {
   skillsRating: Int
   behaviourRating: Int
   notes: String
-  lesson: Lesson!
+  collection: EvaluationCollection!
 }
 
 type Student {
@@ -53,4 +55,24 @@ type Student {
 input CreateTeacherInput {
   name: String!
   email: EmailAddress!
+}
+
+
+input CreateClassInput {
+  name: String!
+  teacherId: ID!
+}
+
+input CreateCollectionInput {
+  date: Date!
+  type: String!
+  description: String
+  evaluations: [CreateEvaluationInput!]
+}
+
+input CreateEvaluationInput {
+  studentId: ID!
+  skillsRating: Int
+  behaviourRating: Int
+  notes: String
 }

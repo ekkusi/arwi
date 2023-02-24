@@ -25,12 +25,31 @@ export type Scalars = {
 
 export type Class = {
   __typename?: "Class";
+  evalationCollections?: Maybe<Array<EvaluationCollection>>;
+  evaluationTypes?: Maybe<Array<Scalars["String"]>>;
   id: Scalars["ID"];
-  lessonTypes?: Maybe<Array<Scalars["String"]>>;
-  lessons?: Maybe<Array<Lesson>>;
   name: Scalars["String"];
   students?: Maybe<Array<Student>>;
   teacher: Teacher;
+};
+
+export type CreateClassInput = {
+  name: Scalars["String"];
+  teacherId: Scalars["ID"];
+};
+
+export type CreateCollectionInput = {
+  date: Scalars["Date"];
+  description?: InputMaybe<Scalars["String"]>;
+  evaluations?: InputMaybe<Array<CreateEvaluationInput>>;
+  type: Scalars["String"];
+};
+
+export type CreateEvaluationInput = {
+  behaviourRating?: InputMaybe<Scalars["Int"]>;
+  notes?: InputMaybe<Scalars["String"]>;
+  skillsRating?: InputMaybe<Scalars["Int"]>;
+  studentId: Scalars["ID"];
 };
 
 export type CreateTeacherInput = {
@@ -41,15 +60,15 @@ export type CreateTeacherInput = {
 export type Evaluation = {
   __typename?: "Evaluation";
   behaviourRating?: Maybe<Scalars["Int"]>;
+  collection: EvaluationCollection;
   id: Scalars["ID"];
-  lesson: Lesson;
   notes?: Maybe<Scalars["String"]>;
   skillsRating?: Maybe<Scalars["Int"]>;
   student: Student;
 };
 
-export type Lesson = {
-  __typename?: "Lesson";
+export type EvaluationCollection = {
+  __typename?: "EvaluationCollection";
   class: Class;
   date: Scalars["Date"];
   description?: Maybe<Scalars["String"]>;
@@ -60,7 +79,24 @@ export type Lesson = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  addEvaluations: Scalars["Int"];
+  createClass: Class;
+  createCollection: EvaluationCollection;
   createTeacher: Teacher;
+};
+
+export type MutationAddEvaluationsArgs = {
+  collectionId: Scalars["ID"];
+  data: Array<CreateEvaluationInput>;
+};
+
+export type MutationCreateClassArgs = {
+  data: CreateClassInput;
+};
+
+export type MutationCreateCollectionArgs = {
+  classId: Scalars["ID"];
+  data: CreateCollectionInput;
 };
 
 export type MutationCreateTeacherArgs = {
@@ -71,11 +107,10 @@ export type Query = {
   __typename?: "Query";
   getClasses?: Maybe<Array<Class>>;
   getTeacher: Teacher;
-  greetings: Scalars["String"];
 };
 
 export type QueryGetClassesArgs = {
-  teacherID: Scalars["ID"];
+  teacherId: Scalars["ID"];
 };
 
 export type QueryGetTeacherArgs = {
@@ -92,7 +127,7 @@ export type Student = {
 
 export type Teacher = {
   __typename?: "Teacher";
-  class?: Maybe<Array<Class>>;
+  classes?: Maybe<Array<Class>>;
   email: Scalars["EmailAddress"];
   id: Scalars["ID"];
   name: Scalars["String"];

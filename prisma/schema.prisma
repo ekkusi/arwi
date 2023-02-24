@@ -37,8 +37,8 @@ model Evaluation {
   id                     String               @id @default(uuid())
   student                Student              @relation(fields: [studentId], references: [id])
   studentId              String
-  skillsRating           Int
-  behaviourRating        Int
+  skillsRating           Int?
+  behaviourRating        Int?
   notes                  String?
   evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id])
   evaluationCollectionId String
@@ -49,5 +49,5 @@ model Student {
   name       String
   class      Class        @relation(fields: [classId], references: [id])
   classId    String
-  Evaluation Evaluation[]
+  evaluations Evaluation[]
 }
