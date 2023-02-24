@@ -1,12 +1,22 @@
-type Teacher @model {
-  id: ID!
-  name: String!
-  email: Email! @unique
-  class: [Class!]
-  passwordHash: String!
+type Query {
+  greetings: String!
+  getTeacher(id: ID!): Teacher!
+  getClasses(teacherID: ID!): [Class!]
 }
 
-type Class @model {
+type Mutation {
+  createTeacher(data: CreateTeacherInput!): Teacher!
+}
+
+type Teacher {
+  id: ID!
+  name: String!
+  email: EmailAddress!
+  class: [Class!]
+}
+
+
+type Class {
   id: ID!
   name: String!
   lessons: [Lesson!]
@@ -15,7 +25,7 @@ type Class @model {
   teacher: Teacher!
 }
 
-type Lesson @model {
+type Lesson {
   id: ID!
   date: Date!
   type: String!
@@ -24,7 +34,7 @@ type Lesson @model {
   class: Class!
 }
 
-type Evaluation @model {
+type Evaluation {
   id: ID!
   student: Student!
   skillsRating: Int
@@ -33,9 +43,14 @@ type Evaluation @model {
   lesson: Lesson!
 }
 
-type Student @model {
+type Student {
   id: ID!
   name: String!
   class: Class!
   evaluations: [Evaluation!]
+}
+
+input CreateTeacherInput {
+  name: String!
+  email: EmailAddress!
 }

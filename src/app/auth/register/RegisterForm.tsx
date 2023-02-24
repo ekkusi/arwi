@@ -36,7 +36,7 @@ export default function RegisterForm() {
   const handleSubmit = async (values: typeof initialValues) => {
     setGeneralError(undefined);
     setLoading(true);
-    const { passwordConfirm, ...data } = values;
+    const { passwordConfirm: _, ...data } = values;
     try {
       // Register teacher
       const result = await fetch(
