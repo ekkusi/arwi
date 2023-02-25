@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "codegen": "graphql-codegen --watch",
-    "prisma:deploy": "dotenv -e .env.production -- npx prisma migrate deploy",
+    "prisma:deploy-dev": "dotenv -e .env.production -- npx prisma migrate deploy",
+    "prisma:deploy": "npx prisma migrate deploy",
     "prepare": "husky install",
     "postinstall": "npx prisma generate"
   },
