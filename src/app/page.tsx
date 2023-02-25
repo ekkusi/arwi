@@ -33,6 +33,7 @@ export default async function Home() {
   if (!session) {
     throw new Error("No session found, something is wrong");
   }
+
   const { user } = session;
 
   const { getTeacher: teacher } = await graphqlClient.request(
