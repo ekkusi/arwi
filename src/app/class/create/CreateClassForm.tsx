@@ -4,10 +4,13 @@ import { Button, Flex, Spinner, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
+import { BoxProps } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+type CreateClassFormProps = BoxProps & {};
 
 const initialValues = {
   name: "",
@@ -22,7 +25,7 @@ const CreateClassForm_CreateClassMutation = graphql(`
   }
 `);
 
-export default function CreateClassForm() {
+export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
   const router = useRouter();
   const { data } = useSession();
   const [loading, setLoading] = useState(false);
