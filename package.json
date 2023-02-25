@@ -10,7 +10,8 @@
     "lint": "next lint",
     "codegen": "graphql-codegen --watch",
     "prisma:deploy": "dotenv -e .env.production -- npx prisma migrate deploy",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.0.1",
