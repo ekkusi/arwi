@@ -1,6 +1,4 @@
-import { AuthenticationError as ApolloAuthenticationError } from "apollo-server-express";
-
-export default class AuthenticationError extends ApolloAuthenticationError {
+export default class AuthenticationError extends Error {
   constructor(m?: string) {
     super(m || "Sinun pitää olla autentikoitunut tätä operaatiota varten");
 
