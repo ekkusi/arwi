@@ -11,9 +11,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const initialValues = {
-  email: "teppo@email.com",
-  password: "asd123",
-  passwordConfirm: "asd123",
+  email: "",
+  password: "",
+  passwordConfirm: "",
 };
 
 const RegisterForm_RegisterMutation = graphql(`
