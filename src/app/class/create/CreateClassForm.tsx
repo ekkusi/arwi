@@ -4,44 +4,25 @@ import { Button, Flex, Spinner, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
-import { BoxProps } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-type CreateClassFormProps = BoxProps & {
-  onClassCreated?: (createdClass: string) => void;
-};
 
 const initialValues = {
   name: "",
 };
 
 const CreateClassForm_CreateClassMutation = graphql(`
-  mutation CreateClass($name: String!, $teacherID: ID!) {
-    classCreate(input: { name: $name, teacher: { link: $teacherID } }) {
-      class {
-        id
-        name
-      }
-    }
-  }
-`);
-
-const CreateClassForm_GetTeacherQuery = graphql(`
-  query CreateClassForm_GetTeacherQuery($teacherEmail: Email!) {
-    teacher(by: { email: $teacherEmail }) {
-      email
+  mutation CreateClassForm_CreateClass($input: CreateClassInput!) {
+    createClass(data: $input) {
+      id
       name
     }
   }
 `);
 
-export default function CreateClassForm({
-  onClassCreated,
-  ...rest
-}: CreateClassFormProps) {
+export default function CreateClassForm() {
   const router = useRouter();
   const { data } = useSession();
   const [loading, setLoading] = useState(false);
@@ -49,24 +30,6 @@ export default function CreateClassForm({
     let error;
     if (value.length === 0) error = "Nimi ei saa olla tyhjä";
     return error;
-  };
-
-  const getTeacher = async () => {
-    if (!data?.user) {
-      throw new Error("Cant find session");
-    }
-
-    setLoading(true);
-
-    const result = await graphqlClient.request(
-      CreateClassForm_GetTeacherQuery,
-      {
-        teacherEmail: data.user.email,
-      }
-    );
-    setLoading(false);
-    // eslint-disable-next-line
-    console.log(result);
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -78,8 +41,10 @@ export default function CreateClassForm({
 
     try {
       await graphqlClient.request(CreateClassForm_CreateClassMutation, {
-        name: values.name,
-        teacherID: data.user.id,
+        input: {
+          ...values,
+          teacherId: data.user.id,
+        },
       });
       setLoading(false);
       router.push("/");
@@ -101,9 +66,6 @@ export default function CreateClassForm({
             Luo luokka
           </Button>
           <Text my="5">Tää alla on mun oma testi, älkää ihmetelkö</Text>
-          <Button isLoading={loading} onClick={getTeacher}>
-            Hae ope
-          </Button>
         </Flex>
       )}
     </Formik>

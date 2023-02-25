@@ -1,15 +1,45 @@
 import { Prisma } from "@prisma/client";
+import { compare, hash } from "bcrypt";
+import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
 
+const BRCRYPT_SALT_ROUNDS = 12;
+
 const resolvers: MutationResolvers<CustomContext> = {
-  createTeacher: async (_, { data }, { prisma }) => {
+  register: async (_, { data }, { prisma }) => {
+    const { password, email } = data;
+    const matchingTeacher = await prisma.teacher.findFirst({
+      where: { email },
+    });
+    if (matchingTeacher)
+      throw new ValidationError(`Sähköposti '${email}' on jo käytössä`);
+    const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
     const teacher = await prisma.teacher.create({
       data: {
-        ...data,
+        email,
+        passwordHash,
       },
     });
     return teacher;
+  },
+  login: async (_, { email, password }, { prisma }) => {
+    const matchingTeacher = await prisma.teacher.findFirst({
+      where: { email },
+    });
+    if (!matchingTeacher)
+      throw new ValidationError(
+        `Käyttäjää ei löytynyt sähköpostilla '${email}'`
+      );
+    const isValidPassword = await compare(
+      password,
+      matchingTeacher.passwordHash
+    );
+    if (!isValidPassword)
+      throw new ValidationError(`Annettu salasana oli väärä.`);
+    return {
+      teacher: matchingTeacher,
+    };
   },
   createClass: async (_, { data }, { prisma }) => {
     const createdClass = await prisma.class.create({

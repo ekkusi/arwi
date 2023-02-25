@@ -5,33 +5,26 @@ import graphqlClient from "@/graphql-client";
 
 type ClassOverviewPageProps = {
   params: {
-    classID: string;
+    classId: string;
   };
 };
 
-const ClassOverviewPage_Query = graphql(`
-  query ClassOverviewPage_Query($classID: ID!) {
-    class(by: { id: $classID }) {
+const ClassOverviewPage_GetClassQuery = graphql(`
+  query ClassOverviewPage_GetClass($classId: ID!) {
+    getClass(id: $classId) {
+      id
       name
-      lessons(first: 10) {
-        edges {
-          node {
-            date
-            description
-            type
-            evaluations(first: 10) {
-              edges {
-                node {
-                  behaviourRating
-                  skillsRating
-                  notes
-                  student {
-                    name
-                  }
-                }
-              }
-            }
+      evaluationCollections {
+        id
+        date
+        type
+        description
+        evaluations {
+          student {
+            name
           }
+          skillsRating
+          behaviourRating
         }
       }
     }
@@ -41,23 +34,17 @@ const ClassOverviewPage_Query = graphql(`
 export default async function ClassOverviewPage({
   params,
 }: ClassOverviewPageProps) {
-  // class variable name is reserved -> classData
-  const { class: classData } = await graphqlClient.request(
-    ClassOverviewPage_Query,
+  const { getClass } = await graphqlClient.request(
+    ClassOverviewPage_GetClassQuery,
     {
-      classID: params.classID,
+      classId: params.classId,
     }
   );
   return (
     <PageWrapper>
-      {classData ? (
-        // TODO: Show lessons etc...
-        <Text as="h1">{classData.name}</Text>
-      ) : (
-        <Text as="h1">
-          No höhlä, luokkaa ei jostakin kumman syystä löytynyt:(
-        </Text>
-      )}
+      {/* TODO: Show lessons etc... */}
+      <Text as="h1">{getClass.name}</Text>
+      <Text>Tätä sivua ei vielä suuremmin olla implementoitu</Text>
     </PageWrapper>
   );
 }

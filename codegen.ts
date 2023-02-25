@@ -1,9 +1,14 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
 
+const customScalars = {
+  Date: "Date",
+  EmailAddress: "string",
+};
+
 const config: CodegenConfig = {
   schema: "http://localhost:3000/api/graphql",
   documents: [
-    // "src/**/*.{ts,tsx}",
+    "src/**/*.{ts,tsx}",
     "./src/graphql-server/**/*.graphql",
     "!src/gql/**/*",
   ],
@@ -18,6 +23,9 @@ const config: CodegenConfig = {
           },
         },
       ],
+      config: {
+        scalars: customScalars,
+      },
     },
     "./src/graphql-server/types/index.ts": {
       plugins: [
@@ -30,10 +38,7 @@ const config: CodegenConfig = {
         "typescript-resolvers",
       ],
       config: {
-        scalars: {
-          Date: "Date",
-          EmailAddress: "string",
-        },
+        scalars: customScalars,
         mapperTypeSuffix: "Prisma",
         mappers: {
           Teacher: "@prisma/client#Teacher",

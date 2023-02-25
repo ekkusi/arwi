@@ -8,8 +8,24 @@ const resolvers: QueryResolvers<CustomContext> = {
         id,
       },
     });
-    if (!teacher) throw new Error(`No teacher found with id '${id}'`);
+    if (!teacher) throw new Error(`Opettajaa ei löytynyt id:llä '${id}'`);
     return teacher;
+  },
+  getTeachers: async (_, __, { prisma }) => {
+    const teachers = await prisma.teacher.findMany();
+    return teachers;
+  },
+  getClasses: async (_, { teacherId }, { prisma }) => {
+    const classes = await prisma.class.findMany({
+      where: { teacherId },
+    });
+    return classes;
+  },
+  getClass: async (_, { id }, { prisma }) => {
+    const matchingClass = await prisma.class.findFirstOrThrow({
+      where: { id },
+    });
+    return matchingClass;
   },
 };
 

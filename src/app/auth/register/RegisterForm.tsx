@@ -2,22 +2,35 @@
 
 import { Box, Button, NextLink, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
+import { graphql } from "@/gql";
+import graphqlClient from "@/graphql-client";
+import { getErrorMessage } from "@/utils/errorUtils";
 import { Form, Formik } from "formik";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const initialValues = {
-  email: "",
-  name: "",
-  password: "",
-  passwordConfirm: "",
+  email: "teppo@email.com",
+  password: "asd123",
+  passwordConfirm: "asd123",
 };
+
+const RegisterForm_RegisterMutation = graphql(`
+  mutation RegisterForm_Register($input: CreateTeacherInput!) {
+    register(data: $input) {
+      id
+      email
+    }
+  }
+`);
 
 export default function RegisterForm() {
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  // TODO: Validate email to be email
   const validateString = (value: string) => {
     let error;
     if (value.length === 0) error = "Ei saa olla tyhjä";
@@ -39,50 +52,33 @@ export default function RegisterForm() {
     const { passwordConfirm: _, ...data } = values;
     try {
       // Register teacher
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/register`,
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
+      await graphqlClient.request(RegisterForm_RegisterMutation, {
+        input: data,
+      });
       // If register was ok -> sign in
-      if (result.ok) {
-        try {
-          const response = await signIn("credentials", {
-            email: data.email,
-            password: data.password,
-            callbackUrl: "/welcome",
-            redirect: false,
-          });
-          if (response && response.status !== 200) {
-            console.warn(response);
-            setGeneralError(response.error);
-            return;
-          }
-          router.push("/welcome");
-        } catch (error) {
-          console.error(error);
+      try {
+        const response = await signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          callbackUrl: "/welcome",
+          redirect: false,
+        });
+        if (response && response.status !== 200) {
+          console.warn(response);
+          setGeneralError(response.error);
+          return;
         }
-        setLoading(false);
-        return;
+        router.push("/welcome");
+      } catch (error) {
+        console.error(error);
       }
-      // If not -> show error messages
-      const json = await result.json();
       setLoading(false);
-      if (json.message) {
-        setGeneralError(json.message);
-        return;
-      }
-      throw new Error(); // Unknown error -> throw error to catch it below and show generic unexpected error message
-    } catch (error) {
-      console.error(error);
-      setGeneralError(
-        "Jotakin jännää tapahtui. Ota yhteyttä järjestelmän kehittäjiin pls."
-      );
+      return;
+    } catch (error: any) {
+      const errorMessage = getErrorMessage(error);
+      setLoading(false);
+
+      setGeneralError(errorMessage);
     }
   };
   return (
@@ -107,7 +103,6 @@ export default function RegisterForm() {
             label="Sähköposti"
             validate={validateString}
           />
-          <FormField name="name" label="Nimi" validate={validateString} />
           <FormField
             name="password"
             label="Salasana"

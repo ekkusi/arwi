@@ -10,38 +10,37 @@ import {
   Text,
 } from "@/components/chakra";
 import { getServerSession } from "next-auth";
-import LogoutButton from "./auth/register/LogoutButton";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import LogoutButton from "./auth/LogoutButton";
 import PageWrapper from "./(components)/PageWrapper";
 
-const MainPage_Query = graphql(`
-  query MainPage_Query($teacherEmail: Email!) {
-    teacher(by: { email: $teacherEmail }) {
+const MainPage_GetTeacherQuery = graphql(`
+  query MainPage_GetTeacher($teacherId: ID!) {
+    getTeacher(id: $teacherId) {
       email
-      name
-      class(first: 10) {
-        edges {
-          node {
-            name
-          }
-        }
+      id
+      classes {
+        id
+        name
       }
     }
   }
 `);
 
 export default async function Home() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session) {
     throw new Error("No session found, something is wrong");
   }
   const { user } = session;
 
-  const { teacher } = await graphqlClient.request(MainPage_Query, {
-    teacherEmail: user.email,
-  });
-
-  const classEdges = teacher?.class?.edges;
+  const { getTeacher: teacher } = await graphqlClient.request(
+    MainPage_GetTeacherQuery,
+    {
+      teacherId: user.id,
+    }
+  );
 
   return (
     <PageWrapper display="flex" flexDirection="column">
@@ -64,11 +63,11 @@ export default async function Home() {
           <>
             <Box mb="5">
               <Text as="h2">Luokat:</Text>
-              {classEdges && classEdges.length > 0 ? (
+              {teacher.classes && teacher.classes.length > 0 ? (
                 <List>
-                  {classEdges.map(
-                    (edge) => edge && <ListItem>{edge.node.name}</ListItem>
-                  )}
+                  {teacher.classes.map((it) => (
+                    <ListItem>{it.name}</ListItem>
+                  ))}
                 </List>
               ) : (
                 <Text>Et vielä ole tehnyt luokkia</Text>

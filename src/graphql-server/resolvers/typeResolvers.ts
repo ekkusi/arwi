@@ -14,7 +14,7 @@ const resolvers: TypeResolvers = {
     },
   },
   Class: {
-    evalationCollections: async ({ id }, _, { prisma }) => {
+    evaluationCollections: async ({ id }, _, { prisma }) => {
       const collections = await prisma.evaluationCollection.findMany({
         where: {
           classId: id,

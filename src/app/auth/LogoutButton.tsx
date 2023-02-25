@@ -10,6 +10,7 @@ type LogoutButtonProps = ButtonProps;
 
 export default function LogoutButton({ children, ...rest }: LogoutButtonProps) {
   const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const handleSignOut = async () => {
     const callbackUrl = `/auth/login`;

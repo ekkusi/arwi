@@ -5,37 +5,16 @@ import { compare, hash } from "bcrypt";
 import NextAuth, { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-const GetTeacher = graphql(`
-  query GetTeacher($email: Email!) {
-    teacher(by: { email: $email }) {
-      id
-      email
-      name
-      passwordHash
-    }
-  }
-`);
-
-const CreateTeacher = graphql(`
-  mutation CreateTeacher(
-    $name: String!
-    $email: Email!
-    $passwordHash: String!
-  ) {
-    teacherCreate(
-      input: { name: $name, email: $email, passwordHash: $passwordHash }
-    ) {
+const Auth_LoginMutation = graphql(`
+  mutation Auth_Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       teacher {
         id
         email
-        name
-        passwordHash
       }
     }
   }
 `);
-
-export const BRCRYT_SALT_ROUNDS = 12;
 
 export const authOptions: AuthOptions = {
   useSecureCookies:
@@ -60,23 +39,14 @@ export const authOptions: AuthOptions = {
           password: string;
         };
 
-        const { teacher } = await graphqlClient.request(GetTeacher, {
+        const {
+          login: { teacher },
+        } = await graphqlClient.request(Auth_LoginMutation, {
           email,
+          password,
         });
 
-        if (!teacher) {
-          throw new Error("Given user doesn't exist.");
-        }
-
-        const isValid = await compare(password, teacher.passwordHash);
-
-        if (!isValid) {
-          throw new Error("Incorrect password.");
-        }
-
-        const { passwordHash, ...returnData } = teacher;
-
-        return returnData;
+        return teacher;
       },
     }),
   ],
@@ -91,7 +61,6 @@ export const authOptions: AuthOptions = {
       return {
         user: {
           email: token.email,
-          name: token.name,
           id: token.sub,
         },
         expires: session.expires,

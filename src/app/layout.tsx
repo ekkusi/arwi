@@ -6,6 +6,7 @@ import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/400-italic.css";
 
 import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import Providers from "./Providers";
 
 export default async function RootLayout({
@@ -13,7 +14,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       {/*

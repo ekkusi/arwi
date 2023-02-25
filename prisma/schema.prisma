@@ -8,10 +8,10 @@ datasource db {
 }
 
 model Teacher {
-  id    String  @id @default(uuid())
-  name  String
-  email String  @unique
-  class Class[]
+  id                    String  @id @default(uuid())
+  email                 String  @unique
+  passwordHash          String
+  class                 Class[]
 }
 
 model Class {

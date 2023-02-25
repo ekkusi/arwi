@@ -23,6 +23,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
   [P in K]-?: NonNullable<T[P]>;
 };
@@ -39,11 +40,11 @@ export type Scalars = {
 
 export type Class = {
   __typename?: "Class";
-  evalationCollections?: Maybe<Array<EvaluationCollection>>;
+  evaluationCollections: Array<EvaluationCollection>;
   evaluationTypes?: Maybe<Array<Scalars["String"]>>;
   id: Scalars["ID"];
   name: Scalars["String"];
-  students?: Maybe<Array<Student>>;
+  students: Array<Student>;
   teacher: Teacher;
 };
 
@@ -68,7 +69,7 @@ export type CreateEvaluationInput = {
 
 export type CreateTeacherInput = {
   email: Scalars["EmailAddress"];
-  name: Scalars["String"];
+  password: Scalars["String"];
 };
 
 export type Evaluation = {
@@ -86,9 +87,14 @@ export type EvaluationCollection = {
   class: Class;
   date: Scalars["Date"];
   description?: Maybe<Scalars["String"]>;
-  evaluations?: Maybe<Array<Evaluation>>;
+  evaluations: Array<Evaluation>;
   id: Scalars["ID"];
   type: Scalars["String"];
+};
+
+export type LoginResult = {
+  __typename?: "LoginResult";
+  teacher: Teacher;
 };
 
 export type Mutation = {
@@ -96,7 +102,8 @@ export type Mutation = {
   addEvaluations: Scalars["Int"];
   createClass: Class;
   createCollection: EvaluationCollection;
-  createTeacher: Teacher;
+  login: LoginResult;
+  register: Teacher;
 };
 
 export type MutationAddEvaluationsArgs = {
@@ -113,14 +120,25 @@ export type MutationCreateCollectionArgs = {
   data: CreateCollectionInput;
 };
 
-export type MutationCreateTeacherArgs = {
+export type MutationLoginArgs = {
+  email: Scalars["String"];
+  password: Scalars["String"];
+};
+
+export type MutationRegisterArgs = {
   data: CreateTeacherInput;
 };
 
 export type Query = {
   __typename?: "Query";
+  getClass: Class;
   getClasses?: Maybe<Array<Class>>;
   getTeacher: Teacher;
+  getTeachers: Array<Teacher>;
+};
+
+export type QueryGetClassArgs = {
+  id: Scalars["ID"];
 };
 
 export type QueryGetClassesArgs = {
@@ -134,17 +152,16 @@ export type QueryGetTeacherArgs = {
 export type Student = {
   __typename?: "Student";
   class: Class;
-  evaluations?: Maybe<Array<Evaluation>>;
+  evaluations: Array<Evaluation>;
   id: Scalars["ID"];
   name: Scalars["String"];
 };
 
 export type Teacher = {
   __typename?: "Teacher";
-  classes?: Maybe<Array<Class>>;
+  classes: Array<Class>;
   email: Scalars["EmailAddress"];
   id: Scalars["ID"];
-  name: Scalars["String"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -266,6 +283,9 @@ export type ResolversTypes = {
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
+  LoginResult: ResolverTypeWrapper<
+    Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }
+  >;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
@@ -287,6 +307,9 @@ export type ResolversParentTypes = {
   EvaluationCollection: EvaluationCollectionPrisma;
   ID: Scalars["ID"];
   Int: Scalars["Int"];
+  LoginResult: Omit<LoginResult, "teacher"> & {
+    teacher: ResolversParentTypes["Teacher"];
+  };
   Mutation: {};
   Query: {};
   String: Scalars["String"];
@@ -298,8 +321,8 @@ export type ClassResolvers<
   ContextType = CustomContext,
   ParentType extends ResolversParentTypes["Class"] = ResolversParentTypes["Class"]
 > = {
-  evalationCollections?: Resolver<
-    Maybe<Array<ResolversTypes["EvaluationCollection"]>>,
+  evaluationCollections?: Resolver<
+    Array<ResolversTypes["EvaluationCollection"]>,
     ParentType,
     ContextType
   >;
@@ -311,7 +334,7 @@ export type ClassResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   students?: Resolver<
-    Maybe<Array<ResolversTypes["Student"]>>,
+    Array<ResolversTypes["Student"]>,
     ParentType,
     ContextType
   >;
@@ -366,12 +389,20 @@ export type EvaluationCollectionResolvers<
     ContextType
   >;
   evaluations?: Resolver<
-    Maybe<Array<ResolversTypes["Evaluation"]>>,
+    Array<ResolversTypes["Evaluation"]>,
     ParentType,
     ContextType
   >;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   type?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LoginResultResolvers<
+  ContextType = CustomContext,
+  ParentType extends ResolversParentTypes["LoginResult"] = ResolversParentTypes["LoginResult"]
+> = {
+  teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -397,11 +428,17 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateCollectionArgs, "classId" | "data">
   >;
-  createTeacher?: Resolver<
+  login?: Resolver<
+    ResolversTypes["LoginResult"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, "email" | "password">
+  >;
+  register?: Resolver<
     ResolversTypes["Teacher"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateTeacherArgs, "data">
+    RequireFields<MutationRegisterArgs, "data">
   >;
 };
 
@@ -409,6 +446,12 @@ export type QueryResolvers<
   ContextType = CustomContext,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = {
+  getClass?: Resolver<
+    ResolversTypes["Class"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetClassArgs, "id">
+  >;
   getClasses?: Resolver<
     Maybe<Array<ResolversTypes["Class"]>>,
     ParentType,
@@ -421,6 +464,11 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetTeacherArgs, "id">
   >;
+  getTeachers?: Resolver<
+    Array<ResolversTypes["Teacher"]>,
+    ParentType,
+    ContextType
+  >;
 };
 
 export type StudentResolvers<
@@ -429,7 +477,7 @@ export type StudentResolvers<
 > = {
   class?: Resolver<ResolversTypes["Class"], ParentType, ContextType>;
   evaluations?: Resolver<
-    Maybe<Array<ResolversTypes["Evaluation"]>>,
+    Array<ResolversTypes["Evaluation"]>,
     ParentType,
     ContextType
   >;
@@ -442,14 +490,9 @@ export type TeacherResolvers<
   ContextType = CustomContext,
   ParentType extends ResolversParentTypes["Teacher"] = ResolversParentTypes["Teacher"]
 > = {
-  classes?: Resolver<
-    Maybe<Array<ResolversTypes["Class"]>>,
-    ParentType,
-    ContextType
-  >;
+  classes?: Resolver<Array<ResolversTypes["Class"]>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes["EmailAddress"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -459,6 +502,7 @@ export type Resolvers<ContextType = CustomContext> = {
   EmailAddress?: GraphQLScalarType;
   Evaluation?: EvaluationResolvers<ContextType>;
   EvaluationCollection?: EvaluationCollectionResolvers<ContextType>;
+  LoginResult?: LoginResultResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;

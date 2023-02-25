@@ -1,10 +1,13 @@
 type Query {
   getTeacher(id: ID!): Teacher!
+  getTeachers: [Teacher!]!
   getClasses(teacherId: ID!): [Class!]
+  getClass(id: ID!): Class!
 }
 
 type Mutation {
-  createTeacher(data: CreateTeacherInput!): Teacher!
+  register(data: CreateTeacherInput!): Teacher!
+  login(email: String!, password: String!): LoginResult!
   createClass(data: CreateClassInput!): Class!
   createCollection(data: CreateCollectionInput!, classId: ID!): EvaluationCollection!
   addEvaluations(data: [CreateEvaluationInput!]!, collectionId: ID!): Int!
@@ -12,17 +15,20 @@ type Mutation {
 
 type Teacher {
   id: ID!
-  name: String!
   email: EmailAddress!
-  classes: [Class!]
+  classes: [Class!]!
+}
+
+type LoginResult {
+  teacher: Teacher!
 }
 
 
 type Class {
   id: ID!
   name: String!
-  evalationCollections: [EvaluationCollection!]
-  students: [Student!]
+  evaluationCollections: [EvaluationCollection!]!
+  students: [Student!]!
   evaluationTypes: [String!]
   teacher: Teacher!
 }
@@ -32,7 +38,7 @@ type EvaluationCollection {
   date: Date!
   type: String!
   description: String
-  evaluations: [Evaluation!]
+  evaluations: [Evaluation!]!
   class: Class!
 }
 
@@ -49,12 +55,12 @@ type Student {
   id: ID!
   name: String!
   class: Class!
-  evaluations: [Evaluation!]
+  evaluations: [Evaluation!]!
 }
 
 input CreateTeacherInput {
-  name: String!
   email: EmailAddress!
+  password: String!
 }
 
 

@@ -1,4 +1,4 @@
-import { Box, Button, NextLink, Text } from "@/components/chakra";
+import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
 import PageWrapper from "../(components)/PageWrapper";
 
 export default function WelcomePage() {
@@ -16,9 +16,11 @@ export default function WelcomePage() {
         <Text mb="5" textAlign="center">
           Mahtavata saada sinut mukaan toteuttamaan laadukkaampaa arviointia:)
         </Text>
-        <Button as={NextLink} href="/" mx="auto">
-          Aloita arviointi
-        </Button>
+        <Flex justifyContent="center">
+          <Button as={NextLink} href="/">
+            Aloita arviointi
+          </Button>
+        </Flex>
       </Box>
     </PageWrapper>
   );
