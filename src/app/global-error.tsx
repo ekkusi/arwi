@@ -2,7 +2,7 @@
 
 import { Button, Flex, NextLink, Text } from "@/components/chakra";
 import { useEffect } from "react";
-import ErrorPageWrapper from "./(components)/ErrorPageWrapper";
+import ErrorPageWrapper from "./(server-components)/ErrorPageWrapper";
 
 type ErrorProps = {
   error: Error;

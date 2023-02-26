@@ -12,7 +12,7 @@ import {
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import LogoutButton from "./auth/LogoutButton";
-import PageWrapper from "./(components)/PageWrapper";
+import PageWrapper from "./(server-components)/PageWrapper";
 
 const MainPage_GetTeacherQuery = graphql(`
   query MainPage_GetTeacher($teacherId: ID!) {

@@ -30,6 +30,8 @@ import {
   InputProps,
   FormLabel as ChakraFormLabel,
   FormLabelProps,
+  IconButton as ChakraIconButton,
+  IconButtonProps,
 } from "@chakra-ui/react";
 import { HTMLMotionProps, motion } from "framer-motion";
 
@@ -74,6 +76,9 @@ export const NextLink = forwardRef<ChakraNextLinkProps, "a">((props, ref) => (
 ));
 export const FormLabel = forwardRef<FormLabelProps, "a">((props, ref) => (
   <ChakraFormLabel ref={ref} {...props} />
+));
+export const IconButton = forwardRef<IconButtonProps, "a">((props, ref) => (
+  <ChakraIconButton ref={ref} {...props} />
 ));
 
 // ##### MOTION CHAKRA COMBINATIONS ######

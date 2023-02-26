@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  IconButton,
   List,
   ListItem,
   NextLink,
@@ -9,7 +10,8 @@ import {
   UnorderedList,
 } from "@/components/chakra";
 import { BoxProps } from "@chakra-ui/react";
-import PageWrapper from "../(components)/PageWrapper";
+import { AiFillDelete } from "react-icons/ai";
+import PageWrapper from "../(server-components)/PageWrapper";
 
 type SectionProps = BoxProps & {
   title: string;
@@ -82,6 +84,7 @@ export default function DesignPage() {
         <Button mb="2" mr="2" variant="outline">
           Outline button
         </Button>
+        <IconButton aria-label="Test" icon={<AiFillDelete />} />
       </Section>
       {/* Lists */}
       <Section title="Lists">

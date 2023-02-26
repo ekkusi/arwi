@@ -3,6 +3,15 @@ import {
   defineStyleConfig,
 } from "@chakra-ui/react";
 
+const formatSizeProps = (size: number) => ({
+  minWidth: size,
+  height: size,
+  "> svg": {
+    width: size,
+    height: size,
+  },
+});
+
 const Button: ComponentSingleStyleConfig = defineStyleConfig({
   baseStyle: {
     textTransform: "uppercase",
@@ -26,11 +35,31 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       color: "black",
       bg: `${colorScheme}.100`,
     }),
+    ghost: {
+      px: 0,
+      py: 0,
+      _hover: {
+        bg: "inherit",
+        opacity: 0.8,
+      },
+    },
   },
   sizes: {
-    md: {
-      py: 5,
-      px: 10,
+    md: ({ variant }) => {
+      const sizeProps = variant === "ghost" ? formatSizeProps(6) : {};
+      return {
+        py: 5,
+        px: 10,
+        ...sizeProps,
+      };
+    },
+    lg: ({ variant }) => {
+      const sizeProps = variant === "ghost" ? formatSizeProps(9) : {};
+      return {
+        py: 6,
+        px: 12,
+        ...sizeProps,
+      };
     },
   },
   defaultProps: {

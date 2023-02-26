@@ -50,6 +50,7 @@ export type Class = {
 
 export type CreateClassInput = {
   name: Scalars["String"];
+  students?: InputMaybe<Array<CreateStudentInput>>;
   teacherId: Scalars["ID"];
 };
 
@@ -65,6 +66,10 @@ export type CreateEvaluationInput = {
   notes?: InputMaybe<Scalars["String"]>;
   skillsRating?: InputMaybe<Scalars["Int"]>;
   studentId: Scalars["ID"];
+};
+
+export type CreateStudentInput = {
+  name: Scalars["String"];
 };
 
 export type CreateTeacherInput = {
@@ -276,6 +281,7 @@ export type ResolversTypes = {
   CreateClassInput: CreateClassInput;
   CreateCollectionInput: CreateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
+  CreateStudentInput: CreateStudentInput;
   CreateTeacherInput: CreateTeacherInput;
   Date: ResolverTypeWrapper<Scalars["Date"]>;
   EmailAddress: ResolverTypeWrapper<Scalars["EmailAddress"]>;
@@ -300,6 +306,7 @@ export type ResolversParentTypes = {
   CreateClassInput: CreateClassInput;
   CreateCollectionInput: CreateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
+  CreateStudentInput: CreateStudentInput;
   CreateTeacherInput: CreateTeacherInput;
   Date: Scalars["Date"];
   EmailAddress: Scalars["EmailAddress"];

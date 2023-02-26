@@ -1,4 +1,4 @@
-import PageWrapper from "../../(components)/PageWrapper";
+import PageWrapper from "../../(server-components)/PageWrapper";
 import RegisterForm from "./RegisterForm";
 
 export default function RegisterPage() {

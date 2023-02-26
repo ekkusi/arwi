@@ -3,12 +3,14 @@
 import { Button, Flex, Spinner, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { graphql } from "@/gql";
+import { CreateStudentInput } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { BoxProps } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AddStudentsList from "./AddStudentsList";
 
 type CreateClassFormProps = BoxProps & {};
 
@@ -29,6 +31,7 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
   const router = useRouter();
   const { data } = useSession();
   const [loading, setLoading] = useState(false);
+  const [students, setStudents] = useState<CreateStudentInput[]>([]);
   const validateName = (value: string) => {
     let error;
     if (value.length === 0) error = "Nimi ei saa olla tyhjä";
@@ -46,6 +49,7 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
       await graphqlClient.request(CreateClassForm_CreateClassMutation, {
         input: {
           ...values,
+          students,
           teacherId: data.user.id,
         },
       });
@@ -65,10 +69,13 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
             Uusi luokka
           </Text>
           <FormField name="name" label="Luokan nimi" validate={validateName} />
+          <Text as="h2">Oppilaat</Text>
+          <AddStudentsList
+            onChanged={(newStudents) => setStudents(newStudents)}
+          />
           <Button type="submit" marginTop="auto" isLoading={loading}>
             Luo luokka
           </Button>
-          <Text my="5">Tää alla on mun oma testi, älkää ihmetelkö</Text>
         </Flex>
       )}
     </Formik>

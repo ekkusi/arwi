@@ -1,4 +1,4 @@
-import PageWrapper from "@/app/(components)/PageWrapper";
+import PageWrapper from "@/app/(server-components)/PageWrapper";
 import LoginForm from "./LoginForm";
 
 export default function LoginPage() {

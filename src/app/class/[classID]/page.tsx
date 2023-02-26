@@ -1,4 +1,4 @@
-import PageWrapper from "@/app/(components)/PageWrapper";
+import PageWrapper from "@/app/(server-components)/PageWrapper";
 import { Text } from "@/components/chakra";
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";

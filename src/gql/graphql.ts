@@ -36,6 +36,7 @@ export type Class = {
 
 export type CreateClassInput = {
   name: Scalars["String"];
+  students?: InputMaybe<Array<CreateStudentInput>>;
   teacherId: Scalars["ID"];
 };
 
@@ -51,6 +52,10 @@ export type CreateEvaluationInput = {
   notes?: InputMaybe<Scalars["String"]>;
   skillsRating?: InputMaybe<Scalars["Int"]>;
   studentId: Scalars["ID"];
+};
+
+export type CreateStudentInput = {
+  name: Scalars["String"];
 };
 
 export type CreateTeacherInput = {
@@ -150,6 +155,12 @@ export type Teacher = {
   id: Scalars["ID"];
 };
 
+export type ClassList_ClassFragment = {
+  __typename?: "Class";
+  id: string;
+  name: string;
+} & { " $fragmentName"?: "ClassList_ClassFragment" };
+
 export type RegisterForm_RegisterMutationVariables = Exact<{
   input: CreateTeacherInput;
 }>;
@@ -221,6 +232,26 @@ export type Auth_LoginMutation = {
   };
 };
 
+export const ClassList_ClassFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ClassList_Class" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Class" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ClassList_ClassFragment, unknown>;
 export const RegisterForm_RegisterDocument = {
   kind: "Document",
   definitions: [

@@ -1,4 +1,4 @@
-import PageWrapper from "@/app/(components)/PageWrapper";
+import PageWrapper from "@/app/(server-components)/PageWrapper";
 import CreateClassForm from "./CreateClassForm";
 
 export default async function CreateClassPage() {

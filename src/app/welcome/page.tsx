@@ -1,5 +1,5 @@
 import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
-import PageWrapper from "../(components)/PageWrapper";
+import PageWrapper from "../(server-components)/PageWrapper";
 
 export default function WelcomePage() {
   return (

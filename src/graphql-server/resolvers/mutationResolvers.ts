@@ -42,18 +42,17 @@ const resolvers: MutationResolvers<CustomContext> = {
     };
   },
   createClass: async (_, { data }, { prisma }) => {
+    const { students, ...rest } = data;
     const createdClass = await prisma.class.create({
-      data,
+      data: {
+        ...rest,
+        students: students
+          ? {
+              createMany: { data: students },
+            }
+          : undefined,
+      },
     });
-    // prisma.evaluationCollection.create({
-    //   data: {
-    //     evaluations: {
-    //       createMany: {
-    //         data: {}
-    //       }
-    //     }
-    //   }
-    // })
     return createdClass;
   },
   createCollection: async (_, { data, classId }, { prisma }) => {

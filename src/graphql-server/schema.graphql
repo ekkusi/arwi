@@ -67,6 +67,11 @@ input CreateTeacherInput {
 input CreateClassInput {
   name: String!
   teacherId: ID!
+  students: [CreateStudentInput!]
+}
+
+input CreateStudentInput {
+  name: String!
 }
 
 input CreateCollectionInput {
