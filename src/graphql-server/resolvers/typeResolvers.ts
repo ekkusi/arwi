@@ -92,6 +92,26 @@ const resolvers: TypeResolvers = {
       return evaluations;
     },
   },
+  Student: {
+    class: async ({ id }, _, { prisma }) => {
+      const matchingClass = await prisma.class.findFirstOrThrow({
+        where: {
+          students: {
+            some: {
+              id,
+            },
+          },
+        },
+      });
+      return matchingClass;
+    },
+    evaluations: async ({ id }, _, { prisma }) => {
+      const evaluations = await prisma.evaluation.findMany({
+        where: { studentId: id },
+      });
+      return evaluations;
+    },
+  },
 };
 
 export default resolvers;
