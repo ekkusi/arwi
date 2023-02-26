@@ -155,12 +155,6 @@ export type Teacher = {
   id: Scalars["ID"];
 };
 
-export type ClassList_ClassFragment = {
-  __typename?: "Class";
-  id: string;
-  name: string;
-} & { " $fragmentName"?: "ClassList_ClassFragment" };
-
 export type RegisterForm_RegisterMutationVariables = Exact<{
   input: CreateTeacherInput;
 }>;
@@ -215,9 +209,21 @@ export type MainPage_GetTeacherQuery = {
     __typename?: "Teacher";
     email: string;
     id: string;
-    classes: Array<{ __typename?: "Class"; id: string; name: string }>;
+    classes: Array<
+      { __typename?: "Class" } & {
+        " $fragmentRefs"?: {
+          ClassList_ClassFragmentFragment: ClassList_ClassFragmentFragment;
+        };
+      }
+    >;
   };
 };
+
+export type ClassList_ClassFragmentFragment = {
+  __typename?: "Class";
+  id: string;
+  name: string;
+} & { " $fragmentName"?: "ClassList_ClassFragmentFragment" };
 
 export type Auth_LoginMutationVariables = Exact<{
   email: Scalars["String"];
@@ -232,12 +238,12 @@ export type Auth_LoginMutation = {
   };
 };
 
-export const ClassList_ClassFragmentDoc = {
+export const ClassList_ClassFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "ClassList_Class" },
+      name: { kind: "Name", value: "ClassList_ClassFragment" },
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Class" },
@@ -251,7 +257,7 @@ export const ClassList_ClassFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<ClassList_ClassFragment, unknown>;
+} as unknown as DocumentNode<ClassList_ClassFragmentFragment, unknown>;
 export const RegisterForm_RegisterDocument = {
   kind: "Document",
   definitions: [
@@ -507,8 +513,13 @@ export const MainPage_GetTeacherDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "FragmentSpread",
+                        name: {
+                          kind: "Name",
+                          value: "ClassList_ClassFragment",
+                        },
+                      },
                     ],
                   },
                 },
@@ -518,6 +529,7 @@ export const MainPage_GetTeacherDocument = {
         ],
       },
     },
+    ...ClassList_ClassFragmentFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<
   MainPage_GetTeacherQuery,

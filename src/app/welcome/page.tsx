@@ -3,7 +3,7 @@ import PageWrapper from "../(server-components)/PageWrapper";
 
 export default function WelcomePage() {
   return (
-    <PageWrapper>
+    <PageWrapper hasNavigation={false}>
       <Box
         position="absolute"
         transform="translate(-50%, -50%)"

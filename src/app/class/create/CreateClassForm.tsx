@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Flex, Spinner, Text } from "@/components/chakra";
+import { Button, Flex, NextLink, Spinner, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { graphql } from "@/gql";
 import { CreateStudentInput } from "@/gql/graphql";
@@ -76,6 +76,15 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
           <Button type="submit" marginTop="auto" isLoading={loading}>
             Luo luokka
           </Button>
+          <NextLink
+            color="gray.700"
+            mt="3"
+            href="/"
+            textTransform="uppercase"
+            textAlign="center"
+          >
+            Peruuta
+          </NextLink>
         </Flex>
       )}
     </Formik>

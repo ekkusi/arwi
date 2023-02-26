@@ -1,18 +1,11 @@
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
-import {
-  Box,
-  Button,
-  Flex,
-  List,
-  ListItem,
-  NextLink,
-  Text,
-} from "@/components/chakra";
+import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import LogoutButton from "./auth/LogoutButton";
 import PageWrapper from "./(server-components)/PageWrapper";
+import ClassList from "../components/ClassList";
 
 const MainPage_GetTeacherQuery = graphql(`
   query MainPage_GetTeacher($teacherId: ID!) {
@@ -20,8 +13,7 @@ const MainPage_GetTeacherQuery = graphql(`
       email
       id
       classes {
-        id
-        name
+        ...ClassList_ClassFragment
       }
     }
   }
@@ -44,9 +36,9 @@ export default async function Home() {
   );
 
   return (
-    <PageWrapper display="flex" flexDirection="column">
-      <NextLink href="/design" display="block" mb="5">
-        To design page
+    <PageWrapper display="flex" flexDirection="column" hasNavigation={false}>
+      <NextLink href="/design" display="block" mb="2">
+        {"Design sivulle \u2B95"}
       </NextLink>
       <Text as="h1" mb="0" textAlign="center">
         Arwi
@@ -64,18 +56,14 @@ export default async function Home() {
           <>
             <Box mb="5">
               <Text as="h2">Luokat:</Text>
-              {teacher.classes && teacher.classes.length > 0 ? (
-                <List>
-                  {teacher.classes.map((it) => (
-                    <ListItem>{it.name}</ListItem>
-                  ))}
-                </List>
+              {teacher.classes.length > 0 ? (
+                <ClassList classes={teacher.classes} mb="5" />
               ) : (
                 <Text>Et vielä ole tehnyt luokkia</Text>
               )}
             </Box>
             <Button as={NextLink} href="/class/create" width="100%">
-              Luo luokka
+              {teacher.classes.length > 0 ? "Luo uusi luokka" : "Luo luokka"}
             </Button>
           </>
         ) : (

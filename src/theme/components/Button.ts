@@ -19,7 +19,7 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
     borderRadius: "3xl",
     py: 5,
     px: 10,
-    fontWeight: "bold",
+    fontWeight: "semibold",
   },
   variants: {
     outline: ({ colorScheme }) => ({

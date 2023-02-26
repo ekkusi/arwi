@@ -43,7 +43,7 @@ export default async function ClassOverviewPage({
   return (
     <PageWrapper>
       {/* TODO: Show lessons etc... */}
-      <Text as="h1">{getClass.name}</Text>
+      <Text as="h1">Luokka: {getClass.name}</Text>
       <Text>Tätä sivua ei vielä suuremmin olla implementoitu</Text>
     </PageWrapper>
   );

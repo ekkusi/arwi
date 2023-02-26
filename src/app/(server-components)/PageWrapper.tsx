@@ -1,9 +1,15 @@
-import { Box } from "@/components/chakra";
+import { Box, NextLink } from "@/components/chakra";
 import { BoxProps } from "@chakra-ui/react";
 
-type PageWrapperProps = BoxProps;
+type PageWrapperProps = BoxProps & {
+  hasNavigation?: boolean;
+};
 
-function PageWrapper({ children, ...rest }: PageWrapperProps) {
+function PageWrapper({
+  children,
+  hasNavigation = true,
+  ...rest
+}: PageWrapperProps) {
   return (
     <Box
       as="main"
@@ -14,6 +20,11 @@ function PageWrapper({ children, ...rest }: PageWrapperProps) {
       position="relative"
       {...rest}
     >
+      {hasNavigation && (
+        <NextLink display="inline-block" mb="2" href="/">
+          {"\u2B05 Takaisin pääsivulle"}
+        </NextLink>
+      )}
       {children}
     </Box>
   );
