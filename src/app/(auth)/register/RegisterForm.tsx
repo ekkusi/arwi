@@ -82,12 +82,7 @@ export default function RegisterForm() {
     }
   };
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      // validateOnChange={false}
-      // validateOnBlur={false}
-    >
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ values }) => (
         <Form>
           <Text as="h1" textAlign="center" mb="5">
@@ -124,7 +119,7 @@ export default function RegisterForm() {
             <Text as="span" mr="1">
               Oletko jo käyttäjä?
             </Text>
-            <NextLink href="/auth/login">Kirjaudu tästä</NextLink>
+            <NextLink href="/login">Kirjaudu tästä</NextLink>
           </Box>
         </Form>
       )}

@@ -1,7 +1,21 @@
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
 type SessionData = {
   user: { email: string; name: string; id: string };
   expires: string;
 };
+
+export async function getSessionOrRedirect(redirectUrl = "/login") {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect(redirectUrl);
+  }
+
+  return session;
+}
 
 export async function getSession(cookie: string): Promise<SessionData | null> {
   const response = await fetch(
@@ -37,7 +51,7 @@ export async function signOut(cookie?: string): Promise<any> {
   const formData = new FormData();
   formData.append("csrfToken", csrfToken);
   formData.append("json", "true");
-  formData.append("callbackUrl", "/auth/login");
+  formData.append("callbackUrl", "/login");
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signout`,
     {

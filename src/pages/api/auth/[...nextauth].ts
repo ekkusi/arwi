@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
-import { compare, hash } from "bcrypt";
 import NextAuth, { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { serverRequest } from "../graphql";
 
 const Auth_LoginMutation = graphql(`
   mutation Auth_Login($email: String!, $password: String!) {
@@ -16,9 +16,10 @@ const Auth_LoginMutation = graphql(`
   }
 `);
 
+const IS_PROD = process.env.NODE_ENV && process.env.NODE_ENV === "production";
+
 export const authOptions: AuthOptions = {
-  useSecureCookies:
-    process.env.NODE_ENV && process.env.NODE_ENV === "production",
+  // useSecureCookies: IS_PROD, // NOTE: Comment this if running in localhost, wont work without https
   session: {
     maxAge: 30 * 24 * 60 * 60,
   },
@@ -39,19 +40,23 @@ export const authOptions: AuthOptions = {
           password: string;
         };
 
-        const {
-          login: { teacher },
-        } = await graphqlClient.request(Auth_LoginMutation, {
-          email,
-          password,
-        });
+        try {
+          const {
+            login: { teacher },
+          } = await serverRequest(Auth_LoginMutation, {
+            email,
+            password,
+          });
 
-        return teacher;
+          return teacher;
+        } catch (error) {
+          throw new Error(String(error));
+        }
       },
     }),
   ],
   pages: {
-    signIn: "/auth/login",
+    signIn: "/login",
   },
   callbacks: {
     async signIn({ user, account, profile, credentials }) {
@@ -74,7 +79,7 @@ export const authOptions: AuthOptions = {
       return baseUrl;
     },
   },
-  debug: true,
+  debug: !IS_PROD,
   secret: process.env.NEXTAUTH_SECRET,
 };
 

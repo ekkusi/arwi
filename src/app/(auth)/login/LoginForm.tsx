@@ -73,7 +73,7 @@ export default function LoginForm() {
             <Text as="span" mr="1">
               Ei vielä käyttäjää?
             </Text>
-            <NextLink href="/auth/register">Rekisteröidy tästä</NextLink>
+            <NextLink href="/register">Rekisteröidy tästä</NextLink>
           </Box>
         </Form>
       )}

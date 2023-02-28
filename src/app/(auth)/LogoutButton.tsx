@@ -13,12 +13,12 @@ export default function LogoutButton({ children, ...rest }: LogoutButtonProps) {
 
   const [loading, setLoading] = useState(false);
   const handleSignOut = async () => {
-    const callbackUrl = `/auth/login`;
+    const callbackUrl = `/login`;
     setLoading(true);
     await signOut({ callbackUrl, redirect: false });
     setLoading(false);
 
-    router.push("/auth/login");
+    router.push("/login");
   };
   return (
     <Button onClick={handleSignOut} isLoading={loading} {...rest}>

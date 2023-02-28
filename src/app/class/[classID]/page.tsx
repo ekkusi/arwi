@@ -1,7 +1,7 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
 import { Text } from "@/components/chakra";
 import { graphql } from "@/gql";
-import graphqlClient from "@/graphql-client";
+import { serverRequest } from "@/pages/api/graphql";
 
 type ClassOverviewPageProps = {
   params: {
@@ -34,12 +34,9 @@ const ClassOverviewPage_GetClassQuery = graphql(`
 export default async function ClassOverviewPage({
   params,
 }: ClassOverviewPageProps) {
-  const { getClass } = await graphqlClient.request(
-    ClassOverviewPage_GetClassQuery,
-    {
-      classId: params.classId,
-    }
-  );
+  const { getClass } = await serverRequest(ClassOverviewPage_GetClassQuery, {
+    classId: params.classId,
+  });
   return (
     <PageWrapper>
       {/* TODO: Show lessons etc... */}

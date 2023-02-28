@@ -1,9 +1,8 @@
 import { graphql } from "@/gql";
-import graphqlClient from "@/graphql-client";
 import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import LogoutButton from "./auth/LogoutButton";
+import { serverRequest } from "@/pages/api/graphql";
+import { getSessionOrRedirect } from "@/utils/sessionUtils";
+import LogoutButton from "./(auth)/LogoutButton";
 import PageWrapper from "./(server-components)/PageWrapper";
 import ClassList from "../components/ClassList";
 
@@ -20,15 +19,9 @@ const MainPage_GetTeacherQuery = graphql(`
 `);
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
+  const { user } = await getSessionOrRedirect();
 
-  if (!session) {
-    throw new Error("No session found, something is wrong");
-  }
-
-  const { user } = session;
-
-  const { getTeacher: teacher } = await graphqlClient.request(
+  const { getTeacher: teacher } = await serverRequest(
     MainPage_GetTeacherQuery,
     {
       teacherId: user.id,

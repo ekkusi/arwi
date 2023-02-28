@@ -27,7 +27,7 @@ const config: CodegenConfig = {
         scalars: customScalars,
       },
     },
-    "./src/graphql-server/types/index.ts": {
+    "./src/pages/api/graphql/types/index.ts": {
       plugins: [
         {
           add: {

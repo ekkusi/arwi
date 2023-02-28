@@ -16,7 +16,7 @@ export default function Error({ error, reset: _ }: ErrorProps) {
   }, [error]);
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/auth/login" });
+    await signOut({ callbackUrl: "/login" });
   };
 
   return (
