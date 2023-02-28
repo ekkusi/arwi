@@ -19,7 +19,7 @@ const Auth_LoginMutation = graphql(`
 const IS_PROD = process.env.NODE_ENV && process.env.NODE_ENV === "production";
 
 export const authOptions: AuthOptions = {
-  useSecureCookies: IS_PROD, // NOTE: Comment this if running in localhost, wont work without https
+  // useSecureCookies: IS_PROD, // NOTE: Comment this if running in localhost, wont work without https
   session: {
     maxAge: 30 * 24 * 60 * 60,
   },
