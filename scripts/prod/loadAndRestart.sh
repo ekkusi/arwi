@@ -9,3 +9,4 @@ docker pull ekkusi/arwi
 docker stop arwi || true && docker rm arwi || true
 docker run --env-file .env.production -d --name arwi -p 3000:3000 ekkusi/arwi
 docker rmi $(docker images -f "dangling=true" -q --no-trunc)
+echo "New container running and old ones removed successfully!"
