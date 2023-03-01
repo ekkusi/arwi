@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { compare, hash } from "bcrypt";
+import { compare, hash } from "bcryptjs";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
