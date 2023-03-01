@@ -8,3 +8,4 @@ cd "../../"
 docker pull ekkusi/arwi
 docker stop arwi && docker rm arwi
 docker run --env-file .env.production -d --name arwi -p 3000:3000 ekkusi/arwi
+docker rm $(docker ps -f "status=exited" -q) && docker rmi $(docker images -f "dangling=true" -q --no-trunc)
