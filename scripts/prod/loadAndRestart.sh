@@ -6,4 +6,5 @@ cd "$parentPath"
 cd "../../"
 
 docker pull ekkusi/arwi
+docker stop arwi && docker rm arwi
 docker run --env-file .env.production -d --name arwi -p 3000:3000 ekkusi/arwi
