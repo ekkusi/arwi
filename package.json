@@ -6,7 +6,7 @@
     "dev": "npm run kill && next dev",
     "kill": "bash ./scripts/kill-process.sh",
     "build": "next build",
-    "build:standalone": "next build && cp -r .next/static .next/standalone/static && cp -r public .next/standalone/public",
+    "build:standalone": "next build && cp -r .next/static .next/standalone/.next/static && cp -r public .next/standalone/public",
     "start": "npm run kill && next start",
     "start:prod": "next start",
     "lint": "next lint",
