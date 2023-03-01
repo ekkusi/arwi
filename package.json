@@ -8,7 +8,7 @@
     "build": "next build",
     "build:standalone": "next build && cp -r .next/static .next/standalone/.next/static && cp -r public .next/standalone/public",
     "start": "npm run kill && next start",
-    "start:prod": "next start",
+    "start:standalone": "npm run kill && node .next/standalone/server.js",
     "lint": "next lint",
     "codegen": "graphql-codegen --watch",
     "prisma:deploy-dev": "dotenv -e .env.production -- npx prisma migrate deploy",

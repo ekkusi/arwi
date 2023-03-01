@@ -5,6 +5,7 @@ type GenericError = Error & {
 // Custom error handler. Fetches originalError from GraphQLResponse structure, if exists. Otherwise returns normal error message
 export const getErrorMessage = (err: GenericError) => {
   const errors = err.response?.errors || err.errors;
+
   if (errors && errors.length > 0) {
     const graphQLError = errors[0];
 

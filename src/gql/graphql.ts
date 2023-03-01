@@ -529,7 +529,21 @@ export const MainPage_GetTeacherDocument = {
         ],
       },
     },
-    ...ClassList_ClassFragmentFragmentDoc.definitions,
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ClassList_ClassFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Class" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<
   MainPage_GetTeacherQuery,

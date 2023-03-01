@@ -1,3 +1,4 @@
+import ValidationError from "../errors/ValidationError";
 import { QueryResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
 
@@ -8,7 +9,8 @@ const resolvers: QueryResolvers<CustomContext> = {
         id,
       },
     });
-    if (!teacher) throw new Error(`Opettajaa ei löytynyt id:llä '${id}'`);
+    if (!teacher)
+      throw new ValidationError(`Opettajaa ei löytynyt id:llä '${id}'`);
     return teacher;
   },
   getTeachers: async (_, __, { prisma }) => {

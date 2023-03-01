@@ -1,4 +1,6 @@
-export default class AuthenticationError extends Error {
+import { GraphQLError } from "graphql";
+
+export default class AuthenticationError extends GraphQLError {
   constructor(m?: string) {
     super(m || "Sinun pitää olla autentikoitunut tätä operaatiota varten");
 

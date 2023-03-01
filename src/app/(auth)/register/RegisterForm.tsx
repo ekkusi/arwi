@@ -76,6 +76,7 @@ export default function RegisterForm() {
       return;
     } catch (error: any) {
       const errorMessage = getErrorMessage(error);
+
       setLoading(false);
 
       setGeneralError(errorMessage);

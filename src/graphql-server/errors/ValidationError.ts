@@ -1,4 +1,6 @@
-export default class ValidationError extends Error {
+import { GraphQLError } from "graphql";
+
+export default class ValidationError extends GraphQLError {
   constructor(m: string) {
     super(m);
 
