@@ -1,3 +1,4 @@
+import revalidateIfProd from "@/utils/revalidate";
 import { Prisma } from "@prisma/client";
 import { compare, hash } from "bcryptjs";
 import ValidationError from "../errors/ValidationError";
@@ -41,7 +42,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       teacher: matchingTeacher,
     };
   },
-  createClass: async (_, { data }, { prisma }) => {
+  createClass: async (_, { data }, { prisma, res }) => {
     const { students, ...rest } = data;
     const createdClass = await prisma.class.create({
       data: {
@@ -53,6 +54,8 @@ const resolvers: MutationResolvers<CustomContext> = {
           : undefined,
       },
     });
+
+    await revalidateIfProd(res, `/${createdClass.teacherId}`);
     return createdClass;
   },
   createCollection: async (_, { data, classId }, { prisma }) => {

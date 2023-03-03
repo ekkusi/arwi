@@ -137,7 +137,7 @@ export type MutationRegisterArgs = {
 export type Query = {
   __typename?: "Query";
   getClass: Class;
-  getClasses?: Maybe<Array<Class>>;
+  getClasses: Array<Class>;
   getTeacher: Teacher;
   getTeachers: Array<Teacher>;
 };
@@ -460,7 +460,7 @@ export type QueryResolvers<
     RequireFields<QueryGetClassArgs, "id">
   >;
   getClasses?: Resolver<
-    Maybe<Array<ResolversTypes["Class"]>>,
+    Array<ResolversTypes["Class"]>,
     ParentType,
     ContextType,
     RequireFields<QueryGetClassesArgs, "teacherId">

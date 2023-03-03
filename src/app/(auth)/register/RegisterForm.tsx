@@ -6,7 +6,7 @@ import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { Form, Formik } from "formik";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -68,7 +68,9 @@ export default function RegisterForm() {
           setGeneralError(response.error);
           return;
         }
-        router.push("/welcome");
+        const session = await getSession();
+        if (!session) throw new Error("Unexpected error"); // Session should be available
+        router.push(`/${session.user.id}`);
       } catch (error) {
         console.error(error);
       }

@@ -123,7 +123,7 @@ export type MutationRegisterArgs = {
 export type Query = {
   __typename?: "Query";
   getClass: Class;
-  getClasses?: Maybe<Array<Class>>;
+  getClasses: Array<Class>;
   getTeacher: Teacher;
   getTeachers: Array<Teacher>;
 };
@@ -174,6 +174,8 @@ export type ClassOverviewPage_GetClassQuery = {
     __typename?: "Class";
     id: string;
     name: string;
+    students: Array<{ __typename?: "Student"; name: string }>;
+    teacher: { __typename?: "Teacher"; id: string };
     evaluationCollections: Array<{
       __typename?: "EvaluationCollection";
       id: string;
@@ -188,6 +190,15 @@ export type ClassOverviewPage_GetClassQuery = {
       }>;
     }>;
   };
+};
+
+export type ClassPage_GetClassesQueryVariables = Exact<{
+  teacherId: Scalars["ID"];
+}>;
+
+export type ClassPage_GetClassesQuery = {
+  __typename?: "Query";
+  getClasses: Array<{ __typename?: "Class"; id: string }>;
 };
 
 export type CreateClassForm_CreateClassMutationVariables = Exact<{
@@ -219,10 +230,27 @@ export type MainPage_GetTeacherQuery = {
   };
 };
 
+export type TeacherLayout_GetTeachersQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type TeacherLayout_GetTeachersQuery = {
+  __typename?: "Query";
+  getTeachers: Array<{ __typename?: "Teacher"; id: string }>;
+};
+
+export type Test_GetTeachersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type Test_GetTeachersQuery = {
+  __typename?: "Query";
+  getTeachers: Array<{ __typename?: "Teacher"; id: string }>;
+};
+
 export type ClassList_ClassFragmentFragment = {
   __typename?: "Class";
   id: string;
   name: string;
+  teacher: { __typename?: "Teacher"; id: string };
 } & { " $fragmentName"?: "ClassList_ClassFragmentFragment" };
 
 export type Auth_LoginMutationVariables = Exact<{
@@ -253,6 +281,16 @@ export const ClassList_ClassFragmentFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "name" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "teacher" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
         ],
       },
     },
@@ -356,6 +394,26 @@ export const ClassOverviewPage_GetClassDocument = {
                 { kind: "Field", name: { kind: "Name", value: "name" } },
                 {
                   kind: "Field",
+                  name: { kind: "Name", value: "students" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "teacher" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
                   name: { kind: "Name", value: "evaluationCollections" },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -410,6 +468,57 @@ export const ClassOverviewPage_GetClassDocument = {
 } as unknown as DocumentNode<
   ClassOverviewPage_GetClassQuery,
   ClassOverviewPage_GetClassQueryVariables
+>;
+export const ClassPage_GetClassesDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ClassPage_GetClasses" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "teacherId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getClasses" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "teacherId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "teacherId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClassPage_GetClassesQuery,
+  ClassPage_GetClassesQueryVariables
 >;
 export const CreateClassForm_CreateClassDocument = {
   kind: "Document",
@@ -541,6 +650,16 @@ export const MainPage_GetTeacherDocument = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "name" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "teacher" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
         ],
       },
     },
@@ -548,6 +667,62 @@ export const MainPage_GetTeacherDocument = {
 } as unknown as DocumentNode<
   MainPage_GetTeacherQuery,
   MainPage_GetTeacherQueryVariables
+>;
+export const TeacherLayout_GetTeachersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "TeacherLayout_GetTeachers" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getTeachers" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  TeacherLayout_GetTeachersQuery,
+  TeacherLayout_GetTeachersQueryVariables
+>;
+export const Test_GetTeachersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Test_GetTeachers" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getTeachers" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  Test_GetTeachersQuery,
+  Test_GetTeachersQueryVariables
 >;
 export const Auth_LoginDocument = {
   kind: "Document",

@@ -1,12 +1,11 @@
 import { createYoga } from "graphql-yoga";
 import { NextApiRequest, NextApiResponse } from "next";
 
-// import schema from "@/graphql-server";
-import { PrismaClient } from "@prisma/client";
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { RemoveIndex } from "graphql-request/dist/types";
 import schema from "@/graphql-server";
 import { getErrorMessage } from "@/utils/errorUtils";
+import prismaClient from "@/graphql-server/prismaClient";
 
 export const config = {
   api: {
@@ -15,8 +14,6 @@ export const config = {
   },
 };
 
-export const prismaClient = new PrismaClient();
-
 const yoga = createYoga<{
   req: NextApiRequest;
   res: NextApiResponse;
@@ -24,15 +21,11 @@ const yoga = createYoga<{
   schema,
   // Needed to be defined explicitly because our endpoint lives at a different path other than `/graphql`
   graphqlEndpoint: "/api/graphql",
-  context: () => {
-    // console.log("Running graphql context");
-    // const requestMapped: Request = req;
-
-    // console.log("Request: ", req);
-    // console.log("Response :", res);
-
+  context: ({ req, res }) => {
     return {
       prisma: prismaClient,
+      req,
+      res,
     };
   },
 });
@@ -55,6 +48,7 @@ export const serverRequest = async <T, V>(
     schema: schemaOverride,
     contextValue: context,
   });
+
   const parsedResult = JSON.parse(JSON.stringify(result));
 
   if (parsedResult.data) {

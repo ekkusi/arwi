@@ -3,11 +3,13 @@ import { BoxProps } from "@chakra-ui/react";
 
 type PageWrapperProps = BoxProps & {
   hasNavigation?: boolean;
+  teacherId?: string;
 };
 
 function PageWrapper({
   children,
   hasNavigation = true,
+  teacherId,
   ...rest
 }: PageWrapperProps) {
   return (
@@ -21,7 +23,11 @@ function PageWrapper({
       {...rest}
     >
       {hasNavigation && (
-        <NextLink display="inline-block" mb="2" href="/">
+        <NextLink
+          display="inline-block"
+          mb="2"
+          href={teacherId ? `/${teacherId}` : "/"}
+        >
           {"\u2B05 Takaisin pääsivulle"}
         </NextLink>
       )}

@@ -41,9 +41,15 @@ export const Box = forwardRef<BoxProps, "div">((props: BoxProps, ref) => (
 export const Flex = forwardRef<FlexProps, "div">((props, ref) => (
   <ChakraFlex ref={ref} {...props} />
 ));
-export const Text = forwardRef<TextProps, "p">((props, ref) => (
+// NOTE: For some reason, with text the same way of exporting results to the following error:
+// "Cannot access Text.prototype on the server. You cannot dot into a client module from a server component. You can only pass the imported name through."
+// If this gets fixed, change text to the same as the other components.
+export { Text } from "@chakra-ui/react";
+// With ref anyway for MotionText
+const TextWithRef = forwardRef<TextProps, "p">((props, ref) => (
   <ChakraText ref={ref} {...props} />
 ));
+
 export const List = forwardRef<ListProps, "ul">((props, ref) => (
   <ChakraList ref={ref} {...props} />
 ));
@@ -85,7 +91,7 @@ export const IconButton = forwardRef<IconButtonProps, "a">((props, ref) => (
 
 type Merge<P, T> = Omit<P, keyof T> & T;
 export type MotionTextProps = Merge<TextProps, HTMLMotionProps<"p">>;
-export const MotionText: React.FC<MotionTextProps> = motion(Text);
+export const MotionText: React.FC<MotionTextProps> = motion(TextWithRef);
 
 export type MotionBoxProps = Merge<BoxProps, HTMLMotionProps<"div">>;
 export const MotionBox: React.FC<MotionBoxProps> = motion(Box);

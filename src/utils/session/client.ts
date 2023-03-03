@@ -1,23 +1,19 @@
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { getSession } from "next-auth/react";
+
+export async function getSessionClient() {
+  const session = await getSession();
+  if (!session) throw new Error("No session found");
+  return session;
+}
 
 type SessionData = {
   user: { email: string; name: string; id: string };
   expires: string;
 };
-
-export async function getSessionOrRedirect(redirectUrl = "/login") {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect(redirectUrl);
-  }
-
-  return session;
-}
-
-export async function getSession(cookie: string): Promise<SessionData | null> {
+// USE getServerSession INSTEAD!
+export async function getSessionFetch(
+  cookie: string
+): Promise<SessionData | null> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/session`,
     {
@@ -31,6 +27,7 @@ export async function getSession(cookie: string): Promise<SessionData | null> {
   return Object.keys(session).length > 0 ? session : null;
 }
 
+// USE SIGNOUT INSTEAD!
 export async function signOut(cookie?: string): Promise<any> {
   const headers: HeadersInit = {};
   if (cookie) headers.cookie = cookie;

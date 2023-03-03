@@ -1,7 +1,5 @@
-"use client";
-
-import { AnimatePresence, motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+// import { AnimatePresence, motion } from "framer-motion";
+// import { usePathname } from "next/navigation";
 
 // Right now in Next.js v13, the exit animations for page transitions don't work correctly if we use an
 //  instance of this component in the layout file, even if we use AnimatePresence in this file.  If we
@@ -15,22 +13,28 @@ import { usePathname } from "next/navigation";
 //  So that's another approach that I need to try-out.
 //  See: https://beta.nextjs.org/docs/routing/pages-and-layouts#templates
 
-export default function Template({ children }: React.ComponentProps<"div">) {
-  const pathname = usePathname();
+// NOTE: When exit animation is fixed, uncomment the following:
 
-  return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.div
-        key={pathname}
-        initial={{ x: 300, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        exit={{ x: 300, opacity: 0 }}
-        transition={{
-          duration: 0.5,
-        }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
-  );
+// export default function Template({ children }: React.ComponentProps<"div">) {
+//   const pathname = usePathname();
+
+//   return (
+//     <AnimatePresence mode="wait" initial={false}>
+//       <motion.div
+//         key={pathname}
+//         initial={{ x: 300, opacity: 0 }}
+//         animate={{ x: 0, opacity: 1 }}
+//         exit={{ x: 300, opacity: 0 }}
+//         transition={{
+//           duration: 0.5,
+//         }}
+//       >
+//         {children}
+//       </motion.div>
+//     </AnimatePresence>
+//   );
+// }
+
+export default function Template({ children }: { children: React.ReactNode }) {
+  return children;
 }

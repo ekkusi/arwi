@@ -10,7 +10,7 @@ export const getErrorMessage = (err: GenericError) => {
     const graphQLError = errors[0];
 
     // Try fetch originalError from extensions and return it's message if exists.
-    if (graphQLError.extensions?.originalError.message) {
+    if (graphQLError.extensions?.originalError?.message) {
       return graphQLError.extensions.originalError.message;
     }
 

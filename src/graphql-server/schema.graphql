@@ -1,7 +1,7 @@
 type Query {
   getTeacher(id: ID!): Teacher!
   getTeachers: [Teacher!]!
-  getClasses(teacherId: ID!): [Class!]
+  getClasses(teacherId: ID!): [Class!]!
   getClass(id: ID!): Class!
 }
 

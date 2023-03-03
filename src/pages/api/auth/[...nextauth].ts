@@ -80,7 +80,7 @@ export const authOptions: AuthOptions = {
     },
   },
   debug: !IS_PROD,
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.SECRET,
 };
 
 export default NextAuth(authOptions);

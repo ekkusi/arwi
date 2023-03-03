@@ -3,7 +3,7 @@
 import { Box, Button, NextLink, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { Form, Formik } from "formik";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -35,9 +35,11 @@ export default function LoginForm() {
       setLoading(false);
       if (response && response.status === 401) {
         setGeneralError("Väärä salasana tai käyttäjätunnus");
-      } else {
-        router.push("/");
+        return;
       }
+      const session = await getSession();
+      if (!session) throw new Error("Unexpected error"); // Session should be available
+      router.push(`/${session.user.id}`);
     } catch (e) {
       setLoading(false);
       console.error(e);

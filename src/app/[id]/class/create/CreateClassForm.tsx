@@ -1,13 +1,13 @@
 "use client";
 
-import { Button, Flex, NextLink, Spinner, Text } from "@/components/chakra";
+import { Button, Flex, NextLink, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
 import { graphql } from "@/gql";
 import { CreateStudentInput } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
+import { getSessionClient } from "@/utils/session/client";
 import { BoxProps } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AddStudentsList from "./AddStudentsList";
@@ -29,7 +29,6 @@ const CreateClassForm_CreateClassMutation = graphql(`
 
 export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
   const router = useRouter();
-  const { data } = useSession();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
   const validateName = (value: string) => {
@@ -39,29 +38,25 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    if (!data?.user) {
-      throw new Error("Cant find session");
-    }
-
+    const session = await getSessionClient();
     setLoading(true);
-
     try {
       await graphqlClient.request(CreateClassForm_CreateClassMutation, {
         input: {
           ...values,
           students,
-          teacherId: data.user.id,
+          teacherId: session.user.id,
         },
       });
       setLoading(false);
-      router.push("/");
+      router.push(`/${session.user.id}`);
     } catch (error) {
       setLoading(false);
       console.error("Error happened:", error);
     }
   };
 
-  return data?.user ? (
+  return (
     <Formik initialValues={{ name: "" }} onSubmit={handleSubmit}>
       {() => (
         <Flex as={Form} flex="1" flexDirection="column" bg="white" {...rest}>
@@ -88,9 +83,5 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
         </Flex>
       )}
     </Formik>
-  ) : (
-    <Text>
-      Loading... <Spinner />
-    </Text>
   );
 }

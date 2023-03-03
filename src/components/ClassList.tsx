@@ -11,6 +11,9 @@ const ClassList_ClassFragment = graphql(`
   fragment ClassList_ClassFragment on Class {
     id
     name
+    teacher {
+      id
+    }
   }
 `);
 
@@ -81,7 +84,7 @@ export default function ClassList({
         <Flex flexDirection="column">
           <Button
             as={NextLink}
-            href={`class/${selectedClass?.id}`}
+            href={`/${selectedClass?.teacher.id}/class/${selectedClass?.id}`}
             mb="3"
             colorScheme="yellow"
             onClick={() => {
@@ -92,7 +95,7 @@ export default function ClassList({
           </Button>
           <Button
             as={NextLink}
-            href={`class/${selectedClass?.id}/create-evaluations`}
+            href={`/${selectedClass?.teacher.id}/class/${selectedClass?.id}/create-evaluations`}
             onClick={() => {
               onClose();
             }}
