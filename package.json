@@ -14,6 +14,7 @@
     "codegen-watch": "graphql-codegen --watch",
     "prisma:deploy-dev": "dotenv -e .env.production -- npx prisma migrate deploy",
     "prisma:deploy": "npx prisma migrate deploy",
+    "clear-db": "ts-node ./src/graphql-server/utils/clearDb.ts",
     "prepare": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
     "postinstall": "npx prisma generate",
     "test": "ts-node ./src/test.ts"

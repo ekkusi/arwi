@@ -20,7 +20,7 @@ model Class {
   name                  String
   students              Student[]
   evaluationCollections EvaluationCollection[]
-  teacher               Teacher                @relation(fields: [teacherId], references: [id])
+  teacher               Teacher                @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId             String
 }
 
@@ -30,7 +30,7 @@ model EvaluationCollection {
   type        String
   description String?
   evaluations Evaluation[]
-  class       Class        @relation(fields: [classId], references: [id])
+  class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId     String
 }
 
@@ -41,14 +41,14 @@ model Evaluation {
   skillsRating           Int?
   behaviourRating        Int?
   notes                  String?
-  evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id])
+  evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id], onDelete: Cascade)
   evaluationCollectionId String
 }
 
 model Student {
   id         String       @id @default(uuid())
   name       String
-  class      Class        @relation(fields: [classId], references: [id])
+  class      Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId    String
   evaluations Evaluation[]
 }
