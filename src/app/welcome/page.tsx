@@ -1,15 +1,11 @@
-import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
+import { Button, Flex, NextLink, Text } from "@/components/chakra";
 import PageWrapper from "../(server-components)/PageWrapper";
+import CenteredContainer from "../(server-components)/primitives/CenteredContainer";
 
 export default function WelcomePage() {
   return (
     <PageWrapper hasNavigation={false}>
-      <Box
-        position="absolute"
-        transform="translate(-50%, -50%)"
-        top="50%"
-        left="50%"
-      >
+      <CenteredContainer>
         <Text as="h1" textAlign="center" fontSize="5xl">
           Tervetuloa!
         </Text>
@@ -21,7 +17,7 @@ export default function WelcomePage() {
             Aloita arviointi
           </Button>
         </Flex>
-      </Box>
+      </CenteredContainer>
     </PageWrapper>
   );
 }
