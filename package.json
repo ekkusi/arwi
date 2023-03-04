@@ -11,7 +11,7 @@
     "start:standalone": "npm run kill && node .next/standalone/server.js",
     "lint": "next lint",
     "codegen": "graphql-codegen",
-    "codegen-watch": "graphql-codegen --watch",
+    "codegen:watch": "graphql-codegen --watch",
     "prisma:deploy-dev": "dotenv -e .env.production -- npx prisma migrate deploy",
     "prisma:deploy": "npx prisma migrate deploy",
     "clear-db": "ts-node ./src/graphql-server/utils/clearDb.ts",

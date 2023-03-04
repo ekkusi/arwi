@@ -1,8 +1,8 @@
 {
-  "name": "Arwi - A teacher's dearest friend",
+  "name": "Arwi - Open paras ystävä",
   "short_name": "Arwi",
-  "description" : "A tool to help teachers evaluate their students more effectively",
-  "theme_color": "#C6F6D5",
+  "description" : "Työkalu oppilaiden arvioimisen helpottamiseen ja opettajien työn keventämiseen.",
+  "theme_color": "#EDF2F7",
   "background_color": "#EDF2F7",
   "display": "standalone",
   "orientation": "portrait",
