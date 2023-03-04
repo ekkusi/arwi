@@ -35,12 +35,7 @@ export default async function HomePage({ params }: HomePageProps) {
   );
 
   return (
-    <PageWrapper
-      display="flex"
-      flexDirection="column"
-      hasNavigation={false}
-      teacherId={teacher.id}
-    >
+    <PageWrapper display="flex" flexDirection="column" hasNavigation={false}>
       <NextLink href="/design" display="block" mb="2">
         {"Design sivulle \u2B95"}
       </NextLink>

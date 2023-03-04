@@ -82,7 +82,15 @@ export default function DesignPage() {
         <Button mb="2" mr="2" variant="outline">
           Outline button
         </Button>
+        <Button size="sm" mb="2" mr="2">
+          Small button
+        </Button>
+        <Button size="sm" mb="2" mr="2">
+          Large Button
+        </Button>
         <IconButton aria-label="Test" icon={<AiFillDelete />} />
+        <IconButton size="sm" aria-label="Test" icon={<AiFillDelete />} />
+        <IconButton size="lg" aria-label="Test" icon={<AiFillDelete />} />
       </Section>
       {/* Lists */}
       <Section title="Lists">

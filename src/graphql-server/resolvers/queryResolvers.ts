@@ -29,6 +29,13 @@ const resolvers: QueryResolvers<CustomContext> = {
     });
     return matchingClass;
   },
+  getCollection: async (_, { id }, { prisma }) => {
+    const matchingCollection =
+      await prisma.evaluationCollection.findFirstOrThrow({
+        where: { id },
+      });
+    return matchingCollection;
+  },
 };
 
 export default resolvers;

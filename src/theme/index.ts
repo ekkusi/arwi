@@ -48,6 +48,7 @@ const theme = extendTheme(
     styles: {
       global: () => ({
         "html, body, #root": {
+          "-webkit-tap-highlight-color": "transparent",
           margin: 0,
           width: "100%",
           overflowX: "hidden",

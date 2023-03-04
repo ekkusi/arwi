@@ -1,7 +1,9 @@
 "use client";
 
-import { Button, Flex, NextLink, Text } from "@/components/chakra";
+import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
+import { Button, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
+import LinkToHome from "@/components/LinkToHome";
 import { graphql } from "@/gql";
 import { CreateStudentInput } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
@@ -57,11 +59,11 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
   };
 
   return (
-    <Formik initialValues={{ name: "" }} onSubmit={handleSubmit}>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {() => (
-        <Flex as={Form} flex="1" flexDirection="column" bg="white" {...rest}>
+        <BorderedCard as={Form} display="flex" flexDirection="column" {...rest}>
           <Text as="h1" textAlign="center">
-            Uusi luokka
+            Uusi arviointi
           </Text>
           <FormField name="name" label="Luokan nimi" validate={validateName} />
           <Text as="h2">Oppilaat</Text>
@@ -71,16 +73,15 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
           <Button type="submit" marginTop="auto" isLoading={loading}>
             Luo luokka
           </Button>
-          <NextLink
+          <LinkToHome
             color="gray.700"
             mt="3"
-            href="/"
             textTransform="uppercase"
             textAlign="center"
           >
             Peruuta
-          </NextLink>
-        </Flex>
+          </LinkToHome>
+        </BorderedCard>
       )}
     </Formik>
   );

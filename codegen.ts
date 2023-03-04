@@ -1,7 +1,7 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
 
 const customScalars = {
-  Date: "Date",
+  Date: "string",
   EmailAddress: "string",
 };
 

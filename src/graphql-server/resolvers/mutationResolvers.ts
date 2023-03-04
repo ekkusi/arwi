@@ -58,7 +58,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     await revalidateIfProd(res, `/${createdClass.teacherId}`);
     return createdClass;
   },
-  createCollection: async (_, { data, classId }, { prisma }) => {
+  createCollection: async (_, { data, classId }, { prisma, res }) => {
     const { evaluations, ...rest } = data;
     const createdCollection = await prisma.evaluationCollection.create({
       data: {
@@ -74,6 +74,11 @@ const resolvers: MutationResolvers<CustomContext> = {
           : undefined,
       },
     });
+    // TODO: teacher info should probably come from context
+    const teacher = await prisma.teacher.findFirstOrThrow({
+      where: { class: { some: { id: classId } } },
+    });
+    await revalidateIfProd(res, `/${teacher.id}/class/${classId}`);
     return createdCollection;
   },
   addEvaluations: async (_, { data, collectionId }, { prisma }) => {

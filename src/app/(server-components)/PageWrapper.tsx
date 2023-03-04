@@ -1,15 +1,14 @@
-import { Box, NextLink } from "@/components/chakra";
+import { Box } from "@/components/chakra";
+import LinkToHome from "@/components/LinkToHome";
 import { BoxProps } from "@chakra-ui/react";
 
 type PageWrapperProps = BoxProps & {
   hasNavigation?: boolean;
-  teacherId?: string;
 };
 
 function PageWrapper({
   children,
   hasNavigation = true,
-  teacherId,
   ...rest
 }: PageWrapperProps) {
   return (
@@ -23,13 +22,9 @@ function PageWrapper({
       {...rest}
     >
       {hasNavigation && (
-        <NextLink
-          display="inline-block"
-          mb="2"
-          href={teacherId ? `/${teacherId}` : "/"}
-        >
+        <LinkToHome display="inline-block" mb="2">
           {"\u2B05 Takaisin pääsivulle"}
-        </NextLink>
+        </LinkToHome>
       )}
       {children}
     </Box>

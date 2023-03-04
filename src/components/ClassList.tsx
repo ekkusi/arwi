@@ -95,7 +95,7 @@ export default function ClassList({
           </Button>
           <Button
             as={NextLink}
-            href={`/${selectedClass?.teacher.id}/class/${selectedClass?.id}/create-evaluations`}
+            href={`/${selectedClass?.teacher.id}/class/${selectedClass?.id}/create-collection`}
             onClick={() => {
               onClose();
             }}

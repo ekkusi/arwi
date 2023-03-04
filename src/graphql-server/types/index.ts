@@ -34,7 +34,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: Date;
+  Date: string;
   EmailAddress: string;
 };
 
@@ -66,6 +66,7 @@ export type CreateEvaluationInput = {
   notes?: InputMaybe<Scalars["String"]>;
   skillsRating?: InputMaybe<Scalars["Int"]>;
   studentId: Scalars["ID"];
+  wasPresent: Scalars["Boolean"];
 };
 
 export type CreateStudentInput = {
@@ -85,6 +86,7 @@ export type Evaluation = {
   notes?: Maybe<Scalars["String"]>;
   skillsRating?: Maybe<Scalars["Int"]>;
   student: Student;
+  wasPresent: Scalars["Boolean"];
 };
 
 export type EvaluationCollection = {
@@ -138,6 +140,7 @@ export type Query = {
   __typename?: "Query";
   getClass: Class;
   getClasses: Array<Class>;
+  getCollection: EvaluationCollection;
   getTeacher: Teacher;
   getTeachers: Array<Teacher>;
 };
@@ -148,6 +151,10 @@ export type QueryGetClassArgs = {
 
 export type QueryGetClassesArgs = {
   teacherId: Scalars["ID"];
+};
+
+export type QueryGetCollectionArgs = {
+  id: Scalars["ID"];
 };
 
 export type QueryGetTeacherArgs = {
@@ -381,6 +388,7 @@ export type EvaluationResolvers<
     ContextType
   >;
   student?: Resolver<ResolversTypes["Student"], ParentType, ContextType>;
+  wasPresent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -464,6 +472,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryGetClassesArgs, "teacherId">
+  >;
+  getCollection?: Resolver<
+    ResolversTypes["EvaluationCollection"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetCollectionArgs, "id">
   >;
   getTeacher?: Resolver<
     ResolversTypes["Teacher"],

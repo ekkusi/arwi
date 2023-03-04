@@ -45,6 +45,14 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
     },
   },
   sizes: {
+    sm: ({ variant }) => {
+      const sizeProps = variant === "ghost" ? formatSizeProps(4) : {};
+      return {
+        py: 4,
+        px: 4,
+        ...sizeProps,
+      };
+    },
     md: ({ variant }) => {
       const sizeProps = variant === "ghost" ? formatSizeProps(6) : {};
       return {

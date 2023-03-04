@@ -3,6 +3,7 @@ type Query {
   getTeachers: [Teacher!]!
   getClasses(teacherId: ID!): [Class!]!
   getClass(id: ID!): Class!
+  getCollection(id: ID!): EvaluationCollection!
 }
 
 type Mutation {
@@ -45,6 +46,7 @@ type EvaluationCollection {
 type Evaluation {
   id: ID!
   student: Student!
+  wasPresent: Boolean!
   skillsRating: Int
   behaviourRating: Int
   notes: String
@@ -83,6 +85,7 @@ input CreateCollectionInput {
 
 input CreateEvaluationInput {
   studentId: ID!
+  wasPresent: Boolean!
   skillsRating: Int
   behaviourRating: Int
   notes: String

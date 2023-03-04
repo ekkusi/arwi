@@ -1,7 +1,8 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
-import { Box, Text } from "@/components/chakra";
+import { Box, NextLink, Text } from "@/components/chakra";
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
+import { formatDate } from "@/utils/dateUtils";
 
 // Necessary for revalidation to work
 export const dynamic = "force-static";
@@ -48,7 +49,7 @@ export default async function ClassOverviewPage({
     classId: params.classId,
   });
   return (
-    <PageWrapper teacherId={getClass.teacher.id}>
+    <PageWrapper>
       {/* TODO: Show lessons etc... */}
       <Text as="h1">Luokka: {getClass.name}</Text>
       <Text as="h2">Oppilaat:</Text>
@@ -63,33 +64,32 @@ export default async function ClassOverviewPage({
           <Text>Ei oppilaita</Text>
         </Box>
       )}
+      <Text as="h2" mt="5">
+        Arvioinnit:
+      </Text>
+      {getClass.evaluationCollections.length > 0 ? (
+        <Box>
+          {getClass.evaluationCollections.map((collection) => (
+            <Box>
+              <Text as="span" textStyle="italic" mr="1">
+                {formatDate(new Date(collection.date), "dd.MM.yyyy")}:
+              </Text>
+              <NextLink href={`${collection.id}/collection/${collection.id}`}>
+                {collection.type}
+              </NextLink>
+            </Box>
+          ))}
+        </Box>
+      ) : (
+        <>
+          <Text>Ei vielä arviointeja</Text>
+          <NextLink
+            href={`${getClass.teacher.id}/class/${getClass.id}/create-collection`}
+          >
+            Siirry tekemään arviointi
+          </NextLink>
+        </>
+      )}
     </PageWrapper>
   );
 }
-
-// const ClassPage_GetClassesQuery = graphql(`
-//   query ClassPage_GetClasses($teacherId: ID!) {
-//     getClasses(teacherId: $teacherId) {
-//       id
-//     }
-//   }
-// `);
-
-// export const generateStaticParams = async ({
-//   params,
-// }: {
-//   params: { id: string };
-// }) => {
-//   console.log("generate class page, params", params);
-
-//   const { getClasses: classes } = await serverRequest(
-//     ClassPage_GetClassesQuery,
-//     {
-//       teacherId: params.id,
-//     }
-//   );
-
-//   return classes.map((it) => ({
-//     classId: it.id,
-//   }));
-// };
