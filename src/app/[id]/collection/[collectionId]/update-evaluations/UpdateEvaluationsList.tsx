@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getSessionClient } from "@/utils/session/client";
+import LinkToHome from "@/components/LinkToHome";
 import RatingSelector from "./RatingSelector";
 
 const UpdateEvaluationsList_CollectionFragment = graphql(`
@@ -184,6 +185,15 @@ export default function UpdateEvaluationsList({
       >
         Luo arvioinnit
       </Button>
+      <LinkToHome
+        color="gray.700"
+        display="block"
+        mt="3"
+        textTransform="uppercase"
+        textAlign="center"
+      >
+        Peruuta
+      </LinkToHome>
     </Box>
   );
 }

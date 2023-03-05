@@ -63,7 +63,7 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
       {() => (
         <BorderedCard as={Form} display="flex" flexDirection="column" {...rest}>
           <Text as="h1" textAlign="center">
-            Uusi arviointi
+            Uusi luokka
           </Text>
           <FormField name="name" label="Luokan nimi" validate={validateName} />
           <Text as="h2">Oppilaat</Text>

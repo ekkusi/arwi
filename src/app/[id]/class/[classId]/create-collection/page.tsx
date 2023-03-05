@@ -23,7 +23,7 @@ export default async function CreateCollectionPage({
   });
   return (
     <PageWrapper display="flex" flexDirection="column" hasNavigation={false}>
-      <CreateCollectionForm flex="1" height="100%" class={getClass} />
+      <CreateCollectionForm flex="1" class={getClass} />
     </PageWrapper>
   );
 }

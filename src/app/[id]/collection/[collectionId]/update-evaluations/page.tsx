@@ -1,5 +1,4 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
-import { Text } from "@/components/chakra";
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 import UpdateEvaluationsList from "./UpdateEvaluationsList";
@@ -33,8 +32,7 @@ export default async function UpdateEvaluationsPage({
     }
   );
   return (
-    <PageWrapper>
-      <Text as="h1">Arviointien lisäys</Text>
+    <PageWrapper hasNavigation={false}>
       <UpdateEvaluationsList collection={getCollection} />
     </PageWrapper>
   );
