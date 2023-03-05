@@ -86,7 +86,7 @@ export default function CreateCollectionForm({
       );
       setLoading(false);
       router.push(
-        `/${session.user.id}/collection/${createCollection.id}/add-evaluations`
+        `/${session.user.id}/collection/${createCollection.id}/update-evaluations`
       );
     } catch (error) {
       setLoading(false);

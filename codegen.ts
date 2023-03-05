@@ -13,6 +13,9 @@ const config: CodegenConfig = {
     "!src/gql/**/*",
   ],
   ignoreNoDocuments: true,
+  config: {
+    sort: false, // Disable sorting so enums will be in same order as in schema (applies to others than enums as well as side effect)
+  },
   generates: {
     "./src/gql/": {
       preset: "client",

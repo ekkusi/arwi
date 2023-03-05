@@ -30,6 +30,7 @@ const CollectionPage_GetCollectionQuery = graphql(`
         wasPresent
         skillsRating
         behaviourRating
+        notes
       }
     }
   }
@@ -65,6 +66,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
               Käyttäytyminen: {getRatingString(evaluation.behaviourRating)}
             </Text>
             <Text>Taidot: {getRatingString(evaluation.skillsRating)}</Text>
+            {!!evaluation.notes && <Text mt="2">{evaluation.notes}</Text>}
           </Box>
         ))
       ) : (

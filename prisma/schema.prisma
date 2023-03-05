@@ -58,5 +58,6 @@ enum Rating {
   POOR
   FAIR
   GOOD
+  GREAT
   EXCELLENT
 }

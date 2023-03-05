@@ -46,8 +46,9 @@ type EvaluationCollection {
 enum Rating {
   POOR
   FAIR
-  EXCELLENT
   GOOD
+  GREAT
+  EXCELLENT
 }
 
 type Evaluation {

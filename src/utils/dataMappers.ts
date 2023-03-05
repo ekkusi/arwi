@@ -4,25 +4,14 @@ export const formatRatingString = (rating: Rating) => {
   switch (rating) {
     case Rating.Excellent:
       return "Erinomainen";
-    case Rating.Good:
+    case Rating.Great:
       return "Kiitettävä";
-    case Rating.Fair:
+    case Rating.Good:
       return "Hyvä";
+    case Rating.Fair:
+      return "Tyydyttävä";
     default:
       return "Välttävä";
-  }
-};
-
-export const formatRatingNumberString = (rating: Rating) => {
-  switch (rating) {
-    case Rating.Excellent:
-      return "(10)";
-    case Rating.Good:
-      return "(9)";
-    case Rating.Fair:
-      return "(7-8)";
-    default:
-      return "(5-6)";
   }
 };
 
@@ -30,12 +19,29 @@ export const formatRatingNumber = (rating: Rating) => {
   switch (rating) {
     case Rating.Excellent:
       return 10;
-    case Rating.Good:
+    case Rating.Great:
       return 9;
+    case Rating.Good:
+      return 8;
     case Rating.Fair:
-      return 7.5;
+      return 7;
     default:
-      return 5.5;
+      return 6;
+  }
+};
+
+export const formatRatingNumberString = (rating: Rating) => {
+  switch (rating) {
+    case Rating.Excellent:
+      return "10";
+    case Rating.Great:
+      return "9";
+    case Rating.Good:
+      return "8";
+    case Rating.Fair:
+      return "7";
+    default:
+      return "< 6";
   }
 };
 
@@ -43,10 +49,12 @@ export const getRatingEmoji = (rating: Rating) => {
   switch (rating) {
     case Rating.Excellent:
       return "🤩";
-    case Rating.Good:
+    case Rating.Great:
       return "😊";
-    case Rating.Fair:
+    case Rating.Good:
       return "🙂";
+    case Rating.Fair:
+      return "😕";
     default:
       return "🙁";
   }

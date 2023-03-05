@@ -8,12 +8,13 @@ const Tag: ComponentSingleStyleConfig = defineStyleConfig({
     container: {
       textTransform: "uppercase",
       fontWeight: "semibold",
+      justifyContent: "center",
     },
   },
   variants: {
     outline: ({ colorScheme }) => ({
       container: {
-        border: "2px",
+        borderWidth: "2px",
         borderColor: `${colorScheme}.800`,
         color: `${colorScheme}.900`,
         boxShadow: "none",

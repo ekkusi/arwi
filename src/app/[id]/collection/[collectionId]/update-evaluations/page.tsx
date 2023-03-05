@@ -2,14 +2,14 @@ import PageWrapper from "@/app/(server-components)/PageWrapper";
 import { Text } from "@/components/chakra";
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
-import AddEvaluationsList from "./AddEvaluationsList";
+import UpdateEvaluationsList from "./UpdateEvaluationsList";
 
-type AddEvaluationsPageProps = {
+type UpdateEvaluationsPageProps = {
   params: { collectionId: string };
 };
 
-const AddEvaluationsPage_GetCollectionQuery = graphql(`
-  query AddEvaluationsPage_GetCollection($collectionId: ID!) {
+const UpdateEvaluationsPage_GetCollectionQuery = graphql(`
+  query UpdateEvaluationsPage_GetCollection($collectionId: ID!) {
     getCollection(id: $collectionId) {
       id
       class {
@@ -18,16 +18,16 @@ const AddEvaluationsPage_GetCollectionQuery = graphql(`
           id
         }
       }
-      ...AddEvaluationsList_Collection
+      ...UpdateEvaluationsList_Collection
     }
   }
 `);
 
-export default async function AddEvaluationsPage({
+export default async function UpdateEvaluationsPage({
   params,
-}: AddEvaluationsPageProps) {
+}: UpdateEvaluationsPageProps) {
   const { getCollection } = await serverRequest(
-    AddEvaluationsPage_GetCollectionQuery,
+    UpdateEvaluationsPage_GetCollectionQuery,
     {
       collectionId: params.collectionId,
     }
@@ -35,7 +35,7 @@ export default async function AddEvaluationsPage({
   return (
     <PageWrapper>
       <Text as="h1">Arviointien lisäys</Text>
-      <AddEvaluationsList collection={getCollection} />
+      <UpdateEvaluationsList collection={getCollection} />
     </PageWrapper>
   );
 }

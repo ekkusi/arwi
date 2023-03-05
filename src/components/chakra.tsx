@@ -28,6 +28,8 @@ import {
   Spinner as ChakraSpinner,
   Input as ChakraInput,
   InputProps,
+  Textarea as ChakraTextarea,
+  TextareaProps,
   FormLabel as ChakraFormLabel,
   FormLabelProps,
   IconButton as ChakraIconButton,
@@ -67,8 +69,11 @@ export const ListItem = forwardRef<ListItemProps, "li">((props, ref) => (
 export const Button = forwardRef<ButtonProps, "button">((props, ref) => (
   <ChakraButton ref={ref} {...props} />
 ));
-export const Input = forwardRef<InputProps, "button">((props, ref) => (
+export const Input = forwardRef<InputProps, "input">((props, ref) => (
   <ChakraInput ref={ref} {...props} />
+));
+export const Textarea = forwardRef<TextareaProps, "textarea">((props, ref) => (
+  <ChakraTextarea ref={ref} {...props} />
 ));
 export const Icon = forwardRef<IconProps, "i">((props, ref) => (
   <ChakraIcon ref={ref} {...props} />
