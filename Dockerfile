@@ -17,7 +17,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npx prisma generate
 # Read environment variables from secrets, should be set when running build
 RUN --mount=type=secret,id=secret SECRET=$(cat /run/secrets/secret) \
-    --mount=type=secret,id=database_url DATABASE_URL$(cat /run/secrets/database_url) \
+    --mount=type=secret,id=database_url DATABASE_URL=$(cat /run/secrets/database_url) \
     --mount=type=secret,id=public_base_url  NEXT_PUBLIC_BASE_URL=$(cat /run/secrets/public_base_url) \
     --mount=type=secret,id=public_graphql_api_url NEXT_PUBLIC_GRAPHQL_API_URL=$(cat /run/secrets/public_graphql_api_url) \
     --mount=type=secret,id=next_auth_url NEXTAUTH_URL=$(cat /run/secrets/next_auth_url) \
