@@ -28,10 +28,11 @@ jobs:
           context: .
           push: true
           tags: ekkusi/arwi:latest
-        env:
-          NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
-          NEXT_PUBLIC_GRAPHQL_API_URL: ${{ secrets.NEXT_PUBLIC_GRAPHQL_API_URL }} 
-          SECRET: ${{ secrets.SECRET }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          IS_HTTPS: ${{ secrets.IS_HTTPS }}
+          platforms: linux/amd64
+          secrets: |
+            "secret=${{ secrets.SECRET }}"
+            "database_url=${{ secrets.DATABASE_URL }}"
+            "public_base_url=${{ secrets.NEXT_PUBLIC_BASE_URL }}"
+            "public_graphql_api_url=${{ secrets.NEXT_PUBLIC_GRAPHQL_API_URL }}"
+            "next_auth_url=${{ secrets.NEXTAUTH_URL }}"
+            "is_https=${{ secrets.IS_HTTPS }}"
