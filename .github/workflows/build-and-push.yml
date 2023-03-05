@@ -33,5 +33,5 @@ jobs:
           NEXT_PUBLIC_GRAPHQL_API_URL: ${{ secrets.NEXT_PUBLIC_GRAPHQL_API_URL }} 
           SECRET: ${{ secrets.SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          DATABASE_URL: ${{ secerets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           IS_HTTPS: ${{ secrets.IS_HTTPS }}
