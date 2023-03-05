@@ -1,5 +1,4 @@
 import revalidateIfProd from "@/utils/revalidate";
-import { Prisma } from "@prisma/client";
 import { compare, hash } from "bcryptjs";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
@@ -81,18 +80,30 @@ const resolvers: MutationResolvers<CustomContext> = {
     await revalidateIfProd(res, `/${teacher.id}/class/${classId}`);
     return createdCollection;
   },
-  addEvaluations: async (_, { data, collectionId }, { prisma }) => {
-    // TODO: Make separate mapper
-    const dataWithCollectionIds = data.map<Prisma.EvaluationCreateManyInput>(
-      (it) => ({
-        ...it,
-        evaluationCollectionId: collectionId,
-      })
-    );
-    const evaluations = await prisma.evaluation.createMany({
-      data: dataWithCollectionIds,
+  updateEvaluations: async (_, { data, collectionId }, { prisma, res }) => {
+    const promises = data.map((it) => {
+      const { id, ...rest } = it;
+      return prisma.evaluation.update({
+        where: { id },
+        data: {
+          ...rest,
+          evaluationCollectionId: collectionId,
+        },
+      });
     });
-    return evaluations.count;
+    const results = await Promise.all(promises);
+
+    // TODO: teacher info should probably come from context
+    const teacher = await prisma.teacher.findFirstOrThrow({
+      where: {
+        class: {
+          some: { evaluationCollections: { some: { id: collectionId } } },
+        },
+      },
+    });
+    await revalidateIfProd(res, `/${teacher.id}/collection/${collectionId}`);
+
+    return results.length;
   },
 };
 

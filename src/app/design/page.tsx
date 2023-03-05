@@ -85,7 +85,7 @@ export default function DesignPage() {
         <Button size="sm" mb="2" mr="2">
           Small button
         </Button>
-        <Button size="sm" mb="2" mr="2">
+        <Button size="lg" mb="2" mr="2">
           Large Button
         </Button>
         <IconButton aria-label="Test" icon={<AiFillDelete />} />

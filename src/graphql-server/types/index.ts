@@ -62,9 +62,9 @@ export type CreateCollectionInput = {
 };
 
 export type CreateEvaluationInput = {
-  behaviourRating?: InputMaybe<Scalars["Int"]>;
+  behaviourRating?: InputMaybe<Rating>;
   notes?: InputMaybe<Scalars["String"]>;
-  skillsRating?: InputMaybe<Scalars["Int"]>;
+  skillsRating?: InputMaybe<Rating>;
   studentId: Scalars["ID"];
   wasPresent: Scalars["Boolean"];
 };
@@ -80,11 +80,11 @@ export type CreateTeacherInput = {
 
 export type Evaluation = {
   __typename?: "Evaluation";
-  behaviourRating?: Maybe<Scalars["Int"]>;
+  behaviourRating?: Maybe<Rating>;
   collection: EvaluationCollection;
   id: Scalars["ID"];
   notes?: Maybe<Scalars["String"]>;
-  skillsRating?: Maybe<Scalars["Int"]>;
+  skillsRating?: Maybe<Rating>;
   student: Student;
   wasPresent: Scalars["Boolean"];
 };
@@ -106,16 +106,11 @@ export type LoginResult = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  addEvaluations: Scalars["Int"];
   createClass: Class;
   createCollection: EvaluationCollection;
   login: LoginResult;
   register: Teacher;
-};
-
-export type MutationAddEvaluationsArgs = {
-  collectionId: Scalars["ID"];
-  data: Array<CreateEvaluationInput>;
+  updateEvaluations: Scalars["Int"];
 };
 
 export type MutationCreateClassArgs = {
@@ -134,6 +129,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   data: CreateTeacherInput;
+};
+
+export type MutationUpdateEvaluationsArgs = {
+  collectionId: Scalars["ID"];
+  data: Array<UpdateEvaluationInput>;
 };
 
 export type Query = {
@@ -161,6 +161,13 @@ export type QueryGetTeacherArgs = {
   id: Scalars["ID"];
 };
 
+export enum Rating {
+  Excellent = "EXCELLENT",
+  Fair = "FAIR",
+  Good = "GOOD",
+  Poor = "POOR",
+}
+
 export type Student = {
   __typename?: "Student";
   class: Class;
@@ -174,6 +181,14 @@ export type Teacher = {
   classes: Array<Class>;
   email: Scalars["EmailAddress"];
   id: Scalars["ID"];
+};
+
+export type UpdateEvaluationInput = {
+  behaviourRating?: InputMaybe<Rating>;
+  id: Scalars["ID"];
+  notes?: InputMaybe<Scalars["String"]>;
+  skillsRating?: InputMaybe<Rating>;
+  wasPresent: Scalars["Boolean"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -301,9 +316,11 @@ export type ResolversTypes = {
   >;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  Rating: Rating;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Student: ResolverTypeWrapper<StudentPrisma>;
   Teacher: ResolverTypeWrapper<TeacherPrisma>;
+  UpdateEvaluationInput: UpdateEvaluationInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -329,6 +346,7 @@ export type ResolversParentTypes = {
   String: Scalars["String"];
   Student: StudentPrisma;
   Teacher: TeacherPrisma;
+  UpdateEvaluationInput: UpdateEvaluationInput;
 };
 
 export type ClassResolvers<
@@ -371,7 +389,7 @@ export type EvaluationResolvers<
   ParentType extends ResolversParentTypes["Evaluation"] = ResolversParentTypes["Evaluation"]
 > = {
   behaviourRating?: Resolver<
-    Maybe<ResolversTypes["Int"]>,
+    Maybe<ResolversTypes["Rating"]>,
     ParentType,
     ContextType
   >;
@@ -383,7 +401,7 @@ export type EvaluationResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   skillsRating?: Resolver<
-    Maybe<ResolversTypes["Int"]>,
+    Maybe<ResolversTypes["Rating"]>,
     ParentType,
     ContextType
   >;
@@ -425,12 +443,6 @@ export type MutationResolvers<
   ContextType = CustomContext,
   ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
 > = {
-  addEvaluations?: Resolver<
-    ResolversTypes["Int"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationAddEvaluationsArgs, "collectionId" | "data">
-  >;
   createClass?: Resolver<
     ResolversTypes["Class"],
     ParentType,
@@ -454,6 +466,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationRegisterArgs, "data">
+  >;
+  updateEvaluations?: Resolver<
+    ResolversTypes["Int"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateEvaluationsArgs, "collectionId" | "data">
   >;
 };
 

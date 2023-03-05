@@ -27,8 +27,14 @@ const documents = {
     types.ClassOverviewPage_GetClassDocument,
   "\n  mutation CreateClassForm_CreateClass($input: CreateClassInput!) {\n    createClass(data: $input) {\n      id\n      name\n    }\n  }\n":
     types.CreateClassForm_CreateClassDocument,
-  "\n  query AddEvaluationsPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      class {\n        id\n        teacher {\n          id\n        }\n      }\n      evaluations {\n        wasPresent\n        student {\n          id\n        }\n      }\n    }\n  }\n":
+  "\n  fragment AddEvaluationsList_Collection on EvaluationCollection {\n    id\n    evaluations {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      student {\n        id\n        name\n      }\n    }\n  }\n":
+    types.AddEvaluationsList_CollectionFragmentDoc,
+  "\n  mutation AddEvaluationsList_AddEvaluations(\n    $addEvaluationsInput: [UpdateEvaluationInput!]!\n    $collectionId: ID!\n  ) {\n    updateEvaluations(data: $addEvaluationsInput, collectionId: $collectionId)\n  }\n":
+    types.AddEvaluationsList_AddEvaluationsDocument,
+  "\n  query AddEvaluationsPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      class {\n        id\n        teacher {\n          id\n        }\n      }\n      ...AddEvaluationsList_Collection\n    }\n  }\n":
     types.AddEvaluationsPage_GetCollectionDocument,
+  "\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      type\n      class {\n        name\n      }\n      evaluations {\n        id\n        student {\n          id\n          name\n        }\n        wasPresent\n        skillsRating\n        behaviourRating\n      }\n    }\n  }\n":
+    types.CollectionPage_GetCollectionDocument,
   "\n  query MainPage_GetTeacher($teacherId: ID!) {\n    getTeacher(id: $teacherId) {\n      email\n      id\n      classes {\n        ...ClassList_ClassFragment\n      }\n    }\n  }\n":
     types.MainPage_GetTeacherDocument,
   "\n  fragment ClassList_ClassFragment on Class {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n":
@@ -97,8 +103,26 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query AddEvaluationsPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      class {\n        id\n        teacher {\n          id\n        }\n      }\n      evaluations {\n        wasPresent\n        student {\n          id\n        }\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query AddEvaluationsPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      class {\n        id\n        teacher {\n          id\n        }\n      }\n      evaluations {\n        wasPresent\n        student {\n          id\n        }\n      }\n    }\n  }\n"];
+  source: "\n  fragment AddEvaluationsList_Collection on EvaluationCollection {\n    id\n    evaluations {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      student {\n        id\n        name\n      }\n    }\n  }\n"
+): (typeof documents)["\n  fragment AddEvaluationsList_Collection on EvaluationCollection {\n    id\n    evaluations {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      student {\n        id\n        name\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation AddEvaluationsList_AddEvaluations(\n    $addEvaluationsInput: [UpdateEvaluationInput!]!\n    $collectionId: ID!\n  ) {\n    updateEvaluations(data: $addEvaluationsInput, collectionId: $collectionId)\n  }\n"
+): (typeof documents)["\n  mutation AddEvaluationsList_AddEvaluations(\n    $addEvaluationsInput: [UpdateEvaluationInput!]!\n    $collectionId: ID!\n  ) {\n    updateEvaluations(data: $addEvaluationsInput, collectionId: $collectionId)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query AddEvaluationsPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      class {\n        id\n        teacher {\n          id\n        }\n      }\n      ...AddEvaluationsList_Collection\n    }\n  }\n"
+): (typeof documents)["\n  query AddEvaluationsPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      class {\n        id\n        teacher {\n          id\n        }\n      }\n      ...AddEvaluationsList_Collection\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      type\n      class {\n        name\n      }\n      evaluations {\n        id\n        student {\n          id\n          name\n        }\n        wasPresent\n        skillsRating\n        behaviourRating\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      type\n      class {\n        name\n      }\n      evaluations {\n        id\n        student {\n          id\n          name\n        }\n        wasPresent\n        skillsRating\n        behaviourRating\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

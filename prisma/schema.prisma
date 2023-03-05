@@ -39,8 +39,8 @@ model Evaluation {
   student                Student              @relation(fields: [studentId], references: [id])
   wasPresent             Boolean              @default(true)
   studentId              String
-  skillsRating           Int?
-  behaviourRating        Int?
+  skillsRating           Rating?
+  behaviourRating        Rating?
   notes                  String?
   evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id], onDelete: Cascade)
   evaluationCollectionId String
@@ -52,4 +52,11 @@ model Student {
   class      Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId    String
   evaluations Evaluation[]
+}
+
+enum Rating {
+  POOR
+  FAIR
+  GOOD
+  EXCELLENT
 }

@@ -1,7 +1,8 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
-import { NextLink, Text } from "@/components/chakra";
+import { Text } from "@/components/chakra";
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
+import AddEvaluationsList from "./AddEvaluationsList";
 
 type AddEvaluationsPageProps = {
   params: { collectionId: string };
@@ -17,12 +18,7 @@ const AddEvaluationsPage_GetCollectionQuery = graphql(`
           id
         }
       }
-      evaluations {
-        wasPresent
-        student {
-          id
-        }
-      }
+      ...AddEvaluationsList_Collection
     }
   }
 `);
@@ -39,12 +35,7 @@ export default async function AddEvaluationsPage({
   return (
     <PageWrapper>
       <Text as="h1">Arviointien lisäys</Text>
-      <Text>Taitaapi olla vielä työn alla tämä sivu</Text>
-      <NextLink
-        href={`/${getCollection.class.teacher.id}/class/${getCollection.class.id}`}
-      >
-        Luokan sivulle
-      </NextLink>
+      <AddEvaluationsList collection={getCollection} />
     </PageWrapper>
   );
 }

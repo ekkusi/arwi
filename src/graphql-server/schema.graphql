@@ -11,7 +11,7 @@ type Mutation {
   login(email: String!, password: String!): LoginResult!
   createClass(data: CreateClassInput!): Class!
   createCollection(data: CreateCollectionInput!, classId: ID!): EvaluationCollection!
-  addEvaluations(data: [CreateEvaluationInput!]!, collectionId: ID!): Int!
+  updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
 }
 
 type Teacher {
@@ -43,12 +43,19 @@ type EvaluationCollection {
   class: Class!
 }
 
+enum Rating {
+  POOR
+  FAIR
+  EXCELLENT
+  GOOD
+}
+
 type Evaluation {
   id: ID!
   student: Student!
   wasPresent: Boolean!
-  skillsRating: Int
-  behaviourRating: Int
+  skillsRating: Rating
+  behaviourRating: Rating
   notes: String
   collection: EvaluationCollection!
 }
@@ -86,7 +93,15 @@ input CreateCollectionInput {
 input CreateEvaluationInput {
   studentId: ID!
   wasPresent: Boolean!
-  skillsRating: Int
-  behaviourRating: Int
+  skillsRating: Rating
+  behaviourRating: Rating
+  notes: String
+}
+
+input UpdateEvaluationInput {
+  id: ID!
+  wasPresent: Boolean!
+  skillsRating: Rating
+  behaviourRating: Rating
   notes: String
 }
