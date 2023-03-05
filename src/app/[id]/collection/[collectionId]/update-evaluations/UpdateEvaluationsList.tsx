@@ -147,8 +147,6 @@ export default function UpdateEvaluationsList({
           <Tag
             as="h2"
             size="lg"
-            colorScheme="gray"
-            variant="outline"
             mx="auto"
             display="block"
             textAlign="center"
