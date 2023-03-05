@@ -5,7 +5,7 @@ import {
   theme as baseTheme,
   withDefaultColorScheme,
 } from "@chakra-ui/react";
-import { Button, FormLabel, Input, Link } from "./components";
+import { Button, FormLabel, Input, Link, Tag } from "./components";
 
 const errorColor = baseTheme.colors.red["700"];
 
@@ -87,6 +87,7 @@ const theme = extendTheme(
       Input,
       FormLabel,
       Link,
+      Tag,
     },
   },
   withDefaultColorScheme({ colorScheme: "green" })

@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   OrderedList,
+  Tag,
   Text,
   UnorderedList,
 } from "@/components/chakra";
@@ -88,9 +89,36 @@ export default function DesignPage() {
         <Button size="lg" mb="2" mr="2">
           Large Button
         </Button>
-        <IconButton aria-label="Test" icon={<AiFillDelete />} />
-        <IconButton size="sm" aria-label="Test" icon={<AiFillDelete />} />
-        <IconButton size="lg" aria-label="Test" icon={<AiFillDelete />} />
+        <IconButton
+          size="sm"
+          aria-label="Test"
+          icon={<AiFillDelete />}
+          mb="2"
+          mr="2"
+        />
+        <IconButton aria-label="Test" icon={<AiFillDelete />} mb="2" mr="2" />
+        <IconButton
+          size="lg"
+          aria-label="Test"
+          icon={<AiFillDelete />}
+          mb="2"
+          mr="2"
+        />
+      </Section>
+      {/* Tags */}
+      <Section title="Tags" display="flex" flexWrap="wrap">
+        <Tag mb="2" mr="2">
+          Default
+        </Tag>
+        <Tag mb="2" mr="2" variant="outline">
+          Outline
+        </Tag>
+        <Tag size="sm" mb="2" mr="2">
+          Small
+        </Tag>
+        <Tag size="lg" mb="2" mr="2">
+          Large
+        </Tag>
       </Section>
       {/* Lists */}
       <Section title="Lists">
