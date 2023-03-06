@@ -34,7 +34,11 @@
   "fullScopeUrl": "https://arwi.zen-tracking.com/",
   "minSdkVersion": 19,
   "orientation": "portrait",
-  "fingerprints": [],
+  "fingerprints": [
+    {
+      "value": "9E:CA:C4:1B:28:EB:C2:59:33:0E:5A:22:D2:B0:39:6E:49:C5:93:CE:A6:18:1C:2B:41:81:21:72:5A:60:D2:1D"
+    }
+  ],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
   "appVersion": "1"
