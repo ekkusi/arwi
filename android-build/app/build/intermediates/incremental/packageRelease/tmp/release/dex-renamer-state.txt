@@ -1,0 +1,4 @@
+#Mon Mar 06 13:20:45 EET 2023
+base.0=/Users/ekeukko/Projects/BigBoyThings/arwi/android-build/app/build/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

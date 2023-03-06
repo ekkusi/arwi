@@ -1,0 +1,41 @@
+{
+  "packageId": "com.arwi.twa",
+  "host": "arwi.zen-tracking.com",
+  "name": "Arwi - Open paras ystävä",
+  "launcherName": "Arwi",
+  "display": "standalone",
+  "themeColor": "#EDF2F7",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#EDF2F7",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://arwi.zen-tracking.com/icons/icon-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "/Users/ekeukko/Projects/BigBoyThings/arwi/android-build/android.keystore",
+    "alias": "arwi"
+  },
+  "appVersionName": "1",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://arwi.zen-tracking.com/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://arwi.zen-tracking.com/",
+  "minSdkVersion": 19,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1"
+}
