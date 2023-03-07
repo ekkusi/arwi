@@ -17,17 +17,17 @@ const resolvers: QueryResolvers<CustomContext> = {
     const teachers = await prisma.teacher.findMany();
     return teachers;
   },
-  getClasses: async (_, { teacherId }, { prisma }) => {
-    const classes = await prisma.class.findMany({
+  getGroups: async (_, { teacherId }, { prisma }) => {
+    const groups = await prisma.group.findMany({
       where: { teacherId },
     });
-    return classes;
+    return groups;
   },
-  getClass: async (_, { id }, { prisma }) => {
-    const matchingClass = await prisma.class.findFirstOrThrow({
+  getGroup: async (_, { id }, { prisma }) => {
+    const group = await prisma.group.findFirstOrThrow({
       where: { id },
     });
-    return matchingClass;
+    return group;
   },
   getCollection: async (_, { id }, { prisma }) => {
     const matchingCollection =

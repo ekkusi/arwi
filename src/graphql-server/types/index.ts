@@ -8,7 +8,7 @@ import {
   Teacher as TeacherPrisma,
   EvaluationCollection as EvaluationCollectionPrisma,
   Evaluation as EvaluationPrisma,
-  Class as ClassPrisma,
+  Group as GroupPrisma,
   Student as StudentPrisma,
 } from "@prisma/client";
 import { CustomContext } from "./contextTypes";
@@ -42,8 +42,8 @@ export type Query = {
   __typename?: "Query";
   getTeacher: Teacher;
   getTeachers: Array<Teacher>;
-  getClasses: Array<Class>;
-  getClass: Class;
+  getGroups: Array<Group>;
+  getGroup: Group;
   getCollection: EvaluationCollection;
 };
 
@@ -51,11 +51,11 @@ export type QueryGetTeacherArgs = {
   id: Scalars["ID"];
 };
 
-export type QueryGetClassesArgs = {
+export type QueryGetGroupsArgs = {
   teacherId: Scalars["ID"];
 };
 
-export type QueryGetClassArgs = {
+export type QueryGetGroupArgs = {
   id: Scalars["ID"];
 };
 
@@ -67,7 +67,7 @@ export type Mutation = {
   __typename?: "Mutation";
   register: Teacher;
   login: LoginResult;
-  createClass: Class;
+  createGroup: Group;
   createCollection: EvaluationCollection;
   updateEvaluations: Scalars["Int"];
 };
@@ -81,13 +81,13 @@ export type MutationLoginArgs = {
   password: Scalars["String"];
 };
 
-export type MutationCreateClassArgs = {
-  data: CreateClassInput;
+export type MutationCreateGroupArgs = {
+  data: CreateGroupInput;
 };
 
 export type MutationCreateCollectionArgs = {
   data: CreateCollectionInput;
-  classId: Scalars["ID"];
+  groupId: Scalars["ID"];
 };
 
 export type MutationUpdateEvaluationsArgs = {
@@ -99,7 +99,7 @@ export type Teacher = {
   __typename?: "Teacher";
   id: Scalars["ID"];
   email: Scalars["EmailAddress"];
-  classes: Array<Class>;
+  groups: Array<Group>;
 };
 
 export type LoginResult = {
@@ -107,8 +107,8 @@ export type LoginResult = {
   teacher: Teacher;
 };
 
-export type Class = {
-  __typename?: "Class";
+export type Group = {
+  __typename?: "Group";
   id: Scalars["ID"];
   name: Scalars["String"];
   evaluationCollections: Array<EvaluationCollection>;
@@ -124,7 +124,7 @@ export type EvaluationCollection = {
   type: Scalars["String"];
   description?: Maybe<Scalars["String"]>;
   evaluations: Array<Evaluation>;
-  class: Class;
+  group: Group;
 };
 
 export enum Rating {
@@ -150,7 +150,7 @@ export type Student = {
   __typename?: "Student";
   id: Scalars["ID"];
   name: Scalars["String"];
-  class: Class;
+  group: Group;
   evaluations: Array<Evaluation>;
 };
 
@@ -159,7 +159,7 @@ export type CreateTeacherInput = {
   password: Scalars["String"];
 };
 
-export type CreateClassInput = {
+export type CreateGroupInput = {
   name: Scalars["String"];
   teacherId: Scalars["ID"];
   students?: InputMaybe<Array<CreateStudentInput>>;
@@ -310,14 +310,14 @@ export type ResolversTypes = {
   LoginResult: ResolverTypeWrapper<
     Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }
   >;
-  Class: ResolverTypeWrapper<ClassPrisma>;
+  Group: ResolverTypeWrapper<GroupPrisma>;
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   Rating: Rating;
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Student: ResolverTypeWrapper<StudentPrisma>;
   CreateTeacherInput: CreateTeacherInput;
-  CreateClassInput: CreateClassInput;
+  CreateGroupInput: CreateGroupInput;
   CreateStudentInput: CreateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
@@ -337,13 +337,13 @@ export type ResolversParentTypes = {
   LoginResult: Omit<LoginResult, "teacher"> & {
     teacher: ResolversParentTypes["Teacher"];
   };
-  Class: ClassPrisma;
+  Group: GroupPrisma;
   EvaluationCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
   Boolean: Scalars["Boolean"];
   Student: StudentPrisma;
   CreateTeacherInput: CreateTeacherInput;
-  CreateClassInput: CreateClassInput;
+  CreateGroupInput: CreateGroupInput;
   CreateStudentInput: CreateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
@@ -375,17 +375,17 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
-  getClasses?: Resolver<
-    Array<ResolversTypes["Class"]>,
+  getGroups?: Resolver<
+    Array<ResolversTypes["Group"]>,
     ParentType,
     ContextType,
-    RequireFields<QueryGetClassesArgs, "teacherId">
+    RequireFields<QueryGetGroupsArgs, "teacherId">
   >;
-  getClass?: Resolver<
-    ResolversTypes["Class"],
+  getGroup?: Resolver<
+    ResolversTypes["Group"],
     ParentType,
     ContextType,
-    RequireFields<QueryGetClassArgs, "id">
+    RequireFields<QueryGetGroupArgs, "id">
   >;
   getCollection?: Resolver<
     ResolversTypes["EvaluationCollection"],
@@ -411,17 +411,17 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationLoginArgs, "email" | "password">
   >;
-  createClass?: Resolver<
-    ResolversTypes["Class"],
+  createGroup?: Resolver<
+    ResolversTypes["Group"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateClassArgs, "data">
+    RequireFields<MutationCreateGroupArgs, "data">
   >;
   createCollection?: Resolver<
     ResolversTypes["EvaluationCollection"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateCollectionArgs, "data" | "classId">
+    RequireFields<MutationCreateCollectionArgs, "data" | "groupId">
   >;
   updateEvaluations?: Resolver<
     ResolversTypes["Int"],
@@ -437,7 +437,7 @@ export type TeacherResolvers<
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   email?: Resolver<ResolversTypes["EmailAddress"], ParentType, ContextType>;
-  classes?: Resolver<Array<ResolversTypes["Class"]>, ParentType, ContextType>;
+  groups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -449,9 +449,9 @@ export type LoginResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ClassResolvers<
+export type GroupResolvers<
   ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Class"] = ResolversParentTypes["Class"]
+  ParentType extends ResolversParentTypes["Group"] = ResolversParentTypes["Group"]
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -491,7 +491,7 @@ export type EvaluationCollectionResolvers<
     ParentType,
     ContextType
   >;
-  class?: Resolver<ResolversTypes["Class"], ParentType, ContextType>;
+  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -527,7 +527,7 @@ export type StudentResolvers<
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  class?: Resolver<ResolversTypes["Class"], ParentType, ContextType>;
+  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
   evaluations?: Resolver<
     Array<ResolversTypes["Evaluation"]>,
     ParentType,
@@ -543,7 +543,7 @@ export type Resolvers<ContextType = CustomContext> = {
   Mutation?: MutationResolvers<ContextType>;
   Teacher?: TeacherResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
-  Class?: ClassResolvers<ContextType>;
+  Group?: GroupResolvers<ContextType>;
   EvaluationCollection?: EvaluationCollectionResolvers<ContextType>;
   Evaluation?: EvaluationResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;

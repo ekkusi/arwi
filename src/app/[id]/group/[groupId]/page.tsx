@@ -7,15 +7,15 @@ import { formatDate } from "@/utils/dateUtils";
 // Necessary for revalidation to work
 export const dynamic = "force-static";
 
-type ClassOverviewPageProps = {
+type GroupOverviewPageProps = {
   params: {
-    classId: string;
+    groupId: string;
   };
 };
 
-const ClassOverviewPage_GetClassQuery = graphql(`
-  query ClassOverviewPage_GetClass($classId: ID!) {
-    getClass(id: $classId) {
+const GroupOverviewPage_GetGroupQuery = graphql(`
+  query GroupOverviewPage_GetGroup($groupId: ID!) {
+    getGroup(id: $groupId) {
       id
       name
       students {
@@ -41,21 +41,21 @@ const ClassOverviewPage_GetClassQuery = graphql(`
   }
 `);
 
-export default async function ClassOverviewPage({
+export default async function GroupOverviewPage({
   params,
-}: ClassOverviewPageProps) {
+}: GroupOverviewPageProps) {
   // const session = await getSessionOrRedirect();
-  const { getClass } = await serverRequest(ClassOverviewPage_GetClassQuery, {
-    classId: params.classId,
+  const { getGroup } = await serverRequest(GroupOverviewPage_GetGroupQuery, {
+    groupId: params.groupId,
   });
   return (
     <PageWrapper>
       {/* TODO: Show lessons etc... */}
-      <Text as="h1">Luokka: {getClass.name}</Text>
+      <Text as="h1">Ryhmä: {getGroup.name}</Text>
       <Text as="h2">Oppilaat:</Text>
-      {getClass.students.length > 0 ? (
+      {getGroup.students.length > 0 ? (
         <Box>
-          {getClass.students.map((student) => (
+          {getGroup.students.map((student) => (
             <Text>{student.name}</Text>
           ))}
         </Box>
@@ -67,9 +67,9 @@ export default async function ClassOverviewPage({
       <Text as="h2" mt="5">
         Arvioinnit:
       </Text>
-      {getClass.evaluationCollections.length > 0 ? (
+      {getGroup.evaluationCollections.length > 0 ? (
         <Box>
-          {getClass.evaluationCollections.map((collection) => (
+          {getGroup.evaluationCollections.map((collection) => (
             <Box>
               <Text as="span" textStyle="italic" mr="1">
                 {formatDate(new Date(collection.date), "dd.MM.yyyy")}:
@@ -84,7 +84,7 @@ export default async function ClassOverviewPage({
         <>
           <Text>Ei vielä arviointeja</Text>
           <NextLink
-            href={`${getClass.teacher.id}/class/${getClass.id}/create-collection`}
+            href={`${getGroup.teacher.id}/group/${getGroup.id}/create-collection`}
           >
             Siirry tekemään arviointi
           </NextLink>

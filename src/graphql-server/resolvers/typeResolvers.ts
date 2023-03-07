@@ -4,20 +4,20 @@ type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
 const resolvers: TypeResolvers = {
   Teacher: {
-    classes: async ({ id }, _, { prisma }) => {
-      const classes = await prisma.class.findMany({
+    groups: async ({ id }, _, { prisma }) => {
+      const groups = await prisma.group.findMany({
         where: {
           teacherId: id,
         },
       });
-      return classes;
+      return groups;
     },
   },
-  Class: {
+  Group: {
     evaluationCollections: async ({ id }, _, { prisma }) => {
       const collections = await prisma.evaluationCollection.findMany({
         where: {
-          classId: id,
+          groupId: id,
         },
       });
       return collections;
@@ -25,7 +25,7 @@ const resolvers: TypeResolvers = {
     students: async ({ id }, _, { prisma }) => {
       const students = await prisma.student.findMany({
         where: {
-          classId: id,
+          groupId: id,
         },
       });
       return students;
@@ -34,7 +34,7 @@ const resolvers: TypeResolvers = {
       // TODO: Maybe implement custom NotFoundError
       const teacher = await prisma.teacher.findFirstOrThrow({
         where: {
-          class: {
+          groups: {
             some: {
               id,
             },
@@ -71,8 +71,8 @@ const resolvers: TypeResolvers = {
     },
   },
   EvaluationCollection: {
-    class: async ({ id }, _, { prisma }) => {
-      const matchingClass = await prisma.class.findFirstOrThrow({
+    group: async ({ id }, _, { prisma }) => {
+      const matchingGroup = await prisma.group.findFirstOrThrow({
         where: {
           evaluationCollections: {
             some: {
@@ -81,7 +81,7 @@ const resolvers: TypeResolvers = {
           },
         },
       });
-      return matchingClass;
+      return matchingGroup;
     },
     evaluations: async ({ id }, _, { prisma }) => {
       const evaluations = await prisma.evaluation.findMany({
@@ -93,8 +93,8 @@ const resolvers: TypeResolvers = {
     },
   },
   Student: {
-    class: async ({ id }, _, { prisma }) => {
-      const matchingClass = await prisma.class.findFirstOrThrow({
+    group: async ({ id }, _, { prisma }) => {
+      const matchingGroup = await prisma.group.findFirstOrThrow({
         where: {
           students: {
             some: {
@@ -103,7 +103,7 @@ const resolvers: TypeResolvers = {
           },
         },
       });
-      return matchingClass;
+      return matchingGroup;
     },
     evaluations: async ({ id }, _, { prisma }) => {
       const evaluations = await prisma.evaluation.findMany({

@@ -18,7 +18,7 @@ const CollectionPage_GetCollectionQuery = graphql(`
       id
       date
       type
-      class {
+      group {
         name
       }
       evaluations {
@@ -49,7 +49,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
   return (
     <PageWrapper>
       <Text as="h1">Arvioinnin yhteenveto</Text>
-      <Text as="h2">Luokka: {collection.class.name}</Text>
+      <Text as="h2">Ryhmä: {collection.group.name}</Text>
       <Text>Tyyppi: {collection.type}</Text>
       <Text mb="3">
         Päivämäärä: {formatDate(new Date(collection.date), "dd.MM.yyyy")}

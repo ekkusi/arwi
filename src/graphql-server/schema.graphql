@@ -1,23 +1,23 @@
 type Query {
   getTeacher(id: ID!): Teacher!
   getTeachers: [Teacher!]!
-  getClasses(teacherId: ID!): [Class!]!
-  getClass(id: ID!): Class!
+  getGroups(teacherId: ID!): [Group!]!
+  getGroup(id: ID!): Group!
   getCollection(id: ID!): EvaluationCollection!
 }
 
 type Mutation {
   register(data: CreateTeacherInput!): Teacher!
   login(email: String!, password: String!): LoginResult!
-  createClass(data: CreateClassInput!): Class!
-  createCollection(data: CreateCollectionInput!, classId: ID!): EvaluationCollection!
+  createGroup(data: CreateGroupInput!): Group!
+  createCollection(data: CreateCollectionInput!, groupId: ID!): EvaluationCollection!
   updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
 }
 
 type Teacher {
   id: ID!
   email: EmailAddress!
-  classes: [Class!]!
+  groups: [Group!]!
 }
 
 type LoginResult {
@@ -25,7 +25,7 @@ type LoginResult {
 }
 
 
-type Class {
+type Group {
   id: ID!
   name: String!
   evaluationCollections: [EvaluationCollection!]!
@@ -40,7 +40,7 @@ type EvaluationCollection {
   type: String!
   description: String
   evaluations: [Evaluation!]!
-  class: Class!
+  group: Group!
 }
 
 enum Rating {
@@ -64,7 +64,7 @@ type Evaluation {
 type Student {
   id: ID!
   name: String!
-  class: Class!
+  group: Group!
   evaluations: [Evaluation!]!
 }
 
@@ -74,7 +74,7 @@ input CreateTeacherInput {
 }
 
 
-input CreateClassInput {
+input CreateGroupInput {
   name: String!
   teacherId: ID!
   students: [CreateStudentInput!]

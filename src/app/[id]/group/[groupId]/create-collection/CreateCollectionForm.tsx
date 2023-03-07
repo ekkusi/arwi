@@ -17,7 +17,7 @@ import StudentParticipationList, {
 } from "./StudentParticipationList";
 
 type CreateCollectionFormProps = BoxProps & {
-  class: FragmentType<typeof CreateCollectionForm_ClassFragment>;
+  group: FragmentType<typeof CreateCollectionForm_GroupFragment>;
 };
 
 const initialValues = {
@@ -26,8 +26,8 @@ const initialValues = {
   date: formatDate(new Date()),
 };
 
-const CreateCollectionForm_ClassFragment = graphql(`
-  fragment CreateCollectionForm_Class on Class {
+const CreateCollectionForm_GroupFragment = graphql(`
+  fragment CreateCollectionForm_Group on Group {
     id
     evaluationTypes
     students {
@@ -39,21 +39,21 @@ const CreateCollectionForm_ClassFragment = graphql(`
 const CreateCollectionForm_CreateCollectionMutation = graphql(`
   mutation CreateCollectionForm_CreateCollection(
     $createCollectionInput: CreateCollectionInput!
-    $classId: ID!
+    $groupId: ID!
   ) {
-    createCollection(data: $createCollectionInput, classId: $classId) {
+    createCollection(data: $createCollectionInput, groupId: $groupId) {
       id
     }
   }
 `);
 
 export default function CreateCollectionForm({
-  class: classFragment,
+  group: groupFragment,
   ...rest
 }: CreateCollectionFormProps) {
-  const classData = useFragment(
-    CreateCollectionForm_ClassFragment,
-    classFragment
+  const groupData = useFragment(
+    CreateCollectionForm_GroupFragment,
+    groupFragment
   );
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -74,7 +74,7 @@ export default function CreateCollectionForm({
       const { createCollection } = await graphqlClient.request(
         CreateCollectionForm_CreateCollectionMutation,
         {
-          classId: classData.id,
+          groupId: groupData.id,
           createCollectionInput: {
             ...values,
             evaluations: participations.map((it) => ({
@@ -112,7 +112,7 @@ export default function CreateCollectionForm({
           <FormField name="date" type="date" label="Päivämäärä" />
           <Text as="h2">Oppilaat</Text>
           <StudentParticipationList
-            students={classData.students}
+            students={groupData.students}
             onChange={onParticipationsChanged}
             isDisabled={loading}
           />

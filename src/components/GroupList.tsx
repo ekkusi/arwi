@@ -2,13 +2,13 @@
 
 import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
 import { FragmentType, graphql, useFragment } from "@/gql";
-import { ClassList_ClassFragmentFragment as ClassFragmentType } from "@/gql/graphql";
+import { GroupList_GroupFragmentFragment as GroupFragmentType } from "@/gql/graphql";
 import { BoxProps, FlexProps, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import DrawerTemplate from "./DrawerTemplate";
 
-const ClassList_ClassFragment = graphql(`
-  fragment ClassList_ClassFragment on Class {
+const GroupList_GroupFragment = graphql(`
+  fragment GroupList_GroupFragment on Group {
     id
     name
     teacher {
@@ -17,16 +17,16 @@ const ClassList_ClassFragment = graphql(`
   }
 `);
 
-type ClassListItemProps = Omit<BoxProps, "onClick"> & {
-  onClick(clickedClass: ClassFragmentType): void;
-  class: ClassFragmentType;
+type GroupListItemProps = Omit<BoxProps, "onClick"> & {
+  onClick(clickedGroup: GroupFragmentType): void;
+  group: GroupFragmentType;
 };
 
-function ClassListItem({
-  class: classData,
+function GroupListItem({
+  group: groupData,
   onClick,
   ...rest
-}: ClassListItemProps) {
+}: GroupListItemProps) {
   return (
     <Box
       border="2px"
@@ -35,7 +35,7 @@ function ClassListItem({
       py="1"
       width="100%"
       bg="secondary-bg"
-      onClick={() => onClick(classData)}
+      onClick={() => onClick(groupData)}
       _hover={{
         cursor: "pointer",
       }}
@@ -45,33 +45,33 @@ function ClassListItem({
       {...rest}
     >
       <Text textAlign="center" fontWeight="600">
-        {classData.name}
+        {groupData.name}
       </Text>
     </Box>
   );
 }
 
-type ClassListProps = FlexProps & {
-  classes: FragmentType<typeof ClassList_ClassFragment>[];
+type GroupListProps = FlexProps & {
+  groups: FragmentType<typeof GroupList_GroupFragment>[];
 };
 
-export default function ClassList({
-  classes: classFragments,
+export default function GroupList({
+  groups: groupFragments,
   ...rest
-}: ClassListProps) {
-  const classes = useFragment(ClassList_ClassFragment, classFragments);
-  const [selectedClass, setSelectedClass] = useState<
-    ClassFragmentType | undefined
+}: GroupListProps) {
+  const groups = useFragment(GroupList_GroupFragment, groupFragments);
+  const [selectedGroup, setSelectedGroup] = useState<
+    GroupFragmentType | undefined
   >();
   const { onClose, isOpen } = useDisclosure({
-    isOpen: !!selectedClass,
+    isOpen: !!selectedGroup,
     onClose: () => {
-      setSelectedClass(undefined);
+      setSelectedGroup(undefined);
     },
   });
 
-  const openModal = (classData: ClassFragmentType) => {
-    setSelectedClass(classData);
+  const openModal = (groupData: GroupFragmentType) => {
+    setSelectedGroup(groupData);
   };
 
   return (
@@ -84,7 +84,7 @@ export default function ClassList({
         <Flex flexDirection="column">
           <Button
             as={NextLink}
-            href={`/${selectedClass?.teacher.id}/class/${selectedClass?.id}`}
+            href={`/${selectedGroup?.teacher.id}/group/${selectedGroup?.id}`}
             mb="3"
             colorScheme="yellow"
             onClick={() => {
@@ -95,7 +95,7 @@ export default function ClassList({
           </Button>
           <Button
             as={NextLink}
-            href={`/${selectedClass?.teacher.id}/class/${selectedClass?.id}/create-collection`}
+            href={`/${selectedGroup?.teacher.id}/group/${selectedGroup?.id}/create-collection`}
             onClick={() => {
               onClose();
             }}
@@ -105,11 +105,11 @@ export default function ClassList({
         </Flex>
       </DrawerTemplate>
       <Flex flexDirection="column" {...rest}>
-        {classes.map((it) => (
-          <ClassListItem
+        {groups.map((it) => (
+          <GroupListItem
             key={it.id}
-            class={it}
-            onClick={(clickedClass) => openModal(clickedClass)}
+            group={it}
+            onClick={(clickedGroup) => openModal(clickedGroup)}
             _notLast={{ mb: 2 }}
           />
         ))}

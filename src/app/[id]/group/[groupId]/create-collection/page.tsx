@@ -4,13 +4,13 @@ import { serverRequest } from "@/pages/api/graphql";
 import CreateCollectionForm from "./CreateCollectionForm";
 
 type CreateCollectionPageProps = {
-  params: { classId: string };
+  params: { groupId: string };
 };
 
-const CreateCollectionPage_GetClassQuery = graphql(`
-  query CreateCollectionPage_GetClass($classId: ID!) {
-    getClass(id: $classId) {
-      ...CreateCollectionForm_Class
+const CreateCollectionPage_GetGroupQuery = graphql(`
+  query CreateCollectionPage_GetGroup($groupId: ID!) {
+    getGroup(id: $groupId) {
+      ...CreateCollectionForm_Group
     }
   }
 `);
@@ -18,12 +18,12 @@ const CreateCollectionPage_GetClassQuery = graphql(`
 export default async function CreateCollectionPage({
   params,
 }: CreateCollectionPageProps) {
-  const { getClass } = await serverRequest(CreateCollectionPage_GetClassQuery, {
-    classId: params.classId,
+  const { getGroup } = await serverRequest(CreateCollectionPage_GetGroupQuery, {
+    groupId: params.groupId,
   });
   return (
     <PageWrapper display="flex" flexDirection="column" hasNavigation={false}>
-      <CreateCollectionForm flex="1" class={getClass} />
+      <CreateCollectionForm flex="1" group={getGroup} />
     </PageWrapper>
   );
 }

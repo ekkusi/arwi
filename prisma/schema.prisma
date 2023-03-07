@@ -12,10 +12,10 @@ model Teacher {
   id                    String  @id @default(uuid())
   email                 String  @unique
   passwordHash          String
-  class                 Class[]
+  groups                Group[]
 }
 
-model Class {
+model Group {
   id                    String                 @id @default(uuid())
   name                  String
   students              Student[]
@@ -30,8 +30,8 @@ model EvaluationCollection {
   type        String
   description String?
   evaluations Evaluation[]
-  class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
-  classId     String
+  group       Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId     String
 }
 
 model Evaluation {
@@ -49,8 +49,8 @@ model Evaluation {
 model Student {
   id         String       @id @default(uuid())
   name       String
-  class      Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
-  classId    String
+  group      Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId    String
   evaluations Evaluation[]
 }
 

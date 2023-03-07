@@ -11,7 +11,7 @@ const UpdateEvaluationsPage_GetCollectionQuery = graphql(`
   query UpdateEvaluationsPage_GetCollection($collectionId: ID!) {
     getCollection(id: $collectionId) {
       id
-      class {
+      group {
         id
         teacher {
           id

@@ -1,10 +1,10 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
-import CreateClassForm from "./CreateClassForm";
+import CreateGroupForm from "./CreateGroupForm";
 
-export default async function CreateClassPage() {
+export default async function CreateGroupPage() {
   return (
     <PageWrapper display="flex" flexDirection="column" hasNavigation={false}>
-      <CreateClassForm flex="1" />
+      <CreateGroupForm flex="1" />
     </PageWrapper>
   );
 }

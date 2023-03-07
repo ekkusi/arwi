@@ -47,7 +47,7 @@ const config: CodegenConfig = {
           Teacher: "@prisma/client#Teacher",
           EvaluationCollection: "@prisma/client#EvaluationCollection",
           Evaluation: "@prisma/client#Evaluation",
-          Class: "@prisma/client#Class",
+          Group: "@prisma/client#Group",
           Student: "@prisma/client#Student",
         },
         contextType: "./contextTypes#CustomContext",

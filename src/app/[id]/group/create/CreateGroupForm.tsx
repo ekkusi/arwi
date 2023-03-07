@@ -14,22 +14,22 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AddStudentsList from "./AddStudentsList";
 
-type CreateClassFormProps = BoxProps & {};
+type CreateGroupFormProps = BoxProps & {};
 
 const initialValues = {
   name: "",
 };
 
-const CreateClassForm_CreateClassMutation = graphql(`
-  mutation CreateClassForm_CreateClass($input: CreateClassInput!) {
-    createClass(data: $input) {
+const CreateGroupForm_CreateGroupMutation = graphql(`
+  mutation CreateGroupForm_CreateGroup($input: CreateGroupInput!) {
+    createGroup(data: $input) {
       id
       name
     }
   }
 `);
 
-export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
+export default function CreateGroupForm({ ...rest }: CreateGroupFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
@@ -43,7 +43,7 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
     const session = await getSessionClient();
     setLoading(true);
     try {
-      await graphqlClient.request(CreateClassForm_CreateClassMutation, {
+      await graphqlClient.request(CreateGroupForm_CreateGroupMutation, {
         input: {
           ...values,
           students,
@@ -63,7 +63,7 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
       {() => (
         <BorderedCard as={Form} display="flex" flexDirection="column" {...rest}>
           <Text as="h1" textAlign="center">
-            Uusi luokka
+            Uusi ryhmä
           </Text>
           <FormField name="name" label="Luokan nimi" validate={validateName} />
           <Text as="h2">Oppilaat</Text>
@@ -71,7 +71,7 @@ export default function CreateClassForm({ ...rest }: CreateClassFormProps) {
             onChanged={(newStudents) => setStudents(newStudents)}
           />
           <Button type="submit" marginTop="auto" isLoading={loading}>
-            Luo luokka
+            Luo ryhmä
           </Button>
           <LinkToHome
             color="gray.700"

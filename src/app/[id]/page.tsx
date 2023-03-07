@@ -1,9 +1,9 @@
 import { graphql } from "@/gql";
 import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
 import { serverRequest } from "@/pages/api/graphql";
-import ClassList from "@/components/ClassList";
 import LogoutButton from "@/app/(auth)/LogoutButton";
 import PageWrapper from "@/app/(server-components)/PageWrapper";
+import GroupList from "@/components/GroupList";
 
 // Necessary for revalidation to work
 export const dynamic = "force-static";
@@ -13,8 +13,8 @@ const MainPage_GetTeacherQuery = graphql(`
     getTeacher(id: $teacherId) {
       email
       id
-      classes {
-        ...ClassList_ClassFragment
+      groups {
+        ...GroupList_GroupFragment
       }
     }
   }
@@ -55,18 +55,18 @@ export default async function HomePage({ params }: HomePageProps) {
           <>
             <Box mb="5">
               <Text as="h2">Luokat:</Text>
-              {teacher.classes.length > 0 ? (
-                <ClassList classes={teacher.classes} mb="5" />
+              {teacher.groups.length > 0 ? (
+                <GroupList groups={teacher.groups} mb="5" />
               ) : (
                 <Text>Et vielä ole tehnyt luokkia</Text>
               )}
             </Box>
             <Button
               as={NextLink}
-              href={`/${teacher.id}/class/create`}
+              href={`/${teacher.id}/group/create`}
               width="100%"
             >
-              {teacher.classes.length > 0 ? "Luo uusi luokka" : "Luo luokka"}
+              {teacher.groups.length > 0 ? "Luo uusi ryhmä" : "Luo ryhmä"}
             </Button>
           </>
         ) : (

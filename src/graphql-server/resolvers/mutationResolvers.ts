@@ -41,9 +41,9 @@ const resolvers: MutationResolvers<CustomContext> = {
       teacher: matchingTeacher,
     };
   },
-  createClass: async (_, { data }, { prisma, res }) => {
+  createGroup: async (_, { data }, { prisma, res }) => {
     const { students, ...rest } = data;
-    const createdClass = await prisma.class.create({
+    const group = await prisma.group.create({
       data: {
         ...rest,
         students: students
@@ -54,15 +54,15 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
     });
 
-    await revalidateIfProd(res, `/${createdClass.teacherId}`);
-    return createdClass;
+    await revalidateIfProd(res, `/${group.teacherId}`);
+    return group;
   },
-  createCollection: async (_, { data, classId }, { prisma, res }) => {
+  createCollection: async (_, { data, groupId }, { prisma, res }) => {
     const { evaluations, ...rest } = data;
     const createdCollection = await prisma.evaluationCollection.create({
       data: {
         ...rest,
-        classId,
+        groupId,
         // Create evaluations if there are some in input
         evaluations: evaluations
           ? {
@@ -75,9 +75,9 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     // TODO: teacher info should probably come from context
     const teacher = await prisma.teacher.findFirstOrThrow({
-      where: { class: { some: { id: classId } } },
+      where: { groups: { some: { id: groupId } } },
     });
-    await revalidateIfProd(res, `/${teacher.id}/class/${classId}`);
+    await revalidateIfProd(res, `/${teacher.id}/group/${groupId}`);
     return createdCollection;
   },
   updateEvaluations: async (_, { data, collectionId }, { prisma, res }) => {
@@ -96,7 +96,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     // TODO: teacher info should probably come from context
     const teacher = await prisma.teacher.findFirstOrThrow({
       where: {
-        class: {
+        groups: {
           some: { evaluationCollections: { some: { id: collectionId } } },
         },
       },
