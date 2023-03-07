@@ -52,7 +52,7 @@ export default function BottomNavigationBar() {
     >
       <BottomNavigationLink href="/">
         <Icon as={AiOutlineHome} w={6} h={6} />
-        <Text as="span">Home</Text>
+        <Text as="span">Koti</Text>
       </BottomNavigationLink>
       <BottomNavigationLink href="/profile">
         <Icon as={CgProfile} w={6} h={6} />
