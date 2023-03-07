@@ -70,7 +70,7 @@ export default function RegisterForm() {
         }
         const session = await getSession();
         if (!session) throw new Error("Unexpected error"); // Session should be available
-        router.push(`/${session.user.id}`);
+        router.push(`/`);
       } catch (error) {
         console.error(error);
       }

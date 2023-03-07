@@ -7,7 +7,6 @@ import LinkToHome from "@/components/LinkToHome";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
-import { getSessionClient } from "@/utils/session/client";
 import { BoxProps } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
@@ -68,7 +67,6 @@ export default function CreateCollectionForm({
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    const session = await getSessionClient();
     setLoading(true);
     try {
       const { createCollection } = await graphqlClient.request(
@@ -85,9 +83,7 @@ export default function CreateCollectionForm({
         }
       );
       setLoading(false);
-      router.push(
-        `/${session.user.id}/collection/${createCollection.id}/update-evaluations`
-      );
+      router.push(`/collection/${createCollection.id}/update-evaluations`);
     } catch (error) {
       setLoading(false);
       console.error("Error happened:", error);

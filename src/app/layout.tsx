@@ -6,8 +6,9 @@ import "@fontsource/open-sans/600.css";
 import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/400-italic.css";
 
-import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+import BottomNavigationBar from "@/components/BottomNavigationBar";
 import Providers from "./Providers";
 
 export default async function RootLayout({
@@ -25,7 +26,10 @@ export default async function RootLayout({
       */}
       <head />
       <body>
-        <Providers session={session}>{children}</Providers>
+        <Providers session={session}>
+          {children}
+          <BottomNavigationBar />
+        </Providers>
       </body>
     </html>
   );

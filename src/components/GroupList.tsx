@@ -84,7 +84,7 @@ export default function GroupList({
         <Flex flexDirection="column">
           <Button
             as={NextLink}
-            href={`/${selectedGroup?.teacher.id}/group/${selectedGroup?.id}`}
+            href={`/group/${selectedGroup?.id}`}
             mb="3"
             colorScheme="yellow"
             onClick={() => {
@@ -95,7 +95,7 @@ export default function GroupList({
           </Button>
           <Button
             as={NextLink}
-            href={`/${selectedGroup?.teacher.id}/group/${selectedGroup?.id}/create-collection`}
+            href={`/group/${selectedGroup?.id}/create-collection`}
             onClick={() => {
               onClose();
             }}

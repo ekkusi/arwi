@@ -21,9 +21,6 @@ const GroupOverviewPage_GetGroupQuery = graphql(`
       students {
         name
       }
-      teacher {
-        id
-      }
       evaluationCollections {
         id
         date
@@ -74,7 +71,7 @@ export default async function GroupOverviewPage({
               <Text as="span" textStyle="italic" mr="1">
                 {formatDate(new Date(collection.date), "dd.MM.yyyy")}:
               </Text>
-              <NextLink href={`${collection.id}/collection/${collection.id}`}>
+              <NextLink href={`/collection/${collection.id}`}>
                 {collection.type}
               </NextLink>
             </Box>
@@ -83,9 +80,7 @@ export default async function GroupOverviewPage({
       ) : (
         <>
           <Text>Ei vielä arviointeja</Text>
-          <NextLink
-            href={`${getGroup.teacher.id}/group/${getGroup.id}/create-collection`}
-          >
+          <NextLink href={`/group/${getGroup.id}/create-collection`}>
             Siirry tekemään arviointi
           </NextLink>
         </>

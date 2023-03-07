@@ -51,7 +51,7 @@ export default function CreateGroupForm({ ...rest }: CreateGroupFormProps) {
         },
       });
       setLoading(false);
-      router.push(`/${session.user.id}`);
+      router.push(`/`);
     } catch (error) {
       setLoading(false);
       console.error("Error happened:", error);

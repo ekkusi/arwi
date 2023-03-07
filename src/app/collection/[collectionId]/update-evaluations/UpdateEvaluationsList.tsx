@@ -13,7 +13,6 @@ import { BoxProps } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getSessionClient } from "@/utils/session/client";
 import LinkToHome from "@/components/LinkToHome";
 import RatingSelector from "./RatingSelector";
 
@@ -61,6 +60,9 @@ export default function UpdateEvaluationsList({
     UpdateEvaluationsList_CollectionFragment,
     collectionFragment
   );
+  // const scrollRef = useRef(null);
+  // useScrollSnap({ ref: scrollRef, duration: 0, delay: 0 });
+
   const [evaluations, setEvaluations] = useState([
     ...collection.evaluations.filter((e) => e.wasPresent),
   ]);
@@ -105,8 +107,7 @@ export default function UpdateEvaluationsList({
         }
       );
       setIsCreating(false);
-      const session = await getSessionClient();
-      router.push(`${session.user.id}/collection/${collection.id}`);
+      router.push(`/collection/${collection.id}`);
     } catch (error: any) {
       setIsCreating(false);
       const message = getErrorMessage(error);
@@ -141,9 +142,22 @@ export default function UpdateEvaluationsList({
   });
 
   return (
-    <Box {...rest}>
+    <Box
+      height="100vh"
+      p="4"
+      scrollSnapType="y mandatory"
+      overflowY="scroll"
+      {...rest}
+    >
       {evaluations.map((evaluation) => (
-        <BorderedCard key={evaluation.student.id} width="100%" mb="3">
+        <BorderedCard
+          key={evaluation.student.id}
+          scrollSnapAlign="center"
+          scrollSnapStop="always"
+          width="100%"
+          // height="calc(100vh - (var(--chakra-space-4) * 2))"
+          mb="3"
+        >
           <Tag
             as="h2"
             size="lg"

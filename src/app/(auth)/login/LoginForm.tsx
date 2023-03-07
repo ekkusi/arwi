@@ -39,7 +39,7 @@ export default function LoginForm() {
       }
       const session = await getSession();
       if (!session) throw new Error("Unexpected error"); // Session should be available
-      router.push(`/${session.user.id}`);
+      router.push(`/`);
     } catch (e) {
       setLoading(false);
       console.error(e);

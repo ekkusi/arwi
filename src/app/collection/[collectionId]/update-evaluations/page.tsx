@@ -10,13 +10,6 @@ type UpdateEvaluationsPageProps = {
 const UpdateEvaluationsPage_GetCollectionQuery = graphql(`
   query UpdateEvaluationsPage_GetCollection($collectionId: ID!) {
     getCollection(id: $collectionId) {
-      id
-      group {
-        id
-        teacher {
-          id
-        }
-      }
       ...UpdateEvaluationsList_Collection
     }
   }
@@ -32,7 +25,7 @@ export default async function UpdateEvaluationsPage({
     }
   );
   return (
-    <PageWrapper hasNavigation={false}>
+    <PageWrapper hasNavigation={false} p={0}>
       <UpdateEvaluationsList collection={getCollection} />
     </PageWrapper>
   );
