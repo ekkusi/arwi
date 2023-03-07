@@ -64,7 +64,7 @@ export default function CreateGroupForm({ ...rest }: CreateGroupFormProps) {
           <Text as="h1" textAlign="center">
             Uusi ryhmä
           </Text>
-          <FormField name="name" label="Luokan nimi" validate={validateName} />
+          <FormField name="name" label="Ryhmän nimi" validate={validateName} />
           <Text as="h2">Oppilaat</Text>
           <AddStudentsList
             onChanged={(newStudents) => setStudents(newStudents)}

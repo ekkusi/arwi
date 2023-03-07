@@ -91,7 +91,7 @@ export default function GroupList({
               onClose();
             }}
           >
-            Luokan tarkasteluun
+            Ryhmän tarkasteluun
           </Button>
           <Button
             as={NextLink}

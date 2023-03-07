@@ -31,7 +31,11 @@ export function BottomNavigationLink({
   );
 }
 
+const NO_NAVIGATION_BAR_PATHS = ["/login", "/register", "/welcome"];
+
 export default function BottomNavigationBar() {
+  const pathname = usePathname();
+  if (NO_NAVIGATION_BAR_PATHS.includes(pathname || "")) return null;
   return (
     <SimpleGrid
       columns={3}
