@@ -1,14 +1,7 @@
 "use client";
 
 import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
-import {
-  Box,
-  Button,
-  NextLink,
-  Tag,
-  Text,
-  Textarea,
-} from "@/components/chakra";
+import { Box, Button, Tag, Text, Textarea } from "@/components/chakra";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import {
   UpdateEvaluationsList_CollectionFragment as CollectionFragmentType,
@@ -149,19 +142,18 @@ export default function UpdateEvaluationsList({
 
   return (
     <Box
-      height="100vh"
+      height="calc(100vh - 58px)"
       p="4"
       scrollSnapType="y mandatory"
       overflowY="scroll"
       {...rest}
     >
-      {evaluations.map((evaluation) => (
+      {evaluations.map((evaluation, index) => (
         <BorderedCard
           key={evaluation.student.id}
-          scrollSnapAlign="center"
+          scrollSnapAlign={index === evaluations.length - 1 ? "end" : "center"}
           scrollSnapStop="always"
           width="100%"
-          // height="calc(100vh - (var(--chakra-space-4) * 2))"
           mb="3"
         >
           <Tag
@@ -193,26 +185,18 @@ export default function UpdateEvaluationsList({
             minHeight="32"
             placeholder="Muita huomioita oppilaan toiminnasta tunnilla..."
           />
+          {index === evaluations.length - 1 && (
+            <Button
+              isLoading={isCreating}
+              onClick={createEvaluations}
+              width="100%"
+              mt="6"
+            >
+              Luo arvioinnit
+            </Button>
+          )}
         </BorderedCard>
       ))}
-      <Button
-        isLoading={isCreating}
-        onClick={createEvaluations}
-        width="100%"
-        mt="3"
-      >
-        Luo arvioinnit
-      </Button>
-      <NextLink
-        href="/"
-        color="gray.700"
-        display="block"
-        mt="3"
-        textTransform="uppercase"
-        textAlign="center"
-      >
-        Peruuta
-      </NextLink>
     </Box>
   );
 }

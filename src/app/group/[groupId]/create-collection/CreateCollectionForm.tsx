@@ -110,6 +110,7 @@ export default function CreateCollectionForm({
             students={groupData.students}
             onChange={onParticipationsChanged}
             isDisabled={loading}
+            mb="5"
           />
           <Button type="submit" marginTop="auto" isLoading={loading}>
             Siirry arvioimaan

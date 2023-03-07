@@ -28,6 +28,7 @@ export default function StudentParticipationList({
   students: stundentFragments,
   onChange,
   isDisabled = false,
+  ...rest
 }: StudentParticipationListProps) {
   const students = useFragment(
     StudentParticipationList_StudentFragment,
@@ -72,7 +73,7 @@ export default function StudentParticipationList({
     onChange?.(participationsCopy);
   };
   return (
-    <Box>
+    <Box {...rest}>
       {participations.map((it, index) => (
         <Flex
           key={`${it.student.name}-${index}`}

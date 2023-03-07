@@ -35,11 +35,11 @@ export default async function HomePage() {
         {teacher ? (
           <>
             <Box mb="5">
-              <Text as="h2">Ryhmät:</Text>
+              <Text as="h2">Omat ryhmät:</Text>
               {teacher.groups.length > 0 ? (
                 <GroupList groups={teacher.groups} mb="5" />
               ) : (
-                <Text>Et vielä ole tehnyt luokkia</Text>
+                <Text>Et vielä ole tehnyt ryhmiä</Text>
               )}
             </Box>
             <Button as={NextLink} href="/group/create" width="100%">
