@@ -1,11 +1,9 @@
 import { Box } from "@/components/chakra";
 import { BoxProps } from "@chakra-ui/react";
 
-type PageWrapperProps = BoxProps & {
-  hasNavigation?: boolean;
-};
+type PageWrapperProps = BoxProps;
 
-function PageWrapper({ children, ...rest }: PageWrapperProps) {
+function PageWrapper(props: PageWrapperProps) {
   return (
     <Box
       as="main"
@@ -15,15 +13,8 @@ function PageWrapper({ children, ...rest }: PageWrapperProps) {
       width="100%"
       position="relative"
       pb="calc(58px + var(--chakra-space-5))"
-      {...rest}
-    >
-      {/* {hasNavigation && (
-        <LinkToHome display="inline-block" mb="2">
-          {"\u2B05 Takaisin pääsivulle"}
-        </LinkToHome>
-      )} */}
-      {children}
-    </Box>
+      {...props}
+    />
   );
 }
 

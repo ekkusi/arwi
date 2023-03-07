@@ -4,7 +4,7 @@ import CenteredContainer from "./(server-components)/primitives/CenteredContaine
 
 export default async function Home() {
   return (
-    <PageWrapper hasNavigation={false}>
+    <PageWrapper>
       <Text as="h1" textAlign="center" mt="12">
         ARWI
       </Text>

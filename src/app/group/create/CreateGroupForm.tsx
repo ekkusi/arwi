@@ -1,9 +1,8 @@
 "use client";
 
 import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
-import { Button, Text } from "@/components/chakra";
+import { Button, NextLink, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
-import LinkToHome from "@/components/LinkToHome";
 import { graphql } from "@/gql";
 import { CreateStudentInput } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
@@ -73,14 +72,15 @@ export default function CreateGroupForm({ ...rest }: CreateGroupFormProps) {
           <Button type="submit" marginTop="auto" isLoading={loading}>
             Luo ryhmä
           </Button>
-          <LinkToHome
+          <NextLink
+            href="/"
             color="gray.700"
             mt="3"
             textTransform="uppercase"
             textAlign="center"
           >
             Peruuta
-          </LinkToHome>
+          </NextLink>
         </BorderedCard>
       )}
     </Formik>

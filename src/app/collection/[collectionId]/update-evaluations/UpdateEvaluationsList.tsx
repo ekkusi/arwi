@@ -1,7 +1,14 @@
 "use client";
 
 import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
-import { Box, Button, Tag, Text, Textarea } from "@/components/chakra";
+import {
+  Box,
+  Button,
+  NextLink,
+  Tag,
+  Text,
+  Textarea,
+} from "@/components/chakra";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import {
   UpdateEvaluationsList_CollectionFragment as CollectionFragmentType,
@@ -13,7 +20,6 @@ import { BoxProps } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import LinkToHome from "@/components/LinkToHome";
 import RatingSelector from "./RatingSelector";
 
 const UpdateEvaluationsList_CollectionFragment = graphql(`
@@ -197,7 +203,8 @@ export default function UpdateEvaluationsList({
       >
         Luo arvioinnit
       </Button>
-      <LinkToHome
+      <NextLink
+        href="/"
         color="gray.700"
         display="block"
         mt="3"
@@ -205,7 +212,7 @@ export default function UpdateEvaluationsList({
         textAlign="center"
       >
         Peruuta
-      </LinkToHome>
+      </NextLink>
     </Box>
   );
 }

@@ -25,7 +25,7 @@ export default async function UpdateEvaluationsPage({
     }
   );
   return (
-    <PageWrapper hasNavigation={false} p={0}>
+    <PageWrapper p={0}>
       <UpdateEvaluationsList collection={getCollection} />
     </PageWrapper>
   );

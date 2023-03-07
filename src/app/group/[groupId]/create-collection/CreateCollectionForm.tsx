@@ -1,9 +1,8 @@
 "use client";
 
 import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
-import { Button, Text } from "@/components/chakra";
+import { Button, NextLink, Text } from "@/components/chakra";
 import FormField from "@/components/FormField";
-import LinkToHome from "@/components/LinkToHome";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
@@ -115,14 +114,15 @@ export default function CreateCollectionForm({
           <Button type="submit" marginTop="auto" isLoading={loading}>
             Siirry arvioimaan
           </Button>
-          <LinkToHome
+          <NextLink
+            href="/"
             color="gray.700"
             mt="3"
             textTransform="uppercase"
             textAlign="center"
           >
             Peruuta
-          </LinkToHome>
+          </NextLink>
         </BorderedCard>
       )}
     </Formik>

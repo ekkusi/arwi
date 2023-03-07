@@ -3,7 +3,7 @@ import RegisterForm from "./RegisterForm";
 
 export default function RegisterPage() {
   return (
-    <PageWrapper hasNavigation={false}>
+    <PageWrapper>
       <RegisterForm />
     </PageWrapper>
   );

@@ -3,7 +3,7 @@ import LoginForm from "./LoginForm";
 
 export default function LoginPage() {
   return (
-    <PageWrapper hasNavigation={false}>
+    <PageWrapper>
       <LoginForm />
     </PageWrapper>
   );

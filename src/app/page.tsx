@@ -30,7 +30,7 @@ export default async function HomePage() {
   );
 
   return (
-    <PageWrapper display="flex" flexDirection="column" hasNavigation={false}>
+    <PageWrapper display="flex" flexDirection="column">
       <Box>
         {teacher ? (
           <>
