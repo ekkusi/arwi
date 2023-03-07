@@ -4,7 +4,7 @@ import CenteredContainer from "../(server-components)/primitives/CenteredContain
 
 export default function WelcomePage() {
   return (
-    <PageWrapper hasNavigation={false}>
+    <PageWrapper>
       <CenteredContainer>
         <Text as="h1" textAlign="center" fontSize="5xl">
           Tervetuloa!

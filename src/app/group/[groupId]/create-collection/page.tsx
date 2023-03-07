@@ -22,7 +22,7 @@ export default async function CreateCollectionPage({
     groupId: params.groupId,
   });
   return (
-    <PageWrapper display="flex" flexDirection="column" hasNavigation={false}>
+    <PageWrapper display="flex" flexDirection="column">
       <CreateCollectionForm flex="1" group={getGroup} />
     </PageWrapper>
   );
