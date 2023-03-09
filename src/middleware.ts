@@ -3,7 +3,7 @@ import { withAuth } from "next-auth/middleware";
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|icons|manifest.json|.well-known).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|icons|manifest.json|.well-known|sw|workbox|fallback).*)",
   ],
 };
 

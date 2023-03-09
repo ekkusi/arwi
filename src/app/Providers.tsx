@@ -1,5 +1,6 @@
 "use client";
 
+import ServiceWorkerProvider from "@/hooks-and-providers/ServiceWorkerProvider";
 import theme from "@/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Session } from "next-auth";
@@ -12,7 +13,10 @@ type ProvidersProps = React.ComponentProps<"div"> & {
 export default function Providers({ children, session }: ProvidersProps) {
   return (
     <SessionProvider session={session}>
-      <ChakraProvider theme={theme}>{children}</ChakraProvider>
+      <ChakraProvider theme={theme}>
+        {children}
+        <ServiceWorkerProvider />
+      </ChakraProvider>
     </SessionProvider>
   );
 }

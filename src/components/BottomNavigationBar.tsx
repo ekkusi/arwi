@@ -31,7 +31,13 @@ export function BottomNavigationLink({
   );
 }
 
-const NO_NAVIGATION_BAR_PATHS = ["/login", "/register", "/welcome"];
+const NO_NAVIGATION_BAR_PATHS = [
+  "/login",
+  "/register",
+  "/welcome",
+  "/_offline",
+  "/error",
+];
 
 export default function BottomNavigationBar() {
   const pathname = usePathname();

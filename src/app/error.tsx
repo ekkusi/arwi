@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, Flex, Text } from "@/components/chakra";
-import { signOut } from "next-auth/react";
 import { useEffect } from "react";
 import ErrorPageWrapper from "./(server-components)/ErrorPageWrapper";
 
@@ -15,18 +14,30 @@ export default function Error({ error, reset: _ }: ErrorProps) {
     console.error(error);
   }, [error]);
 
-  const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/login" });
+  const update = () => {
+    if (
+      typeof window !== "undefined" &&
+      "serviceWorker" in navigator &&
+      window.workbox !== undefined
+    ) {
+      const wb = window.workbox;
+
+      // Send a message to the waiting service worker, instructing it to activate.
+      wb.messageSkipWaiting();
+    } else {
+      console.error("Service worker not found, skip waiting");
+    }
+    window.location.reload();
   };
 
   return (
     <ErrorPageWrapper>
       <Text>
-        Kokeile ensiksi kirjautua uudestaan järjestelmään. Voi olla, että
-        sivuston versiosi tai kirjautumisesi ovat vain vanhentuneet.
+        Kokeile päivittää sovellus alta. Voi olla, että sivuston versiosi on
+        vanhentunut.
       </Text>
       <Flex justifyContent="center">
-        <Button onClick={handleSignOut}>Siirry kirjautumaan</Button>
+        <Button onClick={update}>Päivitä sivusto</Button>
       </Flex>
     </ErrorPageWrapper>
   );
