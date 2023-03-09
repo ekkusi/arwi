@@ -81,8 +81,8 @@ export default function StudentParticipationList({
           justifyContent="space-between"
           mb="2"
         >
-          <Text>{it.student.name}</Text>
-          <Box>
+          <Text mr="1">{it.student.name}</Text>
+          <Flex wrap="nowrap">
             <Button
               size="sm"
               onClick={() => toggleStudentPresent(it)}
@@ -101,7 +101,7 @@ export default function StudentParticipationList({
             >
               Poissa
             </Button>
-          </Box>
+          </Flex>
         </Flex>
       ))}
     </Box>
