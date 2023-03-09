@@ -27,6 +27,7 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       borderColor: `${colorScheme}.800`,
       color: `${colorScheme}.800`,
       bg: "inherit",
+      borderRadius: "md",
     }),
     solid: ({ colorScheme }) => ({
       border: "2px",

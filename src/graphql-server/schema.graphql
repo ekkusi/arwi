@@ -4,6 +4,7 @@ type Query {
   getGroups(teacherId: ID!): [Group!]!
   getGroup(id: ID!): Group!
   getCollection(id: ID!): EvaluationCollection!
+  getStudent(id: ID!): Student!
 }
 
 type Mutation {

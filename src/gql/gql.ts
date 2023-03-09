@@ -13,14 +13,20 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  "\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n":
-    types.GroupList_GroupFragmentFragmentDoc,
   "\n  query MainPage_GetTeacher($teacherId: ID!) {\n    getTeacher(id: $teacherId) {\n      email\n      id\n      groups {\n        ...GroupList_GroupFragment\n      }\n    }\n  }\n":
     types.MainPage_GetTeacherDocument,
+  "\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n":
+    types.GroupList_GroupFragmentFragmentDoc,
   "\n  mutation RegisterForm_Register($input: CreateTeacherInput!) {\n    register(data: $input) {\n      id\n      email\n    }\n  }\n":
     types.RegisterForm_RegisterDocument,
   "\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      type\n      group {\n        name\n      }\n      evaluations {\n        id\n        student {\n          id\n          name\n        }\n        wasPresent\n        skillsRating\n        behaviourRating\n        notes\n      }\n    }\n  }\n":
     types.CollectionPage_GetCollectionDocument,
+  "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      students {\n        id\n        name\n      }\n      evaluationCollections {\n        id\n        date\n        type\n        description\n        evaluations {\n          student {\n            name\n          }\n          skillsRating\n          behaviourRating\n        }\n      }\n    }\n  }\n":
+    types.GroupOverviewPage_GetGroupDocument,
+  "\n  fragment StudentEvaluationRecap_Evaluation on Evaluation {\n    id\n    wasPresent\n    behaviourRating\n    skillsRating\n  }\n":
+    types.StudentEvaluationRecap_EvaluationFragmentDoc,
+  "\n  query StudentPage_GetStudent($studentId: ID!) {\n    getStudent(id: $studentId) {\n      id\n      name\n      evaluations {\n        ...StudentEvaluationRecap_Evaluation\n      }\n    }\n  }\n":
+    types.StudentPage_GetStudentDocument,
   "\n  mutation Auth_Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      teacher {\n        id\n        email\n      }\n    }\n  }\n":
     types.Auth_LoginDocument,
   "\n  mutation CreateGroupForm_CreateGroup($input: CreateGroupInput!) {\n    createGroup(data: $input) {\n      id\n      name\n    }\n  }\n":
@@ -29,8 +35,6 @@ const documents = {
     types.UpdateEvaluationsList_CollectionFragmentDoc,
   "\n  mutation UpdateEvaluationsList_UpdateEvaluations(\n    $updateEvaluationsInput: [UpdateEvaluationInput!]!\n    $collectionId: ID!\n  ) {\n    updateEvaluations(\n      data: $updateEvaluationsInput\n      collectionId: $collectionId\n    )\n  }\n":
     types.UpdateEvaluationsList_UpdateEvaluationsDocument,
-  "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      students {\n        name\n      }\n      evaluationCollections {\n        id\n        date\n        type\n        description\n        evaluations {\n          student {\n            name\n          }\n          skillsRating\n          behaviourRating\n        }\n      }\n    }\n  }\n":
-    types.GroupOverviewPage_GetGroupDocument,
   "\n  query UpdateEvaluationsPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      ...UpdateEvaluationsList_Collection\n    }\n  }\n":
     types.UpdateEvaluationsPage_GetCollectionDocument,
   "\n  fragment CreateCollectionForm_Group on Group {\n    id\n    evaluationTypes\n    students {\n      ...StudentParticipationList_Student\n    }\n  }\n":
@@ -61,14 +65,14 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n"
-): (typeof documents)["\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n"];
+  source: "\n  query MainPage_GetTeacher($teacherId: ID!) {\n    getTeacher(id: $teacherId) {\n      email\n      id\n      groups {\n        ...GroupList_GroupFragment\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query MainPage_GetTeacher($teacherId: ID!) {\n    getTeacher(id: $teacherId) {\n      email\n      id\n      groups {\n        ...GroupList_GroupFragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query MainPage_GetTeacher($teacherId: ID!) {\n    getTeacher(id: $teacherId) {\n      email\n      id\n      groups {\n        ...GroupList_GroupFragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query MainPage_GetTeacher($teacherId: ID!) {\n    getTeacher(id: $teacherId) {\n      email\n      id\n      groups {\n        ...GroupList_GroupFragment\n      }\n    }\n  }\n"];
+  source: "\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n"
+): (typeof documents)["\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -81,6 +85,24 @@ export function graphql(
 export function graphql(
   source: "\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      type\n      group {\n        name\n      }\n      evaluations {\n        id\n        student {\n          id\n          name\n        }\n        wasPresent\n        skillsRating\n        behaviourRating\n        notes\n      }\n    }\n  }\n"
 ): (typeof documents)["\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      type\n      group {\n        name\n      }\n      evaluations {\n        id\n        student {\n          id\n          name\n        }\n        wasPresent\n        skillsRating\n        behaviourRating\n        notes\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      students {\n        id\n        name\n      }\n      evaluationCollections {\n        id\n        date\n        type\n        description\n        evaluations {\n          student {\n            name\n          }\n          skillsRating\n          behaviourRating\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      students {\n        id\n        name\n      }\n      evaluationCollections {\n        id\n        date\n        type\n        description\n        evaluations {\n          student {\n            name\n          }\n          skillsRating\n          behaviourRating\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment StudentEvaluationRecap_Evaluation on Evaluation {\n    id\n    wasPresent\n    behaviourRating\n    skillsRating\n  }\n"
+): (typeof documents)["\n  fragment StudentEvaluationRecap_Evaluation on Evaluation {\n    id\n    wasPresent\n    behaviourRating\n    skillsRating\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query StudentPage_GetStudent($studentId: ID!) {\n    getStudent(id: $studentId) {\n      id\n      name\n      evaluations {\n        ...StudentEvaluationRecap_Evaluation\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query StudentPage_GetStudent($studentId: ID!) {\n    getStudent(id: $studentId) {\n      id\n      name\n      evaluations {\n        ...StudentEvaluationRecap_Evaluation\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -105,12 +127,6 @@ export function graphql(
 export function graphql(
   source: "\n  mutation UpdateEvaluationsList_UpdateEvaluations(\n    $updateEvaluationsInput: [UpdateEvaluationInput!]!\n    $collectionId: ID!\n  ) {\n    updateEvaluations(\n      data: $updateEvaluationsInput\n      collectionId: $collectionId\n    )\n  }\n"
 ): (typeof documents)["\n  mutation UpdateEvaluationsList_UpdateEvaluations(\n    $updateEvaluationsInput: [UpdateEvaluationInput!]!\n    $collectionId: ID!\n  ) {\n    updateEvaluations(\n      data: $updateEvaluationsInput\n      collectionId: $collectionId\n    )\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      students {\n        name\n      }\n      evaluationCollections {\n        id\n        date\n        type\n        description\n        evaluations {\n          student {\n            name\n          }\n          skillsRating\n          behaviourRating\n        }\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      students {\n        name\n      }\n      evaluationCollections {\n        id\n        date\n        type\n        description\n        evaluations {\n          student {\n            name\n          }\n          skillsRating\n          behaviourRating\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

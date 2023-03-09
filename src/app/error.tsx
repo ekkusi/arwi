@@ -32,7 +32,7 @@ export default function Error({ error, reset: _ }: ErrorProps) {
 
   return (
     <ErrorPageWrapper>
-      <Text>
+      <Text mb="5">
         Kokeile päivittää sovellus alta. Voi olla, että sivuston versiosi on
         vanhentunut.
       </Text>

@@ -45,6 +45,7 @@ export type Query = {
   getGroups: Array<Group>;
   getGroup: Group;
   getCollection: EvaluationCollection;
+  getStudent: Student;
 };
 
 export type QueryGetTeacherArgs = {
@@ -60,6 +61,10 @@ export type QueryGetGroupArgs = {
 };
 
 export type QueryGetCollectionArgs = {
+  id: Scalars["ID"];
+};
+
+export type QueryGetStudentArgs = {
   id: Scalars["ID"];
 };
 
@@ -392,6 +397,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryGetCollectionArgs, "id">
+  >;
+  getStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetStudentArgs, "id">
   >;
 };
 

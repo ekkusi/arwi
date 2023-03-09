@@ -1,5 +1,5 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
-import { Box, NextLink, Text } from "@/components/chakra";
+import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 import { formatDate } from "@/utils/dateUtils";
@@ -19,6 +19,7 @@ const GroupOverviewPage_GetGroupQuery = graphql(`
       id
       name
       students {
+        id
         name
       }
       evaluationCollections {
@@ -49,15 +50,26 @@ export default async function GroupOverviewPage({
     <PageWrapper>
       {/* TODO: Show lessons etc... */}
       <Text as="h1">Ryhmä: {getGroup.name}</Text>
-      <Text as="h2">Oppilaat:</Text>
+      <Text as="h2" mb="5">
+        Oppilaat:
+      </Text>
       {getGroup.students.length > 0 ? (
-        <Box>
+        <Flex flexDirection="column" mb="5">
           {getGroup.students.map((student) => (
-            <Text>{student.name}</Text>
+            <Button
+              key={student.id}
+              variant="outline"
+              size="sm"
+              as={NextLink}
+              href={`/student/${student.id}`}
+              _notLast={{ mb: 3 }}
+            >
+              {student.name}
+            </Button>
           ))}
-        </Box>
+        </Flex>
       ) : (
-        <Box>
+        <Box mb="5">
           <Text>Ei oppilaita</Text>
         </Box>
       )}
