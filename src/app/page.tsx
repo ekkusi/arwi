@@ -49,8 +49,6 @@ export default async function HomePage() {
         ) : (
           <Text>Terve</Text>
         )}
-        <Text>Joku muutos</Text>
-        <Text>Joku muutos</Text>
       </Box>
     </PageWrapper>
   );
