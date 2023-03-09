@@ -42,5 +42,7 @@ next-env.d.ts
 
 # Service worker files (generated with build)
 public/sw.js
+public/sw.js.map
 public/workbox-*.js
+public/workbox-*.js.map
 public/fallback-*.js
