@@ -12,8 +12,7 @@ import { serverRequest } from "@/pages/api/graphql";
 import { formatDate } from "@/utils/dateUtils";
 import { FiEdit } from "react-icons/fi";
 
-// Necessary for revalidation to work
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 type GroupOverviewPageProps = {
   params: {

@@ -6,7 +6,7 @@ import { serverRequest } from "@/pages/api/graphql";
 import { formatRatingString } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 type CollectionPageProps = {
   params: { collectionId: string };
