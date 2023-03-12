@@ -13,6 +13,14 @@ const baseStyle: SystemStyleInterpolation = ({ colorScheme, theme }) => {
     border: "1px",
     borderRadius: "lg",
     borderColor: "gray.300",
+    _invalid: {
+      borderColor: "error",
+      boxShadow: `0 0 0 1px ${theme.colors.error}`,
+      _focus: {
+        borderColor: "error",
+        boxShadow: `0 0 0 1px ${theme.colors.error}`,
+      },
+    },
     _focus: {
       ...focusStyles,
     },

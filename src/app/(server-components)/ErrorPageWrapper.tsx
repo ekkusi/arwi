@@ -6,7 +6,7 @@ export default function ErrorPageWrapper({
 }: React.ComponentProps<"div">) {
   return (
     <PageWrapper>
-      <Box maxWidth={{ base: "100%", lg: "1000px" }} mx="auto" pt="16">
+      <Box width="100%" pt="16">
         <Text as="h1" textAlign="center">
           Hupsista!
         </Text>

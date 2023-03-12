@@ -2,8 +2,8 @@ import { graphql } from "@/gql";
 import { Box, Button, NextLink, Text } from "@/components/chakra";
 import { serverRequest } from "@/pages/api/graphql";
 import PageWrapper from "@/app/(server-components)/PageWrapper";
-import GroupList from "@/components/GroupList";
 import { getSessionOrRedirect } from "@/utils/session/server";
+import GroupList from "@/components/functional/GroupList";
 
 // Necessary for revalidation to work
 export const dynamic = "force-dynamic";

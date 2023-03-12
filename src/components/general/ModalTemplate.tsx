@@ -5,17 +5,24 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
+  ModalFooterProps,
   ModalHeader,
   ModalOverlay,
   ModalProps,
   useDisclosure,
 } from "@chakra-ui/react";
 
-type ModalTemplateProps = Omit<ModalProps, "isOpen" | "onClose" | "onOpen"> & {
+export type ModalTemplateProps = Omit<
+  ModalProps,
+  "isOpen" | "onClose" | "onOpen"
+> & {
   headerLabel?: string;
   isOpen?: boolean;
   onClose?: () => void;
   onOpen?: () => void;
+  modalFooter?: JSX.Element;
+  modalFooterProps?: ModalFooterProps;
 };
 
 export default function ModalTemplate({
@@ -23,6 +30,8 @@ export default function ModalTemplate({
   isOpen: customIsOpen,
   onClose: customOnClose,
   onOpen: customOnOpen,
+  modalFooter,
+  modalFooterProps,
   children,
   ...rest
 }: ModalTemplateProps) {
@@ -41,6 +50,9 @@ export default function ModalTemplate({
         <ModalBody px="5" pb="5" pt={headerLabel ? 0 : 5}>
           {children}
         </ModalBody>
+        {modalFooter && (
+          <ModalFooter {...modalFooterProps}>{modalFooter}</ModalFooter>
+        )}
       </ModalContent>
     </Modal>
   );

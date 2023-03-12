@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, NextLink, Text } from "@/components/chakra";
-import FormField from "@/components/FormField";
+import FormField from "@/components/general/FormField";
 import { graphql } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { getErrorMessage } from "@/utils/errorUtils";

@@ -44,10 +44,26 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
         opacity: 0.8,
       },
     },
+    alert: () => ({
+      color: "white",
+      border: "none",
+      bg: "error",
+      borderRadius: "md",
+    }),
+    link: ({ colorScheme }) => ({
+      px: 0,
+      py: 0,
+      color: `${colorScheme}.800`,
+      _hover: {
+        bg: "inherit",
+        opacity: 0.8,
+      },
+    }),
   },
   sizes: {
     sm: ({ variant }) => {
-      const sizeProps = variant === "ghost" ? formatSizeProps(4) : {};
+      const sizeProps =
+        variant === "link" || variant === "ghost" ? formatSizeProps(4) : {};
       return {
         py: 4,
         px: 4,
@@ -55,7 +71,8 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       };
     },
     md: ({ variant }) => {
-      const sizeProps = variant === "ghost" ? formatSizeProps(6) : {};
+      const sizeProps =
+        variant === "link" || variant === "ghost" ? formatSizeProps(6) : {};
       return {
         py: 5,
         px: 10,
@@ -63,7 +80,8 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       };
     },
     lg: ({ variant }) => {
-      const sizeProps = variant === "ghost" ? formatSizeProps(9) : {};
+      const sizeProps =
+        variant === "link" || variant === "ghost" ? formatSizeProps(9) : {};
       return {
         py: 6,
         px: 12,

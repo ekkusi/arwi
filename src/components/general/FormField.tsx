@@ -39,7 +39,7 @@ function FormField({
   as = Input,
   ...rest
 }: FormFieldProps): JSX.Element {
-  const [{ onChange, onBlur, ...field }, meta, helpers] = useField({
+  const [{ onChange, ...field }, meta, helpers] = useField({
     validate,
     ...rest,
   });

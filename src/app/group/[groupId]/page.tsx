@@ -1,8 +1,16 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
-import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  NextLink,
+  Text,
+} from "@/components/chakra";
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 import { formatDate } from "@/utils/dateUtils";
+import { FiEdit } from "react-icons/fi";
 
 // Necessary for revalidation to work
 export const dynamic = "force-static";
@@ -43,19 +51,35 @@ export default async function GroupOverviewPage({
   params,
 }: GroupOverviewPageProps) {
   // const session = await getSessionOrRedirect();
-  const { getGroup } = await serverRequest(GroupOverviewPage_GetGroupQuery, {
-    groupId: params.groupId,
-  });
+  const { getGroup: group } = await serverRequest(
+    GroupOverviewPage_GetGroupQuery,
+    {
+      groupId: params.groupId,
+    }
+  );
   return (
     <PageWrapper>
+      <IconButton
+        size="lg"
+        position="absolute"
+        variant="link"
+        top="5"
+        right="5"
+        as={NextLink}
+        icon={<FiEdit />}
+        aria-label="Ryhmän muokkaukseen"
+        href={`/group/${group.id}/edit`}
+      />
       {/* TODO: Show lessons etc... */}
-      <Text as="h1">Ryhmä: {getGroup.name}</Text>
+      <Text as="h1" mr="10">
+        Ryhmä: {group.name}
+      </Text>
       <Text as="h2" mb="5">
         Oppilaat:
       </Text>
-      {getGroup.students.length > 0 ? (
+      {group.students.length > 0 ? (
         <Flex flexDirection="column" mb="5">
-          {getGroup.students.map((student) => (
+          {group.students.map((student) => (
             <Button
               key={student.id}
               variant="outline"
@@ -76,9 +100,9 @@ export default async function GroupOverviewPage({
       <Text as="h2" mt="5">
         Arvioinnit:
       </Text>
-      {getGroup.evaluationCollections.length > 0 ? (
+      {group.evaluationCollections.length > 0 ? (
         <Box>
-          {getGroup.evaluationCollections.map((collection) => (
+          {group.evaluationCollections.map((collection) => (
             <Box>
               <Text as="span" textStyle="italic" mr="1">
                 {formatDate(new Date(collection.date), "dd.MM.yyyy")}:
@@ -92,7 +116,7 @@ export default async function GroupOverviewPage({
       ) : (
         <>
           <Text>Ei vielä arviointeja</Text>
-          <NextLink href={`/group/${getGroup.id}/create-collection`}>
+          <NextLink href={`/group/${group.id}/create-collection`}>
             Siirry tekemään arviointi
           </NextLink>
         </>

@@ -2,7 +2,7 @@
 
 import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
 import { Button, NextLink, Text } from "@/components/chakra";
-import FormField from "@/components/FormField";
+import FormField from "@/components/general/FormField";
 import { graphql } from "@/gql";
 import { CreateStudentInput } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";

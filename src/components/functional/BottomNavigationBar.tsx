@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { AiOutlineHome } from "react-icons/ai";
 import { MdOutlineDesignServices } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { Text, Icon, NextLink, SimpleGrid } from "./chakra";
+import { Text, Icon, NextLink, SimpleGrid } from "../chakra";
 
 type BotttomNavigationLinkProps = LinkProps & {};
 

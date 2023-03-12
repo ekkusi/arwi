@@ -5,7 +5,7 @@ import { FragmentType, graphql, useFragment } from "@/gql";
 import { GroupList_GroupFragmentFragment as GroupFragmentType } from "@/gql/graphql";
 import { BoxProps, FlexProps, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
-import DrawerTemplate from "./DrawerTemplate";
+import DrawerTemplate from "../general/DrawerTemplate";
 
 const GroupList_GroupFragment = graphql(`
   fragment GroupList_GroupFragment on Group {

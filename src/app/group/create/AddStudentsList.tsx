@@ -1,8 +1,8 @@
+import DeleteButton from "@/app/(server-components)/primitives/DeleteButton";
 import { Box, Flex, IconButton, Input, Text } from "@/components/chakra";
 import { CreateStudentInput } from "@/gql/graphql";
 import { FlexProps } from "@chakra-ui/react";
 import { ChangeEvent, KeyboardEventHandler, useState } from "react";
-import { AiFillDelete } from "react-icons/ai";
 import { IoMdAddCircle } from "react-icons/io";
 
 type AddStudentsListProps = FlexProps & {
@@ -63,13 +63,10 @@ export default function AddStudentsList({
           mb="2"
         >
           <Text>{it.name}</Text>
-          <IconButton
+          <DeleteButton
             onClick={() => removeStudent(index)}
-            colorScheme="red"
-            variant="ghost"
-            aria-label="Poista oppilas"
             mr="6px"
-            icon={<AiFillDelete />}
+            aria-label="Poista oppilas"
           />
         </Flex>
       ))}

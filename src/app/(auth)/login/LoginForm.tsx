@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, NextLink, Text } from "@/components/chakra";
-import FormField from "@/components/FormField";
+import FormField from "@/components/general/FormField";
 import { Form, Formik } from "formik";
 import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";

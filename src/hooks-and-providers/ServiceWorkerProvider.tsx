@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Button, Text } from "@/components/chakra";
-import ModalTemplate from "@/components/ModalTemplate";
+import ModalTemplate from "@/components/general/ModalTemplate";
 import { useEffect, useState } from "react";
 
 export default function ServiceWorkerProvider() {

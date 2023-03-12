@@ -8,7 +8,7 @@ import "@fontsource/open-sans/400-italic.css";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import BottomNavigationBar from "@/components/BottomNavigationBar";
+import BottomNavigationBar from "@/components/functional/BottomNavigationBar";
 import Providers from "./Providers";
 
 export default async function RootLayout({

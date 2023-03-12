@@ -2,7 +2,7 @@
 
 import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
 import { Button, NextLink, Text } from "@/components/chakra";
-import FormField from "@/components/FormField";
+import FormField from "@/components/general/FormField";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
@@ -82,7 +82,7 @@ export default function CreateCollectionForm({
         }
       );
       setLoading(false);
-      router.push(`/collection/${createCollection.id}/update-evaluations`);
+      router.push(`/collection/${createCollection.id}/edit`);
     } catch (error) {
       setLoading(false);
       console.error("Error happened:", error);

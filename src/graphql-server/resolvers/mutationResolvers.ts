@@ -3,6 +3,7 @@ import { compare, hash } from "bcryptjs";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
+import { mapUpdateStudentInput } from "../utils/dataMappers";
 
 const BRCRYPT_SALT_ROUNDS = 12;
 
@@ -104,6 +105,25 @@ const resolvers: MutationResolvers<CustomContext> = {
     await revalidateIfProd(res, `/${teacher.id}/collection/${collectionId}`);
 
     return results.length;
+  },
+  updateStudent: async (_, { data, studentId }, { prisma }) => {
+    const updatedStudent = await prisma.student.update({
+      where: { id: studentId },
+      data: mapUpdateStudentInput(data),
+    });
+    return updatedStudent;
+  },
+  deleteStudent: async (_, { studentId }, { prisma }) => {
+    await prisma.student.delete({
+      where: { id: studentId },
+    });
+    return true;
+  },
+  deleteGroup: async (_, { groupId }, { prisma }) => {
+    await prisma.group.delete({
+      where: { id: groupId },
+    });
+    return true;
   },
 };
 
