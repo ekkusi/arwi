@@ -4,7 +4,7 @@ import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
 import { Box, Button, Tag, Text, Textarea } from "@/components/chakra";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import {
-  UpdateEvaluationsList_CollectionFragment as CollectionFragmentType,
+  UpdateEvaluationsPageContent_CollectionFragment as CollectionFragmentType,
   Rating,
 } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
@@ -15,8 +15,8 @@ import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import RatingSelector from "./RatingSelector";
 
-const UpdateEvaluationsList_CollectionFragment = graphql(`
-  fragment UpdateEvaluationsList_Collection on EvaluationCollection {
+const UpdateEvaluationsPageContent_CollectionFragment = graphql(`
+  fragment UpdateEvaluationsPageContent_Collection on EvaluationCollection {
     id
     evaluations {
       id
@@ -32,8 +32,8 @@ const UpdateEvaluationsList_CollectionFragment = graphql(`
   }
 `);
 
-const UpdateEvaluationsList_UpdateEvaluationsMutation = graphql(`
-  mutation UpdateEvaluationsList_UpdateEvaluations(
+const UpdateEvaluationsPageContent_UpdateEvaluationsMutation = graphql(`
+  mutation UpdateEvaluationsPageContent_UpdateEvaluations(
     $updateEvaluationsInput: [UpdateEvaluationInput!]!
     $collectionId: ID!
   ) {
@@ -44,19 +44,21 @@ const UpdateEvaluationsList_UpdateEvaluationsMutation = graphql(`
   }
 `);
 
-type UpdateEvaluationsListProps = BoxProps & {
-  collection: FragmentType<typeof UpdateEvaluationsList_CollectionFragment>;
+type UpdateEvaluationsPageContentProps = BoxProps & {
+  collection: FragmentType<
+    typeof UpdateEvaluationsPageContent_CollectionFragment
+  >;
 };
 
 type Evaluation = CollectionFragmentType["evaluations"][number];
 
-export default function UpdateEvaluationsList({
+export default function UpdateEvaluationsPageContent({
   collection: collectionFragment,
   ...rest
-}: UpdateEvaluationsListProps) {
+}: UpdateEvaluationsPageContentProps) {
   const router = useRouter();
   const collection = useFragment(
-    UpdateEvaluationsList_CollectionFragment,
+    UpdateEvaluationsPageContent_CollectionFragment,
     collectionFragment
   );
   // const scrollRef = useRef(null);
@@ -93,7 +95,7 @@ export default function UpdateEvaluationsList({
     setIsCreating(true);
     try {
       await graphqlClient.request(
-        UpdateEvaluationsList_UpdateEvaluationsMutation,
+        UpdateEvaluationsPageContent_UpdateEvaluationsMutation,
         {
           updateEvaluationsInput: evaluations.map((evaluation) => ({
             id: evaluation.id,

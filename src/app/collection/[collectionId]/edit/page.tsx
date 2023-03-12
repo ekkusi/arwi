@@ -1,7 +1,7 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
-import UpdateEvaluationsList from "./UpdateEvaluationsList";
+import UpdateEvaluationsPageContent from "./UpdateEvaluationsPageContent";
 
 type UpdateEvaluationsPageProps = {
   params: { collectionId: string };
@@ -10,7 +10,7 @@ type UpdateEvaluationsPageProps = {
 const UpdateEvaluationsPage_GetCollectionQuery = graphql(`
   query UpdateEvaluationsPage_GetCollection($collectionId: ID!) {
     getCollection(id: $collectionId) {
-      ...UpdateEvaluationsList_Collection
+      ...UpdateEvaluationsPageContent_Collection
     }
   }
 `);
@@ -26,7 +26,7 @@ export default async function UpdateEvaluationsPage({
   );
   return (
     <PageWrapper p={0}>
-      <UpdateEvaluationsList collection={getCollection} />
+      <UpdateEvaluationsPageContent collection={getCollection} />
     </PageWrapper>
   );
 }

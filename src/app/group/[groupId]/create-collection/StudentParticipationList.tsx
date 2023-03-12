@@ -87,6 +87,7 @@ export default function StudentParticipationList({
               size="sm"
               onClick={() => toggleStudentPresent(it)}
               variant={it.wasPresent ? "solid" : "outline"}
+              borderRadius="lg"
               isDisabled={!initialParticipationsSet || isDisabled} // Disable changing participations until initial participations are set on parent
               mr="2"
             >
@@ -96,6 +97,7 @@ export default function StudentParticipationList({
               size="sm"
               onClick={() => toggleStudentNotPresent(it)}
               colorScheme="red"
+              borderRadius="lg"
               variant={it.wasPresent ? "outline" : "solid"}
               isDisabled={!initialParticipationsSet || isDisabled}
             >
