@@ -37,11 +37,11 @@ export default function DeleteGroupButton({
 
   const deleteGroup = async () => {
     setLoading(true);
+    setIsModalOpen(false);
     await graphqlClient.request(DeleteGroupButton_DeleteGroupMutation, {
       groupId: group.id,
     });
     setLoading(false);
-    setIsModalOpen(false);
     router.push("/");
     toast({
       title: `Ryhmä '${group.name}' poistettu onnistuneesti.`,
