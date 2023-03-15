@@ -150,55 +150,64 @@ export default function UpdateEvaluationsPageContent({
       overflowY="scroll"
       {...rest}
     >
-      {evaluations.map((evaluation, index) => (
-        <BorderedCard
-          key={evaluation.student.id}
-          scrollSnapAlign={index === evaluations.length - 1 ? "end" : "center"}
-          scrollSnapStop="always"
-          width="100%"
-          mb="3"
-        >
-          <Tag
-            as="h2"
-            size="lg"
-            mx="auto"
-            display="block"
-            textAlign="center"
-            mb="6"
+      {evaluations.length > 0 ? (
+        evaluations.map((evaluation, index) => (
+          <BorderedCard
+            key={evaluation.student.id}
+            scrollSnapAlign={
+              index === evaluations.length - 1 ? "end" : "center"
+            }
+            scrollSnapStop="always"
+            width="100%"
+            mb="3"
           >
-            {evaluation.student.name}
-          </Tag>
-          <Text as="h3">Taidot:</Text>
-          <RatingSelector
-            initialRating={evaluation.skillsRating}
-            onChange={(rating) => changeSkillsRating(evaluation, rating)}
-            mb="8"
-          />
-          <Text as="h3">Työskentely:</Text>
-          <RatingSelector
-            initialRating={evaluation.skillsRating}
-            onChange={(rating) => changeBehaviourRating(evaluation, rating)}
-            mb="8"
-          />
-          <Text as="h3">Muita huomioita:</Text>
-          <Textarea
-            onChange={(e) => debouncedChangeNotes(evaluation, e.target.value)}
-            colorScheme="green"
-            minHeight="32"
-            placeholder="Muita huomioita oppilaan toiminnasta tunnilla..."
-          />
-          {index === evaluations.length - 1 && (
-            <Button
-              isLoading={isCreating}
-              onClick={createEvaluations}
-              width="100%"
-              mt="6"
+            <Tag
+              as="h2"
+              size="lg"
+              mx="auto"
+              display="block"
+              textAlign="center"
+              mb="6"
             >
-              Luo arvioinnit
-            </Button>
-          )}
-        </BorderedCard>
-      ))}
+              {evaluation.student.name}
+            </Tag>
+            <Text as="h3">Taidot:</Text>
+            <RatingSelector
+              initialRating={evaluation.skillsRating}
+              onChange={(rating) => changeSkillsRating(evaluation, rating)}
+              mb="8"
+            />
+            <Text as="h3">Työskentely:</Text>
+            <RatingSelector
+              initialRating={evaluation.skillsRating}
+              onChange={(rating) => changeBehaviourRating(evaluation, rating)}
+              mb="8"
+            />
+            <Text as="h3">Muita huomioita:</Text>
+            <Textarea
+              onChange={(e) => debouncedChangeNotes(evaluation, e.target.value)}
+              colorScheme="green"
+              minHeight="32"
+              placeholder="Muita huomioita oppilaan toiminnasta tunnilla..."
+            />
+            {index === evaluations.length - 1 && (
+              <Button
+                isLoading={isCreating}
+                onClick={createEvaluations}
+                width="100%"
+                mt="6"
+              >
+                Luo arvioinnit
+              </Button>
+            )}
+          </BorderedCard>
+        ))
+      ) : (
+        <Box p="5">
+          <Text as="h1">Arvioinnin muokkaus</Text>
+          <Text>Ei arviointeja kokoelmassa</Text>
+        </Box>
+      )}
     </Box>
   );
 }

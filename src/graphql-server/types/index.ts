@@ -79,6 +79,7 @@ export type Mutation = {
   updateGroup: Group;
   deleteStudent: Scalars["Boolean"];
   deleteGroup: Scalars["Boolean"];
+  deleteCollection: Scalars["Boolean"];
 };
 
 export type MutationRegisterArgs = {
@@ -120,6 +121,10 @@ export type MutationDeleteStudentArgs = {
 
 export type MutationDeleteGroupArgs = {
   groupId: Scalars["ID"];
+};
+
+export type MutationDeleteCollectionArgs = {
+  collectionId: Scalars["ID"];
 };
 
 export type Teacher = {
@@ -497,6 +502,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationDeleteGroupArgs, "groupId">
+  >;
+  deleteCollection?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteCollectionArgs, "collectionId">
   >;
 };
 

@@ -29,6 +29,7 @@ export default async function GroupOverviewPage({
       groupId: params.groupId,
     }
   );
+
   return (
     <PageWrapper>
       <GroupOverviewPageContent group={group} />

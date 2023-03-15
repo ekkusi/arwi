@@ -127,7 +127,7 @@ export default function UpdateStudentsList({
           />
           <DeleteButton
             onClick={() => setStudentInDelete(it)}
-            mr="6px"
+            mr="2"
             aria-label="Poista oppilas"
           />
         </Flex>
@@ -138,8 +138,11 @@ export default function UpdateStudentsList({
         onAccept={() => deleteSelectedStudent()}
       >
         <Text>
-          Oletko varma, että haluat poistaa oppilaan {studentInDelete?.name}?
-          Hänen kaikki tietonsa, mukaan lukien arvioinnit, poistuvat samalla.
+          Oletko varma, että haluat poistaa oppilaan{" "}
+          <Text as="span" fontStyle="italic">
+            {studentInDelete?.name}
+          </Text>
+          ? Hänen kaikki tietonsa, mukaan lukien arvioinnit, poistuvat samalla.
         </Text>
       </ConfirmationModal>
     </Box>

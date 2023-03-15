@@ -32,41 +32,20 @@ export default async function HomePage() {
   return (
     <PageWrapper display="flex" flexDirection="column">
       <Box>
-        {teacher ? (
-          <>
-            <Box mb="5">
-              <Text as="h2">Omat ryhmät:</Text>
-              {teacher.groups.length > 0 ? (
-                <GroupList groups={teacher.groups} mb="5" />
-              ) : (
-                <Text>Et vielä ole tehnyt ryhmiä</Text>
-              )}
-            </Box>
-            <Button as={NextLink} href="/group/create" width="100%">
-              {teacher.groups.length > 0 ? "Luo uusi ryhmä" : "Luo ryhmä"}
-            </Button>
-          </>
-        ) : (
-          <Text>Terve</Text>
-        )}
+        <Box mb="5">
+          <Text as="h2" mb="5">
+            Omat ryhmät:
+          </Text>
+          {teacher.groups.length > 0 ? (
+            <GroupList groups={teacher.groups} mb="5" />
+          ) : (
+            <Text>Et vielä ole tehnyt ryhmiä</Text>
+          )}
+        </Box>
+        <Button as={NextLink} href="/group/create" width="100%">
+          {teacher.groups.length > 0 ? "Luo uusi ryhmä" : "Luo ryhmä"}
+        </Button>
       </Box>
     </PageWrapper>
   );
 }
-// const TeacherLayout_GetTeachersQuery = graphql(`
-//   query TeacherLayout_GetTeachers {
-//     getTeachers {
-//       id
-//     }
-//   }
-// `);
-
-// export const generateStaticParams = async () => {
-//   const { getTeachers: teachers } = await serverRequest(
-//     TeacherLayout_GetTeachersQuery
-//   );
-
-//   return teachers.map((it) => ({
-//     id: it.id,
-//   }));
-// };

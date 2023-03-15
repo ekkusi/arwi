@@ -17,6 +17,7 @@ type Mutation {
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
   deleteStudent(studentId: ID!): Boolean!
   deleteGroup(groupId: ID!): Boolean!
+  deleteCollection(collectionId: ID!): Boolean!
 }
 
 type Teacher {

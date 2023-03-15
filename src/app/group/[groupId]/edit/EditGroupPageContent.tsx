@@ -1,12 +1,12 @@
 "use client";
 
-import { Box, Text, useToast } from "@/components/chakra";
+import { Text, useToast } from "@/components/chakra";
 import BackwardsLink from "@/components/general/BackwardsLink";
 import InputWithError from "@/components/general/InputWithError";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import graphqlClient from "@/graphql-client";
-import { formatDate } from "@/utils/dateUtils";
 import DeleteGroupButton from "./DeleteGroupButton";
+import UpdateCollectionsList from "./UpdateCollectionsList";
 import UpdateStudentsList from "./UpdateStudentsList";
 
 const EditGroupPageContent_GroupFragment = graphql(`
@@ -18,9 +18,7 @@ const EditGroupPageContent_GroupFragment = graphql(`
       ...UpdateStudentsList_Student
     }
     evaluationCollections {
-      id
-      date
-      type
+      ...UpdateCollectionsList_Collection
     }
   }
 `);
@@ -84,20 +82,11 @@ export default function EditGroupPageContent({
         Arvioinnit:
       </Text>
       {group.evaluationCollections.length > 0 ? (
-        <Box>
-          {group.evaluationCollections.map((collection) => (
-            <Box>
-              <Text as="span" textStyle="italic" mr="1">
-                {formatDate(new Date(collection.date), "dd.MM.yyyy")}:
-              </Text>
-              <Text as="span">{collection.type}</Text>
-            </Box>
-          ))}
-        </Box>
+        <UpdateCollectionsList collections={group.evaluationCollections} />
       ) : (
         <Text>Ei vielä arviointeja</Text>
       )}
-      <DeleteGroupButton mt="5" width="100%" group={group} />
+      <DeleteGroupButton mt="8" width="100%" group={group} />
     </>
   );
 }

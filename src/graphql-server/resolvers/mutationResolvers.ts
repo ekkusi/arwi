@@ -137,6 +137,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return true;
   },
+  deleteCollection: async (_, { collectionId }, { prisma }) => {
+    await prisma.evaluationCollection.delete({
+      where: { id: collectionId },
+    });
+    return true;
+  },
 };
 
 export default resolvers;

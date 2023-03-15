@@ -42,6 +42,7 @@ export default function GroupOverviewPageContent({
   return (
     <>
       <IconButton
+        colorScheme="blue"
         size="lg"
         position="absolute"
         variant="link"
