@@ -14,6 +14,7 @@ type Mutation {
   createCollection(data: CreateCollectionInput!, groupId: ID!): EvaluationCollection!
   updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
+  updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
   deleteStudent(studentId: ID!): Boolean!
   deleteGroup(groupId: ID!): Boolean!
 }
@@ -82,6 +83,10 @@ input CreateGroupInput {
   name: String!
   teacherId: ID!
   students: [CreateStudentInput!]
+}
+
+input UpdateGroupInput {
+  name: String
 }
 
 input CreateStudentInput {

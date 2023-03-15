@@ -78,6 +78,7 @@ export default function UpdateStudentsList({
     student: StudentFragment,
     name: string
   ) => {
+    if (name === student.name) return;
     const newStudents = students.map((it) => {
       if (it.id === student.id) {
         return { ...it, name };
@@ -93,9 +94,10 @@ export default function UpdateStudentsList({
 
     toast({
       title: "Oppilaan nimi päivitetty.",
-      description: `Oppilaan '${student.name}' nimi päivitetty onnistuneesti nimeen '${student.name}'`,
+      description: `Oppilaan '${student.name}' nimi päivitetty nimeen '${name}'`,
       status: "success",
       isClosable: true,
+      position: "top",
     });
   };
 
@@ -119,7 +121,7 @@ export default function UpdateStudentsList({
             type="text"
             value={it.name}
             validate={validateName}
-            onChange={(e, isValid) =>
+            onBlur={(e, isValid) =>
               isValid && handleStudentNameChange(it, e.target.value)
             }
           />

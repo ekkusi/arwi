@@ -76,6 +76,7 @@ export type Mutation = {
   createCollection: EvaluationCollection;
   updateEvaluations: Scalars["Int"];
   updateStudent: Student;
+  updateGroup: Group;
   deleteStudent: Scalars["Boolean"];
   deleteGroup: Scalars["Boolean"];
 };
@@ -106,6 +107,11 @@ export type MutationUpdateEvaluationsArgs = {
 export type MutationUpdateStudentArgs = {
   data: UpdateStudentInput;
   studentId: Scalars["ID"];
+};
+
+export type MutationUpdateGroupArgs = {
+  data: UpdateGroupInput;
+  groupId: Scalars["ID"];
 };
 
 export type MutationDeleteStudentArgs = {
@@ -184,6 +190,10 @@ export type CreateGroupInput = {
   name: Scalars["String"];
   teacherId: Scalars["ID"];
   students?: InputMaybe<Array<CreateStudentInput>>;
+};
+
+export type UpdateGroupInput = {
+  name?: InputMaybe<Scalars["String"]>;
 };
 
 export type CreateStudentInput = {
@@ -343,6 +353,7 @@ export type ResolversTypes = {
   Student: ResolverTypeWrapper<StudentPrisma>;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
+  UpdateGroupInput: UpdateGroupInput;
   CreateStudentInput: CreateStudentInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
@@ -370,6 +381,7 @@ export type ResolversParentTypes = {
   Student: StudentPrisma;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
+  UpdateGroupInput: UpdateGroupInput;
   CreateStudentInput: CreateStudentInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
@@ -467,6 +479,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateStudentArgs, "data" | "studentId">
+  >;
+  updateGroup?: Resolver<
+    ResolversTypes["Group"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateGroupArgs, "data" | "groupId">
   >;
   deleteStudent?: Resolver<
     ResolversTypes["Boolean"],

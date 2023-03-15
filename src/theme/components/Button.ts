@@ -81,7 +81,7 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
     },
     lg: ({ variant }) => {
       const sizeProps =
-        variant === "link" || variant === "ghost" ? formatSizeProps(9) : {};
+        variant === "link" || variant === "ghost" ? formatSizeProps(8) : {};
       return {
         py: 6,
         px: 12,

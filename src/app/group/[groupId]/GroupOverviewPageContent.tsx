@@ -45,7 +45,7 @@ export default function GroupOverviewPageContent({
         size="lg"
         position="absolute"
         variant="link"
-        top="5"
+        top="6"
         right="5"
         as={NextLink}
         icon={<FiEdit />}

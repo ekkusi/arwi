@@ -1,6 +1,6 @@
 "use client";
 
-import { FormErrorMessageProps, InputProps } from "@chakra-ui/react";
+import { BoxProps, FormErrorMessageProps, InputProps } from "@chakra-ui/react";
 import debounce from "lodash.debounce";
 import { useMemo, useState } from "react";
 import { Box, Input, Text } from "../chakra";
@@ -18,6 +18,7 @@ type InputWithErrorProps = Omit<InputProps, "value" | "onChange" | "onBlur"> & {
     event: React.FocusEvent<HTMLInputElement>,
     isValid: boolean
   ) => void;
+  containerProps?: BoxProps;
 };
 
 export default function InputWithError({
@@ -27,6 +28,7 @@ export default function InputWithError({
   value: initialValue,
   validate,
   errorMessageProps,
+  containerProps,
   ...rest
 }: InputWithErrorProps) {
   const [error, setError] = useState<string | undefined>();
@@ -68,7 +70,7 @@ export default function InputWithError({
   };
 
   return (
-    <Box>
+    <Box {...containerProps}>
       <Input
         value={value}
         onChange={onChange}

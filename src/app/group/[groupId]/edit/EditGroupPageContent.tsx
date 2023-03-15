@@ -1,8 +1,10 @@
 "use client";
 
-import { Box, Text } from "@/components/chakra";
+import { Box, Text, useToast } from "@/components/chakra";
 import BackwardsLink from "@/components/general/BackwardsLink";
+import InputWithError from "@/components/general/InputWithError";
 import { FragmentType, graphql, useFragment } from "@/gql";
+import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
 import DeleteGroupButton from "./DeleteGroupButton";
 import UpdateStudentsList from "./UpdateStudentsList";
@@ -23,6 +25,17 @@ const EditGroupPageContent_GroupFragment = graphql(`
   }
 `);
 
+const EditGroupPageContent_UpdateGroupMutation = graphql(`
+  mutation EditGroupPageContent_UpdateGroup(
+    $id: ID!
+    $input: UpdateGroupInput!
+  ) {
+    updateGroup(groupId: $id, data: $input) {
+      id
+    }
+  }
+`);
+
 type EditGroupPageContentProps = {
   group: FragmentType<typeof EditGroupPageContent_GroupFragment>;
 };
@@ -31,15 +44,38 @@ export default function EditGroupPageContent({
   group: groupFragment,
 }: EditGroupPageContentProps) {
   const group = useFragment(EditGroupPageContent_GroupFragment, groupFragment);
+  const toast = useToast();
+
+  const updateName = async (name: string) => {
+    if (name === group.name) return;
+    await graphqlClient.request(EditGroupPageContent_UpdateGroupMutation, {
+      id: group.id,
+      input: {
+        name,
+      },
+    });
+
+    toast({
+      title: "Ryhmän nimi päivitetty.",
+      description: `Ryhmän '${group.name}' nimi päivitetty nimeen '${name}'`,
+      status: "success",
+      isClosable: true,
+      position: "top",
+    });
+  };
+
   return (
     <>
       <BackwardsLink href={`/group/${group.id}`}>
         Takaisin yhteenvetoon
       </BackwardsLink>
       <Text as="h1">Ryhmän muokkaus</Text>
-      <Text as="h2" mb="5">
-        Nimi: {group.name}
-      </Text>
+      <Text as="h2">Nimi:</Text>
+      <InputWithError
+        value={group.name}
+        onBlur={(e, isValid) => isValid && updateName(e.target.value)}
+        containerProps={{ mb: "5" }}
+      />
       <Text as="h2" mb="5">
         Oppilaat:
       </Text>
