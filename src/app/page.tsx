@@ -31,21 +31,22 @@ export default async function HomePage() {
 
   return (
     <PageWrapper display="flex" flexDirection="column">
-      <Box>
-        <Box mb="5">
-          <Text as="h2" mb="5">
-            Omat ryhmät:
-          </Text>
-          {teacher.groups.length > 0 ? (
-            <GroupList groups={teacher.groups} mb="5" />
-          ) : (
-            <Text>Et vielä ole tehnyt ryhmiä</Text>
-          )}
-        </Box>
-        <Button as={NextLink} href="/group/create" width="100%">
-          {teacher.groups.length > 0 ? "Luo uusi ryhmä" : "Luo ryhmä"}
-        </Button>
+      <Box mb="5">
+        <Text as="h2" mb="5">
+          Omat ryhmät:
+        </Text>
+        {teacher.groups.length > 0 ? (
+          <GroupList groups={teacher.groups} mb="5" />
+        ) : (
+          <Text>Et vielä ole tehnyt ryhmiä</Text>
+        )}
       </Box>
+      <Button as={NextLink} href="/group/create" width="100%">
+        {teacher.groups.length > 0 ? "Luo uusi ryhmä" : "Luo ryhmä"}
+      </Button>
+      <NextLink textAlign="center" display="block" href="/test" mt="auto">
+        Puheentunnistus testiin
+      </NextLink>
     </PageWrapper>
   );
 }
