@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
-type UseSpeechRecognitionProps = {
+export type UseSpeechRecognitionProps = {
   onResult?: (result: string) => void;
+  onStop?: () => void;
+  onStart?: () => void;
 };
 
 export default function useSpeechRecognition(
@@ -32,7 +34,7 @@ export default function useSpeechRecognition(
           if (event.results[i].isFinal) {
             const newText = event.results[i][0].transcript;
             tempResult = newText;
-            recognition.stop();
+            // recognition.stop();
             break;
           } else {
             const newText = event.results[i][0].transcript;
@@ -40,15 +42,22 @@ export default function useSpeechRecognition(
           }
         }
         setResult(tempResult);
+
         if (props?.onResult) {
           props.onResult(tempResult);
         }
       };
       recognition.onend = () => {
         setActive(false);
+        if (props?.onStop) {
+          props.onStop();
+        }
       };
       recognition.onstart = () => {
         setActive(true);
+        if (props?.onStart) {
+          props.onStart();
+        }
       };
       setSpeechRecognition(recognition);
     }

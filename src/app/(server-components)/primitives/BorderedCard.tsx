@@ -1,7 +1,7 @@
 import { Box } from "@/components/chakra";
 import { BoxProps } from "@chakra-ui/react";
 
-type BorderedCardProps = BoxProps;
+export type BorderedCardProps = BoxProps;
 
 export default function BorderedCard(props: BorderedCardProps) {
   return (
