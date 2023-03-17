@@ -7,7 +7,7 @@ import { Box, Tag, Text, Textarea } from "@/components/chakra";
 import debounce from "lodash.debounce";
 import { useCallback, useMemo, useState } from "react";
 import SpeechRecognition from "@/components/functional/SpeechRecognition";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateEvaluationCard_EvaluationFragment as EvaluationFragment } from "@/gql/graphql";
 import RatingSelector from "./RatingSelector";
 
@@ -36,7 +36,7 @@ export default function UpdateEvaluationCard({
   onChanged: onChangedCallback,
   ...rest
 }: UpdateEvaluationCardProps) {
-  const initialEvaluation = useFragment(
+  const initialEvaluation = getFragmentData(
     UpdateEvaluationCard_EvaluationFragment,
     evaluationFragment
   );

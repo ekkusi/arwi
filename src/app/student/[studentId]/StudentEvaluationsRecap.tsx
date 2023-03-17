@@ -1,5 +1,5 @@
 import { Box, Text } from "@/components/chakra";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { evaluateStudent } from "@/utils/evaluationUtils";
 import { BoxProps } from "@chakra-ui/react";
 
@@ -20,7 +20,7 @@ export default function StudentEvaluationsRecap({
   evaluations: evaluationFragments,
   ...rest
 }: StudentEvaluationsRecapProps) {
-  const evaluations = useFragment(
+  const evaluations = getFragmentData(
     StudentEvaluationRecap_EvaluationFragment,
     evaluationFragments
   );

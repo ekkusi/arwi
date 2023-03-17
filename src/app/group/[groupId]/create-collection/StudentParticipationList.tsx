@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, Flex, Text } from "@/components/chakra";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { StudentParticipationList_StudentFragment as StudentFragmentType } from "@/gql/graphql";
 import { BoxProps } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ export default function StudentParticipationList({
   isDisabled = false,
   ...rest
 }: StudentParticipationListProps) {
-  const students = useFragment(
+  const students = getFragmentData(
     StudentParticipationList_StudentFragment,
     stundentFragments
   );

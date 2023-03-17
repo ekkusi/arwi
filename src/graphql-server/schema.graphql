@@ -12,6 +12,7 @@ type Mutation {
   login(email: String!, password: String!): LoginResult!
   createGroup(data: CreateGroupInput!): Group!
   createCollection(data: CreateCollectionInput!, groupId: ID!): EvaluationCollection!
+  createStudent(data: CreateStudentInput!, groupId: ID!): Student!
   updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!

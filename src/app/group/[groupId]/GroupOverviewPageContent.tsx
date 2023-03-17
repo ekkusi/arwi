@@ -8,7 +8,7 @@ import {
   NextLink,
   Text,
 } from "@/components/chakra";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { formatDate } from "@/utils/dateUtils";
 import { FiEdit } from "react-icons/fi";
 
@@ -35,7 +35,7 @@ type GroupOverviewPageContentProps = {
 export default function GroupOverviewPageContent({
   group: groupFragment,
 }: GroupOverviewPageContentProps) {
-  const group = useFragment(
+  const group = getFragmentData(
     GroupOverviewPageContent_GroupFragment,
     groupFragment
   );

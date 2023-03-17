@@ -3,7 +3,7 @@
 import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
 import { Button, NextLink, Text } from "@/components/chakra";
 import FormField from "@/components/general/FormField";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
 import { BoxProps } from "@chakra-ui/react";
@@ -49,7 +49,7 @@ export default function CreateCollectionForm({
   group: groupFragment,
   ...rest
 }: CreateCollectionFormProps) {
-  const groupData = useFragment(
+  const groupData = getFragmentData(
     CreateCollectionForm_GroupFragment,
     groupFragment
   );

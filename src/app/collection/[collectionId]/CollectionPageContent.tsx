@@ -1,5 +1,5 @@
 import { Box, Text } from "@/components/chakra";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { Rating } from "@/gql/graphql";
 import { formatRatingString } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
@@ -33,7 +33,7 @@ type CollectionPageContentProps = {
 export default function CollectionPageContent({
   collection: collectionFragment,
 }: CollectionPageContentProps) {
-  const collection = useFragment(
+  const collection = getFragmentData(
     CollectionPageContent_CollectionFragment,
     collectionFragment
   );

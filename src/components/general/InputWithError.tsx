@@ -2,7 +2,7 @@
 
 import { BoxProps, FormErrorMessageProps, InputProps } from "@chakra-ui/react";
 import debounce from "lodash.debounce";
-import { useMemo, useState } from "react";
+import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
 import { Box, Input, Text } from "../chakra";
 
 type InputWithErrorProps = Omit<InputProps, "value" | "onChange" | "onBlur"> & {
@@ -21,68 +21,84 @@ type InputWithErrorProps = Omit<InputProps, "value" | "onChange" | "onBlur"> & {
   containerProps?: BoxProps;
 };
 
-export default function InputWithError({
-  debounced = true,
-  onChange: validatedOnChange,
-  onBlur: validatedOnBlur,
-  value: initialValue,
-  validate,
-  errorMessageProps,
-  containerProps,
-  ...rest
-}: InputWithErrorProps) {
-  const [error, setError] = useState<string | undefined>();
-  const [value, setValue] = useState<string | undefined>(() => {
-    return initialValue;
-  });
+export type InputWithErrorHandlers = {
+  clear: () => void;
+};
 
-  const defaultValidate = (newValue: string) => {
-    if (newValue.length <= 0) {
-      return "Tämä kenttä ei voi olla tyhjä";
-    }
-    return undefined;
-  };
+export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
+  (
+    {
+      debounced = false,
+      onChange: validatedOnChange,
+      onBlur: validatedOnBlur,
+      value: initialValue,
+      validate,
+      errorMessageProps,
+      containerProps,
+      ...rest
+    }: InputWithErrorProps,
+    ref
+  ) => {
+    const [error, setError] = useState<string | undefined>();
+    const [value, setValue] = useState<string | undefined>(() => {
+      return initialValue;
+    });
 
-  // Debounce changeNotes function to prevent preformance issues
-  const debouncedOnChange = useMemo(
-    () => validatedOnChange && debounce(validatedOnChange, 300),
-    [validatedOnChange]
-  );
+    const defaultValidate = (newValue: string) => {
+      if (newValue.length <= 0) {
+        return "Tämä kenttä ei voi olla tyhjä";
+      }
+      return undefined;
+    };
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    setValue(newValue);
+    // Debounce changeNotes function to prevent preformance issues
+    const debouncedOnChange = useMemo(
+      () => validatedOnChange && debounce(validatedOnChange, 300),
+      [validatedOnChange]
+    );
 
-    const validateFunc = validate || defaultValidate;
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
+      setValue(newValue);
 
-    const errorMessage = validateFunc(newValue);
-    if (errorMessage) {
-      setError(errorMessage);
-    } else {
-      setError(undefined);
-    }
-    if (debounced) debouncedOnChange?.(event, !errorMessage);
-    else validatedOnChange?.(event, !errorMessage);
-  };
+      const validateFunc = validate || defaultValidate;
 
-  const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    validatedOnBlur?.(event, !error);
-  };
+      const errorMessage = validateFunc(newValue);
+      if (errorMessage) {
+        setError(errorMessage);
+      } else {
+        setError(undefined);
+      }
+      if (debounced) debouncedOnChange?.(event, !errorMessage);
+      else validatedOnChange?.(event, !errorMessage);
+    };
 
-  return (
-    <Box {...containerProps}>
-      <Input
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        isInvalid={!!error}
-        {...rest}
-      />
-      {error && (
-        <Text color="error" {...errorMessageProps}>
-          {error}
-        </Text>
-      )}
-    </Box>
-  );
-}
+    const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+      validatedOnBlur?.(event, !error);
+    };
+
+    useImperativeHandle(ref, () => ({
+      clear() {
+        setValue("");
+        setError(undefined);
+      },
+    }));
+
+    return (
+      <Box {...containerProps}>
+        <Input
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          isInvalid={!!error}
+          {...rest}
+        />
+        {error && (
+          <Text color="error" {...errorMessageProps}>
+            {error}
+          </Text>
+        )}
+      </Box>
+    );
+  }
+);

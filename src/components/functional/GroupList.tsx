@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { GroupList_GroupFragmentFragment as GroupFragmentType } from "@/gql/graphql";
 import { BoxProps, FlexProps, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
@@ -59,7 +59,7 @@ export default function GroupList({
   groups: groupFragments,
   ...rest
 }: GroupListProps) {
-  const groups = useFragment(GroupList_GroupFragment, groupFragments);
+  const groups = getFragmentData(GroupList_GroupFragment, groupFragments);
   const [selectedGroup, setSelectedGroup] = useState<
     GroupFragmentType | undefined
   >();

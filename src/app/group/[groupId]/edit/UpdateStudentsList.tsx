@@ -1,17 +1,20 @@
 "use client";
 
 import DeleteButton from "@/app/(server-components)/primitives/DeleteButton";
-import { Box, Flex, Text } from "@/components/chakra";
+import { Box, Flex, Text, IconButton } from "@/components/chakra";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
-import InputWithError from "@/components/general/InputWithError";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import InputWithError, {
+  InputWithErrorHandlers,
+} from "@/components/general/InputWithError";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import {
   CreateStudentInput,
   UpdateStudentsList_StudentFragment as StudentFragment,
 } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { FlexProps, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { ChangeEvent, KeyboardEventHandler, useRef, useState } from "react";
+import { IoMdAddCircle } from "react-icons/io";
 
 const UpdateStudentsList_StudentFragment = graphql(`
   fragment UpdateStudentsList_Student on Student {
@@ -31,6 +34,17 @@ const UpdateStudentList_UpdateStudentMutation = graphql(`
   }
 `);
 
+const UpdateStudentList_CreateStudentMutation = graphql(`
+  mutation UpdateStudentList_CreateStudent(
+    $input: CreateStudentInput!
+    $groupId: ID!
+  ) {
+    createStudent(data: $input, groupId: $groupId) {
+      ...UpdateStudentsList_Student
+    }
+  }
+`);
+
 const UpdateStudentList_DeleteStudentMutation = graphql(`
   mutation UpdateStudentList_DeleteStudent($studentId: ID!) {
     deleteStudent(studentId: $studentId)
@@ -39,16 +53,19 @@ const UpdateStudentList_DeleteStudentMutation = graphql(`
 
 type UpdateStudentsListProps = FlexProps & {
   students: FragmentType<typeof UpdateStudentsList_StudentFragment>[];
+  groupId: string;
   onChanged?(students: CreateStudentInput[]): void;
 };
 
 export default function UpdateStudentsList({
   onChanged,
+  groupId,
   students: studentFragments,
   ...rest
 }: UpdateStudentsListProps) {
   const toast = useToast();
-  const initialStudents = useFragment(
+  const nameInputRef = useRef<InputWithErrorHandlers>(null);
+  const initialStudents = getFragmentData(
     UpdateStudentsList_StudentFragment,
     studentFragments
   );
@@ -58,6 +75,8 @@ export default function UpdateStudentsList({
   const [students, setStudents] = useState<StudentFragment[]>(() => [
     ...initialStudents,
   ]);
+  const [newStudentName, setNewStudentName] = useState("");
+  const [addingStudent, setAddingStudent] = useState(false);
 
   const deleteSelectedStudent = async () => {
     if (!studentInDelete) return;
@@ -72,6 +91,28 @@ export default function UpdateStudentsList({
     await graphqlClient.request(UpdateStudentList_DeleteStudentMutation, {
       studentId,
     });
+  };
+
+  const addStudent = async () => {
+    // Copy old array with the new element added
+    setAddingStudent(true);
+    const { createStudent: newStudentFragment } = await graphqlClient.request(
+      UpdateStudentList_CreateStudentMutation,
+      {
+        groupId,
+        input: { name: newStudentName },
+      }
+    );
+    const newStudent = getFragmentData(
+      UpdateStudentsList_StudentFragment,
+      newStudentFragment
+    );
+    const newStudents = [...students, newStudent];
+    setStudents(newStudents);
+    setNewStudentName("");
+    nameInputRef.current?.clear();
+    setAddingStudent(false);
+    if (onChanged) onChanged(newStudents);
   };
 
   const handleStudentNameChange = async (
@@ -108,6 +149,24 @@ export default function UpdateStudentsList({
     return undefined;
   };
 
+  const validateNewStudentName = (value: string) => {
+    if (students.some((it) => it.name === value)) {
+      return "Kahdella oppilaalla ei voi olla sama nimi";
+    }
+    return undefined;
+  };
+
+  const handleNewStudentNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewStudentName(e.target.value);
+  };
+
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addStudent();
+    }
+  };
+
   return (
     <Box {...rest}>
       {students.map((it) => (
@@ -132,6 +191,32 @@ export default function UpdateStudentsList({
           />
         </Flex>
       ))}
+      <Flex justifyContent="space-between" mb="2" mt="5">
+        <InputWithError
+          ref={nameInputRef}
+          mr="2"
+          placeholder="Uuden oppilaan nimi"
+          value={newStudentName}
+          isDisabled={addingStudent}
+          debounced={false}
+          validate={validateNewStudentName}
+          onChange={handleNewStudentNameChange}
+          onKeyDown={handleKeyDown}
+        />
+        {/* <Button onClick={addStudent}>Lisää</Button> */}
+        <IconButton
+          onClick={addStudent}
+          colorScheme="green"
+          variant="ghost"
+          isLoading={addingStudent}
+          isDisabled={newStudentName.length <= 0}
+          aria-label="Lisää oppilas"
+          size="lg"
+          mr="1"
+          mt="1"
+          icon={<IoMdAddCircle />}
+        />
+      </Flex>
       <ConfirmationModal
         isOpen={!!studentInDelete}
         onClose={() => setStudentInDelete(undefined)}

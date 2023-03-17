@@ -2,7 +2,7 @@
 
 import { Button, Text } from "@/components/chakra";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import { ButtonProps, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -33,7 +33,7 @@ export default function DeleteGroupButton({
   const router = useRouter();
   const toast = useToast();
 
-  const group = useFragment(DeleteGroupButton_GroupFragment, groupFragment);
+  const group = getFragmentData(DeleteGroupButton_GroupFragment, groupFragment);
 
   const deleteGroup = async () => {
     setLoading(true);

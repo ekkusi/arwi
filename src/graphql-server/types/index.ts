@@ -74,6 +74,7 @@ export type Mutation = {
   login: LoginResult;
   createGroup: Group;
   createCollection: EvaluationCollection;
+  createStudent: Student;
   updateEvaluations: Scalars["Int"];
   updateStudent: Student;
   updateGroup: Group;
@@ -97,6 +98,11 @@ export type MutationCreateGroupArgs = {
 
 export type MutationCreateCollectionArgs = {
   data: CreateCollectionInput;
+  groupId: Scalars["ID"];
+};
+
+export type MutationCreateStudentArgs = {
+  data: CreateStudentInput;
   groupId: Scalars["ID"];
 };
 
@@ -472,6 +478,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationCreateCollectionArgs, "data" | "groupId">
+  >;
+  createStudent?: Resolver<
+    ResolversTypes["Student"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateStudentArgs, "data" | "groupId">
   >;
   updateEvaluations?: Resolver<
     ResolversTypes["Int"],

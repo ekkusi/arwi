@@ -3,7 +3,7 @@
 import { Text, useToast } from "@/components/chakra";
 import BackwardsLink from "@/components/general/BackwardsLink";
 import InputWithError from "@/components/general/InputWithError";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import graphqlClient from "@/graphql-client";
 import DeleteGroupButton from "./DeleteGroupButton";
 import UpdateCollectionsList from "./UpdateCollectionsList";
@@ -41,7 +41,10 @@ type EditGroupPageContentProps = {
 export default function EditGroupPageContent({
   group: groupFragment,
 }: EditGroupPageContentProps) {
-  const group = useFragment(EditGroupPageContent_GroupFragment, groupFragment);
+  const group = getFragmentData(
+    EditGroupPageContent_GroupFragment,
+    groupFragment
+  );
   const toast = useToast();
 
   const updateName = async (name: string) => {
@@ -77,7 +80,7 @@ export default function EditGroupPageContent({
       <Text as="h2" mb="5">
         Oppilaat:
       </Text>
-      <UpdateStudentsList students={group.students} />
+      <UpdateStudentsList students={group.students} groupId={group.id} />
       <Text as="h2" mt="5">
         Arvioinnit:
       </Text>

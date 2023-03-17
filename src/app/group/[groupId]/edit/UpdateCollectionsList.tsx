@@ -3,7 +3,7 @@
 import DeleteButton from "@/app/(server-components)/primitives/DeleteButton";
 import { Box, Flex, Text } from "@/components/chakra";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateCollectionsList_CollectionFragment as CollectionFragment } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
@@ -34,7 +34,7 @@ export default function UpdateCollectionsList({
   collections: collectionFragments,
   ...rest
 }: UpdateCollectionsListProps) {
-  const initialCollections = useFragment(
+  const initialCollections = getFragmentData(
     UpdateCollectionsList_CollectionFragment,
     collectionFragments
   );

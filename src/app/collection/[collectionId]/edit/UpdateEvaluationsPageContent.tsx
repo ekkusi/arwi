@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, NextLink, Text } from "@/components/chakra";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateEvaluationCard_EvaluationFragment as EvaluationFragment } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { getErrorMessage } from "@/utils/errorUtils";
@@ -48,7 +48,7 @@ export default function UpdateEvaluationsPageContent({
 }: UpdateEvaluationsPageContentProps) {
   const router = useRouter();
   const toast = useToast();
-  const collection = useFragment(
+  const collection = getFragmentData(
     UpdateEvaluationsPageContent_CollectionFragment,
     collectionFragment
   );

@@ -7,6 +7,10 @@ import {
   mapUpdateGroupInput,
   mapUpdateStudentInput,
 } from "../utils/dataMappers";
+import {
+  validateCreateStudentInput,
+  validateUpdateStudentInput,
+} from "../utils/dataValidators";
 
 const BRCRYPT_SALT_ROUNDS = 12;
 
@@ -84,6 +88,16 @@ const resolvers: MutationResolvers<CustomContext> = {
     await revalidateIfProd(res, `/${teacher.id}/group/${groupId}`);
     return createdCollection;
   },
+  createStudent: async (_, { data, groupId }, { prisma }) => {
+    await validateCreateStudentInput(data, groupId);
+    const createdStudent = await prisma.student.create({
+      data: {
+        ...data,
+        groupId,
+      },
+    });
+    return createdStudent;
+  },
   updateEvaluations: async (_, { data, collectionId }, { prisma, res }) => {
     const promises = data.map((it) => {
       const { id, ...rest } = it;
@@ -110,6 +124,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     return results.length;
   },
   updateStudent: async (_, { data, studentId }, { prisma }) => {
+    await validateUpdateStudentInput(data, studentId);
     const updatedStudent = await prisma.student.update({
       where: { id: studentId },
       data: mapUpdateStudentInput(data),
