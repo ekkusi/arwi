@@ -1,11 +1,11 @@
 "use client";
 
-import { Box, Button, Text } from "@/components/chakra";
+import { Box, Button, NextLink, Text } from "@/components/chakra";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import { UpdateEvaluationCard_EvaluationFragment as EvaluationFragment } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { getErrorMessage } from "@/utils/errorUtils";
-import { BoxProps } from "@chakra-ui/react";
+import { BoxProps, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import UpdateEvaluationCard from "./UpdateEvaluationCard";
@@ -47,12 +47,11 @@ export default function UpdateEvaluationsPageContent({
   ...rest
 }: UpdateEvaluationsPageContentProps) {
   const router = useRouter();
+  const toast = useToast();
   const collection = useFragment(
     UpdateEvaluationsPageContent_CollectionFragment,
     collectionFragment
   );
-  // const scrollRef = useRef(null);
-  // useScrollSnap({ ref: scrollRef, duration: 0, delay: 0 });
 
   const [evaluations, setEvaluations] = useState(() => [
     ...collection.evaluations.filter((e) => e.wasPresent),
@@ -87,7 +86,28 @@ export default function UpdateEvaluationsPageContent({
         }
       );
       setIsCreating(false);
-      router.push(`/collection/${collection.id}`);
+      router.push(`/`);
+      toast({
+        title: `Arviointi tehty onnistuneesti!`,
+        status: "success",
+        position: "top",
+        description: (
+          <Text>
+            Siirry tarkastelemaan arviointia{" "}
+            <NextLink
+              textDecoration="underline"
+              color="inherit"
+              href={`/collection/${collection.id}`}
+              onClick={() => {
+                toast.closeAll();
+              }}
+            >
+              tästä
+            </NextLink>
+          </Text>
+        ),
+        isClosable: true,
+      });
     } catch (error: any) {
       setIsCreating(false);
       const message = getErrorMessage(error);

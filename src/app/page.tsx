@@ -44,9 +44,6 @@ export default async function HomePage() {
       <Button as={NextLink} href="/group/create" width="100%">
         {teacher.groups.length > 0 ? "Luo uusi ryhmä" : "Luo ryhmä"}
       </Button>
-      <NextLink textAlign="center" display="block" href="/test" mt="auto">
-        Puheentunnistus testiin
-      </NextLink>
     </PageWrapper>
   );
 }
