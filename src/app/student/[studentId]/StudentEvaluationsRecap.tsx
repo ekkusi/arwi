@@ -69,8 +69,11 @@ export default function StudentEvaluationsRecap({
               Taitojen keskiarvo:{" "}
             </Text>
             <Text as="span">
-              {skillsAverage.toFixed(2)} (keskihajonta: {skillsStdev.toFixed(2)}
-              )
+              {Number.isNaN(skillsAverage)
+                ? `${skillsAverage.toFixed(
+                    2
+                  )} (keskihajonta: ${skillsStdev.toFixed(2)}`
+                : "Taitoja ei vielä arvioitu"}
             </Text>
           </Box>
           <Box>
@@ -78,8 +81,11 @@ export default function StudentEvaluationsRecap({
               Työskentelyn keskiarvo:{" "}
             </Text>
             <Text as="span">
-              {behaviourAverage.toFixed(2)} (keskihajonta:{" "}
-              {behaviourStdev.toFixed(2)})
+              {Number.isNaN(behaviourAverage)
+                ? `${behaviourAverage.toFixed(
+                    2
+                  )} (keskihajonta: ${behaviourStdev.toFixed(2)}`
+                : "Työskentelyä ei vielä arvioitu"}
             </Text>
           </Box>
         </>
