@@ -1,4 +1,5 @@
 import { Box, Text } from "@/components/chakra";
+import BackwardsLink from "@/components/general/BackwardsLink";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { Rating } from "@/gql/graphql";
 import { formatRatingString } from "@/utils/dataMappers";
@@ -11,6 +12,7 @@ const CollectionPageContent_CollectionFragment = graphql(`
     type
     group {
       name
+      id
     }
     evaluations {
       id
@@ -44,6 +46,9 @@ export default function CollectionPageContent({
 
   return (
     <>
+      <BackwardsLink href={`/group/${collection.group.id}`}>
+        Takaisin ryhmän yhteenvetoon
+      </BackwardsLink>
       <Text as="h1">Arvioinnin yhteenveto</Text>
       <Text as="h2">Ryhmä: {collection.group.name}</Text>
       <Text>Tyyppi: {collection.type}</Text>

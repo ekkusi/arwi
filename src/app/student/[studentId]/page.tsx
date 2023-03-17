@@ -1,8 +1,7 @@
 import PageWrapper from "@/app/(server-components)/PageWrapper";
-import { Text } from "@/components/chakra";
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
-import StudentEvaluationsRecap from "./StudentEvaluationsRecap";
+import StudentPageContent from "./StudentPageContent";
 
 type StudentPageProps = {
   params: {
@@ -13,11 +12,7 @@ type StudentPageProps = {
 const StudentPage_GetStudentQuery = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
     getStudent(id: $studentId) {
-      id
-      name
-      evaluations {
-        ...StudentEvaluationRecap_Evaluation
-      }
+      ...StudentPageContent_Student
     }
   }
 `);
@@ -31,8 +26,7 @@ export default async function StudentPage({ params }: StudentPageProps) {
   );
   return (
     <PageWrapper>
-      <Text as="h1">Oppilaan {student.name} yhteenveto</Text>
-      <StudentEvaluationsRecap evaluations={student.evaluations} />
+      <StudentPageContent student={student} />
     </PageWrapper>
   );
 }
