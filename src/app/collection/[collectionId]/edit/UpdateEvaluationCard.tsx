@@ -49,7 +49,8 @@ export default function UpdateEvaluationCard({
         ...evaluation,
       };
       newEvaluation[key] = value;
-      setEvaluation(evaluation);
+      setEvaluation(newEvaluation);
+
       if (onChangedCallback) {
         onChangedCallback(newEvaluation);
       }
