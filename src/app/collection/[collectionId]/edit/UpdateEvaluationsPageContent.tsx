@@ -121,6 +121,12 @@ export default function UpdateEvaluationsPageContent({
       p="4"
       scrollSnapType="y mandatory"
       overflowY="scroll"
+      onScrollCapture={() => {
+        if (document?.activeElement?.tagName === "TEXTAREA") {
+          const textAreaEl = document.activeElement as HTMLTextAreaElement;
+          textAreaEl.blur();
+        }
+      }}
       {...rest}
     >
       {evaluations.length > 0 ? (
