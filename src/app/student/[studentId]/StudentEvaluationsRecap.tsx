@@ -1,3 +1,4 @@
+import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
 import { Box, Text } from "@/components/chakra";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { evaluateStudent } from "@/utils/evaluationUtils";
@@ -39,7 +40,7 @@ export default function StudentEvaluationsRecap({
   };
 
   return (
-    <Box {...rest}>
+    <BorderedCard border="none" {...rest}>
       {evaluations.length > 0 ? (
         <>
           <Box>
@@ -69,7 +70,7 @@ export default function StudentEvaluationsRecap({
               Taitojen keskiarvo:{" "}
             </Text>
             <Text as="span">
-              {Number.isNaN(skillsAverage)
+              {!Number.isNaN(skillsAverage)
                 ? `${skillsAverage.toFixed(
                     2
                   )} (keskihajonta: ${skillsStdev.toFixed(2)}`
@@ -81,7 +82,7 @@ export default function StudentEvaluationsRecap({
               Työskentelyn keskiarvo:{" "}
             </Text>
             <Text as="span">
-              {Number.isNaN(behaviourAverage)
+              {!Number.isNaN(behaviourAverage)
                 ? `${behaviourAverage.toFixed(
                     2
                   )} (keskihajonta: ${behaviourStdev.toFixed(2)}`
@@ -92,6 +93,6 @@ export default function StudentEvaluationsRecap({
       ) : (
         <Text>Ei vielä arviointeja</Text>
       )}
-    </Box>
+    </BorderedCard>
   );
 }

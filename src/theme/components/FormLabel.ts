@@ -6,6 +6,7 @@ import {
 const FormLabel: ComponentSingleStyleConfig = defineStyleConfig({
   baseStyle: {
     fontFamily: "heading",
+    fontSize: { base: "lg", md: "xl" },
   },
 });
 

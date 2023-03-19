@@ -32,7 +32,10 @@ export default async function HomePage() {
   return (
     <PageWrapper display="flex" flexDirection="column">
       <Box mb="5">
-        <Text as="h2" mb="5">
+        <Text as="h1" fontSize="lg" fontStyle="italic" textAlign="center">
+          ARWI
+        </Text>
+        <Text as="h2" fontSize="lg" mb="2">
           Omat ryhmät:
         </Text>
         {teacher.groups.length > 0 ? (

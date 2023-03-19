@@ -22,7 +22,7 @@ export function BottomNavigationLink({
       flexDirection="column"
       alignItems="center"
       fontSize="xs"
-      color={pathname === href ? "green.500" : "gray.800"}
+      color={pathname === href ? "green.500" : "light-text"}
       _hover={{
         color: "green.500",
       }}

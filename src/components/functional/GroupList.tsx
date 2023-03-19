@@ -1,6 +1,7 @@
 "use client";
 
-import { Box, Button, Flex, NextLink, Text } from "@/components/chakra";
+import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
+import { Button, Flex, NextLink, Text } from "@/components/chakra";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { GroupList_GroupFragmentFragment as GroupFragmentType } from "@/gql/graphql";
 import { BoxProps, FlexProps, useDisclosure } from "@chakra-ui/react";
@@ -28,13 +29,11 @@ function GroupListItem({
   ...rest
 }: GroupListItemProps) {
   return (
-    <Box
-      border="2px"
-      borderRadius="lg"
+    <BorderedCard
+      border="none"
       px="5"
-      py="1"
+      py="2"
       width="100%"
-      bg="secondary-bg"
       onClick={() => onClick(groupData)}
       _hover={{
         cursor: "pointer",
@@ -44,10 +43,8 @@ function GroupListItem({
       }}
       {...rest}
     >
-      <Text textAlign="center" fontWeight="600">
-        {groupData.name}
-      </Text>
-    </Box>
+      <Text fontWeight="600">{groupData.name}</Text>
+    </BorderedCard>
   );
 }
 

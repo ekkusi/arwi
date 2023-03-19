@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Flex,
-  IconButton,
-  NextLink,
-  Text,
-} from "@/components/chakra";
+import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
+import { Box, Flex, IconButton, NextLink, Text } from "@/components/chakra";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { formatDate } from "@/utils/dateUtils";
 import { FiEdit } from "react-icons/fi";
@@ -42,7 +36,7 @@ export default function GroupOverviewPageContent({
   return (
     <>
       <IconButton
-        colorScheme="blue"
+        colorScheme="gray"
         size="lg"
         position="absolute"
         variant="link"
@@ -62,16 +56,19 @@ export default function GroupOverviewPageContent({
       {group.students.length > 0 ? (
         <Flex flexDirection="column" mb="5">
           {group.students.map((student) => (
-            <Button
+            <BorderedCard
               key={student.id}
-              variant="outline"
-              size="sm"
+              border="none"
+              borderRadius="lg"
+              px="5"
+              py="2"
+              width="100%"
               as={NextLink}
               href={`/student/${student.id}`}
               _notLast={{ mb: 3 }}
             >
               {student.name}
-            </Button>
+            </BorderedCard>
           ))}
         </Flex>
       ) : (

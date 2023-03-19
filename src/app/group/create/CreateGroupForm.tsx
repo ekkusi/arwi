@@ -1,7 +1,7 @@
 "use client";
 
 import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
-import { Button, NextLink, Text } from "@/components/chakra";
+import { Button, NextLink, Text, FormLabel } from "@/components/chakra";
 import FormField from "@/components/general/FormField";
 import { graphql } from "@/gql";
 import { CreateStudentInput } from "@/gql/graphql";
@@ -64,8 +64,15 @@ export default function CreateGroupForm({ ...rest }: CreateGroupFormProps) {
           <Text as="h1" textAlign="center">
             Uusi ryhmä
           </Text>
-          <FormField name="name" label="Ryhmän nimi" validate={validateName} />
-          <Text as="h2">Oppilaat</Text>
+          <FormField
+            name="name"
+            label="Ryhmän nimi"
+            validate={validateName}
+            // onKeyDown={(event) => {
+            //   console.log("keydown", event.key);
+            // }}
+          />
+          <FormLabel>Oppilaat</FormLabel>
           <AddStudentsList
             onChanged={(newStudents) => setStudents(newStudents)}
           />

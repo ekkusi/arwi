@@ -35,6 +35,13 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       boxShadow: "custom",
       color: "black",
       bg: `${colorScheme}.100`,
+      _hover: {
+        bg: `${colorScheme}.100`,
+      },
+      _active: {
+        bg: `${colorScheme}.100`,
+        transform: "scale(0.99, 0.97)",
+      },
     }),
     ghost: {
       px: 0,
