@@ -11,6 +11,7 @@ const config: CodegenConfig = {
     "src/**/*.{ts,tsx}",
     "./src/graphql-server/**/*.graphql",
     "!src/gql/**/*",
+    "!src/app/**/*",
   ],
   ignoreNoDocuments: true,
   config: {

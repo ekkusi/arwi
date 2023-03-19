@@ -1,6 +1,5 @@
 import useSpeechRecognition from "@/hooks-and-providers/useSpeechRecognition";
-import { IconButtonProps } from "@chakra-ui/react";
-import { IconButton } from "@/components/chakra";
+import { IconButtonProps, IconButton } from "@chakra-ui/react";
 import { FaMicrophone } from "react-icons/fa";
 
 type SpeechRecognitionProps = Omit<IconButtonProps, "onClick"> & {

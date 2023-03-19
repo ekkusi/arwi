@@ -5,7 +5,7 @@ export default async function revalidateIfProd(
   path: string
 ) {
   let revalidated = false;
-  if (process.env.NODE_ENV !== "production") return { revalidated: false };
+  // if (process.env.NODE_ENV !== "production") return { revalidated: false };
   try {
     await res.revalidate(path);
     revalidated = true;
@@ -16,3 +16,29 @@ export default async function revalidateIfProd(
     revalidated,
   };
 }
+
+export const revalidateGroupData = async (res: NextApiResponse, id: string) => {
+  const promises = [];
+  promises.push(revalidateIfProd(res, `/group/${id}`));
+  promises.push(revalidateIfProd(res, `/group/${id}/edit`));
+  promises.push(revalidateIfProd(res, `/group/${id}/create-collection`));
+  return Promise.all(promises);
+};
+
+export const revalidateStudentData = async (
+  res: NextApiResponse,
+  id: string
+) => {
+  const promises = [];
+  promises.push(revalidateIfProd(res, `/student/${id}`));
+  return Promise.all(promises);
+};
+
+export const revalidateCollectionData = async (
+  res: NextApiResponse,
+  id: string
+) => {
+  const promises = [];
+  promises.push(revalidateIfProd(res, `/collection/${id}`));
+  return Promise.all(promises);
+};

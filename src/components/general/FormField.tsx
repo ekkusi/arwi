@@ -1,5 +1,3 @@
-"use client";
-
 import {
   FormControl,
   FormControlProps,
@@ -9,7 +7,7 @@ import {
   FormLabelProps,
   Input,
   InputProps,
-} from "@/components/chakra";
+} from "@chakra-ui/react";
 import {
   Field,
   FieldConfig,

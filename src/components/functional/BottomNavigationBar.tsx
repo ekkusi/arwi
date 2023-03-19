@@ -1,13 +1,13 @@
-"use client";
-
-import { LinkProps } from "@chakra-ui/next-js";
 import { usePathname } from "next/navigation";
 import { AiOutlineHome } from "react-icons/ai";
 import { MdOutlineDesignServices } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { Text, Icon, NextLink, SimpleGrid } from "../chakra";
+import { Text, Icon, SimpleGrid, TextProps } from "@chakra-ui/react";
+import Link from "next/link";
 
-type BotttomNavigationLinkProps = LinkProps & {};
+type BotttomNavigationLinkProps = TextProps & {
+  href: string;
+};
 
 export function BottomNavigationLink({
   href,
@@ -16,7 +16,8 @@ export function BottomNavigationLink({
   const pathname = usePathname();
 
   return (
-    <NextLink
+    <Text
+      as={Link}
       href={href}
       display="flex"
       flexDirection="column"

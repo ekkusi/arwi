@@ -1,9 +1,13 @@
-"use client";
-
-import { BoxProps, FormErrorMessageProps, InputProps } from "@chakra-ui/react";
+import {
+  BoxProps,
+  FormErrorMessageProps,
+  InputProps,
+  Box,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import debounce from "lodash.debounce";
 import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
-import { Box, Input, Text } from "../chakra";
 
 type InputWithErrorProps = Omit<InputProps, "value" | "onChange" | "onBlur"> & {
   value?: string;

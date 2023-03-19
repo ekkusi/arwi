@@ -1,11 +1,16 @@
-"use client";
-
-import BorderedCard from "@/app/(server-components)/primitives/BorderedCard";
-import { Button, Flex, NextLink, Text } from "@/components/chakra";
+import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import {
+  Button,
+  Flex,
+  Text,
+  BoxProps,
+  FlexProps,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { GroupList_GroupFragmentFragment as GroupFragmentType } from "@/gql/graphql";
-import { BoxProps, FlexProps, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
+import Link from "next/link";
 import DrawerTemplate from "../general/DrawerTemplate";
 
 const GroupList_GroupFragment = graphql(`
@@ -80,7 +85,7 @@ export default function GroupList({
       >
         <Flex flexDirection="column">
           <Button
-            as={NextLink}
+            as={Link}
             href={`/group/${selectedGroup?.id}`}
             mb="3"
             colorScheme="yellow"
@@ -91,7 +96,7 @@ export default function GroupList({
             Ryhmän tarkasteluun
           </Button>
           <Button
-            as={NextLink}
+            as={Link}
             href={`/group/${selectedGroup?.id}/create-collection`}
             onClick={() => {
               onClose();

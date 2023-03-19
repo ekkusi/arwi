@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Button, Text } from "@/components/chakra";
+import { Button, Text } from "@chakra-ui/react";
 import ModalTemplate from "@/components/general/ModalTemplate";
 import { useEffect, useState } from "react";
 

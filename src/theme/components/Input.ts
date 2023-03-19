@@ -1,7 +1,9 @@
 import {
   ComponentSingleStyleConfig,
   SystemStyleInterpolation,
+  Input as _Input,
 } from "@chakra-ui/react";
+import { KeyboardEvent } from "react";
 
 const baseStyle: SystemStyleInterpolation = ({ colorScheme, theme }) => {
   const focusStyles = {
@@ -46,6 +48,15 @@ const Input: ComponentSingleStyleConfig = {
 };
 
 export default Input;
+
+_Input.defaultProps = {
+  onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.currentTarget.blur();
+    }
+  },
+};
 
 export const Textarea: ComponentSingleStyleConfig = {
   variants: {
