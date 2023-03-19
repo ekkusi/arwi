@@ -64,14 +64,7 @@ export default function CreateGroupForm({ ...rest }: CreateGroupFormProps) {
           <Text as="h1" textAlign="center">
             Uusi ryhmä
           </Text>
-          <FormField
-            name="name"
-            label="Ryhmän nimi"
-            validate={validateName}
-            // onKeyDown={(event) => {
-            //   console.log("keydown", event.key);
-            // }}
-          />
+          <FormField name="name" label="Ryhmän nimi" validate={validateName} />
           <FormLabel>Oppilaat</FormLabel>
           <AddStudentsList
             onChanged={(newStudents) => setStudents(newStudents)}

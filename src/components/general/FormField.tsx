@@ -9,14 +9,13 @@ import {
   FormLabelProps,
   Input,
   InputProps,
-} from "@chakra-ui/react";
+} from "@/components/chakra";
 import {
   Field,
   FieldConfig,
   GenericFieldHTMLAttributes,
   useField,
 } from "formik";
-import React from "react";
 
 type FormFieldProps<Val = string> = GenericFieldHTMLAttributes &
   FieldConfig<Val> & {
