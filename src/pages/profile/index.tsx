@@ -10,10 +10,13 @@ type ProfilePageProps = {
 };
 
 export default function ProfilePage({ user }: ProfilePageProps) {
+  // eslint-disable-next-line
+  console.log("user in profile page", user);
+
   return (
     <PageWrapper display="flex" flexDirection="column">
       <Text as="h1">Profiili</Text>
-      <Text>Sähköposti: {user.email}</Text>
+      <Text>Sähköposti: {user?.email}</Text>
       <Flex flex="1" flexDirection="column" justifyContent="flex-end">
         <LogoutButton mt="auto">Kirjaudu ulos</LogoutButton>
       </Flex>
