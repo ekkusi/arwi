@@ -6,9 +6,9 @@ import { formatDate } from "@/utils/dateUtils";
 import { FiEdit } from "react-icons/fi";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import Link from "next/link";
 import BorderedCard from "@/components/server-components/primitives/BorderedCard";
 import { GroupOverviewPage_GetGroupQuery } from "@/gql/graphql";
+import NoPrefetchLink from "@/components/general/NoPrefetchLink";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +45,7 @@ export default function GroupOverviewPage({ data }: GroupOverviewPageProps) {
         variant="link"
         top="6"
         right="5"
-        as={Link}
+        as={NoPrefetchLink}
         icon={<FiEdit />}
         aria-label="Ryhmän muokkaukseen"
         href={`/group/${group.id}/edit`}
@@ -66,7 +66,7 @@ export default function GroupOverviewPage({ data }: GroupOverviewPageProps) {
               px="5"
               py="2"
               width="100%"
-              as={Link}
+              as={NoPrefetchLink}
               href={`/student/${student.id}`}
               _notLast={{ mb: 3 }}
             >
@@ -89,7 +89,7 @@ export default function GroupOverviewPage({ data }: GroupOverviewPageProps) {
               <Text as="span" textStyle="italic" mr="1">
                 {formatDate(new Date(collection.date), "dd.MM.yyyy")}:
               </Text>
-              <Text as={Link} href={`/collection/${collection.id}`}>
+              <Text as={NoPrefetchLink} href={`/collection/${collection.id}`}>
                 {collection.type}
               </Text>
             </Box>
@@ -98,7 +98,10 @@ export default function GroupOverviewPage({ data }: GroupOverviewPageProps) {
       ) : (
         <>
           <Text>Ei vielä arviointeja</Text>
-          <Text as={Link} href={`/group/${group.id}/create-collection`}>
+          <Text
+            as={NoPrefetchLink}
+            href={`/group/${group.id}/create-collection`}
+          >
             Siirry tekemään arviointi
           </Text>
         </>

@@ -10,9 +10,9 @@ import graphqlClient from "@/graphql-client";
 import { serverRequest } from "@/pages/api/graphql";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { GetStaticPropsContext } from "next";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import NoPrefetchLink from "@/components/general/NoPrefetchLink";
 
 const UpdateEvaluationsPage_GetCollection_Query = graphql(`
   query UpdateEvaluationsPage_GetCollection($collectionId: ID!) {
@@ -95,7 +95,7 @@ export default function UpdateEvaluationsPage({
           <Text>
             Siirry tarkastelemaan arviointia{" "}
             <Text
-              as={Link}
+              as={NoPrefetchLink}
               textDecoration="underline"
               color="inherit"
               href={`/collection/${collection.id}`}

@@ -1,6 +1,6 @@
 import { Button, Text } from "@chakra-ui/react";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import Link from "next/link";
+import NoPrefetchLink from "@/components/general/NoPrefetchLink";
 
 export default function OfflinePage() {
   return (
@@ -11,7 +11,7 @@ export default function OfflinePage() {
         virtaamista internettiin. Palauta yhteys ja napauta alta, niin pääset
         takaisin Arwioimaan.
       </Text>
-      <Button as={Link} href="/">
+      <Button as={NoPrefetchLink} href="/">
         Takaisin touhuamaan
       </Button>
     </PageWrapper>

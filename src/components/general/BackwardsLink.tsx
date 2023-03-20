@@ -1,5 +1,4 @@
 import { Icon, Text, TextProps } from "@chakra-ui/react";
-import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import NoPrefetchLink from "./NoPrefetchLink";
 
@@ -11,12 +10,11 @@ type BackwardsLinkProps = TextProps & {
 export default function BackwardsLink({
   children,
   href,
-  prefetch = true,
   ...rest
 }: BackwardsLinkProps) {
   return (
     <Text
-      as={prefetch ? Link : NoPrefetchLink}
+      as={NoPrefetchLink}
       href={href}
       display="inline-flex"
       alignItems="center"

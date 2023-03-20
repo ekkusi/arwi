@@ -7,9 +7,9 @@ import { getSessionClient } from "@/utils/session/client";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Link from "next/link";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import NoPrefetchLink from "@/components/general/NoPrefetchLink";
 import AddStudentsList from "../../../components/functional/AddStudentsList";
 
 const initialValues = {
@@ -81,7 +81,7 @@ export default function CreateGroupPage() {
               Luo ryhmä
             </Button>
             <Text
-              as={Link}
+              as={NoPrefetchLink}
               href="/"
               color="gray.700"
               mt="3"

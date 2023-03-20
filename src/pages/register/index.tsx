@@ -8,7 +8,7 @@ import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import Link from "next/link";
+import NoPrefetchLink from "@/components/general/NoPrefetchLink";
 
 const initialValues = {
   email: "",
@@ -133,7 +133,7 @@ export default function RegisterPage() {
               <Text as="span" mr="1">
                 Oletko jo käyttäjä?
               </Text>
-              <Text as={Link} href="/login">
+              <Text as={NoPrefetchLink} href="/login">
                 Kirjaudu tästä
               </Text>
             </Box>
