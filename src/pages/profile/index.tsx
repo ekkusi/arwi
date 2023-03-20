@@ -1,9 +1,9 @@
 import PageWrapper from "@/components/server-components/PageWrapper";
 import { Flex, Text } from "@chakra-ui/react";
-import { getSessionOrRedirect } from "@/utils/session/server";
 import { GetServerSideProps } from "next";
-import { Session } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 import LogoutButton from "@/components/functional/LogoutButton";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 type ProfilePageProps = {
   user: Session["user"];
@@ -22,7 +22,10 @@ export default function ProfilePage({ user }: ProfilePageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSessionOrRedirect(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
+  // eslint-disable-next-line
+  console.log("session in home page serverSideProps", session);
+  if (!session) throw new Error("Unexpected error, no session");
 
   return {
     props: {

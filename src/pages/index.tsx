@@ -2,12 +2,13 @@ import { graphql } from "@/gql";
 import { Box, Button, Flex, IconButton, Text } from "@chakra-ui/react";
 import { serverRequest } from "@/pages/api/graphql";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import { getSessionOrRedirect } from "@/utils/session/server";
 import GroupList from "@/components/functional/GroupList";
 import { IoAddSharp } from "react-icons/io5";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { MainPage_GetTeacherQuery } from "@/gql/graphql";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const MainPage_GetTeacher_Query = graphql(`
   query MainPage_GetTeacher($teacherId: ID!) {
@@ -65,9 +66,12 @@ export default function HomePage({ data }: MainPageProps) {
   );
 }
 
-// This gets called on every request
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSessionOrRedirect(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
+  // eslint-disable-next-line
+  console.log("session in home page serverSideProps", session);
+  if (!session) throw new Error("Unexpected error, no session");
+
   const data = await serverRequest(MainPage_GetTeacher_Query, {
     teacherId: session.user.id,
   });
