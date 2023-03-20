@@ -187,8 +187,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 });
 
 const nextConfig = withPWA({
-  output: "standalone",
-  run
+  output: "standalone"
 });
 
 
