@@ -83,7 +83,7 @@ const cacheRules = [
   },
   {
     urlPattern: /\.(?:js)$/i,
-    handler: "StaleWhileRevalidate",
+    handler: "NetworkFirst",
     options: {
       cacheName: "static-js-assets",
       expiration: {
