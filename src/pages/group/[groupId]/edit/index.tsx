@@ -89,7 +89,7 @@ export default function EditGroupPage({ data }: EditGroupPageProps) {
 
   return (
     <PageWrapper>
-      <BackwardsLink href={`/group/${group.id}`}>
+      <BackwardsLink href={`/group/${group.id}`} prefetch={false}>
         Takaisin yhteenvetoon
       </BackwardsLink>
       <Text as="h1">Ryhmän muokkaus</Text>
