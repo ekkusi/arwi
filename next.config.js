@@ -1,14 +1,17 @@
 /** @type {import('next').NextConfig} */
-// const withPWA = require("@ducanh2912/next-pwa").default({
-//   dest: "public",
-// });
+const cacheRules = require("./src/sw-cache");
 
-// const nextConfig = withPWA({
-//   output: "standalone",
-// });
+const withPWA = require("@ducanh2912/next-pwa").default({
+  dest: "public",
+  workboxOptions: {
+    runtimeCaching: cacheRules
+  }
+});
 
-const nextConfig = {
+const nextConfig = withPWA({
   output: "standalone",
-}
+  run
+});
+
 
 module.exports = nextConfig
