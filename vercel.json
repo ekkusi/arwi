@@ -1,7 +1,7 @@
 {
   "functions": {
-    "api/**/*.py": {
-      "excludeFiles": "{node_modules/**/*,.next/**/*,.vercel/**/*}"
+    "pages/**/*": {
+      "excludeFiles": "node_modules/@swc/**/*"
     }
   }
 }
