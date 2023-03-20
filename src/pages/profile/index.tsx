@@ -22,9 +22,11 @@ export default function ProfilePage({ user }: ProfilePageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // eslint-disable-next-line
+  console.log("Running getServerSideProps in profile: ", new Date());
   const session = await getServerSession(context.req, context.res, authOptions);
   // eslint-disable-next-line
-  console.log("session in home page serverSideProps", session);
+  console.log("session in profile page serverSideProps", session);
   if (!session) throw new Error("Unexpected error, no session");
 
   return {

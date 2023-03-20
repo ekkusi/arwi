@@ -67,6 +67,8 @@ export default function HomePage({ data }: MainPageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // eslint-disable-next-line
+  console.log("Running getServerSideProps in home page: ", new Date());
   const session = await getServerSession(context.req, context.res, authOptions);
   // eslint-disable-next-line
   console.log("session in home page serverSideProps", session);
