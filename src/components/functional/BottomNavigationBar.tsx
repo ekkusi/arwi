@@ -16,19 +16,19 @@ export function BottomNavigationLink({
   const pathname = usePathname();
 
   return (
-    <Text
-      as={Link}
-      href={href}
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      fontSize="xs"
-      color={pathname === href ? "green.500" : "light-text"}
-      _hover={{
-        color: "green.500",
-      }}
-      {...rest}
-    />
+    <Link href={href}>
+      <Text
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        fontSize="xs"
+        color={pathname === href ? "green.500" : "light-text"}
+        _hover={{
+          color: "green.500",
+        }}
+        {...rest}
+      />
+    </Link>
   );
 }
 
