@@ -28,7 +28,7 @@ export default function MyApp({
       <SessionProvider session={session}>
         <ChakraProvider theme={theme}>
           <ErrorBoundary>
-            <Component {...pageProps} />
+            <Component session={session} {...pageProps} />
             <BottomNavigationBar />
             <ServiceWorkerProvider />
           </ErrorBoundary>
