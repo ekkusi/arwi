@@ -11,7 +11,7 @@ import { serverRequest } from "@/pages/api/graphql";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
@@ -62,6 +62,9 @@ function UpdateEvaluationsPageContent() {
     ...(data ? data.getCollection.evaluations.filter((e) => e.wasPresent) : []),
   ]);
   const [isCreating, setIsCreating] = useState(false);
+  useEffect(() => {
+    setEvaluations(data ? data.getCollection.evaluations : []);
+  }, [data]);
 
   if (!data) return <LoadingIndicator />;
 
