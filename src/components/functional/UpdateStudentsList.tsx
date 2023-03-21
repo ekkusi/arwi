@@ -17,7 +17,13 @@ import {
   UpdateStudentsList_StudentFragment as StudentFragment,
 } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
-import { ChangeEvent, KeyboardEventHandler, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  KeyboardEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { IoMdAddCircle } from "react-icons/io";
 
 const UpdateStudentsList_StudentFragment = graphql(`
@@ -84,6 +90,12 @@ export default function UpdateStudentsList({
   });
   const [newStudentName, setNewStudentName] = useState("");
   const [addingStudent, setAddingStudent] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    console.log("Setting initial students in StudentParticipationList");
+    setStudents([...initialStudents]);
+  }, [initialStudents]);
 
   const deleteSelectedStudent = async () => {
     if (!studentInDelete) return;

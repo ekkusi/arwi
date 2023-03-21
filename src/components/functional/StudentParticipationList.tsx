@@ -51,7 +51,13 @@ export default function StudentParticipationList({
       setInitialParticipationsSet(true);
       onChange?.(participations);
     }
-  }, [initialParticipationsSet, onChange, participations]);
+    // eslint-disable-next-line
+    console.log("Setting initial students in StudentParticipationList");
+
+    setParticipations(
+      students.map((it) => ({ student: it, wasPresent: true }))
+    );
+  }, [initialParticipationsSet, onChange, participations, students]);
 
   const toggleStudentPresent = (participation: StudentParticipation) => {
     // Copy old array -> update matching participation -> set copy as new state
