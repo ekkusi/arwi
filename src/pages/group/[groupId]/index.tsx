@@ -9,6 +9,10 @@ import PageWrapper from "@/components/server-components/PageWrapper";
 import BorderedCard from "@/components/server-components/primitives/BorderedCard";
 import { GroupOverviewPage_GetGroupQuery } from "@/gql/graphql";
 import NoPrefetchLink from "@/components/general/NoPrefetchLink";
+import useSWR, { SWRConfig } from "swr";
+import graphqlClient from "@/graphql-client";
+import { useRouter } from "next/router";
+import LoadingIndicator from "@/components/general/LoadingIndicator";
 
 export const dynamic = "force-dynamic";
 
@@ -30,12 +34,23 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
   }
 `);
 
-type GroupOverviewPageProps = {
-  data: GroupOverviewPage_GetGroupQuery;
-};
+function GroupOverviewPageContent() {
+  const router = useRouter();
+  const groupId = router.query.groupId as string;
 
-export default function GroupOverviewPage({ data }: GroupOverviewPageProps) {
+  const { data, isLoading, isValidating } =
+    useSWR<GroupOverviewPage_GetGroupQuery>("group", () =>
+      graphqlClient.request(GroupOverviewPage_GetGroup_Query, { groupId })
+    );
+
+  /* eslint-disable*/
+  console.log("data", data);
+  console.log("isLoading", isLoading);
+  console.log("isValidating", isValidating);
+
+  if (!data) return <LoadingIndicator />;
   const { getGroup: group } = data;
+
   return (
     <PageWrapper>
       <IconButton
@@ -107,6 +122,18 @@ export default function GroupOverviewPage({ data }: GroupOverviewPageProps) {
         </>
       )}
     </PageWrapper>
+  );
+}
+
+type GroupOverviewPageProps = {
+  data: GroupOverviewPage_GetGroupQuery;
+};
+
+export default function GroupOverviewPage({ data }: GroupOverviewPageProps) {
+  return (
+    <SWRConfig value={{ fallback: data }}>
+      <GroupOverviewPageContent />
+    </SWRConfig>
   );
 }
 

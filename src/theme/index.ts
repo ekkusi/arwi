@@ -107,6 +107,7 @@ const theme = extendTheme(
           WebkitTapHighlightColor: "transparent",
           margin: 0,
           width: "100%",
+          height: "100%",
           overflowX: "hidden",
           color: "black",
           bg: colors["light-gray"],

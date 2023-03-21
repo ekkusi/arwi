@@ -8,10 +8,13 @@ import graphqlClient from "@/graphql-client";
 import { GetStaticPropsContext } from "next";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { useToast, Button, Text } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import UpdateStudentsList from "@/components/functional/UpdateStudentsList";
 import UpdateCollectionsList from "@/components/functional/UpdateCollectionsList";
+import { EditGroupPage_GetGroupQuery } from "@/gql/graphql";
+import useSWR, { SWRConfig } from "swr";
+import LoadingIndicator from "@/components/general/LoadingIndicator";
 
 const EditGroupPage_GetGroup_Query = graphql(`
   query EditGroupPage_GetGroup($groupId: ID!) {
@@ -42,17 +45,25 @@ const EditGroupPage_DeleteGroup_Mutation = graphql(`
   }
 `);
 
-type EditGroupPageProps = {
-  data: any;
-};
-
-export default function EditGroupPage({ data }: EditGroupPageProps) {
-  const { getGroup: group } = data;
+function EditGroupPageContent() {
+  const router = useRouter();
+  const groupId = router.query.groupId as string;
+  const { data, isLoading, isValidating } = useSWR<EditGroupPage_GetGroupQuery>(
+    "group",
+    () => graphqlClient.request(EditGroupPage_GetGroup_Query, { groupId })
+  );
+  /* eslint-disable*/
+  console.log("edit: data", data);
+  console.log("edit: isLoading", isLoading);
+  console.log("edit: isValidating", isValidating);
   const toast = useToast();
 
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
+
+  if (!data) return <LoadingIndicator />;
+
+  const { getGroup: group } = data;
 
   const updateName = async (name: string) => {
     if (name === group.name) return;
@@ -132,6 +143,18 @@ export default function EditGroupPage({ data }: EditGroupPageProps) {
         </Text>
       </ConfirmationModal>
     </PageWrapper>
+  );
+}
+
+type EditGroupPageProps = {
+  data: EditGroupPage_GetGroupQuery;
+};
+
+export default function GroupOverviewPage({ data }: EditGroupPageProps) {
+  return (
+    <SWRConfig value={{ fallback: data }}>
+      <EditGroupPageContent />
+    </SWRConfig>
   );
 }
 
