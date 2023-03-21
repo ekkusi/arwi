@@ -7,7 +7,7 @@ import { IoAddSharp } from "react-icons/io5";
 import { GetServerSideProps } from "next";
 import { MainPage_GetTeacherQuery } from "@/gql/graphql";
 import { getServerSession } from "next-auth";
-import NoPrefetchLink from "@/components/general/NoPrefetchLink";
+import Link from "next/link";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 const MainPage_GetTeacher_Query = graphql(`
@@ -46,7 +46,7 @@ export default function HomePage({ data }: MainPageProps) {
           <IconButton
             variant="link"
             size="lg"
-            as={NoPrefetchLink}
+            as={Link}
             icon={<IoAddSharp />}
             href="/group/create"
             ml="auto"
@@ -60,7 +60,7 @@ export default function HomePage({ data }: MainPageProps) {
             <Text mb="3" mt="5">
               Sinulla ei vielä ole ryhmiä
             </Text>
-            <Button as={NoPrefetchLink} href="/group/create" width="100%">
+            <Button as={Link} href="/group/create" width="100%">
               Luo ensimmäinen ryhmä
             </Button>
           </>

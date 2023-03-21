@@ -10,8 +10,8 @@ import {
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { GroupList_GroupFragmentFragment as GroupFragmentType } from "@/gql/graphql";
 import { useState } from "react";
+import Link from "next/link";
 import DrawerTemplate from "../general/DrawerTemplate";
-import NoPrefetchLink from "../general/NoPrefetchLink";
 
 const GroupList_GroupFragment = graphql(`
   fragment GroupList_GroupFragment on Group {
@@ -85,7 +85,7 @@ export default function GroupList({
       >
         <Flex flexDirection="column">
           <Button
-            as={NoPrefetchLink}
+            as={Link}
             href={`/group/${selectedGroup?.id}`}
             mb="3"
             colorScheme="yellow"
@@ -96,7 +96,7 @@ export default function GroupList({
             Ryhmän tarkasteluun
           </Button>
           <Button
-            as={NoPrefetchLink}
+            as={Link}
             href={`/group/${selectedGroup?.id}/create-collection`}
             onClick={() => {
               onClose();

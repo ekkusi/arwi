@@ -1,7 +1,7 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import CenteredContainer from "@/components/server-components/primitives/CenteredContainer";
-import NoPrefetchLink from "@/components/general/NoPrefetchLink";
+import Link from "next/link";
 
 export default function WelcomePage() {
   return (
@@ -14,7 +14,7 @@ export default function WelcomePage() {
           Mahtavata saada sinut mukaan toteuttamaan laadukkaampaa arviointia:)
         </Text>
         <Flex justifyContent="center">
-          <Button as={NoPrefetchLink} href="/">
+          <Button as={Link} href="/">
             Aloita arviointi
           </Button>
         </Flex>

@@ -12,7 +12,7 @@ import { getErrorMessage } from "@/utils/errorUtils";
 import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import NoPrefetchLink from "@/components/general/NoPrefetchLink";
+import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 
@@ -104,7 +104,7 @@ function UpdateEvaluationsPageContent() {
           <Text>
             Siirry tarkastelemaan arviointia{" "}
             <Text
-              as={NoPrefetchLink}
+              as={Link}
               textDecoration="underline"
               color="inherit"
               href={`/collection/${collection.id}`}

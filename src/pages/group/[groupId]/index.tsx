@@ -8,7 +8,7 @@ import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import BorderedCard from "@/components/server-components/primitives/BorderedCard";
 import { GroupOverviewPage_GetGroupQuery } from "@/gql/graphql";
-import NoPrefetchLink from "@/components/general/NoPrefetchLink";
+import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import graphqlClient from "@/graphql-client";
 import { useRouter } from "next/router";
@@ -60,7 +60,7 @@ function GroupOverviewPageContent() {
         variant="link"
         top="6"
         right="5"
-        as={NoPrefetchLink}
+        as={Link}
         icon={<FiEdit />}
         aria-label="Ryhmän muokkaukseen"
         href={`/group/${group.id}/edit`}
@@ -81,7 +81,7 @@ function GroupOverviewPageContent() {
               px="5"
               py="2"
               width="100%"
-              as={NoPrefetchLink}
+              as={Link}
               href={`/student/${student.id}`}
               _notLast={{ mb: 3 }}
             >
@@ -104,7 +104,7 @@ function GroupOverviewPageContent() {
               <Text as="span" textStyle="italic" mr="1">
                 {formatDate(new Date(collection.date), "dd.MM.yyyy")}:
               </Text>
-              <Text as={NoPrefetchLink} href={`/collection/${collection.id}`}>
+              <Text as={Link} href={`/collection/${collection.id}`}>
                 {collection.type}
               </Text>
             </Box>
@@ -113,10 +113,7 @@ function GroupOverviewPageContent() {
       ) : (
         <>
           <Text>Ei vielä arviointeja</Text>
-          <Text
-            as={NoPrefetchLink}
-            href={`/group/${group.id}/create-collection`}
-          >
+          <Text as={Link} href={`/group/${group.id}/create-collection`}>
             Siirry tekemään arviointi
           </Text>
         </>

@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import BorderedCard from "@/components/server-components/primitives/BorderedCard";
-import NoPrefetchLink from "@/components/general/NoPrefetchLink";
+import Link from "next/link";
 import AddStudentsList from "@/components/functional/AddStudentsList";
 
 const initialValues = {
@@ -81,7 +81,7 @@ export default function CreateGroupPage() {
               Luo ryhmä
             </Button>
             <Text
-              as={NoPrefetchLink}
+              as={Link}
               href="/"
               color="gray.700"
               mt="3"
