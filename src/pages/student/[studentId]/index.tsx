@@ -9,6 +9,10 @@ import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import StudentEvaluationsRecap from "@/components/server-components/StudentEvaluationsRecap";
 import { StudentPage_GetStudentQuery } from "@/gql/graphql";
+import useSWR, { SWRConfig } from "swr";
+import { useRouter } from "next/router";
+import graphqlClient from "@/graphql-client";
+import LoadingIndicator from "@/components/general/LoadingIndicator";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
@@ -30,16 +34,22 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   }
 `);
 
-type StudentPageContentProps = {
-  data: StudentPage_GetStudentQuery;
-};
+function StudentPageContent() {
+  const router = useRouter();
+  const studentId = router.query.studentId as string;
 
-export default function StudentPageContent({ data }: StudentPageContentProps) {
-  const { getStudent: student } = data;
+  const { data } = useSWR<StudentPage_GetStudentQuery>(
+    `student/${studentId}`,
+    () => graphqlClient.request(StudentPage_GetStudent_Query, { studentId })
+  );
 
   const evaluationsWithNotes = useMemo(() => {
-    return student.evaluations.filter((it) => !!it.notes);
-  }, [student]);
+    return data ? data.getStudent.evaluations.filter((it) => !!it.notes) : [];
+  }, [data]);
+
+  if (!data) return <LoadingIndicator />;
+  const { getStudent: student } = data;
+
   return (
     <PageWrapper>
       <BackwardsLink href={`/group/${student.group.id}`}>
@@ -67,6 +77,17 @@ export default function StudentPageContent({ data }: StudentPageContentProps) {
         <Text>Oppilaalle ei ole vielä annettu erikoishuomioita</Text>
       )}
     </PageWrapper>
+  );
+}
+type StudentPageProps = {
+  data: StudentPage_GetStudentQuery;
+};
+
+export default function StudentPage({ data }: StudentPageProps) {
+  return (
+    <SWRConfig value={{ fallback: data }}>
+      <StudentPageContent />
+    </SWRConfig>
   );
 }
 

@@ -5,7 +5,7 @@ import graphqlClient from "@/graphql-client";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { Form, Formik } from "formik";
 import { getSession, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import NoPrefetchLink from "@/components/general/NoPrefetchLink";

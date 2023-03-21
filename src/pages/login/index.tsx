@@ -5,7 +5,7 @@ import FormField from "@/components/general/FormField";
 import { Form, Formik } from "formik";
 import { getSession, signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const initialValues = {

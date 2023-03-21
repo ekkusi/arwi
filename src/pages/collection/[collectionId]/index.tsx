@@ -8,6 +8,10 @@ import { CollectionPage_GetCollectionQuery, Rating } from "@/gql/graphql";
 import { formatRatingString } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
 import { GetStaticPropsContext } from "next";
+import graphqlClient from "@/graphql-client";
+import { useRouter } from "next/router";
+import useSWR, { SWRConfig } from "swr";
+import LoadingIndicator from "@/components/general/LoadingIndicator";
 
 const CollectionPage_GetCollection_Query = graphql(`
   query CollectionPage_GetCollection($collectionId: ID!) {
@@ -34,11 +38,20 @@ const CollectionPage_GetCollection_Query = graphql(`
   }
 `);
 
-type CollectionPageProps = {
-  data: CollectionPage_GetCollectionQuery;
-};
+function CollectionPageContent() {
+  const router = useRouter();
+  const collectionId = router.query.collectionId as string;
 
-export default function CollectionPage({ data }: CollectionPageProps) {
+  const { data } = useSWR<CollectionPage_GetCollectionQuery>(
+    `collection/${collectionId}`,
+    () =>
+      graphqlClient.request(CollectionPage_GetCollection_Query, {
+        collectionId,
+      })
+  );
+
+  if (!data) return <LoadingIndicator />;
+
   const { getCollection: collection } = data;
   const getRatingString = (rating: Rating | null | undefined) => {
     return rating ? formatRatingString(rating) : "Ei arvioitu";
@@ -74,6 +87,18 @@ export default function CollectionPage({ data }: CollectionPageProps) {
         <Text>Ei arviointeja</Text>
       )}
     </PageWrapper>
+  );
+}
+
+type CollectionPageProps = {
+  data: CollectionPage_GetCollectionQuery;
+};
+
+export default function CollectionPage({ data }: CollectionPageProps) {
+  return (
+    <SWRConfig value={{ fallback: data }}>
+      <CollectionPageContent />
+    </SWRConfig>
   );
 }
 

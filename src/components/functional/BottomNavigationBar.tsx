@@ -1,9 +1,9 @@
-import { usePathname } from "next/navigation";
 import { AiOutlineHome } from "react-icons/ai";
 import { MdOutlineDesignServices } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { Text, Icon, SimpleGrid, TextProps } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 type BotttomNavigationLinkProps = TextProps & {
   href: string;
@@ -13,7 +13,7 @@ export function BottomNavigationLink({
   href,
   ...rest
 }: BotttomNavigationLinkProps) {
-  const pathname = usePathname();
+  const { pathname } = useRouter();
 
   return (
     <Link href={href}>
@@ -41,7 +41,7 @@ const NO_NAVIGATION_BAR_PATHS = [
 ];
 
 export default function BottomNavigationBar() {
-  const pathname = usePathname();
+  const { pathname } = useRouter();
   if (NO_NAVIGATION_BAR_PATHS.includes(pathname || "")) return null;
   return (
     <SimpleGrid

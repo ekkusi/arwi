@@ -5,12 +5,12 @@ import { CreateStudentInput } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { getSessionClient } from "@/utils/session/client";
 import { Form, Formik } from "formik";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import BorderedCard from "@/components/server-components/primitives/BorderedCard";
 import NoPrefetchLink from "@/components/general/NoPrefetchLink";
-import AddStudentsList from "../../../components/functional/AddStudentsList";
+import AddStudentsList from "@/components/functional/AddStudentsList";
 
 const initialValues = {
   name: "",

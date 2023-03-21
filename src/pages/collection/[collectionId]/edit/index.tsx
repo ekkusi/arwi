@@ -10,9 +10,11 @@ import graphqlClient from "@/graphql-client";
 import { serverRequest } from "@/pages/api/graphql";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { GetStaticPropsContext } from "next";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import NoPrefetchLink from "@/components/general/NoPrefetchLink";
+import useSWR, { SWRConfig } from "swr";
+import LoadingIndicator from "@/components/general/LoadingIndicator";
 
 const UpdateEvaluationsPage_GetCollection_Query = graphql(`
   query UpdateEvaluationsPage_GetCollection($collectionId: ID!) {
@@ -42,21 +44,28 @@ const UpdateEvaluationsPage_UpdateEvaluations_Mutation = graphql(`
   }
 `);
 
-type UpdateEvaluationsPageProps = {
-  data: UpdateEvaluationsPage_GetCollectionQuery;
-};
-
-export default function UpdateEvaluationsPage({
-  data,
-}: UpdateEvaluationsPageProps) {
+function UpdateEvaluationsPageContent() {
   const router = useRouter();
+  const collectionId = router.query.collectionId as string;
+
+  const { data } = useSWR<UpdateEvaluationsPage_GetCollectionQuery>(
+    `collection/${collectionId}`,
+    () =>
+      graphqlClient.request(UpdateEvaluationsPage_GetCollection_Query, {
+        collectionId,
+      })
+  );
+
   const toast = useToast();
-  const { getCollection: collection } = data;
 
   const [evaluations, setEvaluations] = useState(() => [
-    ...collection.evaluations.filter((e) => e.wasPresent),
+    ...(data ? data.getCollection.evaluations.filter((e) => e.wasPresent) : []),
   ]);
   const [isCreating, setIsCreating] = useState(false);
+
+  if (!data) return <LoadingIndicator />;
+
+  const { getCollection: collection } = data;
 
   const onChanged = (evaluation: Evaluation) => {
     const newEvaluations = evaluations.map((e) => {
@@ -161,6 +170,19 @@ export default function UpdateEvaluationsPage({
         )}
       </Box>
     </PageWrapper>
+  );
+}
+type UpdateEvaluationsPageProps = {
+  data: UpdateEvaluationsPage_GetCollectionQuery;
+};
+
+export default function UpdateEvaluationsPage({
+  data,
+}: UpdateEvaluationsPageProps) {
+  return (
+    <SWRConfig value={{ fallback: data }}>
+      <UpdateEvaluationsPageContent />
+    </SWRConfig>
   );
 }
 
