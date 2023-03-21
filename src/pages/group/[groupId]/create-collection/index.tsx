@@ -6,7 +6,7 @@ import FormField from "@/components/general/FormField";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
 import { Form, Formik } from "formik";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { GetStaticPropsContext } from "next";
 import Link from "next/link";
@@ -16,6 +16,8 @@ import { CreateCollectionPage_GetGroupQuery } from "@/gql/graphql";
 import StudentParticipationList, {
   StudentParticipation,
 } from "@/components/functional/StudentParticipationList";
+import useSWR, { SWRConfig } from "swr";
+import LoadingIndicator from "@/components/general/LoadingIndicator";
 
 const CreateCollectionPage_GetGroup_Query = graphql(`
   query CreateCollectionPage_GetGroup($groupId: ID!) {
@@ -40,25 +42,36 @@ const CreateCollectionPage_CreateCollection_Mutation = graphql(`
   }
 `);
 
-type CreateCollectionPageProps = BoxProps & {
-  data: CreateCollectionPage_GetGroupQuery;
-};
-
 const initialValues = {
   type: "",
   description: "",
   date: formatDate(new Date()),
 };
 
-export default function CreateCollectionPage({
-  data,
-}: CreateCollectionPageProps) {
-  const { getGroup: group } = data;
+function CreateCollectionPageContent() {
   const router = useRouter();
+  const groupId = router.query.groupId as string;
+
+  const { data } = useSWR<CreateCollectionPage_GetGroupQuery>(
+    `group/${groupId}/create-collection`,
+    () =>
+      graphqlClient.request(CreateCollectionPage_GetGroup_Query, { groupId })
+  );
+
   const [loading, setLoading] = useState(false);
   const [participations, setParticipations] = useState<StudentParticipation[]>(
     []
   );
+
+  const onParticipationsChanged = useCallback(
+    (newParticipations: StudentParticipation[]) => {
+      setParticipations(newParticipations);
+    },
+    []
+  );
+
+  if (!data) return <LoadingIndicator />;
+  const { getGroup: group } = data;
 
   const validateType = (value: string) => {
     let error;
@@ -89,13 +102,6 @@ export default function CreateCollectionPage({
       console.error("Error happened:", error);
     }
   };
-
-  const onParticipationsChanged = useCallback(
-    (newParticipations: StudentParticipation[]) => {
-      setParticipations(newParticipations);
-    },
-    []
-  );
 
   return (
     <PageWrapper display="flex" flexDirection="column">
@@ -136,6 +142,17 @@ export default function CreateCollectionPage({
         )}
       </Formik>
     </PageWrapper>
+  );
+}
+type CreateCollectionPageProps = BoxProps & {
+  data: CreateCollectionPage_GetGroupQuery;
+};
+
+export default function GroupOverviewPage({ data }: CreateCollectionPageProps) {
+  return (
+    <SWRConfig value={{ fallback: data }}>
+      <CreateCollectionPageContent />
+    </SWRConfig>
   );
 }
 

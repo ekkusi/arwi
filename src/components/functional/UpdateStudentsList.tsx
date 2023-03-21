@@ -76,9 +76,12 @@ export default function UpdateStudentsList({
   const [studentInDelete, setStudentInDelete] = useState<
     StudentFragment | undefined
   >();
-  const [students, setStudents] = useState<StudentFragment[]>(() => [
-    ...initialStudents,
-  ]);
+  const [students, setStudents] = useState<StudentFragment[]>(() => {
+    // eslint-disable-next-line
+    console.log("Setting initial students");
+
+    return [...initialStudents];
+  });
   const [newStudentName, setNewStudentName] = useState("");
   const [addingStudent, setAddingStudent] = useState(false);
 

@@ -39,7 +39,7 @@ function GroupOverviewPageContent() {
   const groupId = router.query.groupId as string;
 
   const { data, isLoading, isValidating } =
-    useSWR<GroupOverviewPage_GetGroupQuery>("group", () =>
+    useSWR<GroupOverviewPage_GetGroupQuery>(`group/${groupId}`, () =>
       graphqlClient.request(GroupOverviewPage_GetGroup_Query, { groupId })
     );
 

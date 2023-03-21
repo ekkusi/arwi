@@ -49,7 +49,7 @@ function EditGroupPageContent() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
   const { data, isLoading, isValidating } = useSWR<EditGroupPage_GetGroupQuery>(
-    "group",
+    `group/${groupId}/edit`,
     () => graphqlClient.request(EditGroupPage_GetGroup_Query, { groupId })
   );
   /* eslint-disable*/
