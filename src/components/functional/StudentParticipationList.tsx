@@ -42,22 +42,21 @@ export default function StudentParticipationList({
       }));
     }
   );
-  const [initialParticipationsSet, setInitialParticipationsSet] =
-    useState(false);
+  // const [initialParticipationsSet, setInitialParticipationsSet] =
+  //   useState(false);
 
-  // Set initial participations to parent
+  // Set initial participations
   useEffect(() => {
-    if (!initialParticipationsSet) {
-      setInitialParticipationsSet(true);
-      onChange?.(participations);
-    }
+    const initialParticipations = students.map((it) => ({
+      student: it,
+      wasPresent: true,
+    }));
+    onChange?.(initialParticipations);
     // eslint-disable-next-line
     console.log("Setting initial students in StudentParticipationList");
 
-    setParticipations(
-      students.map((it) => ({ student: it, wasPresent: true }))
-    );
-  }, [initialParticipationsSet, onChange, participations, students]);
+    setParticipations(initialParticipations);
+  }, [onChange, students]);
 
   const toggleStudentPresent = (participation: StudentParticipation) => {
     // Copy old array -> update matching participation -> set copy as new state
@@ -94,7 +93,7 @@ export default function StudentParticipationList({
               onClick={() => toggleStudentPresent(it)}
               variant={it.wasPresent ? "solid" : "outline"}
               borderRadius="lg"
-              isDisabled={!initialParticipationsSet || isDisabled} // Disable changing participations until initial participations are set on parent
+              isDisabled={isDisabled} // Disable changing participations until initial participations are set on parent
               mr="2"
             >
               Paikalla
@@ -105,7 +104,7 @@ export default function StudentParticipationList({
               colorScheme="red"
               borderRadius="lg"
               variant={it.wasPresent ? "outline" : "solid"}
-              isDisabled={!initialParticipationsSet || isDisabled}
+              isDisabled={isDisabled}
             >
               Poissa
             </Button>
