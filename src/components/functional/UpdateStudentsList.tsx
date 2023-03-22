@@ -12,10 +12,7 @@ import InputWithError, {
   InputWithErrorHandlers,
 } from "@/components/general/InputWithError";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
-import {
-  CreateStudentInput,
-  UpdateStudentsList_StudentFragment as StudentFragment,
-} from "@/gql/graphql";
+import { UpdateStudentsList_StudentFragment as StudentFragment } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import {
   ChangeEvent,
@@ -64,11 +61,9 @@ const UpdateStudentList_DeleteStudentMutation = graphql(`
 type UpdateStudentsListProps = FlexProps & {
   students: FragmentType<typeof UpdateStudentsList_StudentFragment>[];
   groupId: string;
-  onChanged?(students: CreateStudentInput[]): void;
 };
 
 export default function UpdateStudentsList({
-  onChanged,
   groupId,
   students: studentFragments,
   ...rest
@@ -100,7 +95,6 @@ export default function UpdateStudentsList({
     const newStudents = [...students];
     newStudents.splice(index, 1);
     setStudents(newStudents);
-    if (onChanged) onChanged(newStudents);
     setStudentInDelete(undefined); // Close modal already before running backend delete
     await graphqlClient.request(UpdateStudentList_DeleteStudentMutation, {
       studentId,
@@ -126,7 +120,6 @@ export default function UpdateStudentsList({
     setNewStudentName("");
     nameInputRef.current?.clear();
     setAddingStudent(false);
-    if (onChanged) onChanged(newStudents);
   };
 
   const handleStudentNameChange = async (
@@ -134,14 +127,6 @@ export default function UpdateStudentsList({
     name: string
   ) => {
     if (name === student.name) return;
-    const newStudents = students.map((it) => {
-      if (it.id === student.id) {
-        return { ...it, name };
-      }
-      return it;
-    });
-    setStudents(newStudents);
-    if (onChanged) onChanged(newStudents);
     await graphqlClient.request(UpdateStudentList_UpdateStudentMutation, {
       input: { name },
       studentId: student.id,

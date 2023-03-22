@@ -7,7 +7,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import debounce from "lodash.debounce";
-import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 
 type InputWithErrorProps = Omit<InputProps, "value" | "onChange" | "onBlur"> & {
   value?: string;
@@ -48,6 +54,12 @@ export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
       return initialValue;
     });
 
+    useEffect(() => {
+      if (initialValue) {
+        setValue(initialValue);
+      }
+    }, [initialValue]);
+
     const defaultValidate = (newValue: string) => {
       if (newValue.length <= 0) {
         return "Tämä kenttä ei voi olla tyhjä";
@@ -65,6 +77,8 @@ export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
       const newValue = event.target.value;
       setValue(newValue);
 
+      if (newValue === initialValue) return;
+
       const validateFunc = validate || defaultValidate;
 
       const errorMessage = validateFunc(newValue);
@@ -78,6 +92,7 @@ export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
     };
 
     const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+      if (event.target.value === initialValue) return;
       validatedOnBlur?.(event, !error);
     };
 
