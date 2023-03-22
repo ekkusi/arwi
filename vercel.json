@@ -3,5 +3,8 @@
     "pages/**/*": {
       "excludeFiles": "node_modules/@swc/**/*"
     }
+  },
+  "github": {
+    "silent": true
   }
 }
