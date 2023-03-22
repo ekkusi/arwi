@@ -49,7 +49,7 @@ function UpdateEvaluationsPageContent() {
   const collectionId = router.query.collectionId as string;
 
   const { data } = useSWR<UpdateEvaluationsPage_GetCollectionQuery>(
-    `collection/${collectionId}`,
+    `collection/${collectionId}/edit`,
     () =>
       graphqlClient.request(UpdateEvaluationsPage_GetCollection_Query, {
         collectionId,
@@ -63,7 +63,9 @@ function UpdateEvaluationsPageContent() {
   ]);
   const [isCreating, setIsCreating] = useState(false);
   useEffect(() => {
-    setEvaluations(data ? data.getCollection.evaluations : []);
+    setEvaluations(
+      data ? data.getCollection.evaluations.filter((e) => e.wasPresent) : []
+    );
   }, [data]);
 
   if (!data) return <LoadingIndicator />;

@@ -17,9 +17,6 @@ export default function useSpeechRecognition(
 
   useEffect(() => {
     if ("webkitSpeechRecognition" in window && !speechRecognition) {
-      // eslint-disable-next-line no-console
-      console.log("Setting up speech recognition");
-
       const SpeechRecognition =
         window.SpeechRecognition || webkitSpeechRecognition;
       const recognition = new SpeechRecognition();

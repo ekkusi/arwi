@@ -33,9 +33,6 @@ export default function StudentParticipationList({
   );
   const [participations, setParticipations] = useState<StudentParticipation[]>(
     () => {
-      // eslint-disable-next-line
-      console.log("setting initial students", students);
-
       return students.map((it) => ({
         student: it,
         wasPresent: true,
@@ -52,9 +49,6 @@ export default function StudentParticipationList({
       wasPresent: true,
     }));
     onChange?.(initialParticipations);
-    // eslint-disable-next-line
-    console.log("Setting initial students in StudentParticipationList");
-
     setParticipations(initialParticipations);
   }, [onChange, students]);
 

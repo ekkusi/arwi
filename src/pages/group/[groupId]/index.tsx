@@ -38,15 +38,10 @@ function GroupOverviewPageContent() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const { data, isLoading, isValidating } =
-    useSWR<GroupOverviewPage_GetGroupQuery>(`group/${groupId}`, () =>
-      graphqlClient.request(GroupOverviewPage_GetGroup_Query, { groupId })
-    );
-
-  /* eslint-disable*/
-  console.log("data", data);
-  console.log("isLoading", isLoading);
-  console.log("isValidating", isValidating);
+  const { data } = useSWR<GroupOverviewPage_GetGroupQuery>(
+    `group/${groupId}`,
+    () => graphqlClient.request(GroupOverviewPage_GetGroup_Query, { groupId })
+  );
 
   if (!data) return <LoadingIndicator />;
   const { getGroup: group } = data;

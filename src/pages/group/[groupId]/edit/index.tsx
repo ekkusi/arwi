@@ -48,14 +48,10 @@ const EditGroupPage_DeleteGroup_Mutation = graphql(`
 function EditGroupPageContent() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
-  const { data, isLoading, isValidating } = useSWR<EditGroupPage_GetGroupQuery>(
+  const { data } = useSWR<EditGroupPage_GetGroupQuery>(
     `group/${groupId}/edit`,
     () => graphqlClient.request(EditGroupPage_GetGroup_Query, { groupId })
   );
-  /* eslint-disable*/
-  console.log("edit: data", data);
-  console.log("edit: isLoading", isLoading);
-  console.log("edit: isValidating", isValidating);
   const toast = useToast();
 
   const [loading, setLoading] = useState(false);

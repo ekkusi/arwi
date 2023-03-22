@@ -10,7 +10,7 @@ import { formatDate } from "@/utils/dateUtils";
 import { GetStaticPropsContext } from "next";
 import graphqlClient from "@/graphql-client";
 import { useRouter } from "next/router";
-import useSWR, { SWRConfig } from "swr";
+import useSWR from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 
 const CollectionPage_GetCollection_Query = graphql(`
@@ -38,7 +38,13 @@ const CollectionPage_GetCollection_Query = graphql(`
   }
 `);
 
-function CollectionPageContent() {
+type CollectionPageProps = {
+  data: CollectionPage_GetCollectionQuery;
+};
+
+export default function CollectionPage({
+  data: fallbackData,
+}: CollectionPageProps) {
   const router = useRouter();
   const collectionId = router.query.collectionId as string;
 
@@ -47,23 +53,25 @@ function CollectionPageContent() {
     () =>
       graphqlClient.request(CollectionPage_GetCollection_Query, {
         collectionId,
-      })
+      }),
+    { fallbackData }
   );
 
   if (!data) return <LoadingIndicator />;
 
   const { getCollection: collection } = data;
+
   const getRatingString = (rating: Rating | null | undefined) => {
     return rating ? formatRatingString(rating) : "Ei arvioitu";
   };
 
   return (
     <PageWrapper>
-      <BackwardsLink href={`/group/${collection.group.id}`}>
+      <BackwardsLink href={`/group/${collection.group?.id}`}>
         Takaisin ryhmän yhteenvetoon
       </BackwardsLink>
       <Text as="h1">Arvioinnin yhteenveto</Text>
-      <Text as="h2">Ryhmä: {collection.group.name}</Text>
+      <Text as="h2">Ryhmä: {collection.group?.name}</Text>
       <Text>Tyyppi: {collection.type}</Text>
       <Text mb="3">
         Päivämäärä: {formatDate(new Date(collection.date), "dd.MM.yyyy")}
@@ -90,18 +98,6 @@ function CollectionPageContent() {
   );
 }
 
-type CollectionPageProps = {
-  data: CollectionPage_GetCollectionQuery;
-};
-
-export default function CollectionPage({ data }: CollectionPageProps) {
-  return (
-    <SWRConfig value={{ fallback: data }}>
-      <CollectionPageContent />
-    </SWRConfig>
-  );
-}
-
 export async function getStaticPaths() {
   return {
     paths: [],
@@ -113,10 +109,10 @@ export async function getStaticProps({
   params,
 }: GetStaticPropsContext<{ collectionId: string }>) {
   if (!params) throw new Error("Unexpected error, no params found");
+
   const data = await serverRequest(CollectionPage_GetCollection_Query, {
     collectionId: params.collectionId,
   });
 
-  // Pass data to the page via props
   return { props: { data } };
 }

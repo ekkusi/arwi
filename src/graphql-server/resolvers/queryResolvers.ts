@@ -34,6 +34,7 @@ const resolvers: QueryResolvers<CustomContext> = {
       await prisma.evaluationCollection.findFirstOrThrow({
         where: { id },
       });
+
     return matchingCollection;
   },
   getStudent: async (_, { id }, { prisma }) => {

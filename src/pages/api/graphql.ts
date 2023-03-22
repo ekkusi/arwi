@@ -28,6 +28,7 @@ const yoga = createYoga<{
       res,
     };
   },
+  logging: "debug",
 });
 
 const { contextFactory, execute, schema: schemaOverride } = yoga.getEnveloped();

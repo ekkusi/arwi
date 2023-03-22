@@ -28,8 +28,6 @@ type MainPageProps = {
 
 export default function HomePage({ data }: MainPageProps) {
   const { getTeacher: teacher } = data;
-  // eslint-disable-next-line
-  console.log("teacher", teacher);
 
   if (!teacher) throw new Error("Unexpected error, no teacher");
 
@@ -71,25 +69,11 @@ export default function HomePage({ data }: MainPageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // eslint-disable-next-line
-  console.log("Running getServerSideProps in home page: ", new Date());
   const session = await getServerSession(context.req, context.res, authOptions);
-  // eslint-disable-next-line
-  console.log("session in home page serverSideProps", session);
   if (!session) throw new Error("Unexpected error, no session");
-
-  // eslint-disable-next-line
-  console.log("getting data");
-  let data;
-  try {
-    data = await serverRequest(MainPage_GetTeacher_Query, {
-      teacherId: session.user.id,
-    });
-    // eslint-disable-next-line
-    console.log("data in home page getServerSideProps", data);
-  } catch (error) {
-    console.error("Error in home page getServerSideProps: ", error);
-  }
+  const data = await serverRequest(MainPage_GetTeacher_Query, {
+    teacherId: session.user.id,
+  });
 
   // Pass data to the page via props
   return { props: { data } };
