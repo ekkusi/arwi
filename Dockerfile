@@ -21,12 +21,14 @@ RUN --mount=type=secret,id=secret  \
     --mount=type=secret,id=public_base_url  \
     --mount=type=secret,id=public_graphql_api_url \ 
     --mount=type=secret,id=next_auth_url \
+    --mount=type=secret,id=openai_api_key \
     --mount=type=secret,id=is_https \
     SECRET=$(cat /run/secrets/secret) \
     DATABASE_URL=$(cat /run/secrets/database_url) \
     NEXT_PUBLIC_BASE_URL=$(cat /run/secrets/public_base_url) \
     NEXT_PUBLIC_GRAPHQL_API_URL=$(cat /run/secrets/public_graphql_api_url) \
     NEXTAUTH_URL=$(cat /run/secrets/next_auth_url) \
+    OPENAI_API_KEY=$(cat /run/secrets/openai_api_key) \
     IS_HTTPS=$(cat /run/secrets/is_https) \
     npm run build
 

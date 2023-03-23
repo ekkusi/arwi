@@ -35,4 +35,5 @@ jobs:
             "public_base_url=${{ secrets.NEXT_PUBLIC_BASE_URL }}"
             "public_graphql_api_url=${{ secrets.NEXT_PUBLIC_GRAPHQL_API_URL }}"
             "next_auth_url=${{ secrets.NEXTAUTH_URL }}"
+            "openai_api_key=${{ secrets.OPENAI_API_KEY }}"
             "is_https=${{ secrets.IS_HTTPS }}"
