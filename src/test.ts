@@ -9,6 +9,8 @@ const testNotes = [
   "Mahtavaa työskentelyä. Avitti muitakin oppilaita keillä pallo ei pysynyt niin hyvin hallinnassa ja yleisesti levitti hyvää ilmapiiriä tunnilla",
 ];
 
+console.log("Trigger deploy");
+
 // openAIClient
 //   .listModels()
 //   .then((result) => {
