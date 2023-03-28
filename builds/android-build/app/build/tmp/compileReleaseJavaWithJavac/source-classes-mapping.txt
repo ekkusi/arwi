@@ -1,0 +1,14 @@
+fi/arwi/twa/Application.java
+ fi.arwi.twa.Application
+com/arwi/twa/LauncherActivity.java
+ com.arwi.twa.LauncherActivity
+fi/arwi/twa/LauncherActivity.java
+ fi.arwi.twa.LauncherActivity
+fi/arwi/twa/DelegationService.java
+ fi.arwi.twa.DelegationService
+com/arwi/twa/Application.java
+ com.arwi.twa.Application
+fi/arwi/twa/BuildConfig.java
+ fi.arwi.twa.BuildConfig
+com/arwi/twa/DelegationService.java
+ com.arwi.twa.DelegationService
