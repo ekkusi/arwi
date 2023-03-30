@@ -36,9 +36,9 @@ while getopts ":d:f:b" opt; do
 done
 
 
-absoluteFilePath="$(cd ../db; pwd)/arwi_dump.sql"
+absoluteFilePath="$(cd ../backups; pwd)/arwi_dump.sql"
 if [ -n "${relativeFilePath}" ]; then absoluteFilePath="$callPath/$relativeFilePath"; fi
-if [ -n "${backupFileName}" ]; then absoluteFilePath="$(cd ../db/prod-backups; pwd)/$backupFileName"; fi
+if [ -n "${backupFileName}" ]; then absoluteFilePath="$(cd ../backups; pwd)/$backupFileName"; fi
 
 
 echo
