@@ -6,7 +6,27 @@ on:
       - 'main'
 
 jobs:
+  tests:
+      name: Run tests
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: 'Create env file'
+            run: |
+              touch .env.test
+              echo DATABASE_URL=${{ secrets.DATABASE_URL_TEST }} >> .env
+              cat .env.test
+
+          - name: Install dependencies
+            run: npm install
+          - name: Schema linter
+            run: npm run graphql:lint
+
+          - name: Run tests
+            run: npm run test-with-setup
   docker:
+    needs: tests
     runs-on: ubuntu-latest
     steps:
       -

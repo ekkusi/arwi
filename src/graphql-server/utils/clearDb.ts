@@ -4,8 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const clearDb = async () => {
-  const deletes = await prisma.teacher.deleteMany();
-  console.log("Deleted: ", deletes);
+  await prisma.teacher.deleteMany();
 };
 
 console.log("Clearing DB...");
@@ -17,3 +16,5 @@ clearDb().then(
     console.error("Something went wrong: ", err);
   }
 );
+
+export default clearDb;

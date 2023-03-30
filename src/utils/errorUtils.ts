@@ -19,3 +19,9 @@ export const getErrorMessage = (err: GenericError) => {
   }
   return err.message;
 };
+
+export function assertIsError(error: unknown): asserts error is Error {
+  if (!(error instanceof Error)) {
+    throw error;
+  }
+}

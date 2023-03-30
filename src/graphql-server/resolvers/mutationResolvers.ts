@@ -2,7 +2,7 @@ import {
   revalidateCollectionData,
   revalidateGroupData,
   revalidateStudentData,
-} from "@/utils/revalidate";
+} from "@/graphql-server/utils/revalidate";
 import { compare, hash } from "bcryptjs";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";

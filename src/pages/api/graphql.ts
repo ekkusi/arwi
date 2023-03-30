@@ -5,7 +5,8 @@ import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { RemoveIndex } from "graphql-request/dist/types";
 import schema from "@/graphql-server";
 import { getErrorMessage } from "@/utils/errorUtils";
-import prismaClient from "@/graphql-server/prismaClient";
+import prisma from "@/graphql-server/prismaClient";
+import { PrismaClient } from "@prisma/client";
 
 export const config = {
   api: {
@@ -23,7 +24,7 @@ const yoga = createYoga<{
   graphqlEndpoint: "/api/graphql",
   context: ({ req, res }) => {
     return {
-      prisma: prismaClient,
+      prisma,
       req,
       res,
     };
@@ -33,15 +34,42 @@ const yoga = createYoga<{
 
 const { contextFactory, execute, schema: schemaOverride } = yoga.getEnveloped();
 
+type RequestOptions<T, V> = {
+  document: TypedDocumentNode<T, V>;
+  prismaOverride: PrismaClient;
+};
+
+function isDocumentOptions<T, V>(
+  documentOrOptions: TypedDocumentNode<T, V> | RequestOptions<T, V>
+): documentOrOptions is RequestOptions<T, V> {
+  return (documentOrOptions as RequestOptions<T, V>).document !== undefined;
+}
+
 // Custom request function to make a Graphql request without HTTP, use in server components
 export const serverRequest = async <T, V>(
-  document: TypedDocumentNode<T, V>,
+  documentOrOptions:
+    | TypedDocumentNode<T, V>
+    | {
+        document: TypedDocumentNode<T, V>;
+        prismaOverride: PrismaClient;
+      },
   ...variablesArray: keyof RemoveIndex<V> extends never // Spread from array to make variables optionality based on document type
     ? [variables?: V]
     : [variables: V]
 ): Promise<T> => {
-  const context = await contextFactory();
   const variables = variablesArray[0];
+
+  let document;
+  let context;
+  if (isDocumentOptions(documentOrOptions)) {
+    document = documentOrOptions.document;
+    context = await contextFactory({
+      prisma: documentOrOptions.prismaOverride,
+    });
+  } else {
+    document = documentOrOptions;
+    context = await contextFactory();
+  }
 
   const result = await execute({
     document,
