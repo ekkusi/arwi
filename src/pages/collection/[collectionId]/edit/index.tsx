@@ -1,10 +1,11 @@
 import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import UpdateEvaluationCard from "@/components/functional/UpdateEvaluationCard";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import { graphql } from "@/gql";
+import { getFragmentData, graphql } from "@/gql";
 import {
   UpdateEvaluationsPage_GetCollectionQuery,
   UpdateEvaluationCard_EvaluationFragment as Evaluation,
+  UpdateEvaluationCard_EvaluationFragmentDoc,
 } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { serverRequest } from "@/pages/api/graphql";
@@ -58,17 +59,23 @@ function UpdateEvaluationsPageContent() {
 
   const toast = useToast();
 
-  const [evaluations, setEvaluations] = useState(() => [
-    ...(data ? data.getCollection.evaluations.filter((e) => e.wasPresent) : []),
-  ]);
+  const [evaluations, setEvaluations] = useState<Evaluation[]>();
   const [isCreating, setIsCreating] = useState(false);
+
   useEffect(() => {
-    setEvaluations(
-      data ? data.getCollection.evaluations.filter((e) => e.wasPresent) : []
-    );
+    if (data) {
+      const filteredEvaluations = data.getCollection.evaluations.filter(
+        (e) => e.wasPresent
+      );
+      setEvaluations(
+        filteredEvaluations.map((it) =>
+          getFragmentData(UpdateEvaluationCard_EvaluationFragmentDoc, it)
+        )
+      );
+    }
   }, [data]);
 
-  if (!data) return <LoadingIndicator />;
+  if (!data || !evaluations) return <LoadingIndicator />;
 
   const { getCollection: collection } = data;
 
@@ -91,7 +98,6 @@ function UpdateEvaluationsPageContent() {
         {
           updateEvaluationsInput: evaluations.map((evaluation) => ({
             id: evaluation.id,
-            wasPresent: evaluation.wasPresent,
             skillsRating: evaluation.skillsRating,
             behaviourRating: evaluation.behaviourRating,
             notes: evaluation.notes,
@@ -144,8 +150,8 @@ function UpdateEvaluationsPageContent() {
           }
         }}
       >
-        {evaluations.length > 0 ? (
-          evaluations.map((evaluation, index) => (
+        {data.getCollection.evaluations.length > 0 ? (
+          data.getCollection.evaluations.map((evaluation, index) => (
             <UpdateEvaluationCard
               key={evaluation.id}
               scrollSnapAlign={

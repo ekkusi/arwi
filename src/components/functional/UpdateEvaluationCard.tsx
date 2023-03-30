@@ -3,16 +3,15 @@ import BorderedCard, {
 } from "@/components/server-components/primitives/BorderedCard";
 import { Box, Tag, Text, Textarea } from "@chakra-ui/react";
 import debounce from "lodash.debounce";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import SpeechRecognition from "@/components/functional/SpeechRecognition";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateEvaluationCard_EvaluationFragment as EvaluationFragment } from "@/gql/graphql";
 import RatingSelector from "./RatingSelector";
 
-const UpdateEvaluationCard_EvaluationFragment = graphql(`
+export const UpdateEvaluationCard_EvaluationFragment = graphql(`
   fragment UpdateEvaluationCard_Evaluation on Evaluation {
     id
-    wasPresent
     skillsRating
     behaviourRating
     notes
@@ -40,6 +39,10 @@ export default function UpdateEvaluationCard({
   );
   const [evaluation, setEvaluation] = useState(() => initialEvaluation);
   const [notes, setNotes] = useState(() => evaluation.notes || "");
+
+  useEffect(() => {
+    setEvaluation(initialEvaluation);
+  }, [initialEvaluation]);
 
   const onChanged = useCallback(
     (key: "skillsRating" | "behaviourRating" | "notes", value: any) => {

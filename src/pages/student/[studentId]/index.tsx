@@ -1,8 +1,15 @@
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
-import { Box, Button, FormLabel, Input, Text } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import {
+  Accordion,
+  Box,
+  Button,
+  FormLabel,
+  Input,
+  Text,
+} from "@chakra-ui/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { formatDate } from "@/utils/dateUtils";
 import BackwardsLink from "@/components/general/BackwardsLink";
 import { GetStaticPropsContext } from "next";
@@ -15,6 +22,9 @@ import graphqlClient from "@/graphql-client";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { AiOutlineCheck } from "react-icons/ai";
+import AccordionItem from "@/components/general/AccordionItem";
+import { formatRatingStringWithNull } from "@/utils/dataMappers";
+import Link from "next/link";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
@@ -27,8 +37,11 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
       evaluations {
         notes
         id
+        skillsRating
+        behaviourRating
         collection {
           date
+          type
         }
         ...StudentEvaluationRecap_Evaluation
       }
@@ -45,19 +58,50 @@ function StudentPageContent() {
     () => graphqlClient.request(StudentPage_GetStudent_Query, { studentId })
   );
 
-  const evaluationsWithNotes = useMemo(() => {
-    return data ? data.getStudent.evaluations.filter((it) => !!it.notes) : [];
-  }, [data]);
-
   const [error, setError] = useState<string | undefined>();
   const [summary, setSummary] = useState<string | undefined>();
   const [summaryLength, setSummaryLength] = useState<number>(50);
   const [isGeneratingSummary, setIsGeneratingSumamry] =
     useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [expandedAccordionIndex, setExpandedAccordionIndex] = useState(-1);
+
+  const accordionItemRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const sortedEvaluations = useMemo(() => {
+    return data
+      ? data.getStudent.evaluations.sort(
+          (a, b) =>
+            new Date(b.collection.date).getTime() -
+            new Date(a.collection.date).getTime()
+        )
+      : [];
+  }, [data]);
+
+  useEffect(() => {
+    const { expandedEvaluationId } = router.query;
+    if (!expandedEvaluationId || typeof expandedEvaluationId !== "string")
+      return;
+
+    const expandedEvaluationIndex = sortedEvaluations.findIndex(
+      (it) => it.id === expandedEvaluationId
+    );
+    if (
+      expandedEvaluationIndex < 0 ||
+      accordionItemRefs.current.length <= expandedEvaluationIndex
+    )
+      return;
+    accordionItemRefs.current[expandedEvaluationIndex]?.scrollIntoView();
+    setExpandedAccordionIndex(expandedEvaluationIndex);
+  }, [sortedEvaluations, router.query]);
 
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
+
+  // const sortedEvaluations = student.evaluations.sort(
+  //   (a, b) =>
+  //     new Date(b.collection.date).getTime() -
+  //     new Date(a.collection.date).getTime()
+  // );
 
   const genearateSummary = async () => {
     if (summaryLength < 10 || summaryLength > 200) {
@@ -70,10 +114,14 @@ function StudentPageContent() {
       setError(undefined);
       setSummary(undefined);
 
+      const notes = student.evaluations
+        .filter((it) => !!it.notes)
+        .map((it) => it.notes);
+
       const result = await fetch("/api/generate-summary", {
         method: "POST",
         body: JSON.stringify({
-          notes: evaluationsWithNotes.map((it) => it.notes || ""),
+          notes,
           summaryLength,
         }),
       });
@@ -110,16 +158,50 @@ function StudentPageContent() {
       </Text>
       <StudentEvaluationsRecap evaluations={student.evaluations} mb="5" />
       <Text as="h2">Oppilaalle annetut huomioit</Text>
-      {evaluationsWithNotes.length > 0 ? (
+      {sortedEvaluations.length > 0 ? (
         <>
-          {evaluationsWithNotes.map((it) => (
-            <Box mb="2" key={it.id}>
-              <Text fontStyle="italic">
-                {formatDate(it.collection.date, "dd.MM.yyyy")}:
-              </Text>
-              <Text>{it.notes}</Text>
-            </Box>
-          ))}
+          <Accordion
+            index={expandedAccordionIndex}
+            onChange={(i) =>
+              setExpandedAccordionIndex(Array.isArray(i) ? i[0] : i)
+            }
+          >
+            {sortedEvaluations.map((it, i) => (
+              <AccordionItem
+                title={`${formatDate(it.collection.date, "dd.MM.yyyy")} - ${
+                  it.collection.type
+                }`}
+                key={it.id}
+                ref={(ref) => {
+                  accordionItemRefs.current[i] = ref;
+                }}
+              >
+                <Text>
+                  Käyttäytyminen:{" "}
+                  {formatRatingStringWithNull(it.behaviourRating)}
+                </Text>
+                <Text>
+                  Taidot: {formatRatingStringWithNull(it.skillsRating)}
+                </Text>
+                {it.notes ? (
+                  <Box mt="3">
+                    <Text mb="1">Huomiot:</Text>
+                    <Text>{it.notes}</Text>
+                  </Box>
+                ) : (
+                  <Text mt="3">Ei erityisiä huomioita annettu</Text>
+                )}
+                <Button
+                  as={Link}
+                  href={`/evaluation/${it.id}/edit`}
+                  mt="3"
+                  size="sm"
+                >
+                  Muokkaa
+                </Button>
+              </AccordionItem>
+            ))}
+          </Accordion>
           <Box my="5">
             <Text as="h2">Testaa palautteen generointia</Text>
             <FormLabel>Palautteen pituus</FormLabel>

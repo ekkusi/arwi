@@ -44,6 +44,12 @@ const resolvers: QueryResolvers<CustomContext> = {
     });
     return matchingStudent;
   },
+  getEvaluation: async (_, { id }, { prisma }) => {
+    const matchingEvaluation = await prisma.evaluation.findFirstOrThrow({
+      where: { id },
+    });
+    return matchingEvaluation;
+  },
 };
 
 export default resolvers;

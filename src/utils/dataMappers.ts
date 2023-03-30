@@ -59,3 +59,9 @@ export const getRatingEmoji = (rating: Rating) => {
       return "🙁";
   }
 };
+
+export const formatRatingStringWithNull = (
+  rating: Rating | null | undefined
+) => {
+  return rating ? formatRatingString(rating) : "Ei arvioitu";
+};

@@ -46,6 +46,7 @@ export type Query = {
   getGroup: Group;
   getCollection: EvaluationCollection;
   getStudent: Student;
+  getEvaluation: Evaluation;
 };
 
 export type QueryGetTeacherArgs = {
@@ -68,6 +69,10 @@ export type QueryGetStudentArgs = {
   id: Scalars["ID"];
 };
 
+export type QueryGetEvaluationArgs = {
+  id: Scalars["ID"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   register: Teacher;
@@ -78,6 +83,7 @@ export type Mutation = {
   updateEvaluations: Scalars["Int"];
   updateStudent: Student;
   updateGroup: Group;
+  updateEvaluation: Evaluation;
   deleteStudent: Scalars["Boolean"];
   deleteGroup: Scalars["Boolean"];
   deleteCollection: Scalars["Boolean"];
@@ -119,6 +125,10 @@ export type MutationUpdateStudentArgs = {
 export type MutationUpdateGroupArgs = {
   data: UpdateGroupInput;
   groupId: Scalars["ID"];
+};
+
+export type MutationUpdateEvaluationArgs = {
+  data: UpdateEvaluationInput;
 };
 
 export type MutationDeleteStudentArgs = {
@@ -233,7 +243,7 @@ export type CreateEvaluationInput = {
 
 export type UpdateEvaluationInput = {
   id: Scalars["ID"];
-  wasPresent: Scalars["Boolean"];
+  wasPresent?: InputMaybe<Scalars["Boolean"]>;
   skillsRating?: InputMaybe<Rating>;
   behaviourRating?: InputMaybe<Rating>;
   notes?: InputMaybe<Scalars["String"]>;
@@ -450,6 +460,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetStudentArgs, "id">
   >;
+  getEvaluation?: Resolver<
+    ResolversTypes["Evaluation"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetEvaluationArgs, "id">
+  >;
 };
 
 export type MutationResolvers<
@@ -503,6 +519,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateGroupArgs, "data" | "groupId">
+  >;
+  updateEvaluation?: Resolver<
+    ResolversTypes["Evaluation"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateEvaluationArgs, "data">
   >;
   deleteStudent?: Resolver<
     ResolversTypes["Boolean"],

@@ -1,5 +1,9 @@
 import { Prisma } from "@prisma/client";
-import { UpdateGroupInput, UpdateStudentInput } from "../types";
+import {
+  UpdateEvaluationInput,
+  UpdateGroupInput,
+  UpdateStudentInput,
+} from "../types";
 
 export const mapUpdateStudentInput = (
   data: UpdateStudentInput
@@ -14,5 +18,15 @@ export const mapUpdateGroupInput = (
 ): Prisma.GroupUpdateInput => {
   return {
     name: data.name ? data.name : undefined,
+  };
+};
+
+export const mapUpdateEvaluationInput = (
+  data: UpdateEvaluationInput
+): Prisma.EvaluationUpdateInput => {
+  const { wasPresent, ...rest } = data;
+  return {
+    ...rest,
+    wasPresent: wasPresent || undefined,
   };
 };

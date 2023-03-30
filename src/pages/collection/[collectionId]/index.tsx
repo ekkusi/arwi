@@ -4,8 +4,8 @@ import { serverRequest } from "@/pages/api/graphql";
 
 import { Box, Text } from "@chakra-ui/react";
 import BackwardsLink from "@/components/general/BackwardsLink";
-import { CollectionPage_GetCollectionQuery, Rating } from "@/gql/graphql";
-import { formatRatingString } from "@/utils/dataMappers";
+import { CollectionPage_GetCollectionQuery } from "@/gql/graphql";
+import { formatRatingStringWithNull } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
 import { GetStaticPropsContext } from "next";
 import graphqlClient from "@/graphql-client";
@@ -61,10 +61,6 @@ export default function CollectionPage({
 
   const { getCollection: collection } = data;
 
-  const getRatingString = (rating: Rating | null | undefined) => {
-    return rating ? formatRatingString(rating) : "Ei arvioitu";
-  };
-
   return (
     <PageWrapper>
       <BackwardsLink href={`/group/${collection.group?.id}`}>
@@ -85,9 +81,12 @@ export default function CollectionPage({
               {evaluation.wasPresent ? "Paikalla" : "Poissa"}
             </Text>
             <Text>
-              Käyttäytyminen: {getRatingString(evaluation.behaviourRating)}
+              Käyttäytyminen:{" "}
+              {formatRatingStringWithNull(evaluation.behaviourRating)}
             </Text>
-            <Text>Taidot: {getRatingString(evaluation.skillsRating)}</Text>
+            <Text>
+              Taidot: {formatRatingStringWithNull(evaluation.skillsRating)}
+            </Text>
             {!!evaluation.notes && <Text mt="2">{evaluation.notes}</Text>}
           </Box>
         ))

@@ -5,6 +5,7 @@ type Query {
   getGroup(id: ID!): Group!
   getCollection(id: ID!): EvaluationCollection!
   getStudent(id: ID!): Student!
+  getEvaluation(id: ID!): Evaluation!
 }
 
 type Mutation {
@@ -16,6 +17,7 @@ type Mutation {
   updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
+  updateEvaluation(data: UpdateEvaluationInput!): Evaluation!
   deleteStudent(studentId: ID!): Boolean!
   deleteGroup(groupId: ID!): Boolean!
   deleteCollection(collectionId: ID!): Boolean!
@@ -117,7 +119,7 @@ input CreateEvaluationInput {
 
 input UpdateEvaluationInput {
   id: ID!
-  wasPresent: Boolean!
+  wasPresent: Boolean
   skillsRating: Rating
   behaviourRating: Rating
   notes: String
