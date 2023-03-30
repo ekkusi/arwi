@@ -62,6 +62,7 @@ export default function GroupList({
   ...rest
 }: GroupListProps) {
   const groups = getFragmentData(GroupList_GroupFragment, groupFragments);
+
   const [selectedGroup, setSelectedGroup] = useState<
     GroupFragmentType | undefined
   >();

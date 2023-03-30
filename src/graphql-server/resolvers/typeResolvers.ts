@@ -9,7 +9,9 @@ const resolvers: TypeResolvers = {
         where: {
           teacherId: id,
         },
+        orderBy: { updatedAt: "desc" },
       });
+
       return groups;
     },
   },

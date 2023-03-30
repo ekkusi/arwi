@@ -153,6 +153,7 @@ export type Group = {
   students: Array<Student>;
   evaluationTypes?: Maybe<Array<Scalars["String"]>>;
   teacher: Teacher;
+  updatedAt: Scalars["Date"];
 };
 
 export type EvaluationCollection = {
@@ -563,6 +564,7 @@ export type GroupResolvers<
     ContextType
   >;
   teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

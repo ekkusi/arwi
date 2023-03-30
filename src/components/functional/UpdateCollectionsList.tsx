@@ -38,9 +38,11 @@ export default function UpdateCollectionsList({
   const [collectionInDelete, setCollectionInDelete] = useState<
     CollectionFragment | undefined
   >();
-  const [collections, setCollections] = useState<CollectionFragment[]>(() => [
-    ...initialCollections,
-  ]);
+  const [collections, setCollections] = useState<CollectionFragment[]>(() =>
+    [...initialCollections].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
+  );
 
   const deleteSelectedCollection = async () => {
     if (!collectionInDelete) return;

@@ -22,6 +22,7 @@ model Group {
   evaluationCollections EvaluationCollection[]
   teacher               Teacher                @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId             String
+  updatedAt             DateTime               @updatedAt @default(now())
 }
 
 model EvaluationCollection {

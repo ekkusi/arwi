@@ -77,14 +77,18 @@ export default function UpdateStudentsList({
   const [studentInDelete, setStudentInDelete] = useState<
     StudentFragment | undefined
   >();
+  const sortStudents = (students: StudentFragment[]) => {
+    return students.sort((a, b) => a.name.localeCompare(b.name));
+  };
+
   const [students, setStudents] = useState<StudentFragment[]>(() => {
-    return [...initialStudents];
+    return sortStudents([...initialStudents]);
   });
   const [newStudentName, setNewStudentName] = useState("");
   const [addingStudent, setAddingStudent] = useState(false);
 
   useEffect(() => {
-    setStudents([...initialStudents]);
+    setStudents(sortStudents([...initialStudents]));
   }, [initialStudents]);
 
   const deleteSelectedStudent = async () => {

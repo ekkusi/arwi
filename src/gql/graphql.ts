@@ -139,6 +139,7 @@ export type Group = {
   students: Array<Student>;
   evaluationTypes?: Maybe<Array<Scalars["String"]>>;
   teacher: Teacher;
+  updatedAt: Scalars["Date"];
 };
 
 export type EvaluationCollection = {
@@ -251,22 +252,6 @@ export type GroupList_GroupFragmentFragment = {
   teacher: { __typename?: "Teacher"; id: string };
 } & { " $fragmentName"?: "GroupList_GroupFragmentFragment" };
 
-export type StudentParticipationList_StudentFragment = {
-  __typename?: "Student";
-  id: string;
-  name: string;
-} & { " $fragmentName"?: "StudentParticipationList_StudentFragment" };
-
-export type UpdateEvaluationCard_EvaluationFragment = {
-  __typename?: "Evaluation";
-  id: string;
-  wasPresent: boolean;
-  skillsRating?: Rating | null;
-  behaviourRating?: Rating | null;
-  notes?: string | null;
-  student: { __typename?: "Student"; id: string; name: string };
-} & { " $fragmentName"?: "UpdateEvaluationCard_EvaluationFragment" };
-
 export type UpdateCollectionsList_CollectionFragment = {
   __typename?: "EvaluationCollection";
   id: string;
@@ -321,6 +306,22 @@ export type UpdateStudentList_DeleteStudentMutation = {
   __typename?: "Mutation";
   deleteStudent: boolean;
 };
+
+export type UpdateEvaluationCard_EvaluationFragment = {
+  __typename?: "Evaluation";
+  id: string;
+  wasPresent: boolean;
+  skillsRating?: Rating | null;
+  behaviourRating?: Rating | null;
+  notes?: string | null;
+  student: { __typename?: "Student"; id: string; name: string };
+} & { " $fragmentName"?: "UpdateEvaluationCard_EvaluationFragment" };
+
+export type StudentParticipationList_StudentFragment = {
+  __typename?: "Student";
+  id: string;
+  name: string;
+} & { " $fragmentName"?: "StudentParticipationList_StudentFragment" };
 
 export type StudentEvaluationRecap_EvaluationFragment = {
   __typename?: "Evaluation";
@@ -379,36 +380,6 @@ export type CreateCollectionWithEvaluationsMutation = {
   };
 };
 
-export type CreateGroupWithoutStudentsMutationVariables = Exact<{
-  data: CreateGroupInput;
-}>;
-
-export type CreateGroupWithoutStudentsMutation = {
-  __typename?: "Mutation";
-  createGroup: {
-    __typename?: "Group";
-    id: string;
-    name: string;
-    teacher: { __typename?: "Teacher"; id: string };
-    students: Array<{ __typename?: "Student"; id: string }>;
-  };
-};
-
-export type CreateGroupWithStudentsMutationVariables = Exact<{
-  data: CreateGroupInput;
-}>;
-
-export type CreateGroupWithStudentsMutation = {
-  __typename?: "Mutation";
-  createGroup: {
-    __typename?: "Group";
-    id: string;
-    name: string;
-    teacher: { __typename?: "Teacher"; id: string };
-    students: Array<{ __typename?: "Student"; id: string; name: string }>;
-  };
-};
-
 export type CreateStudentMutationVariables = Exact<{
   data: CreateStudentInput;
   groupId: Scalars["ID"];
@@ -459,36 +430,6 @@ export type DeleteGroupMutation = {
   deleteGroup: boolean;
 };
 
-export type UpdateEvaluationsMutationVariables = Exact<{
-  data: Array<UpdateEvaluationInput> | UpdateEvaluationInput;
-  collectionId: Scalars["ID"];
-}>;
-
-export type UpdateEvaluationsMutation = {
-  __typename?: "Mutation";
-  updateEvaluations: number;
-};
-
-export type UpdateStudentMutationVariables = Exact<{
-  data: UpdateStudentInput;
-  studentId: Scalars["ID"];
-}>;
-
-export type UpdateStudentMutation = {
-  __typename?: "Mutation";
-  updateStudent: { __typename?: "Student"; id: string; name: string };
-};
-
-export type UpdateGroupMutationVariables = Exact<{
-  data: UpdateGroupInput;
-  groupId: Scalars["ID"];
-}>;
-
-export type UpdateGroupMutation = {
-  __typename?: "Mutation";
-  updateGroup: { __typename?: "Group"; id: string; name: string };
-};
-
 export type GetTeacherQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
@@ -498,16 +439,33 @@ export type GetTeacherQuery = {
   getTeacher: { __typename?: "Teacher"; id: string; email: string };
 };
 
-export type Auth_LoginMutationVariables = Exact<{
-  email: Scalars["String"];
-  password: Scalars["String"];
+export type CreateGroupWithoutStudentsMutationVariables = Exact<{
+  data: CreateGroupInput;
 }>;
 
-export type Auth_LoginMutation = {
+export type CreateGroupWithoutStudentsMutation = {
   __typename?: "Mutation";
-  login: {
-    __typename?: "LoginResult";
-    teacher: { __typename?: "Teacher"; id: string; email: string };
+  createGroup: {
+    __typename?: "Group";
+    id: string;
+    name: string;
+    teacher: { __typename?: "Teacher"; id: string };
+    students: Array<{ __typename?: "Student"; id: string }>;
+  };
+};
+
+export type CreateGroupWithStudentsMutationVariables = Exact<{
+  data: CreateGroupInput;
+}>;
+
+export type CreateGroupWithStudentsMutation = {
+  __typename?: "Mutation";
+  createGroup: {
+    __typename?: "Group";
+    id: string;
+    name: string;
+    teacher: { __typename?: "Teacher"; id: string };
+    students: Array<{ __typename?: "Student"; id: string; name: string }>;
   };
 };
 
@@ -520,24 +478,24 @@ export type RegisterMutation = {
   register: { __typename?: "Teacher"; id: string; email: string };
 };
 
-export type GroupOverviewPage_GetGroupQueryVariables = Exact<{
+export type UpdateGroupMutationVariables = Exact<{
+  data: UpdateGroupInput;
   groupId: Scalars["ID"];
 }>;
 
-export type GroupOverviewPage_GetGroupQuery = {
-  __typename?: "Query";
-  getGroup: {
-    __typename?: "Group";
-    id: string;
-    name: string;
-    students: Array<{ __typename?: "Student"; id: string; name: string }>;
-    evaluationCollections: Array<{
-      __typename?: "EvaluationCollection";
-      id: string;
-      date: string;
-      type: string;
-    }>;
-  };
+export type UpdateGroupMutation = {
+  __typename?: "Mutation";
+  updateGroup: { __typename?: "Group"; id: string; name: string };
+};
+
+export type UpdateStudentMutationVariables = Exact<{
+  data: UpdateStudentInput;
+  studentId: Scalars["ID"];
+}>;
+
+export type UpdateStudentMutation = {
+  __typename?: "Mutation";
+  updateStudent: { __typename?: "Student"; id: string; name: string };
 };
 
 export type CollectionPage_GetCollectionQueryVariables = Exact<{
@@ -564,13 +522,47 @@ export type CollectionPage_GetCollectionQuery = {
   };
 };
 
-export type CreateGroupPage_CreateGroupMutationVariables = Exact<{
-  input: CreateGroupInput;
+export type GroupOverviewPage_GetGroupQueryVariables = Exact<{
+  groupId: Scalars["ID"];
 }>;
 
-export type CreateGroupPage_CreateGroupMutation = {
+export type GroupOverviewPage_GetGroupQuery = {
+  __typename?: "Query";
+  getGroup: {
+    __typename?: "Group";
+    id: string;
+    name: string;
+    students: Array<{ __typename?: "Student"; id: string; name: string }>;
+    evaluationCollections: Array<{
+      __typename?: "EvaluationCollection";
+      id: string;
+      date: string;
+      type: string;
+    }>;
+  };
+};
+
+export type UpdateEvaluationsMutationVariables = Exact<{
+  data: Array<UpdateEvaluationInput> | UpdateEvaluationInput;
+  collectionId: Scalars["ID"];
+}>;
+
+export type UpdateEvaluationsMutation = {
   __typename?: "Mutation";
-  createGroup: { __typename?: "Group"; id: string; name: string };
+  updateEvaluations: number;
+};
+
+export type Auth_LoginMutationVariables = Exact<{
+  email: Scalars["String"];
+  password: Scalars["String"];
+}>;
+
+export type Auth_LoginMutation = {
+  __typename?: "Mutation";
+  login: {
+    __typename?: "LoginResult";
+    teacher: { __typename?: "Teacher"; id: string; email: string };
+  };
 };
 
 export type StudentPage_GetStudentQueryVariables = Exact<{
@@ -597,6 +589,15 @@ export type StudentPage_GetStudentQuery = {
       }
     >;
   };
+};
+
+export type CreateGroupPage_CreateGroupMutationVariables = Exact<{
+  input: CreateGroupInput;
+}>;
+
+export type CreateGroupPage_CreateGroupMutation = {
+  __typename?: "Mutation";
+  createGroup: { __typename?: "Group"; id: string; name: string };
 };
 
 export type UpdateEvaluationsPage_GetCollectionQueryVariables = Exact<{
@@ -741,60 +742,6 @@ export const GroupList_GroupFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GroupList_GroupFragmentFragment, unknown>;
-export const StudentParticipationList_StudentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "StudentParticipationList_Student" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Student" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "name" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<StudentParticipationList_StudentFragment, unknown>;
-export const UpdateEvaluationCard_EvaluationFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "UpdateEvaluationCard_Evaluation" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Evaluation" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
-          { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
-          { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
-          { kind: "Field", name: { kind: "Name", value: "notes" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "student" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<UpdateEvaluationCard_EvaluationFragment, unknown>;
 export const UpdateCollectionsList_CollectionFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -836,6 +783,60 @@ export const UpdateStudentsList_StudentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<UpdateStudentsList_StudentFragment, unknown>;
+export const UpdateEvaluationCard_EvaluationFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "UpdateEvaluationCard_Evaluation" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Evaluation" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+          { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
+          { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
+          { kind: "Field", name: { kind: "Name", value: "notes" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "student" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateEvaluationCard_EvaluationFragment, unknown>;
+export const StudentParticipationList_StudentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "StudentParticipationList_Student" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Student" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<StudentParticipationList_StudentFragment, unknown>;
 export const StudentEvaluationRecap_EvaluationFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -1429,151 +1430,6 @@ export const CreateCollectionWithEvaluationsDocument = {
   CreateCollectionWithEvaluationsMutation,
   CreateCollectionWithEvaluationsMutationVariables
 >;
-export const CreateGroupWithoutStudentsDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "CreateGroupWithoutStudents" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "CreateGroupInput" },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "createGroup" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "data" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "data" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "teacher" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "students" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  CreateGroupWithoutStudentsMutation,
-  CreateGroupWithoutStudentsMutationVariables
->;
-export const CreateGroupWithStudentsDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "CreateGroupWithStudents" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "CreateGroupInput" },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "createGroup" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "data" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "data" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "teacher" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "students" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "name" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  CreateGroupWithStudentsMutation,
-  CreateGroupWithStudentsMutationVariables
->;
 export const CreateStudentDocument = {
   kind: "Document",
   definitions: [
@@ -1860,13 +1716,59 @@ export const DeleteGroupDocument = {
     },
   ],
 } as unknown as DocumentNode<DeleteGroupMutation, DeleteGroupMutationVariables>;
-export const UpdateEvaluationsDocument = {
+export const GetTeacherDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetTeacher" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getTeacher" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetTeacherQuery, GetTeacherQueryVariables>;
+export const CreateGroupWithoutStudentsDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "UpdateEvaluations" },
+      name: { kind: "Name", value: "CreateGroupWithoutStudents" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -1874,14 +1776,202 @@ export const UpdateEvaluationsDocument = {
           type: {
             kind: "NonNullType",
             type: {
-              kind: "ListType",
-              type: {
-                kind: "NonNullType",
-                type: {
-                  kind: "NamedType",
-                  name: { kind: "Name", value: "UpdateEvaluationInput" },
+              kind: "NamedType",
+              name: { kind: "Name", value: "CreateGroupInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createGroup" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "data" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "data" },
                 },
               },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "teacher" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "students" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateGroupWithoutStudentsMutation,
+  CreateGroupWithoutStudentsMutationVariables
+>;
+export const CreateGroupWithStudentsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateGroupWithStudents" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CreateGroupInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createGroup" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "data" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "data" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "teacher" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "students" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateGroupWithStudentsMutation,
+  CreateGroupWithStudentsMutationVariables
+>;
+export const RegisterDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "Register" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CreateTeacherInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "register" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "data" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "data" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const UpdateGroupDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "UpdateGroup" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UpdateGroupInput" },
             },
           },
         },
@@ -1889,7 +1979,7 @@ export const UpdateEvaluationsDocument = {
           kind: "VariableDefinition",
           variable: {
             kind: "Variable",
-            name: { kind: "Name", value: "collectionId" },
+            name: { kind: "Name", value: "groupId" },
           },
           type: {
             kind: "NonNullType",
@@ -1902,7 +1992,7 @@ export const UpdateEvaluationsDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "updateEvaluations" },
+            name: { kind: "Name", value: "updateGroup" },
             arguments: [
               {
                 kind: "Argument",
@@ -1914,22 +2004,26 @@ export const UpdateEvaluationsDocument = {
               },
               {
                 kind: "Argument",
-                name: { kind: "Name", value: "collectionId" },
+                name: { kind: "Name", value: "groupId" },
                 value: {
                   kind: "Variable",
-                  name: { kind: "Name", value: "collectionId" },
+                  name: { kind: "Name", value: "groupId" },
                 },
               },
             ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
           },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<
-  UpdateEvaluationsMutation,
-  UpdateEvaluationsMutationVariables
->;
+} as unknown as DocumentNode<UpdateGroupMutation, UpdateGroupMutationVariables>;
 export const UpdateStudentDocument = {
   kind: "Document",
   definitions: [
@@ -2000,327 +2094,6 @@ export const UpdateStudentDocument = {
 } as unknown as DocumentNode<
   UpdateStudentMutation,
   UpdateStudentMutationVariables
->;
-export const UpdateGroupDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "UpdateGroup" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "UpdateGroupInput" },
-            },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "groupId" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "updateGroup" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "data" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "data" },
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "groupId" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "groupId" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<UpdateGroupMutation, UpdateGroupMutationVariables>;
-export const GetTeacherDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "GetTeacher" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "getTeacher" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "id" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "id" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "email" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetTeacherQuery, GetTeacherQueryVariables>;
-export const Auth_LoginDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "Auth_Login" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "email" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "String" },
-            },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "password" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "String" },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "login" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "email" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "email" },
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "password" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "password" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "teacher" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "email" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<Auth_LoginMutation, Auth_LoginMutationVariables>;
-export const RegisterDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "Register" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "CreateTeacherInput" },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "register" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "data" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "data" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "email" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
-export const GroupOverviewPage_GetGroupDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "GroupOverviewPage_GetGroup" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "groupId" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "getGroup" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "id" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "groupId" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "students" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "name" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "evaluationCollections" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "date" } },
-                      { kind: "Field", name: { kind: "Name", value: "type" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GroupOverviewPage_GetGroupQuery,
-  GroupOverviewPage_GetGroupQueryVariables
 >;
 export const CollectionPage_GetCollectionDocument = {
   kind: "Document",
@@ -2426,25 +2199,184 @@ export const CollectionPage_GetCollectionDocument = {
   CollectionPage_GetCollectionQuery,
   CollectionPage_GetCollectionQueryVariables
 >;
-export const CreateGroupPage_CreateGroupDocument = {
+export const GroupOverviewPage_GetGroupDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "CreateGroupPage_CreateGroup" },
+      operation: "query",
+      name: { kind: "Name", value: "GroupOverviewPage_GetGroup" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
           variable: {
             kind: "Variable",
-            name: { kind: "Name", value: "input" },
+            name: { kind: "Name", value: "groupId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getGroup" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "groupId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "students" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "evaluationCollections" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "date" } },
+                      { kind: "Field", name: { kind: "Name", value: "type" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GroupOverviewPage_GetGroupQuery,
+  GroupOverviewPage_GetGroupQueryVariables
+>;
+export const UpdateEvaluationsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "UpdateEvaluations" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "ListType",
+              type: {
+                kind: "NonNullType",
+                type: {
+                  kind: "NamedType",
+                  name: { kind: "Name", value: "UpdateEvaluationInput" },
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "collectionId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateEvaluations" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "data" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "data" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "collectionId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "collectionId" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdateEvaluationsMutation,
+  UpdateEvaluationsMutationVariables
+>;
+export const Auth_LoginDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "Auth_Login" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "email" },
           },
           type: {
             kind: "NonNullType",
             type: {
               kind: "NamedType",
-              name: { kind: "Name", value: "CreateGroupInput" },
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "password" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
             },
           },
         },
@@ -2454,22 +2386,39 @@ export const CreateGroupPage_CreateGroupDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "createGroup" },
+            name: { kind: "Name", value: "login" },
             arguments: [
               {
                 kind: "Argument",
-                name: { kind: "Name", value: "data" },
+                name: { kind: "Name", value: "email" },
                 value: {
                   kind: "Variable",
-                  name: { kind: "Name", value: "input" },
+                  name: { kind: "Name", value: "email" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "password" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "password" },
                 },
               },
             ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "teacher" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -2477,10 +2426,7 @@ export const CreateGroupPage_CreateGroupDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<
-  CreateGroupPage_CreateGroupMutation,
-  CreateGroupPage_CreateGroupMutationVariables
->;
+} as unknown as DocumentNode<Auth_LoginMutation, Auth_LoginMutationVariables>;
 export const StudentPage_GetStudentDocument = {
   kind: "Document",
   definitions: [
@@ -2590,6 +2536,61 @@ export const StudentPage_GetStudentDocument = {
 } as unknown as DocumentNode<
   StudentPage_GetStudentQuery,
   StudentPage_GetStudentQueryVariables
+>;
+export const CreateGroupPage_CreateGroupDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateGroupPage_CreateGroup" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CreateGroupInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createGroup" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "data" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateGroupPage_CreateGroupMutation,
+  CreateGroupPage_CreateGroupMutationVariables
 >;
 export const UpdateEvaluationsPage_GetCollectionDocument = {
   kind: "Document",

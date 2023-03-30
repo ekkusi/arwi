@@ -84,6 +84,7 @@ const resolvers: MutationResolvers<CustomContext> = {
           : undefined,
       },
     });
+
     await revalidateGroupData(res, groupId);
     return createdCollection;
   },
@@ -110,6 +111,16 @@ const resolvers: MutationResolvers<CustomContext> = {
       });
     });
     const results = await Promise.all(promises);
+    await prisma.evaluationCollection.update({
+      data: {
+        group: {
+          update: {
+            updatedAt: new Date(),
+          },
+        },
+      },
+      where: { id: collectionId },
+    });
 
     await revalidateCollectionData(res, collectionId);
 

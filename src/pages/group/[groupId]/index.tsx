@@ -46,6 +46,14 @@ function GroupOverviewPageContent() {
   if (!data) return <LoadingIndicator />;
   const { getGroup: group } = data;
 
+  const sortedStudents = group.students.sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
+  const sortedCollections = group.evaluationCollections.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+
   return (
     <PageWrapper>
       <IconButton
@@ -66,9 +74,9 @@ function GroupOverviewPageContent() {
       <Text as="h2" mb="5">
         Oppilaat:
       </Text>
-      {group.students.length > 0 ? (
+      {sortedStudents.length > 0 ? (
         <Flex flexDirection="column" mb="5">
-          {group.students.map((student) => (
+          {sortedStudents.map((student) => (
             <BorderedCard
               key={student.id}
               border="none"
@@ -92,9 +100,9 @@ function GroupOverviewPageContent() {
       <Text as="h2" mt="5">
         Arvioinnit:
       </Text>
-      {group.evaluationCollections.length > 0 ? (
+      {sortedCollections.length > 0 ? (
         <Box>
-          {group.evaluationCollections.map((collection) => (
+          {sortedCollections.map((collection) => (
             <Box key={collection.id}>
               <Text as="span" textStyle="italic" mr="1">
                 {formatDate(new Date(collection.date), "dd.MM.yyyy")}:

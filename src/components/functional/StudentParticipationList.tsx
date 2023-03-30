@@ -31,23 +31,28 @@ export default function StudentParticipationList({
     StudentParticipationList_StudentFragment,
     stundentFragments
   );
-  const [participations, setParticipations] = useState<StudentParticipation[]>(
-    () => {
-      return students.map((it) => ({
-        student: it,
-        wasPresent: true,
-      }));
-    }
-  );
-  // const [initialParticipationsSet, setInitialParticipationsSet] =
-  //   useState(false);
 
-  // Set initial participations
-  useEffect(() => {
-    const initialParticipations = students.map((it) => ({
+  const sortParticipations = (
+    initialStudents: readonly StudentFragmentType[]
+  ) => {
+    const unsortedParticipations = initialStudents.map((it) => ({
       student: it,
       wasPresent: true,
     }));
+    return unsortedParticipations.sort((a, b) =>
+      a.student.name.localeCompare(b.student.name)
+    );
+  };
+
+  const [participations, setParticipations] = useState<StudentParticipation[]>(
+    () => {
+      return sortParticipations(students);
+    }
+  );
+
+  // Set initial participations
+  useEffect(() => {
+    const initialParticipations = sortParticipations(students);
     onChange?.(initialParticipations);
     setParticipations(initialParticipations);
   }, [onChange, students]);

@@ -39,6 +39,7 @@ type Group {
   students: [Student!]!
   evaluationTypes: [String!]
   teacher: Teacher!
+  updatedAt: Date!
 }
 
 type EvaluationCollection {
