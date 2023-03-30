@@ -27,6 +27,6 @@ export const mapUpdateEvaluationInput = (
   const { wasPresent, ...rest } = data;
   return {
     ...rest,
-    wasPresent: wasPresent || undefined,
+    wasPresent: wasPresent === null ? undefined : wasPresent,
   };
 };
