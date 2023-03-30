@@ -60,6 +60,9 @@ export default function CollectionPage({
   if (!data) return <LoadingIndicator />;
 
   const { getCollection: collection } = data;
+  const sortedEvaluations = collection.evaluations.sort((a, b) =>
+    a.student.name.localeCompare(b.student.name)
+  );
 
   return (
     <PageWrapper>
@@ -73,8 +76,8 @@ export default function CollectionPage({
         Päivämäärä: {formatDate(new Date(collection.date), "dd.MM.yyyy")}
       </Text>
       <Text as="h2">Arvioinnit:</Text>
-      {collection.evaluations.length > 0 ? (
-        collection.evaluations.map((evaluation) => (
+      {sortedEvaluations.length > 0 ? (
+        sortedEvaluations.map((evaluation) => (
           <Box key={evaluation.id} mb="2">
             <Text fontWeight="semibold">{evaluation.student.name}</Text>
             <Text color={evaluation.wasPresent ? "green" : "red"}>
