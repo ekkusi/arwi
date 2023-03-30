@@ -27,6 +27,9 @@ const UpdateEvaluationsPage_GetCollection_Query = graphql(`
         skillsRating
         behaviourRating
         notes
+        student {
+          name
+        }
         ...UpdateEvaluationCard_Evaluation
       }
     }
@@ -78,6 +81,9 @@ function UpdateEvaluationsPageContent() {
   if (!data || !evaluations) return <LoadingIndicator />;
 
   const { getCollection: collection } = data;
+  const sortedEvaluations = collection.evaluations
+    .filter((e) => e.wasPresent)
+    .sort((a, b) => a.student.name.localeCompare(b.student.name));
 
   const onChanged = (evaluation: Evaluation) => {
     const newEvaluations = evaluations.map((e) => {
@@ -150,8 +156,8 @@ function UpdateEvaluationsPageContent() {
           }
         }}
       >
-        {data.getCollection.evaluations.length > 0 ? (
-          data.getCollection.evaluations.map((evaluation, index) => (
+        {sortedEvaluations.length > 0 ? (
+          sortedEvaluations.map((evaluation, index) => (
             <UpdateEvaluationCard
               key={evaluation.id}
               scrollSnapAlign={
