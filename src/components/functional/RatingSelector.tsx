@@ -4,7 +4,7 @@ import { formatRatingNumberString } from "@/utils/dataMappers";
 import { useState } from "react";
 
 type RatingSelecterProps = Omit<FlexProps, "onChange"> & {
-  onChange: (rating: Rating) => void;
+  onChange: (rating: Rating | null) => void;
   initialRating?: Rating | null;
 };
 
@@ -17,6 +17,11 @@ export default function RatingSelecter({
     initialRating || null
   );
   const onRatingClick = (rating: Rating) => {
+    if (selectedRating === rating) {
+      setSelectedRating(null);
+      onChange(null);
+      return;
+    }
     setSelectedRating(rating);
     onChange(rating);
   };
