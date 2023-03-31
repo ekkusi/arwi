@@ -72,9 +72,7 @@ export default function CollectionPage({
       <Text as="h1">Arvioinnin yhteenveto</Text>
       <Text as="h2">Ryhmä: {collection.group?.name}</Text>
       <Text>Tyyppi: {collection.type}</Text>
-      <Text mb="3">
-        Päivämäärä: {formatDate(new Date(collection.date), "dd.MM.yyyy")}
-      </Text>
+      <Text mb="3">Päivämäärä: {formatDate(new Date(collection.date))}</Text>
       <Text as="h2">Arvioinnit:</Text>
       {sortedEvaluations.length > 0 ? (
         sortedEvaluations.map((evaluation) => (

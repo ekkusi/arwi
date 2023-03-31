@@ -103,7 +103,7 @@ export default function UpdateCollectionsList({
           Oletko varma, että haluat poistaa arvioinnin{" "}
           <Text as="span" fontStyle="italic">
             {collectionInDelete &&
-              `${formatDate(new Date(collectionInDelete.date), "dd.MM.yyyy")} ${
+              `${formatDate(new Date(collectionInDelete.date))} ${
                 collectionInDelete.type
               }`}
           </Text>

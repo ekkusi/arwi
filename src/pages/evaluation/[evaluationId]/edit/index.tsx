@@ -10,8 +10,9 @@ import {
 } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { serverRequest } from "@/pages/api/graphql";
+import { formatDate } from "@/utils/dateUtils";
 import { assertIsError, getErrorMessage } from "@/utils/errorUtils";
-import { Button, useToast } from "@chakra-ui/react";
+import { Button, Text, useToast } from "@chakra-ui/react";
 import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -26,6 +27,10 @@ const EvaluationEditPage_GetEvaluation_Query = graphql(`
       behaviourRating
       student {
         id
+      }
+      collection {
+        date
+        type
       }
       ...UpdateEvaluationCard_Evaluation
     }
@@ -54,7 +59,7 @@ function EvaluationEditPageContent() {
   );
   const toast = useToast();
 
-  const [evaluation, setEvaluation] = useState<
+  const [evaluationData, setEvaluationData] = useState<
     UpdateEvaluationCard_EvaluationFragment | undefined
   >(() =>
     data
@@ -68,7 +73,7 @@ function EvaluationEditPageContent() {
 
   useEffect(() => {
     if (data) {
-      setEvaluation(
+      setEvaluationData(
         getFragmentData(
           UpdateEvaluationCard_EvaluationFragmentDoc,
           data.getEvaluation
@@ -77,12 +82,14 @@ function EvaluationEditPageContent() {
     }
   }, [data]);
 
-  if (!data || !evaluation) return <LoadingIndicator />;
+  if (!data || !evaluationData) return <LoadingIndicator />;
+
+  const { getEvaluation: evaluation } = data;
 
   const onChanged = (
     newEvaluation: UpdateEvaluationCard_EvaluationFragment
   ) => {
-    setEvaluation(newEvaluation);
+    setEvaluationData(newEvaluation);
   };
 
   // Add evaluations and navigate to the collection page
@@ -93,10 +100,10 @@ function EvaluationEditPageContent() {
         EvaluationsEditPage_UpdateEvaluation_Mutation,
         {
           input: {
-            id: evaluation.id,
-            skillsRating: evaluation.skillsRating,
-            behaviourRating: evaluation.behaviourRating,
-            notes: evaluation.notes,
+            id: evaluationData.id,
+            skillsRating: evaluationData.skillsRating,
+            behaviourRating: evaluationData.behaviourRating,
+            notes: evaluationData.notes,
           },
         }
       );
@@ -126,16 +133,19 @@ function EvaluationEditPageContent() {
       <BackwardsLink href={`/student/${evaluation.student.id}`} mb="3">
         Takaisin yhteenvetoon
       </BackwardsLink>
+      <Text as="h1" textAlign="center">{`${formatDate(
+        evaluation.collection.date
+      )} - ${evaluation.collection.type}`}</Text>
       <UpdateEvaluationCard
         key={evaluation.id}
-        evaluation={data.getEvaluation}
+        evaluation={evaluation}
         onChanged={onChanged}
       />
       <Button
         isLoading={isUpdating}
         onClick={updateEvaluation}
         width="100%"
-        mt="6"
+        mt="3"
       >
         Tallenna
       </Button>

@@ -45,7 +45,7 @@ const CreateCollectionPage_CreateCollection_Mutation = graphql(`
 const initialValues = {
   type: "",
   description: "",
-  date: formatDate(new Date()),
+  date: formatDate(new Date(), "yyyy-MM-dd"),
 };
 
 function CreateCollectionPageContent() {

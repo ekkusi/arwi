@@ -105,7 +105,7 @@ function GroupOverviewPageContent() {
           {sortedCollections.map((collection) => (
             <Box key={collection.id}>
               <Text as="span" textStyle="italic" mr="1">
-                {formatDate(new Date(collection.date), "dd.MM.yyyy")}:
+                {formatDate(new Date(collection.date))}:
               </Text>
               <Text as={Link} href={`/collection/${collection.id}`}>
                 {collection.type}

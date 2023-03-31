@@ -46,7 +46,7 @@ export default function BottomNavigationBar() {
   return (
     <SimpleGrid
       columns={3}
-      py="2"
+      py="4"
       width="100%"
       position="fixed"
       zIndex="100"

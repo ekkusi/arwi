@@ -168,7 +168,7 @@ function StudentPageContent() {
           >
             {sortedEvaluations.map((it, i) => (
               <AccordionItem
-                title={`${formatDate(it.collection.date, "dd.MM.yyyy")} - ${
+                title={`${formatDate(it.collection.date)} - ${
                   it.collection.type
                 }`}
                 key={it.id}
