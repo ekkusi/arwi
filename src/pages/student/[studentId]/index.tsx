@@ -149,12 +149,8 @@ function StudentPageContent() {
       <BackwardsLink href={`/group/${student.group.id}`}>
         Takaisin ryhmän yhteenvetoon
       </BackwardsLink>
-      <Text as="h1">
-        Oppilaan{" "}
-        <Text as="span" fontStyle="italic">
-          {student.name}
-        </Text>{" "}
-        yhteenveto
+      <Text as="h1" textAlign="center" mb="2">
+        {student.name}
       </Text>
       <StudentEvaluationsRecap evaluations={student.evaluations} mb="5" />
       <Text as="h2">Kaikki arvioinnit</Text>
