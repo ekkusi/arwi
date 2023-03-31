@@ -80,6 +80,7 @@ function CreateCollectionPageContent() {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    const { description, ...rest } = values;
     setLoading(true);
     try {
       const { createCollection } = await graphqlClient.request(
@@ -87,7 +88,8 @@ function CreateCollectionPageContent() {
         {
           groupId: group.id,
           createCollectionInput: {
-            ...values,
+            description: description.length > 0 ? description : null,
+            ...rest,
             evaluations: participations.map((it) => ({
               studentId: it.student.id,
               wasPresent: it.wasPresent,

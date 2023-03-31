@@ -1,17 +1,24 @@
 import PageWrapper from "@/components/server-components/PageWrapper";
-import { graphql } from "@/gql";
+import { getFragmentData, graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
-import { Box, Text } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import BackwardsLink from "@/components/general/BackwardsLink";
-import { CollectionPage_GetCollectionQuery } from "@/gql/graphql";
-import { formatRatingStringWithNull } from "@/utils/dataMappers";
+import {
+  CollectionPage_GetCollectionQuery,
+  EvaluationsAccordion_EvaluationFragmentDoc,
+} from "@/gql/graphql";
 import { formatDate } from "@/utils/dateUtils";
 import { GetStaticPropsContext } from "next";
 import graphqlClient from "@/graphql-client";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
+import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import EvaluationsAccordion, {
+  EvaluationsAccordionHandlers,
+} from "@/components/functional/EvaluationsAccordion";
+import { useEffect, useRef } from "react";
 
 const CollectionPage_GetCollection_Query = graphql(`
   query CollectionPage_GetCollection($collectionId: ID!) {
@@ -19,20 +26,14 @@ const CollectionPage_GetCollection_Query = graphql(`
       id
       date
       type
+      description
       group {
         name
         id
       }
       evaluations {
         id
-        student {
-          id
-          name
-        }
-        wasPresent
-        skillsRating
-        behaviourRating
-        notes
+        ...EvaluationsAccordion_Evaluation
       }
     }
   }
@@ -48,6 +49,8 @@ export default function CollectionPage({
   const router = useRouter();
   const collectionId = router.query.collectionId as string;
 
+  const evaluationsAccordionRef = useRef<EvaluationsAccordionHandlers>(null);
+
   const { data } = useSWR<CollectionPage_GetCollectionQuery>(
     `collection/${collectionId}`,
     () =>
@@ -57,40 +60,69 @@ export default function CollectionPage({
     { fallbackData }
   );
 
+  useEffect(() => {
+    // Expand the evaluation matching the expandedEvaluationId query param if set
+    const { expandedEvaluationId } = router.query;
+    if (
+      !data ||
+      !expandedEvaluationId ||
+      typeof expandedEvaluationId !== "string"
+    )
+      return;
+
+    const expandedEvaluation = data.getCollection.evaluations.find(
+      (it) => it.id === expandedEvaluationId
+    );
+    if (!expandedEvaluation) return;
+
+    evaluationsAccordionRef.current?.expandEvaluation(
+      getFragmentData(
+        EvaluationsAccordion_EvaluationFragmentDoc,
+        expandedEvaluation
+      )
+    );
+  }, [router.query, data]);
   if (!data) return <LoadingIndicator />;
 
   const { getCollection: collection } = data;
-  const sortedEvaluations = collection.evaluations.sort((a, b) =>
-    a.student.name.localeCompare(b.student.name)
-  );
 
   return (
     <PageWrapper>
       <BackwardsLink href={`/group/${collection.group?.id}`}>
         Takaisin ryhmän yhteenvetoon
       </BackwardsLink>
-      <Text as="h1">Arvioinnin yhteenveto</Text>
-      <Text as="h2">Ryhmä: {collection.group?.name}</Text>
-      <Text>Tyyppi: {collection.type}</Text>
-      <Text mb="3">Päivämäärä: {formatDate(new Date(collection.date))}</Text>
+      <BorderedCard my="3" border="none">
+        <Text as="h1" textAlign="center" mb="2" fontSize="2xl">
+          Arvioinnin yhteenveto
+        </Text>
+        <Text>
+          <Text fontWeight="semibold" as="span">
+            Aihe:
+          </Text>{" "}
+          {collection.type}
+        </Text>
+        <Text>
+          <Text fontWeight="semibold" as="span">
+            Päivämäärä:
+          </Text>{" "}
+          {formatDate(new Date(collection.date))}
+        </Text>
+        <Text>
+          <Text fontWeight="semibold" as="span">
+            Ryhmä:
+          </Text>{" "}
+          {collection.group?.name}
+        </Text>
+        {collection.description && <Text mt="2">{collection.description}</Text>}
+      </BorderedCard>
       <Text as="h2">Arvioinnit:</Text>
-      {sortedEvaluations.length > 0 ? (
-        sortedEvaluations.map((evaluation) => (
-          <Box key={evaluation.id} mb="2">
-            <Text fontWeight="semibold">{evaluation.student.name}</Text>
-            <Text color={evaluation.wasPresent ? "green" : "red"}>
-              {evaluation.wasPresent ? "Paikalla" : "Poissa"}
-            </Text>
-            <Text>
-              Käyttäytyminen:{" "}
-              {formatRatingStringWithNull(evaluation.behaviourRating)}
-            </Text>
-            <Text>
-              Taidot: {formatRatingStringWithNull(evaluation.skillsRating)}
-            </Text>
-            {!!evaluation.notes && <Text mt="2">{evaluation.notes}</Text>}
-          </Box>
-        ))
+
+      {collection.evaluations.length > 0 ? (
+        <EvaluationsAccordion
+          ref={evaluationsAccordionRef}
+          titleFrom="student"
+          evaluations={collection.evaluations}
+        />
       ) : (
         <Text>Ei arviointeja</Text>
       )}

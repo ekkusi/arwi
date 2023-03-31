@@ -108,8 +108,11 @@ function EvaluationEditPageContent() {
         }
       );
       setIsUpdating(false);
+      const { prevPath } = router.query;
+      const redirectPath =
+        !!prevPath && typeof prevPath === "string" ? prevPath : "/";
       router.push({
-        pathname: `/student/${evaluation.student.id}`,
+        pathname: redirectPath,
         query: {
           expandedEvaluationId: evaluation.id,
         },

@@ -11,7 +11,7 @@ function PageWrapper(props: PageWrapperProps) {
       minHeight="100vh"
       width="100%"
       position="relative"
-      pb="calc(58px + var(--chakra-space-5))"
+      pb="calc(74px + var(--chakra-space-5))"
       {...props}
     />
   );

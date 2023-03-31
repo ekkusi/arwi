@@ -1,30 +1,25 @@
-import { graphql } from "@/gql";
+import { getFragmentData, graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
-import {
-  Accordion,
-  Box,
-  Button,
-  FormLabel,
-  Input,
-  Text,
-} from "@chakra-ui/react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { formatDate } from "@/utils/dateUtils";
+import { Box, Button, FormLabel, Input, Text } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import BackwardsLink from "@/components/general/BackwardsLink";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import StudentEvaluationsRecap from "@/components/server-components/StudentEvaluationsRecap";
-import { StudentPage_GetStudentQuery } from "@/gql/graphql";
+import {
+  EvaluationsAccordion_EvaluationFragmentDoc,
+  StudentPage_GetStudentQuery,
+} from "@/gql/graphql";
 import useSWR, { SWRConfig } from "swr";
 import { useRouter } from "next/router";
 import graphqlClient from "@/graphql-client";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { AiOutlineCheck } from "react-icons/ai";
-import AccordionItem from "@/components/general/AccordionItem";
-import { formatRatingStringWithNull } from "@/utils/dataMappers";
-import Link from "next/link";
+import EvaluationsAccordion, {
+  EvaluationsAccordionHandlers,
+} from "@/components/functional/EvaluationsAccordion";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
@@ -35,14 +30,9 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
         id
       }
       evaluations {
-        notes
         id
-        skillsRating
-        behaviourRating
-        collection {
-          date
-          type
-        }
+        notes
+        ...EvaluationsAccordion_Evaluation
         ...StudentEvaluationRecap_Evaluation
       }
     }
@@ -51,6 +41,7 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
 
 function StudentPageContent() {
   const router = useRouter();
+
   const studentId = router.query.studentId as string;
 
   const { data } = useSWR<StudentPage_GetStudentQuery>(
@@ -64,44 +55,33 @@ function StudentPageContent() {
   const [isGeneratingSummary, setIsGeneratingSumamry] =
     useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [expandedAccordionIndex, setExpandedAccordionIndex] = useState(-1);
-
-  const accordionItemRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const sortedEvaluations = useMemo(() => {
-    return data
-      ? data.getStudent.evaluations.sort(
-          (a, b) =>
-            new Date(b.collection.date).getTime() -
-            new Date(a.collection.date).getTime()
-        )
-      : [];
-  }, [data]);
+  const evaluationsAccordionRef = useRef<EvaluationsAccordionHandlers>(null);
 
   useEffect(() => {
+    // Expand the evaluation matching the expandedEvaluationId query param if set
     const { expandedEvaluationId } = router.query;
-    if (!expandedEvaluationId || typeof expandedEvaluationId !== "string")
-      return;
-
-    const expandedEvaluationIndex = sortedEvaluations.findIndex(
-      (it) => it.id === expandedEvaluationId
-    );
     if (
-      expandedEvaluationIndex < 0 ||
-      accordionItemRefs.current.length <= expandedEvaluationIndex
+      !data ||
+      !expandedEvaluationId ||
+      typeof expandedEvaluationId !== "string"
     )
       return;
-    accordionItemRefs.current[expandedEvaluationIndex]?.scrollIntoView();
-    setExpandedAccordionIndex(expandedEvaluationIndex);
-  }, [sortedEvaluations, router.query]);
+
+    const expandedEvaluation = data.getStudent.evaluations.find(
+      (it) => it.id === expandedEvaluationId
+    );
+    if (!expandedEvaluation) return;
+
+    evaluationsAccordionRef.current?.expandEvaluation(
+      getFragmentData(
+        EvaluationsAccordion_EvaluationFragmentDoc,
+        expandedEvaluation
+      )
+    );
+  }, [router.query, data]);
 
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
-
-  // const sortedEvaluations = student.evaluations.sort(
-  //   (a, b) =>
-  //     new Date(b.collection.date).getTime() -
-  //     new Date(a.collection.date).getTime()
-  // );
 
   const genearateSummary = async () => {
     if (summaryLength < 10 || summaryLength > 200) {
@@ -154,50 +134,12 @@ function StudentPageContent() {
       </Text>
       <StudentEvaluationsRecap evaluations={student.evaluations} mb="5" />
       <Text as="h2">Kaikki arvioinnit</Text>
-      {sortedEvaluations.length > 0 ? (
+      {student.evaluations.length > 0 ? (
         <>
-          <Accordion
-            index={expandedAccordionIndex}
-            onChange={(i) =>
-              setExpandedAccordionIndex(Array.isArray(i) ? i[0] : i)
-            }
-          >
-            {sortedEvaluations.map((it, i) => (
-              <AccordionItem
-                title={`${formatDate(it.collection.date)} - ${
-                  it.collection.type
-                }`}
-                key={it.id}
-                ref={(ref) => {
-                  accordionItemRefs.current[i] = ref;
-                }}
-              >
-                <Text>
-                  Käyttäytyminen:{" "}
-                  {formatRatingStringWithNull(it.behaviourRating)}
-                </Text>
-                <Text>
-                  Taidot: {formatRatingStringWithNull(it.skillsRating)}
-                </Text>
-                {it.notes ? (
-                  <Box mt="3">
-                    <Text mb="1">Huomiot:</Text>
-                    <Text>{it.notes}</Text>
-                  </Box>
-                ) : (
-                  <Text mt="3">Ei erityisiä huomioita annettu</Text>
-                )}
-                <Button
-                  as={Link}
-                  href={`/evaluation/${it.id}/edit`}
-                  mt="3"
-                  size="sm"
-                >
-                  Muokkaa
-                </Button>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <EvaluationsAccordion
+            ref={evaluationsAccordionRef}
+            evaluations={student.evaluations}
+          />
           <Box my="5">
             <Text as="h2">Loppuarvioinnin generointi</Text>
             <FormLabel>Palautteen pituus</FormLabel>
