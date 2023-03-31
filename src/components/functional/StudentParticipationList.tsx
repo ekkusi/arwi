@@ -88,7 +88,7 @@ export default function StudentParticipationList({
           <Text mr="1">{it.student.name}</Text>
           <Flex wrap="nowrap">
             <Button
-              size="sm"
+              size="xs"
               onClick={() => toggleStudentPresent(it)}
               variant={it.wasPresent ? "solid" : "outline"}
               borderRadius="lg"
@@ -98,7 +98,7 @@ export default function StudentParticipationList({
               Paikalla
             </Button>
             <Button
-              size="sm"
+              size="xs"
               onClick={() => toggleStudentNotPresent(it)}
               colorScheme="red"
               borderRadius="lg"

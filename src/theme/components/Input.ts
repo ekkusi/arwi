@@ -2,6 +2,7 @@ import {
   ComponentSingleStyleConfig,
   SystemStyleInterpolation,
   Input as _Input,
+  Textarea as _Textarea,
 } from "@chakra-ui/react";
 import { KeyboardEvent } from "react";
 
@@ -65,4 +66,8 @@ export const Textarea: ComponentSingleStyleConfig = {
     flushed: baseStyle,
     unstyled: baseStyle,
   },
+};
+
+_Textarea.defaultProps = {
+  minHeight: "32",
 };

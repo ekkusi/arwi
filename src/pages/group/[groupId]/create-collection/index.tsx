@@ -1,7 +1,7 @@
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
-import { Button, Text, BoxProps } from "@chakra-ui/react";
+import { Button, Text, BoxProps, Textarea } from "@chakra-ui/react";
 import FormField from "@/components/general/FormField";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
@@ -116,8 +116,19 @@ function CreateCollectionPageContent() {
             <Text as="h1" textAlign="center">
               Uusi arviointi
             </Text>
-            <FormField name="type" label="Tyyppi" validate={validateType} />
+            <FormField
+              name="type"
+              label="Aihe"
+              placeholder="Arvioinnin aihe"
+              validate={validateType}
+            />
             <FormField name="date" type="date" label="Päivämäärä" />
+            <FormField
+              as={Textarea}
+              label="Muita tietoja"
+              name="description"
+              placeholder="Muita tietoja arviointikertaan liittyen..."
+            />
             <Text as="h2">Oppilaat</Text>
             <StudentParticipationList
               students={group.students}
