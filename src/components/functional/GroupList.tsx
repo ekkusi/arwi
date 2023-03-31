@@ -63,6 +63,8 @@ export default function GroupList({
 }: GroupListProps) {
   const groups = getFragmentData(GroupList_GroupFragment, groupFragments);
 
+  const sortedGroups = [...groups].sort((a, b) => a.name.localeCompare(b.name));
+
   const [selectedGroup, setSelectedGroup] = useState<
     GroupFragmentType | undefined
   >();
@@ -108,7 +110,7 @@ export default function GroupList({
         </Flex>
       </DrawerTemplate>
       <Flex flexDirection="column" {...rest}>
-        {groups.map((it) => (
+        {sortedGroups.map((it) => (
           <GroupListItem
             key={it.id}
             group={it}

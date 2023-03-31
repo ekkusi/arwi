@@ -20,7 +20,6 @@ const resolvers: QueryResolvers<CustomContext> = {
   getGroups: async (_, { teacherId }, { prisma }) => {
     const groups = await prisma.group.findMany({
       where: { teacherId },
-      orderBy: { updatedAt: "desc" },
     });
     return groups;
   },
