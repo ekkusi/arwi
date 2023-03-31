@@ -157,7 +157,7 @@ function StudentPageContent() {
         yhteenveto
       </Text>
       <StudentEvaluationsRecap evaluations={student.evaluations} mb="5" />
-      <Text as="h2">Oppilaalle annetut huomioit</Text>
+      <Text as="h2">Kaikki arvioinnit</Text>
       {sortedEvaluations.length > 0 ? (
         <>
           <Accordion
@@ -203,7 +203,7 @@ function StudentPageContent() {
             ))}
           </Accordion>
           <Box my="5">
-            <Text as="h2">Testaa palautteen generointia</Text>
+            <Text as="h2">Loppuarvioinnin generointi</Text>
             <FormLabel>Palautteen pituus</FormLabel>
             <Input
               type="number"
