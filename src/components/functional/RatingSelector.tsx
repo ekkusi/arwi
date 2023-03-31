@@ -1,7 +1,7 @@
 import { Flex, Tag, Text, FlexProps } from "@chakra-ui/react";
 import { Rating } from "@/gql/graphql";
 import { formatRatingNumberString } from "@/utils/dataMappers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type RatingSelecterProps = Omit<FlexProps, "onChange"> & {
   onChange: (rating: Rating | null) => void;
@@ -16,6 +16,11 @@ export default function RatingSelecter({
   const [selectedRating, setSelectedRating] = useState<Rating | null>(
     initialRating || null
   );
+
+  useEffect(() => {
+    setSelectedRating(initialRating || null);
+  }, [initialRating]);
+
   const onRatingClick = (rating: Rating) => {
     if (selectedRating === rating) {
       setSelectedRating(null);

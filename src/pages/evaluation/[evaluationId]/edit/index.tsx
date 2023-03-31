@@ -67,13 +67,14 @@ function EvaluationEditPageContent() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    if (data)
+    if (data) {
       setEvaluation(
         getFragmentData(
           UpdateEvaluationCard_EvaluationFragmentDoc,
           data.getEvaluation
         )
       );
+    }
   }, [data]);
 
   if (!data || !evaluation) return <LoadingIndicator />;

@@ -41,6 +41,7 @@ export default function UpdateEvaluationCard({
   const [notes, setNotes] = useState(() => evaluation.notes || "");
 
   useEffect(() => {
+    setNotes(initialEvaluation.notes || "");
     setEvaluation(initialEvaluation);
   }, [initialEvaluation]);
 
