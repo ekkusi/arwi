@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Button, Text } from "@chakra-ui/react";
+import { Button, Flex, Text } from "@chakra-ui/react";
 import ModalTemplate from "@/components/general/ModalTemplate";
 import { useEffect, useState } from "react";
 
@@ -70,13 +70,16 @@ export default function ServiceWorkerProvider() {
   return (
     <ModalTemplate
       isOpen={isModalOpen}
+      isClosable={false}
+      headerLabel="Uusi päivitys saatavilla!"
       onClose={() => {
         setIsModalOpen(false);
       }}
     >
-      <Text>Uusi päivitys saatavilla!</Text>
-      <Text>Päivitä sovellus klikkaamalla alta.</Text>
-      <Button onClick={update}>Päivitä</Button>
+      <Text mb="3">Päivitä sovellus klikkaamalla alta.</Text>
+      <Flex justifyContent="center">
+        <Button onClick={update}>Päivitä</Button>
+      </Flex>
     </ModalTemplate>
   );
 }

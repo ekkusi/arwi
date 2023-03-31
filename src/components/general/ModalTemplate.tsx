@@ -6,6 +6,7 @@ import {
   ModalFooter,
   ModalFooterProps,
   ModalHeader,
+  ModalHeaderProps,
   ModalOverlay,
   ModalProps,
   useDisclosure,
@@ -16,20 +17,24 @@ export type ModalTemplateProps = Omit<
   "isOpen" | "onClose" | "onOpen"
 > & {
   headerLabel?: string;
+  headerProps?: ModalHeaderProps;
   isOpen?: boolean;
   onClose?: () => void;
   onOpen?: () => void;
   modalFooter?: JSX.Element;
   modalFooterProps?: ModalFooterProps;
+  isClosable?: boolean;
 };
 
 export default function ModalTemplate({
   headerLabel,
+  headerProps,
   isOpen: customIsOpen,
   onClose: customOnClose,
   onOpen: customOnOpen,
   modalFooter,
   modalFooterProps,
+  isClosable = true,
   children,
   ...rest
 }: ModalTemplateProps) {
@@ -40,11 +45,20 @@ export default function ModalTemplate({
   });
 
   return (
-    <Modal {...rest} {...disclosureProps}>
+    <Modal
+      closeOnEsc={isClosable}
+      closeOnOverlayClick={isClosable}
+      {...rest}
+      {...disclosureProps}
+    >
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
-        {headerLabel && <ModalHeader>{headerLabel}</ModalHeader>}
+        {isClosable && <ModalCloseButton />}
+        {headerLabel && (
+          <ModalHeader px={5} pb={1} {...headerProps}>
+            {headerLabel}
+          </ModalHeader>
+        )}
         <ModalBody px="5" pb="5" pt={headerLabel ? 0 : 5}>
           {children}
         </ModalBody>
