@@ -1,4 +1,4 @@
-import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import Card from "@/components/server-components/primitives/Card";
 import { Box, Text, BoxProps } from "@chakra-ui/react";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { evaluateStudent } from "@/utils/evaluationUtils";
@@ -39,7 +39,7 @@ export default function StudentEvaluationsRecap({
   };
 
   return (
-    <BorderedCard border="none" {...rest}>
+    <Card {...rest}>
       {evaluations.length > 0 ? (
         <>
           <Box>
@@ -92,6 +92,6 @@ export default function StudentEvaluationsRecap({
       ) : (
         <Text>Ei vielä arviointeja</Text>
       )}
-    </BorderedCard>
+    </Card>
   );
 }

@@ -1,17 +1,18 @@
 import { Box, BoxProps, forwardRef } from "@chakra-ui/react";
 
-export type BorderedCardProps = BoxProps;
+export type CardProps = BoxProps;
 
-export default forwardRef((props: BorderedCardProps, ref) => {
+export default forwardRef((props: CardProps, ref) => {
   return (
     <Box
       ref={ref}
       borderRadius="lg"
-      border="2px"
       boxShadow="md"
       bg="white"
       color="light-text"
-      p="4"
+      px="5"
+      py="4"
+      width="100%"
       {...props}
     />
   );

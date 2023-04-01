@@ -1,4 +1,4 @@
-import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import Card from "@/components/server-components/primitives/Card";
 import {
   Button,
   Flex,
@@ -34,11 +34,8 @@ function GroupListItem({
   ...rest
 }: GroupListItemProps) {
   return (
-    <BorderedCard
-      border="none"
-      px="5"
+    <Card
       py="2"
-      width="100%"
       onClick={() => onClick(groupData)}
       _hover={{
         cursor: "pointer",
@@ -49,7 +46,7 @@ function GroupListItem({
       {...rest}
     >
       <Text fontWeight="600">{groupData.name}</Text>
-    </BorderedCard>
+    </Card>
   );
 }
 

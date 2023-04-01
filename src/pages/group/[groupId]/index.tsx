@@ -1,12 +1,22 @@
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
-import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  IconButton,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+} from "@chakra-ui/react";
 import { formatDate } from "@/utils/dateUtils";
 import { FiEdit } from "react-icons/fi";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import Card from "@/components/server-components/primitives/Card";
 import { GroupOverviewPage_GetGroupQuery } from "@/gql/graphql";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
@@ -68,59 +78,68 @@ function GroupOverviewPageContent() {
         aria-label="Ryhmän muokkaukseen"
         href={`/group/${group.id}/edit`}
       />
-      <Text as="h1" mr="10">
-        Ryhmä: {group.name}
+      <Text as="h1" mr="10" textAlign="center">
+        {group.name}
       </Text>
-      <Text as="h2" mb="5">
-        Oppilaat:
-      </Text>
-      {sortedStudents.length > 0 ? (
-        <Flex flexDirection="column" mb="5">
-          {sortedStudents.map((student) => (
-            <BorderedCard
-              key={student.id}
-              border="none"
-              borderRadius="lg"
-              px="5"
-              py="2"
-              width="100%"
-              as={Link}
-              href={`/student/${student.id}`}
-              _notLast={{ mb: 3 }}
-            >
-              {student.name}
-            </BorderedCard>
-          ))}
-        </Flex>
-      ) : (
-        <Box mb="5">
-          <Text>Ei oppilaita</Text>
-        </Box>
-      )}
-      <Text as="h2" mt="5">
-        Arvioinnit:
-      </Text>
-      {sortedCollections.length > 0 ? (
-        <Box>
-          {sortedCollections.map((collection) => (
-            <Box key={collection.id}>
-              <Text as="span" textStyle="italic" mr="1">
-                {formatDate(new Date(collection.date))}:
-              </Text>
-              <Text as={Link} href={`/collection/${collection.id}`}>
-                {collection.type}
-              </Text>
-            </Box>
-          ))}
-        </Box>
-      ) : (
-        <>
-          <Text>Ei vielä arviointeja</Text>
-          <Text as={Link} href={`/group/${group.id}/create-collection`}>
-            Siirry tekemään arviointi
-          </Text>
-        </>
-      )}
+      <Tabs isFitted>
+        <TabList>
+          <Tab>Oppilaat</Tab>
+          <Tab>Arvioinnit</Tab>
+          <Tab>Tavoitteet</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            {sortedStudents.length > 0 ? (
+              <Flex flexDirection="column">
+                {sortedStudents.map((student) => (
+                  <Card
+                    as={Link}
+                    key={student.id}
+                    py="2"
+                    href={`/student/${student.id}`}
+                    _notLast={{ mb: 3 }}
+                  >
+                    {student.name}
+                  </Card>
+                ))}
+              </Flex>
+            ) : (
+              <Text>Ei oppilaita</Text>
+            )}
+          </TabPanel>
+          <TabPanel>
+            {sortedCollections.length > 0 ? (
+              <Flex flexDirection="column">
+                {sortedCollections.map((collection) => (
+                  <Card
+                    key={collection.id}
+                    as={Link}
+                    href={`/collection/${collection.id}`}
+                    py="2"
+                    _notLast={{ mb: 3 }}
+                  >
+                    {formatDate(new Date(collection.date))}: {collection.type}
+                  </Card>
+                ))}
+              </Flex>
+            ) : (
+              <>
+                <Text mb="3">Arviointeja ryhmälle ei vielä olla tehty</Text>
+                <Button
+                  as={Link}
+                  width="100%"
+                  href={`/group/${group.id}/create-collection`}
+                >
+                  Tee arviointi
+                </Button>
+              </>
+            )}
+          </TabPanel>
+          <TabPanel>
+            <Text>Tavoitteet ovat toistaiseksi työnalla</Text>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </PageWrapper>
   );
 }

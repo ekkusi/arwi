@@ -8,7 +8,7 @@ import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import Card from "@/components/server-components/primitives/Card";
 import Link from "next/link";
 import AddStudentsList from "@/components/functional/AddStudentsList";
 
@@ -58,12 +58,7 @@ export default function CreateGroupPage() {
     <PageWrapper display="flex" flexDirection="column">
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {() => (
-          <BorderedCard
-            as={Form}
-            display="flex"
-            flexDirection="column"
-            flex="1"
-          >
+          <Card as={Form} display="flex" flexDirection="column" flex="1">
             <Text as="h1" textAlign="center">
               Uusi ryhmä
             </Text>
@@ -90,7 +85,7 @@ export default function CreateGroupPage() {
             >
               Peruuta
             </Text>
-          </BorderedCard>
+          </Card>
         )}
       </Formik>
     </PageWrapper>

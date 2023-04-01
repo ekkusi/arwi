@@ -1,6 +1,6 @@
-import BorderedCard, {
+import Card, {
   BorderedCardProps,
-} from "@/components/server-components/primitives/BorderedCard";
+} from "@/components/server-components/primitives/Card";
 import { Box, Tag, Text, Textarea } from "@chakra-ui/react";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -71,7 +71,7 @@ export default function UpdateEvaluationCard({
   };
 
   return (
-    <BorderedCard width="100%" mb="3" {...rest}>
+    <Card mb="3" {...rest}>
       <Tag
         as="h2"
         size="lg"
@@ -114,6 +114,6 @@ export default function UpdateEvaluationCard({
         />
       </Box>
       {children}
-    </BorderedCard>
+    </Card>
   );
 }

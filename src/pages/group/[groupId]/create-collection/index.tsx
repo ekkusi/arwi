@@ -11,7 +11,7 @@ import { useCallback, useState } from "react";
 import { GetStaticPropsContext } from "next";
 import Link from "next/link";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import Card from "@/components/server-components/primitives/Card";
 import { CreateCollectionPage_GetGroupQuery } from "@/gql/graphql";
 import StudentParticipationList, {
   StudentParticipation,
@@ -109,12 +109,7 @@ function CreateCollectionPageContent() {
     <PageWrapper display="flex" flexDirection="column">
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {() => (
-          <BorderedCard
-            as={Form}
-            display="flex"
-            flexDirection="column"
-            flex="1"
-          >
+          <Card as={Form} display="flex" flexDirection="column" flex="1">
             <Text as="h1" textAlign="center">
               Uusi arviointi
             </Text>
@@ -151,7 +146,7 @@ function CreateCollectionPageContent() {
             >
               Peruuta
             </Text>
-          </BorderedCard>
+          </Card>
         )}
       </Formik>
     </PageWrapper>

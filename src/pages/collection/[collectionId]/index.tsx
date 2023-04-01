@@ -14,7 +14,7 @@ import graphqlClient from "@/graphql-client";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
-import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import Card from "@/components/server-components/primitives/Card";
 import EvaluationsAccordion, {
   EvaluationsAccordionHandlers,
 } from "@/components/functional/EvaluationsAccordion";
@@ -91,7 +91,7 @@ export default function CollectionPage({
       <BackwardsLink href={`/group/${collection.group?.id}`}>
         Takaisin ryhmän yhteenvetoon
       </BackwardsLink>
-      <BorderedCard my="3" border="none">
+      <Card my="3" border="none">
         <Text as="h1" textAlign="center" mb="2" fontSize="2xl">
           Arvioinnin yhteenveto
         </Text>
@@ -114,7 +114,7 @@ export default function CollectionPage({
           {collection.group?.name}
         </Text>
         {collection.description && <Text mt="2">{collection.description}</Text>}
-      </BorderedCard>
+      </Card>
       <Text as="h2">Arvioinnit:</Text>
 
       {collection.evaluations.length > 0 ? (
