@@ -145,7 +145,7 @@ function UpdateEvaluationsPageContent() {
   return (
     <PageWrapper p="0">
       <Box
-        height="calc(100vh - 58px)"
+        height="calc(100vh - 74px)"
         p="4"
         scrollSnapType="y mandatory"
         overflowY="scroll"
