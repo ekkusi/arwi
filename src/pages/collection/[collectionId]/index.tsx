@@ -3,7 +3,6 @@ import { getFragmentData, graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
 import { Text } from "@chakra-ui/react";
-import BackwardsLink from "@/components/general/BackwardsLink";
 import {
   CollectionPage_GetCollectionQuery,
   EvaluationsAccordion_EvaluationFragmentDoc,
@@ -19,6 +18,7 @@ import EvaluationsAccordion, {
   EvaluationsAccordionHandlers,
 } from "@/components/functional/EvaluationsAccordion";
 import { useEffect, useRef } from "react";
+import TopNavigationBar from "@/components/functional/TopNavigationBar";
 
 const CollectionPage_GetCollection_Query = graphql(`
   query CollectionPage_GetCollection($collectionId: ID!) {
@@ -88,9 +88,7 @@ export default function CollectionPage({
 
   return (
     <PageWrapper>
-      <BackwardsLink href={`/group/${collection.group?.id}`}>
-        Takaisin ryhmän yhteenvetoon
-      </BackwardsLink>
+      <TopNavigationBar />
       <Card my="3" border="none">
         <Text as="h1" textAlign="center" mb="2" fontSize="2xl">
           Arvioinnin yhteenveto

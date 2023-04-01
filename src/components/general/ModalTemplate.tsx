@@ -52,7 +52,7 @@ export default function ModalTemplate({
       {...disclosureProps}
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent mx="5">
         {isClosable && <ModalCloseButton />}
         {headerLabel && (
           <ModalHeader px={5} pb={1} {...headerProps}>

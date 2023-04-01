@@ -127,15 +127,16 @@ const theme = extendTheme(
           fontFamily: theme.fonts.heading,
         },
         h1: {
-          fontSize: { base: "3xl", md: "4xl" },
+          fontSize: { base: "2xl", md: "3xl" },
+          textAlign: "center",
           mb: 5,
         },
         h2: {
-          fontSize: { base: "2xl", md: "3xl" },
+          fontSize: { base: "xl", md: "2xl" },
           mb: 2,
         },
         h3: {
-          fontSize: { base: "xl", md: "2xl" },
+          fontSize: { base: "lg", md: "xl" },
           mb: 2,
         },
         a: {

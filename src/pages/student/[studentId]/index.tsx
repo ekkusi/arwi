@@ -3,7 +3,6 @@ import { serverRequest } from "@/pages/api/graphql";
 
 import { Box, Button, FormLabel, Input, Text } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import BackwardsLink from "@/components/general/BackwardsLink";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import StudentEvaluationsRecap from "@/components/server-components/StudentEvaluationsRecap";
@@ -20,6 +19,7 @@ import { AiOutlineCheck } from "react-icons/ai";
 import EvaluationsAccordion, {
   EvaluationsAccordionHandlers,
 } from "@/components/functional/EvaluationsAccordion";
+import TopNavigationBar from "@/components/functional/TopNavigationBar";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
@@ -126,9 +126,7 @@ function StudentPageContent() {
 
   return (
     <PageWrapper>
-      <BackwardsLink href={`/group/${student.group.id}`}>
-        Takaisin ryhmän yhteenvetoon
-      </BackwardsLink>
+      <TopNavigationBar />
       <Text as="h1" textAlign="center" mb="2">
         {student.name}
       </Text>

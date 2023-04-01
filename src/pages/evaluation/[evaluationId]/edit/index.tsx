@@ -1,5 +1,5 @@
+import TopNavigationBar from "@/components/functional/TopNavigationBar";
 import UpdateEvaluationCard from "@/components/functional/UpdateEvaluationCard";
-import BackwardsLink from "@/components/general/BackwardsLink";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import { getFragmentData, graphql } from "@/gql";
@@ -133,9 +133,7 @@ function EvaluationEditPageContent() {
 
   return (
     <PageWrapper>
-      <BackwardsLink href={`/student/${evaluation.student.id}`} mb="3">
-        Takaisin yhteenvetoon
-      </BackwardsLink>
+      <TopNavigationBar />
       <Text as="h1" textAlign="center">{`${formatDate(
         evaluation.collection.date
       )} - ${evaluation.collection.type}`}</Text>
