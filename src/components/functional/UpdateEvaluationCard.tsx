@@ -1,5 +1,5 @@
 import Card, {
-  BorderedCardProps,
+  CardProps,
 } from "@/components/server-components/primitives/Card";
 import { Box, Tag, Text, Textarea } from "@chakra-ui/react";
 import debounce from "lodash.debounce";
@@ -22,7 +22,7 @@ export const UpdateEvaluationCard_EvaluationFragment = graphql(`
   }
 `);
 
-type UpdateEvaluationCardProps = BorderedCardProps & {
+type UpdateEvaluationCardProps = CardProps & {
   evaluation: FragmentType<typeof UpdateEvaluationCard_EvaluationFragment>;
   onChanged?: (evaluation: EvaluationFragment) => void;
 };
