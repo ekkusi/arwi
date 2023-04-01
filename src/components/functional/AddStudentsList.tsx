@@ -7,7 +7,7 @@ import {
   FlexProps,
 } from "@chakra-ui/react";
 import { CreateStudentInput } from "@/gql/graphql";
-import { ChangeEvent, KeyboardEventHandler, useState } from "react";
+import { ChangeEvent, KeyboardEventHandler, useRef, useState } from "react";
 import { IoMdAddCircle } from "react-icons/io";
 import DeleteButton from "@/components/server-components/primitives/DeleteButton";
 
@@ -22,6 +22,7 @@ export default function AddStudentsList({
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
   const [name, setName] = useState("");
   const [error, setError] = useState<string | undefined>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const removeStudent = (index: number) => {
     // Copy old array -> remove by index from copy -> set copy as new state
@@ -32,6 +33,7 @@ export default function AddStudentsList({
   };
 
   const addStudent = () => {
+    inputRef.current?.focus();
     if (name.length === 0) {
       setError("Oppilaan nimi ei voi olla tyhjä");
       return;
@@ -64,12 +66,13 @@ export default function AddStudentsList({
       <Flex alignItems="center" justifyContent="space-between" mb="2">
         <Input
           mr="2"
+          ref={inputRef}
           placeholder="Oppilaan nimi"
           value={name}
           onChange={handleNameChange}
           onKeyDown={handleKeyDown}
+          isInvalid={!!error}
         />
-        {/* <Button onClick={addStudent}>Lisää</Button> */}
         <IconButton
           onClick={addStudent}
           colorScheme="green"
