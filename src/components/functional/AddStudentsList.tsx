@@ -41,7 +41,7 @@ export default function AddStudentsList({
       return;
     }
     // Copy old array with the new element added
-    const newStudents = [...students, { name }];
+    const newStudents = [{ name }, ...students];
     setStudents(newStudents);
     setName("");
     if (onChanged) onChanged(newStudents);
@@ -61,21 +61,6 @@ export default function AddStudentsList({
 
   return (
     <Box {...rest}>
-      {students.map((it, index) => (
-        <Flex
-          key={`${it.name}-${index}`}
-          alignItems="center"
-          justifyContent="space-between"
-          mb="2"
-        >
-          <Text>{it.name}</Text>
-          <DeleteButton
-            onClick={() => removeStudent(index)}
-            mr="6px"
-            aria-label="Poista oppilas"
-          />
-        </Flex>
-      ))}
       <Flex alignItems="center" justifyContent="space-between" mb="2">
         <Input
           mr="2"
@@ -95,6 +80,21 @@ export default function AddStudentsList({
         />
       </Flex>
       {error && <Text color="error">{error}</Text>}
+      {students.map((it, index) => (
+        <Flex
+          key={`${it.name}-${index}`}
+          alignItems="center"
+          justifyContent="space-between"
+          mb="2"
+        >
+          <Text>{it.name}</Text>
+          <DeleteButton
+            onClick={() => removeStudent(index)}
+            mr="6px"
+            aria-label="Poista oppilas"
+          />
+        </Flex>
+      ))}
     </Box>
   );
 }
