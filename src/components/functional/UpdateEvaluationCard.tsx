@@ -78,7 +78,7 @@ export default function UpdateEvaluationCard({
         mx="auto"
         display="block"
         textAlign="center"
-        mb="6"
+        mb="4"
       >
         {evaluation.student.name}
       </Tag>
@@ -86,13 +86,13 @@ export default function UpdateEvaluationCard({
       <RatingSelector
         initialRating={evaluation.skillsRating}
         onChange={(rating) => onChanged("skillsRating", rating)}
-        mb="8"
+        mb="6"
       />
       <Text as="h3">Työskentely:</Text>
       <RatingSelector
         initialRating={evaluation.behaviourRating}
         onChange={(rating) => onChanged("behaviourRating", rating)}
-        mb="8"
+        mb="6"
       />
       <Text as="h3">Muita huomioita:</Text>
       <Box position="relative">

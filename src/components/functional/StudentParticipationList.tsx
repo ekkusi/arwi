@@ -1,61 +1,29 @@
 import { Box, Button, Flex, Text, BoxProps } from "@chakra-ui/react";
-import { FragmentType, graphql, getFragmentData } from "@/gql";
-import { StudentParticipationList_StudentFragment as StudentFragmentType } from "@/gql/graphql";
-import { useEffect, useState } from "react";
-
-const StudentParticipationList_StudentFragment = graphql(`
-  fragment StudentParticipationList_Student on Student {
-    id
-    name
-  }
-`);
+import { useState } from "react";
 
 type StudentParticipationListProps = Omit<BoxProps, "onChange"> & {
-  students: FragmentType<typeof StudentParticipationList_StudentFragment>[];
+  initialParticipations: StudentParticipation[];
   onChange?: (participations: StudentParticipation[]) => void;
   isDisabled?: boolean;
 };
 
 export type StudentParticipation = {
-  student: StudentFragmentType;
+  student: {
+    id: string;
+    name: string;
+  };
   wasPresent: boolean;
 };
 
 export default function StudentParticipationList({
-  students: stundentFragments,
+  initialParticipations,
   onChange,
   isDisabled = false,
   ...rest
 }: StudentParticipationListProps) {
-  const students = getFragmentData(
-    StudentParticipationList_StudentFragment,
-    stundentFragments
-  );
-
-  const sortParticipations = (
-    initialStudents: readonly StudentFragmentType[]
-  ) => {
-    const unsortedParticipations = initialStudents.map((it) => ({
-      student: it,
-      wasPresent: true,
-    }));
-    return unsortedParticipations.sort((a, b) =>
-      a.student.name.localeCompare(b.student.name)
-    );
-  };
-
   const [participations, setParticipations] = useState<StudentParticipation[]>(
-    () => {
-      return sortParticipations(students);
-    }
+    () => initialParticipations
   );
-
-  // Set initial participations
-  useEffect(() => {
-    const initialParticipations = sortParticipations(students);
-    onChange?.(initialParticipations);
-    setParticipations(initialParticipations);
-  }, [onChange, students]);
 
   const toggleStudentPresent = (participation: StudentParticipation) => {
     // Copy old array -> update matching participation -> set copy as new state
@@ -76,6 +44,7 @@ export default function StudentParticipationList({
     setParticipations(participationsCopy);
     onChange?.(participationsCopy);
   };
+
   return (
     <Box {...rest}>
       {participations.map((it, index) => (

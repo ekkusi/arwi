@@ -1,32 +1,23 @@
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
-import { Button, Text, BoxProps, Textarea } from "@chakra-ui/react";
-import FormField from "@/components/general/FormField";
+import { BoxProps } from "@chakra-ui/react";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
-import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
 import { GetStaticPropsContext } from "next";
-import Link from "next/link";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import Card from "@/components/server-components/primitives/Card";
 import { CreateCollectionPage_GetGroupQuery } from "@/gql/graphql";
-import StudentParticipationList, {
-  StudentParticipation,
-} from "@/components/functional/StudentParticipationList";
+import { StudentParticipation } from "@/components/functional/StudentParticipationList";
 import useSWR, { SWRConfig } from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
+import UpdateCollectionForm from "@/components/functional/UpdateCollectionForm";
 
 const CreateCollectionPage_GetGroup_Query = graphql(`
   query CreateCollectionPage_GetGroup($groupId: ID!) {
     getGroup(id: $groupId) {
       id
-      evaluationTypes
-      students {
-        ...StudentParticipationList_Student
-      }
+      ...UpdateCollectionForm_Group
     }
   }
 `);
@@ -58,30 +49,14 @@ function CreateCollectionPageContent() {
       graphqlClient.request(CreateCollectionPage_GetGroup_Query, { groupId })
   );
 
-  const [loading, setLoading] = useState(false);
-  const [participations, setParticipations] = useState<StudentParticipation[]>(
-    []
-  );
-
-  const onParticipationsChanged = useCallback(
-    (newParticipations: StudentParticipation[]) => {
-      setParticipations(newParticipations);
-    },
-    []
-  );
-
   if (!data) return <LoadingIndicator />;
   const { getGroup: group } = data;
 
-  const validateType = (value: string) => {
-    let error;
-    if (value.length === 0) error = "Tyyppi ei voi olla tyhjä";
-    return error;
-  };
-
-  const handleSubmit = async (values: typeof initialValues) => {
+  const handleSubmit = async (
+    values: typeof initialValues,
+    participations: StudentParticipation[]
+  ) => {
     const { description, ...rest } = values;
-    setLoading(true);
     try {
       const { createCollection } = await graphqlClient.request(
         CreateCollectionPage_CreateCollection_Mutation,
@@ -97,58 +72,15 @@ function CreateCollectionPageContent() {
           },
         }
       );
-      setLoading(false);
       router.push(`/collection/${createCollection.id}/edit`);
     } catch (error) {
-      setLoading(false);
       console.error("Error happened:", error);
     }
   };
 
   return (
     <PageWrapper display="flex" flexDirection="column">
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        {() => (
-          <Card as={Form} display="flex" flexDirection="column" flex="1">
-            <Text as="h1" textAlign="center">
-              Uusi arviointi
-            </Text>
-            <FormField
-              name="type"
-              label="Aihe"
-              placeholder="Arvioinnin aihe"
-              validate={validateType}
-            />
-            <FormField name="date" type="date" label="Päivämäärä" />
-            <FormField
-              as={Textarea}
-              label="Muita tietoja"
-              name="description"
-              placeholder="Muita tietoja arviointikertaan liittyen..."
-            />
-            <Text as="h2">Oppilaat</Text>
-            <StudentParticipationList
-              students={group.students}
-              onChange={onParticipationsChanged}
-              isDisabled={loading}
-              mb="5"
-            />
-            <Button type="submit" marginTop="auto" isLoading={loading}>
-              Siirry arvioimaan
-            </Button>
-            <Text
-              as={Link}
-              href="/"
-              color="gray.700"
-              mt="3"
-              textTransform="uppercase"
-              textAlign="center"
-            >
-              Peruuta
-            </Text>
-          </Card>
-        )}
-      </Formik>
+      <UpdateCollectionForm onSubmit={handleSubmit} group={group} />
     </PageWrapper>
   );
 }

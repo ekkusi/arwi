@@ -1,5 +1,6 @@
 import {
   AccordionButton,
+  AccordionButtonProps,
   AccordionIcon,
   AccordionItem as ChakraAccordionItem,
   AccordionItemProps as ChakraAccordionItemProps,
@@ -10,14 +11,15 @@ import { forwardRef } from "react";
 
 type AccordionItemProps = ChakraAccordionItemProps & {
   title: string;
+  titleProps?: AccordionButtonProps;
 };
 
 export default forwardRef<HTMLDivElement, AccordionItemProps>(
-  ({ children, ...rest }: AccordionItemProps, ref) => {
+  ({ children, titleProps, ...rest }: AccordionItemProps, ref) => {
     return (
       <ChakraAccordionItem fontSize="lg" {...rest} ref={ref}>
         <Text as="h3" mb="0">
-          <AccordionButton>
+          <AccordionButton {...titleProps}>
             <Text fontSize="md" as="span" flex="1" textAlign="left">
               {rest.title}
             </Text>

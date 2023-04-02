@@ -13,6 +13,7 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
     notes
     behaviourRating
     skillsRating
+    wasPresent
     collection {
       date
       type
@@ -88,6 +89,9 @@ export default forwardRef<
               itemRefs.current[i] = itemRef;
             }}
           >
+            <Text color={it.wasPresent ? "green" : "red"}>
+              {it.wasPresent ? "Paikalla" : "Poissa"}
+            </Text>
             <Text>
               Käyttäytyminen: {formatRatingStringWithNull(it.behaviourRating)}
             </Text>
