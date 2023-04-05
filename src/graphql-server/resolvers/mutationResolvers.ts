@@ -142,6 +142,7 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   updateCollection: async (_, { data, collectionId }, { prisma, res }) => {
     const { evaluations, ...rest } = data;
+    let updatedStudentIds: string[] = [];
     if (evaluations) {
       const promises = evaluations.map((it) => {
         return prisma.evaluation.update({
@@ -151,7 +152,8 @@ const resolvers: MutationResolvers<CustomContext> = {
           },
         });
       });
-      await Promise.all(promises);
+      const updatedEvaluations = await Promise.all(promises);
+      updatedStudentIds = updatedEvaluations.map((it) => it.studentId);
     }
 
     const updatedCollection = await prisma.evaluationCollection.update({
@@ -159,8 +161,19 @@ const resolvers: MutationResolvers<CustomContext> = {
       where: { id: collectionId },
     });
 
-    await revalidateCollectionData(res, updatedCollection.id);
-    await revalidateGroupData(res, updatedCollection.groupId);
+    // Revalidate all the possibly updated pages
+    const revalidatePromises = [];
+    revalidatePromises.push(
+      revalidateCollectionData(res, updatedCollection.id)
+    );
+    revalidatePromises.push(
+      revalidateGroupData(res, updatedCollection.groupId)
+    );
+    const revalidateStudentPromises = updatedStudentIds.map((it) =>
+      revalidateStudentData(res, it)
+    );
+    await Promise.all([revalidatePromises, ...revalidateStudentPromises]);
+
     return updatedCollection;
   },
   updateStudent: async (_, { data, studentId }, { prisma, res }) => {
