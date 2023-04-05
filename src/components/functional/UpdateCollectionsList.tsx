@@ -1,11 +1,13 @@
 import DeleteButton from "@/components/server-components/primitives/DeleteButton";
-import { Box, Flex, Text, FlexProps } from "@chakra-ui/react";
+import { Box, Flex, Text, FlexProps, IconButton } from "@chakra-ui/react";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateCollectionsList_CollectionFragment as CollectionFragment } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
 import { useState } from "react";
+import Link from "next/link";
+import { FiEdit } from "react-icons/fi";
 
 const UpdateCollectionsList_CollectionFragment = graphql(`
   fragment UpdateCollectionsList_Collection on EvaluationCollection {
@@ -78,15 +80,15 @@ export default function UpdateCollectionsList({
           </Box>
           <Flex mr="2">
             {/* TODO: Show this when the actual editing page is ready */}
-            {/* <IconButton
+            <IconButton
               variant="link"
-              colorScheme="blue"
-              as={NextLink}
+              colorScheme="green"
+              as={Link}
               icon={<FiEdit />}
               aria-label="Arvioinnin muokkaukseen"
               href={`/collection/${it.id}/edit`}
               mr="2"
-            /> */}
+            />
             <DeleteButton
               onClick={() => setCollectionInDelete(it)}
               aria-label="Poista arviointi"

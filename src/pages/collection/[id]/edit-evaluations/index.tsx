@@ -50,13 +50,13 @@ const UpdateEvaluationsPage_UpdateEvaluations_Mutation = graphql(`
 
 function UpdateEvaluationsPageContent() {
   const router = useRouter();
-  const collectionId = router.query.collectionId as string;
+  const id = router.query.id as string;
 
   const { data } = useSWR<UpdateEvaluationsPage_GetCollectionQuery>(
-    `collection/${collectionId}/edit`,
+    `collection/${id}/edit-evaluations`,
     () =>
       graphqlClient.request(UpdateEvaluationsPage_GetCollection_Query, {
-        collectionId,
+        collectionId: id,
       })
   );
 
@@ -212,10 +212,10 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({
   params,
-}: GetStaticPropsContext<{ collectionId: string }>) {
+}: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no params");
   const data = await serverRequest(UpdateEvaluationsPage_GetCollection_Query, {
-    collectionId: params.collectionId,
+    collectionId: params.id,
   });
 
   // Pass data to the page via props

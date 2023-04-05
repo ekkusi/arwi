@@ -3,7 +3,6 @@ import { serverRequest } from "@/pages/api/graphql";
 
 import { BoxProps } from "@chakra-ui/react";
 import graphqlClient from "@/graphql-client";
-import { formatDate } from "@/utils/dateUtils";
 import { useRouter } from "next/router";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
@@ -11,7 +10,9 @@ import { CreateCollectionPage_GetGroupQuery } from "@/gql/graphql";
 import { StudentParticipation } from "@/components/functional/StudentParticipationList";
 import useSWR, { SWRConfig } from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
-import UpdateCollectionForm from "@/components/functional/UpdateCollectionForm";
+import UpdateCollectionForm, {
+  FormData,
+} from "@/components/functional/UpdateCollectionForm";
 
 const CreateCollectionPage_GetGroup_Query = graphql(`
   query CreateCollectionPage_GetGroup($groupId: ID!) {
@@ -33,12 +34,6 @@ const CreateCollectionPage_CreateCollection_Mutation = graphql(`
   }
 `);
 
-const initialValues = {
-  type: "",
-  description: "",
-  date: formatDate(new Date(), "yyyy-MM-dd"),
-};
-
 function CreateCollectionPageContent() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
@@ -53,7 +48,7 @@ function CreateCollectionPageContent() {
   const { getGroup: group } = data;
 
   const handleSubmit = async (
-    values: typeof initialValues,
+    values: FormData,
     participations: StudentParticipation[]
   ) => {
     const { description, ...rest } = values;
@@ -72,7 +67,7 @@ function CreateCollectionPageContent() {
           },
         }
       );
-      router.push(`/collection/${createCollection.id}/edit`);
+      router.push(`/collection/${createCollection.id}/edit-evaluations`);
     } catch (error) {
       console.error("Error happened:", error);
     }

@@ -40,5 +40,7 @@ export const revalidateCollectionData = async (
 ) => {
   const promises = [];
   promises.push(revalidateIfProd(res, `/collection/${id}`));
+  promises.push(revalidateIfProd(res, `/collection/${id}/edit`));
+  promises.push(revalidateIfProd(res, `/collection/${id}/edit-evaluations`));
   return Promise.all(promises);
 };

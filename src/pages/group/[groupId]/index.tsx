@@ -30,8 +30,6 @@ import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { useState } from "react";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
 
-export const dynamic = "force-dynamic";
-
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
     getGroup(id: $groupId) {

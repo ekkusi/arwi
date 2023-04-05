@@ -81,6 +81,7 @@ export type Mutation = {
   createCollection: EvaluationCollection;
   createStudent: Student;
   updateEvaluations: Scalars["Int"];
+  updateCollection: EvaluationCollection;
   updateStudent: Student;
   updateGroup: Group;
   updateEvaluation: Evaluation;
@@ -114,6 +115,11 @@ export type MutationCreateStudentArgs = {
 
 export type MutationUpdateEvaluationsArgs = {
   data: Array<UpdateEvaluationInput>;
+  collectionId: Scalars["ID"];
+};
+
+export type MutationUpdateCollectionArgs = {
+  data: UpdateCollectionInput;
   collectionId: Scalars["ID"];
 };
 
@@ -231,6 +237,13 @@ export type CreateCollectionInput = {
   type: Scalars["String"];
   description?: InputMaybe<Scalars["String"]>;
   evaluations?: InputMaybe<Array<CreateEvaluationInput>>;
+};
+
+export type UpdateCollectionInput = {
+  date?: InputMaybe<Scalars["Date"]>;
+  type?: InputMaybe<Scalars["String"]>;
+  description?: InputMaybe<Scalars["String"]>;
+  evaluations?: InputMaybe<Array<UpdateEvaluationInput>>;
 };
 
 export type CreateEvaluationInput = {
@@ -379,6 +392,7 @@ export type ResolversTypes = {
   CreateStudentInput: CreateStudentInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
+  UpdateCollectionInput: UpdateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
   UpdateEvaluationInput: UpdateEvaluationInput;
 };
@@ -407,6 +421,7 @@ export type ResolversParentTypes = {
   CreateStudentInput: CreateStudentInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
+  UpdateCollectionInput: UpdateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
   UpdateEvaluationInput: UpdateEvaluationInput;
 };
@@ -507,6 +522,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateEvaluationsArgs, "data" | "collectionId">
+  >;
+  updateCollection?: Resolver<
+    ResolversTypes["EvaluationCollection"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateCollectionArgs, "data" | "collectionId">
   >;
   updateStudent?: Resolver<
     ResolversTypes["Student"],

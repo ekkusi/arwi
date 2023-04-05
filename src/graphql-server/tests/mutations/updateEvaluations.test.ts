@@ -71,7 +71,6 @@ describe("ServerRequest - updateEvaluations", () => {
       data: [
         {
           id: evaluationId,
-          wasPresent: false,
           skillsRating: Rating.Good,
           behaviourRating: Rating.Fair,
           notes: "Updated notes",
@@ -103,7 +102,6 @@ describe("ServerRequest - updateEvaluations", () => {
     });
 
     expect(updatedEvaluation).toMatchObject({
-      wasPresent: variables.data[0].wasPresent,
       skillsRating: variables.data[0].skillsRating,
       behaviourRating: variables.data[0].behaviourRating,
       notes: variables.data[0].notes,

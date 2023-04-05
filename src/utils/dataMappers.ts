@@ -65,3 +65,15 @@ export const formatRatingStringWithNull = (
 ) => {
   return rating ? formatRatingString(rating) : "Ei arvioitu";
 };
+
+type Valuable<T> = {
+  [K in keyof T as T[K] extends null | undefined ? never : K]: T[K];
+};
+
+export function removeNulls<T extends {}, V = Valuable<T>>(obj: T): V {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([, v]) => !(v === null || typeof v === "undefined")
+    )
+  ) as V;
+}

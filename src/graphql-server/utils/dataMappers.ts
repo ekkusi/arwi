@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import {
+  UpdateCollectionInput,
   UpdateEvaluationInput,
   UpdateGroupInput,
   UpdateStudentInput,
@@ -27,6 +28,18 @@ export const mapUpdateEvaluationInput = (
   const { wasPresent, ...rest } = data;
   return {
     ...rest,
+    skillsRating: data.wasPresent === false ? null : data.skillsRating,
+    behaviourRating: data.wasPresent === false ? null : data.behaviourRating,
     wasPresent: wasPresent === null ? undefined : wasPresent,
+  };
+};
+
+export const mapUpdateCollectionInput = (
+  data: Omit<UpdateCollectionInput, "evaluations">
+): Prisma.EvaluationCollectionUpdateInput => {
+  return {
+    ...data,
+    type: data.type ? data.type : undefined,
+    date: data.date ? new Date(data.date) : undefined,
   };
 };

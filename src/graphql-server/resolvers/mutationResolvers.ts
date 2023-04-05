@@ -8,6 +8,7 @@ import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
 import {
+  mapUpdateCollectionInput,
   mapUpdateEvaluationInput,
   mapUpdateGroupInput,
   mapUpdateStudentInput,
@@ -138,6 +139,29 @@ const resolvers: MutationResolvers<CustomContext> = {
     );
     await revalidateStudentData(res, updatedEvaluation.studentId);
     return updatedEvaluation;
+  },
+  updateCollection: async (_, { data, collectionId }, { prisma, res }) => {
+    const { evaluations, ...rest } = data;
+    if (evaluations) {
+      const promises = evaluations.map((it) => {
+        return prisma.evaluation.update({
+          where: { id: it.id },
+          data: {
+            ...mapUpdateEvaluationInput(it),
+          },
+        });
+      });
+      await Promise.all(promises);
+    }
+
+    const updatedCollection = await prisma.evaluationCollection.update({
+      data: mapUpdateCollectionInput(rest),
+      where: { id: collectionId },
+    });
+
+    await revalidateCollectionData(res, updatedCollection.id);
+    await revalidateGroupData(res, updatedCollection.groupId);
+    return updatedCollection;
   },
   updateStudent: async (_, { data, studentId }, { prisma, res }) => {
     await validateUpdateStudentInput(data, studentId);

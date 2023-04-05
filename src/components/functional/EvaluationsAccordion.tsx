@@ -92,17 +92,26 @@ export default forwardRef<
             <Text color={it.wasPresent ? "green" : "red"}>
               {it.wasPresent ? "Paikalla" : "Poissa"}
             </Text>
-            <Text>
-              Käyttäytyminen: {formatRatingStringWithNull(it.behaviourRating)}
-            </Text>
-            <Text>Taidot: {formatRatingStringWithNull(it.skillsRating)}</Text>
-            {it.notes ? (
-              <Box mt="3">
-                <Text mb="1">Huomiot:</Text>
-                <Text>{it.notes}</Text>
-              </Box>
+            {it.wasPresent ? (
+              <>
+                <Text>
+                  Käyttäytyminen:{" "}
+                  {formatRatingStringWithNull(it.behaviourRating)}
+                </Text>
+                <Text>
+                  Taidot: {formatRatingStringWithNull(it.skillsRating)}
+                </Text>
+                {it.notes ? (
+                  <Box mt="3">
+                    <Text mb="1">Huomiot:</Text>
+                    <Text>{it.notes}</Text>
+                  </Box>
+                ) : (
+                  <Text mt="3">Huomioita ei annettu</Text>
+                )}
+              </>
             ) : (
-              <Text mt="3">Huomioita ei annettu</Text>
+              <Text>Oppilas ei ollut paikalla, ei arviointeja</Text>
             )}
             <Button
               as={Link}

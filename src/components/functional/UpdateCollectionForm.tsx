@@ -1,7 +1,8 @@
 import { FragmentType, getFragmentData, graphql } from "@/gql";
 import { formatDate } from "@/utils/dateUtils";
-import { Button, Link, Text, Textarea } from "@chakra-ui/react";
+import { Button, Text, Textarea } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import FormField from "../general/FormField";
 import Card from "../server-components/primitives/Card";
@@ -39,9 +40,11 @@ const defaultInitialValues = {
   date: formatDate(new Date(), "yyyy-MM-dd"),
 };
 
+export type FormData = typeof defaultInitialValues;
+
 type UpdateCollectionFormProps = {
   onSubmit: (
-    values: typeof defaultInitialValues,
+    values: FormData,
     participations: StudentParticipation[]
   ) => Promise<void>;
   group?: FragmentType<typeof UpdateCollectionForm_Group_Fragment>;
@@ -57,6 +60,7 @@ export default function UpdateCollectionForm({
     UpdateCollectionForm_Group_Fragment,
     groupFragment
   );
+  const router = useRouter();
 
   const collection = getFragmentData(
     UpdateCollectionForm_Collection_Fragment,
@@ -101,7 +105,7 @@ export default function UpdateCollectionForm({
     []
   );
 
-  const handleSubmit = async (values: typeof initialValues) => {
+  const handleSubmit = async (values: FormData) => {
     setIsSubmitting(true);
     await onSubmit(values, participations);
     setIsSubmitting(false);
@@ -115,7 +119,7 @@ export default function UpdateCollectionForm({
       {() => (
         <Card as={Form} display="flex" flexDirection="column" flex="1">
           <Text as="h1" textAlign="center">
-            Uusi arviointi
+            {collection ? "Arvioinnin muokkaus" : "Uusi arviointi"}
           </Text>
           <FormField
             name="type"
@@ -138,15 +142,15 @@ export default function UpdateCollectionForm({
             mb="5"
           />
           <Button type="submit" marginTop="auto" isLoading={isSubmitting}>
-            Siirry arvioimaan
+            {collection ? "Tallenna" : "Siirry arvioimaan"}
           </Button>
           <Text
-            as={Link}
-            href="/"
+            as="a"
             color="gray.700"
             mt="3"
             textTransform="uppercase"
             textAlign="center"
+            onClick={() => router.back()}
           >
             Peruuta
           </Text>
