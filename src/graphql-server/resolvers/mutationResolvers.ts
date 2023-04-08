@@ -9,14 +9,14 @@ import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
 import {
   mapUpdateCollectionInput,
-  mapUpdateEvaluationInput,
   mapUpdateGroupInput,
   mapUpdateStudentInput,
-} from "../utils/dataMappers";
+} from "../utils/mappers";
 import {
   validateCreateStudentInput,
   validateUpdateStudentInput,
-} from "../utils/dataValidators";
+} from "../utils/validators";
+import { updateEvaluation } from "../utils/resolverUtils";
 
 const BRCRYPT_SALT_ROUNDS = 12;
 
@@ -102,14 +102,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     return createdStudent;
   },
   updateEvaluations: async (_, { data, collectionId }, { prisma, res }) => {
-    const promises = data.map((it) => {
-      return prisma.evaluation.update({
-        where: { id: it.id },
-        data: {
-          ...mapUpdateEvaluationInput(it),
-        },
-      });
-    });
+    const promises = data.map((it) => updateEvaluation(it));
     const results = await Promise.all(promises);
     await prisma.evaluationCollection.update({
       data: {
@@ -126,13 +119,8 @@ const resolvers: MutationResolvers<CustomContext> = {
 
     return results.length;
   },
-  updateEvaluation: async (_, { data }, { prisma, res }) => {
-    const updatedEvaluation = await prisma.evaluation.update({
-      where: { id: data.id },
-      data: {
-        ...mapUpdateEvaluationInput(data),
-      },
-    });
+  updateEvaluation: async (_, { data }, { res }) => {
+    const updatedEvaluation = await updateEvaluation(data);
     await revalidateCollectionData(
       res,
       updatedEvaluation.evaluationCollectionId
@@ -144,14 +132,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     const { evaluations, ...rest } = data;
     let updatedStudentIds: string[] = [];
     if (evaluations) {
-      const promises = evaluations.map((it) => {
-        return prisma.evaluation.update({
-          where: { id: it.id },
-          data: {
-            ...mapUpdateEvaluationInput(it),
-          },
-        });
-      });
+      const promises = evaluations.map((it) => updateEvaluation(it));
       const updatedEvaluations = await Promise.all(promises);
       updatedStudentIds = updatedEvaluations.map((it) => it.studentId);
     }

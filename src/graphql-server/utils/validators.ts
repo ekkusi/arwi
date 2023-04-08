@@ -1,6 +1,10 @@
 import ValidationError from "../errors/ValidationError";
 import prisma from "../prismaClient";
-import { CreateStudentInput, UpdateStudentInput } from "../types";
+import {
+  CreateStudentInput,
+  UpdateEvaluationInput,
+  UpdateStudentInput,
+} from "../types";
 
 export const validateCreateStudentInput = async (
   data: CreateStudentInput,
@@ -42,4 +46,22 @@ export const validateUpdateStudentInput = async (
     throw new ValidationError(
       `Ryhmässä on jo '${data.name}' niminen oppilas. Ryhmässä ei voi olla kahta samannimistä oppilasta.`
     );
+};
+
+export const validateUpdateEvaluationInput = async (
+  data: UpdateEvaluationInput
+) => {
+  const matchingEvaluation = await prisma.evaluation.findUniqueOrThrow({
+    where: { id: data.id },
+  });
+  const wasPresent = data.wasPresent || matchingEvaluation.wasPresent;
+
+  if (
+    !wasPresent &&
+    (data.behaviourRating || data.skillsRating || data.notes)
+  ) {
+    throw new ValidationError(
+      `Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää.`
+    );
+  }
 };
