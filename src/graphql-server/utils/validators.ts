@@ -54,10 +54,11 @@ export const validateUpdateEvaluationInput = async (
   const matchingEvaluation = await prisma.evaluation.findUniqueOrThrow({
     where: { id: data.id },
   });
-  const wasPresent = data.wasPresent || matchingEvaluation.wasPresent;
+  const wasPresent =
+    data.wasPresent !== null ? data.wasPresent : matchingEvaluation.wasPresent;
 
   if (
-    !wasPresent &&
+    wasPresent === false &&
     (data.behaviourRating || data.skillsRating || data.notes)
   ) {
     throw new ValidationError(

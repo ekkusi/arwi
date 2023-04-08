@@ -1,5 +1,6 @@
-import { Box, Button, Flex, Text, BoxProps } from "@chakra-ui/react";
+import { Box, Flex, Text, BoxProps } from "@chakra-ui/react";
 import { useState } from "react";
+import ParticipationToggle from "./ParticipationToggle";
 
 type StudentParticipationListProps = Omit<BoxProps, "onChange"> & {
   initialParticipations: StudentParticipation[];
@@ -25,22 +26,12 @@ export default function StudentParticipationList({
     () => initialParticipations
   );
 
-  const toggleStudentPresent = (participation: StudentParticipation) => {
+  const onToggle = (participation: StudentParticipation, value: boolean) => {
     // Copy old array -> update matching participation -> set copy as new state
     const participationsCopy = [...participations];
     const matching = participationsCopy.find((it) => it === participation);
     if (!matching) throw new Error("Unexpected error, student not found");
-    matching.wasPresent = true;
-    setParticipations(participationsCopy);
-    onChange?.(participationsCopy);
-  };
-
-  const toggleStudentNotPresent = (participation: StudentParticipation) => {
-    // Copy old array -> update matching participation -> set copy as new state
-    const participationsCopy = [...participations];
-    const matching = participationsCopy.find((it) => it === participation);
-    if (!matching) throw new Error("Unexpected error, student not found");
-    matching.wasPresent = false;
+    matching.wasPresent = value;
     setParticipations(participationsCopy);
     onChange?.(participationsCopy);
   };
@@ -55,28 +46,11 @@ export default function StudentParticipationList({
           mb="2"
         >
           <Text mr="1">{it.student.name}</Text>
-          <Flex wrap="nowrap">
-            <Button
-              size="xs"
-              onClick={() => toggleStudentPresent(it)}
-              variant={it.wasPresent ? "solid" : "outline"}
-              borderRadius="lg"
-              isDisabled={isDisabled} // Disable changing participations until initial participations are set on parent
-              mr="2"
-            >
-              Paikalla
-            </Button>
-            <Button
-              size="xs"
-              onClick={() => toggleStudentNotPresent(it)}
-              colorScheme="red"
-              borderRadius="lg"
-              variant={it.wasPresent ? "outline" : "solid"}
-              isDisabled={isDisabled}
-            >
-              Poissa
-            </Button>
-          </Flex>
+          <ParticipationToggle
+            isDisabled={isDisabled}
+            initialValue={it.wasPresent}
+            onChange={(value) => onToggle(it, value)}
+          />
         </Flex>
       ))}
     </Box>

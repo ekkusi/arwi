@@ -5,6 +5,7 @@ import PageWrapper from "@/components/server-components/PageWrapper";
 import { getFragmentData, graphql } from "@/gql";
 import {
   EvaluationEditPage_GetEvaluationQuery,
+  EvaluationsEditPage_UpdateEvaluationMutationVariables,
   UpdateEvaluationCard_EvaluationFragment,
   UpdateEvaluationCard_EvaluationFragmentDoc,
 } from "@/gql/graphql";
@@ -99,12 +100,18 @@ function EvaluationEditPageContent() {
       await graphqlClient.request(
         EvaluationsEditPage_UpdateEvaluation_Mutation,
         {
-          input: {
-            id: evaluationData.id,
-            skillsRating: evaluationData.skillsRating,
-            behaviourRating: evaluationData.behaviourRating,
-            notes: evaluationData.notes,
-          },
+          input: !evaluationData.wasPresent
+            ? {
+                id: evaluationData.id,
+                wasPresent: evaluationData.wasPresent,
+              }
+            : {
+                id: evaluationData.id,
+                wasPresent: evaluationData.wasPresent,
+                behaviourRating: evaluationData.behaviourRating,
+                skillsRating: evaluationData.skillsRating,
+                notes: evaluationData.notes,
+              },
         }
       );
       setIsUpdating(false);

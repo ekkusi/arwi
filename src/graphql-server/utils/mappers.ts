@@ -28,8 +28,8 @@ export const mapUpdateEvaluationInput = (
   const { wasPresent, ...rest } = data;
   return {
     ...rest,
-    skillsRating: data.wasPresent === false ? null : data.skillsRating,
-    behaviourRating: data.wasPresent === false ? null : data.behaviourRating,
+    // skillsRating: data.wasPresent === false ? null : data.skillsRating,
+    // behaviourRating: data.wasPresent === false ? null : data.behaviourRating,
     wasPresent: wasPresent === null ? undefined : wasPresent,
   };
 };

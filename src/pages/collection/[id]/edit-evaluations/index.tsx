@@ -166,6 +166,7 @@ function UpdateEvaluationsPageContent() {
               scrollSnapStop="always"
               evaluation={evaluation}
               onChanged={onChanged}
+              hasParticipationToggle={false}
             >
               {index === evaluations.length - 1 && (
                 <Button

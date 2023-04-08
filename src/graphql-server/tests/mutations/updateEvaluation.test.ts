@@ -92,45 +92,6 @@ describe("ServerRequest - updateEvaluation", () => {
     });
   });
 
-  it("should nullify skillsRating and behaviourRating when wasPresent is updated to false", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        id: evaluationId,
-        wasPresent: false,
-        skillsRating: Rating.Great,
-        behaviourRating: Rating.Great,
-      },
-    };
-
-    const query = graphql(`
-      mutation UpdateEvaluationTest_UpdateEvaluationNullify(
-        $data: UpdateEvaluationInput!
-      ) {
-        updateEvaluation(data: $data) {
-          id
-          wasPresent
-          skillsRating
-          behaviourRating
-        }
-      }
-    `);
-
-    // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
-
-    // Assert
-    expect(result.updateEvaluation).toEqual({
-      id: evaluationId,
-      wasPresent: false,
-      skillsRating: null,
-      behaviourRating: null,
-    });
-  });
-
   it("should return an error when the evaluation doesn't exist", async () => {
     // Arrange
     const variables = {

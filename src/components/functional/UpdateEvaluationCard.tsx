@@ -1,13 +1,15 @@
 import Card, {
   CardProps,
 } from "@/components/server-components/primitives/Card";
-import { Box, Tag, Text, Textarea } from "@chakra-ui/react";
+import { Box, Flex, Tag, Text, Textarea } from "@chakra-ui/react";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import SpeechRecognition from "@/components/functional/SpeechRecognition";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateEvaluationCard_EvaluationFragment as EvaluationFragment } from "@/gql/graphql";
 import RatingSelector from "./RatingSelector";
+import ParticipationToggle from "./ParticipationToggle";
+import Overlay from "../general/Overlay";
 
 export const UpdateEvaluationCard_EvaluationFragment = graphql(`
   fragment UpdateEvaluationCard_Evaluation on Evaluation {
@@ -15,6 +17,7 @@ export const UpdateEvaluationCard_EvaluationFragment = graphql(`
     skillsRating
     behaviourRating
     notes
+    wasPresent
     student {
       id
       name
@@ -24,13 +27,21 @@ export const UpdateEvaluationCard_EvaluationFragment = graphql(`
 
 type UpdateEvaluationCardProps = CardProps & {
   evaluation: FragmentType<typeof UpdateEvaluationCard_EvaluationFragment>;
+  hasParticipationToggle?: boolean;
   onChanged?: (evaluation: EvaluationFragment) => void;
 };
+
+type EvaluationPropKeys =
+  | "skillsRating"
+  | "behaviourRating"
+  | "notes"
+  | "wasPresent";
 
 export default function UpdateEvaluationCard({
   children,
   evaluation: evaluationFragment,
   onChanged: onChangedCallback,
+  hasParticipationToggle = true,
   ...rest
 }: UpdateEvaluationCardProps) {
   const initialEvaluation = getFragmentData(
@@ -46,11 +57,11 @@ export default function UpdateEvaluationCard({
   }, [initialEvaluation]);
 
   const onChanged = useCallback(
-    (key: "skillsRating" | "behaviourRating" | "notes", value: any) => {
+    (key: EvaluationPropKeys, value: any) => {
       const newEvaluation = {
         ...evaluation,
+        [key]: value,
       };
-      newEvaluation[key] = value;
       setEvaluation(newEvaluation);
 
       if (onChangedCallback) {
@@ -82,38 +93,61 @@ export default function UpdateEvaluationCard({
       >
         {evaluation.student.name}
       </Tag>
-      <Text as="h3">Taidot:</Text>
-      <RatingSelector
-        initialRating={evaluation.skillsRating}
-        onChange={(rating) => onChanged("skillsRating", rating)}
-        mb="6"
-      />
-      <Text as="h3">Työskentely:</Text>
-      <RatingSelector
-        initialRating={evaluation.behaviourRating}
-        onChange={(rating) => onChanged("behaviourRating", rating)}
-        mb="6"
-      />
-      <Text as="h3">Muita huomioita:</Text>
+      {hasParticipationToggle && (
+        <Flex justifyContent="center" mb="3">
+          <ParticipationToggle
+            size="sm"
+            initialValue={evaluation.wasPresent}
+            onChange={(value) => onChanged("wasPresent", value)}
+          />
+        </Flex>
+      )}
       <Box position="relative">
-        <Textarea
-          value={notes}
-          onChange={(e) => changeNotes(e.target.value)}
-          colorScheme="green"
-          minHeight="32"
-          placeholder="Muita huomioita oppilaan toiminnasta tunnilla..."
-          position="relative"
+        <Text as="h3">Taidot:</Text>
+        <RatingSelector
+          initialRating={evaluation.skillsRating}
+          onChange={(rating) => onChanged("skillsRating", rating)}
+          mb="6"
         />
-        <SpeechRecognition
-          position="absolute"
-          zIndex="100"
-          bottom="1"
-          right="1"
-          aria-label="Puhu tekstiksi"
-          onResult={(result) => changeNotes(result)}
+        <Text as="h3">Työskentely:</Text>
+        <RatingSelector
+          initialRating={evaluation.behaviourRating}
+          onChange={(rating) => onChanged("behaviourRating", rating)}
+          mb="6"
         />
+        <Text as="h3">Muita huomioita:</Text>
+        <Box position="relative">
+          <Textarea
+            value={notes}
+            onChange={(e) => changeNotes(e.target.value)}
+            colorScheme="green"
+            minHeight="32"
+            placeholder="Muita huomioita oppilaan toiminnasta tunnilla..."
+            position="relative"
+          />
+          <SpeechRecognition
+            position="absolute"
+            zIndex="100"
+            bottom="1"
+            right="1"
+            aria-label="Puhu tekstiksi"
+            onResult={(result) => changeNotes(result)}
+          />
+        </Box>
+        {children}
+        {!evaluation.wasPresent && hasParticipationToggle && (
+          <Overlay
+            bgColor="white"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Text color="black" fontWeight="bold" textAlign="center" mx="3">
+              Merkkaa henkilö paikalla olleeksi muokataksesi arviointia
+            </Text>
+          </Overlay>
+        )}
       </Box>
-      {children}
     </Card>
   );
 }
