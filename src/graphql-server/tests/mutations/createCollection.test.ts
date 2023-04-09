@@ -36,7 +36,7 @@ describe("ServerRequest - createCollection", () => {
         date: "2023-04-01",
         type: "Test Evaluation",
         description: "Test description",
-        environmentCode: "LI_TAVLI",
+        environmentCode: "LI_TALVI",
       },
       groupId,
     };
