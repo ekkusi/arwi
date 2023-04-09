@@ -30,6 +30,32 @@
           "color": "#48BB78"
         }
       ]
+    },
+    {
+      "label": "Biologia",
+      "code": "BI",
+      "environments": [
+        {
+          "label": "Kasvit",
+          "code": "BI_KASVI",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Eläimet",
+          "code": "BI_ELAIN",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Mikrobit",
+          "code": "BI_MIKRO",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Ympäristö",
+          "code": "BI_YMPARISTO",
+          "color": "#975A16"
+        }
+      ]
     }
   ]
 }

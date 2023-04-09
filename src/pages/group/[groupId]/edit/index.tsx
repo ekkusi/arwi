@@ -19,6 +19,9 @@ const EditGroupPage_GetGroup_Query = graphql(`
     getGroup(id: $groupId) {
       id
       name
+      subject {
+        label
+      }
       students {
         ...UpdateStudentsList_Student
       }
@@ -72,6 +75,7 @@ function EditGroupPageContent() {
     <PageWrapper>
       <TopNavigationBar />
       <Text as="h1">Ryhmän muokkaus</Text>
+      <Text as="h2">Aine: {group.subject.label}</Text>
       <Text as="h2">Nimi:</Text>
       <InputWithError
         value={group.name}
