@@ -95,8 +95,7 @@ export default forwardRef<
             {it.wasPresent ? (
               <>
                 <Text>
-                  Käyttäytyminen:{" "}
-                  {formatRatingStringWithNull(it.behaviourRating)}
+                  Työskentely: {formatRatingStringWithNull(it.behaviourRating)}
                 </Text>
                 <Text>
                   Taidot: {formatRatingStringWithNull(it.skillsRating)}

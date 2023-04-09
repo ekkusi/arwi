@@ -28,6 +28,26 @@
           "label": "Luontoliikunta",
           "code": "LI_LUONTO",
           "color": "#48BB78"
+        },
+        {
+          "label": "Tanssi",
+          "code": "LI_TANSSI",
+          "color": "#F6E05E"
+        },
+        {
+          "label": "Kuntoliikunta",
+          "code": "LI_KUNTO",
+          "color": "#A0AEC0"
+        },
+        {
+          "label": "Perusliikunta",
+          "code": "LI_PERUS",
+          "color": "#F56565"
+        },
+        {
+          "label": "Muu",
+          "code": "LI_MUU",
+          "color": "#ED64A6"
         }
       ]
     },

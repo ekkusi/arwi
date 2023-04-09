@@ -72,7 +72,7 @@ export default function StudentEvaluationsRecap({
               {!Number.isNaN(skillsAverage)
                 ? `${skillsAverage.toFixed(
                     2
-                  )} (keskihajonta: ${skillsStdev.toFixed(2)}`
+                  )} (keskihajonta: ${skillsStdev.toFixed(2)})`
                 : "Taitoja ei vielä arvioitu"}
             </Text>
           </Box>
@@ -84,7 +84,7 @@ export default function StudentEvaluationsRecap({
               {!Number.isNaN(behaviourAverage)
                 ? `${behaviourAverage.toFixed(
                     2
-                  )} (keskihajonta: ${behaviourStdev.toFixed(2)}`
+                  )} (keskihajonta: ${behaviourStdev.toFixed(2)})`
                 : "Työskentelyä ei vielä arvioitu"}
             </Text>
           </Box>
