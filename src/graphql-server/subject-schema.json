@@ -1,0 +1,35 @@
+{
+  "subjects": [
+    {
+      "label": "Liikunta",
+      "code": "LI",
+      "environments": [
+        {
+          "label": "Talviliikunta",
+          "code": "LI_TALVI",
+          "color": "#BEE3F8"
+        },
+        {
+          "label": "Palloilu",
+          "code": "LI_PALLO",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Vesiliikunta",
+          "code": "LI_VESI",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Voimistelu",
+          "code": "LI_VOIM",
+          "color": "#975A16"
+        },
+        {
+          "label": "Luontoliikunta",
+          "code": "LI_LUONTO",
+          "color": "#48BB78"
+        }
+      ]
+    }
+  ]
+}

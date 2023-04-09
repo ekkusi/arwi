@@ -6,6 +6,7 @@ type Query {
   getCollection(id: ID!): EvaluationCollection!
   getStudent(id: ID!): Student!
   getEvaluation(id: ID!): Evaluation!
+  getSubjects: [Subject!]!
 }
 
 type Mutation {
@@ -34,13 +35,25 @@ type LoginResult {
   teacher: Teacher!
 }
 
+type Subject {
+  code: ID!
+  label: String!
+  environments: [Environment!]!
+}
+
+type Environment {
+  code: ID!
+  color: String!
+  label: String!
+  subject: Subject!
+}
 
 type Group {
   id: ID!
   name: String!
   evaluationCollections: [EvaluationCollection!]!
   students: [Student!]!
-  evaluationTypes: [String!]
+  subject: Subject!
   teacher: Teacher!
   updatedAt: Date!
 }
@@ -49,6 +62,7 @@ type EvaluationCollection {
   id: ID!
   date: Date!
   type: String!
+  environment: Environment!
   description: String
   evaluations: [Evaluation!]!
   group: Group!
@@ -88,6 +102,7 @@ input CreateTeacherInput {
 input CreateGroupInput {
   name: String!
   teacherId: ID!
+  subjectCode: ID!
   students: [CreateStudentInput!]
 }
 
@@ -106,6 +121,7 @@ input UpdateStudentInput {
 input CreateCollectionInput {
   date: Date!
   type: String!
+  environmentCode: ID!
   description: String
   evaluations: [CreateEvaluationInput!]
 }
@@ -113,6 +129,7 @@ input CreateCollectionInput {
 input UpdateCollectionInput {
   date: Date
   type: String
+  environmentCode: ID
   description: String
   evaluations: [UpdateEvaluationInput!]
 }

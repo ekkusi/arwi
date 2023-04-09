@@ -1,6 +1,7 @@
 import ValidationError from "../errors/ValidationError";
 import { QueryResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
+import subjectSchema from "../subject-schema.json";
 
 const resolvers: QueryResolvers<CustomContext> = {
   getTeacher: async (_, { id }, { prisma }) => {
@@ -48,6 +49,13 @@ const resolvers: QueryResolvers<CustomContext> = {
       where: { id },
     });
     return matchingEvaluation;
+  },
+  getSubjects: () => {
+    const subjects = subjectSchema.subjects.map((it) => ({
+      code: it.code,
+      label: it.label,
+    }));
+    return subjects;
   },
 };
 

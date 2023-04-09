@@ -42,6 +42,7 @@ export default function CreateGroupPage() {
       await graphqlClient.request(CreateGroupPage_CreateGroup_Mutation, {
         input: {
           ...values,
+          subjectCode: "LI", // TODO: Make this dynamic
           students,
           teacherId: session.user.id,
         },

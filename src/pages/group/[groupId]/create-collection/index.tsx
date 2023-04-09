@@ -58,8 +58,9 @@ function CreateCollectionPageContent() {
         {
           groupId: group.id,
           createCollectionInput: {
-            description: description.length > 0 ? description : null,
             ...rest,
+            description: description.length > 0 ? description : null,
+            environmentCode: "LI_TALVI", // TODO: Make this dynamic
             evaluations: participations.map((it) => ({
               studentId: it.student.id,
               wasPresent: it.wasPresent,
