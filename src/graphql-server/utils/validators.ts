@@ -57,6 +57,7 @@ export const validateUpdateEvaluationInput = async (
   const wasPresent =
     data.wasPresent !== null ? data.wasPresent : matchingEvaluation.wasPresent;
 
+  // If the student was not present, the evaluation data cannot be updated
   if (
     wasPresent === false &&
     (data.behaviourRating || data.skillsRating || data.notes)
