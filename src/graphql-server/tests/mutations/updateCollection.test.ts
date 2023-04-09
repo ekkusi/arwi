@@ -191,4 +191,43 @@ describe("ServerRequest - updateCollection", () => {
       expect(error.message).toContain("Unexpected error.");
     }
   });
+
+  it("should return an error when the environmentCode is invalid", async () => {
+    // Arrange
+    const variables = {
+      data: {
+        type: "Updated Type",
+        date: "2023-04-01",
+        environmentCode: "INVALID_ENVIRONMENT_CODE",
+      },
+      collectionId,
+    };
+
+    const query = graphql(`
+      mutation UpdateCollectionTest_UpdateCollectionInvalidEnvironmentCode(
+        $data: UpdateCollectionInput!
+        $collectionId: ID!
+      ) {
+        updateCollection(data: $data, collectionId: $collectionId) {
+          id
+          type
+          date
+        }
+      }
+    `);
+
+    // Act
+    try {
+      await serverRequest(
+        { document: query, prismaOverride: prisma },
+        variables
+      );
+    } catch (error) {
+      // Assert
+      assertIsError(error);
+      expect(error.message).toContain(
+        "Ympäristöä koodilla 'INVALID_ENVIRONMENT_CODE' ei ole olemassa."
+      );
+    }
+  });
 });
