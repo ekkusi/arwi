@@ -26,6 +26,7 @@ describe("ServerRequest - createGroup", () => {
       data: {
         name: "Test Group",
         teacherId,
+        subjectCode: "LI",
       },
     };
     const query = graphql(`
@@ -66,6 +67,7 @@ describe("ServerRequest - createGroup", () => {
       data: {
         name: "Test Group with Students",
         teacherId,
+        subjectCode: "LI",
         students: [
           {
             name: "Student 1",

@@ -22,6 +22,7 @@ describe("ServerRequest - updateCollection", () => {
       data: {
         name: "Test Group",
         teacherId: teacher.id,
+        subjectCode: "LI",
       },
     });
 
@@ -41,6 +42,7 @@ describe("ServerRequest - updateCollection", () => {
         date: new Date(),
         type: "Test Type",
         groupId,
+        environmentCode: "LI_TALVI",
       },
     });
 

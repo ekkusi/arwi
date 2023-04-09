@@ -22,6 +22,7 @@ describe("ServerRequest - updateEvaluations", () => {
       data: {
         name: "Test Group",
         teacherId: teacher.id,
+        subjectCode: "LI",
       },
     });
 
@@ -40,6 +41,7 @@ describe("ServerRequest - updateEvaluations", () => {
       data: {
         date: new Date(),
         type: "Test Type",
+        environmentCode: "LI_TALVI",
         groupId,
       },
     });

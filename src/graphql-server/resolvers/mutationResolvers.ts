@@ -13,7 +13,10 @@ import {
   mapUpdateStudentInput,
 } from "../utils/mappers";
 import {
+  validateCreateCollectionInput,
+  validateCreateGroupInput,
   validateCreateStudentInput,
+  validateUpdateCollectionInput,
   validateUpdateStudentInput,
 } from "../utils/validators";
 import { updateEvaluation } from "../utils/resolverUtils";
@@ -56,6 +59,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     };
   },
   createGroup: async (_, { data }, { prisma }) => {
+    await validateCreateGroupInput(data);
     const { students, ...rest } = data;
     const group = await prisma.group.create({
       data: {
@@ -71,6 +75,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     return group;
   },
   createCollection: async (_, { data, groupId }, { prisma, res }) => {
+    await validateCreateCollectionInput(data);
     const { evaluations, ...rest } = data;
     const createdCollection = await prisma.evaluationCollection.create({
       data: {
@@ -129,6 +134,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     return updatedEvaluation;
   },
   updateCollection: async (_, { data, collectionId }, { prisma, res }) => {
+    await validateUpdateCollectionInput(data);
     const { evaluations, ...rest } = data;
     let updatedStudentIds: string[] = [];
     if (evaluations) {

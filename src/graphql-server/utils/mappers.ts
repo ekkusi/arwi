@@ -37,7 +37,8 @@ export const mapUpdateCollectionInput = (
 ): Prisma.EvaluationCollectionUpdateInput => {
   return {
     ...data,
-    type: data.type ? data.type : undefined,
+    type: data.type || undefined,
     date: data.date ? new Date(data.date) : undefined,
+    environmentCode: data.environmentCode || undefined,
   };
 };

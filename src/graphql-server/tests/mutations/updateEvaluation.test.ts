@@ -17,7 +17,7 @@ describe("ServerRequest - updateEvaluation", () => {
     });
 
     const group = await prisma.group.create({
-      data: { name: "Test Group", teacherId: teacher.id },
+      data: { name: "Test Group", teacherId: teacher.id, subjectCode: "LI" },
     });
 
     const student = await prisma.student.create({
@@ -25,7 +25,11 @@ describe("ServerRequest - updateEvaluation", () => {
     });
 
     const collection = await prisma.evaluationCollection.create({
-      data: { type: "Test Collection", groupId: group.id },
+      data: {
+        type: "Test Collection",
+        groupId: group.id,
+        environmentCode: "LI_TALVI",
+      },
     });
 
     const evaluation = await prisma.evaluation.create({

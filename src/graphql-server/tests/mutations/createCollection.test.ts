@@ -16,6 +16,7 @@ describe("ServerRequest - createCollection", () => {
     const group = await prisma.group.create({
       data: {
         name: "Test Group",
+        subjectCode: "LI",
         teacherId: teacher.id,
       },
     });
@@ -35,6 +36,7 @@ describe("ServerRequest - createCollection", () => {
         date: "2023-04-01",
         type: "Test Evaluation",
         description: "Test description",
+        environmentCode: "LI_TAVLI",
       },
       groupId,
     };
@@ -84,6 +86,7 @@ describe("ServerRequest - createCollection", () => {
 
         type: "Test Evaluation",
         description: "Test description",
+        environmentCode: "LI_TALVI",
         evaluations: [
           {
             studentId: student1.id,

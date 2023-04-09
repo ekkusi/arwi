@@ -1,10 +1,41 @@
 import ValidationError from "../errors/ValidationError";
 import prisma from "../prismaClient";
 import {
+  CreateCollectionInput,
+  CreateGroupInput,
   CreateStudentInput,
+  UpdateCollectionInput,
   UpdateEvaluationInput,
   UpdateStudentInput,
 } from "../types";
+import { getEnvironment, getSubject } from "./subjectUtils";
+
+export const validateCreateGroupInput = async ({
+  subjectCode,
+}: CreateGroupInput) => {
+  if (!getSubject(subjectCode))
+    throw new ValidationError(
+      `Aihetta koodilla '${subjectCode}' ei ole olemassa.`
+    );
+};
+
+export const validateCreateCollectionInput = async ({
+  environmentCode,
+}: CreateCollectionInput) => {
+  if (!getEnvironment(environmentCode))
+    throw new ValidationError(
+      `Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`
+    );
+};
+
+export const validateUpdateCollectionInput = async ({
+  environmentCode,
+}: UpdateCollectionInput) => {
+  if (environmentCode && !getEnvironment(environmentCode))
+    throw new ValidationError(
+      `Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`
+    );
+};
 
 export const validateCreateStudentInput = async (
   data: CreateStudentInput,
