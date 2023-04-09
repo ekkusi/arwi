@@ -74,6 +74,37 @@
           "label": "Ympäristö",
           "code": "BI_YMPARISTO",
           "color": "#975A16"
+        },
+        {
+          "label": "Muu",
+          "code": "BI_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Psykologia",
+      "code": "PY",
+      "environments": [
+        {
+          "label": "Aivot",
+          "code": "PY_AIVO",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Tunteet",
+          "code": "PY_TUNTEET",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Käyttäytyminen",
+          "code": "PY_KAYT",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "PY_MUU",
+          "color": "#ED64A6"
         }
       ]
     }
