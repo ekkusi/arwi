@@ -123,7 +123,7 @@ function EvaluationEditPageContent() {
       router.push({
         pathname: redirectPath,
         query: {
-          expandedEvaluationId: evaluation.id,
+          modifiedEvaluationId: evaluationData.id,
         },
       });
       toast({

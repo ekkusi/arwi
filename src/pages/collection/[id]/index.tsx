@@ -1,5 +1,5 @@
 import PageWrapper from "@/components/server-components/PageWrapper";
-import { getFragmentData, graphql } from "@/gql";
+import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
 import { Divider, Text, useToast } from "@chakra-ui/react";
@@ -79,25 +79,12 @@ export default function CollectionPage({
 
   useEffect(() => {
     // Expand the evaluation matching the expandedEvaluationId query param if set
-    const { expandedEvaluationId } = router.query;
-    if (
-      !data ||
-      !expandedEvaluationId ||
-      typeof expandedEvaluationId !== "string"
-    )
-      return;
+    const { modifiedEvaluationId } = router.query;
 
-    const expandedEvaluation = data.getCollection.evaluations.find(
-      (it) => it.id === expandedEvaluationId
-    );
-    if (!expandedEvaluation) return;
+    if (!data || typeof modifiedEvaluationId !== "string") return;
 
-    evaluationsAccordionRef.current?.expandEvaluation(
-      getFragmentData(
-        EvaluationsAccordion_EvaluationFragmentDoc,
-        expandedEvaluation
-      )
-    );
+    evaluationsAccordionRef.current?.expandEvaluations([modifiedEvaluationId]);
+    evaluationsAccordionRef.current?.scrollTo(modifiedEvaluationId);
   }, [router.query, data]);
   if (!data) return <LoadingIndicator />;
 
@@ -150,7 +137,7 @@ export default function CollectionPage({
           arviointien tiedot poistuvat samalla.
         </Text>
       </ConfirmationModal>
-      <Card my="3" border="none">
+      <Card mt="3" mb="5" border="none">
         <Text as="h1" textAlign="center" mb="2" fontSize="2xl">
           Arvioinnin yhteenveto
         </Text>
@@ -174,7 +161,9 @@ export default function CollectionPage({
         </Text>
         {collection.description && <Text mt="2">{collection.description}</Text>}
       </Card>
-      <Text as="h2">Arvioinnit:</Text>
+      <Text as="h2" mb="0">
+        Arvioinnit:
+      </Text>
 
       {collection.evaluations.length > 0 ? (
         <EvaluationsAccordion

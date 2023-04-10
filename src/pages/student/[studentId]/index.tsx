@@ -1,4 +1,4 @@
-import { getFragmentData, graphql } from "@/gql";
+import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
 import { Box, Button, FormLabel, Input, Text } from "@chakra-ui/react";
@@ -59,25 +59,12 @@ function StudentPageContent() {
 
   useEffect(() => {
     // Expand the evaluation matching the expandedEvaluationId query param if set
-    const { expandedEvaluationId } = router.query;
-    if (
-      !data ||
-      !expandedEvaluationId ||
-      typeof expandedEvaluationId !== "string"
-    )
-      return;
+    const { modifiedEvaluationId } = router.query;
 
-    const expandedEvaluation = data.getStudent.evaluations.find(
-      (it) => it.id === expandedEvaluationId
-    );
-    if (!expandedEvaluation) return;
+    if (!data || typeof modifiedEvaluationId !== "string") return;
 
-    evaluationsAccordionRef.current?.expandEvaluation(
-      getFragmentData(
-        EvaluationsAccordion_EvaluationFragmentDoc,
-        expandedEvaluation
-      )
-    );
+    evaluationsAccordionRef.current?.expandEvaluations([modifiedEvaluationId]);
+    evaluationsAccordionRef.current?.scrollTo(modifiedEvaluationId);
   }, [router.query, data]);
 
   if (!data) return <LoadingIndicator />;
@@ -131,7 +118,9 @@ function StudentPageContent() {
         {student.name}
       </Text>
       <StudentEvaluationsRecap evaluations={student.evaluations} mb="5" />
-      <Text as="h2">Kaikki arvioinnit</Text>
+      <Text as="h2" mb="0">
+        Kaikki arvioinnit
+      </Text>
       {student.evaluations.length > 0 ? (
         <>
           <EvaluationsAccordion

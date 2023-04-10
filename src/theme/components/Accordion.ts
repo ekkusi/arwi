@@ -8,8 +8,4 @@ const Accordion: ComponentSingleStyleConfig = defineStyleConfig({
   baseStyle: {},
 });
 
-_Accordion.defaultProps = {
-  allowToggle: true,
-};
-
 export default Accordion;

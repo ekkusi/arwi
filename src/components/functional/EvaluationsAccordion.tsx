@@ -2,7 +2,14 @@ import { FragmentType, getFragmentData, graphql } from "@/gql";
 import { EvaluationsAccordion_EvaluationFragment } from "@/gql/graphql";
 import { formatRatingStringWithNull } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
-import { Accordion, AccordionProps, Box, Button, Text } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionProps,
+  Box,
+  Button,
+  Flex,
+  Text,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import AccordionItem from "../general/AccordionItem";
@@ -26,15 +33,17 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
   }
 `);
 
-type EvaluationsAccordionProps = AccordionProps & {
+type EvaluationsAccordionProps = Omit<
+  AccordionProps,
+  "allowToggle" | "allowMultiple"
+> & {
   evaluations: FragmentType<typeof EvaluationsAccordion_Evaluation_Fragment>[];
   titleFrom?: "student" | "collection";
 };
 
 export type EvaluationsAccordionHandlers = {
-  expandEvaluation: (
-    evaluation: EvaluationsAccordion_EvaluationFragment
-  ) => void;
+  expandEvaluations: (evaluationIds: string[]) => void;
+  scrollTo: (evaluationId: string, delay?: number) => void;
 };
 
 export default forwardRef<
@@ -60,79 +69,108 @@ export default forwardRef<
         : a.student.name.localeCompare(b.student.name)
     );
     const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
-    const [expandedIndex, setExpandedIndex] = useState(-1);
+    const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
+
+    const scrollTo = (evaluationId: string) => {
+      const index = sortedEvaluations.findIndex((it) => it.id === evaluationId);
+
+      if (index === -1) return;
+      itemRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
+    };
 
     useImperativeHandle(ref, () => ({
-      expandEvaluation(evaluation) {
-        const index = sortedEvaluations.findIndex(
-          (it) => it.id === evaluation.id
-        );
-        if (index === -1) return;
-        itemRefs.current[index]?.scrollIntoView();
-        setExpandedIndex(index);
+      expandEvaluations(expandedEvaluationIds) {
+        const indexes = expandedEvaluationIds
+          .map((id) => sortedEvaluations.findIndex((it) => it.id === id))
+          .filter((i) => i !== -1);
+
+        setExpandedIndexes(indexes);
+      },
+      scrollTo(evaluationId) {
+        scrollTo(evaluationId);
       },
     }));
 
+    const openAll = () => {
+      setExpandedIndexes(sortedEvaluations.map((_, i) => i));
+    };
+
+    const closeAll = () => {
+      setExpandedIndexes([]);
+    };
+
     return (
-      <Accordion
-        index={expandedIndex}
-        onChange={(i) => setExpandedIndex(Array.isArray(i) ? i[0] : i)}
-        {...rest}
-      >
-        {sortedEvaluations.map((it, i) => (
-          <AccordionItem
-            title={
-              titleFrom === "collection"
-                ? `${formatDate(it.collection.date)} - ${
-                    it.collection.environment.label
-                  }`
-                : it.student.name
-            }
-            key={it.id}
-            ref={(itemRef) => {
-              itemRefs.current[i] = itemRef;
-            }}
+      <>
+        <Flex justifyContent="end" pb="1" pr="1">
+          <Text
+            color="light-text"
+            onClick={expandedIndexes.length > 0 ? closeAll : openAll}
           >
-            <Text color={it.wasPresent ? "green" : "red"}>
-              {it.wasPresent ? "Paikalla" : "Poissa"}
-            </Text>
-            {it.wasPresent ? (
-              <>
-                <Text>
-                  Työskentely: {formatRatingStringWithNull(it.behaviourRating)}
-                </Text>
-                <Text>
-                  Taidot: {formatRatingStringWithNull(it.skillsRating)}
-                </Text>
-                {it.notes ? (
-                  <Box mt="3">
-                    <Text mb="1">Huomiot:</Text>
-                    <Text>{it.notes}</Text>
-                  </Box>
-                ) : (
-                  <Text mt="3">Huomioita ei annettu</Text>
-                )}
-              </>
-            ) : (
-              <Text>Oppilas ei ollut paikalla, ei arviointeja</Text>
-            )}
-            <Button
-              as={Link}
-              href={{
-                pathname: `/evaluation/${it.id}/edit`,
-                query: {
-                  prevPath:
-                    typeof window !== "undefined" && window.location.pathname,
-                },
+            {expandedIndexes.length > 0 ? "Piilota kaikki" : "Avaa kaikki"}
+          </Text>
+        </Flex>
+        <Accordion
+          index={expandedIndexes}
+          allowMultiple
+          onChange={(i) => setExpandedIndexes(Array.isArray(i) ? i : [i])}
+          {...rest}
+        >
+          {sortedEvaluations.map((it, i) => (
+            <AccordionItem
+              title={
+                titleFrom === "collection"
+                  ? `${formatDate(it.collection.date)} - ${
+                      it.collection.environment.label
+                    }`
+                  : it.student.name
+              }
+              key={it.id}
+              ref={(itemRef) => {
+                itemRefs.current[i] = itemRef;
               }}
-              mt="3"
-              size="sm"
             >
-              Muokkaa
-            </Button>
-          </AccordionItem>
-        ))}
-      </Accordion>
+              <Text color={it.wasPresent ? "green" : "red"}>
+                {it.wasPresent ? "Paikalla" : "Poissa"}
+              </Text>
+              {it.wasPresent ? (
+                <>
+                  <Text>
+                    Työskentely:{" "}
+                    {formatRatingStringWithNull(it.behaviourRating)}
+                  </Text>
+                  <Text>
+                    Taidot: {formatRatingStringWithNull(it.skillsRating)}
+                  </Text>
+                  {it.notes ? (
+                    <Box mt="3">
+                      <Text mb="1">Huomiot:</Text>
+                      <Text>{it.notes}</Text>
+                    </Box>
+                  ) : (
+                    <Text mt="3">Huomioita ei annettu</Text>
+                  )}
+                </>
+              ) : (
+                <Text>Oppilas ei ollut paikalla, ei arviointeja</Text>
+              )}
+              <Button
+                as={Link}
+                href={{
+                  pathname: `/evaluation/${it.id}/edit`,
+                  query: {
+                    prevPath:
+                      typeof window !== "undefined" && window.location.pathname,
+                  },
+                }}
+                mt="3"
+                size="sm"
+              >
+                Muokkaa
+              </Button>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </>
     );
   }
 );
