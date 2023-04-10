@@ -78,6 +78,7 @@ export default function UpdateEvaluationCard({
 
   const changeNotes = (value: string) => {
     setNotes(value);
+
     debouncedOnChanged("notes", value);
   };
 
@@ -131,7 +132,7 @@ export default function UpdateEvaluationCard({
             bottom="1"
             right="1"
             aria-label="Puhu tekstiksi"
-            onResult={(result) => changeNotes(result)}
+            onResult={changeNotes}
           />
         </Box>
         {children}

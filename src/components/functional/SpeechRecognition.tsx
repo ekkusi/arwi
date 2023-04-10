@@ -1,26 +1,24 @@
 import useSpeechRecognition from "@/hooks-and-providers/useSpeechRecognition";
 import { IconButtonProps, IconButton } from "@chakra-ui/react";
+import { useCallback } from "react";
 import { FaMicrophone } from "react-icons/fa";
 
 type SpeechRecognitionProps = Omit<IconButtonProps, "onClick"> & {
   onResult?: (result: string) => void;
-  onStart?: () => void;
-  onStop?: () => void;
 };
 
 export default function SpeechRecognition({
-  onResult,
-  onStart,
-  onStop,
+  onResult: _onResult,
   ...rest
 }: SpeechRecognitionProps) {
+  const onResult = useCallback(
+    (value: string) => {
+      _onResult?.(value);
+    },
+    [_onResult]
+  );
   const { speechRecognition, active } = useSpeechRecognition({
-    onStop: () => {
-      onStop?.();
-    },
-    onResult: (newResult) => {
-      onResult?.(newResult);
-    },
+    onResult,
   });
 
   return speechRecognition ? (
@@ -34,10 +32,11 @@ export default function SpeechRecognition({
       onClick={() => {
         if (!active) {
           speechRecognition.start();
-          onStart?.();
         } else speechRecognition.stop();
       }}
-      onBlur={() => speechRecognition.stop()}
+      onBlur={() => {
+        speechRecognition.stop();
+      }}
       {...rest}
     />
   ) : null;
