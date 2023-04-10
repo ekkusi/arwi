@@ -88,7 +88,7 @@ export default function GroupList({
             as={Link}
             href={`/group/${selectedGroup?.id}`}
             mb="3"
-            colorScheme="yellow"
+            colorScheme="blue"
             onClick={() => {
               onClose();
             }}
