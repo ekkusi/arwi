@@ -37,20 +37,22 @@ export default function useSpeechRecognition({
   useEffect(() => {
     if ("webkitSpeechRecognition" in window) {
       if (!speechRecognition) {
-        const SpeechRecognition =
-          window.SpeechRecognition || webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.lang = "fi-FI";
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.onresult = onResult;
-        recognition.onend = () => {
-          setActive(false);
-        };
-        recognition.onstart = () => {
-          setActive(true);
-        };
-        setSpeechRecognition(recognition);
+        navigator.mediaDevices?.getUserMedia({ audio: true }).then(() => {
+          const SpeechRecognition =
+            window.SpeechRecognition || webkitSpeechRecognition;
+          const recognition = new SpeechRecognition();
+          recognition.lang = "fi-FI";
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.onresult = onResult;
+          recognition.onend = () => {
+            setActive(false);
+          };
+          recognition.onstart = () => {
+            setActive(true);
+          };
+          setSpeechRecognition(recognition);
+        });
       } else {
         speechRecognition.onresult = onResult;
       }

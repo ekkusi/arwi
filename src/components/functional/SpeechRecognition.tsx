@@ -32,7 +32,9 @@ export default function SpeechRecognition({
       onClick={() => {
         if (!active) {
           speechRecognition.start();
-        } else speechRecognition.stop();
+        } else {
+          speechRecognition.stop();
+        }
       }}
       onBlur={() => {
         speechRecognition.stop();
