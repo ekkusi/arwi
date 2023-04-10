@@ -72,7 +72,7 @@ describe("ServerRequest - updateCollection", () => {
     // Arrange
     const variables = {
       data: {
-        type: "Updated Type",
+        environmentCode: "LI_PALLO",
         date: "2023-04-01",
       },
       collectionId,
@@ -85,7 +85,9 @@ describe("ServerRequest - updateCollection", () => {
       ) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
-          type
+          environment {
+            code
+          }
           date
         }
       }
@@ -100,7 +102,9 @@ describe("ServerRequest - updateCollection", () => {
     // Assert
     expect(result.updateCollection).toEqual({
       id: collectionId,
-      type: variables.data.type,
+      environment: {
+        code: variables.data.environmentCode,
+      },
       date: variables.data.date,
     });
   });
@@ -160,7 +164,6 @@ describe("ServerRequest - updateCollection", () => {
     // Arrange
     const variables = {
       data: {
-        type: "Updated Type",
         date: "2023-04-01",
       },
       collectionId: "non-existent-collection-id",
@@ -173,7 +176,6 @@ describe("ServerRequest - updateCollection", () => {
       ) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
-          type
           date
         }
       }
@@ -196,7 +198,6 @@ describe("ServerRequest - updateCollection", () => {
     // Arrange
     const variables = {
       data: {
-        type: "Updated Type",
         date: "2023-04-01",
         environmentCode: "INVALID_ENVIRONMENT_CODE",
       },
@@ -210,7 +211,6 @@ describe("ServerRequest - updateCollection", () => {
       ) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
-          type
           date
         }
       }
