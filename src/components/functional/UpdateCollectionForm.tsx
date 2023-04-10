@@ -39,6 +39,7 @@ const UpdateCollectionForm_Collection_Fragment = graphql(`
     type
     date
     description
+    type
     environment {
       code
     }
@@ -147,6 +148,9 @@ export default function UpdateCollectionForm({
           <Text as="h1" textAlign="center">
             {collection ? "Arvioinnin muokkaus" : "Uusi arviointi"}
           </Text>
+          {collection && collection.type.length > 0 && (
+            <Text>Vanha tyyppi: {collection?.type}</Text>
+          )}
           <FormField
             label="Ympäristö"
             name="environmentCode"
