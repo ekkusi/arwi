@@ -21,6 +21,16 @@ export default function SpeechRecognition({
     onResult,
   });
 
+  const getIsIOS = () => {
+    const ua = navigator.userAgent;
+    if (/iPad|iPhone|iPod/.test(ua)) {
+      return true;
+    }
+    return false;
+  };
+
+  if (getIsIOS()) return null;
+
   return speechRecognition ? (
     <IconButton
       variant="link"
