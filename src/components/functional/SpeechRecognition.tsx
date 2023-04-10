@@ -29,6 +29,7 @@ export default function SpeechRecognition({
     return false;
   };
 
+  // NOTE: This can be removed once IOS supports the SpeechRecognition API
   if (getIsIOS()) return null;
 
   return speechRecognition ? (
