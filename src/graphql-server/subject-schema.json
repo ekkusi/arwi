@@ -7,7 +7,7 @@
         {
           "label": "Talviliikunta",
           "code": "LI_TALVI",
-          "color": "#BEE3F8"
+          "color": "#718096"
         },
         {
           "label": "Palloilu",
@@ -37,7 +37,7 @@
         {
           "label": "Kuntoliikunta",
           "code": "LI_KUNTO",
-          "color": "#A0AEC0"
+          "color": "#9F7AEA"
         },
         {
           "label": "Perusliikunta",
