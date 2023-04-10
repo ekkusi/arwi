@@ -35,7 +35,6 @@ describe("ServerRequest - createCollection", () => {
     const variables = {
       data: {
         date: "2023-04-01",
-        type: "Test Evaluation",
         description: "Test description",
         environmentCode: "LI_TALVI",
       },
@@ -46,7 +45,9 @@ describe("ServerRequest - createCollection", () => {
         createCollection(data: $data, groupId: $groupId) {
           id
           date
-          type
+          environment {
+            code
+          }
           description
         }
       }
@@ -62,8 +63,10 @@ describe("ServerRequest - createCollection", () => {
     expect(result.createCollection).toEqual({
       id: expect.any(String),
       date: variables.data.date,
-      type: variables.data.type,
       description: variables.data.description,
+      environment: {
+        code: variables.data.environmentCode,
+      },
     });
   });
 
@@ -85,7 +88,6 @@ describe("ServerRequest - createCollection", () => {
       data: {
         date: "2023-04-01",
 
-        type: "Test Evaluation",
         description: "Test description",
         environmentCode: "LI_TALVI",
         evaluations: [
@@ -116,8 +118,10 @@ describe("ServerRequest - createCollection", () => {
           createCollection(data: $data, groupId: $groupId) {
             id
             date
-            type
             description
+            environment {
+              code
+            }
             evaluations {
               id
               wasPresent
@@ -139,8 +143,10 @@ describe("ServerRequest - createCollection", () => {
     expect(result.createCollection).toEqual({
       id: expect.any(String),
       date: variables.data.date,
-      type: variables.data.type,
       description: variables.data.description,
+      environment: {
+        code: variables.data.environmentCode,
+      },
       evaluations: [
         {
           id: expect.any(String),
@@ -165,7 +171,6 @@ describe("ServerRequest - createCollection", () => {
     const variables = {
       data: {
         date: "2023-04-01",
-        type: "Test Evaluation",
         description: "Test description",
         environmentCode: invalidEnvironmentCode,
       },
@@ -179,7 +184,6 @@ describe("ServerRequest - createCollection", () => {
         createCollection(data: $data, groupId: $groupId) {
           id
           date
-          type
           description
         }
       }
