@@ -31,7 +31,7 @@ const customComponents = {
         display="inline-block"
         bg={props.data.color}
         p="2"
-        borderRadius="md"
+        borderRadius="full"
         mr="2"
       />
       {children}
@@ -47,7 +47,7 @@ const customComponents = {
           display="inline-block"
           bg={props.data.color}
           p="2"
-          borderRadius="md"
+          borderRadius="full"
           mr="2"
         />
         {children}
