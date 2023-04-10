@@ -177,6 +177,7 @@ export default function UpdateStudentsList({
     <Box {...rest}>
       <Flex justifyContent="space-between" mt="2" mb="5">
         <InputWithError
+          name="new-student-name"
           ref={nameInputRef}
           mr="2"
           placeholder="Uuden oppilaan nimi"
@@ -210,7 +211,8 @@ export default function UpdateStudentsList({
         >
           <InputWithError
             type="text"
-            value={it.name}
+            name={`student-name-${it.id}`}
+            defaultValue={it.name}
             validate={validateName}
             onBlur={(e, isValid) =>
               isValid && handleStudentNameChange(it, e.target.value)

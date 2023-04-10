@@ -1,7 +1,7 @@
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
-import { Box, Button, FormLabel, Input, Text } from "@chakra-ui/react";
+import { Box, Button, FormLabel, Text } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
@@ -20,6 +20,7 @@ import EvaluationsAccordion, {
   EvaluationsAccordionHandlers,
 } from "@/components/functional/EvaluationsAccordion";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
+import InputWithError from "@/components/general/InputWithError";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
@@ -49,9 +50,10 @@ function StudentPageContent() {
     () => graphqlClient.request(StudentPage_GetStudent_Query, { studentId })
   );
 
-  const [error, setError] = useState<string | undefined>();
   const [summary, setSummary] = useState<string | undefined>();
   const [summaryLength, setSummaryLength] = useState<number>(50);
+  const [error, setError] = useState<string | undefined>();
+  const [isSummaryValid, setIsSummaryValid] = useState<boolean>(true);
   const [isGeneratingSummary, setIsGeneratingSumamry] =
     useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -70,11 +72,16 @@ function StudentPageContent() {
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
 
-  const genearateSummary = async () => {
-    if (summaryLength < 10 || summaryLength > 200) {
-      setError("Yhteenvedon pituuden tulee olla välillä 10-200 merkkiä.");
-      return;
+  const validateSummaryLength = (value: string) => {
+    const parsed = Number(value);
+    let errorMessage;
+    if (parsed < 10 || parsed > 200) {
+      errorMessage = "Yhteenvedon pituuden tulee olla välillä 10-200 merkkiä.";
     }
+    return errorMessage;
+  };
+
+  const genearateSummary = async () => {
     try {
       setIsGeneratingSumamry(true);
       setIsCopied(false);
@@ -130,17 +137,22 @@ function StudentPageContent() {
           <Box my="5">
             <Text as="h2">Loppuarvioinnin generointi</Text>
             <FormLabel>Palautteen pituus</FormLabel>
-            <Input
+            <InputWithError
               type="number"
+              name="summary-length"
               isDisabled={isGeneratingSummary}
-              value={summaryLength}
-              onChange={(e) => setSummaryLength(Number(e.target.value))}
-              mb="4"
+              validate={validateSummaryLength}
+              defaultValue={50}
+              onChange={(e, isValid) => {
+                setSummaryLength(Number(e.target.value));
+                setIsSummaryValid(isValid);
+              }}
+              containerProps={{ mb: "4" }}
             />
             <Button
+              isDisabled={!isSummaryValid}
               isLoading={isGeneratingSummary}
               onClick={() => genearateSummary()}
-              mb="2"
             >
               Luo palaute
             </Button>

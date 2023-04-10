@@ -78,7 +78,8 @@ function EditGroupPageContent() {
       <Text as="h2">Aine: {group.subject.label}</Text>
       <Text as="h2">Nimi:</Text>
       <InputWithError
-        value={group.name}
+        name="group-name"
+        defaultValue={group.name}
         onBlur={(e, isValid) => isValid && updateName(e.target.value)}
         containerProps={{ mb: "5" }}
       />

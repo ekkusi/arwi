@@ -9,14 +9,13 @@ import {
 import debounce from "lodash.debounce";
 import {
   forwardRef,
-  useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
-type InputWithErrorProps = Omit<InputProps, "value" | "onChange" | "onBlur"> & {
-  value?: string;
+type InputWithErrorProps = Omit<InputProps, "onChange" | "onBlur" | "name"> & {
   debounced?: boolean;
   validate?: (value: string) => string | undefined;
   errorMessageProps?: FormErrorMessageProps;
@@ -29,6 +28,7 @@ type InputWithErrorProps = Omit<InputProps, "value" | "onChange" | "onBlur"> & {
     isValid: boolean
   ) => void;
   containerProps?: BoxProps;
+  name: string;
 };
 
 export type InputWithErrorHandlers = {
@@ -41,24 +41,17 @@ export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
       debounced = false,
       onChange: validatedOnChange,
       onBlur: validatedOnBlur,
-      value: initialValue,
       validate,
       errorMessageProps,
       containerProps,
+      name,
+      defaultValue = "",
       ...rest
     }: InputWithErrorProps,
     ref
   ) => {
     const [error, setError] = useState<string | undefined>();
-    const [value, setValue] = useState<string | undefined>(() => {
-      return initialValue;
-    });
-
-    useEffect(() => {
-      if (initialValue) {
-        setValue(initialValue);
-      }
-    }, [initialValue]);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const defaultValidate = (newValue: string) => {
       if (newValue.length <= 0) {
@@ -75,9 +68,6 @@ export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;
-      setValue(newValue);
-
-      if (newValue === initialValue) return;
 
       const validateFunc = validate || defaultValidate;
 
@@ -92,13 +82,15 @@ export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
     };
 
     const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-      if (event.target.value === initialValue) return;
+      if (event.target.value === defaultValue) return;
       validatedOnBlur?.(event, !error);
     };
 
     useImperativeHandle(ref, () => ({
       clear() {
-        setValue("");
+        if (inputRef.current) {
+          inputRef.current.value = "";
+        }
         setError(undefined);
       },
     }));
@@ -106,7 +98,9 @@ export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
     return (
       <Box {...containerProps}>
         <Input
-          value={value}
+          ref={inputRef}
+          key={`${name}-${defaultValue}`}
+          defaultValue={defaultValue}
           onChange={onChange}
           onBlur={onBlur}
           isInvalid={!!error}
