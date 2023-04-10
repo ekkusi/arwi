@@ -4,6 +4,9 @@ import { CgProfile } from "react-icons/cg";
 import { Text, Icon, SimpleGrid, TextProps } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { getIsIOS } from "@/utils/deviceUtils";
+// import { getIsIOS } from "@/utils/deviceUtils";
 
 type BotttomNavigationLinkProps = TextProps & {
   href: string;
@@ -42,11 +45,20 @@ const NO_NAVIGATION_BAR_PATHS = [
 
 export default function BottomNavigationBar() {
   const { pathname } = useRouter();
+  const [isIOS, setIsIOS] = useState(false);
+
+  // Has to be done in useEffect because navigator (used in getIsIOS) is not available on server side
+  useEffect(() => {
+    setIsIOS(getIsIOS());
+  }, [isIOS]);
+
   if (NO_NAVIGATION_BAR_PATHS.includes(pathname || "")) return null;
+
   return (
     <SimpleGrid
       columns={3}
-      py="4"
+      pt="4"
+      pb={isIOS ? "6" : "4"}
       width="100%"
       position="fixed"
       zIndex="100"

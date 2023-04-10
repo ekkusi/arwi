@@ -1,4 +1,5 @@
 import useSpeechRecognition from "@/hooks-and-providers/useSpeechRecognition";
+import { getIsIOS } from "@/utils/deviceUtils";
 import { IconButtonProps, IconButton } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { FaMicrophone } from "react-icons/fa";
@@ -20,14 +21,6 @@ export default function SpeechRecognition({
   const { speechRecognition, active } = useSpeechRecognition({
     onResult,
   });
-
-  const getIsIOS = () => {
-    const ua = navigator.userAgent;
-    if (/iPad|iPhone|iPod/.test(ua)) {
-      return true;
-    }
-    return false;
-  };
 
   // NOTE: This can be removed once IOS supports the SpeechRecognition API
   if (getIsIOS()) return null;
