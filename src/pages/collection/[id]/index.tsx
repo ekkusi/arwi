@@ -30,7 +30,10 @@ const CollectionPage_GetCollection_Query = graphql(`
     getCollection(id: $collectionId) {
       id
       date
-      type
+      environment {
+        label
+        color
+      }
       description
       group {
         name
@@ -109,7 +112,7 @@ export default function CollectionPage({
     setIsModalOpen(false);
     router.push("/");
     toast({
-      title: `Arviointi '${dateString} ${collection.type}' poistettu onnistuneesti.`,
+      title: `Arviointi '${dateString} ${collection.environment.label}' poistettu onnistuneesti.`,
       status: "success",
       isClosable: true,
       position: "top",
@@ -153,9 +156,9 @@ export default function CollectionPage({
         </Text>
         <Text>
           <Text fontWeight="semibold" as="span">
-            Aihe:
+            Ympäristö:
           </Text>{" "}
-          {collection.type}
+          {collection.environment.label}
         </Text>
         <Text>
           <Text fontWeight="semibold" as="span">

@@ -1,4 +1,5 @@
 import { FragmentType, getFragmentData, graphql } from "@/gql";
+import { UpdateCollectionForm_EnvironmentFragmentDoc } from "@/gql/graphql";
 import { formatDate } from "@/utils/dateUtils";
 import { Button, Text, Textarea } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
@@ -6,12 +7,26 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import FormField from "../general/FormField";
 import Card from "../server-components/primitives/Card";
+import EnvironmentSelect from "./EnvironmentSelect";
 import StudentParticipationList, {
   StudentParticipation,
 } from "./StudentParticipationList";
 
+const UpdateCollectionForm_Environment_Fragment = graphql(`
+  fragment UpdateCollectionForm_Environment on Environment {
+    label
+    code
+    color
+  }
+`);
+
 const UpdateCollectionForm_Group_Fragment = graphql(`
   fragment UpdateCollectionForm_Group on Group {
+    subject {
+      environments {
+        ...UpdateCollectionForm_Environment
+      }
+    }
     students {
       id
       name
@@ -24,6 +39,16 @@ const UpdateCollectionForm_Collection_Fragment = graphql(`
     type
     date
     description
+    environment {
+      code
+    }
+    group {
+      subject {
+        environments {
+          ...UpdateCollectionForm_Environment
+        }
+      }
+    }
     evaluations {
       wasPresent
       student {
@@ -35,9 +60,9 @@ const UpdateCollectionForm_Collection_Fragment = graphql(`
 `);
 
 const defaultInitialValues = {
-  type: "",
   description: "",
   date: formatDate(new Date(), "yyyy-MM-dd"),
+  environmentCode: "",
 };
 
 export type FormData = typeof defaultInitialValues;
@@ -70,11 +95,18 @@ export default function UpdateCollectionForm({
   if (!group && !collection)
     throw new Error("You have to pass either collection or group as a prop");
 
+  const environmentFragments = collection
+    ? collection.group.subject.environments
+    : group?.subject.environments || [];
+  const environments = environmentFragments.map((it) =>
+    getFragmentData(UpdateCollectionForm_EnvironmentFragmentDoc, it)
+  );
+
   const initialValues = collection
     ? {
-        type: collection.type,
         date: formatDate(new Date(collection.date), "yyyy-MM-dd"),
         description: collection.description || "",
+        environmentCode: collection.environment.code || "",
       }
     : defaultInitialValues;
 
@@ -91,12 +123,6 @@ export default function UpdateCollectionForm({
       return initialParticipations;
     }
   );
-
-  const validateType = (value: string) => {
-    let error;
-    if (value.length === 0) error = "Tyyppi ei voi olla tyhjä";
-    return error;
-  };
 
   const onParticipationsChanged = useCallback(
     (newParticipations: StudentParticipation[]) => {
@@ -122,10 +148,24 @@ export default function UpdateCollectionForm({
             {collection ? "Arvioinnin muokkaus" : "Uusi arviointi"}
           </Text>
           <FormField
-            name="type"
-            label="Aihe"
-            placeholder="Arvioinnin aihe"
-            validate={validateType}
+            label="Ympäristö"
+            name="environmentCode"
+            validate={(value) =>
+              value.length === 0 ? "Ympäristö pitää olla valittu" : ""
+            }
+            render={({
+              field: { name },
+              form: { setFieldValue, setFieldTouched },
+            }) => (
+              <EnvironmentSelect
+                environments={environments}
+                initialCode={initialValues.environmentCode}
+                onChange={(newValue) => {
+                  setFieldTouched(name, true);
+                  setFieldValue(name, newValue?.code || null);
+                }}
+              />
+            )}
           />
           <FormField name="date" type="date" label="Päivämäärä" />
           <FormField

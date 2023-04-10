@@ -256,7 +256,7 @@ export type UpdateStudentInput = {
 
 export type CreateCollectionInput = {
   date: Scalars["Date"];
-  type: Scalars["String"];
+  type?: InputMaybe<Scalars["String"]>;
   environmentCode: Scalars["ID"];
   description?: InputMaybe<Scalars["String"]>;
   evaluations?: InputMaybe<Array<CreateEvaluationInput>>;

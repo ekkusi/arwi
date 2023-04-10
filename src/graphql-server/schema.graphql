@@ -120,7 +120,7 @@ input UpdateStudentInput {
 
 input CreateCollectionInput {
   date: Date!
-  type: String!
+  type: String
   environmentCode: ID!
   description: String
   evaluations: [CreateEvaluationInput!]

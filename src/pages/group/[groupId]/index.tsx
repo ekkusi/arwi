@@ -42,7 +42,9 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
       evaluationCollections {
         id
         date
-        type
+        environment {
+          label
+        }
       }
     }
   }
@@ -159,7 +161,8 @@ function GroupOverviewPageContent() {
                     py="2"
                     _notLast={{ mb: 3 }}
                   >
-                    {formatDate(new Date(collection.date))}: {collection.type}
+                    {formatDate(new Date(collection.date))}:{" "}
+                    {collection.environment.label}
                   </Card>
                 ))}
               </Flex>

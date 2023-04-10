@@ -80,6 +80,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     const createdCollection = await prisma.evaluationCollection.create({
       data: {
         ...rest,
+        type: "",
         groupId,
         // Create evaluations if there are some in input
         evaluations: evaluations

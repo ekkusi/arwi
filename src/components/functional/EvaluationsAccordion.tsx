@@ -16,7 +16,9 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
     wasPresent
     collection {
       date
-      type
+      environment {
+        label
+      }
     }
     student {
       name
@@ -81,7 +83,9 @@ export default forwardRef<
           <AccordionItem
             title={
               titleFrom === "collection"
-                ? `${formatDate(it.collection.date)} - ${it.collection.type}`
+                ? `${formatDate(it.collection.date)} - ${
+                    it.collection.environment.label
+                  }`
                 : it.student.name
             }
             key={it.id}

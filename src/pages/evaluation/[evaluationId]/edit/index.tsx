@@ -31,7 +31,9 @@ const EvaluationEditPage_GetEvaluation_Query = graphql(`
       }
       collection {
         date
-        type
+        environment {
+          label
+        }
       }
       ...UpdateEvaluationCard_Evaluation
     }
@@ -143,7 +145,7 @@ function EvaluationEditPageContent() {
       <TopNavigationBar />
       <Text as="h1" textAlign="center">{`${formatDate(
         evaluation.collection.date
-      )} - ${evaluation.collection.type}`}</Text>
+      )} - ${evaluation.collection.environment.label}`}</Text>
       <UpdateEvaluationCard
         key={evaluation.id}
         evaluation={evaluation}
