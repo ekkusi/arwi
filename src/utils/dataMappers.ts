@@ -63,7 +63,7 @@ export const getRatingEmoji = (rating: Rating) => {
 export const formatRatingStringWithNull = (
   rating: Rating | null | undefined
 ) => {
-  return rating ? formatRatingString(rating) : "Ei arvioitu";
+  return rating ? formatRatingNumberString(rating) : "Ei arvioitu";
 };
 
 type Valuable<T> = {

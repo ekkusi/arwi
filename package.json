@@ -18,7 +18,7 @@
     "clear-db": "ts-node ./src/graphql-server/utils/clearDb.ts",
     "prepare": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
     "postinstall": "npx prisma generate",
-    "test-node": "ts-node ./src/graphql-server/utils/clearDb.ts",
+    "init-mock-data": "ts-node ./src/graphql-server/utils/initMockData.ts",
     "test": "dotenv -e .env.test jest -i",
     "test-with-setup": "npm run prisma:migrate-test && npm run test"
   },

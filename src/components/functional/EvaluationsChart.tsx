@@ -2,7 +2,7 @@ import { FragmentType, getFragmentData, graphql } from "@/gql";
 import { EvaluationsChart_EvaluationFragment } from "@/gql/graphql";
 import { formatRatingNumber } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
-import { Box, BoxProps, useToken } from "@chakra-ui/react";
+import { Box, BoxProps, Text, useToken } from "@chakra-ui/react";
 import {
   CartesianGrid,
   Legend,
@@ -10,9 +10,14 @@ import {
   LineChart,
   ResponsiveContainer,
   Tooltip,
+  TooltipProps,
   XAxis,
   YAxis,
 } from "recharts";
+import {
+  NameType,
+  ValueType,
+} from "recharts/types/component/DefaultTooltipContent";
 
 const EvaluationsChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsChart_Evaluation on Evaluation {
@@ -43,6 +48,27 @@ const mapData = (evaluations: EvaluationsChart_EvaluationFragment[]) => {
   }));
 };
 
+function CustomTooltip({ payload, label }: TooltipProps<ValueType, NameType>) {
+  if (!payload) return null;
+  const environment = payload[0]?.payload?.environment;
+
+  return (
+    <Box p="2" bg="white" border="1px" borderColor="gray.200" borderRadius="md">
+      <Text>
+        {environment && `${environment} -`} {label}
+      </Text>
+      {payload[0] && (
+        <Text color={payload[0].stroke}>
+          {payload[0].name}: {payload[0].value}
+        </Text>
+      )}
+      {payload[1] && (
+        <Text color={payload[1].stroke}>Työskentely: {payload[1].value}</Text>
+      )}
+    </Box>
+  );
+}
+
 type EvaluationsChartProps = BoxProps & {
   evaluations: readonly FragmentType<
     typeof EvaluationsChart_Evaluation_Fragment
@@ -53,6 +79,11 @@ export default function EvaluationsChart({
   evaluations: evaluationFragments,
   ...rest
 }: EvaluationsChartProps) {
+  const evaluations = getFragmentData(
+    EvaluationsChart_Evaluation_Fragment,
+    evaluationFragments
+  );
+
   const [primaryColor, secondaryColor] = useToken("colors", [
     "green.500",
     "blue.500",
@@ -60,10 +91,6 @@ export default function EvaluationsChart({
   const boxRadius = useToken("radii", "md");
   const lgShadow = useToken("shadows", "lg");
 
-  const evaluations = getFragmentData(
-    EvaluationsChart_Evaluation_Fragment,
-    evaluationFragments
-  );
   const sortedEvaluations = [...evaluations].sort(
     (a, b) =>
       new Date(a.collection.date).getTime() -
@@ -79,7 +106,7 @@ export default function EvaluationsChart({
           height={300}
           data={data}
           margin={{
-            top: 0,
+            top: 5,
             bottom: 0,
             right: 15,
             left: -30,
@@ -91,19 +118,18 @@ export default function EvaluationsChart({
           <Tooltip
             wrapperStyle={{ outline: "none", boxShadow: lgShadow }}
             contentStyle={{ borderRadius: boxRadius }}
+            content={<CustomTooltip />}
           />
           <Legend wrapperStyle={{ left: 0 }} />
           <Line
             connectNulls
             name="Taidot"
-            type="monotone"
             dataKey="skillsRating"
             stroke={primaryColor}
           />
           <Line
             connectNulls
             name="Työskentely"
-            type="monotone"
             dataKey="behaviourRating"
             stroke={secondaryColor}
           />
