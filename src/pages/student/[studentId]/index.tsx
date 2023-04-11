@@ -19,8 +19,8 @@ import { AiOutlineCheck } from "react-icons/ai";
 import EvaluationsAccordion, {
   EvaluationsAccordionHandlers,
 } from "@/components/functional/EvaluationsAccordion";
-import TopNavigationBar from "@/components/functional/TopNavigationBar";
 import InputWithError from "@/components/general/InputWithError";
+import BackwardsLink from "@/components/general/BackwardsLink";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
@@ -120,11 +120,12 @@ function StudentPageContent() {
 
   return (
     <PageWrapper>
-      <TopNavigationBar />
-      <Text as="h1" textAlign="center" mb="2">
-        {student.name}
-      </Text>
-      <StudentEvaluationsRecap evaluations={student.evaluations} mb="5" />
+      <BackwardsLink position="absolute" top="9" left="10" />
+      <StudentEvaluationsRecap
+        name={student.name}
+        evaluations={student.evaluations}
+        mb="5"
+      />
       <Text as="h2" mb="0">
         Kaikki arvioinnit
       </Text>

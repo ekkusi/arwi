@@ -2,26 +2,32 @@ import Card from "@/components/server-components/primitives/Card";
 import { Box, Text, BoxProps } from "@chakra-ui/react";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { evaluateStudent } from "@/utils/evaluationUtils";
+import EvaluationsChart from "../functional/EvaluationsChart";
 
-const StudentEvaluationRecap_EvaluationFragment = graphql(/* GraphQL */ `
+const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
   fragment StudentEvaluationRecap_Evaluation on Evaluation {
     id
     wasPresent
     behaviourRating
     skillsRating
+    ...EvaluationsChart_Evaluation
   }
 `);
 
 type StudentEvaluationsRecapProps = BoxProps & {
-  evaluations: FragmentType<typeof StudentEvaluationRecap_EvaluationFragment>[];
+  evaluations: FragmentType<
+    typeof StudentEvaluationRecap_Evaluation_Fragment
+  >[];
+  name: string;
 };
 
 export default function StudentEvaluationsRecap({
   evaluations: evaluationFragments,
+  name,
   ...rest
 }: StudentEvaluationsRecapProps) {
   const evaluations = getFragmentData(
-    StudentEvaluationRecap_EvaluationFragment,
+    StudentEvaluationRecap_Evaluation_Fragment,
     evaluationFragments
   );
 
@@ -40,9 +46,13 @@ export default function StudentEvaluationsRecap({
 
   return (
     <Card {...rest}>
+      <Text as="h1" textAlign="center" mb="2">
+        {name}
+      </Text>
       {evaluations.length > 0 ? (
         <>
           <Box>
+            <EvaluationsChart evaluations={evaluations} mb="2" />
             <Text fontWeight="bold" as="span">
               Arviointeja:{" "}
             </Text>
