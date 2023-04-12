@@ -14,10 +14,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import {
-  NameType,
-  ValueType,
-} from "recharts/types/component/DefaultTooltipContent";
 
 const EvaluationsChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsChart_Evaluation on Evaluation {
@@ -35,20 +31,59 @@ const EvaluationsChart_Evaluation_Fragment = graphql(`
   }
 `);
 
-const mapData = (evaluations: EvaluationsChart_EvaluationFragment[]) => {
-  return evaluations.map((it) => ({
-    date: formatDate(it.collection.date),
-    environment: it.collection.environment.label,
-    skillsRating: it.skillsRating
-      ? formatRatingNumber(it.skillsRating)
-      : undefined,
-    behaviourRating: it.behaviourRating
-      ? formatRatingNumber(it.behaviourRating)
-      : undefined,
-  }));
+type RatingValue = {
+  value: number;
+  currentAvg: number;
 };
 
-function CustomTooltip({ payload, label }: TooltipProps<ValueType, NameType>) {
+type DataType = {
+  date: string;
+  environment: string;
+  skills?: Maybe<RatingValue>;
+  behaviour?: Maybe<RatingValue>;
+};
+
+const mapData = (evaluations: EvaluationsChart_EvaluationFragment[]) => {
+  const data: DataType[] = [];
+  let currentSkillsSum = 0;
+  let notNullSkillsCount = 0;
+  let currentBehaviourSum = 0;
+  let notNullBehaviourCount = 0;
+  evaluations.forEach((it) => {
+    const skillsRating = it.skillsRating && formatRatingNumber(it.skillsRating);
+    const behaviourRating =
+      it.behaviourRating && formatRatingNumber(it.behaviourRating);
+    if (skillsRating) {
+      notNullSkillsCount += 1;
+      currentSkillsSum += skillsRating;
+    }
+    if (behaviourRating) {
+      notNullBehaviourCount += 1;
+      currentBehaviourSum += behaviourRating;
+    }
+    data.push({
+      date: formatDate(it.collection.date),
+      environment: it.collection.environment.label,
+      skills: skillsRating && {
+        value: skillsRating,
+        currentAvg: currentSkillsSum / notNullSkillsCount,
+      },
+      behaviour: behaviourRating && {
+        value: behaviourRating,
+        currentAvg: currentBehaviourSum / notNullBehaviourCount,
+      },
+    });
+  });
+  return data;
+};
+
+const formatValueString = (valueObj: RatingValue) => {
+  if (!valueObj) return "Ei arvoa";
+
+  return `${valueObj?.value} (ka: ${valueObj?.currentAvg.toFixed(2)})`;
+};
+
+function CustomTooltip({ payload, label }: TooltipProps<"number", "string">) {
   if (!payload) return null;
   const environment = payload[0]?.payload?.environment;
 
@@ -59,11 +94,16 @@ function CustomTooltip({ payload, label }: TooltipProps<ValueType, NameType>) {
       </Text>
       {payload[0] && (
         <Text color={payload[0].stroke}>
-          {payload[0].name}: {payload[0].value}
+          {payload[0].name}:{" "}
+          {formatValueString(
+            payload[0].payload.skills || payload[0].payload.behaviour
+          )}
         </Text>
       )}
       {payload[1] && (
-        <Text color={payload[1].stroke}>Työskentely: {payload[1].value}</Text>
+        <Text color={payload[1].stroke}>
+          {payload[1].name}: {formatValueString(payload[1].payload.behaviour)}
+        </Text>
       )}
     </Box>
   );
@@ -88,7 +128,6 @@ export default function EvaluationsChart({
     "green.500",
     "blue.500",
   ]);
-  const boxRadius = useToken("radii", "md");
   const lgShadow = useToken("shadows", "lg");
 
   const sortedEvaluations = [...evaluations].sort(
@@ -109,28 +148,31 @@ export default function EvaluationsChart({
             top: 5,
             bottom: 0,
             right: 15,
-            left: -30,
+            left: -25,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
-          <YAxis type="number" domain={[6, 10]} />
+          <YAxis
+            type="number"
+            label={{ value: "Keskiarvo", angle: -90 }}
+            domain={[6, 10]}
+          />
           <Tooltip
             wrapperStyle={{ outline: "none", boxShadow: lgShadow }}
-            contentStyle={{ borderRadius: boxRadius }}
             content={<CustomTooltip />}
           />
           <Legend wrapperStyle={{ left: 0 }} />
           <Line
             connectNulls
             name="Taidot"
-            dataKey="skillsRating"
+            dataKey="skills.currentAvg"
             stroke={primaryColor}
           />
           <Line
             connectNulls
             name="Työskentely"
-            dataKey="behaviourRating"
+            dataKey="behaviour.currentAvg"
             stroke={secondaryColor}
           />
         </LineChart>
