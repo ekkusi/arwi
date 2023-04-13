@@ -27,6 +27,7 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
     getStudent(id: $studentId) {
       id
       name
+      ...StudentEvaluationRecap_Student
       group {
         id
       }
@@ -43,7 +44,7 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
 function StudentPageContent() {
   const router = useRouter();
 
-  const studentId = router.query.studentId as string;
+  const studentId = router.query.id as string;
 
   const { data } = useSWR<StudentPage_GetStudentQuery>(
     `student/${studentId}`,
@@ -122,7 +123,7 @@ function StudentPageContent() {
     <PageWrapper>
       <BackwardsLink position="absolute" top="9" left="10" />
       <StudentEvaluationsRecap
-        name={student.name}
+        student={student}
         evaluations={student.evaluations}
         mb="5"
       />
@@ -204,10 +205,10 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({
   params,
-}: GetStaticPropsContext<{ studentId: string }>) {
+}: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no paramss");
   const data = await serverRequest(StudentPage_GetStudent_Query, {
-    studentId: params.studentId,
+    studentId: params.id,
   });
   return {
     props: {

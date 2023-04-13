@@ -1,7 +1,7 @@
 import Card from "@/components/server-components/primitives/Card";
 import { Box, Text, BoxProps } from "@chakra-ui/react";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
-import { evaluateStudent } from "@/utils/evaluationUtils";
+import { analyzeEvaluations } from "@/utils/evaluationUtils";
 import EvaluationsChart from "../functional/EvaluationsChart";
 
 const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
@@ -14,21 +14,32 @@ const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
   }
 `);
 
+const StudentEvaluationRecap_Student_Fragment = graphql(/* GraphQL */ `
+  fragment StudentEvaluationRecap_Student on Student {
+    id
+    name
+  }
+`);
+
 type StudentEvaluationsRecapProps = BoxProps & {
   evaluations: FragmentType<
     typeof StudentEvaluationRecap_Evaluation_Fragment
   >[];
-  name: string;
+  student: FragmentType<typeof StudentEvaluationRecap_Student_Fragment>;
 };
 
 export default function StudentEvaluationsRecap({
   evaluations: evaluationFragments,
-  name,
+  student: studentFragment,
   ...rest
 }: StudentEvaluationsRecapProps) {
   const evaluations = getFragmentData(
     StudentEvaluationRecap_Evaluation_Fragment,
     evaluationFragments
+  );
+  const student = getFragmentData(
+    StudentEvaluationRecap_Student_Fragment,
+    studentFragment
   );
 
   const {
@@ -38,7 +49,7 @@ export default function StudentEvaluationsRecap({
     skillsStdev,
     behaviourAverage,
     behaviourStdev,
-  } = evaluateStudent([...evaluations]);
+  } = analyzeEvaluations([...evaluations]);
 
   const formatAmountString = (value: number) => {
     return value === 1 ? "kerta" : "kertaa";
@@ -47,12 +58,16 @@ export default function StudentEvaluationsRecap({
   return (
     <Card {...rest}>
       <Text as="h1" textAlign="center" mb="2">
-        {name}
+        {student.name}
       </Text>
       {evaluations.length > 0 ? (
         <>
           <Box>
-            <EvaluationsChart evaluations={evaluations} mb="2" />
+            <EvaluationsChart
+              studentId={student.id}
+              evaluations={evaluations}
+              mb="2"
+            />
             <Text fontWeight="bold" as="span">
               Arviointeja:{" "}
             </Text>

@@ -16,7 +16,7 @@ type Evaluation = Pick<
   "skillsRating" | "behaviourRating" | "wasPresent"
 >;
 
-export const evaluateStudent = (evaluations: Evaluation[]) => {
+export const analyzeEvaluations = (evaluations: Evaluation[]) => {
   const result: EvaluationResult = {
     skillsAverage: 0,
     skillsStdev: 0,

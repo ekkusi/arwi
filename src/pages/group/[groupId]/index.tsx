@@ -29,6 +29,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { useState } from "react";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
+import CollectionsChart from "@/components/functional/CollectionsChart";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -45,6 +46,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
         environment {
           label
         }
+        ...CollectionsChart_EvaluationCollection
       }
     }
   }
@@ -124,6 +126,7 @@ function GroupOverviewPageContent() {
       <Text as="h1" mt="5" textAlign="center">
         {group.name}
       </Text>
+      <CollectionsChart collections={group.evaluationCollections} />
       <Tabs isFitted>
         <TabList>
           <Tab>Oppilaat</Tab>
