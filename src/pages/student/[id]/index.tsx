@@ -20,7 +20,7 @@ import EvaluationsAccordion, {
   EvaluationsAccordionHandlers,
 } from "@/components/functional/EvaluationsAccordion";
 import InputWithError from "@/components/general/InputWithError";
-import BackwardsLink from "@/components/general/BackwardsLink";
+import TopNavigationBar from "@/components/functional/TopNavigationBar";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
@@ -121,7 +121,8 @@ function StudentPageContent() {
 
   return (
     <PageWrapper>
-      <BackwardsLink position="absolute" top="9" left="10" />
+      {/* <BackwardsLink position="absolute" top="9" left="10" /> */}
+      <TopNavigationBar mb="3" />
       <StudentEvaluationsRecap
         student={student}
         evaluations={student.evaluations}

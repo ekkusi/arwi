@@ -13,7 +13,9 @@ const UpdateCollectionsList_CollectionFragment = graphql(`
   fragment UpdateCollectionsList_Collection on EvaluationCollection {
     id
     date
-    type
+    environment {
+      label
+    }
   }
 `);
 
@@ -76,7 +78,7 @@ export default function UpdateCollectionsList({
             <Text as="span" textStyle="italic" mr="1">
               {formatDate(new Date(it.date), "dd.MM.yyyy")}:
             </Text>
-            <Text as="span">{it.type}</Text>
+            <Text as="span">{it.environment.label}</Text>
           </Box>
           <Flex mr="2">
             {/* TODO: Show this when the actual editing page is ready */}
@@ -106,7 +108,7 @@ export default function UpdateCollectionsList({
           <Text as="span" fontStyle="italic">
             {collectionInDelete &&
               `${formatDate(new Date(collectionInDelete.date))} ${
-                collectionInDelete.type
+                collectionInDelete.environment.label
               }`}
           </Text>
           ? Kaikkien oppilaiden arviointitiedot kyseiseltä arviointikerralta
