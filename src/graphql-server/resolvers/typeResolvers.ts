@@ -104,9 +104,12 @@ const resolvers: TypeResolvers = {
       });
       return matchingGroup;
     },
-    evaluations: async ({ id }, _, { prisma }) => {
+    evaluations: async ({ id }, { wasPresent }, { prisma }) => {
       const evaluations = await prisma.evaluation.findMany({
-        where: { studentId: id },
+        where: {
+          studentId: id,
+          wasPresent: wasPresent !== null ? { equals: wasPresent } : undefined,
+        },
       });
       return evaluations;
     },

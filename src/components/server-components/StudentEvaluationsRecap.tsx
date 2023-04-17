@@ -1,9 +1,10 @@
 import { Box, Text, BoxProps, Flex } from "@chakra-ui/react";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { analyzeEvaluations } from "@/utils/evaluationUtils";
-import EvaluationsChart from "../functional/EvaluationsChart";
+import EvaluationsLineChart from "../functional/EvaluationsLineChart";
 import CenteredContainer from "./primitives/CenteredContainer";
 import FlippingCard from "../general/FlippingCard";
+import EvaluationsBarChart from "../functional/EvaluationsBarChart";
 
 const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
   fragment StudentEvaluationRecap_Evaluation on Evaluation {
@@ -11,7 +12,8 @@ const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
     wasPresent
     behaviourRating
     skillsRating
-    ...EvaluationsChart_Evaluation
+    ...EvaluationsLineChart_Evaluation
+    ...EvaluationsBarChart_Evaluation
   }
 `);
 
@@ -69,15 +71,11 @@ export default function StudentEvaluationsRecap({
           {evaluations.length > 0 ? (
             <>
               <Box>
-                <EvaluationsChart
+                <EvaluationsLineChart
                   studentId={student.id}
                   evaluations={evaluations}
                   mb="2"
                 />
-                <Text fontWeight="bold" as="span">
-                  Arviointeja:{" "}
-                </Text>
-                <Text as="span">{evaluations.length}</Text>
               </Box>
               <Box>
                 <Text fontWeight="bold" as="span">
@@ -140,8 +138,10 @@ export default function StudentEvaluationsRecap({
                   >
                     <CenteredContainer
                       as="span"
-                      fontFamily="heading"
                       fontSize="4xl"
+                      fontFamily="special"
+                      textAlign="center"
+                      lineHeight={1.0}
                     >
                       {gradeSuggestion}
                     </CenteredContainer>
@@ -154,7 +154,7 @@ export default function StudentEvaluationsRecap({
           )}
         </>
       }
-      back={<Text as="h1">Terve</Text>}
+      back={<EvaluationsBarChart evaluations={evaluations} />}
       {...rest}
     />
   );

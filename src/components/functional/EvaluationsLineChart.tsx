@@ -1,13 +1,13 @@
 import { FragmentType, getFragmentData, graphql } from "@/gql";
-import { EvaluationsChart_EvaluationFragment } from "@/gql/graphql";
+import { EvaluationsLineChart_EvaluationFragment } from "@/gql/graphql";
 import { formatRatingNumber } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
 import { BoxProps } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import ChartBase from "../general/ChartBase";
+import ChartBase, { DataType } from "../general/LineChartBase";
 
-const EvaluationsChart_Evaluation_Fragment = graphql(`
-  fragment EvaluationsChart_Evaluation on Evaluation {
+const EvaluationsLineChart_Evaluation_Fragment = graphql(`
+  fragment EvaluationsLineChart_Evaluation on Evaluation {
     id
     skillsRating
     behaviourRating
@@ -22,15 +22,8 @@ const EvaluationsChart_Evaluation_Fragment = graphql(`
   }
 `);
 
-type DataType = {
-  date: string;
-  environment: string;
-  skills?: Maybe<number>;
-  behaviour?: Maybe<number>;
-};
-
 const mapData = (
-  evaluations: EvaluationsChart_EvaluationFragment[],
+  evaluations: EvaluationsLineChart_EvaluationFragment[],
   pushThreshHold: number
 ) => {
   const data: DataType[] = [];
@@ -50,7 +43,7 @@ const mapData = (
       notNullBehaviourCount += 1;
       currentBehaviourSum += behaviourRating;
     }
-    if (i + 1 <= pushThreshHold) return;
+    if (i < pushThreshHold) return;
     data.push({
       date: formatDate(it.collection.date),
       environment: it.collection.environment.label,
@@ -65,33 +58,36 @@ const mapData = (
   return data;
 };
 
-type EvaluationsChartProps = Omit<BoxProps, "onClick"> & {
+type EvaluationsLineChartProps = Omit<BoxProps, "onClick"> & {
   studentId: string;
   evaluations: readonly FragmentType<
-    typeof EvaluationsChart_Evaluation_Fragment
+    typeof EvaluationsLineChart_Evaluation_Fragment
   >[];
-  showAvgThreshhold?: number;
+  firstIndexToPush?: number;
 };
 
-export default function EvaluationsChart({
+export default function EvaluationsLineChart({
   evaluations: evaluationFragments,
   studentId,
-  showAvgThreshhold = 3,
+  firstIndexToPush = 2,
   ...rest
-}: EvaluationsChartProps) {
+}: EvaluationsLineChartProps) {
   const evaluations = getFragmentData(
-    EvaluationsChart_Evaluation_Fragment,
+    EvaluationsLineChart_Evaluation_Fragment,
     evaluationFragments
   );
   const router = useRouter();
 
-  const sortedEvaluations = [...evaluations].sort(
-    (a, b) =>
-      new Date(a.collection.date).getTime() -
-      new Date(b.collection.date).getTime()
-  );
-  const showAvg = sortedEvaluations.length > showAvgThreshhold;
-  const data = mapData(sortedEvaluations, showAvg ? showAvgThreshhold : 0);
+  const sortedEvaluations = [...evaluations]
+    .sort(
+      (a, b) =>
+        new Date(a.collection.date).getTime() -
+        new Date(b.collection.date).getTime()
+    )
+    .filter((it) => it.wasPresent);
+
+  const showAvg = sortedEvaluations.length >= firstIndexToPush + 3;
+  const data = mapData(sortedEvaluations, showAvg ? firstIndexToPush : 0);
 
   return (
     <ChartBase

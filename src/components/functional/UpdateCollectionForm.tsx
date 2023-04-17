@@ -121,7 +121,9 @@ export default function UpdateCollectionForm({
           wasPresent: true,
           student,
         }));
-      return initialParticipations;
+      return initialParticipations.sort((a, b) =>
+        a.student.name.localeCompare(b.student.name)
+      );
     }
   );
 

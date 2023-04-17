@@ -230,6 +230,10 @@ export type Student = {
   evaluations: Array<Evaluation>;
 };
 
+export type StudentEvaluationsArgs = {
+  wasPresent?: InputMaybe<Scalars["Boolean"]>;
+};
+
 export type CreateTeacherInput = {
   email: Scalars["EmailAddress"];
   password: Scalars["String"];
@@ -727,7 +731,8 @@ export type StudentResolvers<
   evaluations?: Resolver<
     Array<ResolversTypes["Evaluation"]>,
     ParentType,
-    ContextType
+    ContextType,
+    Partial<StudentEvaluationsArgs>
   >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

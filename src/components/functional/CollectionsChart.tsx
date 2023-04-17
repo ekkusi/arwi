@@ -3,7 +3,7 @@ import { CollectionsChart_EvaluationCollectionFragment } from "@/gql/graphql";
 import { formatDate } from "@/utils/dateUtils";
 import { analyzeEvaluations } from "@/utils/evaluationUtils";
 import { BoxProps } from "@chakra-ui/react";
-import ChartBase from "../general/ChartBase";
+import ChartBase, { DataType } from "../general/LineChartBase";
 
 const CollectionsChart_Collection_Fragment = graphql(`
   fragment CollectionsChart_EvaluationCollection on EvaluationCollection {
@@ -21,23 +21,15 @@ const CollectionsChart_Collection_Fragment = graphql(`
   }
 `);
 
-type DataType = {
-  date: string;
-  environment: string;
-  skills?: Maybe<number>;
-  behaviour?: Maybe<number>;
-};
-
 const mapData = (
-  collections: CollectionsChart_EvaluationCollectionFragment[],
-  pushThreshHold: number
+  collections: CollectionsChart_EvaluationCollectionFragment[]
 ) => {
   const data: DataType[] = [];
   let currentSkillsSum = 0;
   let notNullSkillsCount = 0;
   let currentBehaviourSum = 0;
   let notNullBehaviourCount = 0;
-  collections.forEach((it, i) => {
+  collections.forEach((it) => {
     const { skillsAverage, behaviourAverage } = analyzeEvaluations(
       it.evaluations
     );
@@ -49,7 +41,6 @@ const mapData = (
       notNullBehaviourCount += 1;
       currentBehaviourSum += behaviourAverage;
     }
-    if (i + 1 <= pushThreshHold) return;
     data.push({
       date: formatDate(it.date),
       environment: it.environment.label,
@@ -85,7 +76,7 @@ export default function CollectionsChart({
   const sortedCollections = [...collections].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
-  const data = mapData(sortedCollections, 0);
+  const data = mapData(sortedCollections);
 
   return <ChartBase data={data} {...rest} />;
 }

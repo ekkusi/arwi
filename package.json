@@ -26,6 +26,7 @@
     "@ducanh2912/next-pwa": "^8.1.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@fontsource/glegoo": "^4.5.7",
     "@fontsource/open-sans": "^4.5.14",
     "@fontsource/raleway": "^4.5.12",
     "@graphql-typed-document-node/core": "^3.1.1",

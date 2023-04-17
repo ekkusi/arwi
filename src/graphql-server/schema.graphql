@@ -90,7 +90,7 @@ type Student {
   id: ID!
   name: String!
   group: Group!
-  evaluations: [Evaluation!]!
+  evaluations(wasPresent: Boolean): [Evaluation!]!
 }
 
 input CreateTeacherInput {

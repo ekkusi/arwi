@@ -1,10 +1,10 @@
 import { Box, BoxProps, Text, useToken } from "@chakra-ui/react";
 import { useState } from "react";
 import {
+  Bar,
+  BarChart,
   CartesianGrid,
   Legend,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   TooltipProps,
@@ -12,13 +12,24 @@ import {
   YAxis,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
+import CenteredContainer from "../server-components/primitives/CenteredContainer";
+import Overlay from "./Overlay";
 
-type ChartBaseProps = Omit<BoxProps, "onClick"> & {
-  data: any[];
+export type DataType = {
+  environment: string;
+  skills?: Maybe<number>;
+  behaviour?: Maybe<number>;
+  fill?: Maybe<string>;
+};
+
+type BarChartBaseProps = Omit<BoxProps, "onClick"> & {
+  data: DataType[];
   tooltipContent?: React.ReactElement;
+  legend?: React.ReactElement;
   skillsKey?: string;
   behaviourKey?: string;
   onClick?: CategoricalChartFunc;
+  notEnoughDataText?: string;
 };
 
 function TooltipContent({
@@ -32,13 +43,13 @@ function TooltipContent({
     <Box p="2" bg="white" border="1px" borderColor="gray.200" borderRadius="md">
       <Text mb="1">{label}</Text>
       {payload[0] && (
-        <Text color={payload[0].stroke}>
+        <Text color={payload[0].color}>
           {payload[0].name}:{" "}
           {payload[0].payload.skills || payload[0].payload.behaviour}
         </Text>
       )}
       {payload[1] && (
-        <Text color={payload[1].stroke}>
+        <Text color={payload[1].color}>
           {payload[1].name}: {payload[1].payload.behaviour}
         </Text>
       )}
@@ -46,13 +57,15 @@ function TooltipContent({
   );
 }
 
-export default function ChartBase({
+export default function BarChartBase({
   data,
-  tooltipContent,
   children,
   onClick,
+  tooltipContent,
+  legend,
+  notEnoughDataText = "Kuvaajan näyttämiseksi tarvitaan vähintään 2 arvoa",
   ...rest
-}: ChartBaseProps) {
+}: BarChartBaseProps) {
   const [primaryColor, secondaryColor] = useToken("colors", [
     "green.500",
     "blue.500",
@@ -78,26 +91,31 @@ export default function ChartBase({
   };
 
   return (
-    <Box {...rest}>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          data={data}
+    <Box position="relative" width="100%" height="100%" {...rest}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={data.length > 2 ? data : []}
+          layout="vertical"
           margin={{
             top: 5,
             bottom: 0,
             right: 15,
-            left: -25,
+            left: -40,
           }}
           onClick={onClick}
           onMouseDown={openTooltip}
           onMouseUp={closeTooltip}
+          barSize={data.length < 4 ? 50 : undefined}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
+          <XAxis type="number" domain={[6, 10]} />
           <YAxis
-            type="number"
-            label={{ value: "Keskiarvojen kehitys", angle: -90 }}
-            domain={[6, 10]}
+            tick={false}
+            // tickLine={false}
+            textAnchor="end"
+            reversed
+            dataKey="environment"
+            type="category"
           />
           <Tooltip
             wrapperStyle={{
@@ -110,31 +128,34 @@ export default function ChartBase({
               y: true,
             }}
           />
-          <Legend wrapperStyle={{ left: 0 }} />
+          <Legend wrapperStyle={{ left: 0 }} content={legend} />
           {children || (
             <>
-              <Line
-                connectNulls
-                type="monotone"
+              <Bar
                 name="Taidot"
                 dataKey="skills"
+                fill={primaryColor}
                 stroke={primaryColor}
-                dot={false}
-                activeDot={isTooltipVisible}
+                label={{ position: "right" }}
               />
-              <Line
-                connectNulls
-                type="monotone"
+              <Bar
                 name="Työskentely"
                 dataKey="behaviour"
+                fill={secondaryColor}
                 stroke={secondaryColor}
-                dot={false}
-                activeDot={isTooltipVisible}
+                label={{ position: "right" }}
               />
             </>
           )}
-        </LineChart>
+        </BarChart>
       </ResponsiveContainer>
+      {data.length < 2 && (
+        <Overlay bgColor="white" opacity={0.3}>
+          <CenteredContainer width="70%" pb={50}>
+            <Text>{notEnoughDataText}</Text>
+          </CenteredContainer>
+        </Overlay>
+      )}
     </Box>
   );
 }

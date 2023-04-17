@@ -79,6 +79,7 @@ const theme = extendTheme(
     fonts: {
       heading: `Raleway, sans-serif`,
       body: `'Open Sans', sans-serif`,
+      special: `Glegoo, sans-serif`,
       // body: "Raleway",
     },
     fontSizes: {

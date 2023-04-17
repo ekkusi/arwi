@@ -1,14 +1,20 @@
 import { hexToRgbA } from "@/utils/color";
 import { Box, BoxProps, useToken } from "@chakra-ui/react";
 
-type OverlayProps = Omit<BoxProps, "bgColor"> & {
+type OverlayProps = Omit<BoxProps, "bgColor" | "opacity"> & {
   bgColor: string;
+  opacity?: number;
 };
 
 // Should have a position: relative in parent
-export default function Overlay({ children, bgColor, ...rest }: OverlayProps) {
+export default function Overlay({
+  children,
+  bgColor,
+  opacity = 0.85,
+  ...rest
+}: OverlayProps) {
   const bgHex = useToken("colors", bgColor);
-  const bgRgba = hexToRgbA(bgHex, 0.85);
+  const bgRgba = hexToRgbA(bgHex, opacity);
 
   return (
     <Box
