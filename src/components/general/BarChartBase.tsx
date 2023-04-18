@@ -122,6 +122,7 @@ export default function BarChartBase({
               outline: "none",
               boxShadow: lgShadow,
             }}
+            cursor={{ fill: "transparent" }}
             content={tooltipContent || <TooltipContent />}
             allowEscapeViewBox={{
               y: true,

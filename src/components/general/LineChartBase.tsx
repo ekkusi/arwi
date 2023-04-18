@@ -1,5 +1,5 @@
 import { Box, BoxProps, Text, useToken } from "@chakra-ui/react";
-import { useState } from "react";
+import { SVGProps, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -55,6 +55,32 @@ function TooltipContent({
     </Box>
   );
 }
+function AxisTick({
+  x = 0,
+  y = 0,
+  payload,
+}: SVGProps<SVGGElement> & { payload?: any }) {
+  const isFirstTick = Number(x) < 50;
+  const xConverted = Number(x);
+
+  return (
+    <g
+      transform={`translate(${
+        isFirstTick ? xConverted - 15 : xConverted + 15
+      },${y})`}
+    >
+      <text
+        x={0}
+        y={3}
+        dy={16}
+        textAnchor={isFirstTick ? "start" : "end"}
+        fill="#666"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+}
 
 export default function LineChartBase({
   data,
@@ -89,6 +115,17 @@ export default function LineChartBase({
   };
 
   const hasEnoughData = data.length >= minItems;
+  // const ticks = [
+  //   {
+  //     value: data[0].date,
+  //     anchor: "start",
+  //   },
+  //   {
+  //     value: data[data.length - 1].date,
+  //     anchor: "end",
+  //   },
+  // ];
+  const ticks = [data[0].date, data[data.length - 1].date];
 
   return (
     <Box position="relative" {...rest}>
@@ -97,7 +134,7 @@ export default function LineChartBase({
           data={hasEnoughData ? data : []}
           margin={{
             top: 5,
-            bottom: 0,
+            bottom: 10,
             right: 15,
             left: -25,
           }}
@@ -106,7 +143,13 @@ export default function LineChartBase({
           onMouseUp={closeTooltip}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
+          <XAxis
+            dataKey="date"
+            interval={0}
+            ticks={ticks}
+            tick={<AxisTick />}
+            domain={["dataMin", "dataMax"]}
+          />
           <YAxis
             type="number"
             label={{ value: "Keskiarvojen kehitys", angle: -90 }}
@@ -123,7 +166,7 @@ export default function LineChartBase({
               y: true,
             }}
           />
-          <Legend wrapperStyle={{ left: 0 }} />
+          <Legend wrapperStyle={{ left: 0, marginTop: 20 }} />
           {children || (
             <>
               <Line
