@@ -108,10 +108,9 @@ export default function BarChartBase({
           barSize={data.length < 4 ? 50 : undefined}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis type="number" domain={[6, 10]} />
+          <XAxis interval={0} type="number" domain={[6, 10]} />
           <YAxis
             tick={false}
-            // tickLine={false}
             textAnchor="end"
             reversed
             dataKey="environment"
@@ -137,6 +136,7 @@ export default function BarChartBase({
                 fill={primaryColor}
                 stroke={primaryColor}
                 label={{ position: "right" }}
+                isAnimationActive={false}
               />
               <Bar
                 name="Työskentely"
@@ -144,6 +144,7 @@ export default function BarChartBase({
                 fill={secondaryColor}
                 stroke={secondaryColor}
                 label={{ position: "right" }}
+                isAnimationActive={false}
               />
             </>
           )}

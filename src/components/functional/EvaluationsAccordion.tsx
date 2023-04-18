@@ -8,10 +8,12 @@ import {
   Box,
   Button,
   Flex,
+  Icon,
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { CgNotes } from "react-icons/cg";
 import AccordionItem from "../general/AccordionItem";
 
 const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
@@ -128,6 +130,14 @@ export default forwardRef<
               ref={(itemRef) => {
                 itemRefs.current[i] = itemRef;
               }}
+              titleProps={{
+                bg: it.wasPresent ? "green.100" : "red.100",
+                _hover: {
+                  bg: it.wasPresent ? "green.200" : "red.200",
+                },
+              }}
+              borderColor="light-gray"
+              titleIcons={it.wasPresent && !!it.notes && <Icon as={CgNotes} />}
             >
               <Text color={it.wasPresent ? "green" : "red"}>
                 {it.wasPresent ? "Paikalla" : "Poissa"}

@@ -11,6 +11,7 @@ const EvaluationsBarChart_Evaluation_Fragment = graphql(`
     id
     skillsRating
     behaviourRating
+    wasPresent
     collection {
       environment {
         label
@@ -153,17 +154,18 @@ export default function EvaluationsBarChart({
     EvaluationsBarChart_Evaluation_Fragment,
     evaluationFragments
   );
+  const filteredEvaluations = evaluations.filter((it) => it.wasPresent);
 
-  const data = mapData([...evaluations]);
+  const data = mapData(filteredEvaluations);
   return (
     <BarChartBase
       data={data}
       tooltipContent={<TooltipContent />}
-      legend={<LegendContent data={data} />}
+      legend={<LegendContent data={data.slice().reverse()} />}
       notEnoughDataText={`Kuvaajan näyttämiseen tarvitaan vähintään 2 ympäristöä, joilla on vähintään ${INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD} arviointia`}
       {...rest}
     >
-      <Bar name="Taidot" dataKey="skills">
+      <Bar name="Taidot" dataKey="skills" isAnimationActive={false}>
         <LabelList position="middle" stroke="white" fontSize="12px">
           Taidot
         </LabelList>
@@ -175,7 +177,7 @@ export default function EvaluationsBarChart({
           />
         ))}
       </Bar>
-      <Bar name="Työskentely" dataKey="behaviour">
+      <Bar name="Työskentely" dataKey="behaviour" isAnimationActive={false}>
         <LabelList position="middle" stroke="white" fontSize="12px">
           Työskentely
         </LabelList>
