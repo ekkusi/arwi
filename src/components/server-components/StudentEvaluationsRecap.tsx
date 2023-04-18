@@ -49,9 +49,7 @@ export default function StudentEvaluationsRecap({
     absencesAmount,
     presencesAmount,
     skillsAverage,
-    skillsStdev,
     behaviourAverage,
-    behaviourStdev,
     gradeSuggestion,
   } = analyzeEvaluations([...evaluations]);
 
@@ -62,7 +60,7 @@ export default function StudentEvaluationsRecap({
   return (
     <FlippingCard
       width="100%"
-      height={750}
+      height={630}
       front={
         <>
           <Text as="h1" textAlign="center" mb="2">
@@ -99,9 +97,7 @@ export default function StudentEvaluationsRecap({
                 </Text>
                 <Text as="span">
                   {!Number.isNaN(skillsAverage)
-                    ? `${skillsAverage.toFixed(
-                        2
-                      )} (keskihajonta: ${skillsStdev.toFixed(2)})`
+                    ? `${skillsAverage.toFixed(2)}`
                     : "Taitoja ei vielä arvioitu"}
                 </Text>
               </Box>
@@ -111,15 +107,12 @@ export default function StudentEvaluationsRecap({
                 </Text>
                 <Text as="span">
                   {!Number.isNaN(behaviourAverage)
-                    ? `${behaviourAverage.toFixed(
-                        2
-                      )} (keskihajonta: ${behaviourStdev.toFixed(2)})`
+                    ? `${behaviourAverage.toFixed(2)}`
                     : "Työskentelyä ei vielä arvioitu"}
                 </Text>
               </Box>
               {gradeSuggestion > 0 && (
                 <Flex
-                  mt="3"
                   alignItems="center"
                   justifyContent="center"
                   flexDirection="column"
