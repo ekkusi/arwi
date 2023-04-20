@@ -173,6 +173,26 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return true;
   },
+  changeGroupYear: async (_, { groupId, newYearCode }, { prisma }) => {
+    let existingYear = await prisma.classYear.findFirst({
+      where: { groupId, code: newYearCode },
+    });
+    if (!existingYear) {
+      existingYear = await prisma.classYear.create({
+        data: {
+          code: newYearCode,
+          groupId,
+        },
+      });
+    }
+    const updatedGroup = await prisma.group.update({
+      data: {
+        currentYearCode: newYearCode,
+      },
+      where: { id: groupId },
+    });
+    return updatedGroup;
+  },
 };
 
 export default resolvers;

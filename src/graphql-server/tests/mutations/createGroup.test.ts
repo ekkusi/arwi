@@ -41,6 +41,11 @@ describe("ServerRequest - createGroup", () => {
           teacher {
             id
           }
+          currentClassYear {
+            info {
+              code
+            }
+          }
           students {
             id
           }
@@ -58,6 +63,11 @@ describe("ServerRequest - createGroup", () => {
     expect(result.createGroup).toEqual({
       id: expect.any(String),
       name: variables.data.name,
+      currentClassYear: {
+        info: {
+          code: variables.data.yearCode,
+        },
+      },
       teacher: {
         id: teacherId,
       },

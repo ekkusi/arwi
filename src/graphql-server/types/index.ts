@@ -91,6 +91,7 @@ export type Mutation = {
   updateCollection: EvaluationCollection;
   updateStudent: Student;
   updateGroup: Group;
+  changeGroupYear: Group;
   updateEvaluation: Evaluation;
   deleteStudent: Scalars["Boolean"];
   deleteGroup: Scalars["Boolean"];
@@ -137,6 +138,11 @@ export type MutationUpdateStudentArgs = {
 
 export type MutationUpdateGroupArgs = {
   data: UpdateGroupInput;
+  groupId: Scalars["ID"];
+};
+
+export type MutationChangeGroupYearArgs = {
+  newYearCode: ClassYearCode;
   groupId: Scalars["ID"];
 };
 
@@ -621,6 +627,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateGroupArgs, "data" | "groupId">
+  >;
+  changeGroupYear?: Resolver<
+    ResolversTypes["Group"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">
   >;
   updateEvaluation?: Resolver<
     ResolversTypes["Evaluation"],
