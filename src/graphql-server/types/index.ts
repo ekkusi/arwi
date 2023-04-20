@@ -10,6 +10,7 @@ import {
   Evaluation as EvaluationPrisma,
   Group as GroupPrisma,
   Student as StudentPrisma,
+  ClassYear as ClassYearPrisma,
 } from "@prisma/client";
 import {
   Subject as SubjectPrisma,
@@ -52,6 +53,7 @@ export type Query = {
   getStudent: Student;
   getEvaluation: Evaluation;
   getSubjects: Array<Subject>;
+  getYearInfos: Array<ClassYearInfo>;
 };
 
 export type QueryGetTeacherArgs = {
@@ -110,12 +112,12 @@ export type MutationCreateGroupArgs = {
 
 export type MutationCreateCollectionArgs = {
   data: CreateCollectionInput;
-  groupId: Scalars["ID"];
+  classYearId: Scalars["ID"];
 };
 
 export type MutationCreateStudentArgs = {
   data: CreateStudentInput;
-  groupId: Scalars["ID"];
+  classYearId: Scalars["ID"];
 };
 
 export type MutationUpdateEvaluationsArgs = {
@@ -185,11 +187,27 @@ export type Group = {
   __typename?: "Group";
   id: Scalars["ID"];
   name: Scalars["String"];
-  evaluationCollections: Array<EvaluationCollection>;
   students: Array<Student>;
   subject: Subject;
   teacher: Teacher;
   updatedAt: Scalars["Date"];
+  currentClassYear: ClassYear;
+  classYears: Array<ClassYear>;
+};
+
+export type ClassYearInfo = {
+  __typename?: "ClassYearInfo";
+  code: ClassYearCode;
+  label: Scalars["String"];
+};
+
+export type ClassYear = {
+  __typename?: "ClassYear";
+  id: Scalars["ID"];
+  info: ClassYearInfo;
+  evaluationCollections: Array<EvaluationCollection>;
+  students: Array<Student>;
+  group: Group;
 };
 
 export type EvaluationCollection = {
@@ -200,16 +218,8 @@ export type EvaluationCollection = {
   environment: Environment;
   description?: Maybe<Scalars["String"]>;
   evaluations: Array<Evaluation>;
-  group: Group;
+  classYear: ClassYear;
 };
-
-export enum Rating {
-  Poor = "POOR",
-  Fair = "FAIR",
-  Good = "GOOD",
-  Great = "GREAT",
-  Excellent = "EXCELLENT",
-}
 
 export type Evaluation = {
   __typename?: "Evaluation";
@@ -227,12 +237,35 @@ export type Student = {
   id: Scalars["ID"];
   name: Scalars["String"];
   group: Group;
-  evaluations: Array<Evaluation>;
+  currentClassEvaluations: Array<Evaluation>;
 };
 
-export type StudentEvaluationsArgs = {
-  wasPresent?: InputMaybe<Scalars["Boolean"]>;
-};
+export enum Rating {
+  POOR = "POOR",
+  FAIR = "FAIR",
+  GOOD = "GOOD",
+  GREAT = "GREAT",
+  EXCELLENT = "EXCELLENT",
+}
+
+export enum ClassYearCode {
+  PRIMARY_FIRST = "PRIMARY_FIRST",
+  PRIMARY_SECOND = "PRIMARY_SECOND",
+  PRIMARY_THIRD = "PRIMARY_THIRD",
+  PRIMARY_FOURTH = "PRIMARY_FOURTH",
+  PRIMARY_FIFTH = "PRIMARY_FIFTH",
+  PRIMARY_SIXTH = "PRIMARY_SIXTH",
+  PRIMARY_SEVENTH = "PRIMARY_SEVENTH",
+  PRIMARY_EIGHTH = "PRIMARY_EIGHTH",
+  PRIMARY_NINTH = "PRIMARY_NINTH",
+  HIGH_SCHOOL_FIRST = "HIGH_SCHOOL_FIRST",
+  HIGH_SCHOOL_SECOND = "HIGH_SCHOOL_SECOND",
+  HIGH_SCHOOL_THIRD = "HIGH_SCHOOL_THIRD",
+  VOCATIONAL_FIRST = "VOCATIONAL_FIRST",
+  VOCATIONAL_SECOND = "VOCATIONAL_SECOND",
+  VOCATIONAL_THIRD = "VOCATIONAL_THIRD",
+  VOCATIONAL_FOURTH = "VOCATIONAL_FOURTH",
+}
 
 export type CreateTeacherInput = {
   email: Scalars["EmailAddress"];
@@ -243,7 +276,8 @@ export type CreateGroupInput = {
   name: Scalars["String"];
   teacherId: Scalars["ID"];
   subjectCode: Scalars["ID"];
-  students?: InputMaybe<Array<CreateStudentInput>>;
+  yearCode: ClassYearCode;
+  students: Array<CreateStudentInput>;
 };
 
 export type UpdateGroupInput = {
@@ -412,10 +446,13 @@ export type ResolversTypes = {
   Subject: ResolverTypeWrapper<SubjectPrisma>;
   Environment: ResolverTypeWrapper<EnvironmentPrisma>;
   Group: ResolverTypeWrapper<GroupPrisma>;
+  ClassYearInfo: ResolverTypeWrapper<ClassYearInfo>;
+  ClassYear: ResolverTypeWrapper<ClassYearPrisma>;
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
-  Rating: Rating;
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
   Student: ResolverTypeWrapper<StudentPrisma>;
+  Rating: Rating;
+  ClassYearCode: ClassYearCode;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
   UpdateGroupInput: UpdateGroupInput;
@@ -444,6 +481,8 @@ export type ResolversParentTypes = {
   Subject: SubjectPrisma;
   Environment: EnvironmentPrisma;
   Group: GroupPrisma;
+  ClassYearInfo: ClassYearInfo;
+  ClassYear: ClassYearPrisma;
   EvaluationCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
   Student: StudentPrisma;
@@ -518,6 +557,11 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
+  getYearInfos?: Resolver<
+    Array<ResolversTypes["ClassYearInfo"]>,
+    ParentType,
+    ContextType
+  >;
 };
 
 export type MutationResolvers<
@@ -546,13 +590,13 @@ export type MutationResolvers<
     ResolversTypes["EvaluationCollection"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateCollectionArgs, "data" | "groupId">
+    RequireFields<MutationCreateCollectionArgs, "data" | "classYearId">
   >;
   createStudent?: Resolver<
     ResolversTypes["Student"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateStudentArgs, "data" | "groupId">
+    RequireFields<MutationCreateStudentArgs, "data" | "classYearId">
   >;
   updateEvaluations?: Resolver<
     ResolversTypes["Int"],
@@ -653,6 +697,42 @@ export type GroupResolvers<
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  students?: Resolver<
+    Array<ResolversTypes["Student"]>,
+    ParentType,
+    ContextType
+  >;
+  subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
+  teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
+  currentClassYear?: Resolver<
+    ResolversTypes["ClassYear"],
+    ParentType,
+    ContextType
+  >;
+  classYears?: Resolver<
+    Array<ResolversTypes["ClassYear"]>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassYearInfoResolvers<
+  ContextType = CustomContext,
+  ParentType extends ResolversParentTypes["ClassYearInfo"] = ResolversParentTypes["ClassYearInfo"]
+> = {
+  code?: Resolver<ResolversTypes["ClassYearCode"], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassYearResolvers<
+  ContextType = CustomContext,
+  ParentType extends ResolversParentTypes["ClassYear"] = ResolversParentTypes["ClassYear"]
+> = {
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  info?: Resolver<ResolversTypes["ClassYearInfo"], ParentType, ContextType>;
   evaluationCollections?: Resolver<
     Array<ResolversTypes["EvaluationCollection"]>,
     ParentType,
@@ -663,9 +743,7 @@ export type GroupResolvers<
     ParentType,
     ContextType
   >;
-  subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
-  teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
+  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -691,7 +769,7 @@ export type EvaluationCollectionResolvers<
     ParentType,
     ContextType
   >;
-  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
+  classYear?: Resolver<ResolversTypes["ClassYear"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -728,11 +806,10 @@ export type StudentResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
-  evaluations?: Resolver<
+  currentClassEvaluations?: Resolver<
     Array<ResolversTypes["Evaluation"]>,
     ParentType,
-    ContextType,
-    Partial<StudentEvaluationsArgs>
+    ContextType
   >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -747,6 +824,8 @@ export type Resolvers<ContextType = CustomContext> = {
   Subject?: SubjectResolvers<ContextType>;
   Environment?: EnvironmentResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
+  ClassYearInfo?: ClassYearInfoResolvers<ContextType>;
+  ClassYear?: ClassYearResolvers<ContextType>;
   EvaluationCollection?: EvaluationCollectionResolvers<ContextType>;
   Evaluation?: EvaluationResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;

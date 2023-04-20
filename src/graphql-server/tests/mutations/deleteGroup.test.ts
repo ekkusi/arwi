@@ -2,6 +2,7 @@ import { graphql } from "@/gql";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
 import { assertIsError } from "@/utils/errorUtils";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - deleteGroup", () => {
   let groupId: string;
@@ -18,6 +19,7 @@ describe("ServerRequest - deleteGroup", () => {
       data: {
         name: "Test Group",
         teacherId: teacher.id,
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
         subjectCode: "LI",
       },
     });

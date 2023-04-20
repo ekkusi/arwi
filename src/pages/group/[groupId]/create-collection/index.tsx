@@ -18,6 +18,9 @@ const CreateCollectionPage_GetGroup_Query = graphql(`
   query CreateCollectionPage_GetGroup($groupId: ID!) {
     getGroup(id: $groupId) {
       id
+      currentClassYear {
+        id
+      }
       ...UpdateCollectionForm_Group
     }
   }
@@ -26,9 +29,9 @@ const CreateCollectionPage_GetGroup_Query = graphql(`
 const CreateCollectionPage_CreateCollection_Mutation = graphql(`
   mutation CreateCollectionPage_CreateCollection(
     $createCollectionInput: CreateCollectionInput!
-    $groupId: ID!
+    $classYearId: ID!
   ) {
-    createCollection(data: $createCollectionInput, groupId: $groupId) {
+    createCollection(data: $createCollectionInput, classYearId: $classYearId) {
       id
     }
   }
@@ -56,7 +59,7 @@ function CreateCollectionPageContent() {
       const { createCollection } = await graphqlClient.request(
         CreateCollectionPage_CreateCollection_Mutation,
         {
-          groupId: group.id,
+          classYearId: group.currentClassYear.id,
           createCollectionInput: {
             ...rest,
             description: description.length > 0 ? description : null,

@@ -15,7 +15,10 @@ import {
   useState,
 } from "react";
 
-type InputWithErrorProps = Omit<InputProps, "onChange" | "onBlur" | "name"> & {
+type InputWithErrorProps = Omit<
+  InputProps,
+  "onChange" | "onBlur" | "name" | "value"
+> & {
   debounced?: boolean;
   validate?: (value: string) => string | undefined;
   errorMessageProps?: FormErrorMessageProps;

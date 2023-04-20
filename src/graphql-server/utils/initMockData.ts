@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { PrismaClient } from "@prisma/client";
+import { ClassYearCode, PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 import mockData from "@/graphql-server/__mocks__/mockData.json";
 import { Rating } from "../types";
@@ -12,8 +12,11 @@ export const clearDb = async () => {
 
 const initMockData = async () => {
   const password = "asd123";
+  const email = "test@email.com";
   const hashedPassword = await hash(password, 12);
-  await prisma.teacher.delete({ where: { email: "test@email.com" } });
+  const existingTeacher = await prisma.teacher.findUnique({ where: { email } });
+  if (existingTeacher)
+    await prisma.teacher.delete({ where: { email: "test@email.com" } });
   const testTeacher = await prisma.teacher.create({
     data: {
       email: "test@email.com",
@@ -25,6 +28,13 @@ const initMockData = async () => {
       name: "Testiryhmä",
       subjectCode: "LI",
       teacherId: testTeacher.id,
+      currentYearCode: ClassYearCode.PRIMARY_FIRST,
+    },
+  });
+  const classYear = await prisma.classYear.create({
+    data: {
+      code: ClassYearCode.PRIMARY_FIRST,
+      groupId: testGroup.id,
     },
   });
   const collectionPromises = mockData.collections.map(({ id: _, ...rest }) =>
@@ -32,7 +42,7 @@ const initMockData = async () => {
       data: {
         ...rest,
         type: "",
-        groupId: testGroup.id,
+        classYearId: classYear.id,
       },
     })
   );
@@ -43,6 +53,7 @@ const initMockData = async () => {
         data: {
           ...rest,
           groupId: testGroup.id,
+          classYears: { connect: { id: classYear.id } },
         },
       })
       .then((student) =>

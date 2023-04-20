@@ -115,17 +115,8 @@ export default function LineChartBase({
   };
 
   const hasEnoughData = data.length >= minItems;
-  // const ticks = [
-  //   {
-  //     value: data[0].date,
-  //     anchor: "start",
-  //   },
-  //   {
-  //     value: data[data.length - 1].date,
-  //     anchor: "end",
-  //   },
-  // ];
-  const ticks = [data[0].date, data[data.length - 1].date];
+
+  const ticks = hasEnoughData ? [data[0].date, data[data.length - 1].date] : [];
 
   return (
     <Box position="relative" {...rest}>
@@ -147,7 +138,7 @@ export default function LineChartBase({
             dataKey="date"
             interval={0}
             ticks={ticks}
-            tick={<AxisTick />}
+            tick={ticks.length > 0 ? <AxisTick /> : false}
             domain={["dataMin", "dataMax"]}
           />
           <YAxis

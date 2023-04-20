@@ -1,7 +1,9 @@
+import { ClassYearCode } from "@prisma/client";
 import ValidationError from "../errors/ValidationError";
 import { QueryResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
 import subjectSchema from "../subject-schema.json";
+import { getClassYearInfo } from "../utils/subjectUtils";
 
 const resolvers: QueryResolvers<CustomContext> = {
   getTeacher: async (_, { id }, { prisma }) => {
@@ -56,6 +58,12 @@ const resolvers: QueryResolvers<CustomContext> = {
       label: it.label,
     }));
     return subjects;
+  },
+  getYearInfos: () => {
+    const yearInfos = Object.keys(ClassYearCode).map((it) =>
+      getClassYearInfo(it as ClassYearCode)
+    );
+    return yearInfos;
   },
 };
 

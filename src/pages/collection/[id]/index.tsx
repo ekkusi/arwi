@@ -35,9 +35,11 @@ const CollectionPage_GetCollection_Query = graphql(`
         color
       }
       description
-      group {
-        name
-        id
+      classYear {
+        group {
+          name
+          id
+        }
       }
       evaluations {
         id
@@ -157,7 +159,7 @@ export default function CollectionPage({
           <Text fontWeight="semibold" as="span">
             Ryhmä:
           </Text>{" "}
-          {collection.group?.name}
+          {collection.classYear.group.name}
         </Text>
         {collection.description && <Text mt="2">{collection.description}</Text>}
       </Card>

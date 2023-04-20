@@ -39,7 +39,7 @@ export const validateUpdateCollectionInput = async ({
 
 export const validateCreateStudentInput = async (
   data: CreateStudentInput,
-  groupId: string
+  classYearId: string
 ) => {
   // Find if there is a student with the same name in the same group
   const matchingStudent = await prisma.student.findFirst({
@@ -48,13 +48,13 @@ export const validateCreateStudentInput = async (
         {
           name: data.name,
         },
-        { groupId },
+        { classYears: { some: { id: classYearId } } },
       ],
     },
   });
   if (matchingStudent)
     throw new ValidationError(
-      `Ryhmässä on jo '${data.name}' niminen oppilas. Ryhmässä ei voi olla kahta samannimistä oppilasta.`
+      `Vuosiluokassa on jo '${data.name}' niminen oppilas. Vuosiluokan sisällä ei voi olla kahta samannimistä oppilasta.`
     );
 };
 

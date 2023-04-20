@@ -44,9 +44,9 @@ const UpdateStudentList_UpdateStudentMutation = graphql(`
 const UpdateStudentList_CreateStudentMutation = graphql(`
   mutation UpdateStudentList_CreateStudent(
     $input: CreateStudentInput!
-    $groupId: ID!
+    $classYearId: ID!
   ) {
-    createStudent(data: $input, groupId: $groupId) {
+    createStudent(data: $input, classYearId: $classYearId) {
       ...UpdateStudentsList_Student
     }
   }
@@ -60,11 +60,11 @@ const UpdateStudentList_DeleteStudentMutation = graphql(`
 
 type UpdateStudentsListProps = FlexProps & {
   students: FragmentType<typeof UpdateStudentsList_StudentFragment>[];
-  groupId: string;
+  classYearId: string;
 };
 
 export default function UpdateStudentsList({
-  groupId,
+  classYearId,
   students: studentFragments,
   ...rest
 }: UpdateStudentsListProps) {
@@ -111,7 +111,7 @@ export default function UpdateStudentsList({
     const { createStudent: newStudentFragment } = await graphqlClient.request(
       UpdateStudentList_CreateStudentMutation,
       {
-        groupId,
+        classYearId,
         input: { name: newStudentName },
       }
     );
@@ -177,11 +177,11 @@ export default function UpdateStudentsList({
     <Box {...rest}>
       <Flex justifyContent="space-between" mt="2" mb="5">
         <InputWithError
+          type="text"
           name="new-student-name"
           ref={nameInputRef}
           mr="2"
           placeholder="Uuden oppilaan nimi"
-          value={newStudentName}
           isDisabled={addingStudent}
           debounced={false}
           validate={validateNewStudentName}

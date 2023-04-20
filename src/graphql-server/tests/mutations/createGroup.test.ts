@@ -1,6 +1,7 @@
 import { graphql } from "@/gql";
 import ValidationError from "@/graphql-server/errors/ValidationError";
 import prisma from "@/graphql-server/prismaClient";
+import { ClassYearCode } from "@/graphql-server/types";
 import { serverRequest } from "@/pages/api/graphql";
 
 describe("ServerRequest - createGroup", () => {
@@ -28,6 +29,8 @@ describe("ServerRequest - createGroup", () => {
         name: "Test Group",
         teacherId,
         subjectCode: "LI",
+        yearCode: ClassYearCode.PRIMARY_FIRST,
+        students: [],
       },
     };
     const query = graphql(`
@@ -69,6 +72,7 @@ describe("ServerRequest - createGroup", () => {
         name: "Test Group with Students",
         teacherId,
         subjectCode: "LI",
+        yearCode: ClassYearCode.PRIMARY_FIRST,
         students: [
           {
             name: "Student 1",
@@ -129,19 +133,14 @@ describe("ServerRequest - createGroup", () => {
         name: "Test Group with Invalid Subject Code",
         teacherId,
         subjectCode: invalidSubjectCode,
+        yearCode: ClassYearCode.PRIMARY_FIRST,
+        students: [],
       },
     };
     const query = graphql(`
       mutation CreateGroupWithInvalidSubjectCode($data: CreateGroupInput!) {
         createGroup(data: $data) {
           id
-          name
-          teacher {
-            id
-          }
-          students {
-            id
-          }
         }
       }
     `);

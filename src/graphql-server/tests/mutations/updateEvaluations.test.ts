@@ -3,6 +3,7 @@ import { Rating } from "@/gql/graphql";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
 import { assertIsError } from "@/utils/errorUtils";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - updateEvaluations", () => {
   let groupId: string;
@@ -23,6 +24,14 @@ describe("ServerRequest - updateEvaluations", () => {
         name: "Test Group",
         teacherId: teacher.id,
         subjectCode: "LI",
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
+      },
+    });
+
+    const classYear = await prisma.classYear.create({
+      data: {
+        code: ClassYearCode.PRIMARY_FIRST,
+        groupId: group.id,
       },
     });
 
@@ -42,7 +51,7 @@ describe("ServerRequest - updateEvaluations", () => {
         date: new Date(),
         type: "Test Type",
         environmentCode: "LI_TALVI",
-        groupId,
+        classYearId: classYear.id,
       },
     });
 
@@ -73,8 +82,8 @@ describe("ServerRequest - updateEvaluations", () => {
       data: [
         {
           id: evaluationId,
-          skillsRating: Rating.Good,
-          behaviourRating: Rating.Fair,
+          skillsRating: Rating.GOOD,
+          behaviourRating: Rating.FAIR,
           notes: "Updated notes",
         },
       ],

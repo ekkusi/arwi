@@ -3,8 +3,10 @@ import { Rating } from "@/gql/graphql";
 import ValidationError from "@/graphql-server/errors/ValidationError";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - createCollection", () => {
+  let classYearId: string;
   let groupId: string;
 
   beforeAll(async () => {
@@ -19,8 +21,16 @@ describe("ServerRequest - createCollection", () => {
         name: "Test Group",
         subjectCode: "LI",
         teacherId: teacher.id,
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
       },
     });
+    const classYear = await prisma.classYear.create({
+      data: {
+        code: ClassYearCode.PRIMARY_FIRST,
+        groupId: group.id,
+      },
+    });
+    classYearId = classYear.id;
     groupId = group.id;
   });
 
@@ -38,11 +48,14 @@ describe("ServerRequest - createCollection", () => {
         description: "Test description",
         environmentCode: "LI_TALVI",
       },
-      groupId,
+      classYearId,
     };
     const query = graphql(`
-      mutation CreateCollection($data: CreateCollectionInput!, $groupId: ID!) {
-        createCollection(data: $data, groupId: $groupId) {
+      mutation CreateCollection(
+        $data: CreateCollectionInput!
+        $classYearId: ID!
+      ) {
+        createCollection(data: $data, classYearId: $classYearId) {
           id
           date
           environment {
@@ -75,12 +88,14 @@ describe("ServerRequest - createCollection", () => {
       data: {
         name: "Test Student 1",
         groupId,
+        classYears: { connect: { id: classYearId } },
       },
     });
     const student2 = await prisma.student.create({
       data: {
         name: "Test Student 2",
         groupId,
+        classYears: { connect: { id: classYearId } },
       },
     });
     // Arrange
@@ -94,28 +109,28 @@ describe("ServerRequest - createCollection", () => {
           {
             studentId: student1.id,
             wasPresent: true,
-            skillsRating: Rating.Good,
-            behaviourRating: Rating.Fair,
+            skillsRating: Rating.GOOD,
+            behaviourRating: Rating.FAIR,
             notes: "Student 1 notes",
           },
           {
             studentId: student2.id,
             wasPresent: false,
-            skillsRating: Rating.Poor,
-            behaviourRating: Rating.Great,
+            skillsRating: Rating.POOR,
+            behaviourRating: Rating.GREAT,
             notes: "Student 2 notes",
           },
         ],
       },
-      groupId,
+      classYearId,
     };
     const query = graphql(
       `
         mutation CreateCollectionWithEvaluations(
           $data: CreateCollectionInput!
-          $groupId: ID!
+          $classYearId: ID!
         ) {
-          createCollection(data: $data, groupId: $groupId) {
+          createCollection(data: $data, classYearId: $classYearId) {
             id
             date
             description
@@ -174,17 +189,15 @@ describe("ServerRequest - createCollection", () => {
         description: "Test description",
         environmentCode: invalidEnvironmentCode,
       },
-      groupId,
+      classYearId,
     };
     const query = graphql(`
       mutation CreateCollectionWithInvalidSubjectCode(
         $data: CreateCollectionInput!
-        $groupId: ID!
+        $classYearId: ID!
       ) {
-        createCollection(data: $data, groupId: $groupId) {
+        createCollection(data: $data, classYearId: $classYearId) {
           id
-          date
-          description
         }
       }
     `);

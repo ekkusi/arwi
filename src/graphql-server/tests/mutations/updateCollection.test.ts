@@ -3,9 +3,11 @@ import prisma from "@/graphql-server/prismaClient";
 import { Rating } from "@/graphql-server/types";
 import { serverRequest } from "@/pages/api/graphql";
 import { assertIsError } from "@/utils/errorUtils";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - updateCollection", () => {
   let groupId: string;
+  let classYearId: string;
   let collectionId: string;
   let studentId: string;
   let evaluationId: string;
@@ -23,10 +25,19 @@ describe("ServerRequest - updateCollection", () => {
         name: "Test Group",
         teacherId: teacher.id,
         subjectCode: "LI",
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
+      },
+    });
+
+    const classYear = await prisma.classYear.create({
+      data: {
+        code: ClassYearCode.PRIMARY_FIRST,
+        groupId: group.id,
       },
     });
 
     groupId = group.id;
+    classYearId = classYear.id;
 
     const student = await prisma.student.create({
       data: {
@@ -41,7 +52,7 @@ describe("ServerRequest - updateCollection", () => {
       data: {
         date: new Date(),
         type: "Test Type",
-        groupId,
+        classYearId,
         environmentCode: "LI_TALVI",
       },
     });
@@ -51,7 +62,7 @@ describe("ServerRequest - updateCollection", () => {
     const evaluation = await prisma.evaluation.create({
       data: {
         wasPresent: true,
-        skillsRating: Rating.Good,
+        skillsRating: Rating.GOOD,
         studentId,
         evaluationCollectionId: collectionId,
       },
@@ -117,8 +128,8 @@ describe("ServerRequest - updateCollection", () => {
           {
             id: evaluationId,
             wasPresent: true,
-            skillsRating: Rating.Excellent,
-            behaviourRating: Rating.Excellent,
+            skillsRating: Rating.EXCELLENT,
+            behaviourRating: Rating.EXCELLENT,
           },
         ],
       },
@@ -153,8 +164,8 @@ describe("ServerRequest - updateCollection", () => {
       evaluations: [
         {
           id: evaluationId,
-          skillsRating: Rating.Excellent,
-          behaviourRating: Rating.Excellent,
+          skillsRating: Rating.EXCELLENT,
+          behaviourRating: Rating.EXCELLENT,
         },
       ],
     });

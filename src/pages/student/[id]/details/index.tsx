@@ -18,7 +18,7 @@ const StudentDetailsPage_Query = graphql(`
       group {
         id
       }
-      evaluations {
+      currentClassEvaluations {
         id
         notes
       }

@@ -31,7 +31,7 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
       group {
         id
       }
-      evaluations {
+      currentClassEvaluations {
         id
         notes
         ...EvaluationsAccordion_Evaluation
@@ -72,6 +72,7 @@ function StudentPageContent() {
 
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
+  const evaluations = student.currentClassEvaluations;
 
   const validateSummaryLength = (value: string) => {
     const parsed = Number(value);
@@ -89,7 +90,7 @@ function StudentPageContent() {
       setError(undefined);
       setSummary(undefined);
 
-      const notes = student.evaluations
+      const notes = evaluations
         .filter((it) => !!it.notes)
         .map((it) => it.notes);
 
@@ -125,17 +126,17 @@ function StudentPageContent() {
       <TopNavigationBar mb="3" />
       <StudentEvaluationsRecap
         student={student}
-        evaluations={student.evaluations}
+        evaluations={evaluations}
         mb="5"
       />
       <Text as="h2" mb="0">
         Kaikki arvioinnit
       </Text>
-      {student.evaluations.length > 0 ? (
+      {evaluations.length > 0 ? (
         <>
           <EvaluationsAccordion
             ref={evaluationsAccordionRef}
-            evaluations={student.evaluations}
+            evaluations={evaluations}
           />
           <Box my="5">
             <Text as="h2">Loppuarvioinnin generointi</Text>

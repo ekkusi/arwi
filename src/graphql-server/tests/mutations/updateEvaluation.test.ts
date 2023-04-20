@@ -3,6 +3,7 @@ import prisma from "@/graphql-server/prismaClient";
 import { Rating } from "@/graphql-server/types";
 import { serverRequest } from "@/pages/api/graphql";
 import { assertIsError } from "@/utils/errorUtils";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - updateEvaluation", () => {
   let evaluationId: string;
@@ -17,7 +18,19 @@ describe("ServerRequest - updateEvaluation", () => {
     });
 
     const group = await prisma.group.create({
-      data: { name: "Test Group", teacherId: teacher.id, subjectCode: "LI" },
+      data: {
+        name: "Test Group",
+        teacherId: teacher.id,
+        subjectCode: "LI",
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
+      },
+    });
+
+    const classYear = await prisma.classYear.create({
+      data: {
+        code: ClassYearCode.PRIMARY_FIRST,
+        groupId: group.id,
+      },
     });
 
     const student = await prisma.student.create({
@@ -27,7 +40,7 @@ describe("ServerRequest - updateEvaluation", () => {
     const collection = await prisma.evaluationCollection.create({
       data: {
         type: "Test Collection",
-        groupId: group.id,
+        classYearId: classYear.id,
         environmentCode: "LI_TALVI",
       },
     });
@@ -60,8 +73,8 @@ describe("ServerRequest - updateEvaluation", () => {
       data: {
         id: evaluationId,
         wasPresent: true,
-        skillsRating: Rating.Great,
-        behaviourRating: Rating.Great,
+        skillsRating: Rating.GREAT,
+        behaviourRating: Rating.GREAT,
         notes: "Test notes",
       },
     };
@@ -90,8 +103,8 @@ describe("ServerRequest - updateEvaluation", () => {
     expect(result.updateEvaluation).toEqual({
       id: evaluationId,
       wasPresent: true,
-      skillsRating: Rating.Great,
-      behaviourRating: Rating.Great,
+      skillsRating: Rating.GREAT,
+      behaviourRating: Rating.GREAT,
       notes: "Test notes",
     });
   });
@@ -102,8 +115,8 @@ describe("ServerRequest - updateEvaluation", () => {
       data: {
         id: "non-existent-evaluation-id",
         wasPresent: false,
-        skillsRating: Rating.Great,
-        behaviourRating: Rating.Great,
+        skillsRating: Rating.GREAT,
+        behaviourRating: Rating.GREAT,
       },
     };
 

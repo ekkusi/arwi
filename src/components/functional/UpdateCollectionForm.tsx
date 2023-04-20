@@ -36,17 +36,18 @@ const UpdateCollectionForm_Group_Fragment = graphql(`
 
 const UpdateCollectionForm_Collection_Fragment = graphql(`
   fragment UpdateCollectionForm_Collection on EvaluationCollection {
-    type
     date
-    description
     type
+    description
     environment {
       code
     }
-    group {
-      subject {
-        environments {
-          ...UpdateCollectionForm_Environment
+    classYear {
+      group {
+        subject {
+          environments {
+            ...UpdateCollectionForm_Environment
+          }
         }
       }
     }
@@ -97,7 +98,7 @@ export default function UpdateCollectionForm({
     throw new Error("You have to pass either collection or group as a prop");
 
   const environmentFragments = collection
-    ? collection.group.subject.environments
+    ? collection.classYear.group.subject.environments
     : group?.subject.environments || [];
   const environments = environmentFragments.map((it) =>
     getFragmentData(UpdateCollectionForm_EnvironmentFragmentDoc, it)

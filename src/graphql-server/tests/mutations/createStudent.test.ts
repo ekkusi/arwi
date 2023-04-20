@@ -1,8 +1,10 @@
 import { graphql } from "@/gql";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - createStudent", () => {
+  let classYearId: string;
   let groupId: string;
 
   beforeAll(async () => {
@@ -17,8 +19,16 @@ describe("ServerRequest - createStudent", () => {
         name: "Test Group",
         subjectCode: "LI",
         teacherId: teacher.id,
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
       },
     });
+    const classYear = await prisma.classYear.create({
+      data: {
+        code: ClassYearCode.PRIMARY_FIRST,
+        groupId: group.id,
+      },
+    });
+    classYearId = classYear.id;
     groupId = group.id;
   });
 
@@ -34,14 +44,17 @@ describe("ServerRequest - createStudent", () => {
       data: {
         name: "Test Student",
       },
-      groupId,
+      classYearId,
     };
     const query = graphql(
       `
-        mutation CreateStudent($data: CreateStudentInput!, $groupId: ID!) {
-          createStudent(data: $data, groupId: $groupId) {
+        mutation CreateStudent($data: CreateStudentInput!, $classYearId: ID!) {
+          createStudent(data: $data, classYearId: $classYearId) {
             id
             name
+            group {
+              id
+            }
           }
         }
       `
@@ -56,6 +69,16 @@ describe("ServerRequest - createStudent", () => {
     expect(result.createStudent).toEqual({
       id: expect.any(String),
       name: variables.data.name,
+      group: {
+        id: groupId,
+      },
     });
+
+    // Check that student-classyear connection gets added properly
+    const classYearStudents = await prisma.student.findMany({
+      where: { classYears: { some: { id: classYearId } } },
+    });
+
+    expect(classYearStudents).toHaveLength(1);
   });
 });

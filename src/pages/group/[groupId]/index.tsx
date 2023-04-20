@@ -36,17 +36,19 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
     getGroup(id: $groupId) {
       id
       name
-      students {
-        id
-        name
-      }
-      evaluationCollections {
-        id
-        date
-        environment {
-          label
+      currentClassYear {
+        students {
+          id
+          name
         }
-        ...CollectionsChart_EvaluationCollection
+        evaluationCollections {
+          id
+          date
+          environment {
+            label
+          }
+          ...CollectionsChart_EvaluationCollection
+        }
       }
     }
   }
@@ -73,11 +75,11 @@ function GroupOverviewPageContent() {
   if (!data) return <LoadingIndicator />;
   const { getGroup: group } = data;
 
-  const sortedStudents = group.students.sort((a, b) =>
+  const sortedStudents = group.currentClassYear.students.sort((a, b) =>
     a.name.localeCompare(b.name)
   );
 
-  const sortedCollections = group.evaluationCollections.sort(
+  const sortedCollections = group.currentClassYear.evaluationCollections.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
@@ -126,7 +128,9 @@ function GroupOverviewPageContent() {
       <Text as="h1" mt="5" textAlign="center">
         {group.name}
       </Text>
-      <CollectionsChart collections={group.evaluationCollections} />
+      <CollectionsChart
+        collections={group.currentClassYear.evaluationCollections}
+      />
       <Tabs isFitted>
         <TabList>
           <Tab>Oppilaat</Tab>

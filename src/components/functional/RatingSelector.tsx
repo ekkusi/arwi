@@ -33,13 +33,13 @@ export default function RatingSelecter({
 
   const getRatingColor = (rating: Rating) => {
     switch (rating) {
-      case Rating.Poor:
+      case Rating.POOR:
         return selectedRating === rating ? "red.500" : "red.100";
-      case Rating.Fair:
+      case Rating.FAIR:
         return selectedRating === rating ? "orange.500" : "orange.100";
-      case Rating.Good:
+      case Rating.GOOD:
         return selectedRating === rating ? "yellow.500" : "yellow.100";
-      case Rating.Great:
+      case Rating.GREAT:
         return selectedRating === rating ? "green.500" : "green.100";
       default:
         return selectedRating === rating ? "green.600" : "green.400";

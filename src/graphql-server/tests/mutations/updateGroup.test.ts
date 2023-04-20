@@ -2,6 +2,7 @@ import { graphql } from "@/gql";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
 import { assertIsError } from "@/utils/errorUtils";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - updateGroup", () => {
   let groupId: string;
@@ -19,6 +20,7 @@ describe("ServerRequest - updateGroup", () => {
         name: "Test Group",
         teacherId: teacher.id,
         subjectCode: "LI",
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
       },
     });
 

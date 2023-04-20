@@ -2,6 +2,7 @@ import { Button, Text, FormLabel } from "@chakra-ui/react";
 import FormField from "@/components/general/FormField";
 import { graphql } from "@/gql";
 import {
+  ClassYearCode,
   CreateGroupPage_GetSubjectsQuery,
   CreateStudentInput,
 } from "@/gql/graphql";
@@ -58,6 +59,7 @@ export default function CreateGroupPage({ data }: CreateGroupPageProps) {
       await graphqlClient.request(CreateGroupPage_CreateGroup_Mutation, {
         input: {
           ...values,
+          yearCode: ClassYearCode.PRIMARY_FIRST,
           subjectCode: values.subjectCode,
           students,
           teacherId: session.user.id,

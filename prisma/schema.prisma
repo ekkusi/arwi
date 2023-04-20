@@ -18,12 +18,22 @@ model Teacher {
 model Group {
   id                    String                 @id @default(uuid())
   name                  String
-  students              Student[]
-  evaluationCollections EvaluationCollection[]
   subjectCode           String
+  students              Student[]
+  classYears            ClassYear[]
+  currentYearCode       ClassYearCode
   teacher               Teacher                @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId             String
   updatedAt             DateTime               @updatedAt @default(now())
+}
+
+model ClassYear {
+  id                    String                 @id @default(uuid())
+  code                  ClassYearCode
+  group                 Group                   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId               String
+  students              Student[]
+  evaluationCollections EvaluationCollection[]
 }
 
 model EvaluationCollection {
@@ -33,8 +43,8 @@ model EvaluationCollection {
   description           String?
   evaluations           Evaluation[]
   environmentCode       String
-  group                 Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId               String
+  classYear             ClassYear        @relation(fields: [classYearId], references: [id], onDelete: Cascade)
+  classYearId           String
 }
 
 model Evaluation {
@@ -50,10 +60,11 @@ model Evaluation {
 }
 
 model Student {
-  id         String       @id @default(uuid())
-  name       String
-  group      Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId    String
+  id          String       @id @default(uuid())
+  name        String
+  group       Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId     String
+  classYears  ClassYear[]  
   evaluations Evaluation[]
 }
 
@@ -63,4 +74,23 @@ enum Rating {
   GOOD
   GREAT
   EXCELLENT
+}
+
+enum ClassYearCode {
+  PRIMARY_FIRST
+  PRIMARY_SECOND
+  PRIMARY_THIRD
+  PRIMARY_FOURTH
+  PRIMARY_FIFTH
+  PRIMARY_SIXTH
+  PRIMARY_SEVENTH
+  PRIMARY_EIGHTH
+  PRIMARY_NINTH
+  HIGH_SCHOOL_FIRST
+  HIGH_SCHOOL_SECOND
+  HIGH_SCHOOL_THIRD
+  VOCATIONAL_FIRST
+  VOCATIONAL_SECOND
+  VOCATIONAL_THIRD
+  VOCATIONAL_FOURTH
 }

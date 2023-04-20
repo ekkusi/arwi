@@ -2,9 +2,11 @@ import { graphql } from "@/gql";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
 import { assertIsError } from "@/utils/errorUtils";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - deleteStudent", () => {
   let groupId: string;
+  let classYearId: string;
   let studentId: string;
 
   beforeEach(async () => {
@@ -20,15 +22,27 @@ describe("ServerRequest - deleteStudent", () => {
         name: "Test Group",
         teacherId: teacher.id,
         subjectCode: "LI",
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
+      },
+    });
+
+    const classYear = await prisma.classYear.create({
+      data: {
+        code: ClassYearCode.PRIMARY_FIRST,
+        groupId: group.id,
       },
     });
 
     groupId = group.id;
+    classYearId = classYear.id;
 
     const student = await prisma.student.create({
       data: {
         name: "Test Student",
         groupId,
+        classYears: {
+          connect: { id: classYearId },
+        },
       },
     });
 
@@ -65,7 +79,17 @@ describe("ServerRequest - deleteStudent", () => {
     const deletedStudent = await prisma.student.findUnique({
       where: { id: studentId },
     });
+
     expect(deletedStudent).toBeNull();
+
+    // Check that the student-classyear relationship has been deleted
+    const classYearStudents = await prisma.student.findMany({
+      where: {
+        classYears: { some: { id: classYearId } },
+      },
+    });
+
+    expect(classYearStudents).toHaveLength(0);
   });
 
   it("should return an error when the student doesn't exist", async () => {

@@ -16,6 +16,9 @@ const config: CodegenConfig = {
   ignoreNoDocuments: true,
   config: {
     sort: false, // Disable sorting so enums will be in same order as in schema (applies to others than enums as well as side effect)
+    namingConvention: {
+      enumValues: "change-case#upperCase",
+    },
   },
   generates: {
     "./src/gql/": {
@@ -53,6 +56,7 @@ const config: CodegenConfig = {
           Evaluation: "@prisma/client#Evaluation",
           Group: "@prisma/client#Group",
           Student: "@prisma/client#Student",
+          ClassYear: "@prisma/client#ClassYear",
           Subject: "@/graphql-server/types/subject#Subject",
           Environment: "@/graphql-server/types/subject#Environment",
         },

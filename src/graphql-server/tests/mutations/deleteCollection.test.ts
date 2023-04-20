@@ -2,9 +2,10 @@ import { graphql } from "@/gql";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
 import { assertIsError } from "@/utils/errorUtils";
+import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - deleteCollection", () => {
-  let groupId: string;
+  let classYearId: string;
   let collectionId: string;
 
   beforeEach(async () => {
@@ -20,16 +21,24 @@ describe("ServerRequest - deleteCollection", () => {
         name: "Test Group",
         teacherId: teacher.id,
         subjectCode: "LI",
+        currentYearCode: ClassYearCode.PRIMARY_FIRST,
       },
     });
 
-    groupId = group.id;
+    const classYear = await prisma.classYear.create({
+      data: {
+        code: ClassYearCode.PRIMARY_FIRST,
+        groupId: group.id,
+      },
+    });
+
+    classYearId = classYear.id;
 
     const collection = await prisma.evaluationCollection.create({
       data: {
         date: new Date(),
         type: "Test Type",
-        groupId,
+        classYearId,
         environmentCode: "LI_TALVI",
       },
     });

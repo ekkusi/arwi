@@ -1,5 +1,9 @@
 import { Resolvers } from "../types";
-import { getEnvironment, getSubject } from "../utils/subjectUtils";
+import {
+  getClassYearInfo,
+  getEnvironment,
+  getSubject,
+} from "../utils/subjectUtils";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -16,13 +20,28 @@ const resolvers: TypeResolvers = {
     },
   },
   Group: {
-    evaluationCollections: async ({ id }, _, { prisma }) => {
-      const collections = await prisma.evaluationCollection.findMany({
+    currentClassYear: async ({ currentYearCode, id }, _, { prisma }) => {
+      const classYear = await prisma.classYear.findFirstOrThrow({
+        where: {
+          AND: [
+            {
+              groupId: id,
+            },
+            {
+              code: currentYearCode,
+            },
+          ],
+        },
+      });
+      return classYear;
+    },
+    classYears: async ({ id }, _, { prisma }) => {
+      const classYears = await prisma.classYear.findMany({
         where: {
           groupId: id,
         },
       });
-      return collections;
+      return classYears;
     },
     students: async ({ id }, _, { prisma }) => {
       const students = await prisma.student.findMany({
@@ -70,15 +89,13 @@ const resolvers: TypeResolvers = {
     },
   },
   EvaluationCollection: {
-    group: async ({ groupId }, _, { prisma }) => {
-      const matchingGroup = await prisma.group.findUniqueOrThrow({
+    classYear: async ({ classYearId }, _, { prisma }) => {
+      const classYear = await prisma.classYear.findUniqueOrThrow({
         where: {
-          id: groupId,
+          id: classYearId,
         },
       });
-      // console.log("fetching group in collection", matchingGroup);
-
-      return matchingGroup;
+      return classYear;
     },
     evaluations: async ({ id }, _, { prisma }) => {
       const evaluations = await prisma.evaluation.findMany({
@@ -104,11 +121,25 @@ const resolvers: TypeResolvers = {
       });
       return matchingGroup;
     },
-    evaluations: async ({ id }, { wasPresent }, { prisma }) => {
+    currentClassEvaluations: async ({ id, groupId }, _, { prisma }) => {
+      const group = await prisma.group.findUniqueOrThrow({
+        where: { id: groupId },
+      });
       const evaluations = await prisma.evaluation.findMany({
         where: {
           studentId: id,
-          wasPresent: wasPresent !== null ? { equals: wasPresent } : undefined,
+          AND: [
+            {
+              studentId: id,
+            },
+            {
+              evaluationCollection: {
+                classYear: {
+                  code: group.currentYearCode,
+                },
+              },
+            },
+          ],
         },
       });
       return evaluations;
@@ -119,6 +150,35 @@ const resolvers: TypeResolvers = {
       const subject = getSubject(code);
       if (!subject) throw new Error(`Subject not found with code: ${code}`);
       return subject.environments;
+    },
+  },
+  ClassYear: {
+    info: async ({ code }) => {
+      return getClassYearInfo(code);
+    },
+    group: async ({ groupId }, _, { prisma }) => {
+      const group = await prisma.group.findUniqueOrThrow({
+        where: {
+          id: groupId,
+        },
+      });
+      return group;
+    },
+    evaluationCollections: async ({ id }, _, { prisma }) => {
+      const collections = await prisma.evaluationCollection.findMany({
+        where: {
+          classYearId: id,
+        },
+      });
+      return collections;
+    },
+    students: async ({ id }, _, { prisma }) => {
+      const students = await prisma.student.findMany({
+        where: {
+          classYears: { some: { id } },
+        },
+      });
+      return students;
     },
   },
 };

@@ -2,13 +2,13 @@ import { Rating } from "@/gql/graphql";
 
 export const formatRatingString = (rating: Rating) => {
   switch (rating) {
-    case Rating.Excellent:
+    case Rating.EXCELLENT:
       return "Erinomainen";
-    case Rating.Great:
+    case Rating.GREAT:
       return "Kiitettävä";
-    case Rating.Good:
+    case Rating.GOOD:
       return "Hyvä";
-    case Rating.Fair:
+    case Rating.FAIR:
       return "Tyydyttävä";
     default:
       return "Välttävä";
@@ -17,13 +17,13 @@ export const formatRatingString = (rating: Rating) => {
 
 export const formatRatingNumber = (rating: Rating) => {
   switch (rating) {
-    case Rating.Excellent:
+    case Rating.EXCELLENT:
       return 10;
-    case Rating.Great:
+    case Rating.GREAT:
       return 9;
-    case Rating.Good:
+    case Rating.GOOD:
       return 8;
-    case Rating.Fair:
+    case Rating.FAIR:
       return 7;
     default:
       return 6;
@@ -32,13 +32,13 @@ export const formatRatingNumber = (rating: Rating) => {
 
 export const formatRatingNumberString = (rating: Rating) => {
   switch (rating) {
-    case Rating.Excellent:
+    case Rating.EXCELLENT:
       return "10";
-    case Rating.Great:
+    case Rating.GREAT:
       return "9";
-    case Rating.Good:
+    case Rating.GOOD:
       return "8";
-    case Rating.Fair:
+    case Rating.FAIR:
       return "7";
     default:
       return "< 6";
@@ -47,13 +47,13 @@ export const formatRatingNumberString = (rating: Rating) => {
 
 export const getRatingEmoji = (rating: Rating) => {
   switch (rating) {
-    case Rating.Excellent:
+    case Rating.EXCELLENT:
       return "🤩";
-    case Rating.Great:
+    case Rating.GREAT:
       return "😊";
-    case Rating.Good:
+    case Rating.GOOD:
       return "🙂";
-    case Rating.Fair:
+    case Rating.FAIR:
       return "😕";
     default:
       return "🙁";

@@ -25,8 +25,11 @@ const EditGroupPage_GetGroup_Query = graphql(`
       students {
         ...UpdateStudentsList_Student
       }
-      evaluationCollections {
-        ...UpdateCollectionsList_Collection
+      currentClassYear {
+        id
+        evaluationCollections {
+          ...UpdateCollectionsList_Collection
+        }
       }
     }
   }
@@ -86,12 +89,17 @@ function EditGroupPageContent() {
       <Text as="h2" mb="5">
         Oppilaat:
       </Text>
-      <UpdateStudentsList students={group.students} groupId={group.id} />
+      <UpdateStudentsList
+        students={group.students}
+        classYearId={group.currentClassYear.id}
+      />
       <Text as="h2" mt="5">
         Arvioinnit:
       </Text>
-      {group.evaluationCollections.length > 0 ? (
-        <UpdateCollectionsList collections={group.evaluationCollections} />
+      {group.currentClassYear.evaluationCollections.length > 0 ? (
+        <UpdateCollectionsList
+          collections={group.currentClassYear.evaluationCollections}
+        />
       ) : (
         <Text>Ei vielä arviointeja</Text>
       )}
