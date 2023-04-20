@@ -20,6 +20,7 @@ export const prisma = new PrismaClient({
 });
 
 beforeAll(async () => {
+  await prisma.$executeRawUnsafe(`CREATE SCHEMA IF NOT EXISTS "${schemaId}";`);
   await prisma.$executeRawUnsafe(`SET search_path TO "${schemaId}";`);
   await prisma.$executeRawUnsafe(`DROP EXTENSION IF EXISTS "uuid-ossp";`);
   await prisma.$executeRawUnsafe(
