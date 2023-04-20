@@ -19,7 +19,13 @@ export const prisma = new PrismaClient({
   datasources: { db: { url } },
 });
 
-beforeAll(() => {
+beforeAll(async () => {
+  await prisma.$executeRawUnsafe(`
+    SET search_path TO ${schemaId}};
+    DROP EXTENSION IF EXISTS "uuid-ossp";
+
+    CREATE EXTENSION "uuid-ossp" SCHEMA ${schemaId};
+  `);
   execSync(`npx prisma migrate dev`, {
     env: {
       ...process.env,
