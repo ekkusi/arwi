@@ -1,4 +1,5 @@
 import { graphql } from "@/gql";
+import ValidationError from "@/graphql-server/errors/ValidationError";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
 
@@ -26,6 +27,7 @@ describe("ServerRequest - createGroup", () => {
       data: {
         name: "Test Group",
         teacherId,
+        subjectCode: "LI",
       },
     };
     const query = graphql(`
@@ -66,6 +68,7 @@ describe("ServerRequest - createGroup", () => {
       data: {
         name: "Test Group with Students",
         teacherId,
+        subjectCode: "LI",
         students: [
           {
             name: "Student 1",
@@ -116,5 +119,44 @@ describe("ServerRequest - createGroup", () => {
         },
       ],
     });
+  });
+
+  it("should throw an error when invalid subjectCode is provided", async () => {
+    // Arrange
+    const invalidSubjectCode = "INVALID_CODE";
+    const variables = {
+      data: {
+        name: "Test Group with Invalid Subject Code",
+        teacherId,
+        subjectCode: invalidSubjectCode,
+      },
+    };
+    const query = graphql(`
+      mutation CreateGroupWithInvalidSubjectCode($data: CreateGroupInput!) {
+        createGroup(data: $data) {
+          id
+          name
+          teacher {
+            id
+          }
+          students {
+            id
+          }
+        }
+      }
+    `);
+
+    // Act
+    const result = serverRequest(
+      { document: query, prismaOverride: prisma },
+      variables
+    ).catch((e) => e);
+
+    // Assert
+    await expect(result).resolves.toThrow(
+      new ValidationError(
+        `Aihetta koodilla '${invalidSubjectCode}' ei ole olemassa.`
+      )
+    );
   });
 });

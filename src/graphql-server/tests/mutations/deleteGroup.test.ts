@@ -18,6 +18,7 @@ describe("ServerRequest - deleteGroup", () => {
       data: {
         name: "Test Group",
         teacherId: teacher.id,
+        subjectCode: "LI",
       },
     });
 

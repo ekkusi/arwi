@@ -53,6 +53,8 @@ const config: CodegenConfig = {
           Evaluation: "@prisma/client#Evaluation",
           Group: "@prisma/client#Group",
           Student: "@prisma/client#Student",
+          Subject: "@/graphql-server/types/subject#Subject",
+          Environment: "@/graphql-server/types/subject#Environment",
         },
         contextType: "./contextTypes#CustomContext",
       },

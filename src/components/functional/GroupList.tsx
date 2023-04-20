@@ -1,4 +1,4 @@
-import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import Card from "@/components/server-components/primitives/Card";
 import {
   Button,
   Flex,
@@ -34,11 +34,8 @@ function GroupListItem({
   ...rest
 }: GroupListItemProps) {
   return (
-    <BorderedCard
-      border="none"
-      px="5"
+    <Card
       py="2"
-      width="100%"
       onClick={() => onClick(groupData)}
       _hover={{
         cursor: "pointer",
@@ -49,7 +46,7 @@ function GroupListItem({
       {...rest}
     >
       <Text fontWeight="600">{groupData.name}</Text>
-    </BorderedCard>
+    </Card>
   );
 }
 
@@ -62,6 +59,9 @@ export default function GroupList({
   ...rest
 }: GroupListProps) {
   const groups = getFragmentData(GroupList_GroupFragment, groupFragments);
+
+  const sortedGroups = [...groups].sort((a, b) => a.name.localeCompare(b.name));
+
   const [selectedGroup, setSelectedGroup] = useState<
     GroupFragmentType | undefined
   >();
@@ -88,7 +88,7 @@ export default function GroupList({
             as={Link}
             href={`/group/${selectedGroup?.id}`}
             mb="3"
-            colorScheme="yellow"
+            colorScheme="blue"
             onClick={() => {
               onClose();
             }}
@@ -107,7 +107,7 @@ export default function GroupList({
         </Flex>
       </DrawerTemplate>
       <Flex flexDirection="column" {...rest}>
-        {groups.map((it) => (
+        {sortedGroups.map((it) => (
           <GroupListItem
             key={it.id}
             group={it}

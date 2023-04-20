@@ -5,6 +5,8 @@ type Query {
   getGroup(id: ID!): Group!
   getCollection(id: ID!): EvaluationCollection!
   getStudent(id: ID!): Student!
+  getEvaluation(id: ID!): Evaluation!
+  getSubjects: [Subject!]!
 }
 
 type Mutation {
@@ -14,8 +16,10 @@ type Mutation {
   createCollection(data: CreateCollectionInput!, groupId: ID!): EvaluationCollection!
   createStudent(data: CreateStudentInput!, groupId: ID!): Student!
   updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
+  updateCollection(data: UpdateCollectionInput!, collectionId: ID!): EvaluationCollection!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
+  updateEvaluation(data: UpdateEvaluationInput!): Evaluation!
   deleteStudent(studentId: ID!): Boolean!
   deleteGroup(groupId: ID!): Boolean!
   deleteCollection(collectionId: ID!): Boolean!
@@ -31,20 +35,34 @@ type LoginResult {
   teacher: Teacher!
 }
 
+type Subject {
+  code: ID!
+  label: String!
+  environments: [Environment!]!
+}
+
+type Environment {
+  code: ID!
+  color: String!
+  label: String!
+  subject: Subject!
+}
 
 type Group {
   id: ID!
   name: String!
   evaluationCollections: [EvaluationCollection!]!
   students: [Student!]!
-  evaluationTypes: [String!]
+  subject: Subject!
   teacher: Teacher!
+  updatedAt: Date!
 }
 
 type EvaluationCollection {
   id: ID!
   date: Date!
   type: String!
+  environment: Environment!
   description: String
   evaluations: [Evaluation!]!
   group: Group!
@@ -72,7 +90,7 @@ type Student {
   id: ID!
   name: String!
   group: Group!
-  evaluations: [Evaluation!]!
+  evaluations(wasPresent: Boolean): [Evaluation!]!
 }
 
 input CreateTeacherInput {
@@ -84,6 +102,7 @@ input CreateTeacherInput {
 input CreateGroupInput {
   name: String!
   teacherId: ID!
+  subjectCode: ID!
   students: [CreateStudentInput!]
 }
 
@@ -101,9 +120,18 @@ input UpdateStudentInput {
 
 input CreateCollectionInput {
   date: Date!
-  type: String!
+  type: String
+  environmentCode: ID!
   description: String
   evaluations: [CreateEvaluationInput!]
+}
+
+input UpdateCollectionInput {
+  date: Date
+  type: String
+  environmentCode: ID
+  description: String
+  evaluations: [UpdateEvaluationInput!]
 }
 
 input CreateEvaluationInput {
@@ -116,7 +144,7 @@ input CreateEvaluationInput {
 
 input UpdateEvaluationInput {
   id: ID!
-  wasPresent: Boolean!
+  wasPresent: Boolean
   skillsRating: Rating
   behaviourRating: Rating
   notes: String

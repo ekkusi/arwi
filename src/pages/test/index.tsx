@@ -3,7 +3,9 @@ import PageWrapper from "@/components/server-components/PageWrapper";
 import useSpeechRecognition from "@/hooks-and-providers/useSpeechRecognition";
 
 export default function TestPage() {
-  const { speechRecognition, active, result } = useSpeechRecognition();
+  const { speechRecognition, active, result } = useSpeechRecognition({
+    onResult: () => {},
+  });
 
   const toggleSpeechRecognition = () => {
     if (!speechRecognition) return;

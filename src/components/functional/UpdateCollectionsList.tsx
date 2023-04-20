@@ -1,17 +1,21 @@
 import DeleteButton from "@/components/server-components/primitives/DeleteButton";
-import { Box, Flex, Text, FlexProps } from "@chakra-ui/react";
+import { Box, Flex, Text, FlexProps, IconButton } from "@chakra-ui/react";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateCollectionsList_CollectionFragment as CollectionFragment } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { formatDate } from "@/utils/dateUtils";
 import { useState } from "react";
+import Link from "next/link";
+import { FiEdit } from "react-icons/fi";
 
 const UpdateCollectionsList_CollectionFragment = graphql(`
   fragment UpdateCollectionsList_Collection on EvaluationCollection {
     id
     date
-    type
+    environment {
+      label
+    }
   }
 `);
 
@@ -38,9 +42,11 @@ export default function UpdateCollectionsList({
   const [collectionInDelete, setCollectionInDelete] = useState<
     CollectionFragment | undefined
   >();
-  const [collections, setCollections] = useState<CollectionFragment[]>(() => [
-    ...initialCollections,
-  ]);
+  const [collections, setCollections] = useState<CollectionFragment[]>(() =>
+    [...initialCollections].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
+  );
 
   const deleteSelectedCollection = async () => {
     if (!collectionInDelete) return;
@@ -72,19 +78,19 @@ export default function UpdateCollectionsList({
             <Text as="span" textStyle="italic" mr="1">
               {formatDate(new Date(it.date), "dd.MM.yyyy")}:
             </Text>
-            <Text as="span">{it.type}</Text>
+            <Text as="span">{it.environment.label}</Text>
           </Box>
           <Flex mr="2">
             {/* TODO: Show this when the actual editing page is ready */}
-            {/* <IconButton
+            <IconButton
               variant="link"
-              colorScheme="blue"
-              as={NextLink}
+              colorScheme="green"
+              as={Link}
               icon={<FiEdit />}
               aria-label="Arvioinnin muokkaukseen"
               href={`/collection/${it.id}/edit`}
               mr="2"
-            /> */}
+            />
             <DeleteButton
               onClick={() => setCollectionInDelete(it)}
               aria-label="Poista arviointi"
@@ -101,8 +107,8 @@ export default function UpdateCollectionsList({
           Oletko varma, että haluat poistaa arvioinnin{" "}
           <Text as="span" fontStyle="italic">
             {collectionInDelete &&
-              `${formatDate(new Date(collectionInDelete.date), "dd.MM.yyyy")} ${
-                collectionInDelete.type
+              `${formatDate(new Date(collectionInDelete.date))} ${
+                collectionInDelete.environment.label
               }`}
           </Text>
           ? Kaikkien oppilaiden arviointitiedot kyseiseltä arviointikerralta

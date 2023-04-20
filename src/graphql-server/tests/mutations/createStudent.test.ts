@@ -15,6 +15,7 @@ describe("ServerRequest - createStudent", () => {
     const group = await prisma.group.create({
       data: {
         name: "Test Group",
+        subjectCode: "LI",
         teacherId: teacher.id,
       },
     });

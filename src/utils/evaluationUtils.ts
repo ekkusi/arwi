@@ -9,6 +9,7 @@ type EvaluationResult = {
   behaviourStdev: number;
   absencesAmount: number;
   presencesAmount: number;
+  gradeSuggestion: number;
 };
 
 type Evaluation = Pick<
@@ -16,7 +17,7 @@ type Evaluation = Pick<
   "skillsRating" | "behaviourRating" | "wasPresent"
 >;
 
-export const evaluateStudent = (evaluations: Evaluation[]) => {
+export const analyzeEvaluations = (evaluations: Evaluation[]) => {
   const result: EvaluationResult = {
     skillsAverage: 0,
     skillsStdev: 0,
@@ -24,6 +25,7 @@ export const evaluateStudent = (evaluations: Evaluation[]) => {
     behaviourStdev: 0,
     absencesAmount: 0,
     presencesAmount: 0,
+    gradeSuggestion: 0,
   };
   const skillsArray: number[] = [];
   const behaviourArray: number[] = [];
@@ -48,5 +50,9 @@ export const evaluateStudent = (evaluations: Evaluation[]) => {
   result.behaviourAverage /= behaviourArray.length;
   result.skillsStdev = stdev(skillsArray, result.skillsAverage);
   result.behaviourStdev = stdev(behaviourArray, result.behaviourAverage);
+  if (result.behaviourAverage > 0 && result.skillsAverage > 0)
+    result.gradeSuggestion = Math.round(
+      (result.behaviourAverage + result.skillsAverage) / 2
+    );
   return result;
 };

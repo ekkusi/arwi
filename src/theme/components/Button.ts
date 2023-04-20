@@ -68,6 +68,16 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
     }),
   },
   sizes: {
+    xs: ({ variant }) => {
+      const sizeProps =
+        variant === "link" || variant === "ghost" ? formatSizeProps(3) : {};
+      return {
+        py: 3,
+        px: 3,
+        fontSize: "xs",
+        ...sizeProps,
+      };
+    },
     sm: ({ variant }) => {
       const sizeProps =
         variant === "link" || variant === "ghost" ? formatSizeProps(4) : {};

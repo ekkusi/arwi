@@ -1,0 +1,112 @@
+{
+  "subjects": [
+    {
+      "label": "Liikunta",
+      "code": "LI",
+      "environments": [
+        {
+          "label": "Talviliikunta",
+          "code": "LI_TALVI",
+          "color": "#718096"
+        },
+        {
+          "label": "Palloilu",
+          "code": "LI_PALLO",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Vesiliikunta",
+          "code": "LI_VESI",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Voimistelu",
+          "code": "LI_VOIM",
+          "color": "#975A16"
+        },
+        {
+          "label": "Luontoliikunta",
+          "code": "LI_LUONTO",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Tanssi",
+          "code": "LI_TANSSI",
+          "color": "#F6E05E"
+        },
+        {
+          "label": "Kuntoliikunta",
+          "code": "LI_KUNTO",
+          "color": "#9F7AEA"
+        },
+        {
+          "label": "Perusliikunta",
+          "code": "LI_PERUS",
+          "color": "#F56565"
+        },
+        {
+          "label": "Muu",
+          "code": "LI_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Biologia",
+      "code": "BI",
+      "environments": [
+        {
+          "label": "Kasvit",
+          "code": "BI_KASVI",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Eläimet",
+          "code": "BI_ELAIN",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Mikrobit",
+          "code": "BI_MIKRO",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Ympäristö",
+          "code": "BI_YMPARISTO",
+          "color": "#975A16"
+        },
+        {
+          "label": "Muu",
+          "code": "BI_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Psykologia",
+      "code": "PY",
+      "environments": [
+        {
+          "label": "Aivot",
+          "code": "PY_AIVO",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Tunteet",
+          "code": "PY_TUNTEET",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Käyttäytyminen",
+          "code": "PY_KAYT",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "PY_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    }
+  ]
+}

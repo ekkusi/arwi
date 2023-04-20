@@ -11,19 +11,21 @@ import {
 import {
   Field,
   FieldConfig,
+  FieldProps,
   GenericFieldHTMLAttributes,
   useField,
 } from "formik";
 
-type FormFieldProps<Val = string> = GenericFieldHTMLAttributes &
-  FieldConfig<Val> & {
-    label: string;
-    inputProps?: InputProps;
-    labelProps?: FormLabelProps;
-    containerProps?: FormControlProps;
-    errorMessageProps?: FormErrorMessageProps;
-    children?: JSX.Element;
-  };
+type Some = GenericFieldHTMLAttributes & FieldConfig;
+
+type FormFieldProps = Some & {
+  label: string;
+  inputProps?: InputProps;
+  labelProps?: FormLabelProps;
+  containerProps?: FormControlProps;
+  errorMessageProps?: FormErrorMessageProps;
+  render?: (props: FieldProps) => React.ReactNode;
+};
 
 function FormField({
   label,
@@ -32,7 +34,7 @@ function FormField({
   containerProps,
   errorMessageProps,
   validate,
-  children,
+  render,
   as = Input,
   ...rest
 }: FormFieldProps): JSX.Element {
@@ -65,21 +67,22 @@ function FormField({
   return (
     <FormControl
       isInvalid={!!meta.error && meta.touched}
-      mb="7"
+      mb="5"
       {...containerProps}
     >
       <FormLabel htmlFor={rest.id || rest.name} {...labelProps}>
         {label}
       </FormLabel>
       <Field
-        as={as}
+        as={render ? undefined : as}
         {...rest}
         {...field}
         {...inputProps}
         onChange={handleChange}
         onBlur={handleBlur}
-      />
-      {children}
+      >
+        {render ? (props: FieldProps) => render(props) : undefined}
+      </Field>
       <FormErrorMessage {...errorMessageProps}>
         {meta.error || "terve"}
       </FormErrorMessage>

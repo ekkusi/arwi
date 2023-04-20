@@ -1,10 +1,11 @@
 import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import UpdateEvaluationCard from "@/components/functional/UpdateEvaluationCard";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import { graphql } from "@/gql";
+import { getFragmentData, graphql } from "@/gql";
 import {
   UpdateEvaluationsPage_GetCollectionQuery,
   UpdateEvaluationCard_EvaluationFragment as Evaluation,
+  UpdateEvaluationCard_EvaluationFragmentDoc,
 } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { serverRequest } from "@/pages/api/graphql";
@@ -26,6 +27,9 @@ const UpdateEvaluationsPage_GetCollection_Query = graphql(`
         skillsRating
         behaviourRating
         notes
+        student {
+          name
+        }
         ...UpdateEvaluationCard_Evaluation
       }
     }
@@ -46,31 +50,40 @@ const UpdateEvaluationsPage_UpdateEvaluations_Mutation = graphql(`
 
 function UpdateEvaluationsPageContent() {
   const router = useRouter();
-  const collectionId = router.query.collectionId as string;
+  const id = router.query.id as string;
 
   const { data } = useSWR<UpdateEvaluationsPage_GetCollectionQuery>(
-    `collection/${collectionId}/edit`,
+    `collection/${id}/edit-evaluations`,
     () =>
       graphqlClient.request(UpdateEvaluationsPage_GetCollection_Query, {
-        collectionId,
+        collectionId: id,
       })
   );
 
   const toast = useToast();
 
-  const [evaluations, setEvaluations] = useState(() => [
-    ...(data ? data.getCollection.evaluations.filter((e) => e.wasPresent) : []),
-  ]);
+  const [evaluations, setEvaluations] = useState<Evaluation[]>();
   const [isCreating, setIsCreating] = useState(false);
+
   useEffect(() => {
-    setEvaluations(
-      data ? data.getCollection.evaluations.filter((e) => e.wasPresent) : []
-    );
+    if (data) {
+      const filteredEvaluations = data.getCollection.evaluations.filter(
+        (e) => e.wasPresent
+      );
+      setEvaluations(
+        filteredEvaluations.map((it) =>
+          getFragmentData(UpdateEvaluationCard_EvaluationFragmentDoc, it)
+        )
+      );
+    }
   }, [data]);
 
-  if (!data) return <LoadingIndicator />;
+  if (!data || !evaluations) return <LoadingIndicator />;
 
   const { getCollection: collection } = data;
+  const sortedEvaluations = collection.evaluations
+    .filter((e) => e.wasPresent)
+    .sort((a, b) => a.student.name.localeCompare(b.student.name));
 
   const onChanged = (evaluation: Evaluation) => {
     const newEvaluations = evaluations.map((e) => {
@@ -91,7 +104,6 @@ function UpdateEvaluationsPageContent() {
         {
           updateEvaluationsInput: evaluations.map((evaluation) => ({
             id: evaluation.id,
-            wasPresent: evaluation.wasPresent,
             skillsRating: evaluation.skillsRating,
             behaviourRating: evaluation.behaviourRating,
             notes: evaluation.notes,
@@ -133,7 +145,7 @@ function UpdateEvaluationsPageContent() {
   return (
     <PageWrapper p="0">
       <Box
-        height="calc(100vh - 58px)"
+        height="calc(100vh - 74px)"
         p="4"
         scrollSnapType="y mandatory"
         overflowY="scroll"
@@ -144,8 +156,8 @@ function UpdateEvaluationsPageContent() {
           }
         }}
       >
-        {evaluations.length > 0 ? (
-          evaluations.map((evaluation, index) => (
+        {sortedEvaluations.length > 0 ? (
+          sortedEvaluations.map((evaluation, index) => (
             <UpdateEvaluationCard
               key={evaluation.id}
               scrollSnapAlign={
@@ -154,6 +166,7 @@ function UpdateEvaluationsPageContent() {
               scrollSnapStop="always"
               evaluation={evaluation}
               onChanged={onChanged}
+              hasParticipationToggle={false}
             >
               {index === evaluations.length - 1 && (
                 <Button
@@ -200,10 +213,10 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({
   params,
-}: GetStaticPropsContext<{ collectionId: string }>) {
+}: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no params");
   const data = await serverRequest(UpdateEvaluationsPage_GetCollection_Query, {
-    collectionId: params.collectionId,
+    collectionId: params.id,
   });
 
   // Pass data to the page via props

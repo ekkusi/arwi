@@ -11,6 +11,10 @@ import {
   Group as GroupPrisma,
   Student as StudentPrisma,
 } from "@prisma/client";
+import {
+  Subject as SubjectPrisma,
+  Environment as EnvironmentPrisma,
+} from "@/graphql-server/types/subject";
 import { CustomContext } from "./contextTypes";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -46,6 +50,8 @@ export type Query = {
   getGroup: Group;
   getCollection: EvaluationCollection;
   getStudent: Student;
+  getEvaluation: Evaluation;
+  getSubjects: Array<Subject>;
 };
 
 export type QueryGetTeacherArgs = {
@@ -68,6 +74,10 @@ export type QueryGetStudentArgs = {
   id: Scalars["ID"];
 };
 
+export type QueryGetEvaluationArgs = {
+  id: Scalars["ID"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   register: Teacher;
@@ -76,8 +86,10 @@ export type Mutation = {
   createCollection: EvaluationCollection;
   createStudent: Student;
   updateEvaluations: Scalars["Int"];
+  updateCollection: EvaluationCollection;
   updateStudent: Student;
   updateGroup: Group;
+  updateEvaluation: Evaluation;
   deleteStudent: Scalars["Boolean"];
   deleteGroup: Scalars["Boolean"];
   deleteCollection: Scalars["Boolean"];
@@ -111,6 +123,11 @@ export type MutationUpdateEvaluationsArgs = {
   collectionId: Scalars["ID"];
 };
 
+export type MutationUpdateCollectionArgs = {
+  data: UpdateCollectionInput;
+  collectionId: Scalars["ID"];
+};
+
 export type MutationUpdateStudentArgs = {
   data: UpdateStudentInput;
   studentId: Scalars["ID"];
@@ -119,6 +136,10 @@ export type MutationUpdateStudentArgs = {
 export type MutationUpdateGroupArgs = {
   data: UpdateGroupInput;
   groupId: Scalars["ID"];
+};
+
+export type MutationUpdateEvaluationArgs = {
+  data: UpdateEvaluationInput;
 };
 
 export type MutationDeleteStudentArgs = {
@@ -145,14 +166,30 @@ export type LoginResult = {
   teacher: Teacher;
 };
 
+export type Subject = {
+  __typename?: "Subject";
+  code: Scalars["ID"];
+  label: Scalars["String"];
+  environments: Array<Environment>;
+};
+
+export type Environment = {
+  __typename?: "Environment";
+  code: Scalars["ID"];
+  color: Scalars["String"];
+  label: Scalars["String"];
+  subject: Subject;
+};
+
 export type Group = {
   __typename?: "Group";
   id: Scalars["ID"];
   name: Scalars["String"];
   evaluationCollections: Array<EvaluationCollection>;
   students: Array<Student>;
-  evaluationTypes?: Maybe<Array<Scalars["String"]>>;
+  subject: Subject;
   teacher: Teacher;
+  updatedAt: Scalars["Date"];
 };
 
 export type EvaluationCollection = {
@@ -160,6 +197,7 @@ export type EvaluationCollection = {
   id: Scalars["ID"];
   date: Scalars["Date"];
   type: Scalars["String"];
+  environment: Environment;
   description?: Maybe<Scalars["String"]>;
   evaluations: Array<Evaluation>;
   group: Group;
@@ -192,6 +230,10 @@ export type Student = {
   evaluations: Array<Evaluation>;
 };
 
+export type StudentEvaluationsArgs = {
+  wasPresent?: InputMaybe<Scalars["Boolean"]>;
+};
+
 export type CreateTeacherInput = {
   email: Scalars["EmailAddress"];
   password: Scalars["String"];
@@ -200,6 +242,7 @@ export type CreateTeacherInput = {
 export type CreateGroupInput = {
   name: Scalars["String"];
   teacherId: Scalars["ID"];
+  subjectCode: Scalars["ID"];
   students?: InputMaybe<Array<CreateStudentInput>>;
 };
 
@@ -217,9 +260,18 @@ export type UpdateStudentInput = {
 
 export type CreateCollectionInput = {
   date: Scalars["Date"];
-  type: Scalars["String"];
+  type?: InputMaybe<Scalars["String"]>;
+  environmentCode: Scalars["ID"];
   description?: InputMaybe<Scalars["String"]>;
   evaluations?: InputMaybe<Array<CreateEvaluationInput>>;
+};
+
+export type UpdateCollectionInput = {
+  date?: InputMaybe<Scalars["Date"]>;
+  type?: InputMaybe<Scalars["String"]>;
+  environmentCode?: InputMaybe<Scalars["ID"]>;
+  description?: InputMaybe<Scalars["String"]>;
+  evaluations?: InputMaybe<Array<UpdateEvaluationInput>>;
 };
 
 export type CreateEvaluationInput = {
@@ -232,7 +284,7 @@ export type CreateEvaluationInput = {
 
 export type UpdateEvaluationInput = {
   id: Scalars["ID"];
-  wasPresent: Scalars["Boolean"];
+  wasPresent?: InputMaybe<Scalars["Boolean"]>;
   skillsRating?: InputMaybe<Rating>;
   behaviourRating?: InputMaybe<Rating>;
   notes?: InputMaybe<Scalars["String"]>;
@@ -357,6 +409,8 @@ export type ResolversTypes = {
   LoginResult: ResolverTypeWrapper<
     Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }
   >;
+  Subject: ResolverTypeWrapper<SubjectPrisma>;
+  Environment: ResolverTypeWrapper<EnvironmentPrisma>;
   Group: ResolverTypeWrapper<GroupPrisma>;
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   Rating: Rating;
@@ -368,6 +422,7 @@ export type ResolversTypes = {
   CreateStudentInput: CreateStudentInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
+  UpdateCollectionInput: UpdateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
   UpdateEvaluationInput: UpdateEvaluationInput;
 };
@@ -386,6 +441,8 @@ export type ResolversParentTypes = {
   LoginResult: Omit<LoginResult, "teacher"> & {
     teacher: ResolversParentTypes["Teacher"];
   };
+  Subject: SubjectPrisma;
+  Environment: EnvironmentPrisma;
   Group: GroupPrisma;
   EvaluationCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
@@ -396,6 +453,7 @@ export type ResolversParentTypes = {
   CreateStudentInput: CreateStudentInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
+  UpdateCollectionInput: UpdateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
   UpdateEvaluationInput: UpdateEvaluationInput;
 };
@@ -449,6 +507,17 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetStudentArgs, "id">
   >;
+  getEvaluation?: Resolver<
+    ResolversTypes["Evaluation"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetEvaluationArgs, "id">
+  >;
+  getSubjects?: Resolver<
+    Array<ResolversTypes["Subject"]>,
+    ParentType,
+    ContextType
+  >;
 };
 
 export type MutationResolvers<
@@ -491,6 +560,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateEvaluationsArgs, "data" | "collectionId">
   >;
+  updateCollection?: Resolver<
+    ResolversTypes["EvaluationCollection"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateCollectionArgs, "data" | "collectionId">
+  >;
   updateStudent?: Resolver<
     ResolversTypes["Student"],
     ParentType,
@@ -502,6 +577,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateGroupArgs, "data" | "groupId">
+  >;
+  updateEvaluation?: Resolver<
+    ResolversTypes["Evaluation"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateEvaluationArgs, "data">
   >;
   deleteStudent?: Resolver<
     ResolversTypes["Boolean"],
@@ -541,6 +622,31 @@ export type LoginResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SubjectResolvers<
+  ContextType = CustomContext,
+  ParentType extends ResolversParentTypes["Subject"] = ResolversParentTypes["Subject"]
+> = {
+  code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  environments?: Resolver<
+    Array<ResolversTypes["Environment"]>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EnvironmentResolvers<
+  ContextType = CustomContext,
+  ParentType extends ResolversParentTypes["Environment"] = ResolversParentTypes["Environment"]
+> = {
+  code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  color?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GroupResolvers<
   ContextType = CustomContext,
   ParentType extends ResolversParentTypes["Group"] = ResolversParentTypes["Group"]
@@ -557,12 +663,9 @@ export type GroupResolvers<
     ParentType,
     ContextType
   >;
-  evaluationTypes?: Resolver<
-    Maybe<Array<ResolversTypes["String"]>>,
-    ParentType,
-    ContextType
-  >;
+  subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
   teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -573,6 +676,11 @@ export type EvaluationCollectionResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   date?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
   type?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  environment?: Resolver<
+    ResolversTypes["Environment"],
+    ParentType,
+    ContextType
+  >;
   description?: Resolver<
     Maybe<ResolversTypes["String"]>,
     ParentType,
@@ -623,7 +731,8 @@ export type StudentResolvers<
   evaluations?: Resolver<
     Array<ResolversTypes["Evaluation"]>,
     ParentType,
-    ContextType
+    ContextType,
+    Partial<StudentEvaluationsArgs>
   >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -635,6 +744,8 @@ export type Resolvers<ContextType = CustomContext> = {
   Mutation?: MutationResolvers<ContextType>;
   Teacher?: TeacherResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
+  Subject?: SubjectResolvers<ContextType>;
+  Environment?: EnvironmentResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
   EvaluationCollection?: EvaluationCollectionResolvers<ContextType>;
   Evaluation?: EvaluationResolvers<ContextType>;

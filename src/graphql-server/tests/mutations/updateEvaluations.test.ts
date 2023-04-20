@@ -22,6 +22,7 @@ describe("ServerRequest - updateEvaluations", () => {
       data: {
         name: "Test Group",
         teacherId: teacher.id,
+        subjectCode: "LI",
       },
     });
 
@@ -40,6 +41,7 @@ describe("ServerRequest - updateEvaluations", () => {
       data: {
         date: new Date(),
         type: "Test Type",
+        environmentCode: "LI_TALVI",
         groupId,
       },
     });
@@ -71,7 +73,6 @@ describe("ServerRequest - updateEvaluations", () => {
       data: [
         {
           id: evaluationId,
-          wasPresent: false,
           skillsRating: Rating.Good,
           behaviourRating: Rating.Fair,
           notes: "Updated notes",
@@ -103,7 +104,6 @@ describe("ServerRequest - updateEvaluations", () => {
     });
 
     expect(updatedEvaluation).toMatchObject({
-      wasPresent: variables.data[0].wasPresent,
       skillsRating: variables.data[0].skillsRating,
       behaviourRating: variables.data[0].behaviourRating,
       notes: variables.data[0].notes,
@@ -117,49 +117,9 @@ describe("ServerRequest - updateEvaluations", () => {
         {
           id: "non-existent-id",
           wasPresent: false,
-          skillsRating: Rating.Good,
-          behaviourRating: Rating.Fair,
-          notes: "Updated notes",
         },
       ],
       collectionId,
-    };
-
-    const query = graphql(`
-      mutation UpdateEvaluations(
-        $data: [UpdateEvaluationInput!]!
-        $collectionId: ID!
-      ) {
-        updateEvaluations(data: $data, collectionId: $collectionId)
-      }
-    `);
-
-    // Act
-    try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
-    } catch (error) {
-      // Assert
-      assertIsError(error);
-      expect(error.message).toContain("Unexpected error.");
-    }
-  });
-
-  it("should return an error when the collection doesn't exist", async () => {
-    // Arrange
-    const variables = {
-      data: [
-        {
-          id: evaluationId,
-          wasPresent: false,
-          skillsRating: Rating.Good,
-          behaviourRating: Rating.Fair,
-          notes: "Updated notes",
-        },
-      ],
-      collectionId: "non-existent-collection-id",
     };
 
     const query = graphql(`

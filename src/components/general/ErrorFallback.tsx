@@ -12,7 +12,7 @@ export default function ErrorFallback() {
       } else {
         console.error("Service worker not found, skip waiting");
       }
-      window.location.reload();
+      window.location.replace("/");
     }
   };
 

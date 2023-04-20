@@ -7,7 +7,7 @@ import {
   FlexProps,
 } from "@chakra-ui/react";
 import { CreateStudentInput } from "@/gql/graphql";
-import { ChangeEvent, KeyboardEventHandler, useState } from "react";
+import { ChangeEvent, KeyboardEventHandler, useRef, useState } from "react";
 import { IoMdAddCircle } from "react-icons/io";
 import DeleteButton from "@/components/server-components/primitives/DeleteButton";
 
@@ -22,6 +22,7 @@ export default function AddStudentsList({
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
   const [name, setName] = useState("");
   const [error, setError] = useState<string | undefined>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const removeStudent = (index: number) => {
     // Copy old array -> remove by index from copy -> set copy as new state
@@ -32,6 +33,7 @@ export default function AddStudentsList({
   };
 
   const addStudent = () => {
+    inputRef.current?.focus();
     if (name.length === 0) {
       setError("Oppilaan nimi ei voi olla tyhjä");
       return;
@@ -41,7 +43,7 @@ export default function AddStudentsList({
       return;
     }
     // Copy old array with the new element added
-    const newStudents = [...students, { name }];
+    const newStudents = [{ name }, ...students];
     setStudents(newStudents);
     setName("");
     if (onChanged) onChanged(newStudents);
@@ -61,6 +63,26 @@ export default function AddStudentsList({
 
   return (
     <Box {...rest}>
+      <Flex alignItems="center" justifyContent="space-between" mb="2">
+        <Input
+          mr="2"
+          ref={inputRef}
+          placeholder="Oppilaan nimi"
+          value={name}
+          onChange={handleNameChange}
+          onKeyDown={handleKeyDown}
+          isInvalid={!!error}
+        />
+        <IconButton
+          onClick={addStudent}
+          colorScheme="green"
+          variant="ghost"
+          aria-label="Lisää oppilas"
+          size="lg"
+          icon={<IoMdAddCircle />}
+        />
+      </Flex>
+      {error && <Text color="error">{error}</Text>}
       {students.map((it, index) => (
         <Flex
           key={`${it.name}-${index}`}
@@ -76,25 +98,6 @@ export default function AddStudentsList({
           />
         </Flex>
       ))}
-      <Flex alignItems="center" justifyContent="space-between" mb="2">
-        <Input
-          mr="2"
-          placeholder="Oppilaan nimi"
-          value={name}
-          onChange={handleNameChange}
-          onKeyDown={handleKeyDown}
-        />
-        {/* <Button onClick={addStudent}>Lisää</Button> */}
-        <IconButton
-          onClick={addStudent}
-          colorScheme="green"
-          variant="ghost"
-          aria-label="Lisää oppilas"
-          size="lg"
-          icon={<IoMdAddCircle />}
-        />
-      </Flex>
-      {error && <Text color="error">{error}</Text>}
     </Box>
   );
 }

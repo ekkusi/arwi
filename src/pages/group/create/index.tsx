@@ -1,19 +1,25 @@
 import { Button, Text, FormLabel } from "@chakra-ui/react";
 import FormField from "@/components/general/FormField";
 import { graphql } from "@/gql";
-import { CreateStudentInput } from "@/gql/graphql";
+import {
+  CreateGroupPage_GetSubjectsQuery,
+  CreateStudentInput,
+} from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { getSessionClient } from "@/utils/session/client";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import BorderedCard from "@/components/server-components/primitives/BorderedCard";
+import Card from "@/components/server-components/primitives/Card";
 import Link from "next/link";
 import AddStudentsList from "@/components/functional/AddStudentsList";
+import { serverRequest } from "@/pages/api/graphql";
+import SubjectSelect from "@/components/functional/SubjectSelect";
 
 const initialValues = {
   name: "",
+  subjectCode: "LI",
 };
 
 const CreateGroupPage_CreateGroup_Mutation = graphql(`
@@ -25,15 +31,25 @@ const CreateGroupPage_CreateGroup_Mutation = graphql(`
   }
 `);
 
-export default function CreateGroupPage() {
+const CreateGroupPage_GetSubjects_Query = graphql(`
+  query CreateGroupPage_GetSubjects {
+    getSubjects {
+      code
+      label
+    }
+  }
+`);
+
+type CreateGroupPageProps = {
+  data: CreateGroupPage_GetSubjectsQuery;
+};
+
+export default function CreateGroupPage({ data }: CreateGroupPageProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
-  const validateName = (value: string) => {
-    let error;
-    if (value.length === 0) error = "Nimi ei saa olla tyhjä";
-    return error;
-  };
+
+  const subjects = data.getSubjects;
 
   const handleSubmit = async (values: typeof initialValues) => {
     const session = await getSessionClient();
@@ -42,6 +58,7 @@ export default function CreateGroupPage() {
       await graphqlClient.request(CreateGroupPage_CreateGroup_Mutation, {
         input: {
           ...values,
+          subjectCode: values.subjectCode,
           students,
           teacherId: session.user.id,
         },
@@ -58,12 +75,7 @@ export default function CreateGroupPage() {
     <PageWrapper display="flex" flexDirection="column">
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {() => (
-          <BorderedCard
-            as={Form}
-            display="flex"
-            flexDirection="column"
-            flex="1"
-          >
+          <Card as={Form} display="flex" flexDirection="column" flex="1">
             <Text as="h1" textAlign="center">
               Uusi ryhmä
             </Text>
@@ -71,7 +83,29 @@ export default function CreateGroupPage() {
               name="name"
               label="Ryhmän nimi"
               placeholder="Ryhmän nimi"
-              validate={validateName}
+              validate={(value) =>
+                value.length === 0 ? "Nimi ei saa olla tyhjä" : ""
+              }
+            />
+            <FormField
+              label="Aine"
+              name="subjectCode"
+              validate={(value) =>
+                value === null ? "Aihe pitää olla valittu" : ""
+              }
+              render={({
+                field: { name },
+                form: { setFieldValue, setFieldTouched },
+              }) => (
+                <SubjectSelect
+                  subjects={subjects}
+                  initialSubjectCode={initialValues.subjectCode}
+                  onChange={(newValue) => {
+                    setFieldTouched(name, true);
+                    setFieldValue(name, newValue?.code || null);
+                  }}
+                />
+              )}
             />
             <FormLabel>Oppilaat</FormLabel>
             <AddStudentsList
@@ -90,9 +124,18 @@ export default function CreateGroupPage() {
             >
               Peruuta
             </Text>
-          </BorderedCard>
+          </Card>
         )}
       </Formik>
     </PageWrapper>
   );
+}
+
+export async function getStaticProps() {
+  const data = await serverRequest(CreateGroupPage_GetSubjects_Query);
+  return {
+    props: {
+      data,
+    },
+  };
 }

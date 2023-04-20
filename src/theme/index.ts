@@ -5,7 +5,15 @@ import {
   theme as baseTheme,
   withDefaultColorScheme,
 } from "@chakra-ui/react";
-import { Button, FormLabel, Input, Link, Tag, Textarea } from "./components";
+import {
+  Accordion,
+  Button,
+  FormLabel,
+  Input,
+  Link,
+  Tag,
+  Textarea,
+} from "./components";
 
 const errorColor = baseTheme.colors.red["700"];
 
@@ -21,18 +29,6 @@ const themeOverrides = {
     700: "#6D28D9",
     800: "#5B21B6",
     900: "#4C1D95",
-  },
-  yellow: {
-    50: "#FFFAF0",
-    100: "#FEEBC8",
-    200: "#FBD38D",
-    300: "#F6AD55",
-    400: "#ED8936",
-    500: "#DD6B20",
-    600: "#C05621",
-    700: "#9C4221",
-    800: "#7B341E",
-    900: "#652B19",
   },
   blue: {
     50: "#EFF6FF",
@@ -83,6 +79,7 @@ const theme = extendTheme(
     fonts: {
       heading: `Raleway, sans-serif`,
       body: `'Open Sans', sans-serif`,
+      special: `Glegoo, sans-serif`,
       // body: "Raleway",
     },
     fontSizes: {
@@ -119,15 +116,16 @@ const theme = extendTheme(
           fontFamily: theme.fonts.heading,
         },
         h1: {
-          fontSize: { base: "3xl", md: "4xl" },
+          fontSize: { base: "2xl", md: "3xl" },
+          textAlign: "center",
           mb: 5,
         },
         h2: {
-          fontSize: { base: "2xl", md: "3xl" },
+          fontSize: { base: "xl", md: "2xl" },
           mb: 2,
         },
         h3: {
-          fontSize: { base: "xl", md: "2xl" },
+          fontSize: { base: "lg", md: "xl" },
           mb: 2,
         },
         a: {
@@ -146,6 +144,7 @@ const theme = extendTheme(
       FormLabel,
       Link,
       Tag,
+      Accordion,
     },
   },
   withDefaultColorScheme({ colorScheme: "green" })

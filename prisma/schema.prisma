@@ -20,18 +20,21 @@ model Group {
   name                  String
   students              Student[]
   evaluationCollections EvaluationCollection[]
+  subjectCode           String
   teacher               Teacher                @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId             String
+  updatedAt             DateTime               @updatedAt @default(now())
 }
 
 model EvaluationCollection {
-  id          String       @id @default(uuid())
-  date        DateTime     @default(now())
-  type        String
-  description String?
-  evaluations Evaluation[]
-  group       Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId     String
+  id                    String       @id @default(uuid())
+  date                  DateTime     @default(now())
+  type                  String
+  description           String?
+  evaluations           Evaluation[]
+  environmentCode       String
+  group                 Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId               String
 }
 
 model Evaluation {

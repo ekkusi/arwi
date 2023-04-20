@@ -77,14 +77,18 @@ export default function UpdateStudentsList({
   const [studentInDelete, setStudentInDelete] = useState<
     StudentFragment | undefined
   >();
+  const sortStudents = (students: StudentFragment[]) => {
+    return students.sort((a, b) => a.name.localeCompare(b.name));
+  };
+
   const [students, setStudents] = useState<StudentFragment[]>(() => {
-    return [...initialStudents];
+    return sortStudents([...initialStudents]);
   });
   const [newStudentName, setNewStudentName] = useState("");
   const [addingStudent, setAddingStudent] = useState(false);
 
   useEffect(() => {
-    setStudents([...initialStudents]);
+    setStudents(sortStudents([...initialStudents]));
   }, [initialStudents]);
 
   const deleteSelectedStudent = async () => {
@@ -115,7 +119,7 @@ export default function UpdateStudentsList({
       UpdateStudentsList_StudentFragment,
       newStudentFragment
     );
-    const newStudents = [...students, newStudent];
+    const newStudents = [newStudent, ...students];
     setStudents(newStudents);
     setNewStudentName("");
     nameInputRef.current?.clear();
@@ -171,30 +175,9 @@ export default function UpdateStudentsList({
 
   return (
     <Box {...rest}>
-      {students.map((it) => (
-        <Flex
-          key={it.id}
-          alignItems="center"
-          justifyContent="space-between"
-          mb="2"
-        >
-          <InputWithError
-            type="text"
-            value={it.name}
-            validate={validateName}
-            onBlur={(e, isValid) =>
-              isValid && handleStudentNameChange(it, e.target.value)
-            }
-          />
-          <DeleteButton
-            onClick={() => setStudentInDelete(it)}
-            mr="2"
-            aria-label="Poista oppilas"
-          />
-        </Flex>
-      ))}
-      <Flex justifyContent="space-between" mb="2" mt="5">
+      <Flex justifyContent="space-between" mt="2" mb="5">
         <InputWithError
+          name="new-student-name"
           ref={nameInputRef}
           mr="2"
           placeholder="Uuden oppilaan nimi"
@@ -219,6 +202,29 @@ export default function UpdateStudentsList({
           icon={<IoMdAddCircle />}
         />
       </Flex>
+      {students.map((it) => (
+        <Flex
+          key={it.id}
+          alignItems="center"
+          justifyContent="space-between"
+          mb="2"
+        >
+          <InputWithError
+            type="text"
+            name={`student-name-${it.id}`}
+            defaultValue={it.name}
+            validate={validateName}
+            onBlur={(e, isValid) =>
+              isValid && handleStudentNameChange(it, e.target.value)
+            }
+          />
+          <DeleteButton
+            onClick={() => setStudentInDelete(it)}
+            mr="2"
+            aria-label="Poista oppilas"
+          />
+        </Flex>
+      ))}
       <ConfirmationModal
         isOpen={!!studentInDelete}
         onClose={() => setStudentInDelete(undefined)}

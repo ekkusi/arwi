@@ -19,6 +19,7 @@ describe("ServerRequest - deleteCollection", () => {
       data: {
         name: "Test Group",
         teacherId: teacher.id,
+        subjectCode: "LI",
       },
     });
 
@@ -29,6 +30,7 @@ describe("ServerRequest - deleteCollection", () => {
         date: new Date(),
         type: "Test Type",
         groupId,
+        environmentCode: "LI_TALVI",
       },
     });
 

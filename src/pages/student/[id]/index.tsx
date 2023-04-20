@@ -1,35 +1,40 @@
 import { graphql } from "@/gql";
 import { serverRequest } from "@/pages/api/graphql";
 
-import { Box, Button, FormLabel, Input, Text } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
-import { formatDate } from "@/utils/dateUtils";
-import BackwardsLink from "@/components/general/BackwardsLink";
+import { Box, Button, FormLabel, Text } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import StudentEvaluationsRecap from "@/components/server-components/StudentEvaluationsRecap";
-import { StudentPage_GetStudentQuery } from "@/gql/graphql";
+import {
+  EvaluationsAccordion_EvaluationFragmentDoc,
+  StudentPage_GetStudentQuery,
+} from "@/gql/graphql";
 import useSWR, { SWRConfig } from "swr";
 import { useRouter } from "next/router";
 import graphqlClient from "@/graphql-client";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { AiOutlineCheck } from "react-icons/ai";
+import EvaluationsAccordion, {
+  EvaluationsAccordionHandlers,
+} from "@/components/functional/EvaluationsAccordion";
+import InputWithError from "@/components/general/InputWithError";
+import TopNavigationBar from "@/components/functional/TopNavigationBar";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
   query StudentPage_GetStudent($studentId: ID!) {
     getStudent(id: $studentId) {
       id
       name
+      ...StudentEvaluationRecap_Student
       group {
         id
       }
       evaluations {
-        notes
         id
-        collection {
-          date
-        }
+        notes
+        ...EvaluationsAccordion_Evaluation
         ...StudentEvaluationRecap_Evaluation
       }
     }
@@ -38,42 +43,60 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
 
 function StudentPageContent() {
   const router = useRouter();
-  const studentId = router.query.studentId as string;
+
+  const studentId = router.query.id as string;
 
   const { data } = useSWR<StudentPage_GetStudentQuery>(
     `student/${studentId}`,
     () => graphqlClient.request(StudentPage_GetStudent_Query, { studentId })
   );
 
-  const evaluationsWithNotes = useMemo(() => {
-    return data ? data.getStudent.evaluations.filter((it) => !!it.notes) : [];
-  }, [data]);
-
-  const [error, setError] = useState<string | undefined>();
   const [summary, setSummary] = useState<string | undefined>();
   const [summaryLength, setSummaryLength] = useState<number>(50);
+  const [error, setError] = useState<string | undefined>();
+  const [isSummaryValid, setIsSummaryValid] = useState<boolean>(true);
   const [isGeneratingSummary, setIsGeneratingSumamry] =
     useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const evaluationsAccordionRef = useRef<EvaluationsAccordionHandlers>(null);
+
+  useEffect(() => {
+    // Expand the evaluation matching the expandedEvaluationId query param if set
+    const { modifiedEvaluationId } = router.query;
+
+    if (!data || typeof modifiedEvaluationId !== "string") return;
+
+    evaluationsAccordionRef.current?.expandEvaluations([modifiedEvaluationId]);
+    evaluationsAccordionRef.current?.scrollTo(modifiedEvaluationId);
+  }, [router.query, data]);
 
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
 
-  const genearateSummary = async () => {
-    if (summaryLength < 10 || summaryLength > 200) {
-      setError("Yhteenvedon pituuden tulee olla välillä 10-200 merkkiä.");
-      return;
+  const validateSummaryLength = (value: string) => {
+    const parsed = Number(value);
+    let errorMessage;
+    if (parsed < 10 || parsed > 200) {
+      errorMessage = "Yhteenvedon pituuden tulee olla välillä 10-200 merkkiä.";
     }
+    return errorMessage;
+  };
+
+  const genearateSummary = async () => {
     try {
       setIsGeneratingSumamry(true);
       setIsCopied(false);
       setError(undefined);
       setSummary(undefined);
 
+      const notes = student.evaluations
+        .filter((it) => !!it.notes)
+        .map((it) => it.notes);
+
       const result = await fetch("/api/generate-summary", {
         method: "POST",
         body: JSON.stringify({
-          notes: evaluationsWithNotes.map((it) => it.notes || ""),
+          notes,
           summaryLength,
         }),
       });
@@ -98,42 +121,41 @@ function StudentPageContent() {
 
   return (
     <PageWrapper>
-      <BackwardsLink href={`/group/${student.group.id}`}>
-        Takaisin ryhmän yhteenvetoon
-      </BackwardsLink>
-      <Text as="h1">
-        Oppilaan{" "}
-        <Text as="span" fontStyle="italic">
-          {student.name}
-        </Text>{" "}
-        yhteenveto
+      {/* <BackwardsLink position="absolute" top="9" left="10" /> */}
+      <TopNavigationBar mb="3" />
+      <StudentEvaluationsRecap
+        student={student}
+        evaluations={student.evaluations}
+        mb="5"
+      />
+      <Text as="h2" mb="0">
+        Kaikki arvioinnit
       </Text>
-      <StudentEvaluationsRecap evaluations={student.evaluations} mb="5" />
-      <Text as="h2">Oppilaalle annetut huomioit</Text>
-      {evaluationsWithNotes.length > 0 ? (
+      {student.evaluations.length > 0 ? (
         <>
-          {evaluationsWithNotes.map((it) => (
-            <Box mb="2" key={it.id}>
-              <Text fontStyle="italic">
-                {formatDate(it.collection.date, "dd.MM.yyyy")}:
-              </Text>
-              <Text>{it.notes}</Text>
-            </Box>
-          ))}
+          <EvaluationsAccordion
+            ref={evaluationsAccordionRef}
+            evaluations={student.evaluations}
+          />
           <Box my="5">
-            <Text as="h2">Testaa palautteen generointia</Text>
+            <Text as="h2">Loppuarvioinnin generointi</Text>
             <FormLabel>Palautteen pituus</FormLabel>
-            <Input
+            <InputWithError
               type="number"
+              name="summary-length"
               isDisabled={isGeneratingSummary}
-              value={summaryLength}
-              onChange={(e) => setSummaryLength(Number(e.target.value))}
-              mb="4"
+              validate={validateSummaryLength}
+              defaultValue={50}
+              onChange={(e, isValid) => {
+                setSummaryLength(Number(e.target.value));
+                setIsSummaryValid(isValid);
+              }}
+              containerProps={{ mb: "4" }}
             />
             <Button
+              isDisabled={!isSummaryValid}
               isLoading={isGeneratingSummary}
               onClick={() => genearateSummary()}
-              mb="2"
             >
               Luo palaute
             </Button>
@@ -184,10 +206,10 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({
   params,
-}: GetStaticPropsContext<{ studentId: string }>) {
+}: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no paramss");
   const data = await serverRequest(StudentPage_GetStudent_Query, {
-    studentId: params.studentId,
+    studentId: params.id,
   });
   return {
     props: {

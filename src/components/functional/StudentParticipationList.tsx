@@ -1,76 +1,41 @@
-import { Box, Button, Flex, Text, BoxProps } from "@chakra-ui/react";
-import { FragmentType, graphql, getFragmentData } from "@/gql";
-import { StudentParticipationList_StudentFragment as StudentFragmentType } from "@/gql/graphql";
-import { useEffect, useState } from "react";
-
-const StudentParticipationList_StudentFragment = graphql(`
-  fragment StudentParticipationList_Student on Student {
-    id
-    name
-  }
-`);
+import { Box, Flex, Text, BoxProps } from "@chakra-ui/react";
+import { useState } from "react";
+import ParticipationToggle from "./ParticipationToggle";
 
 type StudentParticipationListProps = Omit<BoxProps, "onChange"> & {
-  students: FragmentType<typeof StudentParticipationList_StudentFragment>[];
+  initialParticipations: StudentParticipation[];
   onChange?: (participations: StudentParticipation[]) => void;
   isDisabled?: boolean;
 };
 
 export type StudentParticipation = {
-  student: StudentFragmentType;
+  student: {
+    id: string;
+    name: string;
+  };
   wasPresent: boolean;
 };
 
 export default function StudentParticipationList({
-  students: stundentFragments,
+  initialParticipations,
   onChange,
   isDisabled = false,
   ...rest
 }: StudentParticipationListProps) {
-  const students = getFragmentData(
-    StudentParticipationList_StudentFragment,
-    stundentFragments
-  );
   const [participations, setParticipations] = useState<StudentParticipation[]>(
-    () => {
-      return students.map((it) => ({
-        student: it,
-        wasPresent: true,
-      }));
-    }
+    () => initialParticipations
   );
-  // const [initialParticipationsSet, setInitialParticipationsSet] =
-  //   useState(false);
 
-  // Set initial participations
-  useEffect(() => {
-    const initialParticipations = students.map((it) => ({
-      student: it,
-      wasPresent: true,
-    }));
-    onChange?.(initialParticipations);
-    setParticipations(initialParticipations);
-  }, [onChange, students]);
-
-  const toggleStudentPresent = (participation: StudentParticipation) => {
+  const onToggle = (participation: StudentParticipation, value: boolean) => {
     // Copy old array -> update matching participation -> set copy as new state
     const participationsCopy = [...participations];
     const matching = participationsCopy.find((it) => it === participation);
     if (!matching) throw new Error("Unexpected error, student not found");
-    matching.wasPresent = true;
+    matching.wasPresent = value;
     setParticipations(participationsCopy);
     onChange?.(participationsCopy);
   };
 
-  const toggleStudentNotPresent = (participation: StudentParticipation) => {
-    // Copy old array -> update matching participation -> set copy as new state
-    const participationsCopy = [...participations];
-    const matching = participationsCopy.find((it) => it === participation);
-    if (!matching) throw new Error("Unexpected error, student not found");
-    matching.wasPresent = false;
-    setParticipations(participationsCopy);
-    onChange?.(participationsCopy);
-  };
   return (
     <Box {...rest}>
       {participations.map((it, index) => (
@@ -81,28 +46,11 @@ export default function StudentParticipationList({
           mb="2"
         >
           <Text mr="1">{it.student.name}</Text>
-          <Flex wrap="nowrap">
-            <Button
-              size="sm"
-              onClick={() => toggleStudentPresent(it)}
-              variant={it.wasPresent ? "solid" : "outline"}
-              borderRadius="lg"
-              isDisabled={isDisabled} // Disable changing participations until initial participations are set on parent
-              mr="2"
-            >
-              Paikalla
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => toggleStudentNotPresent(it)}
-              colorScheme="red"
-              borderRadius="lg"
-              variant={it.wasPresent ? "outline" : "solid"}
-              isDisabled={isDisabled}
-            >
-              Poissa
-            </Button>
-          </Flex>
+          <ParticipationToggle
+            isDisabled={isDisabled}
+            initialValue={it.wasPresent}
+            onChange={(value) => onToggle(it, value)}
+          />
         </Flex>
       ))}
     </Box>

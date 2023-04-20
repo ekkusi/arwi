@@ -18,6 +18,7 @@ describe("ServerRequest - updateGroup", () => {
       data: {
         name: "Test Group",
         teacherId: teacher.id,
+        subjectCode: "LI",
       },
     });
 

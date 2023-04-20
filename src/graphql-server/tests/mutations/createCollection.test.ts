@@ -1,5 +1,6 @@
 import { graphql } from "@/gql";
 import { Rating } from "@/gql/graphql";
+import ValidationError from "@/graphql-server/errors/ValidationError";
 import prisma from "@/graphql-server/prismaClient";
 import { serverRequest } from "@/pages/api/graphql";
 
@@ -16,6 +17,7 @@ describe("ServerRequest - createCollection", () => {
     const group = await prisma.group.create({
       data: {
         name: "Test Group",
+        subjectCode: "LI",
         teacherId: teacher.id,
       },
     });
@@ -33,8 +35,8 @@ describe("ServerRequest - createCollection", () => {
     const variables = {
       data: {
         date: "2023-04-01",
-        type: "Test Evaluation",
         description: "Test description",
+        environmentCode: "LI_TALVI",
       },
       groupId,
     };
@@ -43,7 +45,9 @@ describe("ServerRequest - createCollection", () => {
         createCollection(data: $data, groupId: $groupId) {
           id
           date
-          type
+          environment {
+            code
+          }
           description
         }
       }
@@ -59,8 +63,10 @@ describe("ServerRequest - createCollection", () => {
     expect(result.createCollection).toEqual({
       id: expect.any(String),
       date: variables.data.date,
-      type: variables.data.type,
       description: variables.data.description,
+      environment: {
+        code: variables.data.environmentCode,
+      },
     });
   });
 
@@ -82,8 +88,8 @@ describe("ServerRequest - createCollection", () => {
       data: {
         date: "2023-04-01",
 
-        type: "Test Evaluation",
         description: "Test description",
+        environmentCode: "LI_TALVI",
         evaluations: [
           {
             studentId: student1.id,
@@ -112,8 +118,10 @@ describe("ServerRequest - createCollection", () => {
           createCollection(data: $data, groupId: $groupId) {
             id
             date
-            type
             description
+            environment {
+              code
+            }
             evaluations {
               id
               wasPresent
@@ -135,8 +143,10 @@ describe("ServerRequest - createCollection", () => {
     expect(result.createCollection).toEqual({
       id: expect.any(String),
       date: variables.data.date,
-      type: variables.data.type,
       description: variables.data.description,
+      environment: {
+        code: variables.data.environmentCode,
+      },
       evaluations: [
         {
           id: expect.any(String),
@@ -154,5 +164,44 @@ describe("ServerRequest - createCollection", () => {
         },
       ],
     });
+  });
+  it("should throw an error when invalid environmentCode is provided", async () => {
+    // Arrange
+    const invalidEnvironmentCode = "INVALID_CODE";
+    const variables = {
+      data: {
+        date: "2023-04-01",
+        description: "Test description",
+        environmentCode: invalidEnvironmentCode,
+      },
+      groupId,
+    };
+    const query = graphql(`
+      mutation CreateCollectionWithInvalidSubjectCode(
+        $data: CreateCollectionInput!
+        $groupId: ID!
+      ) {
+        createCollection(data: $data, groupId: $groupId) {
+          id
+          date
+          description
+        }
+      }
+    `);
+
+    // Act
+    const result = serverRequest(
+      { document: query, prismaOverride: prisma },
+      {
+        ...variables,
+      }
+    ).catch((e) => e);
+
+    // Assert
+    await expect(result).resolves.toThrow(
+      new ValidationError(
+        `Ympäristöä koodilla '${invalidEnvironmentCode}' ei ole olemassa.`
+      )
+    );
   });
 });

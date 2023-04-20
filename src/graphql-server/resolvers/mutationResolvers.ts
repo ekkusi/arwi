@@ -8,13 +8,18 @@ import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
 import {
+  mapUpdateCollectionInput,
   mapUpdateGroupInput,
   mapUpdateStudentInput,
-} from "../utils/dataMappers";
+} from "../utils/mappers";
 import {
+  validateCreateCollectionInput,
+  validateCreateGroupInput,
   validateCreateStudentInput,
+  validateUpdateCollectionInput,
   validateUpdateStudentInput,
-} from "../utils/dataValidators";
+} from "../utils/validators";
+import { updateEvaluation } from "../utils/resolverUtils";
 
 const BRCRYPT_SALT_ROUNDS = 12;
 
@@ -54,6 +59,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     };
   },
   createGroup: async (_, { data }, { prisma }) => {
+    await validateCreateGroupInput(data);
     const { students, ...rest } = data;
     const group = await prisma.group.create({
       data: {
@@ -69,10 +75,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     return group;
   },
   createCollection: async (_, { data, groupId }, { prisma, res }) => {
+    await validateCreateCollectionInput(data);
     const { evaluations, ...rest } = data;
     const createdCollection = await prisma.evaluationCollection.create({
       data: {
         ...rest,
+        type: "",
         groupId,
         // Create evaluations if there are some in input
         evaluations: evaluations
@@ -84,6 +92,7 @@ const resolvers: MutationResolvers<CustomContext> = {
           : undefined,
       },
     });
+
     await revalidateGroupData(res, groupId);
     return createdCollection;
   },
@@ -99,21 +108,61 @@ const resolvers: MutationResolvers<CustomContext> = {
     return createdStudent;
   },
   updateEvaluations: async (_, { data, collectionId }, { prisma, res }) => {
-    const promises = data.map((it) => {
-      const { id, ...rest } = it;
-      return prisma.evaluation.update({
-        where: { id },
-        data: {
-          ...rest,
-          evaluationCollectionId: collectionId,
-        },
-      });
-    });
+    const promises = data.map((it) => updateEvaluation(it));
     const results = await Promise.all(promises);
+    await prisma.evaluationCollection.update({
+      data: {
+        group: {
+          update: {
+            updatedAt: new Date(),
+          },
+        },
+      },
+      where: { id: collectionId },
+    });
 
     await revalidateCollectionData(res, collectionId);
 
     return results.length;
+  },
+  updateEvaluation: async (_, { data }, { res }) => {
+    const updatedEvaluation = await updateEvaluation(data);
+    await revalidateCollectionData(
+      res,
+      updatedEvaluation.evaluationCollectionId
+    );
+    await revalidateStudentData(res, updatedEvaluation.studentId);
+    return updatedEvaluation;
+  },
+  updateCollection: async (_, { data, collectionId }, { prisma, res }) => {
+    await validateUpdateCollectionInput(data);
+    const { evaluations, ...rest } = data;
+    let updatedStudentIds: string[] = [];
+    if (evaluations) {
+      const promises = evaluations.map((it) => updateEvaluation(it));
+      const updatedEvaluations = await Promise.all(promises);
+      updatedStudentIds = updatedEvaluations.map((it) => it.studentId);
+    }
+
+    const updatedCollection = await prisma.evaluationCollection.update({
+      data: mapUpdateCollectionInput(rest),
+      where: { id: collectionId },
+    });
+
+    // Revalidate all the possibly updated pages
+    const revalidatePromises = [];
+    revalidatePromises.push(
+      revalidateCollectionData(res, updatedCollection.id)
+    );
+    revalidatePromises.push(
+      revalidateGroupData(res, updatedCollection.groupId)
+    );
+    const revalidateStudentPromises = updatedStudentIds.map((it) =>
+      revalidateStudentData(res, it)
+    );
+    await Promise.all([revalidatePromises, ...revalidateStudentPromises]);
+
+    return updatedCollection;
   },
   updateStudent: async (_, { data, studentId }, { prisma, res }) => {
     await validateUpdateStudentInput(data, studentId);

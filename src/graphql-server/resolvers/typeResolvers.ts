@@ -1,4 +1,5 @@
 import { Resolvers } from "../types";
+import { getEnvironment, getSubject } from "../utils/subjectUtils";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -10,6 +11,7 @@ const resolvers: TypeResolvers = {
           teacherId: id,
         },
       });
+
       return groups;
     },
   },
@@ -38,6 +40,15 @@ const resolvers: TypeResolvers = {
         },
       });
       return teacher;
+    },
+    subject: ({ subjectCode }) => {
+      const matchingSubject = getSubject(subjectCode);
+      if (!matchingSubject)
+        throw new Error(`Subject not found with code: ${subjectCode}`);
+      return {
+        code: matchingSubject.code,
+        label: matchingSubject.label,
+      };
     },
   },
   Evaluation: {
@@ -77,6 +88,12 @@ const resolvers: TypeResolvers = {
       });
       return evaluations;
     },
+    environment: ({ environmentCode }) => {
+      const environment = getEnvironment(environmentCode);
+      if (!environment)
+        throw new Error(`Environment not found with code: ${environmentCode}`);
+      return environment;
+    },
   },
   Student: {
     group: async ({ groupId }, _, { prisma }) => {
@@ -87,11 +104,21 @@ const resolvers: TypeResolvers = {
       });
       return matchingGroup;
     },
-    evaluations: async ({ id }, _, { prisma }) => {
+    evaluations: async ({ id }, { wasPresent }, { prisma }) => {
       const evaluations = await prisma.evaluation.findMany({
-        where: { studentId: id },
+        where: {
+          studentId: id,
+          wasPresent: wasPresent !== null ? { equals: wasPresent } : undefined,
+        },
       });
       return evaluations;
+    },
+  },
+  Subject: {
+    environments: ({ code }) => {
+      const subject = getSubject(code);
+      if (!subject) throw new Error(`Subject not found with code: ${code}`);
+      return subject.environments;
     },
   },
 };

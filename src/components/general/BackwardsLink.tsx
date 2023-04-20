@@ -1,26 +1,27 @@
 import { Icon, Text, TextProps } from "@chakra-ui/react";
-import Link from "next/link";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useRouter } from "next/router";
+import { BiArrowBack } from "react-icons/bi";
 
 type BackwardsLinkProps = TextProps & {
-  href: string;
   prefetch?: boolean;
 };
 
 export default function BackwardsLink({
   children,
-  href,
   ...rest
 }: BackwardsLinkProps) {
+  const router = useRouter();
+
   return (
     <Text
-      as={Link}
-      href={href}
+      as="a"
+      onClick={() => router.back()}
       display="inline-flex"
       alignItems="center"
+      fontSize="lg"
       {...rest}
     >
-      <Icon as={AiOutlineArrowLeft} mr="1" />
+      <Icon as={BiArrowBack} mr="1" w={6} h={6} />
       {children}
     </Text>
   );
