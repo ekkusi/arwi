@@ -5,6 +5,7 @@ parentPath=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parentPath"
 cd "../../"
 
+git pull
 /bin/bash scripts/dumpdb.sh -b
 docker pull ekkusi/arwi
 docker stop arwi || true && docker rm arwi || true
