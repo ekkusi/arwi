@@ -52,8 +52,6 @@ export type Query = {
   getCollection: EvaluationCollection;
   getStudent: Student;
   getEvaluation: Evaluation;
-  getSubjects: Array<Subject>;
-  getYearInfos: Array<ClassYearInfo>;
 };
 
 export type QueryGetTeacherArgs = {
@@ -557,16 +555,6 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryGetEvaluationArgs, "id">
-  >;
-  getSubjects?: Resolver<
-    Array<ResolversTypes["Subject"]>,
-    ParentType,
-    ContextType
-  >;
-  getYearInfos?: Resolver<
-    Array<ResolversTypes["ClassYearInfo"]>,
-    ParentType,
-    ContextType
   >;
 };
 

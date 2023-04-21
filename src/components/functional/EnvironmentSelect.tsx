@@ -8,20 +8,11 @@ import {
 } from "chakra-react-select";
 import { hexToRgbA } from "@/utils/color";
 import { useEffect, useRef, useState } from "react";
-import { FragmentType, getFragmentData, graphql } from "@/gql";
-import { EnvironmentSelect_EnvironmentFragment as Environment } from "@/gql/graphql";
+import { Environment, getSubject } from "@/utils/subjectUtils";
 import Select, { SelectProps } from "../general/Select";
 
-const EnvironmentSelect_Environment_Fragment = graphql(`
-  fragment EnvironmentSelect_Environment on Environment {
-    code
-    label
-    color
-  }
-`);
-
 type SubjectSelectProps = SelectProps & {
-  environments: FragmentType<typeof EnvironmentSelect_Environment_Fragment>[];
+  subjectCode: string;
   initialCode?: string;
   onChange?: (value: Environment | null) => void;
 };
@@ -61,15 +52,16 @@ const customComponents = {
 };
 
 export default function EnvironmentSelect({
-  environments: environmentFragments,
+  subjectCode,
   onChange: _onChange,
   initialCode,
   ...rest
 }: SubjectSelectProps) {
-  const environments = getFragmentData(
-    EnvironmentSelect_Environment_Fragment,
-    environmentFragments
-  );
+  const subject = getSubject(subjectCode);
+  if (!subject)
+    throw new Error(`Subject with code ${subjectCode} doesn't exist`);
+  const { environments } = subject;
+
   const ref = useRef<SelectInstance<Environment> | null>(null);
   const [isDirty, setIsDirty] = useState(false);
 

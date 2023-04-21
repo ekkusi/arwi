@@ -6,8 +6,6 @@ type Query {
   getCollection(id: ID!): EvaluationCollection!
   getStudent(id: ID!): Student!
   getEvaluation(id: ID!): Evaluation!
-  getSubjects: [Subject!]!
-  getYearInfos: [ClassYearInfo!]!
 }
 
 type Mutation {

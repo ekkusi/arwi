@@ -8,7 +8,7 @@ import {
   UpdateEvaluationInput,
   UpdateStudentInput,
 } from "../types";
-import { getEnvironment, getSubject } from "./subjectUtils";
+import { getEnvironment, getSubject } from "../../utils/subjectUtils";
 
 export const validateCreateGroupInput = async ({
   subjectCode,

@@ -1,5 +1,4 @@
 import { FragmentType, getFragmentData, graphql } from "@/gql";
-import { EnvironmentSelect_EnvironmentFragmentDoc } from "@/gql/graphql";
 import { formatDate } from "@/utils/dateUtils";
 import { Button, Text, Textarea } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
@@ -15,9 +14,7 @@ import StudentParticipationList, {
 const UpdateCollectionForm_Group_Fragment = graphql(`
   fragment UpdateCollectionForm_Group on Group {
     subject {
-      environments {
-        ...EnvironmentSelect_Environment
-      }
+      code
     }
     students {
       id
@@ -37,9 +34,7 @@ const UpdateCollectionForm_Collection_Fragment = graphql(`
     classYear {
       group {
         subject {
-          environments {
-            ...EnvironmentSelect_Environment
-          }
+          code
         }
       }
     }
@@ -89,9 +84,9 @@ export default function UpdateCollectionForm({
   if (!group && !collection)
     throw new Error("You have to pass either collection or group as a prop");
 
-  const environments = collection
-    ? collection.classYear.group.subject.environments
-    : group?.subject.environments || [];
+  const subjectCode = collection
+    ? collection.classYear.group.subject.code
+    : (group?.subject.code as string);
 
   const initialValues = collection
     ? {
@@ -154,7 +149,7 @@ export default function UpdateCollectionForm({
               form: { setFieldValue, setFieldTouched },
             }) => (
               <EnvironmentSelect
-                environments={environments}
+                subjectCode={subjectCode}
                 initialCode={initialValues.environmentCode}
                 onChange={(newValue) => {
                   setFieldTouched(name, true);

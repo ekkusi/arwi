@@ -3,7 +3,8 @@ import {
   getClassYearInfo,
   getEnvironment,
   getSubject,
-} from "../utils/subjectUtils";
+  getSubjectCode,
+} from "../../utils/subjectUtils";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -147,7 +148,7 @@ const resolvers: TypeResolvers = {
   },
   Subject: {
     environments: ({ code }) => {
-      const subject = getSubject(code);
+      const subject = getSubject(getSubjectCode(code));
       if (!subject) throw new Error(`Subject not found with code: ${code}`);
       return subject.environments;
     },

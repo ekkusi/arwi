@@ -1,11 +1,7 @@
 import { Button, Text, FormLabel } from "@chakra-ui/react";
 import FormField from "@/components/general/FormField";
 import { graphql } from "@/gql";
-import {
-  ClassYearCode,
-  CreateGroupPage_GetMetaDataQuery,
-  CreateStudentInput,
-} from "@/gql/graphql";
+import { ClassYearCode, CreateStudentInput } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
 import { getSessionClient } from "@/utils/session/client";
 import { Form, Formik } from "formik";
@@ -15,7 +11,6 @@ import PageWrapper from "@/components/server-components/PageWrapper";
 import Card from "@/components/server-components/primitives/Card";
 import Link from "next/link";
 import AddStudentsList from "@/components/functional/AddStudentsList";
-import { serverRequest } from "@/pages/api/graphql";
 import SubjectSelect from "@/components/functional/SubjectSelect";
 import ClassYearSelect from "@/components/functional/ClassYearSelect";
 
@@ -38,28 +33,10 @@ const CreateGroupPage_CreateGroup_Mutation = graphql(`
   }
 `);
 
-const CreateGroupPage_GetMetaData_Query = graphql(`
-  query CreateGroupPage_GetMetaData {
-    getSubjects {
-      ...SubjectSelect_Subject
-    }
-    getYearInfos {
-      ...ClassYearSelect_ClassYearInfo
-    }
-  }
-`);
-
-type CreateGroupPageProps = {
-  data: CreateGroupPage_GetMetaDataQuery;
-};
-
-export default function CreateGroupPage({ data }: CreateGroupPageProps) {
+export default function CreateGroupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
-
-  const subjects = data.getSubjects;
-  const yearInfos = data.getYearInfos;
 
   const handleSubmit = async (values: typeof initialValues) => {
     const { yearCode, ...rest } = values;
@@ -112,7 +89,6 @@ export default function CreateGroupPage({ data }: CreateGroupPageProps) {
                 form: { setFieldValue, setFieldTouched },
               }) => (
                 <ClassYearSelect
-                  classYearInfos={yearInfos}
                   onChange={(newValue) => {
                     setFieldTouched(name, true);
                     setFieldValue(name, newValue?.code || null);
@@ -129,7 +105,6 @@ export default function CreateGroupPage({ data }: CreateGroupPageProps) {
                 form: { setFieldValue, setFieldTouched },
               }) => (
                 <SubjectSelect
-                  subjects={subjects}
                   initialSubjectCode={initialValues.subjectCode}
                   onChange={(newValue) => {
                     setFieldTouched(name, true);
@@ -160,13 +135,4 @@ export default function CreateGroupPage({ data }: CreateGroupPageProps) {
       </Formik>
     </PageWrapper>
   );
-}
-
-export async function getStaticProps() {
-  const data = await serverRequest(CreateGroupPage_GetMetaData_Query);
-  return {
-    props: {
-      data,
-    },
-  };
 }
