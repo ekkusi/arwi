@@ -1,4 +1,5 @@
 import { FragmentType, getFragmentData, graphql } from "@/gql";
+import { ClassYearSelect_ClassYearInfoFragment } from "@/gql/graphql";
 import Select, { SelectProps } from "../general/Select";
 
 const ClassYearSelect_ClassYearInfo_Fragment = graphql(`
@@ -9,26 +10,27 @@ const ClassYearSelect_ClassYearInfo_Fragment = graphql(`
 `);
 
 type ClassYearSelectProps = SelectProps & {
-  classYears: FragmentType<typeof ClassYearSelect_ClassYearInfo_Fragment>[];
+  classYearInfos: FragmentType<typeof ClassYearSelect_ClassYearInfo_Fragment>[];
   initialClassYearCode?: string;
+  onChange?: (value: ClassYearSelect_ClassYearInfoFragment | null) => void;
 };
 
 export default function ClassYearSelect({
-  classYears: classYearFragments,
+  classYearInfos: classYearInfoFragments,
   initialClassYearCode,
   ...rest
 }: ClassYearSelectProps) {
-  const classYears = getFragmentData(
+  const options = getFragmentData(
     ClassYearSelect_ClassYearInfo_Fragment,
-    classYearFragments
+    classYearInfoFragments
   );
 
   return (
     <Select
-      options={classYears}
+      options={options}
       getOptionValue={(option) => option.code}
       isSearchable={false}
-      defaultValue={classYears.find((it) => it.code === initialClassYearCode)}
+      defaultValue={options.find((it) => it.code === initialClassYearCode)}
       placeholder="Valitse vuosiluokka..."
       {...rest}
     />

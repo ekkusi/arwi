@@ -3,7 +3,7 @@ import FormField from "@/components/general/FormField";
 import { graphql } from "@/gql";
 import {
   ClassYearCode,
-  CreateGroupPage_GetSubjectsQuery,
+  CreateGroupPage_GetMetaDataQuery,
   CreateStudentInput,
 } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
@@ -17,10 +17,16 @@ import Link from "next/link";
 import AddStudentsList from "@/components/functional/AddStudentsList";
 import { serverRequest } from "@/pages/api/graphql";
 import SubjectSelect from "@/components/functional/SubjectSelect";
+import ClassYearSelect from "@/components/functional/ClassYearSelect";
 
-const initialValues = {
+const initialValues: {
+  name: string;
+  subjectCode: string;
+  yearCode: ClassYearCode | null;
+} = {
   name: "",
   subjectCode: "LI",
+  yearCode: null,
 };
 
 const CreateGroupPage_CreateGroup_Mutation = graphql(`
@@ -32,16 +38,19 @@ const CreateGroupPage_CreateGroup_Mutation = graphql(`
   }
 `);
 
-const CreateGroupPage_GetSubjects_Query = graphql(`
-  query CreateGroupPage_GetSubjects {
+const CreateGroupPage_GetMetaData_Query = graphql(`
+  query CreateGroupPage_GetMetaData {
     getSubjects {
       ...SubjectSelect_Subject
+    }
+    getYearInfos {
+      ...ClassYearSelect_ClassYearInfo
     }
   }
 `);
 
 type CreateGroupPageProps = {
-  data: CreateGroupPage_GetSubjectsQuery;
+  data: CreateGroupPage_GetMetaDataQuery;
 };
 
 export default function CreateGroupPage({ data }: CreateGroupPageProps) {
@@ -50,15 +59,19 @@ export default function CreateGroupPage({ data }: CreateGroupPageProps) {
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
 
   const subjects = data.getSubjects;
+  const yearInfos = data.getYearInfos;
 
   const handleSubmit = async (values: typeof initialValues) => {
+    const { yearCode, ...rest } = values;
+    if (!yearCode) throw new Error("Unexpected error"); // Shouldn't ever be thrown because nulls are checked during validation
+
     const session = await getSessionClient();
     setLoading(true);
     try {
       await graphqlClient.request(CreateGroupPage_CreateGroup_Mutation, {
         input: {
-          ...values,
-          yearCode: ClassYearCode.PRIMARY_FIRST,
+          ...rest,
+          yearCode,
           subjectCode: values.subjectCode,
           students,
           teacherId: session.user.id,
@@ -89,11 +102,28 @@ export default function CreateGroupPage({ data }: CreateGroupPageProps) {
               }
             />
             <FormField
+              label="Vuosiluokka"
+              name="yearCode"
+              validate={(value) =>
+                !value ? "Vuosiluokka pitää olla valittu" : ""
+              }
+              render={({
+                field: { name },
+                form: { setFieldValue, setFieldTouched },
+              }) => (
+                <ClassYearSelect
+                  classYearInfos={yearInfos}
+                  onChange={(newValue) => {
+                    setFieldTouched(name, true);
+                    setFieldValue(name, newValue?.code || null);
+                  }}
+                />
+              )}
+            />
+            <FormField
               label="Aine"
               name="subjectCode"
-              validate={(value) =>
-                value === null ? "Aihe pitää olla valittu" : ""
-              }
+              validate={(value) => (!value ? "Aine pitää olla valittu" : "")}
               render={({
                 field: { name },
                 form: { setFieldValue, setFieldTouched },
@@ -133,7 +163,7 @@ export default function CreateGroupPage({ data }: CreateGroupPageProps) {
 }
 
 export async function getStaticProps() {
-  const data = await serverRequest(CreateGroupPage_GetSubjects_Query);
+  const data = await serverRequest(CreateGroupPage_GetMetaData_Query);
   return {
     props: {
       data,

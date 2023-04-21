@@ -37,6 +37,10 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
       id
       name
       currentClassYear {
+        info {
+          code
+          label
+        }
         students {
           id
           name
