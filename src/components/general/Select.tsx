@@ -7,7 +7,7 @@ import {
 } from "chakra-react-select";
 import { forwardRef, RefAttributes } from "react";
 
-export type SelectCustomProps = {
+export type SelectProps = {
   containerProps?: BoxProps;
 };
 
@@ -22,7 +22,7 @@ function Select<
     ...rest
   }: Props<Option, IsMulti, Group> &
     RefAttributes<SelectInstance<Option, IsMulti, Group>> &
-    SelectCustomProps,
+    SelectProps,
   ref: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>
 ) {
   return (
@@ -56,7 +56,7 @@ const WithRef = forwardRef(Select) as <
 >(
   props: Props<Option, IsMulti, Group> & {
     ref?: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>;
-  } & SelectCustomProps
+  } & SelectProps
 ) => ReturnType<typeof Select>;
 
 export default WithRef;

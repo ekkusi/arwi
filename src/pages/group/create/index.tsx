@@ -35,8 +35,7 @@ const CreateGroupPage_CreateGroup_Mutation = graphql(`
 const CreateGroupPage_GetSubjects_Query = graphql(`
   query CreateGroupPage_GetSubjects {
     getSubjects {
-      code
-      label
+      ...SubjectSelect_Subject
     }
   }
 `);

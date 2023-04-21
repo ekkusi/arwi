@@ -1,5 +1,5 @@
 import { FragmentType, getFragmentData, graphql } from "@/gql";
-import { UpdateCollectionForm_EnvironmentFragmentDoc } from "@/gql/graphql";
+import { EnvironmentSelect_EnvironmentFragmentDoc } from "@/gql/graphql";
 import { formatDate } from "@/utils/dateUtils";
 import { Button, Text, Textarea } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
@@ -12,19 +12,11 @@ import StudentParticipationList, {
   StudentParticipation,
 } from "./StudentParticipationList";
 
-const UpdateCollectionForm_Environment_Fragment = graphql(`
-  fragment UpdateCollectionForm_Environment on Environment {
-    label
-    code
-    color
-  }
-`);
-
 const UpdateCollectionForm_Group_Fragment = graphql(`
   fragment UpdateCollectionForm_Group on Group {
     subject {
       environments {
-        ...UpdateCollectionForm_Environment
+        ...EnvironmentSelect_Environment
       }
     }
     students {
@@ -46,7 +38,7 @@ const UpdateCollectionForm_Collection_Fragment = graphql(`
       group {
         subject {
           environments {
-            ...UpdateCollectionForm_Environment
+            ...EnvironmentSelect_Environment
           }
         }
       }
@@ -97,12 +89,9 @@ export default function UpdateCollectionForm({
   if (!group && !collection)
     throw new Error("You have to pass either collection or group as a prop");
 
-  const environmentFragments = collection
+  const environments = collection
     ? collection.classYear.group.subject.environments
     : group?.subject.environments || [];
-  const environments = environmentFragments.map((it) =>
-    getFragmentData(UpdateCollectionForm_EnvironmentFragmentDoc, it)
-  );
 
   const initialValues = collection
     ? {
