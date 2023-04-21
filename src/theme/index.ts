@@ -13,6 +13,8 @@ import {
   Link,
   Tag,
   Textarea,
+  Checkbox,
+  Popover,
 } from "./components";
 
 const errorColor = baseTheme.colors.red["700"];
@@ -145,6 +147,8 @@ const theme = extendTheme(
       Link,
       Tag,
       Accordion,
+      Checkbox,
+      Popover,
     },
   },
   withDefaultColorScheme({ colorScheme: "green" })

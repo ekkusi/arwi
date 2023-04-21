@@ -25,7 +25,6 @@ export default function Overlay({
       bottom="0"
       bgColor={bgRgba}
       color="bg"
-      zIndex="101"
       {...rest}
     >
       {children}

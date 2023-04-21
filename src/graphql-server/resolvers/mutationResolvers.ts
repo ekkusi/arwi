@@ -173,15 +173,62 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return true;
   },
-  changeGroupYear: async (_, { groupId, newYearCode }, { prisma }) => {
-    let existingYear = await prisma.classYear.findFirst({
+  changeGroupYear: async (
+    _,
+    { groupId, newYearCode, transferEvaluations },
+    { prisma }
+  ) => {
+    let newYear = await prisma.classYear.findFirst({
       where: { groupId, code: newYearCode },
     });
-    if (!existingYear) {
-      existingYear = await prisma.classYear.create({
+    const group = await prisma.group.findUniqueOrThrow({
+      where: { id: groupId },
+    });
+    if (!newYear) {
+      // Copy students from current year to new year
+      const currentYearStudents = await prisma.student.findMany({
+        where: {
+          classYears: {
+            some: {
+              AND: [
+                {
+                  code: group.currentYearCode,
+                },
+                {
+                  groupId: group.id,
+                },
+              ],
+            },
+          },
+        },
+      });
+      newYear = await prisma.classYear.create({
         data: {
           code: newYearCode,
           groupId,
+          students: {
+            connect: currentYearStudents.map((it) => ({ id: it.id })),
+          },
+        },
+      });
+    }
+    // Transfer collections to new class year if transferEvaluations is passed
+    if (transferEvaluations === true) {
+      await prisma.evaluationCollection.updateMany({
+        where: {
+          classYear: {
+            AND: [
+              {
+                code: group.currentYearCode,
+              },
+              {
+                groupId: group.id,
+              },
+            ],
+          },
+        },
+        data: {
+          classYearId: newYear.id,
         },
       });
     }

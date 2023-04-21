@@ -16,27 +16,34 @@ import { BsThreeDots } from "react-icons/bs";
 type EditPopoverProps = Omit<PopoverProps, "children"> & {
   children: React.ReactNode;
   openButtonProps?: IconButtonProps;
+  openButton?: React.ReactNode;
 };
 
 export default function Popover({
   children,
   openButtonProps,
+  openButton,
   ...rest
 }: EditPopoverProps) {
   return (
     <ChakraPopover placement="bottom-start" {...rest}>
       <PopoverTrigger>
-        <IconButton
-          colorScheme="gray"
-          variant="link"
-          icon={<BsThreeDots />}
-          aria-label="Muokkaa"
-          {...openButtonProps}
-        />
+        <Flex>
+          {openButton || (
+            <IconButton
+              colorScheme="gray"
+              variant="link"
+              icon={<BsThreeDots />}
+              aria-label="Muokkaa"
+              {...openButtonProps}
+            />
+          )}
+        </Flex>
       </PopoverTrigger>
       <PopoverContent
         minWidth="44"
         width="auto"
+        maxWidth="100%"
         boxShadow="md"
         color="light-text"
         fontSize="sm"
@@ -66,6 +73,7 @@ export const PopoverItem = forwardRef<PopoverItemProps, "div">(
           cursor: "pointer",
           bg: "gray.100",
         }}
+        fontWeight="semibold"
         {...rest}
       >
         {icon && <Icon as={icon} mr="2" />}

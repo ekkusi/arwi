@@ -142,6 +142,7 @@ export type MutationUpdateGroupArgs = {
 export type MutationChangeGroupYearArgs = {
   newYearCode: ClassYearCode;
   groupId: Scalars["ID"];
+  transferEvaluations?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export type MutationUpdateEvaluationArgs = {

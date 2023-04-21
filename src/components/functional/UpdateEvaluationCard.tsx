@@ -128,7 +128,6 @@ export default function UpdateEvaluationCard({
           />
           <SpeechRecognition
             position="absolute"
-            zIndex="100"
             bottom="1"
             right="1"
             aria-label="Puhu tekstiksi"

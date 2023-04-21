@@ -99,8 +99,8 @@ export default function BarChartBase({
           margin={{
             top: 5,
             bottom: 0,
-            right: 15,
-            left: -40,
+            right: 25,
+            left: -35,
           }}
           onClick={onClick}
           onMouseDown={openTooltip}

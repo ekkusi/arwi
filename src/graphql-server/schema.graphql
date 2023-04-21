@@ -18,7 +18,7 @@ type Mutation {
   updateCollection(data: UpdateCollectionInput!, collectionId: ID!): EvaluationCollection!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
-  changeGroupYear(newYearCode: ClassYearCode!, groupId: ID!): Group!
+  changeGroupYear(newYearCode: ClassYearCode!, groupId: ID!, transferEvaluations: Boolean): Group!
   updateEvaluation(data: UpdateEvaluationInput!): Evaluation!
   deleteStudent(studentId: ID!): Boolean!
   deleteGroup(groupId: ID!): Boolean!

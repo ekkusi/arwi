@@ -20,7 +20,7 @@ import PageWrapper from "@/components/server-components/PageWrapper";
 import Card from "@/components/server-components/primitives/Card";
 import { GroupOverviewPage_GetGroupQuery } from "@/gql/graphql";
 import Link from "next/link";
-import useSWR, { SWRConfig } from "swr";
+import useSWR, { mutate, SWRConfig } from "swr";
 import graphqlClient from "@/graphql-client";
 import { useRouter } from "next/router";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
@@ -30,6 +30,8 @@ import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { useState } from "react";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
 import CollectionsChart from "@/components/functional/CollectionsChart";
+import ChangeClassYearModal from "@/components/functional/ChangeClassYearModal";
+import { BiTransfer } from "react-icons/bi";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -54,6 +56,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           ...CollectionsChart_EvaluationCollection
         }
       }
+      ...ChangeClassYearModal_Group
     }
   }
 `);
@@ -74,7 +77,8 @@ function GroupOverviewPageContent() {
     () => graphqlClient.request(GroupOverviewPage_GetGroup_Query, { groupId })
   );
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isChangeYearModalOpen, setIsChangeYearModalOpen] = useState(false);
 
   if (!data) return <LoadingIndicator />;
   const { getGroup: group } = data;
@@ -91,7 +95,7 @@ function GroupOverviewPageContent() {
     await graphqlClient.request(GroupOverviewPage_DeleteGroup_Mutation, {
       groupId: group.id,
     });
-    setIsModalOpen(false);
+    setIsDeleteModalOpen(false);
     router.push("/");
     toast({
       title: `Ryhmä '${group.name}' poistettu onnistuneesti.`,
@@ -108,20 +112,26 @@ function GroupOverviewPageContent() {
           <PopoverItem icon={FiEdit} as={Link} href={`/group/${group.id}/edit`}>
             Muokkaa
           </PopoverItem>
+          <PopoverItem
+            icon={BiTransfer}
+            onClick={() => setIsChangeYearModalOpen(true)}
+          >
+            Vaihda vuosiluokkaa
+          </PopoverItem>
           <Divider />
           <PopoverItem
             icon={RiDeleteBin6Line}
             color="error"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsDeleteModalOpen(true)}
           >
             Poista
           </PopoverItem>
         </Popover>
       </TopNavigationBar>
       <ConfirmationModal
-        isOpen={isModalOpen}
+        isOpen={isDeleteModalOpen}
         awaitBeforeClose
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => setIsDeleteModalOpen(false)}
         onAccept={() => deleteGroup()}
       >
         <Text>
@@ -129,6 +139,12 @@ function GroupOverviewPageContent() {
           arviointien tiedot poistuvat samalla.
         </Text>
       </ConfirmationModal>
+      <ChangeClassYearModal
+        group={group}
+        isOpen={isChangeYearModalOpen}
+        onClose={() => setIsChangeYearModalOpen(false)}
+        onChanged={() => mutate(`group/${group.id}`)}
+      />
       <Text as="h1" mt="5" textAlign="center">
         {group.name}
       </Text>
