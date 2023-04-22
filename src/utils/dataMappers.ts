@@ -1,4 +1,5 @@
 import { Rating } from "@/gql/graphql";
+import { LearningObjective } from "./subjectUtils";
 
 export const formatRatingString = (rating: Rating) => {
   switch (rating) {
@@ -58,6 +59,10 @@ export const getRatingEmoji = (rating: Rating) => {
     default:
       return "🙁";
   }
+};
+
+export const formatObjectiveLabel = (learningObjective: LearningObjective) => {
+  return `${learningObjective.code}: ${learningObjective.label}`;
 };
 
 export const formatRatingStringWithNull = (

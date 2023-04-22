@@ -41,6 +41,10 @@ const CollectionPage_GetCollection_Query = graphql(`
           id
         }
       }
+      learningObjectives {
+        code
+        label
+      }
       evaluations {
         id
         ...EvaluationsAccordion_Evaluation
@@ -151,6 +155,12 @@ export default function CollectionPage({
         </Text>
         <Text>
           <Text fontWeight="semibold" as="span">
+            Ympäristö:
+          </Text>{" "}
+          {collection.learningObjectives.map((it) => it.code).join(", ")}
+        </Text>
+        <Text>
+          <Text fontWeight="semibold" as="span">
             Päivämäärä:
           </Text>{" "}
           {dateString}
@@ -159,7 +169,9 @@ export default function CollectionPage({
           <Text fontWeight="semibold" as="span">
             Ryhmä:
           </Text>{" "}
-          {collection.classYear.group.name}
+          <Link href={`/group/${collection.classYear.group.id}`}>
+            {collection.classYear.group.name}
+          </Link>
         </Text>
         {collection.description && <Text mt="2">{collection.description}</Text>}
       </Card>
