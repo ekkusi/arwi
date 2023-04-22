@@ -19,6 +19,7 @@
     "postinstall": "npx prisma generate",
     "init-mock-data": "ts-node ./src/graphql-server/utils/initMockData.ts",
     "test": "dotenv -e .env.test jest -i",
+    "test-individual": "dotenv -e .env.test jest",
     "test-with-setup": "npm run prisma:migrate-test && npm run test"
   },
   "dependencies": {

@@ -8,6 +8,7 @@ import { ClassYearCode as PrismaClassYearCode } from "@prisma/client";
 describe("ServerRequest - changeGroupYear", () => {
   let groupId: string;
   let classYearId: string;
+  let teacherId: string;
 
   beforeAll(async () => {
     // Create test data for the changeGroupYear
@@ -17,11 +18,14 @@ describe("ServerRequest - changeGroupYear", () => {
         passwordHash: "hashed-password",
       },
     });
+    teacherId = teacher.id;
+  });
 
+  beforeEach(async () => {
     const group = await prisma.group.create({
       data: {
         name: "Test Group",
-        teacherId: teacher.id,
+        teacherId,
         subjectCode: "LI",
         currentYearCode: PrismaClassYearCode.PRIMARY_FIRST,
       },
@@ -41,9 +45,12 @@ describe("ServerRequest - changeGroupYear", () => {
 
   afterAll(async () => {
     // Clean up test data
+    await prisma.teacher.deleteMany();
+  });
+
+  afterEach(async () => {
     await prisma.classYear.deleteMany();
     await prisma.group.deleteMany();
-    await prisma.teacher.deleteMany();
   });
 
   it("should change the current year of the group", async () => {
