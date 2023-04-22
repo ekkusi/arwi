@@ -95,3 +95,7 @@ export function removeNulls<T extends {}, V = Valuable<T>>(obj: T): V {
     )
   ) as V;
 }
+
+export const formatAmountString = (value: number) => {
+  return value === 1 ? "kerta" : "kertaa";
+};

@@ -1,6 +1,7 @@
 import { Box, Text, BoxProps, Flex } from "@chakra-ui/react";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { analyzeEvaluations } from "@/utils/evaluationUtils";
+import { formatAmountString } from "@/utils/dataMappers";
 import EvaluationsLineChart from "../functional/EvaluationsLineChart";
 import CenteredContainer from "./primitives/CenteredContainer";
 import FlippingCard from "../general/FlippingCard";
@@ -52,10 +53,6 @@ export default function StudentEvaluationsRecap({
     behaviourAverage,
     gradeSuggestion,
   } = analyzeEvaluations([...evaluations]);
-
-  const formatAmountString = (value: number) => {
-    return value === 1 ? "kerta" : "kertaa";
-  };
 
   return (
     <FlippingCard

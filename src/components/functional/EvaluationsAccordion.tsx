@@ -153,11 +153,11 @@ export default forwardRef<
                   </Text>
                   {it.notes ? (
                     <Box mt="3">
-                      <Text mb="1">Huomiot:</Text>
+                      <Text mb="1">Sanallinen palaute:</Text>
                       <Text>{it.notes}</Text>
                     </Box>
                   ) : (
-                    <Text mt="3">Huomioita ei annettu</Text>
+                    <Text mt="3">Sanallista palautetta ei annettu</Text>
                   )}
                 </>
               ) : (

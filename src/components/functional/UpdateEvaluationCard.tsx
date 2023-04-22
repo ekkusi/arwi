@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import SpeechRecognition from "@/components/functional/SpeechRecognition";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateEvaluationCard_EvaluationFragment as EvaluationFragment } from "@/gql/graphql";
+import { formatAmountString } from "@/utils/dataMappers";
 import RatingSelector from "./RatingSelector";
 import ParticipationToggle from "./ParticipationToggle";
 import Overlay from "../general/Overlay";
@@ -21,6 +22,9 @@ export const UpdateEvaluationCard_EvaluationFragment = graphql(`
     student {
       id
       name
+      currentClassEvaluations {
+        notes
+      }
     }
   }
 `);
@@ -82,6 +86,11 @@ export default function UpdateEvaluationCard({
     debouncedOnChanged("notes", value);
   };
 
+  const givenNotesCount = useMemo(() => {
+    return evaluation.student.currentClassEvaluations.filter((it) => !!it.notes)
+      .length;
+  }, [evaluation]);
+
   return (
     <Card mb="3" {...rest}>
       <Tag
@@ -116,14 +125,17 @@ export default function UpdateEvaluationCard({
           onChange={(rating) => onChanged("behaviourRating", rating)}
           mb="6"
         />
-        <Text as="h3">Muita huomioita:</Text>
+        <Text as="h3">
+          Sanallinen palaute (annettu {givenNotesCount}{" "}
+          {formatAmountString(givenNotesCount)}):
+        </Text>
         <Box position="relative">
           <Textarea
             value={notes}
             onChange={(e) => changeNotes(e.target.value)}
             colorScheme="green"
             minHeight="32"
-            placeholder="Muita huomioita oppilaan toiminnasta tunnilla..."
+            placeholder="Sanallinen palaute oppilaan toiminnasta tunnilla..."
             position="relative"
           />
           <SpeechRecognition
