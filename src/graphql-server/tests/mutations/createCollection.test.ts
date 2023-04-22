@@ -47,6 +47,7 @@ describe("ServerRequest - createCollection", () => {
         date: "2023-04-01",
         description: "Test description",
         environmentCode: "LI_TALVI",
+        learningObjectiveCodes: ["T1", "T2"],
       },
       classYearId,
     };
@@ -62,6 +63,9 @@ describe("ServerRequest - createCollection", () => {
             code
           }
           description
+          learningObjectives {
+            code
+          }
         }
       }
     `);
@@ -80,6 +84,14 @@ describe("ServerRequest - createCollection", () => {
       environment: {
         code: variables.data.environmentCode,
       },
+      learningObjectives: [
+        {
+          code: variables.data.learningObjectiveCodes[0],
+        },
+        {
+          code: variables.data.learningObjectiveCodes[1],
+        },
+      ],
     });
   });
 
@@ -121,6 +133,7 @@ describe("ServerRequest - createCollection", () => {
             notes: "Student 2 notes",
           },
         ],
+        learningObjectiveCodes: [],
       },
       classYearId,
     };
@@ -188,6 +201,7 @@ describe("ServerRequest - createCollection", () => {
         date: "2023-04-01",
         description: "Test description",
         environmentCode: invalidEnvironmentCode,
+        learningObjectiveCodes: [],
       },
       classYearId,
     };
@@ -215,6 +229,43 @@ describe("ServerRequest - createCollection", () => {
       new ValidationError(
         `Ympäristöä koodilla '${invalidEnvironmentCode}' ei ole olemassa.`
       )
+    );
+  });
+
+  it("should throw an error when invalid learningObjectiveCode is provided", async () => {
+    // Arrange
+    const invalidLearningObjectiveCode = "INVALID_CODE";
+    const variables = {
+      data: {
+        date: "2023-04-01",
+        description: "Test description",
+        environmentCode: "LI_TALVI",
+        learningObjectiveCodes: [invalidLearningObjectiveCode],
+      },
+      classYearId,
+    };
+    const query = graphql(`
+      mutation CreateCollectionWithInvalidLearningObjectiveCode(
+        $data: CreateCollectionInput!
+        $classYearId: ID!
+      ) {
+        createCollection(data: $data, classYearId: $classYearId) {
+          id
+        }
+      }
+    `);
+
+    // Act
+    const result = serverRequest(
+      { document: query, prismaOverride: prisma },
+      {
+        ...variables,
+      }
+    ).catch((e) => e);
+
+    // Assert
+    await expect(result).resolves.toThrow(
+      new ValidationError(`Osa oppimistavoitteista ei ole olemassa.`)
     );
   });
 });

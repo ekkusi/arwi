@@ -173,6 +173,20 @@ export type LoginResult = {
   teacher: Teacher;
 };
 
+export enum LearningObjectiveType {
+  BEHAVIOUR = "BEHAVIOUR",
+  SKILLS = "SKILLS",
+  NOT_EVALUATED = "NOT_EVALUATED",
+}
+
+export type LearningObjective = {
+  __typename?: "LearningObjective";
+  code: Scalars["ID"];
+  label: Scalars["String"];
+  description: Scalars["String"];
+  type: LearningObjectiveType;
+};
+
 export type Subject = {
   __typename?: "Subject";
   code: Scalars["ID"];
@@ -224,6 +238,7 @@ export type EvaluationCollection = {
   description?: Maybe<Scalars["String"]>;
   evaluations: Array<Evaluation>;
   classYear: ClassYear;
+  learningObjectives: Array<LearningObjective>;
 };
 
 export type Evaluation = {
@@ -302,6 +317,7 @@ export type CreateCollectionInput = {
   type?: InputMaybe<Scalars["String"]>;
   environmentCode: Scalars["ID"];
   description?: InputMaybe<Scalars["String"]>;
+  learningObjectiveCodes: Array<Scalars["ID"]>;
   evaluations?: InputMaybe<Array<CreateEvaluationInput>>;
 };
 
@@ -310,6 +326,7 @@ export type UpdateCollectionInput = {
   type?: InputMaybe<Scalars["String"]>;
   environmentCode?: InputMaybe<Scalars["ID"]>;
   description?: InputMaybe<Scalars["String"]>;
+  learningObjectiveCodes?: InputMaybe<Array<Scalars["ID"]>>;
   evaluations?: InputMaybe<Array<UpdateEvaluationInput>>;
 };
 
@@ -448,6 +465,8 @@ export type ResolversTypes = {
   LoginResult: ResolverTypeWrapper<
     Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }
   >;
+  LearningObjectiveType: LearningObjectiveType;
+  LearningObjective: ResolverTypeWrapper<LearningObjective>;
   Subject: ResolverTypeWrapper<SubjectPrisma>;
   Environment: ResolverTypeWrapper<EnvironmentPrisma>;
   Group: ResolverTypeWrapper<GroupPrisma>;
@@ -483,6 +502,7 @@ export type ResolversParentTypes = {
   LoginResult: Omit<LoginResult, "teacher"> & {
     teacher: ResolversParentTypes["Teacher"];
   };
+  LearningObjective: LearningObjective;
   Subject: SubjectPrisma;
   Environment: EnvironmentPrisma;
   Group: GroupPrisma;
@@ -667,6 +687,21 @@ export type LoginResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type LearningObjectiveResolvers<
+  ContextType = CustomContext,
+  ParentType extends ResolversParentTypes["LearningObjective"] = ResolversParentTypes["LearningObjective"]
+> = {
+  code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  type?: Resolver<
+    ResolversTypes["LearningObjectiveType"],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SubjectResolvers<
   ContextType = CustomContext,
   ParentType extends ResolversParentTypes["Subject"] = ResolversParentTypes["Subject"]
@@ -771,6 +806,11 @@ export type EvaluationCollectionResolvers<
     ContextType
   >;
   classYear?: Resolver<ResolversTypes["ClassYear"], ParentType, ContextType>;
+  learningObjectives?: Resolver<
+    Array<ResolversTypes["LearningObjective"]>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -822,6 +862,7 @@ export type Resolvers<ContextType = CustomContext> = {
   Mutation?: MutationResolvers<ContextType>;
   Teacher?: TeacherResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
+  LearningObjective?: LearningObjectiveResolvers<ContextType>;
   Subject?: SubjectResolvers<ContextType>;
   Environment?: EnvironmentResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;

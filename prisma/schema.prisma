@@ -37,14 +37,15 @@ model ClassYear {
 }
 
 model EvaluationCollection {
-  id                    String       @id @default(uuid())
-  date                  DateTime     @default(now())
-  type                  String
-  description           String?
-  evaluations           Evaluation[]
-  environmentCode       String
-  classYear             ClassYear        @relation(fields: [classYearId], references: [id], onDelete: Cascade)
-  classYearId           String
+  id                      String       @id @default(uuid())
+  date                    DateTime     @default(now())
+  type                    String
+  learningObjectiveCodes  String[]
+  description             String?
+  evaluations             Evaluation[]
+  environmentCode         String
+  classYear               ClassYear        @relation(fields: [classYearId], references: [id], onDelete: Cascade)
+  classYearId             String
 }
 
 model Evaluation {

@@ -40,5 +40,6 @@ export const mapUpdateCollectionInput = (
     type: data.type || undefined,
     date: data.date ? new Date(data.date) : undefined,
     environmentCode: data.environmentCode || undefined,
+    learningObjectiveCodes: data.learningObjectiveCodes || undefined,
   };
 };

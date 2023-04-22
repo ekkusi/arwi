@@ -1,10 +1,11 @@
-import { Resolvers } from "../types";
 import {
   getClassYearInfo,
   getEnvironment,
+  getLearningObjectives,
   getSubject,
   getSubjectCode,
-} from "../../utils/subjectUtils";
+} from "@/utils/subjectUtils";
+import { ClassYearCode, Resolvers } from "../types";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -111,6 +112,24 @@ const resolvers: TypeResolvers = {
       if (!environment)
         throw new Error(`Environment not found with code: ${environmentCode}`);
       return environment;
+    },
+    learningObjectives: async (
+      { classYearId, learningObjectiveCodes },
+      _,
+      { prisma }
+    ) => {
+      const group = await prisma.group.findFirstOrThrow({
+        where: {
+          classYears: { some: { id: classYearId } },
+        },
+      });
+      const subjectObjectives = getLearningObjectives(
+        group.subjectCode,
+        ClassYearCode[group.currentYearCode]
+      );
+      return subjectObjectives.filter((objective) =>
+        learningObjectiveCodes.includes(objective.code)
+      );
     },
   },
   Student: {

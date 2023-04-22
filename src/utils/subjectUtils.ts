@@ -1,12 +1,22 @@
 import { ClassYearCode as PrismaClassYearCode } from "@prisma/client";
 import subjectSchema from "../graphql-server/subject-schema.json";
-import { ClassYearCode } from "../graphql-server/types";
+import { ClassYearCode, LearningObjectiveType } from "../graphql-server/types";
 
 export type Subject = (typeof subjectSchema.subjects)[number];
-export type SubjectMinimal = Omit<Subject, "environments">;
+export type SubjectMinimal = Omit<
+  Subject,
+  "environments" | "learning_objectives"
+>;
+export type LearningObjective = Omit<
+  Subject["learning_objectives"]["1-2"][number],
+  "type"
+> & {
+  type: LearningObjectiveType;
+};
 
-export type Environment =
-  (typeof subjectSchema.subjects)[number]["environments"][number];
+export type LearningObjectiveKey = keyof Subject["learning_objectives"];
+
+export type Environment = Subject["environments"][number];
 
 export const getSubjectCode = (environmentCode: string) => {
   if (environmentCode.length < 2) {
@@ -76,4 +86,49 @@ export const getClassYearInfos = () => {
     getClassYearInfo(it as ClassYearCode)
   );
   return yearInfos;
+};
+
+export const getLearningObjectKey = (
+  yearCode: ClassYearCode
+): LearningObjectiveKey => {
+  switch (yearCode) {
+    case ClassYearCode.PRIMARY_FIRST:
+    case ClassYearCode.PRIMARY_SECOND:
+      return "1-2";
+    case ClassYearCode.PRIMARY_THIRD:
+    case ClassYearCode.PRIMARY_FOURTH:
+    case ClassYearCode.PRIMARY_FIFTH:
+    case ClassYearCode.PRIMARY_SIXTH:
+      return "3-6";
+    case ClassYearCode.PRIMARY_SEVENTH:
+    case ClassYearCode.PRIMARY_EIGHTH:
+    case ClassYearCode.PRIMARY_NINTH:
+      return "7-9";
+    case ClassYearCode.HIGH_SCHOOL_FIRST:
+    case ClassYearCode.HIGH_SCHOOL_SECOND:
+    case ClassYearCode.HIGH_SCHOOL_THIRD:
+      return "high_school_1-3";
+    case ClassYearCode.VOCATIONAL_FIRST:
+    case ClassYearCode.VOCATIONAL_SECOND:
+    case ClassYearCode.VOCATIONAL_THIRD:
+    case ClassYearCode.VOCATIONAL_FOURTH:
+      return "vocational_1-4";
+    default:
+      throw new Error("Invalid class year code");
+  }
+};
+
+export const getLearningObjectives = (
+  subjectCode: string,
+  yearCode: ClassYearCode
+): LearningObjective[] => {
+  const objectives =
+    getSubject(subjectCode)?.learning_objectives[
+      getLearningObjectKey(yearCode)
+    ] || [];
+
+  return objectives.map((it) => ({
+    ...it,
+    type: it.type as LearningObjectiveType,
+  }));
 };

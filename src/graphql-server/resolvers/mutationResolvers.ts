@@ -78,7 +78,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     return group;
   },
   createCollection: async (_, { data, classYearId }, { prisma }) => {
-    await validateCreateCollectionInput(data);
+    await validateCreateCollectionInput(data, classYearId);
     const { evaluations, ...rest } = data;
     const createdCollection = await prisma.evaluationCollection.create({
       data: {
@@ -125,7 +125,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     return updatedEvaluation;
   },
   updateCollection: async (_, { data, collectionId }, { prisma }) => {
-    await validateUpdateCollectionInput(data);
+    await validateUpdateCollectionInput(data, collectionId);
     const { evaluations, ...rest } = data;
     if (evaluations) {
       const promises = evaluations.map((it) => updateEvaluation(it));

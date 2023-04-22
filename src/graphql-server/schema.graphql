@@ -35,6 +35,19 @@ type LoginResult {
   teacher: Teacher!
 }
 
+enum LearningObjectiveType {
+  BEHAVIOUR
+  SKILLS
+  NOT_EVALUATED
+}
+
+type LearningObjective {
+  code: ID!
+  label: String!
+  description: String!
+  type: LearningObjectiveType!
+}
+
 type Subject {
   code: ID!
   label: String!
@@ -80,6 +93,7 @@ type EvaluationCollection {
   description: String
   evaluations: [Evaluation!]!
   classYear: ClassYear!
+  learningObjectives: [LearningObjective!]!
 }
 
 type Evaluation {
@@ -156,6 +170,7 @@ input CreateCollectionInput {
   type: String
   environmentCode: ID!
   description: String
+  learningObjectiveCodes: [ID!]!
   evaluations: [CreateEvaluationInput!]
 }
 
@@ -164,6 +179,7 @@ input UpdateCollectionInput {
   type: String
   environmentCode: ID
   description: String
+  learningObjectiveCodes: [ID!]
   evaluations: [UpdateEvaluationInput!]
 }
 

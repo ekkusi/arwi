@@ -1,6 +1,7 @@
 import ValidationError from "../errors/ValidationError";
 import prisma from "../prismaClient";
 import {
+  ClassYearCode,
   CreateCollectionInput,
   CreateGroupInput,
   CreateStudentInput,
@@ -8,7 +9,11 @@ import {
   UpdateEvaluationInput,
   UpdateStudentInput,
 } from "../types";
-import { getEnvironment, getSubject } from "../../utils/subjectUtils";
+import {
+  getEnvironment,
+  getLearningObjectives,
+  getSubject,
+} from "../../utils/subjectUtils";
 
 export const validateCreateGroupInput = async ({
   subjectCode,
@@ -19,22 +24,73 @@ export const validateCreateGroupInput = async ({
     );
 };
 
-export const validateCreateCollectionInput = async ({
-  environmentCode,
-}: CreateCollectionInput) => {
+export const validateLearningObjectives = (
+  subjectCode: string,
+  yearCode: ClassYearCode,
+  learningObjectiveCodes: string[]
+) => {
+  const learningObjectives = getLearningObjectives(subjectCode, yearCode);
+  if (
+    !learningObjectiveCodes.every((code) =>
+      learningObjectives.some((objective) => objective.code === code)
+    )
+  )
+    throw new ValidationError(`Osa oppimistavoitteista ei ole olemassa.`);
+};
+
+export const validateCreateCollectionInput = async (
+  { environmentCode, learningObjectiveCodes }: CreateCollectionInput,
+  classYearId: string
+) => {
   if (!getEnvironment(environmentCode))
     throw new ValidationError(
       `Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`
     );
+  if (learningObjectiveCodes.length > 0) {
+    const group = await prisma.group.findFirstOrThrow({
+      where: {
+        classYears: {
+          some: {
+            id: classYearId,
+          },
+        },
+      },
+    });
+    validateLearningObjectives(
+      group.subjectCode,
+      ClassYearCode[group.currentYearCode],
+      learningObjectiveCodes
+    );
+  }
 };
 
-export const validateUpdateCollectionInput = async ({
-  environmentCode,
-}: UpdateCollectionInput) => {
+export const validateUpdateCollectionInput = async (
+  { environmentCode, learningObjectiveCodes }: UpdateCollectionInput,
+  collectionId: string
+) => {
   if (environmentCode && !getEnvironment(environmentCode))
     throw new ValidationError(
       `Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`
     );
+
+  if (learningObjectiveCodes && learningObjectiveCodes.length > 0) {
+    const group = await prisma.group.findFirstOrThrow({
+      where: {
+        classYears: {
+          some: {
+            evaluationCollections: {
+              some: { id: collectionId },
+            },
+          },
+        },
+      },
+    });
+    validateLearningObjectives(
+      group.subjectCode,
+      ClassYearCode[group.currentYearCode],
+      learningObjectiveCodes
+    );
+  }
 };
 
 export const validateCreateStudentInput = async (

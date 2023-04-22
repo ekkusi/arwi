@@ -79,12 +79,13 @@ describe("ServerRequest - updateCollection", () => {
     await prisma.group.deleteMany();
   });
 
-  it("should update the collection's type and date", async () => {
+  it("should update the collection's environment, date and learning codes", async () => {
     // Arrange
     const variables = {
       data: {
         environmentCode: "LI_PALLO",
         date: "2023-04-01",
+        learningObjectiveCodes: ["T1", "T2"],
       },
       collectionId,
     };
@@ -100,6 +101,9 @@ describe("ServerRequest - updateCollection", () => {
             code
           }
           date
+          learningObjectives {
+            code
+          }
         }
       }
     `);
@@ -117,6 +121,14 @@ describe("ServerRequest - updateCollection", () => {
         code: variables.data.environmentCode,
       },
       date: variables.data.date,
+      learningObjectives: [
+        {
+          code: variables.data.learningObjectiveCodes[0],
+        },
+        {
+          code: variables.data.learningObjectiveCodes[1],
+        },
+      ],
     });
   });
 
@@ -238,6 +250,44 @@ describe("ServerRequest - updateCollection", () => {
       assertIsError(error);
       expect(error.message).toContain(
         "Ympäristöä koodilla 'INVALID_ENVIRONMENT_CODE' ei ole olemassa."
+      );
+    }
+  });
+
+  it("should return an error when the learningObjectiveCodes are invalid", async () => {
+    // Arrange
+    const variables = {
+      data: {
+        date: "2023-04-01",
+        environmentCode: "LI_TALVI",
+        learningObjectiveCodes: ["INVALID_LEARNING_OBJECTIVE_CODE"],
+      },
+      collectionId,
+    };
+
+    const query = graphql(`
+      mutation UpdateCollectionTest_UpdateCollectionInvalidLearningObjectiveCodes(
+        $data: UpdateCollectionInput!
+        $collectionId: ID!
+      ) {
+        updateCollection(data: $data, collectionId: $collectionId) {
+          id
+          date
+        }
+      }
+    `);
+
+    // Act
+    try {
+      await serverRequest(
+        { document: query, prismaOverride: prisma },
+        variables
+      );
+    } catch (error) {
+      // Assert
+      assertIsError(error);
+      expect(error.message).toContain(
+        "Osa oppimistavoitteista ei ole olemassa."
       );
     }
   });
