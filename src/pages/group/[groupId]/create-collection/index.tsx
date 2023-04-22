@@ -67,6 +67,7 @@ function CreateCollectionPageContent() {
               studentId: it.student.id,
               wasPresent: it.wasPresent,
             })),
+            learningObjectiveCodes: [],
           },
         }
       );
