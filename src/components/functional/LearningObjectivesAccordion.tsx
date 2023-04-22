@@ -31,21 +31,27 @@ export default function LearningObjectivesAccordion({
 
   return (
     <Accordion allowMultiple {...rest}>
-      {objectives.map((it) => (
-        <AccordionItem
-          title={formatObjectiveLabel(it)}
-          key={it.code}
-          {...itemProps}
-        >
-          <Text mb="2">
-            <Text fontWeight="semibold" as="span">
-              Tyyppi:
-            </Text>{" "}
-            {formatObjectiveTypeLabel(it.type)}
-          </Text>
-          <Text>{it.description}</Text>
-        </AccordionItem>
-      ))}
+      {objectives.length > 0 ? (
+        objectives.map((it) => (
+          <AccordionItem
+            title={formatObjectiveLabel(it)}
+            key={it.code}
+            {...itemProps}
+          >
+            <Text mb="2">
+              <Text fontWeight="semibold" as="span">
+                Tyyppi:
+              </Text>{" "}
+              {formatObjectiveTypeLabel(it.type)}
+            </Text>
+            <Text>{it.description}</Text>
+          </AccordionItem>
+        ))
+      ) : (
+        <Text>
+          Arwi ei vielä kyseisen vuosiluokan tavoitteita annetulle aineelle
+        </Text>
+      )}
     </Accordion>
   );
 }

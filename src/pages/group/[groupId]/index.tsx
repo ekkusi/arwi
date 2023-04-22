@@ -212,19 +212,6 @@ function GroupOverviewPageContent() {
             )}
           </TabPanel>
           <TabPanel>
-            {/* <Text>Oppimistavoitteet</Text>
-            <Text>
-              <Text fontWeight="semibold" as="span">
-                Vuosiluokka:
-              </Text>{" "}
-              {group.currentClassYear.info.label}
-            </Text>
-            <Text mb="2">
-              <Text fontWeight="semibold" as="span">
-                Aine:
-              </Text>{" "}
-              {group.subject.label}
-            </Text> */}
             <LearningObjectivesAccordion
               subjectCode={group.subject.code}
               yearCode={group.currentClassYear.info.code}
