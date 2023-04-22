@@ -32,12 +32,17 @@ import TopNavigationBar from "@/components/functional/TopNavigationBar";
 import CollectionsChart from "@/components/functional/CollectionsChart";
 import ChangeClassYearModal from "@/components/functional/ChangeClassYearModal";
 import { BiTransfer } from "react-icons/bi";
+import LearningObjectivesAccordion from "@/components/functional/LearningObjectivesAccordion";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
     getGroup(id: $groupId) {
       id
       name
+      subject {
+        label
+        code
+      }
       currentClassYear {
         info {
           code
@@ -207,7 +212,28 @@ function GroupOverviewPageContent() {
             )}
           </TabPanel>
           <TabPanel>
-            <Text>Tavoitteet ovat vielä työn alla</Text>
+            {/* <Text>Oppimistavoitteet</Text>
+            <Text>
+              <Text fontWeight="semibold" as="span">
+                Vuosiluokka:
+              </Text>{" "}
+              {group.currentClassYear.info.label}
+            </Text>
+            <Text mb="2">
+              <Text fontWeight="semibold" as="span">
+                Aine:
+              </Text>{" "}
+              {group.subject.label}
+            </Text> */}
+            <LearningObjectivesAccordion
+              subjectCode={group.subject.code}
+              yearCode={group.currentClassYear.info.code}
+              itemProps={{
+                _first: {
+                  borderTop: "none",
+                },
+              }}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

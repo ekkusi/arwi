@@ -1,4 +1,4 @@
-import { Rating } from "@/gql/graphql";
+import { LearningObjectiveType, Rating } from "@/gql/graphql";
 import { LearningObjective } from "./subjectUtils";
 
 export const formatRatingString = (rating: Rating) => {
@@ -63,6 +63,19 @@ export const getRatingEmoji = (rating: Rating) => {
 
 export const formatObjectiveLabel = (learningObjective: LearningObjective) => {
   return `${learningObjective.code}: ${learningObjective.label}`;
+};
+
+export const formatObjectiveTypeLabel = (type: LearningObjectiveType) => {
+  switch (type) {
+    case LearningObjectiveType.SKILLS:
+      return "Taidot";
+    case LearningObjectiveType.BEHAVIOUR:
+      return "Työskentely";
+    case LearningObjectiveType.NOT_EVALUATED:
+      return "Ei arvioitava tavoite";
+    default:
+      throw new Error("Unknown learning objective type");
+  }
 };
 
 export const formatRatingStringWithNull = (
