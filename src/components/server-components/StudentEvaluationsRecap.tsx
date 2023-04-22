@@ -22,6 +22,9 @@ const StudentEvaluationRecap_Student_Fragment = graphql(/* GraphQL */ `
   fragment StudentEvaluationRecap_Student on Student {
     id
     name
+    group {
+      name
+    }
   }
 `);
 
@@ -57,11 +60,14 @@ export default function StudentEvaluationsRecap({
   return (
     <FlippingCard
       width="100%"
-      height={630}
+      height={650}
       front={
         <>
-          <Text as="h1" textAlign="center" mb="2">
+          <Text as="h1" textAlign="center" mb="-1">
             {student.name}
+          </Text>
+          <Text as="h2" fontSize="lg" textAlign="center" mb="2">
+            {student.group.name}
           </Text>
           <>
             <Box>
