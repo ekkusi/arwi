@@ -5,7 +5,7 @@ import { serverRequest } from "@/pages/api/graphql";
 import InputWithError from "@/components/general/InputWithError";
 import graphqlClient from "@/graphql-client";
 import { GetStaticPropsContext } from "next";
-import { useToast, Text } from "@chakra-ui/react";
+import { useToast, Text, FormLabel } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import UpdateStudentsList from "@/components/functional/UpdateStudentsList";
 import UpdateCollectionsList from "@/components/functional/UpdateCollectionsList";
@@ -27,6 +27,9 @@ const EditGroupPage_GetGroup_Query = graphql(`
       }
       currentClassYear {
         id
+        info {
+          label
+        }
         evaluationCollections {
           ...UpdateCollectionsList_Collection
         }
@@ -78,24 +81,21 @@ function EditGroupPageContent() {
     <PageWrapper>
       <TopNavigationBar />
       <Text as="h1">Ryhmän muokkaus</Text>
-      <Text as="h2">Aine: {group.subject.label}</Text>
-      <Text as="h2">Nimi:</Text>
+      <FormLabel>Aine: {group.subject.label}</FormLabel>
+      <FormLabel>Vuosiluokka: {group.currentClassYear.info.label}</FormLabel>
+      <FormLabel>Nimi:</FormLabel>
       <InputWithError
         name="group-name"
         defaultValue={group.name}
         onBlur={(e, isValid) => isValid && updateName(e.target.value)}
         containerProps={{ mb: "5" }}
       />
-      <Text as="h2" mb="5">
-        Oppilaat:
-      </Text>
+      <FormLabel mb="3">Oppilaat:</FormLabel>
       <UpdateStudentsList
         students={group.students}
         classYearId={group.currentClassYear.id}
       />
-      <Text as="h2" mt="5">
-        Arvioinnit:
-      </Text>
+      <FormLabel mt="5">Arvioinnit:</FormLabel>
       {group.currentClassYear.evaluationCollections.length > 0 ? (
         <UpdateCollectionsList
           collections={group.currentClassYear.evaluationCollections}
