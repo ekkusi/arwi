@@ -42,6 +42,11 @@ function Select<
             transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
           },
         }),
+        multiValue: (prev) => ({
+          ...prev,
+          px: 3,
+          py: 1,
+        }),
         ...chakraStyles,
       }}
       placeholder="Valitse"
