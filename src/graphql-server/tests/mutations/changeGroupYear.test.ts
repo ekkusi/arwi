@@ -7,6 +7,7 @@ import { ClassYearCode as PrismaClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - changeGroupYear", () => {
   let groupId: string;
+  let classYearId: string;
 
   beforeAll(async () => {
     // Create test data for the changeGroupYear
@@ -35,13 +36,7 @@ describe("ServerRequest - changeGroupYear", () => {
       },
     });
 
-    await prisma.evaluationCollection.create({
-      data: {
-        type: "Test Collection",
-        classYearId: classYear.id,
-        environmentCode: "LI_TALVI",
-      },
-    });
+    classYearId = classYear.id;
   });
 
   afterAll(async () => {
@@ -126,12 +121,19 @@ describe("ServerRequest - changeGroupYear", () => {
       expect(error.message).toContain("Unexpected error.");
     }
   });
-  it("should change evaluationCollections inside the currentClassYear when the classYear is changed", async () => {
+  it("should keep evaluationCollections inside the previousYear when the classYear is changed", async () => {
     // Arrange
     const variables = {
       groupId,
       newYearCode: ClassYearCode.PRIMARY_SECOND,
     };
+    await prisma.evaluationCollection.create({
+      data: {
+        type: "Test Collection",
+        classYearId,
+        environmentCode: "LI_TALVI",
+      },
+    });
 
     const query = graphql(`
       mutation ChangeGroupYearTest_ChangeGroupYearEvaluationCollections(
@@ -176,5 +178,76 @@ describe("ServerRequest - changeGroupYear", () => {
     });
 
     expect(previousClassYear.evaluationCollections).toHaveLength(1);
+  });
+
+  it("should transfer evaluationCollections from the previous classYear to the new classYear when transferEvaluations is set to true", async () => {
+    // Create an evaluationCollection for the first class year
+    const evaluationCollection = await prisma.evaluationCollection.create({
+      data: {
+        type: "Test Collection",
+        classYearId,
+        environmentCode: "LI_TALVI",
+      },
+    });
+
+    // Arrange
+    const variables = {
+      groupId,
+      newYearCode: ClassYearCode.PRIMARY_SECOND,
+      transferEvaluations: true,
+    };
+
+    const query = graphql(`
+      mutation ChangeGroupYearTest_ChangeGroupYearTransferEvaluations(
+        $groupId: ID!
+        $newYearCode: ClassYearCode!
+        $transferEvaluations: Boolean
+      ) {
+        changeGroupYear(
+          groupId: $groupId
+          newYearCode: $newYearCode
+          transferEvaluations: $transferEvaluations
+        ) {
+          id
+          currentClassYear {
+            info {
+              code
+            }
+            evaluationCollections {
+              id
+            }
+          }
+        }
+      }
+    `);
+
+    // Act
+    const result = await serverRequest(
+      { document: query, prismaOverride: prisma },
+      variables
+    );
+
+    // Assert
+    expect(result.changeGroupYear).toEqual({
+      id: groupId,
+      currentClassYear: {
+        info: {
+          code: ClassYearCode.PRIMARY_SECOND,
+        },
+        evaluationCollections: [
+          {
+            id: evaluationCollection.id,
+          },
+        ],
+      },
+    });
+
+    // Check the evaluationCollections of the previous class year
+    const previousClassYear = await prisma.classYear.findFirstOrThrow({
+      where: { groupId, code: ClassYearCode.PRIMARY_FIRST },
+      include: { evaluationCollections: true },
+    });
+
+    expect(previousClassYear.evaluationCollections).toEqual([]);
   });
 });
