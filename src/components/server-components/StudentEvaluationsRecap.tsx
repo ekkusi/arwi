@@ -66,85 +66,79 @@ export default function StudentEvaluationsRecap({
           <Text as="h1" textAlign="center" mb="2">
             {student.name}
           </Text>
-          {evaluations.length > 0 ? (
-            <>
-              <Box>
-                <EvaluationsLineChart
-                  studentId={student.id}
-                  evaluations={evaluations}
-                  mb="2"
-                />
-              </Box>
-              <Box>
-                <Text fontWeight="bold" as="span">
-                  Paikalla:{" "}
-                </Text>
-                <Text as="span">
-                  {presencesAmount} {formatAmountString(presencesAmount)}
-                </Text>
-              </Box>
-              <Box>
-                <Text fontWeight="bold" as="span">
-                  Poissa:{" "}
-                </Text>
-                <Text as="span">
-                  {absencesAmount} {formatAmountString(absencesAmount)}
-                </Text>
-              </Box>
-              <Box>
-                <Text fontWeight="bold" as="span">
-                  Taitojen keskiarvo:{" "}
-                </Text>
-                <Text as="span">
-                  {!Number.isNaN(skillsAverage)
-                    ? `${skillsAverage.toFixed(2)}`
-                    : "Taitoja ei vielä arvioitu"}
-                </Text>
-              </Box>
-              <Box>
-                <Text fontWeight="bold" as="span">
-                  Työskentelyn keskiarvo:{" "}
-                </Text>
-                <Text as="span">
-                  {!Number.isNaN(behaviourAverage)
-                    ? `${behaviourAverage.toFixed(2)}`
-                    : "Työskentelyä ei vielä arvioitu"}
-                </Text>
-              </Box>
-              {gradeSuggestion > 0 && (
-                <Flex
-                  alignItems="center"
-                  justifyContent="center"
-                  flexDirection="column"
-                  flex="1"
+          <>
+            <Box>
+              <EvaluationsLineChart
+                studentId={student.id}
+                evaluations={evaluations}
+                mb="2"
+              />
+            </Box>
+            <Box>
+              <Text fontWeight="bold" as="span">
+                Paikalla:{" "}
+              </Text>
+              <Text as="span">
+                {presencesAmount} {formatAmountString(presencesAmount)}
+              </Text>
+            </Box>
+            <Box>
+              <Text fontWeight="bold" as="span">
+                Poissa:{" "}
+              </Text>
+              <Text as="span">
+                {absencesAmount} {formatAmountString(absencesAmount)}
+              </Text>
+            </Box>
+            <Box>
+              <Text fontWeight="bold" as="span">
+                Taitojen keskiarvo:{" "}
+              </Text>
+              <Text as="span">
+                {!Number.isNaN(skillsAverage)
+                  ? `${skillsAverage.toFixed(2)}`
+                  : "Taitoja ei vielä arvioitu"}
+              </Text>
+            </Box>
+            <Box>
+              <Text fontWeight="bold" as="span">
+                Työskentelyn keskiarvo:{" "}
+              </Text>
+              <Text as="span">
+                {!Number.isNaN(behaviourAverage)
+                  ? `${behaviourAverage.toFixed(2)}`
+                  : "Työskentelyä ei vielä arvioitu"}
+              </Text>
+            </Box>
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+              flex="1"
+            >
+              <Text mb="1" as="span">
+                Numeroehdotus:
+              </Text>
+              <Box
+                position="relative"
+                border="1px"
+                boxShadow="md"
+                borderColor="gray"
+                borderRadius="full"
+                p="10"
+              >
+                <CenteredContainer
+                  as="span"
+                  fontSize="4xl"
+                  fontFamily="special"
+                  textAlign="center"
+                  lineHeight={1.0}
                 >
-                  <Text mb="1" as="span">
-                    Numeroehdotus:
-                  </Text>
-                  <Box
-                    position="relative"
-                    border="1px"
-                    boxShadow="md"
-                    borderColor="gray"
-                    borderRadius="full"
-                    p="10"
-                  >
-                    <CenteredContainer
-                      as="span"
-                      fontSize="4xl"
-                      fontFamily="special"
-                      textAlign="center"
-                      lineHeight={1.0}
-                    >
-                      {gradeSuggestion}
-                    </CenteredContainer>
-                  </Box>
-                </Flex>
-              )}
-            </>
-          ) : (
-            <Text>Ei vielä arviointeja</Text>
-          )}
+                  {gradeSuggestion > 0 ? gradeSuggestion : "–"}
+                </CenteredContainer>
+              </Box>
+            </Flex>
+          </>
         </>
       }
       back={<EvaluationsBarChart evaluations={evaluations} />}
