@@ -3,7 +3,6 @@ import { EvaluationsLineChart_EvaluationFragment } from "@/gql/graphql";
 import { formatRatingNumber } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
 import { BoxProps } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import ChartBase, { DataType } from "../general/LineChartBase";
 
 const EvaluationsLineChart_Evaluation_Fragment = graphql(`
@@ -68,7 +67,7 @@ type EvaluationsLineChartProps = Omit<BoxProps, "onClick"> & {
 
 export default function EvaluationsLineChart({
   evaluations: evaluationFragments,
-  studentId,
+  studentId: _,
   firstIndexToPush = 2,
   ...rest
 }: EvaluationsLineChartProps) {
@@ -76,7 +75,7 @@ export default function EvaluationsLineChart({
     EvaluationsLineChart_Evaluation_Fragment,
     evaluationFragments
   );
-  const router = useRouter();
+  // const router = useRouter();
 
   const sortedEvaluations = [...evaluations]
     .sort(
@@ -92,9 +91,9 @@ export default function EvaluationsLineChart({
   return (
     <ChartBase
       data={data}
-      onClick={() => {
-        router.push(`/student/${studentId}/details`);
-      }}
+      // onClick={() => {
+      //   router.push(`/student/${studentId}/details`);
+      // }}
       {...rest}
     />
   );

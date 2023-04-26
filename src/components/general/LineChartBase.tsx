@@ -166,6 +166,7 @@ export default function LineChartBase({
                 name="Taidot"
                 dataKey="skills"
                 stroke={primaryColor}
+                strokeWidth="2"
                 dot={false}
                 activeDot={isTooltipVisible}
               />
@@ -175,6 +176,7 @@ export default function LineChartBase({
                 name="Työskentely"
                 dataKey="behaviour"
                 stroke={secondaryColor}
+                strokeWidth="2"
                 dot={false}
                 activeDot={isTooltipVisible}
               />
