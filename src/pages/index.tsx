@@ -31,6 +31,9 @@ export default function HomePage({ data }: MainPageProps) {
 
   if (!teacher) throw new Error("Unexpected error, no teacher");
 
+  // eslint-disable-next-line
+  console.log(teacher);
+
   return (
     <PageWrapper display="flex" flexDirection="column">
       <Box mb="5">
