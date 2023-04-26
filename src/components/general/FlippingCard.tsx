@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex, FlexProps } from "@chakra-ui/react";
+import { Box, BoxProps, FlexProps } from "@chakra-ui/react";
 import React from "react";
 import Card from "../server-components/primitives/Card";
 
@@ -12,7 +12,7 @@ type FlippingCardProps = WithRequired<
 
 function FlippingCardChild(props: FlexProps) {
   return (
-    <Flex
+    <Card
       display="flex"
       flexDirection="column"
       position="absolute"
@@ -22,6 +22,7 @@ function FlippingCardChild(props: FlexProps) {
       bottom="0"
       __css={{
         backfaceVisibility: "hidden",
+        visibility: "visible",
       }}
       p="inherit"
       {...props}
@@ -47,12 +48,14 @@ function FlippingCard({
       height={height}
       {...rest}
     >
-      <Card
+      <Box
         transition="transform 0.6s"
         width="100%"
         height="100%"
         position="relative"
         transform={`rotateY(${isFlipped ? "180" : "0"}deg)`}
+        px="5"
+        py="4"
         __css={{
           transformStyle: "preserve-3d",
           perspective: "1000px",
@@ -62,7 +65,7 @@ function FlippingCard({
         <FlippingCardChild transform="rotateY(180deg)">
           {back}
         </FlippingCardChild>
-      </Card>
+      </Box>
     </Box>
   );
 }
