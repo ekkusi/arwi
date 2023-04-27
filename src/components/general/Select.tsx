@@ -1,6 +1,7 @@
 import { BoxProps } from "@chakra-ui/react";
 import {
   GroupBase,
+  MultiValue,
   Props,
   Select as ReactSelect,
   SelectInstance,
@@ -19,16 +20,31 @@ function Select<
   {
     containerProps,
     chakraStyles,
+    defaultValue,
+    getOptionValue,
     ...rest
-  }: Props<Option, IsMulti, Group> &
+  }: WithRequired<Props<Option, IsMulti, Group>, "getOptionValue"> &
     RefAttributes<SelectInstance<Option, IsMulti, Group>> &
     SelectProps,
   ref: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>
 ) {
+  // Make distinct keys based on the default value so that the select is re-rendered
+  const formatKey = () => {
+    if (Array.isArray(defaultValue)) {
+      return (defaultValue as MultiValue<Option>)
+        .map((it) => getOptionValue(it))
+        .join(",");
+    }
+    return defaultValue && getOptionValue(defaultValue as Option);
+  };
+
   return (
     <ReactSelect
       ref={ref}
+      key={formatKey()}
       selectedOptionColorScheme="green"
+      defaultValue={defaultValue}
+      getOptionValue={getOptionValue}
       chakraStyles={{
         container: (prev) => ({
           ...prev,
@@ -59,7 +75,7 @@ const WithRef = forwardRef(Select) as <
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
-  props: Props<Option, IsMulti, Group> & {
+  props: WithRequired<Props<Option, IsMulti, Group>, "getOptionValue"> & {
     ref?: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>;
   } & SelectProps
 ) => ReturnType<typeof Select>;
