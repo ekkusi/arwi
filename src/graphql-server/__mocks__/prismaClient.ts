@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { execSync } from "child_process";
 import { URL } from "url";
 import { v4 } from "uuid";
 
@@ -16,7 +17,6 @@ const url = generateDatabaseURL(schemaId);
 process.env.DATABASE_URL = url;
 export const prisma = new PrismaClient({
   datasources: { db: { url } },
-  log: ["query", "info", "warn"],
 });
 
 beforeAll(async () => {
@@ -26,12 +26,13 @@ beforeAll(async () => {
   await prisma.$executeRawUnsafe(
     `CREATE EXTENSION "uuid-ossp" SCHEMA "${schemaId}";`
   );
-  // eslint-disable-next-line no-console
-  console.log("Executing migrations to: ", generateDatabaseURL(schemaId));
 
-  // execSync(
-  //   `DATABASE_URL=${generateDatabaseURL(schemaId)} npx prisma migrate dev`
-  // );
+  execSync(`npx prisma migrate dev`, {
+    env: {
+      ...process.env,
+      DATABASE_URL: generateDatabaseURL(schemaId),
+    },
+  });
 });
 afterAll(async () => {
   await prisma.$executeRawUnsafe(

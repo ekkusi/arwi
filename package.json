@@ -16,6 +16,7 @@
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
     "prepare": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
+    "postinstall": "npx prisma generate",
     "init-mock-data": "ts-node ./src/graphql-server/utils/initMockData.ts",
     "test": "dotenv -e .env.test jest -i",
     "test-individual": "dotenv -e .env.test jest",
