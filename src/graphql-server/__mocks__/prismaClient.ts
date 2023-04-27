@@ -28,14 +28,11 @@ beforeAll(async () => {
     `CREATE EXTENSION "uuid-ossp" SCHEMA "${schemaId}";`
   );
   // eslint-disable-next-line no-console
-  console.log("Executing migrations to: ", generateDatabaseURL);
+  console.log("Executing migrations to: ", generateDatabaseURL(schemaId));
 
-  execSync(`npx prisma migrate dev`, {
-    env: {
-      ...process.env,
-      DATABASE_URL: generateDatabaseURL(schemaId),
-    },
-  });
+  execSync(
+    `DATABASE_URL=${generateDatabaseURL(schemaId)} npx prisma migrate dev`
+  );
 });
 afterAll(async () => {
   await prisma.$executeRawUnsafe(
