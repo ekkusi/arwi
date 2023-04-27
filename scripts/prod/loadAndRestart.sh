@@ -7,6 +7,7 @@ cd "../../"
 
 git pull
 /bin/bash scripts/dumpdb.sh -b
+npm run prisma:deploy-prod
 docker pull ekkusi/arwi
 docker stop arwi || true && docker rm arwi || true
 docker run --env-file .env.production -d --name arwi -p 3000:3000 ekkusi/arwi
