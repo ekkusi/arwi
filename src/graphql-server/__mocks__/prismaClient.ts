@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { execSync } from "child_process";
 import { URL } from "url";
 import { v4 } from "uuid";
 
@@ -30,9 +29,9 @@ beforeAll(async () => {
   // eslint-disable-next-line no-console
   console.log("Executing migrations to: ", generateDatabaseURL(schemaId));
 
-  execSync(
-    `DATABASE_URL=${generateDatabaseURL(schemaId)} npx prisma migrate dev`
-  );
+  // execSync(
+  //   `DATABASE_URL=${generateDatabaseURL(schemaId)} npx prisma migrate dev`
+  // );
 });
 afterAll(async () => {
   await prisma.$executeRawUnsafe(

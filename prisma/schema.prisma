@@ -56,6 +56,7 @@ model Evaluation {
   skillsRating           Rating?
   behaviourRating        Rating?
   notes                  String?
+  test                Boolean?
   evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id], onDelete: Cascade)
   evaluationCollectionId String
 }
