@@ -17,6 +17,7 @@ const url = generateDatabaseURL(schemaId);
 process.env.DATABASE_URL = url;
 export const prisma = new PrismaClient({
   datasources: { db: { url } },
+  log: ["query", "info", "warn"],
 });
 
 beforeAll(async () => {
@@ -26,6 +27,9 @@ beforeAll(async () => {
   await prisma.$executeRawUnsafe(
     `CREATE EXTENSION "uuid-ossp" SCHEMA "${schemaId}";`
   );
+  // eslint-disable-next-line no-console
+  console.log("Executing migrations to: ", generateDatabaseURL);
+
   execSync(`npx prisma migrate dev`, {
     env: {
       ...process.env,
