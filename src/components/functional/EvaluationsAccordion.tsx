@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { AiOutlineStar } from "react-icons/ai";
 import { CgNotes } from "react-icons/cg";
 import AccordionItem from "../general/AccordionItem";
 
@@ -23,6 +24,7 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
     behaviourRating
     skillsRating
     wasPresent
+    isStellar
     collection {
       date
       environment {
@@ -137,7 +139,14 @@ export default forwardRef<
                 },
               }}
               borderColor="light-gray"
-              titleIcons={it.wasPresent && !!it.notes && <Icon as={CgNotes} />}
+              titleIcons={
+                it.wasPresent && (
+                  <>
+                    {it.isStellar && <Icon as={AiOutlineStar} mr="1" />}
+                    {!!it.notes && <Icon as={CgNotes} />}
+                  </>
+                )
+              }
             >
               <Text color={it.wasPresent ? "green" : "red"}>
                 {it.wasPresent ? "Paikalla" : "Poissa"}

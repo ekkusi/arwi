@@ -1,13 +1,14 @@
 import Card, {
   CardProps,
 } from "@/components/server-components/primitives/Card";
-import { Box, Flex, Tag, Text, Textarea } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Tag, Text, Textarea } from "@chakra-ui/react";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import SpeechRecognition from "@/components/functional/SpeechRecognition";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateEvaluationCard_EvaluationFragment as EvaluationFragment } from "@/gql/graphql";
 import { formatAmountString } from "@/utils/dataMappers";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import RatingSelector from "./RatingSelector";
 import ParticipationToggle from "./ParticipationToggle";
 import Overlay from "../general/Overlay";
@@ -19,6 +20,7 @@ export const UpdateEvaluationCard_EvaluationFragment = graphql(`
     behaviourRating
     notes
     wasPresent
+    isStellar
     student {
       id
       name
@@ -39,7 +41,8 @@ type EvaluationPropKeys =
   | "skillsRating"
   | "behaviourRating"
   | "notes"
-  | "wasPresent";
+  | "wasPresent"
+  | "isStellar";
 
 export default function UpdateEvaluationCard({
   children,
@@ -100,8 +103,21 @@ export default function UpdateEvaluationCard({
         display="block"
         textAlign="center"
         mb="4"
+        position="relative"
       >
         {evaluation.student.name}
+        <IconButton
+          position="absolute"
+          top="50%"
+          transform="translateY(-50%)"
+          right="3"
+          variant="ghost"
+          colorScheme="yellow"
+          size="lg"
+          icon={evaluation.isStellar ? <AiFillStar /> : <AiOutlineStar />}
+          onClick={() => onChanged("isStellar", !evaluation.isStellar)}
+          aria-label="Merkkaa arviointi tähtiarvioinniksi"
+        />
       </Tag>
       {hasParticipationToggle && (
         <Flex justifyContent="center" mb="3">

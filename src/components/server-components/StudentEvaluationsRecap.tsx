@@ -1,7 +1,8 @@
-import { Box, Text, BoxProps, Flex } from "@chakra-ui/react";
+import { Box, Text, BoxProps, Flex, Icon } from "@chakra-ui/react";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { analyzeEvaluations } from "@/utils/evaluationUtils";
 import { formatAmountString } from "@/utils/dataMappers";
+import { AiOutlineStar } from "react-icons/ai";
 import EvaluationsLineChart from "../functional/EvaluationsLineChart";
 import CenteredContainer from "./primitives/CenteredContainer";
 import FlippingCard from "../general/FlippingCard";
@@ -13,6 +14,7 @@ const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
     wasPresent
     behaviourRating
     skillsRating
+    isStellar
     ...EvaluationsLineChart_Evaluation
     ...EvaluationsBarChart_Evaluation
   }
@@ -55,12 +57,15 @@ export default function StudentEvaluationsRecap({
     skillsAverage,
     behaviourAverage,
     gradeSuggestion,
+    isStellarCount,
   } = analyzeEvaluations([...evaluations]);
+
+  const starRowCount = Math.ceil(isStellarCount / 12);
 
   return (
     <FlippingCard
       width="100%"
-      height={650}
+      height={650 + starRowCount * 25}
       front={
         <>
           <Text as="h1" textAlign="center" mb="-1">
@@ -74,9 +79,21 @@ export default function StudentEvaluationsRecap({
               <EvaluationsLineChart
                 studentId={student.id}
                 evaluations={evaluations}
-                mb="2"
               />
             </Box>
+            {isStellarCount > 0 && (
+              <Flex justifyContent="center" mb="3" wrap="wrap">
+                {[...Array(isStellarCount)].map((_, i) => (
+                  <Icon
+                    key={i}
+                    as={AiOutlineStar}
+                    color="yellow.400"
+                    w={6}
+                    h={6}
+                  />
+                ))}
+              </Flex>
+            )}
             <Box>
               <Text fontWeight="bold" as="span">
                 Paikalla:{" "}

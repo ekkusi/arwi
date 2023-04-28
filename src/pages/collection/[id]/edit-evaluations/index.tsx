@@ -107,6 +107,7 @@ function UpdateEvaluationsPageContent() {
             skillsRating: evaluation.skillsRating,
             behaviourRating: evaluation.behaviourRating,
             notes: evaluation.notes,
+            isStellar: evaluation.isStellar,
           })),
           collectionId: collection.id,
         }

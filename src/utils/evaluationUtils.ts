@@ -10,11 +10,12 @@ type EvaluationResult = {
   absencesAmount: number;
   presencesAmount: number;
   gradeSuggestion: number;
+  isStellarCount: number;
 };
 
 type Evaluation = Pick<
   BaseEvaluation,
-  "skillsRating" | "behaviourRating" | "wasPresent"
+  "skillsRating" | "behaviourRating" | "wasPresent" | "isStellar"
 >;
 
 export const analyzeEvaluations = (evaluations: Evaluation[]) => {
@@ -26,6 +27,7 @@ export const analyzeEvaluations = (evaluations: Evaluation[]) => {
     absencesAmount: 0,
     presencesAmount: 0,
     gradeSuggestion: 0,
+    isStellarCount: 0,
   };
   const skillsArray: number[] = [];
   const behaviourArray: number[] = [];
@@ -44,6 +46,9 @@ export const analyzeEvaluations = (evaluations: Evaluation[]) => {
       result.presencesAmount += 1;
     } else {
       result.absencesAmount += 1;
+    }
+    if (evaluation.isStellar) {
+      result.isStellarCount += 1;
     }
   });
   result.skillsAverage /= skillsArray.length;

@@ -113,6 +113,7 @@ function EvaluationEditPageContent() {
                 behaviourRating: evaluationData.behaviourRating,
                 skillsRating: evaluationData.skillsRating,
                 notes: evaluationData.notes,
+                isStellar: evaluationData.isStellar,
               },
         }
       );
