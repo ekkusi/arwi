@@ -103,6 +103,7 @@ type Evaluation {
   skillsRating: Rating
   behaviourRating: Rating
   notes: String
+  isStellar: Boolean!
   collection: EvaluationCollection!
 }
 
@@ -189,6 +190,7 @@ input CreateEvaluationInput {
   skillsRating: Rating
   behaviourRating: Rating
   notes: String
+  isStellar: Boolean
 }
 
 input UpdateEvaluationInput {
@@ -197,4 +199,5 @@ input UpdateEvaluationInput {
   skillsRating: Rating
   behaviourRating: Rating
   notes: String
+  isStellar: Boolean
 }

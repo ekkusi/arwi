@@ -25,10 +25,11 @@ export const mapUpdateGroupInput = (
 export const mapUpdateEvaluationInput = (
   data: UpdateEvaluationInput
 ): Prisma.EvaluationUpdateInput => {
-  const { wasPresent, ...rest } = data;
+  const { wasPresent, isStellar, ...rest } = data;
   return {
     ...rest,
     wasPresent: wasPresent === null ? undefined : wasPresent,
+    isStellar: isStellar === null ? undefined : isStellar,
   };
 };
 

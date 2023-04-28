@@ -76,6 +76,7 @@ describe("ServerRequest - updateEvaluation", () => {
         skillsRating: Rating.GREAT,
         behaviourRating: Rating.GREAT,
         notes: "Test notes",
+        isStellar: true,
       },
     };
 
@@ -106,6 +107,7 @@ describe("ServerRequest - updateEvaluation", () => {
       skillsRating: Rating.GREAT,
       behaviourRating: Rating.GREAT,
       notes: "Test notes",
+      isStellar: true,
     });
   });
 

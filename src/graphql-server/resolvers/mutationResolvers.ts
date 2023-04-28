@@ -89,7 +89,10 @@ const resolvers: MutationResolvers<CustomContext> = {
         evaluations: evaluations
           ? {
               createMany: {
-                data: evaluations,
+                data: evaluations.map((it) => ({
+                  ...it,
+                  isStellar: it.isStellar === null ? undefined : it.isStellar,
+                })),
               },
             }
           : undefined,

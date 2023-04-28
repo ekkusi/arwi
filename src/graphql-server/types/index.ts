@@ -249,6 +249,7 @@ export type Evaluation = {
   skillsRating?: Maybe<Rating>;
   behaviourRating?: Maybe<Rating>;
   notes?: Maybe<Scalars["String"]>;
+  isStellar: Scalars["Boolean"];
   collection: EvaluationCollection;
 };
 
@@ -336,6 +337,7 @@ export type CreateEvaluationInput = {
   skillsRating?: InputMaybe<Rating>;
   behaviourRating?: InputMaybe<Rating>;
   notes?: InputMaybe<Scalars["String"]>;
+  isStellar?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export type UpdateEvaluationInput = {
@@ -344,6 +346,7 @@ export type UpdateEvaluationInput = {
   skillsRating?: InputMaybe<Rating>;
   behaviourRating?: InputMaybe<Rating>;
   notes?: InputMaybe<Scalars["String"]>;
+  isStellar?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -832,6 +835,7 @@ export type EvaluationResolvers<
     ContextType
   >;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  isStellar?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   collection?: Resolver<
     ResolversTypes["EvaluationCollection"],
     ParentType,
