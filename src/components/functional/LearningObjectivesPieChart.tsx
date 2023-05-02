@@ -75,8 +75,8 @@ export default function LearningObjectivesPieChart({
         <Overlay bgColor={overlayBgColor} opacity={0.3}>
           <CenteredContainer width="70%" pb={50}>
             <Text>
-              Kuvaajan näyttämiseen tarvitaan vähintään {minItems} arviointia,
-              jotka sisältävät tavoitteita
+              Kuvaajan näyttämiseen vähintään {minItems} tavoitetta täytyy olla
+              arvioitu vähintään kerran
             </Text>
           </CenteredContainer>
         </Overlay>
