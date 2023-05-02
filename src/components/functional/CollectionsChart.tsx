@@ -17,6 +17,7 @@ const CollectionsChart_Collection_Fragment = graphql(`
       skillsRating
       behaviourRating
       wasPresent
+      isStellar
     }
   }
 `);

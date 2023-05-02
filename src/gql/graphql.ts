@@ -380,6 +380,7 @@ export type CollectionsChart_EvaluationCollectionFragment = {
     skillsRating?: Rating | null;
     behaviourRating?: Rating | null;
     wasPresent: boolean;
+    isStellar: boolean;
   }>;
 } & { " $fragmentName"?: "CollectionsChart_EvaluationCollectionFragment" };
 
@@ -1405,6 +1406,7 @@ export const CollectionsChart_EvaluationCollectionFragmentDoc = {
                   name: { kind: "Name", value: "behaviourRating" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
               ],
             },
           },
@@ -5207,6 +5209,7 @@ export const GroupOverviewPage_GetGroupDocument = {
                   name: { kind: "Name", value: "behaviourRating" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
               ],
             },
           },
