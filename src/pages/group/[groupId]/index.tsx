@@ -135,8 +135,9 @@ function GroupOverviewPageContent() {
             objective,
             count: 1,
           };
+        } else {
+          objectives[objective.code].count += 1;
         }
-        objectives[objective.code].count += 1;
       });
     });
     return Object.values(objectives).map((it) => ({
