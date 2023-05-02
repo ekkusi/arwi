@@ -22,13 +22,14 @@ export type DataType = {
   behaviour?: Maybe<number>;
 };
 
-type LineChartBaseProps = Omit<BoxProps, "onClick"> & {
+export type LineChartBaseProps = Omit<BoxProps, "onClick"> & {
   data: any[];
   tooltipContent?: React.ReactElement;
   skillsKey?: string;
   behaviourKey?: string;
   onClick?: CategoricalChartFunc;
   minItems?: number;
+  overlayBgColor?: string;
 };
 
 function TooltipContent({
@@ -88,6 +89,7 @@ export default function LineChartBase({
   children,
   onClick,
   minItems = 3,
+  overlayBgColor = "light-gray",
   ...rest
 }: LineChartBaseProps) {
   const [primaryColor, secondaryColor] = useToken("colors", [
@@ -185,7 +187,7 @@ export default function LineChartBase({
         </LineChart>
       </ResponsiveContainer>
       {!hasEnoughData && (
-        <Overlay bgColor="white" opacity={0.3}>
+        <Overlay bgColor={overlayBgColor} opacity={0.3}>
           <CenteredContainer width="70%" pb={50}>
             <Text>
               Kuvaajan näyttämiseen tarvitaan vähintään {minItems} arviointia

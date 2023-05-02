@@ -79,6 +79,7 @@ export default function StudentEvaluationsRecap({
               <EvaluationsLineChart
                 studentId={student.id}
                 evaluations={evaluations}
+                overlayBgColor="white"
               />
             </Box>
             {isStellarCount > 0 && (
@@ -161,7 +162,9 @@ export default function StudentEvaluationsRecap({
           </>
         </>
       }
-      back={<EvaluationsBarChart evaluations={evaluations} />}
+      back={
+        <EvaluationsBarChart evaluations={evaluations} overlayBgColor="white" />
+      }
       {...rest}
     />
   );

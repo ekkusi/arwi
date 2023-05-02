@@ -29,6 +29,8 @@ const documents = {
     types.EvaluationsLineChart_EvaluationFragmentDoc,
   "\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n":
     types.GroupList_GroupFragmentFragmentDoc,
+  "\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n":
+    types.LearningObjectivesPieChart_LearningObjectiveFragmentDoc,
   "\n  fragment UpdateCollectionForm_Group on Group {\n    subject {\n      code\n    }\n    currentClassYear {\n      info {\n        code\n      }\n    }\n    students {\n      id\n      name\n    }\n  }\n":
     types.UpdateCollectionForm_GroupFragmentDoc,
   "\n  fragment UpdateCollectionForm_Collection on EvaluationCollection {\n    date\n    type\n    description\n    environment {\n      code\n    }\n    classYear {\n      info {\n        code\n      }\n      group {\n        subject {\n          code\n        }\n      }\n    }\n    learningObjectives {\n      code\n    }\n    evaluations {\n      wasPresent\n      student {\n        id\n        name\n      }\n    }\n  }\n":
@@ -117,7 +119,7 @@ const documents = {
     types.CollectionPage_DeleteCollectionDocument,
   "\n  mutation CreateGroupPage_CreateGroup($input: CreateGroupInput!) {\n    createGroup(data: $input) {\n      id\n      name\n    }\n  }\n":
     types.CreateGroupPage_CreateGroupDocument,
-  "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      subject {\n        label\n        code\n      }\n      currentClassYear {\n        info {\n          code\n          label\n        }\n        students {\n          id\n          name\n        }\n        evaluationCollections {\n          id\n          date\n          environment {\n            label\n          }\n          ...CollectionsChart_EvaluationCollection\n        }\n      }\n      ...ChangeClassYearModal_Group\n    }\n  }\n":
+  "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      subject {\n        label\n        code\n      }\n      currentClassYear {\n        info {\n          code\n          label\n        }\n        students {\n          id\n          name\n        }\n        evaluationCollections {\n          id\n          date\n          environment {\n            label\n          }\n          learningObjectives {\n            code\n            ...LearningObjectivesPieChart_LearningObjective\n          }\n          ...CollectionsChart_EvaluationCollection\n        }\n      }\n      ...ChangeClassYearModal_Group\n    }\n  }\n":
     types.GroupOverviewPage_GetGroupDocument,
   "\n  mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {\n    deleteGroup(groupId: $groupId)\n  }\n":
     types.GroupOverviewPage_DeleteGroupDocument,
@@ -209,6 +211,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n"
 ): (typeof documents)["\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n"
+): (typeof documents)["\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -477,8 +485,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      subject {\n        label\n        code\n      }\n      currentClassYear {\n        info {\n          code\n          label\n        }\n        students {\n          id\n          name\n        }\n        evaluationCollections {\n          id\n          date\n          environment {\n            label\n          }\n          ...CollectionsChart_EvaluationCollection\n        }\n      }\n      ...ChangeClassYearModal_Group\n    }\n  }\n"
-): (typeof documents)["\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      subject {\n        label\n        code\n      }\n      currentClassYear {\n        info {\n          code\n          label\n        }\n        students {\n          id\n          name\n        }\n        evaluationCollections {\n          id\n          date\n          environment {\n            label\n          }\n          ...CollectionsChart_EvaluationCollection\n        }\n      }\n      ...ChangeClassYearModal_Group\n    }\n  }\n"];
+  source: "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      subject {\n        label\n        code\n      }\n      currentClassYear {\n        info {\n          code\n          label\n        }\n        students {\n          id\n          name\n        }\n        evaluationCollections {\n          id\n          date\n          environment {\n            label\n          }\n          learningObjectives {\n            code\n            ...LearningObjectivesPieChart_LearningObjective\n          }\n          ...CollectionsChart_EvaluationCollection\n        }\n      }\n      ...ChangeClassYearModal_Group\n    }\n  }\n"
+): (typeof documents)["\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      subject {\n        label\n        code\n      }\n      currentClassYear {\n        info {\n          code\n          label\n        }\n        students {\n          id\n          name\n        }\n        evaluationCollections {\n          id\n          date\n          environment {\n            label\n          }\n          learningObjectives {\n            code\n            ...LearningObjectivesPieChart_LearningObjective\n          }\n          ...CollectionsChart_EvaluationCollection\n        }\n      }\n      ...ChangeClassYearModal_Group\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

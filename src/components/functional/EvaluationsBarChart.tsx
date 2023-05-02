@@ -2,9 +2,12 @@ import { FragmentType, getFragmentData, graphql } from "@/gql";
 import { EvaluationsBarChart_EvaluationFragment } from "@/gql/graphql";
 import { hexToRgbA } from "@/utils/color";
 import { formatRatingNumber } from "@/utils/dataMappers";
-import { Box, BoxProps, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { Bar, Cell, LabelList, TooltipProps } from "recharts";
-import BarChartBase, { DataType } from "../general/BarChartBase";
+import BarChartBase, {
+  BarChartBaseProps,
+  DataType,
+} from "../general/BarChartBase";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on Evaluation {
@@ -94,7 +97,7 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
   return data;
 };
 
-type EvaluationsBarChartProps = Omit<BoxProps, "onClick"> & {
+type EvaluationsBarChartProps = Omit<BarChartBaseProps, "data"> & {
   evaluations: readonly FragmentType<
     typeof EvaluationsBarChart_Evaluation_Fragment
   >[];

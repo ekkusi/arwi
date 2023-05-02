@@ -436,6 +436,15 @@ export type GroupList_GroupFragmentFragment = {
   teacher: { __typename?: "Teacher"; id: string };
 } & { " $fragmentName"?: "GroupList_GroupFragmentFragment" };
 
+export type LearningObjectivesPieChart_LearningObjectiveFragment = {
+  __typename?: "LearningObjective";
+  label: string;
+  code: string;
+  type: LearningObjectiveType;
+} & {
+  " $fragmentName"?: "LearningObjectivesPieChart_LearningObjectiveFragment";
+};
+
 export type UpdateCollectionForm_GroupFragment = {
   __typename?: "Group";
   subject: { __typename?: "Subject"; code: string };
@@ -1069,6 +1078,13 @@ export type GroupOverviewPage_GetGroupQuery = {
           id: string;
           date: string;
           environment: { __typename?: "Environment"; label: string };
+          learningObjectives: Array<
+            { __typename?: "LearningObjective"; code: string } & {
+              " $fragmentRefs"?: {
+                LearningObjectivesPieChart_LearningObjectiveFragment: LearningObjectivesPieChart_LearningObjectiveFragment;
+              };
+            }
+          >;
         } & {
           " $fragmentRefs"?: {
             CollectionsChart_EvaluationCollectionFragment: CollectionsChart_EvaluationCollectionFragment;
@@ -1483,6 +1499,33 @@ export const GroupList_GroupFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<GroupList_GroupFragmentFragment, unknown>;
+export const LearningObjectivesPieChart_LearningObjectiveFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: {
+        kind: "Name",
+        value: "LearningObjectivesPieChart_LearningObjective",
+      },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "LearningObjective" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "label" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "type" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  LearningObjectivesPieChart_LearningObjectiveFragment,
+  unknown
+>;
 export const UpdateCollectionForm_GroupFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -5059,6 +5102,30 @@ export const GroupOverviewPage_GetGroupDocument = {
                               },
                             },
                             {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "learningObjectives",
+                              },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "code" },
+                                  },
+                                  {
+                                    kind: "FragmentSpread",
+                                    name: {
+                                      kind: "Name",
+                                      value:
+                                        "LearningObjectivesPieChart_LearningObjective",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
                               kind: "FragmentSpread",
                               name: {
                                 kind: "Name",
@@ -5078,6 +5145,25 @@ export const GroupOverviewPage_GetGroupDocument = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: {
+        kind: "Name",
+        value: "LearningObjectivesPieChart_LearningObjective",
+      },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "LearningObjective" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "label" } },
+          { kind: "Field", name: { kind: "Name", value: "code" } },
+          { kind: "Field", name: { kind: "Name", value: "type" } },
         ],
       },
     },

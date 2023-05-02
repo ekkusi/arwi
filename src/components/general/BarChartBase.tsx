@@ -22,7 +22,7 @@ export type DataType = {
   fill?: Maybe<string>;
 };
 
-type BarChartBaseProps = Omit<BoxProps, "onClick"> & {
+export type BarChartBaseProps = Omit<BoxProps, "onClick"> & {
   data: DataType[];
   tooltipContent?: React.ReactElement;
   legend?: React.ReactElement;
@@ -30,6 +30,7 @@ type BarChartBaseProps = Omit<BoxProps, "onClick"> & {
   behaviourKey?: string;
   onClick?: CategoricalChartFunc;
   notEnoughDataText?: string;
+  overlayBgColor?: string;
 };
 
 function TooltipContent({
@@ -64,6 +65,7 @@ export default function BarChartBase({
   tooltipContent,
   legend,
   notEnoughDataText = "Kuvaajan näyttämiseksi tarvitaan vähintään 2 arvoa",
+  overlayBgColor = "light-gray",
   ...rest
 }: BarChartBaseProps) {
   const [primaryColor, secondaryColor] = useToken("colors", [
@@ -152,7 +154,7 @@ export default function BarChartBase({
         </BarChart>
       </ResponsiveContainer>
       {data.length < 2 && (
-        <Overlay bgColor="white" opacity={0.3}>
+        <Overlay bgColor={overlayBgColor} opacity={0.3}>
           <CenteredContainer width="70%" pb={50}>
             <Text>{notEnoughDataText}</Text>
           </CenteredContainer>

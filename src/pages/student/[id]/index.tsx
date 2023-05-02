@@ -181,7 +181,9 @@ function StudentPageContent() {
           </Box>
         </>
       ) : (
-        <Text>Oppilaalle ei ole vielä annettu sanallista palautetta</Text>
+        <Text mb="5">
+          Oppilaalle ei ole vielä annettu sanallista palautetta
+        </Text>
       )}
     </PageWrapper>
   );

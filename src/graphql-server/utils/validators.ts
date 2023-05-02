@@ -5,6 +5,7 @@ import {
   CreateCollectionInput,
   CreateGroupInput,
   CreateStudentInput,
+  LearningObjectiveType,
   UpdateCollectionInput,
   UpdateEvaluationInput,
   UpdateStudentInput,
@@ -32,10 +33,16 @@ export const validateLearningObjectives = (
   const learningObjectives = getLearningObjectives(subjectCode, yearCode);
   if (
     !learningObjectiveCodes.every((code) =>
-      learningObjectives.some((objective) => objective.code === code)
+      learningObjectives.some(
+        (objective) =>
+          objective.code === code &&
+          objective.type !== LearningObjectiveType.NOT_EVALUATED
+      )
     )
   )
-    throw new ValidationError(`Osa oppimistavoitteista ei ole olemassa.`);
+    throw new ValidationError(
+      `Osa oppimistavoitteista ei ole olemassa tai eivät ole arvioitavia.`
+    );
 };
 
 export const validateCreateCollectionInput = async (

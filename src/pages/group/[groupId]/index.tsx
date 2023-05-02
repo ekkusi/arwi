@@ -18,7 +18,11 @@ import { FiEdit } from "react-icons/fi";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import Card from "@/components/server-components/primitives/Card";
-import { GroupOverviewPage_GetGroupQuery } from "@/gql/graphql";
+import {
+  GroupOverviewPage_GetGroupQuery,
+  LearningObjectivesPieChart_LearningObjectiveFragment,
+  LearningObjectivesPieChart_LearningObjectiveFragmentDoc,
+} from "@/gql/graphql";
 import Link from "next/link";
 import useSWR, { mutate, SWRConfig } from "swr";
 import graphqlClient from "@/graphql-client";
@@ -33,6 +37,9 @@ import CollectionsChart from "@/components/functional/CollectionsChart";
 import ChangeClassYearModal from "@/components/functional/ChangeClassYearModal";
 import { BiTransfer } from "react-icons/bi";
 import LearningObjectivesAccordion from "@/components/functional/LearningObjectivesAccordion";
+import LearningObjectivesPieChart, {
+  DataType,
+} from "@/components/functional/LearningObjectivesPieChart";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -57,6 +64,10 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           date
           environment {
             label
+          }
+          learningObjectives {
+            code
+            ...LearningObjectivesPieChart_LearningObjective
           }
           ...CollectionsChart_EvaluationCollection
         }
@@ -108,6 +119,30 @@ function GroupOverviewPageContent() {
       isClosable: true,
       position: "top",
     });
+  };
+
+  const mapObjectivesChartData = (): DataType[] => {
+    const objectives: {
+      [key: string]: {
+        objective: (typeof group.currentClassYear.evaluationCollections)[number]["learningObjectives"][number];
+        count: number;
+      };
+    } = {};
+    group.currentClassYear.evaluationCollections.forEach((collection) => {
+      collection.learningObjectives.forEach((objective) => {
+        if (!objectives[objective.code]) {
+          objectives[objective.code] = {
+            objective,
+            count: 1,
+          };
+        }
+        objectives[objective.code].count += 1;
+      });
+    });
+    return Object.values(objectives).map((it) => ({
+      learningObjective: it.objective,
+      count: it.count,
+    }));
   };
 
   return (
@@ -212,6 +247,7 @@ function GroupOverviewPageContent() {
             )}
           </TabPanel>
           <TabPanel>
+            <LearningObjectivesPieChart data={mapObjectivesChartData()} />
             <LearningObjectivesAccordion
               subjectCode={group.subject.code}
               yearCode={group.currentClassYear.info.code}

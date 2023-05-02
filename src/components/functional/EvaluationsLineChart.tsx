@@ -2,8 +2,10 @@ import { FragmentType, getFragmentData, graphql } from "@/gql";
 import { EvaluationsLineChart_EvaluationFragment } from "@/gql/graphql";
 import { formatRatingNumber } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
-import { BoxProps } from "@chakra-ui/react";
-import ChartBase, { DataType } from "../general/LineChartBase";
+import ChartBase, {
+  DataType,
+  LineChartBaseProps,
+} from "../general/LineChartBase";
 
 const EvaluationsLineChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsLineChart_Evaluation on Evaluation {
@@ -57,7 +59,7 @@ const mapData = (
   return data;
 };
 
-type EvaluationsLineChartProps = Omit<BoxProps, "onClick"> & {
+type EvaluationsLineChartProps = Omit<LineChartBaseProps, "data"> & {
   studentId: string;
   evaluations: readonly FragmentType<
     typeof EvaluationsLineChart_Evaluation_Fragment
@@ -88,13 +90,5 @@ export default function EvaluationsLineChart({
   const showAvg = sortedEvaluations.length >= firstIndexToPush + 3;
   const data = mapData(sortedEvaluations, showAvg ? firstIndexToPush : 0);
 
-  return (
-    <ChartBase
-      data={data}
-      // onClick={() => {
-      //   router.push(`/student/${studentId}/details`);
-      // }}
-      {...rest}
-    />
-  );
+  return <ChartBase data={data} {...rest} />;
 }
