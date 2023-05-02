@@ -130,7 +130,9 @@ export default function BarChartBase({
               y: true,
             }}
           />
-          <Legend wrapperStyle={{ left: 0 }} content={legend} />
+          {data.length > 2 && (
+            <Legend wrapperStyle={{ left: 0 }} content={legend} />
+          )}
           {children || (
             <>
               <Bar
