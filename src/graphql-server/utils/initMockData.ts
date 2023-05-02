@@ -37,14 +37,16 @@ const initMockData = async () => {
       groupId: testGroup.id,
     },
   });
-  const collectionPromises = mockData.collections.map(({ id: _, ...rest }) =>
-    prisma.evaluationCollection.create({
-      data: {
-        ...rest,
-        type: "",
-        classYearId: classYear.id,
-      },
-    })
+  const collectionPromises = mockData.collections.map(
+    ({ id: _, learningObjectives, ...rest }) =>
+      prisma.evaluationCollection.create({
+        data: {
+          ...rest,
+          learningObjectiveCodes: learningObjectives,
+          type: "",
+          classYearId: classYear.id,
+        },
+      })
   );
   const collections = await Promise.all(collectionPromises);
   const studentPromises = mockData.students.map(({ evaluations, ...rest }) =>
