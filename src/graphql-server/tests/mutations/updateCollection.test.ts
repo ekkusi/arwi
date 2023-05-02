@@ -287,7 +287,7 @@ describe("ServerRequest - updateCollection", () => {
       // Assert
       assertIsError(error);
       expect(error.message).toContain(
-        "Osa oppimistavoitteista ei ole olemassa."
+        `Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`
       );
     }
   });

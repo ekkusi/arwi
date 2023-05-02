@@ -265,7 +265,9 @@ describe("ServerRequest - createCollection", () => {
 
     // Assert
     await expect(result).resolves.toThrow(
-      new ValidationError(`Osa oppimistavoitteista ei ole olemassa.`)
+      new ValidationError(
+        `Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`
+      )
     );
   });
 });

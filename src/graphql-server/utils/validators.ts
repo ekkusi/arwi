@@ -41,7 +41,7 @@ export const validateLearningObjectives = (
     )
   )
     throw new ValidationError(
-      `Osa oppimistavoitteista ei ole olemassa tai eivät ole arvioitavia.`
+      `Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`
     );
 };
 

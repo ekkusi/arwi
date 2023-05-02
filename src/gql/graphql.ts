@@ -933,6 +933,7 @@ export type UpdateEvaluationTest_UpdateEvaluationDefaultMutation = {
     skillsRating?: Rating | null;
     behaviourRating?: Rating | null;
     notes?: string | null;
+    isStellar: boolean;
   };
 };
 
@@ -4306,6 +4307,7 @@ export const UpdateEvaluationTest_UpdateEvaluationDefaultDocument = {
                   name: { kind: "Name", value: "behaviourRating" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "notes" } },
+                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
               ],
             },
           },

@@ -90,6 +90,7 @@ describe("ServerRequest - updateEvaluation", () => {
           skillsRating
           behaviourRating
           notes
+          isStellar
         }
       }
     `);

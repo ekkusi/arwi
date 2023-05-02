@@ -99,7 +99,7 @@ const documents = {
     types.UpdateCollectionTest_UpdateCollectionInvalidEnvironmentCodeDocument,
   "\n      mutation UpdateCollectionTest_UpdateCollectionInvalidLearningObjectiveCodes(\n        $data: UpdateCollectionInput!\n        $collectionId: ID!\n      ) {\n        updateCollection(data: $data, collectionId: $collectionId) {\n          id\n          date\n        }\n      }\n    ":
     types.UpdateCollectionTest_UpdateCollectionInvalidLearningObjectiveCodesDocument,
-  "\n      mutation UpdateEvaluationTest_UpdateEvaluationDefault(\n        $data: UpdateEvaluationInput!\n      ) {\n        updateEvaluation(data: $data) {\n          id\n          wasPresent\n          skillsRating\n          behaviourRating\n          notes\n        }\n      }\n    ":
+  "\n      mutation UpdateEvaluationTest_UpdateEvaluationDefault(\n        $data: UpdateEvaluationInput!\n      ) {\n        updateEvaluation(data: $data) {\n          id\n          wasPresent\n          skillsRating\n          behaviourRating\n          notes\n          isStellar\n        }\n      }\n    ":
     types.UpdateEvaluationTest_UpdateEvaluationDefaultDocument,
   "\n      mutation UpdateEvaluationTest_UpdateEvaluationError(\n        $data: UpdateEvaluationInput!\n      ) {\n        updateEvaluation(data: $data) {\n          id\n          wasPresent\n          skillsRating\n          behaviourRating\n        }\n      }\n    ":
     types.UpdateEvaluationTest_UpdateEvaluationErrorDocument,
@@ -425,8 +425,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n      mutation UpdateEvaluationTest_UpdateEvaluationDefault(\n        $data: UpdateEvaluationInput!\n      ) {\n        updateEvaluation(data: $data) {\n          id\n          wasPresent\n          skillsRating\n          behaviourRating\n          notes\n        }\n      }\n    "
-): (typeof documents)["\n      mutation UpdateEvaluationTest_UpdateEvaluationDefault(\n        $data: UpdateEvaluationInput!\n      ) {\n        updateEvaluation(data: $data) {\n          id\n          wasPresent\n          skillsRating\n          behaviourRating\n          notes\n        }\n      }\n    "];
+  source: "\n      mutation UpdateEvaluationTest_UpdateEvaluationDefault(\n        $data: UpdateEvaluationInput!\n      ) {\n        updateEvaluation(data: $data) {\n          id\n          wasPresent\n          skillsRating\n          behaviourRating\n          notes\n          isStellar\n        }\n      }\n    "
+): (typeof documents)["\n      mutation UpdateEvaluationTest_UpdateEvaluationDefault(\n        $data: UpdateEvaluationInput!\n      ) {\n        updateEvaluation(data: $data) {\n          id\n          wasPresent\n          skillsRating\n          behaviourRating\n          notes\n          isStellar\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
