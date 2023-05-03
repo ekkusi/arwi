@@ -25,12 +25,10 @@ const documents = {
     types.EvaluationsAccordion_EvaluationFragmentDoc,
   "\n  fragment EvaluationsBarChart_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    wasPresent\n    collection {\n      environment {\n        label\n        code\n        color\n      }\n    }\n  }\n":
     types.EvaluationsBarChart_EvaluationFragmentDoc,
-  "\n  fragment EvaluationsLineChart_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    wasPresent\n    collection {\n      date\n      environment {\n        label\n        code\n      }\n    }\n  }\n":
+  "\n  fragment EvaluationsLineChart_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    wasPresent\n    collection {\n      date\n      environment {\n        label\n        code\n        color\n      }\n    }\n  }\n":
     types.EvaluationsLineChart_EvaluationFragmentDoc,
   "\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n":
     types.GroupList_GroupFragmentFragmentDoc,
-  "\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n":
-    types.LearningObjectivesPieChart_LearningObjectiveFragmentDoc,
   "\n  fragment UpdateCollectionForm_Group on Group {\n    subject {\n      code\n    }\n    currentClassYear {\n      info {\n        code\n      }\n    }\n    students {\n      id\n      name\n    }\n  }\n":
     types.UpdateCollectionForm_GroupFragmentDoc,
   "\n  fragment UpdateCollectionForm_Collection on EvaluationCollection {\n    date\n    type\n    description\n    environment {\n      code\n    }\n    classYear {\n      info {\n        code\n      }\n      group {\n        subject {\n          code\n        }\n      }\n    }\n    learningObjectives {\n      code\n    }\n    evaluations {\n      wasPresent\n      student {\n        id\n        name\n      }\n    }\n  }\n":
@@ -39,8 +37,6 @@ const documents = {
     types.UpdateCollectionsList_CollectionFragmentDoc,
   "\n  mutation UpdateCollectionList_DeleteCollection($id: ID!) {\n    deleteCollection(collectionId: $id)\n  }\n":
     types.UpdateCollectionList_DeleteCollectionDocument,
-  "\n  fragment UpdateEvaluationCard_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    notes\n    wasPresent\n    isStellar\n    student {\n      id\n      name\n      currentClassEvaluations {\n        notes\n      }\n    }\n  }\n":
-    types.UpdateEvaluationCard_EvaluationFragmentDoc,
   "\n  fragment UpdateStudentsList_Student on Student {\n    id\n    name\n  }\n":
     types.UpdateStudentsList_StudentFragmentDoc,
   "\n  mutation UpdateStudentList_UpdateStudent(\n    $input: UpdateStudentInput!\n    $studentId: ID!\n  ) {\n    updateStudent(data: $input, studentId: $studentId) {\n      id\n    }\n  }\n":
@@ -49,6 +45,8 @@ const documents = {
     types.UpdateStudentList_CreateStudentDocument,
   "\n  mutation UpdateStudentList_DeleteStudent($studentId: ID!) {\n    deleteStudent(studentId: $studentId)\n  }\n":
     types.UpdateStudentList_DeleteStudentDocument,
+  "\n  fragment UpdateEvaluationCard_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    notes\n    wasPresent\n    isStellar\n    student {\n      id\n      name\n      currentClassEvaluations {\n        notes\n      }\n    }\n  }\n":
+    types.UpdateEvaluationCard_EvaluationFragmentDoc,
   "\n  fragment StudentEvaluationRecap_Evaluation on Evaluation {\n    id\n    wasPresent\n    behaviourRating\n    skillsRating\n    isStellar\n    ...EvaluationsLineChart_Evaluation\n    ...EvaluationsBarChart_Evaluation\n  }\n":
     types.StudentEvaluationRecap_EvaluationFragmentDoc,
   "\n  fragment StudentEvaluationRecap_Student on Student {\n    id\n    name\n    group {\n      name\n    }\n  }\n":
@@ -137,6 +135,8 @@ const documents = {
     types.EvaluationEditPage_GetEvaluationDocument,
   "\n  mutation EvaluationsEditPage_UpdateEvaluation(\n    $input: UpdateEvaluationInput!\n  ) {\n    updateEvaluation(data: $input) {\n      id\n    }\n  }\n":
     types.EvaluationsEditPage_UpdateEvaluationDocument,
+  "\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n":
+    types.LearningObjectivesPieChart_LearningObjectiveFragmentDoc,
   "\n  query CreateCollectionPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      currentClassYear {\n        id\n      }\n      ...UpdateCollectionForm_Group\n    }\n  }\n":
     types.CreateCollectionPage_GetGroupDocument,
   "\n  mutation CreateCollectionPage_CreateCollection(\n    $createCollectionInput: CreateCollectionInput!\n    $classYearId: ID!\n  ) {\n    createCollection(data: $createCollectionInput, classYearId: $classYearId) {\n      id\n    }\n  }\n":
@@ -145,7 +145,7 @@ const documents = {
     types.EditGroupPage_GetGroupDocument,
   "\n  mutation EditGroupPage_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {\n    updateGroup(groupId: $id, data: $input) {\n      id\n    }\n  }\n":
     types.EditGroupPage_UpdateGroupDocument,
-  "\n  query StudentDetailsPage($id: ID!) {\n    getStudent(id: $id) {\n      id\n      name\n      group {\n        id\n      }\n      currentClassEvaluations {\n        id\n        notes\n      }\n    }\n  }\n":
+  "\n  query StudentDetailsPage($id: ID!) {\n    getStudent(id: $id) {\n      id\n      name\n      group {\n        id\n      }\n      currentClassEvaluations {\n        id\n        notes\n        ...EvaluationsLineChart_Evaluation\n      }\n    }\n  }\n":
     types.StudentDetailsPageDocument,
 };
 
@@ -203,20 +203,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment EvaluationsLineChart_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    wasPresent\n    collection {\n      date\n      environment {\n        label\n        code\n      }\n    }\n  }\n"
-): (typeof documents)["\n  fragment EvaluationsLineChart_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    wasPresent\n    collection {\n      date\n      environment {\n        label\n        code\n      }\n    }\n  }\n"];
+  source: "\n  fragment EvaluationsLineChart_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    wasPresent\n    collection {\n      date\n      environment {\n        label\n        code\n        color\n      }\n    }\n  }\n"
+): (typeof documents)["\n  fragment EvaluationsLineChart_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    wasPresent\n    collection {\n      date\n      environment {\n        label\n        code\n        color\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
   source: "\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n"
 ): (typeof documents)["\n  fragment GroupList_GroupFragment on Group {\n    id\n    name\n    teacher {\n      id\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n"
-): (typeof documents)["\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -245,12 +239,6 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment UpdateEvaluationCard_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    notes\n    wasPresent\n    isStellar\n    student {\n      id\n      name\n      currentClassEvaluations {\n        notes\n      }\n    }\n  }\n"
-): (typeof documents)["\n  fragment UpdateEvaluationCard_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    notes\n    wasPresent\n    isStellar\n    student {\n      id\n      name\n      currentClassEvaluations {\n        notes\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
   source: "\n  fragment UpdateStudentsList_Student on Student {\n    id\n    name\n  }\n"
 ): (typeof documents)["\n  fragment UpdateStudentsList_Student on Student {\n    id\n    name\n  }\n"];
 /**
@@ -271,6 +259,12 @@ export function graphql(
 export function graphql(
   source: "\n  mutation UpdateStudentList_DeleteStudent($studentId: ID!) {\n    deleteStudent(studentId: $studentId)\n  }\n"
 ): (typeof documents)["\n  mutation UpdateStudentList_DeleteStudent($studentId: ID!) {\n    deleteStudent(studentId: $studentId)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment UpdateEvaluationCard_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    notes\n    wasPresent\n    isStellar\n    student {\n      id\n      name\n      currentClassEvaluations {\n        notes\n      }\n    }\n  }\n"
+): (typeof documents)["\n  fragment UpdateEvaluationCard_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    notes\n    wasPresent\n    isStellar\n    student {\n      id\n      name\n      currentClassEvaluations {\n        notes\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -539,6 +533,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n"
+): (typeof documents)["\n  fragment LearningObjectivesPieChart_LearningObjective on LearningObjective {\n    label\n    code\n    type\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  query CreateCollectionPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      currentClassYear {\n        id\n      }\n      ...UpdateCollectionForm_Group\n    }\n  }\n"
 ): (typeof documents)["\n  query CreateCollectionPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      currentClassYear {\n        id\n      }\n      ...UpdateCollectionForm_Group\n    }\n  }\n"];
 /**
@@ -563,8 +563,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query StudentDetailsPage($id: ID!) {\n    getStudent(id: $id) {\n      id\n      name\n      group {\n        id\n      }\n      currentClassEvaluations {\n        id\n        notes\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query StudentDetailsPage($id: ID!) {\n    getStudent(id: $id) {\n      id\n      name\n      group {\n        id\n      }\n      currentClassEvaluations {\n        id\n        notes\n      }\n    }\n  }\n"];
+  source: "\n  query StudentDetailsPage($id: ID!) {\n    getStudent(id: $id) {\n      id\n      name\n      group {\n        id\n      }\n      currentClassEvaluations {\n        id\n        notes\n        ...EvaluationsLineChart_Evaluation\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query StudentDetailsPage($id: ID!) {\n    getStudent(id: $id) {\n      id\n      name\n      group {\n        id\n      }\n      currentClassEvaluations {\n        id\n        notes\n        ...EvaluationsLineChart_Evaluation\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

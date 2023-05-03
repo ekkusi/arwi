@@ -17,7 +17,6 @@ import Overlay from "./Overlay";
 
 export type DataType = {
   date: string;
-  environment: string;
   skills?: Maybe<number>;
   behaviour?: Maybe<number>;
 };

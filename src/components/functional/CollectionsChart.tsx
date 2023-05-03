@@ -44,7 +44,6 @@ const mapData = (
     }
     data.push({
       date: formatDate(it.date),
-      environment: it.environment.label,
       skills:
         skillsAverage > 0
           ? Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100

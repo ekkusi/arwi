@@ -9,6 +9,9 @@ import { GetStaticPropsContext } from "next";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 import { StudentDetailsPageQuery } from "@/gql/graphql";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
+import EvaluationsLineChart from "@/components/functional/EvaluationsLineChart";
+import { getSubject } from "@/utils/subjectUtils";
+import { useEffect } from "react";
 
 const StudentDetailsPage_Query = graphql(`
   query StudentDetailsPage($id: ID!) {
@@ -21,6 +24,7 @@ const StudentDetailsPage_Query = graphql(`
       currentClassEvaluations {
         id
         notes
+        ...EvaluationsLineChart_Evaluation
       }
     }
   }
@@ -29,11 +33,25 @@ const StudentDetailsPage_Query = graphql(`
 function StudentDetailsPageContent() {
   const router = useRouter();
   const id = router.query.id as string;
+  const subject = getSubject("LI");
+  if (!subject) throw new Error(`Subject with code LI doesn't exist`);
+  const { environments } = subject;
 
   const { data } = useSWR<StudentDetailsPageQuery>(
     `student/${id}/details`,
     () => graphqlClient.request(StudentDetailsPage_Query, { id })
   );
+
+  useEffect(() => {
+    if (window.screen) {
+      window.screen.orientation.lock("landscape");
+    }
+    return () => {
+      if (window.screen) {
+        window.screen.orientation.unlock();
+      }
+    };
+  });
 
   if (!data) return <LoadingIndicator />;
 
@@ -44,6 +62,12 @@ function StudentDetailsPageContent() {
       <TopNavigationBar />
       <Text as="h1">{student.name}</Text>
       <Text>Työn alla...</Text>
+      <EvaluationsLineChart
+        evaluations={student.currentClassEvaluations}
+        studentId={student.id}
+        type="skills"
+        environments={environments}
+      />
     </PageWrapper>
   );
 }

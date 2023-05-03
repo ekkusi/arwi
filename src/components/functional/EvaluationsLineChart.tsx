@@ -2,8 +2,10 @@ import { FragmentType, getFragmentData, graphql } from "@/gql";
 import { EvaluationsLineChart_EvaluationFragment } from "@/gql/graphql";
 import { formatRatingNumber } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
+import { Environment } from "@/utils/subjectUtils";
+import { Line } from "recharts";
 import ChartBase, {
-  DataType,
+  DataType as BaseDataType,
   LineChartBaseProps,
 } from "../general/LineChartBase";
 
@@ -18,10 +20,19 @@ const EvaluationsLineChart_Evaluation_Fragment = graphql(`
       environment {
         label
         code
+        color
       }
     }
   }
 `);
+
+type DataType = BaseDataType & {
+  environment: EvaluationsLineChart_EvaluationFragment["collection"]["environment"];
+};
+
+type DataTypeByEnvironments = {
+  [key: string]: DataType;
+};
 
 const mapData = (
   evaluations: EvaluationsLineChart_EvaluationFragment[],
@@ -47,7 +58,7 @@ const mapData = (
     if (i < pushThreshHold) return;
     data.push({
       date: formatDate(it.collection.date),
-      environment: it.collection.environment.label,
+      environment: it.collection.environment,
       skills:
         skillsRating &&
         Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100,
@@ -59,25 +70,38 @@ const mapData = (
   return data;
 };
 
+const mapDataByEnvironments = (data: DataType[]) => {
+  const dataByEnvironments: DataTypeByEnvironments[] = [];
+  data.forEach((it) => {
+    const newData: DataTypeByEnvironments = {};
+    newData[it.environment.code] = it;
+    dataByEnvironments.push(newData);
+  });
+  return dataByEnvironments;
+};
+
 type EvaluationsLineChartProps = Omit<LineChartBaseProps, "data"> & {
   studentId: string;
   evaluations: readonly FragmentType<
     typeof EvaluationsLineChart_Evaluation_Fragment
   >[];
   firstIndexToPush?: number;
+  environments?: Environment[];
+  type?: "skills" | "behaviour" | "both" | "avg";
 };
 
 export default function EvaluationsLineChart({
   evaluations: evaluationFragments,
   studentId: _,
   firstIndexToPush = 2,
+  environments = [],
+  type = "both",
   ...rest
 }: EvaluationsLineChartProps) {
   const evaluations = getFragmentData(
     EvaluationsLineChart_Evaluation_Fragment,
     evaluationFragments
   );
-  // const router = useRouter();
 
   const sortedEvaluations = [...evaluations]
     .sort(
@@ -89,6 +113,24 @@ export default function EvaluationsLineChart({
 
   const showAvg = sortedEvaluations.length >= firstIndexToPush + 3;
   const data = mapData(sortedEvaluations, showAvg ? firstIndexToPush : 0);
+  const dataByEnvironments = mapDataByEnvironments(data);
 
-  return <ChartBase data={data} {...rest} />;
+  return (
+    <ChartBase data={type === "both" ? data : dataByEnvironments} {...rest}>
+      {type !== "both" &&
+        environments.map((it) => (
+          <Line
+            key={it.code}
+            connectNulls
+            type="monotone"
+            name={it.label}
+            dataKey={`${it.code}.${type}`}
+            stroke={it.color}
+            strokeWidth="2"
+            dot={false}
+            // // activeDot={isTooltipVisible}
+          />
+        ))}
+    </ChartBase>
+  );
 }
