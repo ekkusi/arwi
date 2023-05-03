@@ -14,7 +14,7 @@
     "codegen:watch": "graphql-codegen --watch",
     "prisma:deploy-dev": "dotenv -e .env -- npx prisma migrate deploy",
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
-    "prisma:deploy-prod": "dotenv -e .env.production -- npx prisma migrate deploy",
+    "prisma:deploy-prod": "npx dotenv -e .env.production -- npx prisma migrate deploy",
     "prepare": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
     "postinstall": "npx prisma generate",
     "init-mock-data": "ts-node ./src/graphql-server/utils/initMockData.ts",
