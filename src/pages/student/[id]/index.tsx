@@ -136,7 +136,9 @@ function StudentPageContent() {
             {summary && (
               <Box mt="5">
                 <Text as="h3">Palaute:</Text>
-                <Text>{summary}</Text>
+                <Text whiteSpace="pre-line" mb="5">
+                  {summary}
+                </Text>
                 <Box flexDirection="column" alignItems="center" mt="2">
                   <Button
                     leftIcon={

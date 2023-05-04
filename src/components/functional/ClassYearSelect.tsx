@@ -1,7 +1,10 @@
 import { ClassYearInfo, getClassYearInfos } from "@/utils/subjectUtils";
 import Select, { SelectProps } from "../general/Select";
 
-type ClassYearSelectProps = SelectProps & {
+type ClassYearSelectProps = Omit<
+  SelectProps<ClassYearInfo>,
+  "getOptionValue"
+> & {
   initialClassYearCode?: string;
   onChange?: (value: ClassYearInfo | null) => void;
 };
