@@ -1,9 +1,11 @@
 import { ClassYearCode, LearningObjectiveType } from "@/gql/graphql";
-import { getLearningObjectives, LearningObjective } from "@/utils/subjectUtils";
+import {
+  getLearningObjectives,
+  LearningObjectiveMinimal,
+} from "@/utils/subjectUtils";
 import { Text } from "@chakra-ui/react";
 import {
   chakraComponents,
-  MultiValue,
   MultiValueGenericProps,
   GroupBase,
 } from "chakra-react-select";
@@ -11,17 +13,17 @@ import { useMemo } from "react";
 import Select, { SelectProps } from "../general/Select";
 
 type LearningObjectiveSelectProps = Omit<
-  SelectProps<LearningObjective, true>,
+  SelectProps<LearningObjectiveMinimal, boolean>,
   "getOptionValue"
 > & {
   subjectCode: string;
   yearCode: ClassYearCode;
-  initialCodes?: string[];
-  onChange?: (value: MultiValue<LearningObjective>) => void;
 };
 
 const customComponents = {
-  MultiValueLabel: (props: MultiValueGenericProps<LearningObjective>) => {
+  MultiValueLabel: (
+    props: MultiValueGenericProps<LearningObjectiveMinimal>
+  ) => {
     const { data } = props;
     return (
       <chakraComponents.MultiValueLabel {...props}>
@@ -34,14 +36,13 @@ const customComponents = {
 export default function LearningObjectiveSelect({
   subjectCode,
   yearCode,
-  initialCodes,
   ...rest
 }: LearningObjectiveSelectProps) {
   const options = useMemo(
     () => getLearningObjectives(subjectCode, yearCode),
     [subjectCode, yearCode]
   );
-  const groups: GroupBase<LearningObjective>[] = useMemo(() => {
+  const groups: GroupBase<LearningObjectiveMinimal>[] = useMemo(() => {
     const skillsOptions = options.filter(
       (it) => it.type === LearningObjectiveType.SKILLS
     );
@@ -68,14 +69,8 @@ export default function LearningObjectiveSelect({
       isSearchable={false}
       closeMenuOnSelect={false}
       blurInputOnSelect={false}
-      defaultValue={
-        initialCodes
-          ? options.filter((it) => initialCodes.includes(it.code))
-          : []
-      }
       placeholder="Valitse tavoitteet..."
       noOptionsMessage={() => "Ei valittavia tavoitteita"}
-      isMulti
       components={customComponents}
       {...rest}
     />

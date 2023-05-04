@@ -5,12 +5,25 @@ import {
   Props,
   Select as ReactSelect,
   SelectInstance,
+  SingleValue,
 } from "chakra-react-select";
 import { forwardRef, RefAttributes } from "react";
 
 // export type SelectProps = {
 //   containerProps?: BoxProps;
 // };
+
+export function isMultiOption<T>(
+  value: MultiValue<T> | SingleValue<T>
+): value is T[] {
+  return Array.isArray(value);
+}
+
+export function isSingleOption<T>(
+  value: MultiValue<T> | SingleValue<T>
+): value is T {
+  return value != null && !isMultiOption(value);
+}
 
 export type SelectProps<
   Option = unknown,

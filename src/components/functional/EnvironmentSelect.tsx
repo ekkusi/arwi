@@ -2,18 +2,17 @@ import { Box, Flex } from "@chakra-ui/react";
 import {
   chakraComponents,
   OptionProps,
-  SingleValue,
   SingleValueProps,
 } from "chakra-react-select";
 import { hexToRgbA } from "@/utils/color";
 import { Environment, getSubject } from "@/utils/subjectUtils";
-import { useMemo } from "react";
 import Select, { SelectProps } from "../general/Select";
 
-type SubjectSelectProps = Omit<SelectProps<Environment>, "getOptionValue"> & {
+type SubjectSelectProps = Omit<
+  SelectProps<Environment, boolean>,
+  "getOptionValue"
+> & {
   subjectCode: string;
-  initialValue?: string | string[];
-  onChange?: (value: Environment | Environment[] | null) => void;
 };
 
 // Make sure this is defined outside of the component which returns your select
@@ -52,8 +51,6 @@ const customComponents = {
 
 export default function EnvironmentSelect({
   subjectCode,
-  onChange: _onChange,
-  initialValue,
   ...rest
 }: SubjectSelectProps) {
   const subject = getSubject(subjectCode);
@@ -61,20 +58,9 @@ export default function EnvironmentSelect({
     throw new Error(`Subject with code ${subjectCode} doesn't exist`);
   const { environments } = subject;
 
-  const onChange = (newValue: SingleValue<Environment> | null) => {
-    _onChange?.(newValue);
-  };
-
-  const defaultValue = useMemo(() => {
-    if (!initialValue) return null;
-    return null;
-  }, [initialValue]);
-
   return (
     <Select
       options={environments}
-      defaultValue={defaultValue}
-      onChange={onChange}
       isSearchable={false}
       getOptionValue={(option) => option.code}
       components={customComponents}

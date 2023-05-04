@@ -14,6 +14,8 @@ export type LearningObjective = Omit<
   type: LearningObjectiveType;
 };
 
+export type LearningObjectiveMinimal = Omit<LearningObjective, "description">;
+
 export type LearningObjectiveKey = keyof Subject["learning_objectives"];
 
 export type Environment = Subject["environments"][number];

@@ -13,6 +13,7 @@ import Link from "next/link";
 import AddStudentsList from "@/components/functional/AddStudentsList";
 import SubjectSelect from "@/components/functional/SubjectSelect";
 import ClassYearSelect from "@/components/functional/ClassYearSelect";
+import { isSingleOption } from "@/components/general/Select";
 
 const initialValues: {
   name: string;
@@ -91,7 +92,10 @@ export default function CreateGroupPage() {
                 <ClassYearSelect
                   onChange={(newValue) => {
                     setFieldTouched(name, true);
-                    setFieldValue(name, newValue?.code || null);
+                    setFieldValue(
+                      name,
+                      isSingleOption(newValue) ? newValue.code : null
+                    );
                   }}
                 />
               )}
@@ -108,7 +112,10 @@ export default function CreateGroupPage() {
                   initialSubjectCode={initialValues.subjectCode}
                   onChange={(newValue) => {
                     setFieldTouched(name, true);
-                    setFieldValue(name, newValue?.code || null);
+                    setFieldValue(
+                      name,
+                      isSingleOption(newValue) ? newValue.code : null
+                    );
                   }}
                 />
               )}

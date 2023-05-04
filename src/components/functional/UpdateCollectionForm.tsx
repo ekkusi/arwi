@@ -6,6 +6,7 @@ import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import FormField from "../general/FormField";
+import { isMultiOption, isSingleOption } from "../general/Select";
 import Card from "../server-components/primitives/Card";
 import EnvironmentSelect from "./EnvironmentSelect";
 import LearningObjectiveSelect from "./LearningObjectiveSelect";
@@ -37,6 +38,8 @@ const UpdateCollectionForm_Collection_Fragment = graphql(`
     description
     environment {
       code
+      label
+      color
     }
     classYear {
       info {
@@ -50,6 +53,8 @@ const UpdateCollectionForm_Collection_Fragment = graphql(`
     }
     learningObjectives {
       code
+      label
+      type
     }
     evaluations {
       wasPresent
@@ -175,12 +180,12 @@ export default function UpdateCollectionForm({
             }) => (
               <EnvironmentSelect
                 subjectCode={subjectCode}
-                initialValue={initialValues.environmentCode}
+                defaultValue={collection?.environment}
                 onChange={(newValue) => {
                   setFieldTouched(name, true);
                   setFieldValue(
                     name,
-                    !Array.isArray(newValue) ? newValue?.code : null
+                    isSingleOption(newValue) ? newValue.code : null
                   );
                 }}
               />
@@ -196,12 +201,13 @@ export default function UpdateCollectionForm({
               <LearningObjectiveSelect
                 subjectCode={subjectCode}
                 yearCode={classYearCode}
-                initialCodes={initialValues.learningObjectiveCodes}
+                defaultValue={collection?.learningObjectives}
+                isMulti
                 onChange={(newValue) => {
                   setFieldTouched(name, true);
                   setFieldValue(
                     name,
-                    newValue.map((it) => it.code)
+                    isMultiOption(newValue) && newValue.map((it) => it.code)
                   );
                 }}
               />
