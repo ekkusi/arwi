@@ -10,7 +10,10 @@ import {
 import { useMemo } from "react";
 import Select, { SelectProps } from "../general/Select";
 
-type LearningObjectiveSelectProps = SelectProps & {
+type LearningObjectiveSelectProps = Omit<
+  SelectProps<LearningObjective, true>,
+  "getOptionValue"
+> & {
   subjectCode: string;
   yearCode: ClassYearCode;
   initialCodes?: string[];

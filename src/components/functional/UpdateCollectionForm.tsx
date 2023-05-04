@@ -175,10 +175,13 @@ export default function UpdateCollectionForm({
             }) => (
               <EnvironmentSelect
                 subjectCode={subjectCode}
-                initialCode={initialValues.environmentCode}
+                initialValue={initialValues.environmentCode}
                 onChange={(newValue) => {
                   setFieldTouched(name, true);
-                  setFieldValue(name, newValue?.code || null);
+                  setFieldValue(
+                    name,
+                    !Array.isArray(newValue) ? newValue?.code : null
+                  );
                 }}
               />
             )}
