@@ -1,4 +1,4 @@
-import { BoxProps } from "@chakra-ui/react";
+import { DEFAULT_COLOR_SCHEME } from "@/theme";
 import {
   GroupBase,
   MultiValue,
@@ -8,10 +8,6 @@ import {
   SingleValue,
 } from "chakra-react-select";
 import { forwardRef, RefAttributes } from "react";
-
-// export type SelectProps = {
-//   containerProps?: BoxProps;
-// };
 
 export function isMultiOption<T>(
   value: MultiValue<T> | SingleValue<T>
@@ -30,9 +26,7 @@ export type SelectProps<
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 > = WithRequired<Props<Option, IsMulti, Group>, "getOptionValue"> &
-  RefAttributes<SelectInstance<Option, IsMulti, Group>> & {
-    containerProps?: BoxProps;
-  };
+  RefAttributes<SelectInstance<Option, IsMulti, Group>>;
 
 function Select<
   Option = unknown,
@@ -40,7 +34,6 @@ function Select<
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
   {
-    containerProps,
     chakraStyles,
     defaultValue,
     getOptionValue,
@@ -65,25 +58,56 @@ function Select<
       selectedOptionColorScheme="green"
       defaultValue={defaultValue}
       getOptionValue={getOptionValue}
+      hideSelectedOptions={false}
       chakraStyles={{
-        container: (prev) => ({
-          ...prev,
-          ...containerProps,
-        }),
-        dropdownIndicator: (prev, { selectProps: { menuIsOpen } }) => ({
-          ...prev,
+        ...chakraStyles,
+        dropdownIndicator: (styles, options) => ({
+          ...styles,
           bg: "inherit",
+          color: `${DEFAULT_COLOR_SCHEME}.500`,
           "> svg": {
             transitionDuration: "normal",
-            transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+            transform: `rotate(${
+              options.selectProps.menuIsOpen ? -180 : 0
+            }deg)`,
           },
+          ...chakraStyles?.dropdownIndicator?.(styles, options),
         }),
-        multiValue: (prev) => ({
-          ...prev,
+        multiValue: (styles, props) => ({
+          ...styles,
+          bg: `${DEFAULT_COLOR_SCHEME}.400`,
+          color: `white`,
+          fontSize: "sm",
           px: 3,
           py: 1,
+          ...chakraStyles?.multiValue?.(styles, props),
         }),
-        ...chakraStyles,
+        multiValueRemove: (styles, props) => ({
+          ...styles,
+          color: `white`,
+          opacity: 1,
+          ml: 1,
+          ...chakraStyles?.multiValueRemove?.(styles, props),
+        }),
+        clearIndicator: (styles, props) => ({
+          ...styles,
+          color: `${DEFAULT_COLOR_SCHEME}.500`,
+          opacity: 1,
+          ...chakraStyles?.clearIndicator?.(styles, props),
+        }),
+        groupHeading: (styles, props) => ({
+          ...styles,
+          color: `${DEFAULT_COLOR_SCHEME}.500`,
+          ...chakraStyles?.groupHeading?.(styles, props),
+        }),
+        option: (styles, props) => ({
+          ...styles,
+          bg: props.isSelected ? `${DEFAULT_COLOR_SCHEME}.400` : "inherit",
+          _active: {
+            bg: props.isSelected ? `${DEFAULT_COLOR_SCHEME}.400` : "inherit",
+          },
+          ...chakraStyles?.option?.(styles, props),
+        }),
       }}
       placeholder="Valitse"
       {...rest}

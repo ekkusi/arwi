@@ -2,7 +2,7 @@ import Card, {
   CardProps,
 } from "@/components/server-components/primitives/Card";
 import { Box, Flex, IconButton, Tag, Text, Textarea } from "@chakra-ui/react";
-import debounce from "lodash.debounce";
+import debounce from "lodash/debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import SpeechRecognition from "@/components/functional/SpeechRecognition";
 import { FragmentType, graphql, getFragmentData } from "@/gql";

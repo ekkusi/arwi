@@ -58,6 +58,8 @@ const themeOverrides = {
   },
 };
 
+export const DEFAULT_COLOR_SCHEME = "green";
+
 const colors = {
   ...themeOverrides,
   "light-gray": themeOverrides.gray["100"],
@@ -66,7 +68,7 @@ const colors = {
   "light-text": themeOverrides.gray["700"],
   "secondary-bg": themeOverrides.blue["100"],
   // "secondary-bg": baseTheme.colors.yellow["100"],
-  "primary-bg": baseTheme.colors.green["100"],
+  "primary-bg": baseTheme.colors[DEFAULT_COLOR_SCHEME]["100"],
 
   // TODO: Should probably configure other reds as well, this only changes red.500 (which is used in errors)
   red: {
@@ -131,7 +133,7 @@ const theme = extendTheme(
           mb: 2,
         },
         a: {
-          color: "green.800",
+          color: `${DEFAULT_COLOR_SCHEME}.800`,
           fontWeight: "semibold",
         },
       }),
@@ -151,7 +153,7 @@ const theme = extendTheme(
       Popover,
     },
   },
-  withDefaultColorScheme({ colorScheme: "green" })
+  withDefaultColorScheme({ colorScheme: DEFAULT_COLOR_SCHEME })
 );
 
 export default theme;

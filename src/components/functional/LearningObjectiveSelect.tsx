@@ -3,11 +3,12 @@ import {
   getLearningObjectives,
   LearningObjectiveMinimal,
 } from "@/utils/subjectUtils";
-import { Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import {
   chakraComponents,
   MultiValueGenericProps,
   GroupBase,
+  OptionProps,
 } from "chakra-react-select";
 import { useMemo } from "react";
 import Select, { SelectProps } from "../general/Select";
@@ -29,6 +30,20 @@ const customComponents = {
       <chakraComponents.MultiValueLabel {...props}>
         <Text>{data.code}</Text>
       </chakraComponents.MultiValueLabel>
+    );
+  },
+
+  Option: (props: OptionProps<LearningObjectiveMinimal>) => {
+    const { data } = props;
+    return (
+      <chakraComponents.Option {...props}>
+        <Box display="flex">
+          <Text as="span" mr="1">
+            {data.code}:
+          </Text>
+          <Text as="span">{data.label}</Text>
+        </Box>
+      </chakraComponents.Option>
     );
   },
 };
@@ -72,6 +87,11 @@ export default function LearningObjectiveSelect({
       placeholder="Valitse tavoitteet..."
       noOptionsMessage={() => "Ei valittavia tavoitteita"}
       components={customComponents}
+      chakraStyles={{
+        option: () => ({
+          fontSize: "sm",
+        }),
+      }}
       {...rest}
     />
   );

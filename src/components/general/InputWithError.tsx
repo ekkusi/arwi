@@ -6,7 +6,7 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-import debounce from "lodash.debounce";
+import debounce from "lodash/debounce";
 import {
   forwardRef,
   useImperativeHandle,

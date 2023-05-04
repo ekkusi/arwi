@@ -8,6 +8,7 @@ import ConfirmationModal, {
   ConfirmationModalProps,
 } from "../general/ConfirmationModal";
 import Popover from "../general/Popover";
+import { isSingleOption } from "../general/Select";
 import ClassYearSelect from "./ClassYearSelect";
 
 const ChangeClassYearModal_ChangeClassYear_Mutation = graphql(`
@@ -85,8 +86,14 @@ export default function ChangeClassYearModal({
       <FormLabel>Uusi vuosiluokka</FormLabel>
       <ClassYearSelect
         initialClassYearCode={group.currentClassYear.info.code}
-        containerProps={{ mb: 3 }}
-        onChange={(value) => setYearCode(value?.code || null)}
+        chakraStyles={{
+          container: () => ({
+            mb: 3,
+          }),
+        }}
+        onChange={(value) =>
+          setYearCode(isSingleOption(value) ? value.code : null)
+        }
       />
       <Flex alignItems="center" position="relative">
         <Checkbox
