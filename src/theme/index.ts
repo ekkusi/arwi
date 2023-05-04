@@ -133,7 +133,7 @@ const theme = extendTheme(
           mb: 2,
         },
         a: {
-          color: `${DEFAULT_COLOR_SCHEME}.800`,
+          color: `${DEFAULT_COLOR_SCHEME}.500`,
           fontWeight: "semibold",
         },
       }),

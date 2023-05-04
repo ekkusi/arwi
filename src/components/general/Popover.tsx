@@ -31,7 +31,7 @@ export default function Popover({
         <Flex>
           {openButton || (
             <IconButton
-              colorScheme="gray"
+              color="green.500"
               variant="link"
               icon={<BsThreeDots />}
               aria-label="Muokkaa"
