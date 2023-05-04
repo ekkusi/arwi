@@ -83,7 +83,7 @@ export default function GroupList({
         onClose={onClose}
         headerLabel="Mitä haluat tehdä?"
       >
-        <Flex flexDirection="column">
+        <Flex flexDirection="column" pb="3">
           <Button
             as={Link}
             href={`/group/${selectedGroup?.id}`}
