@@ -7,12 +7,13 @@ import {
 } from "chakra-react-select";
 import { hexToRgbA } from "@/utils/color";
 import { Environment, getSubject } from "@/utils/subjectUtils";
+import { useMemo } from "react";
 import Select, { SelectProps } from "../general/Select";
 
-type SubjectSelectProps = SelectProps & {
+type SubjectSelectProps = Omit<SelectProps<Environment>, "getOptionValue"> & {
   subjectCode: string;
-  initialCode?: string;
-  onChange?: (value: Environment | null) => void;
+  initialValue?: string | string[];
+  onChange?: (value: Environment | Environment[] | null) => void;
 };
 
 // Make sure this is defined outside of the component which returns your select
@@ -52,7 +53,7 @@ const customComponents = {
 export default function EnvironmentSelect({
   subjectCode,
   onChange: _onChange,
-  initialCode,
+  initialValue,
   ...rest
 }: SubjectSelectProps) {
   const subject = getSubject(subjectCode);
@@ -64,10 +65,15 @@ export default function EnvironmentSelect({
     _onChange?.(newValue);
   };
 
+  const defaultValue = useMemo(() => {
+    if (!initialValue) return null;
+    return null;
+  }, [initialValue]);
+
   return (
     <Select
       options={environments}
-      defaultValue={environments.find((it) => it.code === initialCode)}
+      defaultValue={defaultValue}
       onChange={onChange}
       isSearchable={false}
       getOptionValue={(option) => option.code}

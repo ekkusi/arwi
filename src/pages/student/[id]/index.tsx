@@ -19,7 +19,6 @@ import { AiOutlineCheck } from "react-icons/ai";
 import EvaluationsAccordion, {
   EvaluationsAccordionHandlers,
 } from "@/components/functional/EvaluationsAccordion";
-import InputWithError from "@/components/general/InputWithError";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
@@ -36,6 +35,7 @@ const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
         notes
         ...EvaluationsAccordion_Evaluation
         ...StudentEvaluationRecap_Evaluation
+        ...OpenAIUtils_Evaluation
       }
     }
   }
@@ -52,9 +52,7 @@ function StudentPageContent() {
   );
 
   const [summary, setSummary] = useState<string | undefined>();
-  const [summaryLength, setSummaryLength] = useState<number>(50);
   const [error, setError] = useState<string | undefined>();
-  const [isSummaryValid, setIsSummaryValid] = useState<boolean>(true);
   const [isGeneratingSummary, setIsGeneratingSumamry] =
     useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -74,15 +72,6 @@ function StudentPageContent() {
   const { getStudent: student } = data;
   const evaluations = student.currentClassEvaluations;
 
-  const validateSummaryLength = (value: string) => {
-    const parsed = Number(value);
-    let errorMessage;
-    if (parsed < 10 || parsed > 200) {
-      errorMessage = "Yhteenvedon pituuden tulee olla välillä 10-200 merkkiä.";
-    }
-    return errorMessage;
-  };
-
   const genearateSummary = async () => {
     try {
       setIsGeneratingSumamry(true);
@@ -90,20 +79,16 @@ function StudentPageContent() {
       setError(undefined);
       setSummary(undefined);
 
-      const notes = evaluations
-        .filter((it) => !!it.notes)
-        .map((it) => it.notes);
-
       const result = await fetch("/api/generate-summary", {
         method: "POST",
         body: JSON.stringify({
-          notes,
-          summaryLength,
+          evaluations,
         }),
       });
 
       if (!result.ok) throw new Error("Something went wrong");
       const json = await result.json();
+
       setSummary(json.summary);
       setIsGeneratingSumamry(false);
     } catch (e) {
@@ -141,20 +126,7 @@ function StudentPageContent() {
           <Box my="5">
             <Text as="h2">Loppuarvioinnin generointi</Text>
             <FormLabel>Palautteen pituus</FormLabel>
-            <InputWithError
-              type="number"
-              name="summary-length"
-              isDisabled={isGeneratingSummary}
-              validate={validateSummaryLength}
-              defaultValue={50}
-              onChange={(e, isValid) => {
-                setSummaryLength(Number(e.target.value));
-                setIsSummaryValid(isValid);
-              }}
-              containerProps={{ mb: "4" }}
-            />
             <Button
-              isDisabled={!isSummaryValid}
               isLoading={isGeneratingSummary}
               onClick={() => genearateSummary()}
             >

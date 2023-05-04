@@ -10,18 +10,16 @@ export default async function handler(
     return res.status(405).json({ message: "Invalid method" });
   }
 
-  const { notes, summaryLength: _summaryLength } = JSON.parse(req.body);
+  const { evaluations } = JSON.parse(req.body);
 
-  if (!notes) {
+  if (!evaluations) {
     return res.status(400).json({ message: "No notes found on request" });
   }
-
-  const summaryLength = Number(_summaryLength) || 50;
 
   try {
     // e.g. for "/blog/[slug]" this should be "/blog/post-1"
 
-    const summary = await generateStudentSummary(notes, summaryLength);
+    const summary = await generateStudentSummary(evaluations);
     return res.json({ summary });
   } catch (err) {
     return res

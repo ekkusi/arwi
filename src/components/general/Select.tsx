@@ -8,9 +8,18 @@ import {
 } from "chakra-react-select";
 import { forwardRef, RefAttributes } from "react";
 
-export type SelectProps = {
-  containerProps?: BoxProps;
-};
+// export type SelectProps = {
+//   containerProps?: BoxProps;
+// };
+
+export type SelectProps<
+  Option = unknown,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+> = WithRequired<Props<Option, IsMulti, Group>, "getOptionValue"> &
+  RefAttributes<SelectInstance<Option, IsMulti, Group>> & {
+    containerProps?: BoxProps;
+  };
 
 function Select<
   Option = unknown,
@@ -23,9 +32,7 @@ function Select<
     defaultValue,
     getOptionValue,
     ...rest
-  }: WithRequired<Props<Option, IsMulti, Group>, "getOptionValue"> &
-    RefAttributes<SelectInstance<Option, IsMulti, Group>> &
-    SelectProps,
+  }: SelectProps<Option, IsMulti, Group>,
   ref: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>
 ) {
   // Make distinct keys based on the default value so that the select is re-rendered
@@ -75,9 +82,9 @@ const WithRef = forwardRef(Select) as <
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
-  props: WithRequired<Props<Option, IsMulti, Group>, "getOptionValue"> & {
+  props: SelectProps<Option, IsMulti, Group> & {
     ref?: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>;
-  } & SelectProps
+  }
 ) => ReturnType<typeof Select>;
 
 export default WithRef;

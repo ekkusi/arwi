@@ -1,7 +1,10 @@
 import { getSubjects, SubjectMinimal } from "@/utils/subjectUtils";
 import Select, { SelectProps } from "../general/Select";
 
-type SubjectSelectProps = SelectProps & {
+type SubjectSelectProps = Omit<
+  SelectProps<SubjectMinimal>,
+  "getOptionValue"
+> & {
   initialSubjectCode?: string;
   onChange?: (value: SubjectMinimal | null) => void;
 };
