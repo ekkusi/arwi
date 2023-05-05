@@ -15,6 +15,7 @@ import {
   Textarea,
   Checkbox,
   Popover,
+  Radio,
 } from "./components";
 
 const errorColor = baseTheme.colors.red["700"];
@@ -151,6 +152,7 @@ const theme = extendTheme(
       Accordion,
       Checkbox,
       Popover,
+      Radio,
     },
   },
   withDefaultColorScheme({ colorScheme: DEFAULT_COLOR_SCHEME })

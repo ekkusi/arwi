@@ -3,7 +3,8 @@ import { EvaluationsLineChartDetailed_EvaluationFragment } from "@/gql/graphql";
 import { formatRatingNumber } from "@/utils/dataMappers";
 import { formatDate } from "@/utils/dateUtils";
 import { Environment } from "@/utils/subjectUtils";
-import { Line } from "recharts";
+import { Box, Text } from "@chakra-ui/react";
+import { Line, TooltipProps } from "recharts";
 import ChartBase, {
   DataType as BaseDataType,
   LineChartBaseProps,
@@ -31,17 +32,35 @@ type DataType = BaseDataType & {
 };
 
 type DataTypeByEnvironments = {
-  [key: string]: DataType;
+  [key: string]: Omit<DataType, "date"> | string;
 };
+
+function TooltipContent({
+  active,
+  payload,
+  label,
+}: TooltipProps<"number", "string">) {
+  if (!payload?.[0] || !payload[0].dataKey || !active) return null;
+
+  return (
+    <Box p="2" bg="white" border="1px" borderColor="gray.200" borderRadius="md">
+      <Text color={payload[0].stroke}>
+        {label} - {payload[0].name}
+        {payload[0].payload[payload[0].dataKey]}
+      </Text>
+    </Box>
+  );
+}
 
 const mapDataByEnvironments = (
   evaluations: EvaluationsLineChartDetailed_EvaluationFragment[]
 ) => {
   const data: DataTypeByEnvironments[] = [];
   evaluations.forEach((it) => {
-    const newData: DataTypeByEnvironments = {};
-    newData[it.collection.environment.code] = {
+    const newData: DataTypeByEnvironments = {
       date: formatDate(it.collection.date),
+    };
+    newData[it.collection.environment.code] = {
       skills: it.skillsRating && formatRatingNumber(it.skillsRating),
       behaviour: it.behaviourRating && formatRatingNumber(it.behaviourRating),
       environment: it.collection.environment,
@@ -56,13 +75,13 @@ type EvaluationsLineChartDetailedProps = Omit<LineChartBaseProps, "data"> & {
     typeof EvaluationsLineChartDetailed_Evaluation_Fragment
   >[];
   environments?: Environment[];
-  type?: "skills" | "behaviour" | "both" | "avg";
+  type?: "skills" | "behaviour";
 };
 
 export default function EvaluationsLineChartDetailed({
   evaluations: evaluationFragments,
   environments = [],
-  type = "both",
+  type = "skills",
   ...rest
 }: EvaluationsLineChartDetailedProps) {
   const evaluations = getFragmentData(
@@ -82,7 +101,12 @@ export default function EvaluationsLineChartDetailed({
   const data = mapDataByEnvironments(sortedEvaluations);
 
   return (
-    <ChartBase data={data} {...rest}>
+    <ChartBase
+      tooltipContent={<TooltipContent />}
+      data={data}
+      yLabel="Arvosana"
+      {...rest}
+    >
       {environments.map((it) => (
         <Line
           key={it.code}
@@ -92,8 +116,6 @@ export default function EvaluationsLineChartDetailed({
           dataKey={`${it.code}.${type}`}
           stroke={it.color}
           strokeWidth="2"
-          // dot={false}
-          // // activeDot={isTooltipVisible}
         />
       ))}
     </ChartBase>

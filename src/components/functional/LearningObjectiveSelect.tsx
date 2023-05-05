@@ -82,8 +82,6 @@ export default function LearningObjectiveSelect({
       getOptionValue={(value) => value.code}
       getOptionLabel={(value) => `${value.code}: ${value.label}`}
       isSearchable={false}
-      closeMenuOnSelect={false}
-      blurInputOnSelect={false}
       placeholder="Valitse tavoitteet..."
       noOptionsMessage={() => "Ei valittavia tavoitteita"}
       components={customComponents}

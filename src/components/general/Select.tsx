@@ -1,4 +1,5 @@
 import { DEFAULT_COLOR_SCHEME } from "@/theme";
+import { BoxProps } from "@chakra-ui/react";
 import {
   GroupBase,
   MultiValue,
@@ -26,7 +27,9 @@ export type SelectProps<
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 > = WithRequired<Props<Option, IsMulti, Group>, "getOptionValue"> &
-  RefAttributes<SelectInstance<Option, IsMulti, Group>>;
+  RefAttributes<SelectInstance<Option, IsMulti, Group>> & {
+    containerProps?: BoxProps;
+  };
 
 function Select<
   Option = unknown,
@@ -37,6 +40,7 @@ function Select<
     chakraStyles,
     defaultValue,
     getOptionValue,
+    containerProps,
     ...rest
   }: SelectProps<Option, IsMulti, Group>,
   ref: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>
@@ -59,8 +63,14 @@ function Select<
       defaultValue={defaultValue}
       getOptionValue={getOptionValue}
       hideSelectedOptions={false}
+      closeMenuOnSelect={!rest.isMulti}
+      blurInputOnSelect={!rest.isMulti}
       chakraStyles={{
-        ...chakraStyles,
+        container: (styles, options) => ({
+          ...styles,
+          ...chakraStyles?.container?.(styles, options),
+          ...containerProps,
+        }),
         dropdownIndicator: (styles, options) => ({
           ...styles,
           bg: "inherit",
@@ -72,6 +82,10 @@ function Select<
             }deg)`,
           },
           ...chakraStyles?.dropdownIndicator?.(styles, options),
+        }),
+        singleValue: (styles, props) => ({
+          ...styles,
+          ...chakraStyles?.singleValue?.(styles, props),
         }),
         multiValue: (styles, props) => ({
           ...styles,

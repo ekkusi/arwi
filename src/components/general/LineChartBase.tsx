@@ -29,6 +29,7 @@ export type LineChartBaseProps = Omit<BoxProps, "onClick"> & {
   onClick?: CategoricalChartFunc;
   minItems?: number;
   overlayBgColor?: string;
+  yLabel?: string;
 };
 
 function TooltipContent({
@@ -89,6 +90,7 @@ export default function LineChartBase({
   onClick,
   minItems = 3,
   overlayBgColor = "light-gray",
+  yLabel = "Keskiarvojen kehitys",
   ...rest
 }: LineChartBaseProps) {
   const [primaryColor, secondaryColor] = useToken("colors", [
@@ -144,7 +146,7 @@ export default function LineChartBase({
           />
           <YAxis
             type="number"
-            label={{ value: "Keskiarvojen kehitys", angle: -90 }}
+            label={{ value: yLabel, angle: -90 }}
             domain={[6, 10]}
           />
           <Tooltip

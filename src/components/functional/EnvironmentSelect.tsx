@@ -47,6 +47,12 @@ const customComponents = {
       </Flex>
     </chakraComponents.SingleValue>
   ),
+  // MultiValue: ({
+  //   children,
+  //   ...props
+  // }: MultiValueProps<Environment, false>) => (
+  //   <chakraComponents.MultiValue {...props}
+  // )
 };
 
 export default function EnvironmentSelect({
@@ -65,14 +71,18 @@ export default function EnvironmentSelect({
       getOptionValue={(option) => option.code}
       components={customComponents}
       chakraStyles={{
-        option: (prev, { data, isSelected }) => ({
-          ...prev,
+        option: (_, { data, isSelected }) => ({
           bg: isSelected ? hexToRgbA(data.color, 0.8) : "inherit",
           color: isSelected ? "white" : data.color,
+          _active: {
+            bg: isSelected ? hexToRgbA(data.color, 0.8) : "inherit",
+          },
         }),
-        singleValue: (prev, { data }) => ({
-          ...prev,
+        singleValue: (_, { data }) => ({
           color: data.color,
+        }),
+        multiValue: (_, { data }) => ({
+          bg: data.color,
         }),
       }}
       placeholder="Valitse ympäristö..."

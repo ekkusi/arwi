@@ -1,7 +1,7 @@
 import { graphql } from "@/gql";
 import useSWR, { SWRConfig } from "swr";
 import PageWrapper from "@/components/server-components/PageWrapper";
-import { Text } from "@chakra-ui/react";
+import { FormLabel, Radio, RadioGroup } from "@chakra-ui/react";
 import graphqlClient from "@/graphql-client";
 import { useRouter } from "next/router";
 import { serverRequest } from "@/pages/api/graphql";
@@ -12,6 +12,8 @@ import TopNavigationBar from "@/components/functional/TopNavigationBar";
 import { Environment, getSubject } from "@/utils/subjectUtils";
 import { useEffect, useState } from "react";
 import EvaluationsLineChartDetailed from "@/components/functional/EvaluationsLineChartDetailed";
+import EnvironmentSelect from "@/components/functional/EnvironmentSelect";
+import { isMultiOption } from "@/components/general/Select";
 
 const StudentDetailsPage_Query = graphql(`
   query StudentDetailsPage($id: ID!) {
@@ -44,6 +46,7 @@ function StudentDetailsPageContent() {
   );
 
   const [environments, setEnvironments] = useState<Environment[]>([]);
+  const [graphType, setGraphType] = useState<"skills" | "behaviour">("skills");
 
   useEffect(() => {
     if (window.screen) {
@@ -64,20 +67,36 @@ function StudentDetailsPageContent() {
 
   if (!data) return <LoadingIndicator />;
 
+  const subject = getSubject(data.getStudent.group.subject.code);
   const { getStudent: student } = data;
 
   return (
     <PageWrapper>
-      <TopNavigationBar />
-      <Text as="h1">{student.name}</Text>
-      <Text as="h2">Arvioinnit ympäristöttäin</Text>
-      {/* <EnvironmentSelect
+      <TopNavigationBar mb="3" />
+      <FormLabel>Ympäristöt</FormLabel>
+      <EnvironmentSelect
         subjectCode={student.group.subject.code}
-        onChange={(value) => value && setEnvironments([value])}
-      /> */}
+        onChange={(value) => isMultiOption(value) && setEnvironments(value)}
+        defaultValue={subject?.environments}
+        isMulti
+        containerProps={{
+          mb: 2,
+        }}
+      />
+      <FormLabel>Arviointikohde</FormLabel>
+      <RadioGroup
+        onChange={(value: "skills" | "behaviour") => setGraphType(value)}
+        value={graphType}
+        mb="2"
+      >
+        <Radio value="skills" mr="2">
+          Taidot
+        </Radio>
+        <Radio value="behaviour">Työskentely</Radio>
+      </RadioGroup>
       <EvaluationsLineChartDetailed
         evaluations={student.currentClassEvaluations}
-        type="skills"
+        type={graphType}
         environments={environments}
       />
     </PageWrapper>
