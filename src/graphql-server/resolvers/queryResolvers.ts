@@ -1,9 +1,19 @@
+import { ADMIN_USER } from "@/config";
+import AuthenticationError from "../errors/AuthenticationError";
 import ValidationError from "../errors/ValidationError";
 import { QueryResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
+import {
+  checkAuthenticatedByCollection,
+  checkAuthenticatedByEvaluation,
+  checkAuthenticatedByGroup,
+  checkAuthenticatedByStudent,
+  checkAuthenticatedByTeacher,
+} from "../utils/auth";
 
 const resolvers: QueryResolvers<CustomContext> = {
-  getTeacher: async (_, { id }, { prisma }) => {
+  getTeacher: async (_, { id }, { prisma, user }) => {
+    checkAuthenticatedByTeacher(user, id);
     const teacher = await prisma.teacher.findUnique({
       where: {
         id,
@@ -13,23 +23,28 @@ const resolvers: QueryResolvers<CustomContext> = {
       throw new ValidationError(`Opettajaa ei löytynyt id:llä '${id}'`);
     return teacher;
   },
-  getTeachers: async (_, __, { prisma }) => {
+  getTeachers: async (_, __, { prisma, user }) => {
+    if (user?.id !== ADMIN_USER.id)
+      throw new AuthenticationError("Admin route");
     const teachers = await prisma.teacher.findMany();
     return teachers;
   },
-  getGroups: async (_, { teacherId }, { prisma }) => {
+  getGroups: async (_, { teacherId }, { prisma, user }) => {
+    checkAuthenticatedByTeacher(user, teacherId);
     const groups = await prisma.group.findMany({
       where: { teacherId },
     });
     return groups;
   },
-  getGroup: async (_, { id }, { prisma }) => {
+  getGroup: async (_, { id }, { prisma, user }) => {
+    await checkAuthenticatedByGroup(user, id);
     const group = await prisma.group.findFirstOrThrow({
       where: { id },
     });
     return group;
   },
-  getCollection: async (_, { id }, { prisma }) => {
+  getCollection: async (_, { id }, { prisma, user }) => {
+    await checkAuthenticatedByCollection(user, id);
     const matchingCollection =
       await prisma.evaluationCollection.findFirstOrThrow({
         where: { id },
@@ -37,13 +52,15 @@ const resolvers: QueryResolvers<CustomContext> = {
 
     return matchingCollection;
   },
-  getStudent: async (_, { id }, { prisma }) => {
+  getStudent: async (_, { id }, { prisma, user }) => {
+    await checkAuthenticatedByStudent(user, id);
     const matchingStudent = await prisma.student.findFirstOrThrow({
       where: { id },
     });
     return matchingStudent;
   },
-  getEvaluation: async (_, { id }, { prisma }) => {
+  getEvaluation: async (_, { id }, { prisma, user }) => {
+    await checkAuthenticatedByEvaluation(user, id);
     const matchingEvaluation = await prisma.evaluation.findFirstOrThrow({
       where: { id },
     });

@@ -71,8 +71,54 @@ export const validateCreateCollectionInput = async (
   }
 };
 
+export const validateUpdateEvaluationInput = async (
+  data: UpdateEvaluationInput
+) => {
+  const matchingEvaluation = await prisma.evaluation.findUniqueOrThrow({
+    where: { id: data.id },
+  });
+  const wasPresent =
+    data.wasPresent !== null ? data.wasPresent : matchingEvaluation.wasPresent;
+
+  // If the student was not present, the evaluation data cannot be updated
+  if (
+    wasPresent === false &&
+    (data.behaviourRating || data.skillsRating || data.notes)
+  ) {
+    throw new ValidationError(
+      `Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää.`
+    );
+  }
+};
+
+export const validateUpdateEvaluationsInput = async (
+  data: UpdateEvaluationInput[],
+  collectionId: string
+) => {
+  const ids = data.map((it) => it.id);
+  const evaluations = await prisma.evaluation.findMany({
+    where: {
+      evaluationCollectionId: collectionId,
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  if (ids.length !== evaluations.length)
+    throw new ValidationError(
+      "Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan"
+    );
+  const validatePromises = data.map((it) => validateUpdateEvaluationInput(it));
+  await Promise.all(validatePromises);
+};
+
 export const validateUpdateCollectionInput = async (
-  { environmentCode, learningObjectiveCodes }: UpdateCollectionInput,
+  {
+    environmentCode,
+    learningObjectiveCodes,
+    evaluations,
+  }: UpdateCollectionInput,
   collectionId: string
 ) => {
   if (environmentCode && !getEnvironment(environmentCode))
@@ -98,6 +144,8 @@ export const validateUpdateCollectionInput = async (
       learningObjectiveCodes
     );
   }
+  if (evaluations)
+    await validateUpdateEvaluationsInput(evaluations, collectionId);
 };
 
 export const validateCreateStudentInput = async (
@@ -140,24 +188,4 @@ export const validateUpdateStudentInput = async (
     throw new ValidationError(
       `Ryhmässä on jo '${data.name}' niminen oppilas. Ryhmässä ei voi olla kahta samannimistä oppilasta.`
     );
-};
-
-export const validateUpdateEvaluationInput = async (
-  data: UpdateEvaluationInput
-) => {
-  const matchingEvaluation = await prisma.evaluation.findUniqueOrThrow({
-    where: { id: data.id },
-  });
-  const wasPresent =
-    data.wasPresent !== null ? data.wasPresent : matchingEvaluation.wasPresent;
-
-  // If the student was not present, the evaluation data cannot be updated
-  if (
-    wasPresent === false &&
-    (data.behaviourRating || data.skillsRating || data.notes)
-  ) {
-    throw new ValidationError(
-      `Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää.`
-    );
-  }
 };

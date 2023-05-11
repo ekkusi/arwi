@@ -4,6 +4,7 @@ import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
 import {
   mapUpdateCollectionInput,
+  mapUpdateEvaluationInput,
   mapUpdateGroupInput,
   mapUpdateStudentInput,
 } from "../utils/mappers";
@@ -12,9 +13,16 @@ import {
   validateCreateGroupInput,
   validateCreateStudentInput,
   validateUpdateCollectionInput,
+  validateUpdateEvaluationsInput,
   validateUpdateStudentInput,
 } from "../utils/validators";
 import { updateEvaluation } from "../utils/resolverUtils";
+import {
+  checkAuthenticatedByCollection,
+  checkAuthenticatedByEvaluation,
+  checkAuthenticatedByGroup,
+  checkAuthenticatedByStudent,
+} from "../utils/auth";
 
 const BRCRYPT_SALT_ROUNDS = 12;
 
@@ -99,32 +107,57 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return createdStudent;
   },
-  updateEvaluations: async (_, { data }) => {
-    const promises = data.map((it) => updateEvaluation(it));
-    const results = await Promise.all(promises);
+  updateEvaluations: async (_, { data, collectionId }, { prisma, user }) => {
+    await checkAuthenticatedByCollection(user, collectionId);
+    await validateUpdateEvaluationsInput(data, collectionId);
 
-    return results.length;
+    await prisma.evaluationCollection.update({
+      data: {
+        evaluations: {
+          update: data.map((it) => ({
+            data: mapUpdateEvaluationInput(it),
+            where: {
+              id: it.id,
+            },
+          })),
+        },
+      },
+      where: { id: collectionId },
+    });
+
+    return data.length;
   },
-  updateEvaluation: async (_, { data }) => {
+  updateEvaluation: async (_, { data }, { user }) => {
+    await checkAuthenticatedByEvaluation(user, data.id);
     const updatedEvaluation = await updateEvaluation(data);
     return updatedEvaluation;
   },
-  updateCollection: async (_, { data, collectionId }, { prisma }) => {
+  updateCollection: async (_, { data, collectionId }, { prisma, user }) => {
+    await checkAuthenticatedByCollection(user, collectionId);
     await validateUpdateCollectionInput(data, collectionId);
     const { evaluations, ...rest } = data;
-    if (evaluations) {
-      const promises = evaluations.map((it) => updateEvaluation(it));
-      await Promise.all(promises);
-    }
 
     const updatedCollection = await prisma.evaluationCollection.update({
-      data: mapUpdateCollectionInput(rest),
+      data: {
+        ...mapUpdateCollectionInput(rest),
+        evaluations: evaluations
+          ? {
+              update: evaluations.map((it) => ({
+                data: mapUpdateEvaluationInput(it),
+                where: {
+                  id: it.id,
+                },
+              })),
+            }
+          : undefined,
+      },
       where: { id: collectionId },
     });
 
     return updatedCollection;
   },
-  updateStudent: async (_, { data, studentId }, { prisma }) => {
+  updateStudent: async (_, { data, studentId }, { prisma, user }) => {
+    await checkAuthenticatedByStudent(user, studentId);
     await validateUpdateStudentInput(data, studentId);
     const updatedStudent = await prisma.student.update({
       where: { id: studentId },
@@ -132,7 +165,8 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return updatedStudent;
   },
-  updateGroup: async (_, { data, groupId }, { prisma }) => {
+  updateGroup: async (_, { data, groupId }, { prisma, user }) => {
+    await checkAuthenticatedByGroup(user, groupId);
     const updatedGroup = await prisma.group.update({
       where: { id: groupId },
       data: mapUpdateGroupInput(data),
@@ -140,19 +174,22 @@ const resolvers: MutationResolvers<CustomContext> = {
 
     return updatedGroup;
   },
-  deleteStudent: async (_, { studentId }, { prisma }) => {
+  deleteStudent: async (_, { studentId }, { prisma, user }) => {
+    await checkAuthenticatedByStudent(user, studentId);
     await prisma.student.delete({
       where: { id: studentId },
     });
     return true;
   },
-  deleteGroup: async (_, { groupId }, { prisma }) => {
+  deleteGroup: async (_, { groupId }, { prisma, user }) => {
+    await checkAuthenticatedByGroup(user, groupId);
     await prisma.group.delete({
       where: { id: groupId },
     });
     return true;
   },
-  deleteCollection: async (_, { collectionId }, { prisma }) => {
+  deleteCollection: async (_, { collectionId }, { prisma, user }) => {
+    await checkAuthenticatedByCollection(user, collectionId);
     await prisma.evaluationCollection.delete({
       where: { id: collectionId },
     });
@@ -161,8 +198,9 @@ const resolvers: MutationResolvers<CustomContext> = {
   changeGroupYear: async (
     _,
     { groupId, newYearCode, transferEvaluations },
-    { prisma }
+    { prisma, user }
   ) => {
+    await checkAuthenticatedByGroup(user, groupId);
     let newYear = await prisma.classYear.findFirst({
       where: { groupId, code: newYearCode },
     });

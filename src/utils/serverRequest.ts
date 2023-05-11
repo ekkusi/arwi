@@ -1,3 +1,4 @@
+import { ADMIN_USER } from "@/config";
 import prisma from "@/graphql-server/prismaClient";
 import { CustomContext } from "@/graphql-server/types/contextTypes";
 import { options, ServerContext } from "@/pages/api/graphql";
@@ -14,10 +15,7 @@ const yoga = createYoga<ServerContext, CustomContext>({
   ...options,
   context: {
     prisma,
-    user: {
-      email: "server-request@email.com",
-      id: "SERVER_REQUEST_ID",
-    },
+    user: ADMIN_USER,
   },
 });
 
