@@ -1,6 +1,6 @@
 import PageWrapper from "@/components/server-components/PageWrapper";
 import { graphql } from "@/gql";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 
 import InputWithError from "@/components/general/InputWithError";
 import graphqlClient from "@/graphql-client";

@@ -1,7 +1,7 @@
 import { graphql } from "@/gql";
 import { assertIsError } from "@/utils/errorUtils";
 import prisma from "@/graphql-server/prismaClient";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 
 describe("ServerRequest - register", () => {
   afterEach(async () => {

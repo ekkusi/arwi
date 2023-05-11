@@ -1,5 +1,5 @@
 import { graphql } from "@/gql";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 
 import { BoxProps } from "@chakra-ui/react";
 import graphqlClient from "@/graphql-client";

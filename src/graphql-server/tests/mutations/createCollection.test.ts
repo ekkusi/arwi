@@ -2,7 +2,7 @@ import { graphql } from "@/gql";
 import { Rating } from "@/gql/graphql";
 import ValidationError from "@/graphql-server/errors/ValidationError";
 import prisma from "@/graphql-server/prismaClient";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 import { ClassYearCode } from "@prisma/client";
 
 describe("ServerRequest - createCollection", () => {

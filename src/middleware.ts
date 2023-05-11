@@ -7,7 +7,7 @@ export const config = {
   ],
 };
 
-const ALLOWED_PATHS = ["/login", "/register"];
+const ALLOWED_PATHS = ["/register"];
 
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.

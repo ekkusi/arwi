@@ -1,20 +1,8 @@
-/* eslint-disable */
-import { graphql } from "@/gql";
-import graphqlClient from "@/graphql-client";
+import ValidationError from "@/graphql-server/errors/ValidationError";
+import prisma from "@/graphql-server/prismaClient";
+import { compare } from "bcryptjs";
 import NextAuth, { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { serverRequest } from "../graphql";
-
-const Auth_LoginMutation = graphql(`
-  mutation Auth_Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      teacher {
-        id
-        email
-      }
-    }
-  }
-`);
 
 const IS_PROD = process.env.NODE_ENV && process.env.NODE_ENV === "production";
 const isHttps =
@@ -23,7 +11,7 @@ const isHttps =
 export const authOptions: AuthOptions = {
   useSecureCookies: isHttps,
   session: {
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   providers: [
     Credentials({
@@ -42,18 +30,23 @@ export const authOptions: AuthOptions = {
           password: string;
         };
 
-        try {
-          const {
-            login: { teacher },
-          } = await serverRequest(Auth_LoginMutation, {
-            email,
-            password,
-          });
-
-          return teacher;
-        } catch (error) {
-          throw new Error(String(error));
-        }
+        const matchingTeacher = await prisma.teacher.findFirst({
+          where: { email },
+        });
+        if (!matchingTeacher)
+          throw new ValidationError(
+            `Käyttäjää ei löytynyt sähköpostilla '${email}'`
+          );
+        const isValidPassword = await compare(
+          password,
+          matchingTeacher.passwordHash
+        );
+        if (!isValidPassword)
+          throw new ValidationError(`Annettu salasana oli väärä.`);
+        return {
+          email: matchingTeacher.email,
+          id: matchingTeacher.id,
+        };
       },
     }),
   ],
@@ -61,10 +54,10 @@ export const authOptions: AuthOptions = {
     signIn: "/login",
   },
   callbacks: {
-    async signIn({ user, account, profile, credentials }) {
+    async signIn() {
       return true;
     },
-    async session({ session, user, token }) {
+    async session({ session, token }) {
       return {
         user: {
           email: token.email,
@@ -77,7 +70,7 @@ export const authOptions: AuthOptions = {
       // Allows relative callback URLs
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
+      if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
   },

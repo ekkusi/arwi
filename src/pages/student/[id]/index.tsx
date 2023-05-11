@@ -1,5 +1,5 @@
 import { graphql } from "@/gql";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 
 import { Box, Button, FormLabel, Text } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";

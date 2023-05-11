@@ -1,6 +1,6 @@
 import { graphql } from "@/gql";
 import prisma from "@/graphql-server/prismaClient";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 import { assertIsError } from "@/utils/errorUtils";
 
 describe("ServerRequest - getTeacher", () => {

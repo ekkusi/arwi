@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { applyMiddleware } from "graphql-middleware";
 import {
   DateResolver,
   DateTypeDefinition,
@@ -6,9 +7,10 @@ import {
   EmailAddressTypeDefinition,
 } from "graphql-scalars";
 import { createSchema } from "graphql-yoga";
-import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
+import isAuthenticatedMiddleware from "./middleware/authMiddleware";
 import resolvers from "./resolvers";
+import { CustomContext } from "./types/contextTypes";
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = readFileSync(
@@ -16,10 +18,7 @@ const typeDefs = readFileSync(
   "utf-8"
 );
 
-const schema = createSchema<{
-  req: NextApiRequest;
-  res: NextApiResponse;
-}>({
+const schema = createSchema<CustomContext>({
   typeDefs: `
     ${DateTypeDefinition}
     ${EmailAddressTypeDefinition}
@@ -32,4 +31,6 @@ const schema = createSchema<{
   },
 });
 
-export default schema;
+const schemaWithMiddleware = applyMiddleware(schema, isAuthenticatedMiddleware);
+
+export default schemaWithMiddleware;

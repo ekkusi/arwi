@@ -1,4 +1,4 @@
-import { compare, hash } from "bcryptjs";
+import { hash } from "bcryptjs";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
@@ -34,24 +34,6 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
     });
     return teacher;
-  },
-  login: async (_, { email, password }, { prisma }) => {
-    const matchingTeacher = await prisma.teacher.findFirst({
-      where: { email },
-    });
-    if (!matchingTeacher)
-      throw new ValidationError(
-        `Käyttäjää ei löytynyt sähköpostilla '${email}'`
-      );
-    const isValidPassword = await compare(
-      password,
-      matchingTeacher.passwordHash
-    );
-    if (!isValidPassword)
-      throw new ValidationError(`Annettu salasana oli väärä.`);
-    return {
-      teacher: matchingTeacher,
-    };
   },
   createGroup: async (_, { data }, { prisma }) => {
     await validateCreateGroupInput(data);

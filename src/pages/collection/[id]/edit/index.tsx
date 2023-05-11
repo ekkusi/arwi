@@ -4,7 +4,7 @@ import PageWrapper from "@/components/server-components/PageWrapper";
 import graphqlClient from "@/graphql-client";
 import { EditCollectionPageQuery } from "@/gql/graphql";
 import { useRouter } from "next/router";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 import { GetStaticPropsContext } from "next";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 import UpdateCollectionForm, {

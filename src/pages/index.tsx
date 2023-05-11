@@ -1,6 +1,6 @@
 import { graphql } from "@/gql";
 import { Box, Button, Flex, IconButton, Text } from "@chakra-ui/react";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import GroupList from "@/components/functional/GroupList";
 import { IoAddSharp } from "react-icons/io5";
@@ -89,6 +89,7 @@ export default function HomePage({ data }: MainPageProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
   if (!session) throw new Error("Unexpected error, no session");
+
   const data = await serverRequest(MainPage_GetTeacher_Query, {
     teacherId: session.user.id,
   });

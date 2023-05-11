@@ -1,7 +1,7 @@
 import { graphql } from "@/gql";
 import { Rating } from "@/gql/graphql";
 import prisma from "@/graphql-server/prismaClient";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 import { assertIsError } from "@/utils/errorUtils";
 import { ClassYearCode } from "@prisma/client";
 

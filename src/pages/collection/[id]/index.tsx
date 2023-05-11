@@ -1,6 +1,6 @@
 import PageWrapper from "@/components/server-components/PageWrapper";
 import { graphql } from "@/gql";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 
 import { Divider, Text, useToast } from "@chakra-ui/react";
 import {

@@ -2,7 +2,7 @@ import { graphql } from "@/gql";
 import ValidationError from "@/graphql-server/errors/ValidationError";
 import prisma from "@/graphql-server/prismaClient";
 import { ClassYearCode } from "@/graphql-server/types";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 
 describe("ServerRequest - createGroup", () => {
   let teacherId: string;

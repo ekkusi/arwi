@@ -8,7 +8,7 @@ import {
   UpdateEvaluationCard_EvaluationFragmentDoc,
 } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
-import { serverRequest } from "@/pages/api/graphql";
+import serverRequest from "@/utils/serverRequest";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
