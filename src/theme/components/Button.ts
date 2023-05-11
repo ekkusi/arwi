@@ -60,7 +60,9 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
     link: ({ colorScheme }) => ({
       px: 0,
       py: 0,
-      color: `${colorScheme}.800`,
+      textTransform: "none",
+      color: `${colorScheme}.600`,
+      textDecoration: "underline",
       _hover: {
         bg: "inherit",
         opacity: 0.8,

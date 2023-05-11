@@ -1,4 +1,4 @@
-import { Button, Text, FormLabel } from "@chakra-ui/react";
+import { Button, Text, FormLabel, Textarea, Flex, Box } from "@chakra-ui/react";
 import FormField from "@/components/general/FormField";
 import { graphql } from "@/gql";
 import { ClassYearCode, CreateStudentInput } from "@/gql/graphql";
@@ -14,6 +14,7 @@ import AddStudentsList from "@/components/functional/AddStudentsList";
 import SubjectSelect from "@/components/functional/SubjectSelect";
 import ClassYearSelect from "@/components/functional/ClassYearSelect";
 import { isSingleOption } from "@/components/general/Select";
+import ConfirmationModal from "@/components/general/ConfirmationModal";
 
 const initialValues: {
   name: string;
@@ -38,6 +39,9 @@ export default function CreateGroupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
+  const [isImportStudentsModalOpen, setIsImportStudentsModalOpen] =
+    useState(false);
+  const [studentsListText, setStudentsListText] = useState("");
 
   const handleSubmit = async (values: typeof initialValues) => {
     const { yearCode, ...rest } = values;
@@ -63,8 +67,48 @@ export default function CreateGroupPage() {
     }
   };
 
+  const addStudentsList = () => {
+    const studentNames = studentsListText
+      .split(/\r?\n/)
+      .filter((it) => it.length > 0);
+    setStudents(studentNames.map((it) => ({ name: it })));
+
+    setStudentsListText("");
+    setIsImportStudentsModalOpen(false);
+  };
+
   return (
     <PageWrapper display="flex" flexDirection="column">
+      <ConfirmationModal
+        isOpen={isImportStudentsModalOpen}
+        onAccept={addStudentsList}
+        onClose={() => setIsImportStudentsModalOpen(false)}
+        headerLabel="Tuo oppilaita listana"
+        acceptLabel="Lisää"
+        variant="regular"
+      >
+        <Text mb="3">
+          Lisää useita oppilaita kerralla erottelemalla nimet riveittäin.
+          Jokaisesta rivistä tulee uusi oppilas.
+        </Text>
+        <Box position="relative">
+          <Textarea
+            onChange={(event) => setStudentsListText(event.target.value)}
+          />
+          {/* This is a hack to get a "placeholder" with line breaks */}
+          <Text
+            visibility={studentsListText.length === 0 ? "visible" : "hidden"}
+            position="absolute"
+            top="9px"
+            left="16px"
+            color="gray.500"
+          >
+            Eetu E<br />
+            Pinja P<br />
+            Joona J
+          </Text>
+        </Box>
+      </ConfirmationModal>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {() => (
           <Card as={Form} display="flex" flexDirection="column" flex="1">
@@ -120,9 +164,19 @@ export default function CreateGroupPage() {
                 />
               )}
             />
-            <FormLabel>Oppilaat</FormLabel>
+            <Flex justifyContent="space-between" alignItems="center">
+              <FormLabel>Oppilaat</FormLabel>
+              <Button
+                variant="link"
+                onClick={() => setIsImportStudentsModalOpen(true)}
+              >
+                Tuo listana
+              </Button>
+            </Flex>
             <AddStudentsList
+              initialStudents={students}
               onChanged={(newStudents) => setStudents(newStudents)}
+              mb="5"
             />
             <Button type="submit" marginTop="auto" isLoading={loading}>
               Luo ryhmä

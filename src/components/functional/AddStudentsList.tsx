@@ -7,22 +7,38 @@ import {
   FlexProps,
 } from "@chakra-ui/react";
 import { CreateStudentInput } from "@/gql/graphql";
-import { ChangeEvent, KeyboardEventHandler, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  KeyboardEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { IoMdAddCircle } from "react-icons/io";
 import DeleteButton from "@/components/server-components/primitives/DeleteButton";
 
 type AddStudentsListProps = FlexProps & {
+  initialStudents?: CreateStudentInput[];
   onChanged?(students: CreateStudentInput[]): void;
 };
 
 export default function AddStudentsList({
+  initialStudents,
   onChanged,
   ...rest
 }: AddStudentsListProps) {
-  const [students, setStudents] = useState<CreateStudentInput[]>([]);
+  const [students, setStudents] = useState<CreateStudentInput[]>(
+    initialStudents || []
+  );
   const [name, setName] = useState("");
   const [error, setError] = useState<string | undefined>();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (initialStudents && students !== initialStudents) {
+      setStudents(initialStudents);
+    }
+  }, [students, initialStudents]);
 
   const removeStudent = (index: number) => {
     // Copy old array -> remove by index from copy -> set copy as new state
@@ -63,7 +79,11 @@ export default function AddStudentsList({
 
   return (
     <Box {...rest}>
-      <Flex alignItems="center" justifyContent="space-between" mb="2">
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        mb={students.length > 0 ? 4 : 0}
+      >
         <Input
           mr="2"
           ref={inputRef}
