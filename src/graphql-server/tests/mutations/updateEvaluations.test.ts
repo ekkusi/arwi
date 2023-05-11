@@ -149,7 +149,9 @@ describe("ServerRequest - updateEvaluations", () => {
     } catch (error) {
       // Assert
       assertIsError(error);
-      expect(error.message).toContain("Unexpected error.");
+      expect(error.message).toContain(
+        "Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan"
+      );
     }
   });
 });
