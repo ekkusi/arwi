@@ -39,8 +39,7 @@ export default function CreateGroupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<CreateStudentInput[]>([]);
-  const [isImportStudentsModalOpen, setIsImportStudentsModalOpen] =
-    useState(false);
+  const [isImportStudentsModalOpen, setIsImportStudentsModalOpen] = useState(false);
   const [studentsListText, setStudentsListText] = useState("");
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -68,9 +67,7 @@ export default function CreateGroupPage() {
   };
 
   const addStudentsList = () => {
-    const studentNames = studentsListText
-      .split(/\r?\n/)
-      .filter((it) => it.length > 0);
+    const studentNames = studentsListText.split(/\r?\n/).filter((it) => it.length > 0);
     setStudents(studentNames.map((it) => ({ name: it })));
 
     setStudentsListText("");
@@ -87,22 +84,11 @@ export default function CreateGroupPage() {
         acceptLabel="Lisää"
         variant="regular"
       >
-        <Text mb="3">
-          Lisää useita oppilaita kerralla erottelemalla nimet riveittäin.
-          Jokaisesta rivistä tulee uusi oppilas.
-        </Text>
+        <Text mb="3">Lisää useita oppilaita kerralla erottelemalla nimet riveittäin. Jokaisesta rivistä tulee uusi oppilas.</Text>
         <Box position="relative">
-          <Textarea
-            onChange={(event) => setStudentsListText(event.target.value)}
-          />
+          <Textarea onChange={(event) => setStudentsListText(event.target.value)} />
           {/* This is a hack to get a "placeholder" with line breaks */}
-          <Text
-            visibility={studentsListText.length === 0 ? "visible" : "hidden"}
-            position="absolute"
-            top="9px"
-            left="16px"
-            color="gray.500"
-          >
+          <Text visibility={studentsListText.length === 0 ? "visible" : "hidden"} position="absolute" top="9px" left="16px" color="gray.500">
             Eetu E<br />
             Pinja P<br />
             Joona J
@@ -119,27 +105,17 @@ export default function CreateGroupPage() {
               name="name"
               label="Ryhmän nimi"
               placeholder="Ryhmän nimi"
-              validate={(value) =>
-                value.length === 0 ? "Nimi ei saa olla tyhjä" : ""
-              }
+              validate={(value) => (value.length === 0 ? "Nimi ei saa olla tyhjä" : "")}
             />
             <FormField
               label="Vuosiluokka"
               name="yearCode"
-              validate={(value) =>
-                !value ? "Vuosiluokka pitää olla valittu" : ""
-              }
-              render={({
-                field: { name },
-                form: { setFieldValue, setFieldTouched },
-              }) => (
+              validate={(value) => (!value ? "Vuosiluokka pitää olla valittu" : "")}
+              render={({ field: { name }, form: { setFieldValue, setFieldTouched } }) => (
                 <ClassYearSelect
                   onChange={(newValue) => {
                     setFieldTouched(name, true);
-                    setFieldValue(
-                      name,
-                      isSingleOption(newValue) ? newValue.code : null
-                    );
+                    setFieldValue(name, isSingleOption(newValue) ? newValue.code : null);
                   }}
                 />
               )}
@@ -148,47 +124,27 @@ export default function CreateGroupPage() {
               label="Aine"
               name="subjectCode"
               validate={(value) => (!value ? "Aine pitää olla valittu" : "")}
-              render={({
-                field: { name },
-                form: { setFieldValue, setFieldTouched },
-              }) => (
+              render={({ field: { name }, form: { setFieldValue, setFieldTouched } }) => (
                 <SubjectSelect
                   initialSubjectCode={initialValues.subjectCode}
                   onChange={(newValue) => {
                     setFieldTouched(name, true);
-                    setFieldValue(
-                      name,
-                      isSingleOption(newValue) ? newValue.code : null
-                    );
+                    setFieldValue(name, isSingleOption(newValue) ? newValue.code : null);
                   }}
                 />
               )}
             />
             <Flex justifyContent="space-between" alignItems="center">
               <FormLabel>Oppilaat</FormLabel>
-              <Button
-                variant="link"
-                onClick={() => setIsImportStudentsModalOpen(true)}
-              >
+              <Button variant="link" onClick={() => setIsImportStudentsModalOpen(true)}>
                 Tuo listana
               </Button>
             </Flex>
-            <AddStudentsList
-              initialStudents={students}
-              onChanged={(newStudents) => setStudents(newStudents)}
-              mb="5"
-            />
+            <AddStudentsList initialStudents={students} onChanged={(newStudents) => setStudents(newStudents)} mb="5" />
             <Button type="submit" marginTop="auto" isLoading={loading}>
               Luo ryhmä
             </Button>
-            <Text
-              as={Link}
-              href="/"
-              color="gray.700"
-              mt="3"
-              textTransform="uppercase"
-              textAlign="center"
-            >
+            <Text as={Link} href="/" color="gray.700" mt="3" textTransform="uppercase" textAlign="center">
               Peruuta
             </Text>
           </Card>

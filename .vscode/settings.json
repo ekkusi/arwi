@@ -12,6 +12,10 @@
     "typescriptreact",
     "mdx"
   ],
+  "eslint.workingDirectories": [
+    "./app",
+    "./next"
+  ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "files.eol": "\n"

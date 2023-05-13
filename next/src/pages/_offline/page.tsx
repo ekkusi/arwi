@@ -7,8 +7,7 @@ export default function OfflinePage() {
     <PageWrapper>
       <Text as="h1">Ei yhteyttä:(</Text>
       <Text mb="3">
-        Valitetttavasti Arwi ei toistaiseksi pysty auttamaan ilman bittien
-        virtaamista internettiin. Palauta yhteys ja napauta alta, niin pääset
+        Valitetttavasti Arwi ei toistaiseksi pysty auttamaan ilman bittien virtaamista internettiin. Palauta yhteys ja napauta alta, niin pääset
         takaisin Arwioimaan.
       </Text>
       <Button as={Link} href="/">

@@ -91,10 +91,7 @@ describe("ServerRequest - updateCollection", () => {
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionDefault(
-        $data: UpdateCollectionInput!
-        $collectionId: ID!
-      ) {
+      mutation UpdateCollectionTest_UpdateCollectionDefault($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
           environment {
@@ -109,10 +106,7 @@ describe("ServerRequest - updateCollection", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.updateCollection).toEqual({
@@ -149,10 +143,7 @@ describe("ServerRequest - updateCollection", () => {
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionEvaluation(
-        $data: UpdateCollectionInput!
-        $collectionId: ID!
-      ) {
+      mutation UpdateCollectionTest_UpdateCollectionEvaluation($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
           evaluations {
@@ -165,10 +156,7 @@ describe("ServerRequest - updateCollection", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.updateCollection).toEqual({
@@ -193,10 +181,7 @@ describe("ServerRequest - updateCollection", () => {
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionError(
-        $data: UpdateCollectionInput!
-        $collectionId: ID!
-      ) {
+      mutation UpdateCollectionTest_UpdateCollectionError($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
           date
@@ -206,10 +191,7 @@ describe("ServerRequest - updateCollection", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       // Assert
       assertIsError(error);
@@ -228,10 +210,7 @@ describe("ServerRequest - updateCollection", () => {
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionInvalidEnvironmentCode(
-        $data: UpdateCollectionInput!
-        $collectionId: ID!
-      ) {
+      mutation UpdateCollectionTest_UpdateCollectionInvalidEnvironmentCode($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
           date
@@ -241,16 +220,11 @@ describe("ServerRequest - updateCollection", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       // Assert
       assertIsError(error);
-      expect(error.message).toContain(
-        "Ympäristöä koodilla 'INVALID_ENVIRONMENT_CODE' ei ole olemassa."
-      );
+      expect(error.message).toContain("Ympäristöä koodilla 'INVALID_ENVIRONMENT_CODE' ei ole olemassa.");
     }
   });
 
@@ -266,10 +240,7 @@ describe("ServerRequest - updateCollection", () => {
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionInvalidLearningObjectiveCodes(
-        $data: UpdateCollectionInput!
-        $collectionId: ID!
-      ) {
+      mutation UpdateCollectionTest_UpdateCollectionInvalidLearningObjectiveCodes($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
           date
@@ -279,16 +250,11 @@ describe("ServerRequest - updateCollection", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       // Assert
       assertIsError(error);
-      expect(error.message).toContain(
-        `Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`
-      );
+      expect(error.message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`);
     }
   });
 });

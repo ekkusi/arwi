@@ -10,49 +10,24 @@ import {
   UpdateEvaluationInput,
   UpdateStudentInput,
 } from "../types";
-import {
-  getEnvironment,
-  getLearningObjectives,
-  getSubject,
-} from "../../utils/subjectUtils";
+import { getEnvironment, getLearningObjectives, getSubject } from "../../utils/subjectUtils";
 
-export const validateCreateGroupInput = async ({
-  subjectCode,
-}: CreateGroupInput) => {
-  if (!getSubject(subjectCode))
-    throw new ValidationError(
-      `Aihetta koodilla '${subjectCode}' ei ole olemassa.`
-    );
+export const validateCreateGroupInput = async ({ subjectCode }: CreateGroupInput) => {
+  if (!getSubject(subjectCode)) throw new ValidationError(`Aihetta koodilla '${subjectCode}' ei ole olemassa.`);
 };
 
-export const validateLearningObjectives = (
-  subjectCode: string,
-  yearCode: ClassYearCode,
-  learningObjectiveCodes: string[]
-) => {
+export const validateLearningObjectives = (subjectCode: string, yearCode: ClassYearCode, learningObjectiveCodes: string[]) => {
   const learningObjectives = getLearningObjectives(subjectCode, yearCode);
   if (
     !learningObjectiveCodes.every((code) =>
-      learningObjectives.some(
-        (objective) =>
-          objective.code === code &&
-          objective.type !== LearningObjectiveType.NOT_EVALUATED
-      )
+      learningObjectives.some((objective) => objective.code === code && objective.type !== LearningObjectiveType.NOT_EVALUATED)
     )
   )
-    throw new ValidationError(
-      `Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`
-    );
+    throw new ValidationError(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`);
 };
 
-export const validateCreateCollectionInput = async (
-  { environmentCode, learningObjectiveCodes }: CreateCollectionInput,
-  classYearId: string
-) => {
-  if (!getEnvironment(environmentCode))
-    throw new ValidationError(
-      `Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`
-    );
+export const validateCreateCollectionInput = async ({ environmentCode, learningObjectiveCodes }: CreateCollectionInput, classYearId: string) => {
+  if (!getEnvironment(environmentCode)) throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
   if (learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({
       where: {
@@ -63,38 +38,23 @@ export const validateCreateCollectionInput = async (
         },
       },
     });
-    validateLearningObjectives(
-      group.subjectCode,
-      ClassYearCode[group.currentYearCode],
-      learningObjectiveCodes
-    );
+    validateLearningObjectives(group.subjectCode, ClassYearCode[group.currentYearCode], learningObjectiveCodes);
   }
 };
 
-export const validateUpdateEvaluationInput = async (
-  data: UpdateEvaluationInput
-) => {
+export const validateUpdateEvaluationInput = async (data: UpdateEvaluationInput) => {
   const matchingEvaluation = await prisma.evaluation.findUniqueOrThrow({
     where: { id: data.id },
   });
-  const wasPresent =
-    data.wasPresent !== null ? data.wasPresent : matchingEvaluation.wasPresent;
+  const wasPresent = data.wasPresent !== null ? data.wasPresent : matchingEvaluation.wasPresent;
 
   // If the student was not present, the evaluation data cannot be updated
-  if (
-    wasPresent === false &&
-    (data.behaviourRating || data.skillsRating || data.notes)
-  ) {
-    throw new ValidationError(
-      `Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää.`
-    );
+  if (wasPresent === false && (data.behaviourRating || data.skillsRating || data.notes)) {
+    throw new ValidationError(`Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää.`);
   }
 };
 
-export const validateUpdateEvaluationsInput = async (
-  data: UpdateEvaluationInput[],
-  collectionId: string
-) => {
+export const validateUpdateEvaluationsInput = async (data: UpdateEvaluationInput[], collectionId: string) => {
   const ids = data.map((it) => it.id);
   const evaluations = await prisma.evaluation.findMany({
     where: {
@@ -105,26 +65,16 @@ export const validateUpdateEvaluationsInput = async (
     },
   });
 
-  if (ids.length !== evaluations.length)
-    throw new ValidationError(
-      "Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan"
-    );
+  if (ids.length !== evaluations.length) throw new ValidationError("Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan");
   const validatePromises = data.map((it) => validateUpdateEvaluationInput(it));
   await Promise.all(validatePromises);
 };
 
 export const validateUpdateCollectionInput = async (
-  {
-    environmentCode,
-    learningObjectiveCodes,
-    evaluations,
-  }: UpdateCollectionInput,
+  { environmentCode, learningObjectiveCodes, evaluations }: UpdateCollectionInput,
   collectionId: string
 ) => {
-  if (environmentCode && !getEnvironment(environmentCode))
-    throw new ValidationError(
-      `Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`
-    );
+  if (environmentCode && !getEnvironment(environmentCode)) throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
 
   if (learningObjectiveCodes && learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({
@@ -138,20 +88,12 @@ export const validateUpdateCollectionInput = async (
         },
       },
     });
-    validateLearningObjectives(
-      group.subjectCode,
-      ClassYearCode[group.currentYearCode],
-      learningObjectiveCodes
-    );
+    validateLearningObjectives(group.subjectCode, ClassYearCode[group.currentYearCode], learningObjectiveCodes);
   }
-  if (evaluations)
-    await validateUpdateEvaluationsInput(evaluations, collectionId);
+  if (evaluations) await validateUpdateEvaluationsInput(evaluations, collectionId);
 };
 
-export const validateCreateStudentInput = async (
-  data: CreateStudentInput,
-  classYearId: string
-) => {
+export const validateCreateStudentInput = async (data: CreateStudentInput, classYearId: string) => {
   // Find if there is a student with the same name in the same group
   const matchingStudent = await prisma.student.findFirst({
     where: {
@@ -164,15 +106,10 @@ export const validateCreateStudentInput = async (
     },
   });
   if (matchingStudent)
-    throw new ValidationError(
-      `Vuosiluokassa on jo '${data.name}' niminen oppilas. Vuosiluokan sisällä ei voi olla kahta samannimistä oppilasta.`
-    );
+    throw new ValidationError(`Vuosiluokassa on jo '${data.name}' niminen oppilas. Vuosiluokan sisällä ei voi olla kahta samannimistä oppilasta.`);
 };
 
-export const validateUpdateStudentInput = async (
-  data: UpdateStudentInput,
-  studentId: string
-) => {
+export const validateUpdateStudentInput = async (data: UpdateStudentInput, studentId: string) => {
   if (!data.name) return;
   // Find if there is a student with the same name in the same group
   const matchingStudent = await prisma.student.findFirst({
@@ -184,8 +121,5 @@ export const validateUpdateStudentInput = async (
       ],
     },
   });
-  if (matchingStudent)
-    throw new ValidationError(
-      `Ryhmässä on jo '${data.name}' niminen oppilas. Ryhmässä ei voi olla kahta samannimistä oppilasta.`
-    );
+  if (matchingStudent) throw new ValidationError(`Ryhmässä on jo '${data.name}' niminen oppilas. Ryhmässä ei voi olla kahta samannimistä oppilasta.`);
 };

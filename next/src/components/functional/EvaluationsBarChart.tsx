@@ -4,10 +4,7 @@ import { hexToRgbA } from "@/utils/color";
 import { formatRatingNumber } from "@/utils/dataMappers";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { Bar, Cell, LabelList, TooltipProps } from "recharts";
-import BarChartBase, {
-  BarChartBaseProps,
-  DataType,
-} from "../general/BarChartBase";
+import BarChartBase, { BarChartBaseProps, DataType } from "../general/BarChartBase";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on Evaluation {
@@ -61,53 +58,31 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
     const matchingEnvironment = tempData[envCode];
 
     if (evaluation.skillsRating) {
-      matchingEnvironment.skills.value += formatRatingNumber(
-        evaluation.skillsRating
-      );
+      matchingEnvironment.skills.value += formatRatingNumber(evaluation.skillsRating);
       matchingEnvironment.skills.count += 1;
     }
     if (evaluation.behaviourRating) {
-      matchingEnvironment.behaviour.value += formatRatingNumber(
-        evaluation.behaviourRating
-      );
+      matchingEnvironment.behaviour.value += formatRatingNumber(evaluation.behaviourRating);
       matchingEnvironment.behaviour.count += 1;
     }
   });
   Object.keys(tempData).forEach((key) => {
-    if (tempData[key].skills.count < INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD)
-      return;
+    if (tempData[key].skills.count < INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD) return;
     data.push({
       environment: tempData[key].label,
       fill: tempData[key].color,
-      skills:
-        tempData[key].skills.count > 0
-          ? Math.round(
-              (tempData[key].skills.value / tempData[key].skills.count) * 100
-            ) / 100
-          : null,
-      behaviour:
-        tempData[key].behaviour.count > 0
-          ? Math.round(
-              (tempData[key].behaviour.value / tempData[key].behaviour.count) *
-                100
-            ) / 100
-          : null,
+      skills: tempData[key].skills.count > 0 ? Math.round((tempData[key].skills.value / tempData[key].skills.count) * 100) / 100 : null,
+      behaviour: tempData[key].behaviour.count > 0 ? Math.round((tempData[key].behaviour.value / tempData[key].behaviour.count) * 100) / 100 : null,
     });
   });
   return data;
 };
 
 type EvaluationsBarChartProps = Omit<BarChartBaseProps, "data"> & {
-  evaluations: readonly FragmentType<
-    typeof EvaluationsBarChart_Evaluation_Fragment
-  >[];
+  evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
 };
 
-function TooltipContent({
-  active,
-  payload,
-  label,
-}: TooltipProps<"number", "string">) {
+function TooltipContent({ active, payload, label }: TooltipProps<"number", "string">) {
   if (!payload || !active) return null;
 
   return (
@@ -117,8 +92,7 @@ function TooltipContent({
       </Text>
       {payload[0] && (
         <Text>
-          {payload[0].name}:{" "}
-          {payload[0].payload.skills || payload[0].payload.behaviour}
+          {payload[0].name}: {payload[0].payload.skills || payload[0].payload.behaviour}
         </Text>
       )}
       {payload[1] && (
@@ -135,13 +109,7 @@ function LegendContent({ data }: { data: DataType[] }) {
     <Flex wrap="wrap" justifyContent="center">
       {data.map((entry) => (
         <Flex key={entry.environment} mr="2" alignItems="center">
-          <Box
-            width="2"
-            height="2"
-            bg={entry.fill as string}
-            mr="1"
-            borderRadius="sm"
-          />
+          <Box width="2" height="2" bg={entry.fill as string} mr="1" borderRadius="sm" />
           <Text color={entry.fill as string}>{entry.environment}</Text>
         </Flex>
       ))}
@@ -149,14 +117,8 @@ function LegendContent({ data }: { data: DataType[] }) {
   );
 }
 
-export default function EvaluationsBarChart({
-  evaluations: evaluationFragments,
-  ...rest
-}: EvaluationsBarChartProps) {
-  const evaluations = getFragmentData(
-    EvaluationsBarChart_Evaluation_Fragment,
-    evaluationFragments
-  );
+export default function EvaluationsBarChart({ evaluations: evaluationFragments, ...rest }: EvaluationsBarChartProps) {
+  const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = evaluations.filter((it) => it.wasPresent);
 
   const data = mapData(filteredEvaluations);
@@ -174,10 +136,7 @@ export default function EvaluationsBarChart({
         </LabelList>
         <LabelList dataKey="skills" position="right" />
         {data.map((entry, index) => (
-          <Cell
-            key={`cell-${index}`}
-            fill={entry.fill ? hexToRgbA(entry.fill, 0.7) : undefined}
-          />
+          <Cell key={`cell-${index}`} fill={entry.fill ? hexToRgbA(entry.fill, 0.7) : undefined} />
         ))}
       </Bar>
       <Bar name="Työskentely" dataKey="behaviour" isAnimationActive={false}>

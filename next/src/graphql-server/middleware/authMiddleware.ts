@@ -4,13 +4,7 @@ import mutationResolvers from "../resolvers/mutationResolvers";
 import { Mutation } from "../types";
 import { CustomContext } from "../types/contextTypes";
 
-const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (
-  resolve,
-  parent,
-  args,
-  context,
-  info
-) => {
+const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (resolve, parent, args, context, info) => {
   if (!context.user) {
     throw new AuthenticationError();
   }
@@ -20,15 +14,12 @@ const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (
 
 const PUBLIC_RESOLVERS: (keyof Mutation)[] = ["login", "register"];
 
-const mutationResolverKeys: (keyof Mutation)[] = Object.keys(
-  mutationResolvers
-) as (keyof Mutation)[];
+const mutationResolverKeys: (keyof Mutation)[] = Object.keys(mutationResolvers) as (keyof Mutation)[];
 
 const mutationMiddleware: { [key: string]: IMiddlewareFunction } = {};
 
 mutationResolverKeys.forEach((it) => {
-  if (!PUBLIC_RESOLVERS.includes(it))
-    mutationMiddleware[it] = checkIsAuthenticated;
+  if (!PUBLIC_RESOLVERS.includes(it)) mutationMiddleware[it] = checkIsAuthenticated;
 });
 
 // Middleware, like annotations, can be applied to specific graph fields

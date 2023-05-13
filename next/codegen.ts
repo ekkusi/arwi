@@ -7,12 +7,7 @@ const customScalars = {
 
 const config: CodegenConfig = {
   schema: "http://localhost:3000/api/graphql",
-  documents: [
-    "src/**/*.{ts,tsx}",
-    "./src/graphql-server/**/*.graphql",
-    "!src/gql/**/*",
-    "!src/app/**/*",
-  ],
+  documents: ["src/**/*.{ts,tsx}", "./src/graphql-server/**/*.graphql", "!src/gql/**/*", "!src/app/**/*"],
   ignoreNoDocuments: true,
   config: {
     sort: false, // Disable sorting so enums will be in same order as in schema (applies to others than enums as well as side effect)

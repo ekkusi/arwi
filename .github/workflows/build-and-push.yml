@@ -10,7 +10,7 @@ jobs:
   tests:
     defaults:
       run:
-        working-directory: dart_project
+        working-directory: next
     name: Run tests
     runs-on: ubuntu-latest
     services:
@@ -43,7 +43,7 @@ jobs:
   docker:
     defaults:
       run:
-        working-directory: dart_project
+        working-directory: next
     needs: tests
     runs-on: ubuntu-latest
     steps:

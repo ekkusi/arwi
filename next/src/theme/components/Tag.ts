@@ -1,7 +1,4 @@
-import {
-  ComponentSingleStyleConfig,
-  defineStyleConfig,
-} from "@chakra-ui/react";
+import { ComponentSingleStyleConfig, defineStyleConfig } from "@chakra-ui/react";
 
 const Tag: ComponentSingleStyleConfig = defineStyleConfig({
   baseStyle: {

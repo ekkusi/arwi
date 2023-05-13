@@ -5,10 +5,7 @@ import { formatDate } from "@/utils/dateUtils";
 import { Environment } from "@/utils/subjectUtils";
 import { Box, Text } from "@chakra-ui/react";
 import { Line, TooltipProps } from "recharts";
-import ChartBase, {
-  DataType as BaseDataType,
-  LineChartBaseProps,
-} from "../general/LineChartBase";
+import ChartBase, { DataType as BaseDataType, LineChartBaseProps } from "../general/LineChartBase";
 
 const EvaluationsLineChartDetailed_Evaluation_Fragment = graphql(`
   fragment EvaluationsLineChartDetailed_Evaluation on Evaluation {
@@ -35,11 +32,7 @@ type DataTypeByEnvironments = {
   [key: string]: Omit<DataType, "date"> | string;
 };
 
-function TooltipContent({
-  active,
-  payload,
-  label,
-}: TooltipProps<"number", "string">) {
+function TooltipContent({ active, payload, label }: TooltipProps<"number", "string">) {
   if (!payload?.[0] || !payload[0].dataKey || !active) return null;
 
   return (
@@ -52,9 +45,7 @@ function TooltipContent({
   );
 }
 
-const mapDataByEnvironments = (
-  evaluations: EvaluationsLineChartDetailed_EvaluationFragment[]
-) => {
+const mapDataByEnvironments = (evaluations: EvaluationsLineChartDetailed_EvaluationFragment[]) => {
   const data: DataTypeByEnvironments[] = [];
   evaluations.forEach((it) => {
     const newData: DataTypeByEnvironments = {
@@ -71,9 +62,7 @@ const mapDataByEnvironments = (
 };
 
 type EvaluationsLineChartDetailedProps = Omit<LineChartBaseProps, "data"> & {
-  evaluations: readonly FragmentType<
-    typeof EvaluationsLineChartDetailed_Evaluation_Fragment
-  >[];
+  evaluations: readonly FragmentType<typeof EvaluationsLineChartDetailed_Evaluation_Fragment>[];
   environments?: Environment[];
   type?: "skills" | "behaviour";
 };
@@ -84,39 +73,19 @@ export default function EvaluationsLineChartDetailed({
   type = "skills",
   ...rest
 }: EvaluationsLineChartDetailedProps) {
-  const evaluations = getFragmentData(
-    EvaluationsLineChartDetailed_Evaluation_Fragment,
-    evaluationFragments
-  );
+  const evaluations = getFragmentData(EvaluationsLineChartDetailed_Evaluation_Fragment, evaluationFragments);
 
   const sortedEvaluations = [...evaluations]
-    .sort(
-      (a, b) =>
-        new Date(a.collection.date).getTime() -
-        new Date(b.collection.date).getTime()
-    )
+    .sort((a, b) => new Date(a.collection.date).getTime() - new Date(b.collection.date).getTime())
     .filter((it) => it.wasPresent);
 
   // const showAvg = sortedEvaluations.length >= firstIndexToPush + 3;
   const data = mapDataByEnvironments(sortedEvaluations);
 
   return (
-    <ChartBase
-      tooltipContent={<TooltipContent />}
-      data={data}
-      yLabel="Arvosana"
-      {...rest}
-    >
+    <ChartBase tooltipContent={<TooltipContent />} data={data} yLabel="Arvosana" {...rest}>
       {environments.map((it) => (
-        <Line
-          key={it.code}
-          connectNulls
-          type="monotone"
-          name={it.label}
-          dataKey={`${it.code}.${type}`}
-          stroke={it.color}
-          strokeWidth="2"
-        />
+        <Line key={it.code} connectNulls type="monotone" name={it.label} dataKey={`${it.code}.${type}`} stroke={it.color} strokeWidth="2" />
       ))}
     </ChartBase>
   );

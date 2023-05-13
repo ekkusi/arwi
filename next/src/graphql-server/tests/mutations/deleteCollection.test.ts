@@ -65,10 +65,7 @@ describe("ServerRequest - deleteCollection", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.deleteCollection).toBe(true);
@@ -93,10 +90,7 @@ describe("ServerRequest - deleteCollection", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       // Assert
       assertIsError(error);

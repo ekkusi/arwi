@@ -13,10 +13,7 @@ type EvaluationResult = {
   isStellarCount: number;
 };
 
-type Evaluation = Pick<
-  BaseEvaluation,
-  "skillsRating" | "behaviourRating" | "wasPresent" | "isStellar"
->;
+type Evaluation = Pick<BaseEvaluation, "skillsRating" | "behaviourRating" | "wasPresent" | "isStellar">;
 
 export const analyzeEvaluations = (evaluations: Evaluation[]) => {
   const result: EvaluationResult = {
@@ -56,8 +53,6 @@ export const analyzeEvaluations = (evaluations: Evaluation[]) => {
   result.skillsStdev = stdev(skillsArray, result.skillsAverage);
   result.behaviourStdev = stdev(behaviourArray, result.behaviourAverage);
   if (result.behaviourAverage > 0 && result.skillsAverage > 0)
-    result.gradeSuggestion = Math.round(
-      (result.behaviourAverage + result.skillsAverage) / 2
-    );
+    result.gradeSuggestion = Math.round((result.behaviourAverage + result.skillsAverage) / 2);
   return result;
 };

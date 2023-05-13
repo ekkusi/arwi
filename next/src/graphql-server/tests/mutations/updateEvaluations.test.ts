@@ -91,19 +91,13 @@ describe("ServerRequest - updateEvaluations", () => {
     };
 
     const query = graphql(`
-      mutation UpdateEvaluations(
-        $data: [UpdateEvaluationInput!]!
-        $collectionId: ID!
-      ) {
+      mutation UpdateEvaluations($data: [UpdateEvaluationInput!]!, $collectionId: ID!) {
         updateEvaluations(data: $data, collectionId: $collectionId)
       }
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.updateEvaluations).toEqual(1);
@@ -132,26 +126,18 @@ describe("ServerRequest - updateEvaluations", () => {
     };
 
     const query = graphql(`
-      mutation UpdateEvaluations(
-        $data: [UpdateEvaluationInput!]!
-        $collectionId: ID!
-      ) {
+      mutation UpdateEvaluations($data: [UpdateEvaluationInput!]!, $collectionId: ID!) {
         updateEvaluations(data: $data, collectionId: $collectionId)
       }
     `);
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       // Assert
       assertIsError(error);
-      expect(error.message).toContain(
-        "Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan"
-      );
+      expect(error.message).toContain("Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan");
     }
   });
 });

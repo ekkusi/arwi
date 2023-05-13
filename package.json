@@ -13,7 +13,8 @@
   "scripts": {
     "prepare": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
     "postinstall": "cd next && npx prisma generate",
-    "next:dev": "cd next && npm run dev"
+    "next:dev": "cd next && npm run dev",
+    "lint:fix": "yarn --cwd next lint:fix && yarn --cwd app lint:fix"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.52.0",

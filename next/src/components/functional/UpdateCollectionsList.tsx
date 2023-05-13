@@ -30,31 +30,18 @@ type UpdateCollectionsListProps = FlexProps & {
   onChanged?(collections: CollectionFragment[]): void;
 };
 
-export default function UpdateCollectionsList({
-  onChanged,
-  collections: collectionFragments,
-  ...rest
-}: UpdateCollectionsListProps) {
-  const initialCollections = getFragmentData(
-    UpdateCollectionsList_CollectionFragment,
-    collectionFragments
-  );
-  const [collectionInDelete, setCollectionInDelete] = useState<
-    CollectionFragment | undefined
-  >();
+export default function UpdateCollectionsList({ onChanged, collections: collectionFragments, ...rest }: UpdateCollectionsListProps) {
+  const initialCollections = getFragmentData(UpdateCollectionsList_CollectionFragment, collectionFragments);
+  const [collectionInDelete, setCollectionInDelete] = useState<CollectionFragment | undefined>();
   const [collections, setCollections] = useState<CollectionFragment[]>(() =>
-    [...initialCollections].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
+    [...initialCollections].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   );
 
   const deleteSelectedCollection = async () => {
     if (!collectionInDelete) return;
     // Copy old array -> remove by index from copy -> set copy as new state
     const collectionId = collectionInDelete.id;
-    const index = collections.findIndex(
-      (it) => it.id === collectionInDelete.id
-    );
+    const index = collections.findIndex((it) => it.id === collectionInDelete.id);
     const newCollections = [...collections];
     newCollections.splice(index, 1);
     setCollections(newCollections);
@@ -68,12 +55,7 @@ export default function UpdateCollectionsList({
   return (
     <Box {...rest}>
       {collections.map((it) => (
-        <Flex
-          key={it.id}
-          alignItems="center"
-          justifyContent="space-between"
-          mb="2"
-        >
+        <Flex key={it.id} alignItems="center" justifyContent="space-between" mb="2">
           <Box>
             <Text as="span" textStyle="italic" mr="1">
               {formatDate(new Date(it.date), "dd.MM.yyyy")}:
@@ -91,28 +73,17 @@ export default function UpdateCollectionsList({
               href={`/collection/${it.id}/edit`}
               mr="2"
             />
-            <DeleteButton
-              onClick={() => setCollectionInDelete(it)}
-              aria-label="Poista arviointi"
-            />
+            <DeleteButton onClick={() => setCollectionInDelete(it)} aria-label="Poista arviointi" />
           </Flex>
         </Flex>
       ))}
-      <ConfirmationModal
-        isOpen={!!collectionInDelete}
-        onClose={() => setCollectionInDelete(undefined)}
-        onAccept={() => deleteSelectedCollection()}
-      >
+      <ConfirmationModal isOpen={!!collectionInDelete} onClose={() => setCollectionInDelete(undefined)} onAccept={() => deleteSelectedCollection()}>
         <Text>
           Oletko varma, että haluat poistaa arvioinnin{" "}
           <Text as="span" fontStyle="italic">
-            {collectionInDelete &&
-              `${formatDate(new Date(collectionInDelete.date))} ${
-                collectionInDelete.environment.label
-              }`}
+            {collectionInDelete && `${formatDate(new Date(collectionInDelete.date))} ${collectionInDelete.environment.label}`}
           </Text>
-          ? Kaikkien oppilaiden arviointitiedot kyseiseltä arviointikerralta
-          poistuvat samalla.
+          ? Kaikkien oppilaiden arviointitiedot kyseiseltä arviointikerralta poistuvat samalla.
         </Text>
       </ConfirmationModal>
     </Box>

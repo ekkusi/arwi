@@ -1,9 +1,6 @@
 import { NextApiResponse } from "next";
 
-export default async function revalidateIfProd(
-  res: NextApiResponse,
-  path: string
-) {
+export default async function revalidateIfProd(res: NextApiResponse, path: string) {
   let revalidated = false;
   if (process.env.NODE_ENV !== "production") return { revalidated: false };
   try {
@@ -25,19 +22,13 @@ export const revalidateGroupData = async (res: NextApiResponse, id: string) => {
   return Promise.all(promises);
 };
 
-export const revalidateStudentData = async (
-  res: NextApiResponse,
-  id: string
-) => {
+export const revalidateStudentData = async (res: NextApiResponse, id: string) => {
   const promises = [];
   promises.push(revalidateIfProd(res, `/student/${id}`));
   return Promise.all(promises);
 };
 
-export const revalidateCollectionData = async (
-  res: NextApiResponse,
-  id: string
-) => {
+export const revalidateCollectionData = async (res: NextApiResponse, id: string) => {
   const promises = [];
   promises.push(revalidateIfProd(res, `/collection/${id}`));
   promises.push(revalidateIfProd(res, `/collection/${id}/edit`));

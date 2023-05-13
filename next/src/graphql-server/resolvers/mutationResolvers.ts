@@ -2,12 +2,7 @@ import { hash } from "bcryptjs";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
-import {
-  mapUpdateCollectionInput,
-  mapUpdateEvaluationInput,
-  mapUpdateGroupInput,
-  mapUpdateStudentInput,
-} from "../utils/mappers";
+import { mapUpdateCollectionInput, mapUpdateEvaluationInput, mapUpdateGroupInput, mapUpdateStudentInput } from "../utils/mappers";
 import {
   validateCreateCollectionInput,
   validateCreateGroupInput,
@@ -32,8 +27,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     const matchingTeacher = await prisma.teacher.findFirst({
       where: { email },
     });
-    if (matchingTeacher)
-      throw new ValidationError(`Sähköposti '${email}' on jo käytössä`);
+    if (matchingTeacher) throw new ValidationError(`Sähköposti '${email}' on jo käytössä`);
     const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
     const teacher = await prisma.teacher.create({
       data: {
@@ -195,11 +189,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return true;
   },
-  changeGroupYear: async (
-    _,
-    { groupId, newYearCode, transferEvaluations },
-    { prisma, user }
-  ) => {
+  changeGroupYear: async (_, { groupId, newYearCode, transferEvaluations }, { prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
     let newYear = await prisma.classYear.findFirst({
       where: { groupId, code: newYearCode },

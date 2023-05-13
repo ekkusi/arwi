@@ -1,17 +1,11 @@
 import { ClassYearInfo, getClassYearInfos } from "@/utils/subjectUtils";
 import Select, { SelectProps } from "../general/Select";
 
-type ClassYearSelectProps = Omit<
-  SelectProps<ClassYearInfo, boolean>,
-  "getOptionValue"
-> & {
+type ClassYearSelectProps = Omit<SelectProps<ClassYearInfo, boolean>, "getOptionValue"> & {
   initialClassYearCode?: string;
 };
 
-export default function ClassYearSelect({
-  initialClassYearCode,
-  ...rest
-}: ClassYearSelectProps) {
+export default function ClassYearSelect({ initialClassYearCode, ...rest }: ClassYearSelectProps) {
   const options = getClassYearInfos();
   return (
     <Select

@@ -8,14 +8,8 @@ type RatingSelecterProps = Omit<FlexProps, "onChange"> & {
   initialRating?: Rating | null;
 };
 
-export default function RatingSelecter({
-  onChange,
-  initialRating,
-  ...rest
-}: RatingSelecterProps) {
-  const [selectedRating, setSelectedRating] = useState<Rating | null>(
-    initialRating || null
-  );
+export default function RatingSelecter({ onChange, initialRating, ...rest }: RatingSelecterProps) {
+  const [selectedRating, setSelectedRating] = useState<Rating | null>(initialRating || null);
 
   useEffect(() => {
     setSelectedRating(initialRating || null);

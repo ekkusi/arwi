@@ -1,56 +1,32 @@
 import { DEFAULT_COLOR_SCHEME } from "@/theme";
 import { BoxProps } from "@chakra-ui/react";
-import {
-  GroupBase,
-  MultiValue,
-  Props,
-  Select as ReactSelect,
-  SelectInstance,
-  SingleValue,
-} from "chakra-react-select";
+import { GroupBase, MultiValue, Props, Select as ReactSelect, SelectInstance, SingleValue } from "chakra-react-select";
 import { forwardRef, RefAttributes } from "react";
 
-export function isMultiOption<T>(
-  value: MultiValue<T> | SingleValue<T>
-): value is T[] {
+export function isMultiOption<T>(value: MultiValue<T> | SingleValue<T>): value is T[] {
   return Array.isArray(value);
 }
 
-export function isSingleOption<T>(
-  value: MultiValue<T> | SingleValue<T>
-): value is T {
+export function isSingleOption<T>(value: MultiValue<T> | SingleValue<T>): value is T {
   return value != null && !isMultiOption(value);
 }
 
-export type SelectProps<
-  Option = unknown,
-  IsMulti extends boolean = false,
-  Group extends GroupBase<Option> = GroupBase<Option>
-> = WithRequired<Props<Option, IsMulti, Group>, "getOptionValue"> &
+export type SelectProps<Option = unknown, IsMulti extends boolean = false, Group extends GroupBase<Option> = GroupBase<Option>> = WithRequired<
+  Props<Option, IsMulti, Group>,
+  "getOptionValue"
+> &
   RefAttributes<SelectInstance<Option, IsMulti, Group>> & {
     containerProps?: BoxProps;
   };
 
-function Select<
-  Option = unknown,
-  IsMulti extends boolean = false,
-  Group extends GroupBase<Option> = GroupBase<Option>
->(
-  {
-    chakraStyles,
-    defaultValue,
-    getOptionValue,
-    containerProps,
-    ...rest
-  }: SelectProps<Option, IsMulti, Group>,
+function Select<Option = unknown, IsMulti extends boolean = false, Group extends GroupBase<Option> = GroupBase<Option>>(
+  { chakraStyles, defaultValue, getOptionValue, containerProps, ...rest }: SelectProps<Option, IsMulti, Group>,
   ref: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>
 ) {
   // Make distinct keys based on the default value so that the select is re-rendered
   const formatKey = () => {
     if (Array.isArray(defaultValue)) {
-      return (defaultValue as MultiValue<Option>)
-        .map((it) => getOptionValue(it))
-        .join(",");
+      return (defaultValue as MultiValue<Option>).map((it) => getOptionValue(it)).join(",");
     }
     return defaultValue && getOptionValue(defaultValue as Option);
   };
@@ -77,9 +53,7 @@ function Select<
           color: `${DEFAULT_COLOR_SCHEME}.500`,
           "> svg": {
             transitionDuration: "normal",
-            transform: `rotate(${
-              options.selectProps.menuIsOpen ? -180 : 0
-            }deg)`,
+            transform: `rotate(${options.selectProps.menuIsOpen ? -180 : 0}deg)`,
           },
           ...chakraStyles?.dropdownIndicator?.(styles, options),
         }),
@@ -128,11 +102,7 @@ function Select<
     />
   );
 }
-const WithRef = forwardRef(Select) as <
-  Option = unknown,
-  IsMulti extends boolean = false,
-  Group extends GroupBase<Option> = GroupBase<Option>
->(
+const WithRef = forwardRef(Select) as <Option = unknown, IsMulti extends boolean = false, Group extends GroupBase<Option> = GroupBase<Option>>(
   props: SelectProps<Option, IsMulti, Group> & {
     ref?: React.ForwardedRef<SelectInstance<Option, IsMulti, Group>>;
   }

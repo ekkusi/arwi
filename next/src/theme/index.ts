@@ -1,22 +1,7 @@
 "use client";
 
-import {
-  extendTheme,
-  theme as baseTheme,
-  withDefaultColorScheme,
-} from "@chakra-ui/react";
-import {
-  Accordion,
-  Button,
-  FormLabel,
-  Input,
-  Link,
-  Tag,
-  Textarea,
-  Checkbox,
-  Popover,
-  Radio,
-} from "./components";
+import { extendTheme, theme as baseTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { Accordion, Button, FormLabel, Input, Link, Tag, Textarea, Checkbox, Popover, Radio } from "./components";
 
 const errorColor = baseTheme.colors.red["700"];
 

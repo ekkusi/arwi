@@ -42,20 +42,10 @@ function ConfirmationModal({
       headerLabel="Oletko varma?"
       modalFooter={
         <>
-          <Button
-            variant={variant === "delete" ? "alert" : "solid"}
-            isLoading={loading}
-            onClick={acceptAndClose}
-            mr="3"
-          >
+          <Button variant={variant === "delete" ? "alert" : "solid"} isLoading={loading} onClick={acceptAndClose} mr="3">
             {acceptLabel}
           </Button>
-          <Button
-            variant="ghost"
-            colorScheme="gray"
-            isDisabled={loading}
-            onClick={() => disclosureProps.onClose()}
-          >
+          <Button variant="ghost" colorScheme="gray" isDisabled={loading} onClick={() => disclosureProps.onClose()}>
             {cancelLabel}
           </Button>
         </>

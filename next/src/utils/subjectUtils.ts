@@ -3,14 +3,8 @@ import subjectSchema from "../graphql-server/subject-schema.json";
 import { ClassYearCode, LearningObjectiveType } from "../graphql-server/types";
 
 export type Subject = (typeof subjectSchema.subjects)[number];
-export type SubjectMinimal = Omit<
-  Subject,
-  "environments" | "learning_objectives"
->;
-export type LearningObjective = Omit<
-  Subject["learning_objectives"]["1-2"][number],
-  "type"
-> & {
+export type SubjectMinimal = Omit<Subject, "environments" | "learning_objectives">;
+export type LearningObjective = Omit<Subject["learning_objectives"]["1-2"][number], "type"> & {
   type: LearningObjectiveType;
 };
 
@@ -28,9 +22,7 @@ export const getSubjectCode = (environmentCode: string) => {
 };
 
 export const getSubject = (subjectCode: string): Subject | null => {
-  const matchingSubject = subjectSchema.subjects.find(
-    (it) => it.code === subjectCode
-  );
+  const matchingSubject = subjectSchema.subjects.find((it) => it.code === subjectCode);
   return matchingSubject || null;
 };
 
@@ -44,9 +36,7 @@ export const getSubjects = (): SubjectMinimal[] => {
 export const getEnvironment = (environmentCode: string): Environment | null => {
   const subject = getSubject(getSubjectCode(environmentCode));
   if (!subject) return null;
-  const environment = subject.environments.find(
-    (it) => it.code === environmentCode
-  );
+  const environment = subject.environments.find((it) => it.code === environmentCode);
   return environment || null;
 };
 
@@ -74,9 +64,7 @@ export const YEAR_CODE_LABELS: Record<PrismaClassYearCode, string> = {
   VOCATIONAL_FOURTH: "Ammattikoulu 4. vuosi",
 };
 
-export const getClassYearInfo = (
-  yearCode: PrismaClassYearCode
-): ClassYearInfo => {
+export const getClassYearInfo = (yearCode: PrismaClassYearCode): ClassYearInfo => {
   return {
     label: YEAR_CODE_LABELS[yearCode],
     code: ClassYearCode[yearCode],
@@ -84,15 +72,11 @@ export const getClassYearInfo = (
 };
 
 export const getClassYearInfos = () => {
-  const yearInfos = Object.keys(ClassYearCode).map((it) =>
-    getClassYearInfo(it as ClassYearCode)
-  );
+  const yearInfos = Object.keys(ClassYearCode).map((it) => getClassYearInfo(it as ClassYearCode));
   return yearInfos;
 };
 
-export const getLearningObjectKey = (
-  yearCode: ClassYearCode
-): LearningObjectiveKey => {
+export const getLearningObjectKey = (yearCode: ClassYearCode): LearningObjectiveKey => {
   switch (yearCode) {
     case ClassYearCode.PRIMARY_FIRST:
     case ClassYearCode.PRIMARY_SECOND:
@@ -120,14 +104,8 @@ export const getLearningObjectKey = (
   }
 };
 
-export const getLearningObjectives = (
-  subjectCode: string,
-  yearCode: ClassYearCode
-): LearningObjective[] => {
-  const objectives =
-    getSubject(subjectCode)?.learning_objectives[
-      getLearningObjectKey(yearCode)
-    ] || [];
+export const getLearningObjectives = (subjectCode: string, yearCode: ClassYearCode): LearningObjective[] => {
+  const objectives = getSubject(subjectCode)?.learning_objectives[getLearningObjectKey(yearCode)] || [];
 
   return objectives.map((it) => ({
     ...it,

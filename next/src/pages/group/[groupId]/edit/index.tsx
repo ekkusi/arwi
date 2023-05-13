@@ -49,9 +49,8 @@ const EditGroupPage_UpdateGroup_Mutation = graphql(`
 function EditGroupPageContent() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
-  const { data } = useSWR<EditGroupPage_GetGroupQuery>(
-    `group/${groupId}/edit`,
-    () => graphqlClient.request(EditGroupPage_GetGroup_Query, { groupId })
+  const { data } = useSWR<EditGroupPage_GetGroupQuery>(`group/${groupId}/edit`, () =>
+    graphqlClient.request(EditGroupPage_GetGroup_Query, { groupId })
   );
   const toast = useToast();
 
@@ -91,15 +90,10 @@ function EditGroupPageContent() {
         containerProps={{ mb: "5" }}
       />
       <FormLabel mb="3">Oppilaat:</FormLabel>
-      <UpdateStudentsList
-        students={group.students}
-        classYearId={group.currentClassYear.id}
-      />
+      <UpdateStudentsList students={group.students} classYearId={group.currentClassYear.id} />
       <FormLabel mt="5">Arvioinnit:</FormLabel>
       {group.currentClassYear.evaluationCollections.length > 0 ? (
-        <UpdateCollectionsList
-          collections={group.currentClassYear.evaluationCollections}
-        />
+        <UpdateCollectionsList collections={group.currentClassYear.evaluationCollections} />
       ) : (
         <Text>Ei vielä arviointeja</Text>
       )}
@@ -126,9 +120,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<{ groupId: string }>) {
+export async function getStaticProps({ params }: GetStaticPropsContext<{ groupId: string }>) {
   if (!params) throw new Error("Unexpected error, no params");
   const data = await serverRequest(EditGroupPage_GetGroup_Query, {
     groupId: params.groupId,

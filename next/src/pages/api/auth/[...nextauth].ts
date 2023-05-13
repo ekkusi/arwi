@@ -5,8 +5,7 @@ import NextAuth, { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 const IS_PROD = process.env.NODE_ENV && process.env.NODE_ENV === "production";
-const isHttps =
-  (process.env.IS_HTTPS && process.env.IS_HTTPS === "true") || false;
+const isHttps = (process.env.IS_HTTPS && process.env.IS_HTTPS === "true") || false;
 
 export const authOptions: AuthOptions = {
   useSecureCookies: isHttps,
@@ -33,16 +32,9 @@ export const authOptions: AuthOptions = {
         const matchingTeacher = await prisma.teacher.findFirst({
           where: { email },
         });
-        if (!matchingTeacher)
-          throw new ValidationError(
-            `Käyttäjää ei löytynyt sähköpostilla '${email}'`
-          );
-        const isValidPassword = await compare(
-          password,
-          matchingTeacher.passwordHash
-        );
-        if (!isValidPassword)
-          throw new ValidationError(`Annettu salasana oli väärä.`);
+        if (!matchingTeacher) throw new ValidationError(`Käyttäjää ei löytynyt sähköpostilla '${email}'`);
+        const isValidPassword = await compare(password, matchingTeacher.passwordHash);
+        if (!isValidPassword) throw new ValidationError(`Annettu salasana oli väärä.`);
         return {
           email: matchingTeacher.email,
           id: matchingTeacher.id,

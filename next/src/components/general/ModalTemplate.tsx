@@ -12,10 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-export type ModalTemplateProps = Omit<
-  ModalProps,
-  "isOpen" | "onClose" | "onOpen"
-> & {
+export type ModalTemplateProps = Omit<ModalProps, "isOpen" | "onClose" | "onOpen"> & {
   headerLabel?: string;
   headerProps?: ModalHeaderProps;
   isOpen?: boolean;
@@ -45,12 +42,7 @@ export default function ModalTemplate({
   });
 
   return (
-    <Modal
-      closeOnEsc={isClosable}
-      closeOnOverlayClick={isClosable}
-      {...rest}
-      {...disclosureProps}
-    >
+    <Modal closeOnEsc={isClosable} closeOnOverlayClick={isClosable} {...rest} {...disclosureProps}>
       <ModalOverlay />
       <ModalContent mx="5">
         {isClosable && <ModalCloseButton />}
@@ -62,9 +54,7 @@ export default function ModalTemplate({
         <ModalBody px="5" pb="5" pt={headerLabel ? 0 : 5}>
           {children}
         </ModalBody>
-        {modalFooter && (
-          <ModalFooter {...modalFooterProps}>{modalFooter}</ModalFooter>
-        )}
+        {modalFooter && <ModalFooter {...modalFooterProps}>{modalFooter}</ModalFooter>}
       </ModalContent>
     </Modal>
   );

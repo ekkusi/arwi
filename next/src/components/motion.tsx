@@ -4,12 +4,8 @@ import { HTMLMotionProps, motion } from "framer-motion";
 // ##### MOTION CHAKRA COMBINATIONS ######
 
 // Chakra components need ref for framer-motion wrapper
-const BoxWithRef = forwardRef<BoxProps, "div">((props: BoxProps, ref) => (
-  <Box ref={ref} {...props} />
-));
-const TextWithRef = forwardRef<TextProps, "p">((props, ref) => (
-  <Text ref={ref} {...props} />
-));
+const BoxWithRef = forwardRef<BoxProps, "div">((props: BoxProps, ref) => <Box ref={ref} {...props} />);
+const TextWithRef = forwardRef<TextProps, "p">((props, ref) => <Text ref={ref} {...props} />);
 
 type Merge<P, T> = Omit<P, keyof T> & T;
 export type MotionTextProps = Merge<TextProps, HTMLMotionProps<"p">>;

@@ -1,30 +1,17 @@
 import { ClassYearCode, LearningObjectiveType } from "@/gql/graphql";
-import {
-  getLearningObjectives,
-  LearningObjectiveMinimal,
-} from "@/utils/subjectUtils";
+import { getLearningObjectives, LearningObjectiveMinimal } from "@/utils/subjectUtils";
 import { Box, Text } from "@chakra-ui/react";
-import {
-  chakraComponents,
-  MultiValueGenericProps,
-  GroupBase,
-  OptionProps,
-} from "chakra-react-select";
+import { chakraComponents, MultiValueGenericProps, GroupBase, OptionProps } from "chakra-react-select";
 import { useMemo } from "react";
 import Select, { SelectProps } from "../general/Select";
 
-type LearningObjectiveSelectProps = Omit<
-  SelectProps<LearningObjectiveMinimal, boolean>,
-  "getOptionValue"
-> & {
+type LearningObjectiveSelectProps = Omit<SelectProps<LearningObjectiveMinimal, boolean>, "getOptionValue"> & {
   subjectCode: string;
   yearCode: ClassYearCode;
 };
 
 const customComponents = {
-  MultiValueLabel: (
-    props: MultiValueGenericProps<LearningObjectiveMinimal>
-  ) => {
+  MultiValueLabel: (props: MultiValueGenericProps<LearningObjectiveMinimal>) => {
     const { data } = props;
     return (
       <chakraComponents.MultiValueLabel {...props}>
@@ -48,22 +35,11 @@ const customComponents = {
   },
 };
 
-export default function LearningObjectiveSelect({
-  subjectCode,
-  yearCode,
-  ...rest
-}: LearningObjectiveSelectProps) {
-  const options = useMemo(
-    () => getLearningObjectives(subjectCode, yearCode),
-    [subjectCode, yearCode]
-  );
+export default function LearningObjectiveSelect({ subjectCode, yearCode, ...rest }: LearningObjectiveSelectProps) {
+  const options = useMemo(() => getLearningObjectives(subjectCode, yearCode), [subjectCode, yearCode]);
   const groups: GroupBase<LearningObjectiveMinimal>[] = useMemo(() => {
-    const skillsOptions = options.filter(
-      (it) => it.type === LearningObjectiveType.SKILLS
-    );
-    const behaviourOptions = options.filter(
-      (it) => it.type === LearningObjectiveType.BEHAVIOUR
-    );
+    const skillsOptions = options.filter((it) => it.type === LearningObjectiveType.SKILLS);
+    const behaviourOptions = options.filter((it) => it.type === LearningObjectiveType.BEHAVIOUR);
     return [
       {
         label: "Taidot",

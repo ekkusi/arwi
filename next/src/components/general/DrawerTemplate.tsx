@@ -1,18 +1,6 @@
-import {
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerProps,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, DrawerProps, useDisclosure } from "@chakra-ui/react";
 
-type DrawerTemplateProps = Omit<
-  DrawerProps,
-  "isOpen" | "onClose" | "onOpen"
-> & {
+type DrawerTemplateProps = Omit<DrawerProps, "isOpen" | "onClose" | "onOpen"> & {
   headerLabel?: string;
   isOpen?: boolean;
   onClose?: () => void;

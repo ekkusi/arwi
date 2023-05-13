@@ -52,10 +52,7 @@ describe("ServerRequest - createCollection", () => {
       classYearId,
     };
     const query = graphql(`
-      mutation CreateCollection(
-        $data: CreateCollectionInput!
-        $classYearId: ID!
-      ) {
+      mutation CreateCollection($data: CreateCollectionInput!, $classYearId: ID!) {
         createCollection(data: $data, classYearId: $classYearId) {
           id
           date
@@ -71,10 +68,7 @@ describe("ServerRequest - createCollection", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.createCollection).toEqual({
@@ -139,10 +133,7 @@ describe("ServerRequest - createCollection", () => {
     };
     const query = graphql(
       `
-        mutation CreateCollectionWithEvaluations(
-          $data: CreateCollectionInput!
-          $classYearId: ID!
-        ) {
+        mutation CreateCollectionWithEvaluations($data: CreateCollectionInput!, $classYearId: ID!) {
           createCollection(data: $data, classYearId: $classYearId) {
             id
             date
@@ -162,10 +153,7 @@ describe("ServerRequest - createCollection", () => {
       `
     );
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.createCollection).toEqual({
@@ -206,10 +194,7 @@ describe("ServerRequest - createCollection", () => {
       classYearId,
     };
     const query = graphql(`
-      mutation CreateCollectionWithInvalidSubjectCode(
-        $data: CreateCollectionInput!
-        $classYearId: ID!
-      ) {
+      mutation CreateCollectionWithInvalidSubjectCode($data: CreateCollectionInput!, $classYearId: ID!) {
         createCollection(data: $data, classYearId: $classYearId) {
           id
         }
@@ -225,11 +210,7 @@ describe("ServerRequest - createCollection", () => {
     ).catch((e) => e);
 
     // Assert
-    await expect(result).resolves.toThrow(
-      new ValidationError(
-        `Ympäristöä koodilla '${invalidEnvironmentCode}' ei ole olemassa.`
-      )
-    );
+    await expect(result).resolves.toThrow(new ValidationError(`Ympäristöä koodilla '${invalidEnvironmentCode}' ei ole olemassa.`));
   });
 
   it("should throw an error when invalid learningObjectiveCode is provided", async () => {
@@ -245,10 +226,7 @@ describe("ServerRequest - createCollection", () => {
       classYearId,
     };
     const query = graphql(`
-      mutation CreateCollectionWithInvalidLearningObjectiveCode(
-        $data: CreateCollectionInput!
-        $classYearId: ID!
-      ) {
+      mutation CreateCollectionWithInvalidLearningObjectiveCode($data: CreateCollectionInput!, $classYearId: ID!) {
         createCollection(data: $data, classYearId: $classYearId) {
           id
         }
@@ -264,10 +242,6 @@ describe("ServerRequest - createCollection", () => {
     ).catch((e) => e);
 
     // Assert
-    await expect(result).resolves.toThrow(
-      new ValidationError(
-        `Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`
-      )
-    );
+    await expect(result).resolves.toThrow(new ValidationError(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`));
   });
 });

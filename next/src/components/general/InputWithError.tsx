@@ -1,35 +1,13 @@
-import {
-  BoxProps,
-  FormErrorMessageProps,
-  InputProps,
-  Box,
-  Input,
-  Text,
-} from "@chakra-ui/react";
+import { BoxProps, FormErrorMessageProps, InputProps, Box, Input, Text } from "@chakra-ui/react";
 import debounce from "lodash/debounce";
-import {
-  forwardRef,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from "react";
 
-type InputWithErrorProps = Omit<
-  InputProps,
-  "onChange" | "onBlur" | "name" | "value"
-> & {
+type InputWithErrorProps = Omit<InputProps, "onChange" | "onBlur" | "name" | "value"> & {
   debounced?: boolean;
   validate?: (value: string) => string | undefined;
   errorMessageProps?: FormErrorMessageProps;
-  onChange?: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    isValid: boolean
-  ) => void;
-  onBlur?: (
-    event: React.FocusEvent<HTMLInputElement>,
-    isValid: boolean
-  ) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>, isValid: boolean) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>, isValid: boolean) => void;
   containerProps?: BoxProps;
   name: string;
 };
@@ -64,10 +42,7 @@ export default forwardRef<InputWithErrorHandlers, InputWithErrorProps>(
     };
 
     // Debounce changeNotes function to prevent preformance issues
-    const debouncedOnChange = useMemo(
-      () => validatedOnChange && debounce(validatedOnChange, 300),
-      [validatedOnChange]
-    );
+    const debouncedOnChange = useMemo(() => validatedOnChange && debounce(validatedOnChange, 300), [validatedOnChange]);
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;

@@ -1,16 +1,6 @@
 import { Box, BoxProps, Text, useToken } from "@chakra-ui/react";
 import { useState } from "react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  TooltipProps,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 import CenteredContainer from "../server-components/primitives/CenteredContainer";
 import Overlay from "./Overlay";
@@ -33,11 +23,7 @@ export type BarChartBaseProps = Omit<BoxProps, "onClick"> & {
   overlayBgColor?: string;
 };
 
-function TooltipContent({
-  active,
-  payload,
-  label,
-}: TooltipProps<"number", "string">) {
+function TooltipContent({ active, payload, label }: TooltipProps<"number", "string">) {
   if (!payload || !active) return null;
 
   return (
@@ -45,8 +31,7 @@ function TooltipContent({
       <Text mb="1">{label}</Text>
       {payload[0] && (
         <Text color={payload[0].color}>
-          {payload[0].name}:{" "}
-          {payload[0].payload.skills || payload[0].payload.behaviour}
+          {payload[0].name}: {payload[0].payload.skills || payload[0].payload.behaviour}
         </Text>
       )}
       {payload[1] && (
@@ -68,14 +53,9 @@ export default function BarChartBase({
   overlayBgColor = "light-gray",
   ...rest
 }: BarChartBaseProps) {
-  const [primaryColor, secondaryColor] = useToken("colors", [
-    "green.500",
-    "blue.500",
-  ]);
+  const [primaryColor, secondaryColor] = useToken("colors", ["green.500", "blue.500"]);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [currentTimeoutId, setCurrentTimeoutId] = useState<
-    NodeJS.Timeout | undefined
-  >();
+  const [currentTimeoutId, setCurrentTimeoutId] = useState<NodeJS.Timeout | undefined>();
   const lgShadow = useToken("shadows", "lg");
 
   // Open tooltip after 300 of mouse down
@@ -111,13 +91,7 @@ export default function BarChartBase({
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis interval={0} type="number" domain={[6, 10]} />
-          <YAxis
-            tick={false}
-            textAnchor="end"
-            reversed
-            dataKey="environment"
-            type="category"
-          />
+          <YAxis tick={false} textAnchor="end" reversed dataKey="environment" type="category" />
           <Tooltip
             wrapperStyle={{
               visibility: isTooltipVisible ? "visible" : "hidden",
@@ -130,19 +104,10 @@ export default function BarChartBase({
               y: true,
             }}
           />
-          {data.length > 2 && (
-            <Legend wrapperStyle={{ left: 0 }} content={legend} />
-          )}
+          {data.length > 2 && <Legend wrapperStyle={{ left: 0 }} content={legend} />}
           {children || (
             <>
-              <Bar
-                name="Taidot"
-                dataKey="skills"
-                fill={primaryColor}
-                stroke={primaryColor}
-                label={{ position: "right" }}
-                isAnimationActive={false}
-              />
+              <Bar name="Taidot" dataKey="skills" fill={primaryColor} stroke={primaryColor} label={{ position: "right" }} isAnimationActive={false} />
               <Bar
                 name="Työskentely"
                 dataKey="behaviour"

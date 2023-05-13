@@ -15,8 +15,7 @@ const initMockData = async () => {
   const email = "test@email.com";
   const hashedPassword = await hash(password, 12);
   const existingTeacher = await prisma.teacher.findUnique({ where: { email } });
-  if (existingTeacher)
-    await prisma.teacher.delete({ where: { email: "test@email.com" } });
+  if (existingTeacher) await prisma.teacher.delete({ where: { email: "test@email.com" } });
   const testTeacher = await prisma.teacher.create({
     data: {
       email: "test@email.com",
@@ -37,16 +36,15 @@ const initMockData = async () => {
       groupId: testGroup.id,
     },
   });
-  const collectionPromises = mockData.collections.map(
-    ({ id: _, learningObjectives, ...rest }) =>
-      prisma.evaluationCollection.create({
-        data: {
-          ...rest,
-          learningObjectiveCodes: learningObjectives,
-          type: "",
-          classYearId: classYear.id,
-        },
-      })
+  const collectionPromises = mockData.collections.map(({ id: _, learningObjectives, ...rest }) =>
+    prisma.evaluationCollection.create({
+      data: {
+        ...rest,
+        learningObjectiveCodes: learningObjectives,
+        type: "",
+        classYearId: classYear.id,
+      },
+    })
   );
   const collections = await Promise.all(collectionPromises);
   const studentPromises = mockData.students.map(({ evaluations, ...rest }) =>

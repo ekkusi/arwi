@@ -2,10 +2,7 @@ import { Box, BoxProps, FlexProps } from "@chakra-ui/react";
 import React from "react";
 import Card from "../server-components/primitives/Card";
 
-type FlippingCardProps = WithRequired<
-  Omit<BoxProps, "children">,
-  "width" | "height"
-> & {
+type FlippingCardProps = WithRequired<Omit<BoxProps, "children">, "width" | "height"> & {
   front: React.ReactNode;
   back: React.ReactNode;
 };
@@ -30,13 +27,7 @@ function FlippingCardChild(props: FlexProps) {
   );
 }
 
-function FlippingCard({
-  front,
-  back,
-  width,
-  height,
-  ...rest
-}: FlippingCardProps): JSX.Element {
+function FlippingCard({ front, back, width, height, ...rest }: FlippingCardProps): JSX.Element {
   const [isFlipped, setIsFlipped] = React.useState(false);
   return (
     <Box
@@ -62,9 +53,7 @@ function FlippingCard({
         }}
       >
         <FlippingCardChild>{front}</FlippingCardChild>
-        <FlippingCardChild transform="rotateY(180deg)">
-          {back}
-        </FlippingCardChild>
+        <FlippingCardChild transform="rotateY(180deg)">{back}</FlippingCardChild>
       </Box>
     </Box>
   );

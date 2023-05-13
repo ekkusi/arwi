@@ -19,13 +19,11 @@ const resolvers: QueryResolvers<CustomContext> = {
         id,
       },
     });
-    if (!teacher)
-      throw new ValidationError(`Opettajaa ei löytynyt id:llä '${id}'`);
+    if (!teacher) throw new ValidationError(`Opettajaa ei löytynyt id:llä '${id}'`);
     return teacher;
   },
   getTeachers: async (_, __, { prisma, user }) => {
-    if (user?.id !== ADMIN_USER.id)
-      throw new AuthenticationError("Admin route");
+    if (user?.id !== ADMIN_USER.id) throw new AuthenticationError("Admin route");
     const teachers = await prisma.teacher.findMany();
     return teachers;
   },
@@ -45,10 +43,9 @@ const resolvers: QueryResolvers<CustomContext> = {
   },
   getCollection: async (_, { id }, { prisma, user }) => {
     await checkAuthenticatedByCollection(user, id);
-    const matchingCollection =
-      await prisma.evaluationCollection.findFirstOrThrow({
-        where: { id },
-      });
+    const matchingCollection = await prisma.evaluationCollection.findFirstOrThrow({
+      where: { id },
+    });
 
     return matchingCollection;
   },

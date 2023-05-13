@@ -26,9 +26,7 @@ type RequestOptions<T, V> = {
   prismaOverride: PrismaClient;
 };
 
-function isDocumentOptions<T, V>(
-  documentOrOptions: TypedDocumentNode<T, V> | RequestOptions<T, V>
-): documentOrOptions is RequestOptions<T, V> {
+function isDocumentOptions<T, V>(documentOrOptions: TypedDocumentNode<T, V> | RequestOptions<T, V>): documentOrOptions is RequestOptions<T, V> {
   return (documentOrOptions as RequestOptions<T, V>).document !== undefined;
 }
 
@@ -45,8 +43,7 @@ const serverRequest = async <T, V>(
     : [variables: V]
 ): Promise<T> => {
   // Should prevent usage in client side code
-  if (typeof window !== "undefined")
-    throw new Error("serverRequest cannot be used in client side code.");
+  if (typeof window !== "undefined") throw new Error("serverRequest cannot be used in client side code.");
 
   const variables = variablesArray[0];
 

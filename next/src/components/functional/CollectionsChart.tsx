@@ -22,18 +22,14 @@ const CollectionsChart_Collection_Fragment = graphql(`
   }
 `);
 
-const mapData = (
-  collections: CollectionsChart_EvaluationCollectionFragment[]
-) => {
+const mapData = (collections: CollectionsChart_EvaluationCollectionFragment[]) => {
   const data: DataType[] = [];
   let currentSkillsSum = 0;
   let notNullSkillsCount = 0;
   let currentBehaviourSum = 0;
   let notNullBehaviourCount = 0;
   collections.forEach((it) => {
-    const { skillsAverage, behaviourAverage } = analyzeEvaluations(
-      it.evaluations
-    );
+    const { skillsAverage, behaviourAverage } = analyzeEvaluations(it.evaluations);
     if (skillsAverage > 0) {
       notNullSkillsCount += 1;
       currentSkillsSum += skillsAverage;
@@ -44,38 +40,21 @@ const mapData = (
     }
     data.push({
       date: formatDate(it.date),
-      skills:
-        skillsAverage > 0
-          ? Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100
-          : null,
-      behaviour:
-        behaviourAverage > 0
-          ? Math.round((currentBehaviourSum / notNullBehaviourCount) * 100) /
-            100
-          : null,
+      skills: skillsAverage > 0 ? Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100 : null,
+      behaviour: behaviourAverage > 0 ? Math.round((currentBehaviourSum / notNullBehaviourCount) * 100) / 100 : null,
     });
   });
   return data;
 };
 
 type CollectionsChartProps = Omit<BoxProps, "onClick"> & {
-  collections: readonly FragmentType<
-    typeof CollectionsChart_Collection_Fragment
-  >[];
+  collections: readonly FragmentType<typeof CollectionsChart_Collection_Fragment>[];
 };
 
-export default function CollectionsChart({
-  collections: collectionFragments,
-  ...rest
-}: CollectionsChartProps) {
-  const collections = getFragmentData(
-    CollectionsChart_Collection_Fragment,
-    collectionFragments
-  );
+export default function CollectionsChart({ collections: collectionFragments, ...rest }: CollectionsChartProps) {
+  const collections = getFragmentData(CollectionsChart_Collection_Fragment, collectionFragments);
 
-  const sortedCollections = [...collections].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+  const sortedCollections = [...collections].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const data = mapData(sortedCollections);
 
   return <ChartBase data={data} {...rest} />;

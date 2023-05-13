@@ -3,10 +3,7 @@ import { graphql } from "@/gql";
 import serverRequest from "@/utils/serverRequest";
 
 import { Divider, Text, useToast } from "@chakra-ui/react";
-import {
-  CollectionPage_GetCollectionQuery,
-  EvaluationsAccordion_EvaluationFragmentDoc,
-} from "@/gql/graphql";
+import { CollectionPage_GetCollectionQuery, EvaluationsAccordion_EvaluationFragmentDoc } from "@/gql/graphql";
 import { formatDate } from "@/utils/dateUtils";
 import { GetStaticPropsContext } from "next";
 import graphqlClient from "@/graphql-client";
@@ -14,9 +11,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 import Card from "@/components/server-components/primitives/Card";
-import EvaluationsAccordion, {
-  EvaluationsAccordionHandlers,
-} from "@/components/functional/EvaluationsAccordion";
+import EvaluationsAccordion, { EvaluationsAccordionHandlers } from "@/components/functional/EvaluationsAccordion";
 import { useEffect, useRef, useState } from "react";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
 import Popover, { PopoverItem } from "@/components/general/Popover";
@@ -63,9 +58,7 @@ type CollectionPageProps = {
   data: CollectionPage_GetCollectionQuery;
 };
 
-export default function CollectionPage({
-  data: fallbackData,
-}: CollectionPageProps) {
+export default function CollectionPage({ data: fallbackData }: CollectionPageProps) {
   const router = useRouter();
   const id = router.query.id as string;
   const toast = useToast();
@@ -115,33 +108,17 @@ export default function CollectionPage({
     <PageWrapper>
       <TopNavigationBar>
         <Popover>
-          <PopoverItem
-            icon={FiEdit}
-            as={Link}
-            href={`/collection/${collection.id}/edit`}
-          >
+          <PopoverItem icon={FiEdit} as={Link} href={`/collection/${collection.id}/edit`}>
             Muokkaa
           </PopoverItem>
           <Divider />
-          <PopoverItem
-            icon={RiDeleteBin6Line}
-            color="error"
-            onClick={() => setIsModalOpen(true)}
-          >
+          <PopoverItem icon={RiDeleteBin6Line} color="error" onClick={() => setIsModalOpen(true)}>
             Poista
           </PopoverItem>
         </Popover>
       </TopNavigationBar>
-      <ConfirmationModal
-        isOpen={isModalOpen}
-        awaitBeforeClose
-        onClose={() => setIsModalOpen(false)}
-        onAccept={() => deleteGroup()}
-      >
-        <Text>
-          Haluatko varmasti poistaa ryhmän? Kaikki ryhmän oppilaiden sekä heidän
-          arviointien tiedot poistuvat samalla.
-        </Text>
+      <ConfirmationModal isOpen={isModalOpen} awaitBeforeClose onClose={() => setIsModalOpen(false)} onAccept={() => deleteGroup()}>
+        <Text>Haluatko varmasti poistaa ryhmän? Kaikki ryhmän oppilaiden sekä heidän arviointien tiedot poistuvat samalla.</Text>
       </ConfirmationModal>
       <Card mt="3" mb="5" border="none">
         <Text as="h1" textAlign="center" mb="2" fontSize="2xl">
@@ -169,9 +146,7 @@ export default function CollectionPage({
           <Text fontWeight="semibold" as="span">
             Ryhmä:
           </Text>{" "}
-          <Link href={`/group/${collection.classYear.group.id}`}>
-            {collection.classYear.group.name}
-          </Link>
+          <Link href={`/group/${collection.classYear.group.id}`}>{collection.classYear.group.name}</Link>
         </Text>
         {collection.description && <Text mt="2">{collection.description}</Text>}
       </Card>
@@ -180,11 +155,7 @@ export default function CollectionPage({
       </Text>
 
       {collection.evaluations.length > 0 ? (
-        <EvaluationsAccordion
-          ref={evaluationsAccordionRef}
-          titleFrom="student"
-          evaluations={collection.evaluations}
-        />
+        <EvaluationsAccordion ref={evaluationsAccordionRef} titleFrom="student" evaluations={collection.evaluations} />
       ) : (
         <Text>Ei arviointeja</Text>
       )}
@@ -199,9 +170,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<{ id: string }>) {
+export async function getStaticProps({ params }: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no params found");
 
   const data = await serverRequest(CollectionPage_GetCollection_Query, {

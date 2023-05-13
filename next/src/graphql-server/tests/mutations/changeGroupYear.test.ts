@@ -61,10 +61,7 @@ describe("ServerRequest - changeGroupYear", () => {
     };
 
     const query = graphql(`
-      mutation ChangeGroupYearTest_ChangeGroupYear(
-        $groupId: ID!
-        $newYearCode: ClassYearCode!
-      ) {
+      mutation ChangeGroupYearTest_ChangeGroupYear($groupId: ID!, $newYearCode: ClassYearCode!) {
         changeGroupYear(groupId: $groupId, newYearCode: $newYearCode) {
           id
           currentClassYear {
@@ -77,10 +74,7 @@ describe("ServerRequest - changeGroupYear", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.changeGroupYear).toEqual({
@@ -101,10 +95,7 @@ describe("ServerRequest - changeGroupYear", () => {
     };
 
     const query = graphql(`
-      mutation ChangeGroupYearTest_ChangeGroupYearError(
-        $groupId: ID!
-        $newYearCode: ClassYearCode!
-      ) {
+      mutation ChangeGroupYearTest_ChangeGroupYearError($groupId: ID!, $newYearCode: ClassYearCode!) {
         changeGroupYear(groupId: $groupId, newYearCode: $newYearCode) {
           id
           currentClassYear {
@@ -118,10 +109,7 @@ describe("ServerRequest - changeGroupYear", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       // Assert
       assertIsError(error);
@@ -143,10 +131,7 @@ describe("ServerRequest - changeGroupYear", () => {
     });
 
     const query = graphql(`
-      mutation ChangeGroupYearTest_ChangeGroupYearEvaluationCollections(
-        $groupId: ID!
-        $newYearCode: ClassYearCode!
-      ) {
+      mutation ChangeGroupYearTest_ChangeGroupYearEvaluationCollections($groupId: ID!, $newYearCode: ClassYearCode!) {
         changeGroupYear(groupId: $groupId, newYearCode: $newYearCode) {
           id
           currentClassYear {
@@ -162,10 +147,7 @@ describe("ServerRequest - changeGroupYear", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.changeGroupYear).toEqual({
@@ -205,16 +187,8 @@ describe("ServerRequest - changeGroupYear", () => {
     };
 
     const query = graphql(`
-      mutation ChangeGroupYearTest_ChangeGroupYearTransferEvaluations(
-        $groupId: ID!
-        $newYearCode: ClassYearCode!
-        $transferEvaluations: Boolean
-      ) {
-        changeGroupYear(
-          groupId: $groupId
-          newYearCode: $newYearCode
-          transferEvaluations: $transferEvaluations
-        ) {
+      mutation ChangeGroupYearTest_ChangeGroupYearTransferEvaluations($groupId: ID!, $newYearCode: ClassYearCode!, $transferEvaluations: Boolean) {
+        changeGroupYear(groupId: $groupId, newYearCode: $newYearCode, transferEvaluations: $transferEvaluations) {
           id
           currentClassYear {
             info {
@@ -229,10 +203,7 @@ describe("ServerRequest - changeGroupYear", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.changeGroupYear).toEqual({

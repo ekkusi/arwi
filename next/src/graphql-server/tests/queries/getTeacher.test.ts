@@ -50,16 +50,11 @@ describe("ServerRequest - getTeacher", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       assertIsError(error);
       // Assert
-      expect(error.message).toEqual(
-        `Opettajaa ei löytynyt id:llä '${variables.id}'`
-      );
+      expect(error.message).toEqual(`Opettajaa ei löytynyt id:llä '${variables.id}'`);
     }
   });
 });

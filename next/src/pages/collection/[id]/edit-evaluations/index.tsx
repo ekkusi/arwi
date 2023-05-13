@@ -37,14 +37,8 @@ const UpdateEvaluationsPage_GetCollection_Query = graphql(`
 `);
 
 const UpdateEvaluationsPage_UpdateEvaluations_Mutation = graphql(`
-  mutation UpdateEvaluationsPage_UpdateEvaluations(
-    $updateEvaluationsInput: [UpdateEvaluationInput!]!
-    $collectionId: ID!
-  ) {
-    updateEvaluations(
-      data: $updateEvaluationsInput
-      collectionId: $collectionId
-    )
+  mutation UpdateEvaluationsPage_UpdateEvaluations($updateEvaluationsInput: [UpdateEvaluationInput!]!, $collectionId: ID!) {
+    updateEvaluations(data: $updateEvaluationsInput, collectionId: $collectionId)
   }
 `);
 
@@ -52,12 +46,10 @@ function UpdateEvaluationsPageContent() {
   const router = useRouter();
   const id = router.query.id as string;
 
-  const { data } = useSWR<UpdateEvaluationsPage_GetCollectionQuery>(
-    `collection/${id}/edit-evaluations`,
-    () =>
-      graphqlClient.request(UpdateEvaluationsPage_GetCollection_Query, {
-        collectionId: id,
-      })
+  const { data } = useSWR<UpdateEvaluationsPage_GetCollectionQuery>(`collection/${id}/edit-evaluations`, () =>
+    graphqlClient.request(UpdateEvaluationsPage_GetCollection_Query, {
+      collectionId: id,
+    })
   );
 
   const toast = useToast();
@@ -67,23 +59,15 @@ function UpdateEvaluationsPageContent() {
 
   useEffect(() => {
     if (data) {
-      const filteredEvaluations = data.getCollection.evaluations.filter(
-        (e) => e.wasPresent
-      );
-      setEvaluations(
-        filteredEvaluations.map((it) =>
-          getFragmentData(UpdateEvaluationCard_EvaluationFragmentDoc, it)
-        )
-      );
+      const filteredEvaluations = data.getCollection.evaluations.filter((e) => e.wasPresent);
+      setEvaluations(filteredEvaluations.map((it) => getFragmentData(UpdateEvaluationCard_EvaluationFragmentDoc, it)));
     }
   }, [data]);
 
   if (!data || !evaluations) return <LoadingIndicator />;
 
   const { getCollection: collection } = data;
-  const sortedEvaluations = collection.evaluations
-    .filter((e) => e.wasPresent)
-    .sort((a, b) => a.student.name.localeCompare(b.student.name));
+  const sortedEvaluations = collection.evaluations.filter((e) => e.wasPresent).sort((a, b) => a.student.name.localeCompare(b.student.name));
 
   const onChanged = (evaluation: Evaluation) => {
     const newEvaluations = evaluations.map((e) => {
@@ -99,19 +83,16 @@ function UpdateEvaluationsPageContent() {
   const createEvaluations = async () => {
     setIsCreating(true);
     try {
-      await graphqlClient.request(
-        UpdateEvaluationsPage_UpdateEvaluations_Mutation,
-        {
-          updateEvaluationsInput: evaluations.map((evaluation) => ({
-            id: evaluation.id,
-            skillsRating: evaluation.skillsRating,
-            behaviourRating: evaluation.behaviourRating,
-            notes: evaluation.notes,
-            isStellar: evaluation.isStellar,
-          })),
-          collectionId: collection.id,
-        }
-      );
+      await graphqlClient.request(UpdateEvaluationsPage_UpdateEvaluations_Mutation, {
+        updateEvaluationsInput: evaluations.map((evaluation) => ({
+          id: evaluation.id,
+          skillsRating: evaluation.skillsRating,
+          behaviourRating: evaluation.behaviourRating,
+          notes: evaluation.notes,
+          isStellar: evaluation.isStellar,
+        })),
+        collectionId: collection.id,
+      });
       setIsCreating(false);
       router.push(`/`);
       toast({
@@ -161,21 +142,14 @@ function UpdateEvaluationsPageContent() {
           sortedEvaluations.map((evaluation, index) => (
             <UpdateEvaluationCard
               key={evaluation.id}
-              scrollSnapAlign={
-                index === evaluations.length - 1 ? "end" : "center"
-              }
+              scrollSnapAlign={index === evaluations.length - 1 ? "end" : "center"}
               scrollSnapStop="always"
               evaluation={evaluation}
               onChanged={onChanged}
               hasParticipationToggle={false}
             >
               {index === evaluations.length - 1 && (
-                <Button
-                  isLoading={isCreating}
-                  onClick={createEvaluations}
-                  width="100%"
-                  mt="6"
-                >
+                <Button isLoading={isCreating} onClick={createEvaluations} width="100%" mt="6">
                   Luo arvioinnit
                 </Button>
               )}
@@ -195,9 +169,7 @@ type UpdateEvaluationsPageProps = {
   data: UpdateEvaluationsPage_GetCollectionQuery;
 };
 
-export default function UpdateEvaluationsPage({
-  data,
-}: UpdateEvaluationsPageProps) {
+export default function UpdateEvaluationsPage({ data }: UpdateEvaluationsPageProps) {
   return (
     <SWRConfig value={{ fallback: data }}>
       <UpdateEvaluationsPageContent />
@@ -212,9 +184,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<{ id: string }>) {
+export async function getStaticProps({ params }: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no params");
   const data = await serverRequest(UpdateEvaluationsPage_GetCollection_Query, {
     collectionId: params.id,

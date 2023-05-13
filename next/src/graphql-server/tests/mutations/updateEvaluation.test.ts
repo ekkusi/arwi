@@ -81,9 +81,7 @@ describe("ServerRequest - updateEvaluation", () => {
     };
 
     const query = graphql(`
-      mutation UpdateEvaluationTest_UpdateEvaluationDefault(
-        $data: UpdateEvaluationInput!
-      ) {
+      mutation UpdateEvaluationTest_UpdateEvaluationDefault($data: UpdateEvaluationInput!) {
         updateEvaluation(data: $data) {
           id
           wasPresent
@@ -96,10 +94,7 @@ describe("ServerRequest - updateEvaluation", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.updateEvaluation).toEqual({
@@ -124,9 +119,7 @@ describe("ServerRequest - updateEvaluation", () => {
     };
 
     const query = graphql(`
-      mutation UpdateEvaluationTest_UpdateEvaluationError(
-        $data: UpdateEvaluationInput!
-      ) {
+      mutation UpdateEvaluationTest_UpdateEvaluationError($data: UpdateEvaluationInput!) {
         updateEvaluation(data: $data) {
           id
           wasPresent
@@ -138,10 +131,7 @@ describe("ServerRequest - updateEvaluation", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       // Assert
       assertIsError(error);

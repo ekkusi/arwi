@@ -23,9 +23,7 @@ beforeAll(async () => {
   await prisma.$executeRawUnsafe(`CREATE SCHEMA IF NOT EXISTS "${schemaId}";`);
   await prisma.$executeRawUnsafe(`SET search_path TO "${schemaId}";`);
   await prisma.$executeRawUnsafe(`DROP EXTENSION IF EXISTS "uuid-ossp";`);
-  await prisma.$executeRawUnsafe(
-    `CREATE EXTENSION "uuid-ossp" SCHEMA "${schemaId}";`
-  );
+  await prisma.$executeRawUnsafe(`CREATE EXTENSION "uuid-ossp" SCHEMA "${schemaId}";`);
 
   execSync(`npx prisma migrate dev`, {
     env: {
@@ -35,9 +33,7 @@ beforeAll(async () => {
   });
 });
 afterAll(async () => {
-  await prisma.$executeRawUnsafe(
-    `DROP SCHEMA IF EXISTS "${schemaId}" CASCADE;`
-  );
+  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE;`);
   await prisma.$disconnect();
 });
 

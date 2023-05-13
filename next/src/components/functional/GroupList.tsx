@@ -1,12 +1,5 @@
 import Card from "@/components/server-components/primitives/Card";
-import {
-  Button,
-  Flex,
-  Text,
-  BoxProps,
-  FlexProps,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Button, Flex, Text, BoxProps, FlexProps, useDisclosure } from "@chakra-ui/react";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { GroupList_GroupFragmentFragment as GroupFragmentType } from "@/gql/graphql";
 import { useState } from "react";
@@ -28,11 +21,7 @@ type GroupListItemProps = Omit<BoxProps, "onClick"> & {
   group: GroupFragmentType;
 };
 
-function GroupListItem({
-  group: groupData,
-  onClick,
-  ...rest
-}: GroupListItemProps) {
+function GroupListItem({ group: groupData, onClick, ...rest }: GroupListItemProps) {
   return (
     <Card
       py="2"
@@ -54,17 +43,12 @@ type GroupListProps = FlexProps & {
   groups: FragmentType<typeof GroupList_GroupFragment>[];
 };
 
-export default function GroupList({
-  groups: groupFragments,
-  ...rest
-}: GroupListProps) {
+export default function GroupList({ groups: groupFragments, ...rest }: GroupListProps) {
   const groups = getFragmentData(GroupList_GroupFragment, groupFragments);
 
   const sortedGroups = [...groups].sort((a, b) => a.name.localeCompare(b.name));
 
-  const [selectedGroup, setSelectedGroup] = useState<
-    GroupFragmentType | undefined
-  >();
+  const [selectedGroup, setSelectedGroup] = useState<GroupFragmentType | undefined>();
   const { onClose, isOpen } = useDisclosure({
     isOpen: !!selectedGroup,
     onClose: () => {
@@ -78,11 +62,7 @@ export default function GroupList({
 
   return (
     <>
-      <DrawerTemplate
-        isOpen={isOpen}
-        onClose={onClose}
-        headerLabel="Mitä haluat tehdä?"
-      >
+      <DrawerTemplate isOpen={isOpen} onClose={onClose} headerLabel="Mitä haluat tehdä?">
         <Flex flexDirection="column" pb="3">
           <Button
             as={Link}
@@ -108,12 +88,7 @@ export default function GroupList({
       </DrawerTemplate>
       <Flex flexDirection="column" {...rest}>
         {sortedGroups.map((it) => (
-          <GroupListItem
-            key={it.id}
-            group={it}
-            onClick={(clickedGroup) => openModal(clickedGroup)}
-            _notLast={{ mb: 2 }}
-          />
+          <GroupListItem key={it.id} group={it} onClick={(clickedGroup) => openModal(clickedGroup)} _notLast={{ mb: 2 }} />
         ))}
       </Flex>
     </>
