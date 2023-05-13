@@ -6,29 +6,9 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
 } from "@react-navigation/native-stack";
-import HomeStack from "./containers/HomeStack";
-import ProfileStack from "./containers/ProfileStack";
-import DesignStack from "./containers/DesignStack";
-
-export type HomeStackParamList = {
-  Home: {};
-};
-export type ProfileStackParamList = {
-  Profile: {};
-};
-export type DesignStackParamList = {
-  Design: {};
-};
-
-const screenOptions: NativeStackNavigationOptions = {
-  headerStyle: {
-    backgroundColor: "white",
-  },
-  headerTintColor: "darkgray",
-  headerTitleStyle: {
-    fontWeight: "bold",
-  },
-};
+import HomeStack from "./containers/home/HomeStack";
+import ProfileStack from "./containers/profile/ProfileStack";
+import DesignStack from "./containers/design/DesignStack";
 
 const BottomTab = createBottomTabNavigator();
 
