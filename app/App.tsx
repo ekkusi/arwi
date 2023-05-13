@@ -4,6 +4,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import HomeStack from "./containers/home/HomeStack";
 import ProfileStack from "./containers/profile/ProfileStack";
 import DesignStack from "./containers/design/DesignStack";
+import { COLORS } from "./theme";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -26,10 +27,10 @@ export default function App() {
             }
             // You can return any component that you like here!
           },
-          tabBarActiveTintColor: "green",
-          tabBarInactiveTintColor: "white",
+          tabBarActiveTintColor: COLORS.green,
+          tabBarInactiveTintColor: COLORS.darkgray,
           headerShown: false,
-          tabBarStyle: { backgroundColor: "white" },
+          tabBarStyle: { backgroundColor: COLORS.white },
         })}
       >
         <BottomTab.Screen name="HomeStack" component={HomeStack} options={{ title: "Koti" }} />
