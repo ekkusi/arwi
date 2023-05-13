@@ -9,5 +9,6 @@
         "allowAsProps": true
       }
     ]
-  }
+  },
+  "ignorePatterns": ["metro.config.js", "babel.config.js", "jest.config.js"]
 }
