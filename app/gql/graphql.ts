@@ -330,7 +330,12 @@ export type MainPage_GetTeacherQueryVariables = Exact<{
 
 export type MainPage_GetTeacherQuery = {
   __typename?: "Query";
-  getTeacher: { __typename?: "Teacher"; email: string; id: string; groups: Array<{ __typename?: "Group"; id: string }> };
+  getTeacher: {
+    __typename?: "Teacher";
+    email: string;
+    id: string;
+    groups: Array<{ __typename?: "Group"; id: string; name: string; subject: { __typename?: "Subject"; label: string } }>;
+  };
 };
 
 export const MainPage_GetTeacherDocument = {
@@ -364,7 +369,18 @@ export const MainPage_GetTeacherDocument = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "groups" },
-                  selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }] },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "subject" },
+                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "label" } }] },
+                      },
+                    ],
+                  },
                 },
               ],
             },
