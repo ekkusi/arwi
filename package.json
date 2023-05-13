@@ -12,8 +12,8 @@
   "license": "MIT",
   "scripts": {
     "prepare": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
-    "postinstall": "cd next && npx prisma generate",
-    "next:dev": "cd next && npm run dev",
+    "postinstall": "npx -w next prisma generate",
+    "next:dev": "yarn --cwd next run dev",
     "lint:fix": "yarn --cwd next lint:fix && yarn --cwd app lint:fix"
   },
   "devDependencies": {
