@@ -1,9 +1,5 @@
 /* eslint-disable */
-import {
-  GraphQLResolveInfo,
-  GraphQLScalarType,
-  GraphQLScalarTypeConfig,
-} from "graphql";
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql";
 import {
   Teacher as TeacherPrisma,
   EvaluationCollection as EvaluationCollectionPrisma,
@@ -12,26 +8,15 @@ import {
   Student as StudentPrisma,
   ClassYear as ClassYearPrisma,
 } from "@prisma/client";
-import {
-  Subject as SubjectPrisma,
-  Environment as EnvironmentPrisma,
-} from "@/graphql-server/types/subject";
+import { Subject as SubjectPrisma, Environment as EnvironmentPrisma } from "@/graphql-server/types/subject";
 import { CustomContext } from "./contextTypes";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
-  [P in K]-?: NonNullable<T[P]>;
-};
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -379,25 +364,9 @@ export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-export interface SubscriptionSubscriberObject<
-  TResult,
-  TKey extends string,
-  TParent,
-  TContext,
-  TArgs
-> {
-  subscribe: SubscriptionSubscribeFn<
-    { [key in TKey]: TResult },
-    TParent,
-    TContext,
-    TArgs
-  >;
-  resolve?: SubscriptionResolveFn<
-    TResult,
-    { [key in TKey]: TResult },
-    TContext,
-    TArgs
-  >;
+export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
 
 export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
@@ -405,26 +374,12 @@ export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
   resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
 }
 
-export type SubscriptionObject<
-  TResult,
-  TKey extends string,
-  TParent,
-  TContext,
-  TArgs
-> =
+export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<
-  TResult,
-  TKey extends string,
-  TParent = {},
-  TContext = {},
-  TArgs = {}
-> =
-  | ((
-      ...args: any[]
-    ) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
@@ -433,20 +388,11 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
-  obj: T,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
-export type DirectiveResolverFn<
-  TResult = {},
-  TParent = {},
-  TContext = {},
-  TArgs = {}
-> = (
+export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
@@ -465,9 +411,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Teacher: ResolverTypeWrapper<TeacherPrisma>;
-  LoginResult: ResolverTypeWrapper<
-    Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }
-  >;
+  LoginResult: ResolverTypeWrapper<Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
   LearningObjectiveType: LearningObjectiveType;
   LearningObjective: ResolverTypeWrapper<LearningObjective>;
   Subject: ResolverTypeWrapper<SubjectPrisma>;
@@ -502,9 +446,7 @@ export type ResolversParentTypes = {
   Int: Scalars["Int"];
   Boolean: Scalars["Boolean"];
   Teacher: TeacherPrisma;
-  LoginResult: Omit<LoginResult, "teacher"> & {
-    teacher: ResolversParentTypes["Teacher"];
-  };
+  LoginResult: Omit<LoginResult, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
   LearningObjective: LearningObjective;
   Subject: SubjectPrisma;
   Environment: EnvironmentPrisma;
@@ -525,157 +467,52 @@ export type ResolversParentTypes = {
   UpdateEvaluationInput: UpdateEvaluationInput;
 };
 
-export interface DateScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
   name: "Date";
 }
 
-export interface EmailAddressScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["EmailAddress"], any> {
+export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["EmailAddress"], any> {
   name: "EmailAddress";
 }
 
-export type QueryResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
-> = {
-  getTeacher?: Resolver<
-    ResolversTypes["Teacher"],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetTeacherArgs, "id">
-  >;
-  getTeachers?: Resolver<
-    Array<ResolversTypes["Teacher"]>,
-    ParentType,
-    ContextType
-  >;
-  getGroups?: Resolver<
-    Array<ResolversTypes["Group"]>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetGroupsArgs, "teacherId">
-  >;
-  getGroup?: Resolver<
-    ResolversTypes["Group"],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetGroupArgs, "id">
-  >;
-  getCollection?: Resolver<
-    ResolversTypes["EvaluationCollection"],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetCollectionArgs, "id">
-  >;
-  getStudent?: Resolver<
-    ResolversTypes["Student"],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetStudentArgs, "id">
-  >;
-  getEvaluation?: Resolver<
-    ResolversTypes["Evaluation"],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetEvaluationArgs, "id">
-  >;
+export type QueryResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
+  getTeacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType, RequireFields<QueryGetTeacherArgs, "id">>;
+  getTeachers?: Resolver<Array<ResolversTypes["Teacher"]>, ParentType, ContextType>;
+  getGroups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType, RequireFields<QueryGetGroupsArgs, "teacherId">>;
+  getGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<QueryGetGroupArgs, "id">>;
+  getCollection?: Resolver<ResolversTypes["EvaluationCollection"], ParentType, ContextType, RequireFields<QueryGetCollectionArgs, "id">>;
+  getStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<QueryGetStudentArgs, "id">>;
+  getEvaluation?: Resolver<ResolversTypes["Evaluation"], ParentType, ContextType, RequireFields<QueryGetEvaluationArgs, "id">>;
 };
 
-export type MutationResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
-> = {
-  register?: Resolver<
-    ResolversTypes["Teacher"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationRegisterArgs, "data">
-  >;
-  login?: Resolver<
-    ResolversTypes["LoginResult"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationLoginArgs, "email" | "password">
-  >;
-  createGroup?: Resolver<
-    ResolversTypes["Group"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateGroupArgs, "data">
-  >;
+export type MutationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]> = {
+  register?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType, RequireFields<MutationRegisterArgs, "data">>;
+  login?: Resolver<ResolversTypes["LoginResult"], ParentType, ContextType, RequireFields<MutationLoginArgs, "email" | "password">>;
+  createGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationCreateGroupArgs, "data">>;
   createCollection?: Resolver<
     ResolversTypes["EvaluationCollection"],
     ParentType,
     ContextType,
     RequireFields<MutationCreateCollectionArgs, "data" | "classYearId">
   >;
-  createStudent?: Resolver<
-    ResolversTypes["Student"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateStudentArgs, "data" | "classYearId">
-  >;
-  updateEvaluations?: Resolver<
-    ResolversTypes["Int"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateEvaluationsArgs, "data" | "collectionId">
-  >;
+  createStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationCreateStudentArgs, "data" | "classYearId">>;
+  updateEvaluations?: Resolver<ResolversTypes["Int"], ParentType, ContextType, RequireFields<MutationUpdateEvaluationsArgs, "data" | "collectionId">>;
   updateCollection?: Resolver<
     ResolversTypes["EvaluationCollection"],
     ParentType,
     ContextType,
     RequireFields<MutationUpdateCollectionArgs, "data" | "collectionId">
   >;
-  updateStudent?: Resolver<
-    ResolversTypes["Student"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateStudentArgs, "data" | "studentId">
-  >;
-  updateGroup?: Resolver<
-    ResolversTypes["Group"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateGroupArgs, "data" | "groupId">
-  >;
-  changeGroupYear?: Resolver<
-    ResolversTypes["Group"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">
-  >;
-  updateEvaluation?: Resolver<
-    ResolversTypes["Evaluation"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateEvaluationArgs, "data">
-  >;
-  deleteStudent?: Resolver<
-    ResolversTypes["Boolean"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteStudentArgs, "studentId">
-  >;
-  deleteGroup?: Resolver<
-    ResolversTypes["Boolean"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteGroupArgs, "groupId">
-  >;
-  deleteCollection?: Resolver<
-    ResolversTypes["Boolean"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteCollectionArgs, "collectionId">
-  >;
+  updateStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationUpdateStudentArgs, "data" | "studentId">>;
+  updateGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, "data" | "groupId">>;
+  changeGroupYear?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">>;
+  updateEvaluation?: Resolver<ResolversTypes["Evaluation"], ParentType, ContextType, RequireFields<MutationUpdateEvaluationArgs, "data">>;
+  deleteStudent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, "studentId">>;
+  deleteGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, "groupId">>;
+  deleteCollection?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationDeleteCollectionArgs, "collectionId">>;
 };
 
-export type TeacherResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Teacher"] = ResolversParentTypes["Teacher"]
-> = {
+export type TeacherResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Teacher"] = ResolversParentTypes["Teacher"]> = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   email?: Resolver<ResolversTypes["EmailAddress"], ParentType, ContextType>;
   groups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
@@ -697,25 +534,14 @@ export type LearningObjectiveResolvers<
   code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  type?: Resolver<
-    ResolversTypes["LearningObjectiveType"],
-    ParentType,
-    ContextType
-  >;
+  type?: Resolver<ResolversTypes["LearningObjectiveType"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SubjectResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Subject"] = ResolversParentTypes["Subject"]
-> = {
+export type SubjectResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Subject"] = ResolversParentTypes["Subject"]> = {
   code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  environments?: Resolver<
-    Array<ResolversTypes["Environment"]>,
-    ParentType,
-    ContextType
-  >;
+  environments?: Resolver<Array<ResolversTypes["Environment"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -730,30 +556,15 @@ export type EnvironmentResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GroupResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Group"] = ResolversParentTypes["Group"]
-> = {
+export type GroupResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Group"] = ResolversParentTypes["Group"]> = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  students?: Resolver<
-    Array<ResolversTypes["Student"]>,
-    ParentType,
-    ContextType
-  >;
+  students?: Resolver<Array<ResolversTypes["Student"]>, ParentType, ContextType>;
   subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
   teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
-  currentClassYear?: Resolver<
-    ResolversTypes["ClassYear"],
-    ParentType,
-    ContextType
-  >;
-  classYears?: Resolver<
-    Array<ResolversTypes["ClassYear"]>,
-    ParentType,
-    ContextType
-  >;
+  currentClassYear?: Resolver<ResolversTypes["ClassYear"], ParentType, ContextType>;
+  classYears?: Resolver<Array<ResolversTypes["ClassYear"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -772,16 +583,8 @@ export type ClassYearResolvers<
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   info?: Resolver<ResolversTypes["ClassYearInfo"], ParentType, ContextType>;
-  evaluationCollections?: Resolver<
-    Array<ResolversTypes["EvaluationCollection"]>,
-    ParentType,
-    ContextType
-  >;
-  students?: Resolver<
-    Array<ResolversTypes["Student"]>,
-    ParentType,
-    ContextType
-  >;
+  evaluationCollections?: Resolver<Array<ResolversTypes["EvaluationCollection"]>, ParentType, ContextType>;
+  students?: Resolver<Array<ResolversTypes["Student"]>, ParentType, ContextType>;
   group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -793,27 +596,11 @@ export type EvaluationCollectionResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   date?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
   type?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  environment?: Resolver<
-    ResolversTypes["Environment"],
-    ParentType,
-    ContextType
-  >;
-  description?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
-  evaluations?: Resolver<
-    Array<ResolversTypes["Evaluation"]>,
-    ParentType,
-    ContextType
-  >;
+  environment?: Resolver<ResolversTypes["Environment"], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  evaluations?: Resolver<Array<ResolversTypes["Evaluation"]>, ParentType, ContextType>;
   classYear?: Resolver<ResolversTypes["ClassYear"], ParentType, ContextType>;
-  learningObjectives?: Resolver<
-    Array<ResolversTypes["LearningObjective"]>,
-    ParentType,
-    ContextType
-  >;
+  learningObjectives?: Resolver<Array<ResolversTypes["LearningObjective"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -824,38 +611,19 @@ export type EvaluationResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   student?: Resolver<ResolversTypes["Student"], ParentType, ContextType>;
   wasPresent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  skillsRating?: Resolver<
-    Maybe<ResolversTypes["Rating"]>,
-    ParentType,
-    ContextType
-  >;
-  behaviourRating?: Resolver<
-    Maybe<ResolversTypes["Rating"]>,
-    ParentType,
-    ContextType
-  >;
+  skillsRating?: Resolver<Maybe<ResolversTypes["Rating"]>, ParentType, ContextType>;
+  behaviourRating?: Resolver<Maybe<ResolversTypes["Rating"]>, ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   isStellar?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  collection?: Resolver<
-    ResolversTypes["EvaluationCollection"],
-    ParentType,
-    ContextType
-  >;
+  collection?: Resolver<ResolversTypes["EvaluationCollection"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type StudentResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Student"] = ResolversParentTypes["Student"]
-> = {
+export type StudentResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Student"] = ResolversParentTypes["Student"]> = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
-  currentClassEvaluations?: Resolver<
-    Array<ResolversTypes["Evaluation"]>,
-    ParentType,
-    ContextType
-  >;
+  currentClassEvaluations?: Resolver<Array<ResolversTypes["Evaluation"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
