@@ -7,7 +7,7 @@ export const screenOptions: NativeStackNavigationOptions = {
   },
   headerTintColor: "darkgray",
   headerTitleStyle: {
-    fontWeight: "bold",
+    fontWeight: "normal",
   },
 };
 
