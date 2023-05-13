@@ -28,9 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: 'Create .env.test file'
-        defaults:
-          run:
-            working-directory: next
+        working-directory: next
         run: |
           touch .env.test
           echo DATABASE_URL=postgresql://user:password@localhost:5432/arwi-test >> .env.test
