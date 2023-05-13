@@ -4,14 +4,10 @@ export type UseSpeechRecognitionProps = {
   onResult: (result: string) => void;
 };
 
-export default function useSpeechRecognition({
-  onResult: _onResult,
-}: UseSpeechRecognitionProps) {
+export default function useSpeechRecognition({ onResult: _onResult }: UseSpeechRecognitionProps) {
   const [active, setActive] = useState(false);
   const [result, setResult] = useState("");
-  const [speechRecognition, setSpeechRecognition] = useState<
-    SpeechRecognition | undefined
-  >();
+  const [speechRecognition, setSpeechRecognition] = useState<SpeechRecognition | undefined>();
 
   const onResult = useCallback(
     (event: SpeechRecognitionEvent) => {
@@ -37,8 +33,7 @@ export default function useSpeechRecognition({
   useEffect(() => {
     if ("webkitSpeechRecognition" in window) {
       if (!speechRecognition) {
-        const SpeechRecognition =
-          window.SpeechRecognition || webkitSpeechRecognition;
+        const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.lang = "fi-FI";
         recognition.continuous = true;

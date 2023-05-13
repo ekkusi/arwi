@@ -8,10 +8,7 @@ type SpeechRecognitionProps = Omit<IconButtonProps, "onClick"> & {
   onResult?: (result: string) => void;
 };
 
-export default function SpeechRecognition({
-  onResult: _onResult,
-  ...rest
-}: SpeechRecognitionProps) {
+export default function SpeechRecognition({ onResult: _onResult, ...rest }: SpeechRecognitionProps) {
   const onResult = useCallback(
     (value: string) => {
       _onResult?.(value);

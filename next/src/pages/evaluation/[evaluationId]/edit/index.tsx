@@ -40,9 +40,7 @@ const EvaluationEditPage_GetEvaluation_Query = graphql(`
   }
 `);
 const EvaluationsEditPage_UpdateEvaluation_Mutation = graphql(`
-  mutation EvaluationsEditPage_UpdateEvaluation(
-    $input: UpdateEvaluationInput!
-  ) {
+  mutation EvaluationsEditPage_UpdateEvaluation($input: UpdateEvaluationInput!) {
     updateEvaluation(data: $input) {
       id
     }
@@ -53,35 +51,21 @@ function EvaluationEditPageContent() {
   const router = useRouter();
   const evaluationId = router.query.evaluationId as string;
 
-  const { data } = useSWR<EvaluationEditPage_GetEvaluationQuery>(
-    `evaluation/${evaluationId}/edit`,
-    () =>
-      graphqlClient.request(EvaluationEditPage_GetEvaluation_Query, {
-        evaluationId,
-      })
+  const { data } = useSWR<EvaluationEditPage_GetEvaluationQuery>(`evaluation/${evaluationId}/edit`, () =>
+    graphqlClient.request(EvaluationEditPage_GetEvaluation_Query, {
+      evaluationId,
+    })
   );
   const toast = useToast();
 
-  const [evaluationData, setEvaluationData] = useState<
-    UpdateEvaluationCard_EvaluationFragment | undefined
-  >(() =>
-    data
-      ? getFragmentData(
-          UpdateEvaluationCard_EvaluationFragmentDoc,
-          data.getEvaluation
-        )
-      : undefined
+  const [evaluationData, setEvaluationData] = useState<UpdateEvaluationCard_EvaluationFragment | undefined>(() =>
+    data ? getFragmentData(UpdateEvaluationCard_EvaluationFragmentDoc, data.getEvaluation) : undefined
   );
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (data) {
-      setEvaluationData(
-        getFragmentData(
-          UpdateEvaluationCard_EvaluationFragmentDoc,
-          data.getEvaluation
-        )
-      );
+      setEvaluationData(getFragmentData(UpdateEvaluationCard_EvaluationFragmentDoc, data.getEvaluation));
     }
   }, [data]);
 
@@ -89,9 +73,7 @@ function EvaluationEditPageContent() {
 
   const { getEvaluation: evaluation } = data;
 
-  const onChanged = (
-    newEvaluation: UpdateEvaluationCard_EvaluationFragment
-  ) => {
+  const onChanged = (newEvaluation: UpdateEvaluationCard_EvaluationFragment) => {
     setEvaluationData(newEvaluation);
   };
 
@@ -99,28 +81,24 @@ function EvaluationEditPageContent() {
   const updateEvaluation = async () => {
     setIsUpdating(true);
     try {
-      await graphqlClient.request(
-        EvaluationsEditPage_UpdateEvaluation_Mutation,
-        {
-          input: !evaluationData.wasPresent
-            ? {
-                id: evaluationData.id,
-                wasPresent: evaluationData.wasPresent,
-              }
-            : {
-                id: evaluationData.id,
-                wasPresent: evaluationData.wasPresent,
-                behaviourRating: evaluationData.behaviourRating,
-                skillsRating: evaluationData.skillsRating,
-                notes: evaluationData.notes,
-                isStellar: evaluationData.isStellar,
-              },
-        }
-      );
+      await graphqlClient.request(EvaluationsEditPage_UpdateEvaluation_Mutation, {
+        input: !evaluationData.wasPresent
+          ? {
+              id: evaluationData.id,
+              wasPresent: evaluationData.wasPresent,
+            }
+          : {
+              id: evaluationData.id,
+              wasPresent: evaluationData.wasPresent,
+              behaviourRating: evaluationData.behaviourRating,
+              skillsRating: evaluationData.skillsRating,
+              notes: evaluationData.notes,
+              isStellar: evaluationData.isStellar,
+            },
+      });
       setIsUpdating(false);
       const { prevPath } = router.query;
-      const redirectPath =
-        !!prevPath && typeof prevPath === "string" ? prevPath : "/";
+      const redirectPath = !!prevPath && typeof prevPath === "string" ? prevPath : "/";
       router.push({
         pathname: redirectPath,
         query: {
@@ -144,20 +122,9 @@ function EvaluationEditPageContent() {
   return (
     <PageWrapper>
       <TopNavigationBar />
-      <Text as="h1" textAlign="center">{`${formatDate(
-        evaluation.collection.date
-      )} - ${evaluation.collection.environment.label}`}</Text>
-      <UpdateEvaluationCard
-        key={evaluation.id}
-        evaluation={evaluation}
-        onChanged={onChanged}
-      />
-      <Button
-        isLoading={isUpdating}
-        onClick={updateEvaluation}
-        width="100%"
-        mt="3"
-      >
+      <Text as="h1" textAlign="center">{`${formatDate(evaluation.collection.date)} - ${evaluation.collection.environment.label}`}</Text>
+      <UpdateEvaluationCard key={evaluation.id} evaluation={evaluation} onChanged={onChanged} />
+      <Button isLoading={isUpdating} onClick={updateEvaluation} width="100%" mt="3">
         Tallenna
       </Button>
     </PageWrapper>
@@ -183,9 +150,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<{ evaluationId: string }>) {
+export async function getStaticProps({ params }: GetStaticPropsContext<{ evaluationId: string }>) {
   if (!params) throw new Error("Unexpected error, no paramss");
   const data = await serverRequest(EvaluationEditPage_GetEvaluation_Query, {
     evaluationId: params.evaluationId,

@@ -5,8 +5,10 @@
     "prettier",
     "plugin:prettier/recommended"
   ],
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": ["./tsconfig.json"]
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
@@ -15,6 +17,12 @@
     "react/no-array-index-key": "off",
     "react/style-prop-object": "off",
     "no-restricted-exports": "off",
+    // "prettier/prettier": [
+    //   "error",
+    //   {
+    //     "printWidth": 150
+    //   }
+    // ],
     "no-console": [
       "warn",
       {
@@ -30,6 +38,16 @@
         "devDependencies": true
       }
     ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+   ],
     "import/prefer-default-export": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/no-use-before-define": [
@@ -51,5 +69,6 @@
     "import/resolver": {
       "node": {}
     }
-  }
+  },
+  "ignorePatterns": ["*.js"]
 }

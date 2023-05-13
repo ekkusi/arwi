@@ -18,10 +18,7 @@ export default function ErrorFallback() {
 
   return (
     <ErrorPageWrapper>
-      <Text mb="5">
-        Kokeile päivittää sovellus alta. Voi olla, että sivuston versiosi on
-        vain vanhentunut.
-      </Text>
+      <Text mb="5">Kokeile päivittää sovellus alta. Voi olla, että sivuston versiosi on vain vanhentunut.</Text>
       <Flex justifyContent="center">
         <Button onClick={update}>Päivitä sivusto</Button>
       </Flex>

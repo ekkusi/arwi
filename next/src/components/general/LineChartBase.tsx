@@ -1,16 +1,6 @@
 import { Box, BoxProps, Text, useToken } from "@chakra-ui/react";
 import { SVGProps, useState } from "react";
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  TooltipProps,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 import CenteredContainer from "../server-components/primitives/CenteredContainer";
 import Overlay from "./Overlay";
@@ -32,11 +22,7 @@ export type LineChartBaseProps = Omit<BoxProps, "onClick"> & {
   yLabel?: string;
 };
 
-function TooltipContent({
-  active,
-  payload,
-  label,
-}: TooltipProps<"number", "string">) {
+function TooltipContent({ active, payload, label }: TooltipProps<"number", "string">) {
   if (!payload || !active) return null;
 
   return (
@@ -44,8 +30,7 @@ function TooltipContent({
       <Text mb="1">{label}</Text>
       {payload[0] && (
         <Text color={payload[0].stroke}>
-          {payload[0].name}:{" "}
-          {payload[0].payload.skills || payload[0].payload.behaviour}
+          {payload[0].name}: {payload[0].payload.skills || payload[0].payload.behaviour}
         </Text>
       )}
       {payload[1] && (
@@ -56,27 +41,13 @@ function TooltipContent({
     </Box>
   );
 }
-function AxisTick({
-  x = 0,
-  y = 0,
-  payload,
-}: SVGProps<SVGGElement> & { payload?: any }) {
+function AxisTick({ x = 0, y = 0, payload }: SVGProps<SVGGElement> & { payload?: any }) {
   const isFirstTick = Number(x) < 50;
   const xConverted = Number(x);
 
   return (
-    <g
-      transform={`translate(${
-        isFirstTick ? xConverted - 15 : xConverted + 15
-      },${y})`}
-    >
-      <text
-        x={0}
-        y={3}
-        dy={16}
-        textAnchor={isFirstTick ? "start" : "end"}
-        fill="#666"
-      >
+    <g transform={`translate(${isFirstTick ? xConverted - 15 : xConverted + 15},${y})`}>
+      <text x={0} y={3} dy={16} textAnchor={isFirstTick ? "start" : "end"} fill="#666">
         {payload.value}
       </text>
     </g>
@@ -93,14 +64,9 @@ export default function LineChartBase({
   yLabel = "Keskiarvojen kehitys",
   ...rest
 }: LineChartBaseProps) {
-  const [primaryColor, secondaryColor] = useToken("colors", [
-    "green.500",
-    "blue.500",
-  ]);
+  const [primaryColor, secondaryColor] = useToken("colors", ["green.500", "blue.500"]);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [currentTimeoutId, setCurrentTimeoutId] = useState<
-    NodeJS.Timeout | undefined
-  >();
+  const [currentTimeoutId, setCurrentTimeoutId] = useState<NodeJS.Timeout | undefined>();
   const lgShadow = useToken("shadows", "lg");
 
   // Open tooltip after 300 of mouse down
@@ -137,18 +103,8 @@ export default function LineChartBase({
           onMouseUp={closeTooltip}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="date"
-            interval={0}
-            ticks={ticks}
-            tick={ticks.length > 0 ? <AxisTick /> : false}
-            domain={["dataMin", "dataMax"]}
-          />
-          <YAxis
-            type="number"
-            label={{ value: yLabel, angle: -90 }}
-            domain={[6, 10]}
-          />
+          <XAxis dataKey="date" interval={0} ticks={ticks} tick={ticks.length > 0 ? <AxisTick /> : false} domain={["dataMin", "dataMax"]} />
+          <YAxis type="number" label={{ value: yLabel, angle: -90 }} domain={[6, 10]} />
           <Tooltip
             wrapperStyle={{
               visibility: isTooltipVisible ? "visible" : "hidden",
@@ -190,9 +146,7 @@ export default function LineChartBase({
       {!hasEnoughData && (
         <Overlay bgColor={overlayBgColor} opacity={0.3}>
           <CenteredContainer width="70%" pb={50}>
-            <Text>
-              Kuvaajan näyttämiseen tarvitaan vähintään {minItems} arviointia
-            </Text>
+            <Text>Kuvaajan näyttämiseen tarvitaan vähintään {minItems} arviointia</Text>
           </CenteredContainer>
         </Overlay>
       )}

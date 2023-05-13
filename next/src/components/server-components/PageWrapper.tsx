@@ -4,16 +4,7 @@ type PageWrapperProps = BoxProps;
 
 function PageWrapper(props: PageWrapperProps) {
   return (
-    <Box
-      as="main"
-      p="5"
-      bg="light-gray"
-      minHeight="100vh"
-      width="100%"
-      position="relative"
-      pb="calc(74px + var(--chakra-space-5))"
-      {...props}
-    />
+    <Box as="main" p="5" bg="light-gray" minHeight="100vh" width="100%" position="relative" pb="calc(74px + var(--chakra-space-5))" {...props} />
   );
 }
 

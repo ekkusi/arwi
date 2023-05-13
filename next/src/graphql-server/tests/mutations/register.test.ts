@@ -26,10 +26,7 @@ describe("ServerRequest - register", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     const savedTeacher = await prisma.teacher.findFirst({
@@ -68,16 +65,11 @@ describe("ServerRequest - register", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       assertIsError(error);
       // Assert
-      expect(error.message).toEqual(
-        `Sähköposti '${variables.data.email}' on jo käytössä`
-      );
+      expect(error.message).toEqual(`Sähköposti '${variables.data.email}' on jo käytössä`);
     }
   });
 });

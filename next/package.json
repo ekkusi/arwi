@@ -10,6 +10,7 @@
     "start": "npm run kill && next start",
     "start:standalone": "npm run kill && node .next/standalone/server.js",
     "lint": "next lint",
+    "lint:fix": "eslint --fix .",
     "codegen": "graphql-codegen",
     "codegen:watch": "graphql-codegen --watch",
     "prisma:deploy-dev": "dotenv -e .env -- npx prisma migrate deploy",

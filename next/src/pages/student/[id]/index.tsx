@@ -6,19 +6,14 @@ import { useEffect, useRef, useState } from "react";
 import { GetStaticPropsContext } from "next";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import StudentEvaluationsRecap from "@/components/server-components/StudentEvaluationsRecap";
-import {
-  EvaluationsAccordion_EvaluationFragmentDoc,
-  StudentPage_GetStudentQuery,
-} from "@/gql/graphql";
+import { EvaluationsAccordion_EvaluationFragmentDoc, StudentPage_GetStudentQuery } from "@/gql/graphql";
 import useSWR, { SWRConfig } from "swr";
 import { useRouter } from "next/router";
 import graphqlClient from "@/graphql-client";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { AiOutlineCheck } from "react-icons/ai";
-import EvaluationsAccordion, {
-  EvaluationsAccordionHandlers,
-} from "@/components/functional/EvaluationsAccordion";
+import EvaluationsAccordion, { EvaluationsAccordionHandlers } from "@/components/functional/EvaluationsAccordion";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
 
 const StudentPage_GetStudent_Query = graphql(/* GraphQL */ `
@@ -46,15 +41,13 @@ function StudentPageContent() {
 
   const studentId = router.query.id as string;
 
-  const { data } = useSWR<StudentPage_GetStudentQuery>(
-    `student/${studentId}`,
-    () => graphqlClient.request(StudentPage_GetStudent_Query, { studentId })
+  const { data } = useSWR<StudentPage_GetStudentQuery>(`student/${studentId}`, () =>
+    graphqlClient.request(StudentPage_GetStudent_Query, { studentId })
   );
 
   const [summary, setSummary] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const [isGeneratingSummary, setIsGeneratingSumamry] =
-    useState<boolean>(false);
+  const [isGeneratingSummary, setIsGeneratingSumamry] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const evaluationsAccordionRef = useRef<EvaluationsAccordionHandlers>(null);
 
@@ -93,9 +86,7 @@ function StudentPageContent() {
       setIsGeneratingSumamry(false);
     } catch (e) {
       setIsGeneratingSumamry(false);
-      setError(
-        "Palautteen generoinnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
-      );
+      setError("Palautteen generoinnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan.");
     }
   };
 
@@ -109,27 +100,17 @@ function StudentPageContent() {
     <PageWrapper>
       {/* <BackwardsLink position="absolute" top="9" left="10" /> */}
       <TopNavigationBar mb="3" />
-      <StudentEvaluationsRecap
-        student={student}
-        evaluations={evaluations}
-        mb="5"
-      />
+      <StudentEvaluationsRecap student={student} evaluations={evaluations} mb="5" />
       <Text as="h2" mb="0">
         Kaikki arvioinnit
       </Text>
       {evaluations.length > 0 ? (
         <>
-          <EvaluationsAccordion
-            ref={evaluationsAccordionRef}
-            evaluations={evaluations}
-          />
+          <EvaluationsAccordion ref={evaluationsAccordionRef} evaluations={evaluations} />
           <Box my="5">
             <Text as="h2">Loppuarvioinnin generointi</Text>
             <FormLabel>Palautteen pituus</FormLabel>
-            <Button
-              isLoading={isGeneratingSummary}
-              onClick={() => genearateSummary()}
-            >
+            <Button isLoading={isGeneratingSummary} onClick={() => genearateSummary()}>
               Luo palaute
             </Button>
             {error && <Text color="red.500">{error}</Text>}
@@ -141,9 +122,7 @@ function StudentPageContent() {
                 </Text>
                 <Box flexDirection="column" alignItems="center" mt="2">
                   <Button
-                    leftIcon={
-                      isCopied ? <AiOutlineCheck /> : <HiOutlineClipboardList />
-                    }
+                    leftIcon={isCopied ? <AiOutlineCheck /> : <HiOutlineClipboardList />}
                     isDisabled={isCopied}
                     onClick={() => copySummaryToClipboard()}
                   >
@@ -155,9 +134,7 @@ function StudentPageContent() {
           </Box>
         </>
       ) : (
-        <Text mb="5">
-          Oppilaalle ei ole vielä annettu sanallista palautetta
-        </Text>
+        <Text mb="5">Oppilaalle ei ole vielä annettu sanallista palautetta</Text>
       )}
     </PageWrapper>
   );
@@ -181,9 +158,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<{ id: string }>) {
+export async function getStaticProps({ params }: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no paramss");
   const data = await serverRequest(StudentPage_GetStudent_Query, {
     studentId: params.id,

@@ -1,26 +1,11 @@
 import DeleteButton from "@/components/server-components/primitives/DeleteButton";
-import {
-  Box,
-  Flex,
-  Text,
-  IconButton,
-  FlexProps,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, IconButton, FlexProps, useToast } from "@chakra-ui/react";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
-import InputWithError, {
-  InputWithErrorHandlers,
-} from "@/components/general/InputWithError";
+import InputWithError, { InputWithErrorHandlers } from "@/components/general/InputWithError";
 import { FragmentType, graphql, getFragmentData } from "@/gql";
 import { UpdateStudentsList_StudentFragment as StudentFragment } from "@/gql/graphql";
 import graphqlClient from "@/graphql-client";
-import {
-  ChangeEvent,
-  KeyboardEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, KeyboardEventHandler, useEffect, useRef, useState } from "react";
 import { IoMdAddCircle } from "react-icons/io";
 
 const UpdateStudentsList_StudentFragment = graphql(`
@@ -31,10 +16,7 @@ const UpdateStudentsList_StudentFragment = graphql(`
 `);
 
 const UpdateStudentList_UpdateStudentMutation = graphql(`
-  mutation UpdateStudentList_UpdateStudent(
-    $input: UpdateStudentInput!
-    $studentId: ID!
-  ) {
+  mutation UpdateStudentList_UpdateStudent($input: UpdateStudentInput!, $studentId: ID!) {
     updateStudent(data: $input, studentId: $studentId) {
       id
     }
@@ -42,10 +24,7 @@ const UpdateStudentList_UpdateStudentMutation = graphql(`
 `);
 
 const UpdateStudentList_CreateStudentMutation = graphql(`
-  mutation UpdateStudentList_CreateStudent(
-    $input: CreateStudentInput!
-    $classYearId: ID!
-  ) {
+  mutation UpdateStudentList_CreateStudent($input: CreateStudentInput!, $classYearId: ID!) {
     createStudent(data: $input, classYearId: $classYearId) {
       ...UpdateStudentsList_Student
     }
@@ -63,20 +42,11 @@ type UpdateStudentsListProps = FlexProps & {
   classYearId: string;
 };
 
-export default function UpdateStudentsList({
-  classYearId,
-  students: studentFragments,
-  ...rest
-}: UpdateStudentsListProps) {
+export default function UpdateStudentsList({ classYearId, students: studentFragments, ...rest }: UpdateStudentsListProps) {
   const toast = useToast();
   const nameInputRef = useRef<InputWithErrorHandlers>(null);
-  const initialStudents = getFragmentData(
-    UpdateStudentsList_StudentFragment,
-    studentFragments
-  );
-  const [studentInDelete, setStudentInDelete] = useState<
-    StudentFragment | undefined
-  >();
+  const initialStudents = getFragmentData(UpdateStudentsList_StudentFragment, studentFragments);
+  const [studentInDelete, setStudentInDelete] = useState<StudentFragment | undefined>();
   const sortStudents = (students: StudentFragment[]) => {
     return students.sort((a, b) => a.name.localeCompare(b.name));
   };
@@ -108,17 +78,11 @@ export default function UpdateStudentsList({
   const addStudent = async () => {
     // Copy old array with the new element added
     setAddingStudent(true);
-    const { createStudent: newStudentFragment } = await graphqlClient.request(
-      UpdateStudentList_CreateStudentMutation,
-      {
-        classYearId,
-        input: { name: newStudentName },
-      }
-    );
-    const newStudent = getFragmentData(
-      UpdateStudentsList_StudentFragment,
-      newStudentFragment
-    );
+    const { createStudent: newStudentFragment } = await graphqlClient.request(UpdateStudentList_CreateStudentMutation, {
+      classYearId,
+      input: { name: newStudentName },
+    });
+    const newStudent = getFragmentData(UpdateStudentsList_StudentFragment, newStudentFragment);
     const newStudents = [newStudent, ...students];
     setStudents(newStudents);
     setNewStudentName("");
@@ -126,10 +90,7 @@ export default function UpdateStudentsList({
     setAddingStudent(false);
   };
 
-  const handleStudentNameChange = async (
-    student: StudentFragment,
-    name: string
-  ) => {
+  const handleStudentNameChange = async (student: StudentFragment, name: string) => {
     if (name === student.name) return;
     await graphqlClient.request(UpdateStudentList_UpdateStudentMutation, {
       input: { name },
@@ -203,33 +164,18 @@ export default function UpdateStudentsList({
         />
       </Flex>
       {students.map((it) => (
-        <Flex
-          key={it.id}
-          alignItems="center"
-          justifyContent="space-between"
-          mb="2"
-        >
+        <Flex key={it.id} alignItems="center" justifyContent="space-between" mb="2">
           <InputWithError
             type="text"
             name={`student-name-${it.id}`}
             defaultValue={it.name}
             validate={validateName}
-            onBlur={(e, isValid) =>
-              isValid && handleStudentNameChange(it, e.target.value)
-            }
+            onBlur={(e, isValid) => isValid && handleStudentNameChange(it, e.target.value)}
           />
-          <DeleteButton
-            onClick={() => setStudentInDelete(it)}
-            mr="2"
-            aria-label="Poista oppilas"
-          />
+          <DeleteButton onClick={() => setStudentInDelete(it)} mr="2" aria-label="Poista oppilas" />
         </Flex>
       ))}
-      <ConfirmationModal
-        isOpen={!!studentInDelete}
-        onClose={() => setStudentInDelete(undefined)}
-        onAccept={() => deleteSelectedStudent()}
-      >
+      <ConfirmationModal isOpen={!!studentInDelete} onClose={() => setStudentInDelete(undefined)} onAccept={() => deleteSelectedStudent()}>
         <Text>
           Oletko varma, että haluat poistaa oppilaan{" "}
           <Text as="span" fontStyle="italic">

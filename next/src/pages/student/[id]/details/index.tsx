@@ -40,10 +40,7 @@ function StudentDetailsPageContent() {
   const router = useRouter();
   const id = router.query.id as string;
 
-  const { data } = useSWR<StudentDetailsPageQuery>(
-    `student/${id}/details`,
-    () => graphqlClient.request(StudentDetailsPage_Query, { id })
-  );
+  const { data } = useSWR<StudentDetailsPageQuery>(`student/${id}/details`, () => graphqlClient.request(StudentDetailsPage_Query, { id }));
 
   const [environments, setEnvironments] = useState<Environment[]>([]);
   const [graphType, setGraphType] = useState<"skills" | "behaviour">("skills");
@@ -84,21 +81,13 @@ function StudentDetailsPageContent() {
         }}
       />
       <FormLabel>Arviointikohde</FormLabel>
-      <RadioGroup
-        onChange={(value: "skills" | "behaviour") => setGraphType(value)}
-        value={graphType}
-        mb="2"
-      >
+      <RadioGroup onChange={(value: "skills" | "behaviour") => setGraphType(value)} value={graphType} mb="2">
         <Radio value="skills" mr="2">
           Taidot
         </Radio>
         <Radio value="behaviour">Työskentely</Radio>
       </RadioGroup>
-      <EvaluationsLineChartDetailed
-        evaluations={student.currentClassEvaluations}
-        type={graphType}
-        environments={environments}
-      />
+      <EvaluationsLineChartDetailed evaluations={student.currentClassEvaluations} type={graphType} environments={environments} />
     </PageWrapper>
   );
 }
@@ -122,9 +111,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<{ id: string }>) {
+export async function getStaticProps({ params }: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no params");
 
   const data = await serverRequest(StudentDetailsPage_Query, {

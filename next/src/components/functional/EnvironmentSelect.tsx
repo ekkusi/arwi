@@ -1,17 +1,10 @@
 import { Box, Flex } from "@chakra-ui/react";
-import {
-  chakraComponents,
-  OptionProps,
-  SingleValueProps,
-} from "chakra-react-select";
+import { chakraComponents, OptionProps, SingleValueProps } from "chakra-react-select";
 import { hexToRgbA } from "@/utils/color";
 import { Environment, getSubject } from "@/utils/subjectUtils";
 import Select, { SelectProps } from "../general/Select";
 
-type SubjectSelectProps = Omit<
-  SelectProps<Environment, boolean>,
-  "getOptionValue"
-> & {
+type SubjectSelectProps = Omit<SelectProps<Environment, boolean>, "getOptionValue"> & {
   subjectCode: string;
 };
 
@@ -20,29 +13,14 @@ type SubjectSelectProps = Omit<
 const customComponents = {
   Option: ({ children, ...props }: OptionProps<Environment, false>) => (
     <chakraComponents.Option {...props}>
-      <Box
-        display="inline-block"
-        bg={props.data.color}
-        p="2"
-        borderRadius="full"
-        mr="2"
-      />
+      <Box display="inline-block" bg={props.data.color} p="2" borderRadius="full" mr="2" />
       {children}
     </chakraComponents.Option>
   ),
-  SingleValue: ({
-    children,
-    ...props
-  }: SingleValueProps<Environment, false>) => (
+  SingleValue: ({ children, ...props }: SingleValueProps<Environment, false>) => (
     <chakraComponents.SingleValue {...props}>
       <Flex alignItems="center">
-        <Box
-          display="inline-block"
-          bg={props.data.color}
-          p="2"
-          borderRadius="full"
-          mr="2"
-        />
+        <Box display="inline-block" bg={props.data.color} p="2" borderRadius="full" mr="2" />
         {children}
       </Flex>
     </chakraComponents.SingleValue>
@@ -55,13 +33,9 @@ const customComponents = {
   // )
 };
 
-export default function EnvironmentSelect({
-  subjectCode,
-  ...rest
-}: SubjectSelectProps) {
+export default function EnvironmentSelect({ subjectCode, ...rest }: SubjectSelectProps) {
   const subject = getSubject(subjectCode);
-  if (!subject)
-    throw new Error(`Subject with code ${subjectCode} doesn't exist`);
+  if (!subject) throw new Error(`Subject with code ${subjectCode} doesn't exist`);
   const { environments } = subject;
 
   return (

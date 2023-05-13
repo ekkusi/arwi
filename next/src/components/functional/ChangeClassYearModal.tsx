@@ -4,24 +4,14 @@ import graphqlClient from "@/graphql-client";
 import { Checkbox, Flex, FormLabel, Icon, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import ConfirmationModal, {
-  ConfirmationModalProps,
-} from "../general/ConfirmationModal";
+import ConfirmationModal, { ConfirmationModalProps } from "../general/ConfirmationModal";
 import Popover from "../general/Popover";
 import { isSingleOption } from "../general/Select";
 import ClassYearSelect from "./ClassYearSelect";
 
 const ChangeClassYearModal_ChangeClassYear_Mutation = graphql(`
-  mutation ChangeClassYearModal_ChangeClassYear(
-    $groupId: ID!
-    $newYearCode: ClassYearCode!
-    $transferEvaluations: Boolean!
-  ) {
-    changeGroupYear(
-      groupId: $groupId
-      newYearCode: $newYearCode
-      transferEvaluations: $transferEvaluations
-    ) {
+  mutation ChangeClassYearModal_ChangeClassYear($groupId: ID!, $newYearCode: ClassYearCode!, $transferEvaluations: Boolean!) {
+    changeGroupYear(groupId: $groupId, newYearCode: $newYearCode, transferEvaluations: $transferEvaluations) {
       id
     }
   }
@@ -38,27 +28,15 @@ const ChangeClassYearModal_Group_Fragment = graphql(`
   }
 `);
 
-type ChangeClassYearModalProps = Omit<
-  ConfirmationModalProps,
-  "onAccept" | "children"
-> & {
+type ChangeClassYearModalProps = Omit<ConfirmationModalProps, "onAccept" | "children"> & {
   onChanged?: () => void;
   group: FragmentType<typeof ChangeClassYearModal_Group_Fragment>;
 };
 
-export default function ChangeClassYearModal({
-  group: groupFragment,
-  onChanged,
-  ...rest
-}: ChangeClassYearModalProps) {
-  const group = getFragmentData(
-    ChangeClassYearModal_Group_Fragment,
-    groupFragment
-  );
+export default function ChangeClassYearModal({ group: groupFragment, onChanged, ...rest }: ChangeClassYearModalProps) {
+  const group = getFragmentData(ChangeClassYearModal_Group_Fragment, groupFragment);
   const [moveEvaluations, setMoveEvaluations] = useState(false);
-  const [yearCode, setYearCode] = useState<ClassYearCode | null>(
-    () => group.currentClassYear.info.code
-  );
+  const [yearCode, setYearCode] = useState<ClassYearCode | null>(() => group.currentClassYear.info.code);
 
   const changeYear = async () => {
     if (!yearCode) throw new Error("Unexpected null yearCode"); // Should never happen
@@ -91,9 +69,7 @@ export default function ChangeClassYearModal({
             mb: 3,
           }),
         }}
-        onChange={(value) =>
-          setYearCode(isSingleOption(value) ? value.code : null)
-        }
+        onChange={(value) => setYearCode(isSingleOption(value) ? value.code : null)}
       />
       <Flex alignItems="center" position="relative">
         <Checkbox
@@ -104,23 +80,10 @@ export default function ChangeClassYearModal({
         >
           <Text as="span">Siirrä arvioinnit uuteen vuosiluokkaan</Text>
         </Checkbox>
-        <Popover
-          variant="responsive"
-          openButton={
-            <Icon
-              color="green"
-              as={AiOutlineInfoCircle}
-              aria-label="Lisäinfoa siirtämisestä"
-              w={5}
-              h={5}
-            />
-          }
-        >
+        <Popover variant="responsive" openButton={<Icon color="green" as={AiOutlineInfoCircle} aria-label="Lisäinfoa siirtämisestä" w={5} h={5} />}>
           <Text>
-            Mikäli ruksit tämän ruudun,kaikki arvioinnit siirtyvät nykyisestä
-            vuosiluokasta uuteen vuosiluokkaan. Ilman ruksimista arvioinnit
-            säilyvät nykyisessä vuosiluokassa ja uusi vuosiluokka aloitetaan
-            tyhjästä.
+            Mikäli ruksit tämän ruudun,kaikki arvioinnit siirtyvät nykyisestä vuosiluokasta uuteen vuosiluokkaan. Ilman ruksimista arvioinnit säilyvät
+            nykyisessä vuosiluokassa ja uusi vuosiluokka aloitetaan tyhjästä.
           </Text>
         </Popover>
       </Flex>

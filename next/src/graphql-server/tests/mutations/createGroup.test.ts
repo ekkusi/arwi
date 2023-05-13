@@ -54,10 +54,7 @@ describe("ServerRequest - createGroup", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.createGroup).toEqual({
@@ -110,10 +107,7 @@ describe("ServerRequest - createGroup", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.createGroup).toEqual({
@@ -156,16 +150,9 @@ describe("ServerRequest - createGroup", () => {
     `);
 
     // Act
-    const result = serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    ).catch((e) => e);
+    const result = serverRequest({ document: query, prismaOverride: prisma }, variables).catch((e) => e);
 
     // Assert
-    await expect(result).resolves.toThrow(
-      new ValidationError(
-        `Aihetta koodilla '${invalidSubjectCode}' ei ole olemassa.`
-      )
-    );
+    await expect(result).resolves.toThrow(new ValidationError(`Aihetta koodilla '${invalidSubjectCode}' ei ole olemassa.`));
   });
 });

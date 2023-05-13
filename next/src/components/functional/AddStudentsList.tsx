@@ -1,19 +1,6 @@
-import {
-  Box,
-  Flex,
-  IconButton,
-  Input,
-  Text,
-  FlexProps,
-} from "@chakra-ui/react";
+import { Box, Flex, IconButton, Input, Text, FlexProps } from "@chakra-ui/react";
 import { CreateStudentInput } from "@/gql/graphql";
-import {
-  ChangeEvent,
-  KeyboardEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, KeyboardEventHandler, useEffect, useRef, useState } from "react";
 import { IoMdAddCircle } from "react-icons/io";
 import DeleteButton from "@/components/server-components/primitives/DeleteButton";
 
@@ -22,14 +9,8 @@ type AddStudentsListProps = FlexProps & {
   onChanged?(students: CreateStudentInput[]): void;
 };
 
-export default function AddStudentsList({
-  initialStudents,
-  onChanged,
-  ...rest
-}: AddStudentsListProps) {
-  const [students, setStudents] = useState<CreateStudentInput[]>(
-    initialStudents || []
-  );
+export default function AddStudentsList({ initialStudents, onChanged, ...rest }: AddStudentsListProps) {
+  const [students, setStudents] = useState<CreateStudentInput[]>(initialStudents || []);
   const [name, setName] = useState("");
   const [error, setError] = useState<string | undefined>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,11 +60,7 @@ export default function AddStudentsList({
 
   return (
     <Box {...rest}>
-      <Flex
-        alignItems="center"
-        justifyContent="space-between"
-        mb={students.length > 0 ? 4 : 0}
-      >
+      <Flex alignItems="center" justifyContent="space-between" mb={students.length > 0 ? 4 : 0}>
         <Input
           mr="2"
           ref={inputRef}
@@ -93,29 +70,13 @@ export default function AddStudentsList({
           onKeyDown={handleKeyDown}
           isInvalid={!!error}
         />
-        <IconButton
-          onClick={addStudent}
-          colorScheme="green"
-          variant="ghost"
-          aria-label="Lisää oppilas"
-          size="lg"
-          icon={<IoMdAddCircle />}
-        />
+        <IconButton onClick={addStudent} colorScheme="green" variant="ghost" aria-label="Lisää oppilas" size="lg" icon={<IoMdAddCircle />} />
       </Flex>
       {error && <Text color="error">{error}</Text>}
       {students.map((it, index) => (
-        <Flex
-          key={`${it.name}-${index}`}
-          alignItems="center"
-          justifyContent="space-between"
-          mb="2"
-        >
+        <Flex key={`${it.name}-${index}`} alignItems="center" justifyContent="space-between" mb="2">
           <Text>{it.name}</Text>
-          <DeleteButton
-            onClick={() => removeStudent(index)}
-            mr="6px"
-            aria-label="Poista oppilas"
-          />
+          <DeleteButton onClick={() => removeStudent(index)} mr="6px" aria-label="Poista oppilas" />
         </Flex>
       ))}
     </Box>

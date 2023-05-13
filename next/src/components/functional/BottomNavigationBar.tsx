@@ -12,10 +12,7 @@ type BotttomNavigationLinkProps = TextProps & {
   href: string;
 };
 
-export function BottomNavigationLink({
-  href,
-  ...rest
-}: BotttomNavigationLinkProps) {
+export function BottomNavigationLink({ href, ...rest }: BotttomNavigationLinkProps) {
   const { pathname } = useRouter();
 
   return (
@@ -35,13 +32,7 @@ export function BottomNavigationLink({
   );
 }
 
-const NO_NAVIGATION_BAR_PATHS = [
-  "/login",
-  "/register",
-  "/welcome",
-  "/_offline",
-  "/error",
-];
+const NO_NAVIGATION_BAR_PATHS = ["/login", "/register", "/welcome", "/_offline", "/error"];
 
 export default function BottomNavigationBar() {
   const { pathname } = useRouter();

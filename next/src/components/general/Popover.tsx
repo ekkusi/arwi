@@ -19,36 +19,13 @@ type EditPopoverProps = Omit<PopoverProps, "children"> & {
   openButton?: React.ReactNode;
 };
 
-export default function Popover({
-  children,
-  openButtonProps,
-  openButton,
-  ...rest
-}: EditPopoverProps) {
+export default function Popover({ children, openButtonProps, openButton, ...rest }: EditPopoverProps) {
   return (
     <ChakraPopover placement="bottom-start" {...rest}>
       <PopoverTrigger>
-        <Flex>
-          {openButton || (
-            <IconButton
-              color="green.500"
-              variant="link"
-              icon={<BsThreeDots />}
-              aria-label="Muokkaa"
-              {...openButtonProps}
-            />
-          )}
-        </Flex>
+        <Flex>{openButton || <IconButton color="green.500" variant="link" icon={<BsThreeDots />} aria-label="Muokkaa" {...openButtonProps} />}</Flex>
       </PopoverTrigger>
-      <PopoverContent
-        minWidth="44"
-        width="auto"
-        maxWidth="100%"
-        boxShadow="md"
-        color="light-text"
-        fontSize="sm"
-        p="2"
-      >
+      <PopoverContent minWidth="44" width="auto" maxWidth="100%" boxShadow="md" color="light-text" fontSize="sm" p="2">
         {children}
       </PopoverContent>
     </ChakraPopover>
@@ -59,26 +36,24 @@ export type PopoverItemProps = FlexProps & {
   icon?: IconType;
 };
 
-export const PopoverItem = forwardRef<PopoverItemProps, "div">(
-  ({ icon, children, ...rest }, ref) => {
-    return (
-      <Flex
-        ref={ref}
-        color="inherit"
-        px="2"
-        py="2"
-        borderRadius="md"
-        alignItems="center"
-        _hover={{
-          cursor: "pointer",
-          bg: "gray.100",
-        }}
-        fontWeight="semibold"
-        {...rest}
-      >
-        {icon && <Icon as={icon} mr="2" />}
-        {children}
-      </Flex>
-    );
-  }
-);
+export const PopoverItem = forwardRef<PopoverItemProps, "div">(({ icon, children, ...rest }, ref) => {
+  return (
+    <Flex
+      ref={ref}
+      color="inherit"
+      px="2"
+      py="2"
+      borderRadius="md"
+      alignItems="center"
+      _hover={{
+        cursor: "pointer",
+        bg: "gray.100",
+      }}
+      fontWeight="semibold"
+      {...rest}
+    >
+      {icon && <Icon as={icon} mr="2" />}
+      {children}
+    </Flex>
+  );
+});

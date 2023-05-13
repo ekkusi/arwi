@@ -1,7 +1,4 @@
-import {
-  ComponentSingleStyleConfig,
-  defineStyleConfig,
-} from "@chakra-ui/react";
+import { ComponentSingleStyleConfig, defineStyleConfig } from "@chakra-ui/react";
 
 const formatSizeProps = (size: number) => ({
   minWidth: size,
@@ -71,8 +68,7 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
   },
   sizes: {
     xs: ({ variant }) => {
-      const sizeProps =
-        variant === "link" || variant === "ghost" ? formatSizeProps(3) : {};
+      const sizeProps = variant === "link" || variant === "ghost" ? formatSizeProps(3) : {};
       return {
         py: 3,
         px: 3,
@@ -81,8 +77,7 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       };
     },
     sm: ({ variant }) => {
-      const sizeProps =
-        variant === "link" || variant === "ghost" ? formatSizeProps(4) : {};
+      const sizeProps = variant === "link" || variant === "ghost" ? formatSizeProps(4) : {};
       return {
         py: 4,
         px: 4,
@@ -90,8 +85,7 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       };
     },
     md: ({ variant }) => {
-      const sizeProps =
-        variant === "link" || variant === "ghost" ? formatSizeProps(6) : {};
+      const sizeProps = variant === "link" || variant === "ghost" ? formatSizeProps(6) : {};
       return {
         py: 5,
         px: 10,
@@ -99,8 +93,7 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       };
     },
     lg: ({ variant }) => {
-      const sizeProps =
-        variant === "link" || variant === "ghost" ? formatSizeProps(8) : {};
+      const sizeProps = variant === "link" || variant === "ghost" ? formatSizeProps(8) : {};
       return {
         py: 6,
         px: 12,

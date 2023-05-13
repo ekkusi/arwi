@@ -1,9 +1,4 @@
-import {
-  ComponentSingleStyleConfig,
-  SystemStyleInterpolation,
-  Input as _Input,
-  Textarea as _Textarea,
-} from "@chakra-ui/react";
+import { ComponentSingleStyleConfig, SystemStyleInterpolation, Input as _Input, Textarea as _Textarea } from "@chakra-ui/react";
 import { KeyboardEvent } from "react";
 
 const baseStyle: SystemStyleInterpolation = ({ colorScheme, theme }) => {

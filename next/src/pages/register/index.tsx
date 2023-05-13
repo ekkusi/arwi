@@ -37,10 +37,7 @@ export default function RegisterPage() {
     return error;
   };
 
-  const validatePasswordConfirm = (
-    password: string,
-    passwordConfirm: string
-  ) => {
+  const validatePasswordConfirm = (password: string, passwordConfirm: string) => {
     let error;
     if (password !== passwordConfirm) error = "Salasanat eivät täsmää";
     return error;
@@ -119,9 +116,7 @@ export default function RegisterPage() {
               name="passwordConfirm"
               label="Salasana uudelleen"
               type="password"
-              validate={(value) =>
-                validatePasswordConfirm(values.password, value)
-              }
+              validate={(value) => validatePasswordConfirm(values.password, value)}
               inputProps={{
                 onKeyDown: () => {},
               }}

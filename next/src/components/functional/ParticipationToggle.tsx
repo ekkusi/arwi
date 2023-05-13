@@ -8,13 +8,7 @@ type ParticipationToggleProps = Omit<FlexProps, "onChange"> & {
   size?: "xs" | "sm" | "md" | "lg";
 };
 
-export default function ParticipationToggle({
-  isDisabled,
-  initialValue = true,
-  onChange,
-  size = "xs",
-  ...rest
-}: ParticipationToggleProps) {
+export default function ParticipationToggle({ isDisabled, initialValue = true, onChange, size = "xs", ...rest }: ParticipationToggleProps) {
   const [value, setValue] = useState(initialValue);
 
   const toggle = (newValue: boolean) => {

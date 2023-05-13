@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  List,
-  ListItem,
-  OrderedList,
-  Tag,
-  Text,
-  UnorderedList,
-  BoxProps,
-} from "@chakra-ui/react";
+import { Box, Button, IconButton, List, ListItem, OrderedList, Tag, Text, UnorderedList, BoxProps } from "@chakra-ui/react";
 import { AiFillDelete } from "react-icons/ai";
 import PageWrapper from "@/components/server-components/PageWrapper";
 
@@ -89,21 +78,9 @@ export default function DesignPage() {
         <Button size="lg" mb="2" mr="2">
           Large Button
         </Button>
-        <IconButton
-          size="sm"
-          aria-label="Test"
-          icon={<AiFillDelete />}
-          mb="2"
-          mr="2"
-        />
+        <IconButton size="sm" aria-label="Test" icon={<AiFillDelete />} mb="2" mr="2" />
         <IconButton aria-label="Test" icon={<AiFillDelete />} mb="2" mr="2" />
-        <IconButton
-          size="lg"
-          aria-label="Test"
-          icon={<AiFillDelete />}
-          mb="2"
-          mr="2"
-        />
+        <IconButton size="lg" aria-label="Test" icon={<AiFillDelete />} mb="2" mr="2" />
       </Section>
       {/* Tags */}
       <Section title="Tags" display="flex" flexWrap="wrap">

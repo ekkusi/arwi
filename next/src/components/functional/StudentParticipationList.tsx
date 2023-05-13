@@ -16,15 +16,8 @@ export type StudentParticipation = {
   wasPresent: boolean;
 };
 
-export default function StudentParticipationList({
-  initialParticipations,
-  onChange,
-  isDisabled = false,
-  ...rest
-}: StudentParticipationListProps) {
-  const [participations, setParticipations] = useState<StudentParticipation[]>(
-    () => initialParticipations
-  );
+export default function StudentParticipationList({ initialParticipations, onChange, isDisabled = false, ...rest }: StudentParticipationListProps) {
+  const [participations, setParticipations] = useState<StudentParticipation[]>(() => initialParticipations);
 
   const onToggle = (participation: StudentParticipation, value: boolean) => {
     // Copy old array -> update matching participation -> set copy as new state
@@ -39,18 +32,9 @@ export default function StudentParticipationList({
   return (
     <Box {...rest}>
       {participations.map((it, index) => (
-        <Flex
-          key={`${it.student.name}-${index}`}
-          alignItems="center"
-          justifyContent="space-between"
-          mb="2"
-        >
+        <Flex key={`${it.student.name}-${index}`} alignItems="center" justifyContent="space-between" mb="2">
           <Text mr="1">{it.student.name}</Text>
-          <ParticipationToggle
-            isDisabled={isDisabled}
-            initialValue={it.wasPresent}
-            onChange={(value) => onToggle(it, value)}
-          />
+          <ParticipationToggle isDisabled={isDisabled} initialValue={it.wasPresent} onChange={(value) => onToggle(it, value)} />
         </Flex>
       ))}
     </Box>

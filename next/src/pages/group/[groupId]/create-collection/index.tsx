@@ -10,9 +10,7 @@ import { CreateCollectionPage_GetGroupQuery } from "@/gql/graphql";
 import { StudentParticipation } from "@/components/functional/StudentParticipationList";
 import useSWR, { SWRConfig } from "swr";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
-import UpdateCollectionForm, {
-  FormData,
-} from "@/components/functional/UpdateCollectionForm";
+import UpdateCollectionForm, { FormData } from "@/components/functional/UpdateCollectionForm";
 
 const CreateCollectionPage_GetGroup_Query = graphql(`
   query CreateCollectionPage_GetGroup($groupId: ID!) {
@@ -27,10 +25,7 @@ const CreateCollectionPage_GetGroup_Query = graphql(`
 `);
 
 const CreateCollectionPage_CreateCollection_Mutation = graphql(`
-  mutation CreateCollectionPage_CreateCollection(
-    $createCollectionInput: CreateCollectionInput!
-    $classYearId: ID!
-  ) {
+  mutation CreateCollectionPage_CreateCollection($createCollectionInput: CreateCollectionInput!, $classYearId: ID!) {
     createCollection(data: $createCollectionInput, classYearId: $classYearId) {
       id
     }
@@ -41,35 +36,27 @@ function CreateCollectionPageContent() {
   const router = useRouter();
   const groupId = router.query.groupId as string;
 
-  const { data } = useSWR<CreateCollectionPage_GetGroupQuery>(
-    `group/${groupId}/create-collection`,
-    () =>
-      graphqlClient.request(CreateCollectionPage_GetGroup_Query, { groupId })
+  const { data } = useSWR<CreateCollectionPage_GetGroupQuery>(`group/${groupId}/create-collection`, () =>
+    graphqlClient.request(CreateCollectionPage_GetGroup_Query, { groupId })
   );
 
   if (!data) return <LoadingIndicator />;
   const { getGroup: group } = data;
 
-  const handleSubmit = async (
-    values: FormData,
-    participations: StudentParticipation[]
-  ) => {
+  const handleSubmit = async (values: FormData, participations: StudentParticipation[]) => {
     const { description, ...rest } = values;
     try {
-      const { createCollection } = await graphqlClient.request(
-        CreateCollectionPage_CreateCollection_Mutation,
-        {
-          classYearId: group.currentClassYear.id,
-          createCollectionInput: {
-            ...rest,
-            description: description.length > 0 ? description : null,
-            evaluations: participations.map((it) => ({
-              studentId: it.student.id,
-              wasPresent: it.wasPresent,
-            })),
-          },
-        }
-      );
+      const { createCollection } = await graphqlClient.request(CreateCollectionPage_CreateCollection_Mutation, {
+        classYearId: group.currentClassYear.id,
+        createCollectionInput: {
+          ...rest,
+          description: description.length > 0 ? description : null,
+          evaluations: participations.map((it) => ({
+            studentId: it.student.id,
+            wasPresent: it.wasPresent,
+          })),
+        },
+      });
       router.push(`/collection/${createCollection.id}/edit-evaluations`);
     } catch (error) {
       console.error("Error happened:", error);
@@ -101,9 +88,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<{ groupId: string }>) {
+export async function getStaticProps({ params }: GetStaticPropsContext<{ groupId: string }>) {
   if (!params) throw new Error("Unexpected error, no params");
   const data = await serverRequest(CreateCollectionPage_GetGroup_Query, {
     groupId: params.groupId,

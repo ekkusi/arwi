@@ -16,10 +16,7 @@ import theme from "@/theme";
 import ServiceWorkerProvider from "@/hooks-and-providers/ServiceWorkerProvider";
 import ErrorBoundary from "@/components/general/ErrorBoundary";
 
-export default function MyApp({
-  Component,
-  pageProps: { session, ...pageProps },
-}: AppProps) {
+export default function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <>
       <Head>

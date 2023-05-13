@@ -13,9 +13,7 @@ const LearningObjectivesPieChart_LearningObjective_Fragment = graphql(`
   }
 `);
 export type DataType = {
-  learningObjective: FragmentType<
-    typeof LearningObjectivesPieChart_LearningObjective_Fragment
-  >;
+  learningObjective: FragmentType<typeof LearningObjectivesPieChart_LearningObjective_Fragment>;
   count: number;
 };
 
@@ -29,20 +27,11 @@ type PieChartBaseProps = Omit<BoxProps, "onClick"> & {
   overlayBgColor?: string;
 };
 
-export default function LearningObjectivesPieChart({
-  data,
-  onClick,
-  minItems = 2,
-  overlayBgColor = "light-gray",
-  ...rest
-}: PieChartBaseProps) {
+export default function LearningObjectivesPieChart({ data, onClick, minItems = 2, overlayBgColor = "light-gray", ...rest }: PieChartBaseProps) {
   const [primaryColor] = useToken("colors", ["green.500"]);
 
   const mappedData = data.map((d) => {
-    const learningObjective = getFragmentData(
-      LearningObjectivesPieChart_LearningObjective_Fragment,
-      d.learningObjective
-    );
+    const learningObjective = getFragmentData(LearningObjectivesPieChart_LearningObjective_Fragment, d.learningObjective);
     return {
       value: d.count,
       label: learningObjective.label,
@@ -74,10 +63,7 @@ export default function LearningObjectivesPieChart({
       {!hasEnoughData && (
         <Overlay bgColor={overlayBgColor} opacity={0.3}>
           <CenteredContainer width="70%" pb={50}>
-            <Text>
-              Kuvaajan näyttämiseen vähintään {minItems} tavoitetta täytyy olla
-              arvioitu vähintään kerran
-            </Text>
+            <Text>Kuvaajan näyttämiseen vähintään {minItems} tavoitetta täytyy olla arvioitu vähintään kerran</Text>
           </CenteredContainer>
         </Overlay>
       )}

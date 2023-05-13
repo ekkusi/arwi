@@ -7,9 +7,7 @@ import { useRouter } from "next/router";
 import serverRequest from "@/utils/serverRequest";
 import { GetStaticPropsContext } from "next";
 import LoadingIndicator from "@/components/general/LoadingIndicator";
-import UpdateCollectionForm, {
-  FormData,
-} from "@/components/functional/UpdateCollectionForm";
+import UpdateCollectionForm, { FormData } from "@/components/functional/UpdateCollectionForm";
 import { StudentParticipation } from "@/components/functional/StudentParticipationList";
 
 const EditCollectionPage_Query = graphql(`
@@ -28,10 +26,7 @@ const EditCollectionPage_Query = graphql(`
 `);
 
 const EditCollectionPage_UpdateCollection_Mutation = graphql(`
-  mutation EditCollectionPage_UpdateCollection(
-    $input: UpdateCollectionInput!
-    $id: ID!
-  ) {
+  mutation EditCollectionPage_UpdateCollection($input: UpdateCollectionInput!, $id: ID!) {
     updateCollection(data: $input, collectionId: $id) {
       id
     }
@@ -42,28 +37,20 @@ function EditCollectionPageContent() {
   const router = useRouter();
   const id = router.query.id as string;
 
-  const { data } = useSWR<EditCollectionPageQuery>(
-    `collection/${id}/edit`,
-    () => graphqlClient.request(EditCollectionPage_Query, { id })
-  );
+  const { data } = useSWR<EditCollectionPageQuery>(`collection/${id}/edit`, () => graphqlClient.request(EditCollectionPage_Query, { id }));
 
   if (!data) return <LoadingIndicator />;
 
   const { getCollection: collection } = data;
 
-  const handleSubmit = async (
-    values: FormData,
-    participations: StudentParticipation[]
-  ) => {
+  const handleSubmit = async (values: FormData, participations: StudentParticipation[]) => {
     const { description, ...rest } = values;
     try {
       // TODO: This is a bit ugly, but it works for now
       // Map the participations to the evaluations input, find matching id from original evaluations
       const evaluationsInput = participations
         .map((it) => {
-          const matchingEvaluation = collection.evaluations.find(
-            (evaluation) => it.student.id === evaluation.student.id
-          );
+          const matchingEvaluation = collection.evaluations.find((evaluation) => it.student.id === evaluation.student.id);
           if (!matchingEvaluation) return undefined;
           return {
             id: matchingEvaluation.id,
@@ -71,17 +58,14 @@ function EditCollectionPageContent() {
           };
         })
         .flatMap((f) => (f ? [f] : []));
-      await graphqlClient.request(
-        EditCollectionPage_UpdateCollection_Mutation,
-        {
-          id: collection.id,
-          input: {
-            description: description.length > 0 ? description : null,
-            ...rest,
-            evaluations: evaluationsInput,
-          },
-        }
-      );
+      await graphqlClient.request(EditCollectionPage_UpdateCollection_Mutation, {
+        id: collection.id,
+        input: {
+          description: description.length > 0 ? description : null,
+          ...rest,
+          evaluations: evaluationsInput,
+        },
+      });
       router.back();
       // router.push(`/collection/${updateCollection.id}`);
     } catch (error) {
@@ -91,10 +75,7 @@ function EditCollectionPageContent() {
 
   return (
     <PageWrapper>
-      <UpdateCollectionForm
-        onSubmit={handleSubmit}
-        collection={data.getCollection}
-      />
+      <UpdateCollectionForm onSubmit={handleSubmit} collection={data.getCollection} />
     </PageWrapper>
   );
 }
@@ -118,9 +99,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<{ id: string }>) {
+export async function getStaticProps({ params }: GetStaticPropsContext<{ id: string }>) {
   if (!params) throw new Error("Unexpected error, no params");
   const data = await serverRequest(EditCollectionPage_Query, {
     id: params.id,

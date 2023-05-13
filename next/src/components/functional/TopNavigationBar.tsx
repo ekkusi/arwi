@@ -3,10 +3,7 @@ import BackwardsLink from "../general/BackwardsLink";
 
 type TopNavigationBarProps = FlexProps & {};
 
-export default function TopNavigationBar({
-  children,
-  ...rest
-}: TopNavigationBarProps) {
+export default function TopNavigationBar({ children, ...rest }: TopNavigationBarProps) {
   return (
     <Flex justifyContent="space-between" {...rest}>
       <BackwardsLink />

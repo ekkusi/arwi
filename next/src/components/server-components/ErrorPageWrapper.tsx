@@ -1,9 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
 import PageWrapper from "./PageWrapper";
 
-export default function ErrorPageWrapper({
-  children,
-}: React.ComponentProps<"div">) {
+export default function ErrorPageWrapper({ children }: React.ComponentProps<"div">) {
   return (
     <PageWrapper>
       <Box width="100%" pt="16">
@@ -11,8 +9,7 @@ export default function ErrorPageWrapper({
           Hupsista!
         </Text>
         <Text mb="5">
-          Jotakin jännää taisi päästä käymään. Voipi olla, että järjestelmässä
-          on joku bugi luuraamassa. Jos palaat tälle sivulle yhtenään, ota
+          Jotakin jännää taisi päästä käymään. Voipi olla, että järjestelmässä on joku bugi luuraamassa. Jos palaat tälle sivulle yhtenään, ota
           yhteyttä järjestelmän ylläpitäjään.
         </Text>
         {children}

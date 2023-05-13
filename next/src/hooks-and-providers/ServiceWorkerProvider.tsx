@@ -8,11 +8,7 @@ export default function ServiceWorkerProvider() {
   // This hook only run once in browser after the component is rendered for the first time.
   // It has same effect as the old componentDidMount lifecycle callback.
   useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      "serviceWorker" in navigator &&
-      window.workbox !== undefined
-    ) {
+    if (typeof window !== "undefined" && "serviceWorker" in navigator && window.workbox !== undefined) {
       const wb = window.workbox;
       // add event listeners to handle PWA lifecycle events
       wb.addEventListener("installed", (event) => {
@@ -46,11 +42,7 @@ export default function ServiceWorkerProvider() {
   }, []);
 
   const update = () => {
-    if (
-      typeof window !== "undefined" &&
-      "serviceWorker" in navigator &&
-      window.workbox !== undefined
-    ) {
+    if (typeof window !== "undefined" && "serviceWorker" in navigator && window.workbox !== undefined) {
       const wb = window.workbox;
       console.log("Updating service worker...");
       setIsModalOpen(false);

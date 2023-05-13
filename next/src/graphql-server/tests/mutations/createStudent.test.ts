@@ -60,10 +60,7 @@ describe("ServerRequest - createStudent", () => {
       `
     );
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.createStudent).toEqual({

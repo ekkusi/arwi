@@ -78,9 +78,7 @@ export const formatObjectiveTypeLabel = (type: LearningObjectiveType) => {
   }
 };
 
-export const formatRatingStringWithNull = (
-  rating: Rating | null | undefined
-) => {
+export const formatRatingStringWithNull = (rating: Rating | null | undefined) => {
   return rating ? formatRatingNumberString(rating) : "Ei arvioitu";
 };
 
@@ -89,11 +87,7 @@ type Valuable<T> = {
 };
 
 export function removeNulls<T extends {}, V = Valuable<T>>(obj: T): V {
-  return Object.fromEntries(
-    Object.entries(obj).filter(
-      ([, v]) => !(v === null || typeof v === "undefined")
-    )
-  ) as V;
+  return Object.fromEntries(Object.entries(obj).filter(([, v]) => !(v === null || typeof v === "undefined"))) as V;
 }
 
 export const formatAmountString = (value: number) => {

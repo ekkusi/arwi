@@ -1,7 +1,4 @@
-import {
-  ComponentSingleStyleConfig,
-  defineStyleConfig,
-} from "@chakra-ui/react";
+import { ComponentSingleStyleConfig, defineStyleConfig } from "@chakra-ui/react";
 
 const Link: ComponentSingleStyleConfig = defineStyleConfig({
   baseStyle: {

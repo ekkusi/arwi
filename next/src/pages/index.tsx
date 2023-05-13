@@ -1,13 +1,13 @@
-import { graphql } from "@/gql";
 import { Box, Button, Flex, IconButton, Text } from "@chakra-ui/react";
+import { IoAddSharp } from "react-icons/io5";
+import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth";
+import Link from "next/link";
+import { graphql } from "@/gql";
 import serverRequest from "@/utils/serverRequest";
 import PageWrapper from "@/components/server-components/PageWrapper";
 import GroupList from "@/components/functional/GroupList";
-import { IoAddSharp } from "react-icons/io5";
-import { GetServerSideProps } from "next";
 import { MainPage_GetTeacherQuery } from "@/gql/graphql";
-import { getServerSession } from "next-auth";
-import Link from "next/link";
 import { DEFAULT_COLOR_SCHEME } from "@/theme";
 import { authOptions } from "./api/auth/[...nextauth]";
 
@@ -34,24 +34,8 @@ export default function HomePage({ data }: MainPageProps) {
 
   return (
     <PageWrapper display="flex" flexDirection="column">
-      <Box
-        bg={`${DEFAULT_COLOR_SCHEME}.400`}
-        boxShadow="lg"
-        position="absolute"
-        top="0"
-        left="0"
-        right="0"
-        py="3"
-      >
-        <Text
-          as="h1"
-          mb="0"
-          fontSize="xl"
-          fontStyle="italic"
-          fontWeight="normal"
-          textAlign="center"
-          color="light-gray"
-        >
+      <Box bg={`${DEFAULT_COLOR_SCHEME}.400`} boxShadow="lg" position="absolute" top="0" left="0" right="0" py="3">
+        <Text as="h1" mb="0" fontSize="xl" fontStyle="italic" fontWeight="normal" textAlign="center" color="light-gray">
           ARWI
         </Text>
       </Box>

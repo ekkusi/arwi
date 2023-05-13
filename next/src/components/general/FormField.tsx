@@ -8,13 +8,7 @@ import {
   Input,
   InputProps,
 } from "@chakra-ui/react";
-import {
-  Field,
-  FieldConfig,
-  FieldProps,
-  GenericFieldHTMLAttributes,
-  useField,
-} from "formik";
+import { Field, FieldConfig, FieldProps, GenericFieldHTMLAttributes, useField } from "formik";
 
 type Some = GenericFieldHTMLAttributes & FieldConfig;
 
@@ -65,27 +59,14 @@ function FormField({
     validateField(event.target.value);
   };
   return (
-    <FormControl
-      isInvalid={!!meta.error && meta.touched}
-      mb="5"
-      {...containerProps}
-    >
+    <FormControl isInvalid={!!meta.error && meta.touched} mb="5" {...containerProps}>
       <FormLabel htmlFor={rest.id || rest.name} {...labelProps}>
         {label}
       </FormLabel>
-      <Field
-        as={render ? undefined : as}
-        {...rest}
-        {...field}
-        {...inputProps}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      >
+      <Field as={render ? undefined : as} {...rest} {...field} {...inputProps} onChange={handleChange} onBlur={handleBlur}>
         {render ? (props: FieldProps) => render(props) : undefined}
       </Field>
-      <FormErrorMessage {...errorMessageProps}>
-        {meta.error || "terve"}
-      </FormErrorMessage>
+      <FormErrorMessage {...errorMessageProps}>{meta.error || "terve"}</FormErrorMessage>
     </FormControl>
   );
 }

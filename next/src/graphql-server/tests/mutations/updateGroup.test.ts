@@ -51,10 +51,7 @@ describe("ServerRequest - updateGroup", () => {
     `);
 
     // Act
-    const result = await serverRequest(
-      { document: query, prismaOverride: prisma },
-      variables
-    );
+    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
     // Assert
     expect(result.updateGroup).toEqual({
@@ -83,10 +80,7 @@ describe("ServerRequest - updateGroup", () => {
 
     // Act
     try {
-      await serverRequest(
-        { document: query, prismaOverride: prisma },
-        variables
-      );
+      await serverRequest({ document: query, prismaOverride: prisma }, variables);
     } catch (error) {
       // Assert
       assertIsError(error);

@@ -1,6 +1,4 @@
-import Card, {
-  CardProps,
-} from "@/components/server-components/primitives/Card";
+import Card, { CardProps } from "@/components/server-components/primitives/Card";
 import { Box, Flex, IconButton, Tag, Text, Textarea } from "@chakra-ui/react";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -37,12 +35,7 @@ type UpdateEvaluationCardProps = CardProps & {
   onChanged?: (evaluation: EvaluationFragment) => void;
 };
 
-type EvaluationPropKeys =
-  | "skillsRating"
-  | "behaviourRating"
-  | "notes"
-  | "wasPresent"
-  | "isStellar";
+type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
 
 export default function UpdateEvaluationCard({
   children,
@@ -51,10 +44,7 @@ export default function UpdateEvaluationCard({
   hasParticipationToggle = true,
   ...rest
 }: UpdateEvaluationCardProps) {
-  const initialEvaluation = getFragmentData(
-    UpdateEvaluationCard_EvaluationFragment,
-    evaluationFragment
-  );
+  const initialEvaluation = getFragmentData(UpdateEvaluationCard_EvaluationFragment, evaluationFragment);
   const [evaluation, setEvaluation] = useState(() => initialEvaluation);
   const [notes, setNotes] = useState(() => evaluation.notes || "");
 
@@ -78,10 +68,7 @@ export default function UpdateEvaluationCard({
     [evaluation, onChangedCallback]
   );
 
-  const debouncedOnChanged = useMemo(
-    () => debounce(onChanged, 300),
-    [onChanged]
-  );
+  const debouncedOnChanged = useMemo(() => debounce(onChanged, 300), [onChanged]);
 
   const changeNotes = (value: string) => {
     setNotes(value);
@@ -90,21 +77,12 @@ export default function UpdateEvaluationCard({
   };
 
   const givenNotesCount = useMemo(() => {
-    return evaluation.student.currentClassEvaluations.filter((it) => !!it.notes)
-      .length;
+    return evaluation.student.currentClassEvaluations.filter((it) => !!it.notes).length;
   }, [evaluation]);
 
   return (
     <Card mb="3" {...rest}>
-      <Tag
-        as="h2"
-        size="lg"
-        mx="auto"
-        display="block"
-        textAlign="center"
-        mb="4"
-        position="relative"
-      >
+      <Tag as="h2" size="lg" mx="auto" display="block" textAlign="center" mb="4" position="relative">
         {evaluation.student.name}
         <IconButton
           position="absolute"
@@ -121,29 +99,16 @@ export default function UpdateEvaluationCard({
       </Tag>
       {hasParticipationToggle && (
         <Flex justifyContent="center" mb="3">
-          <ParticipationToggle
-            size="sm"
-            initialValue={evaluation.wasPresent}
-            onChange={(value) => onChanged("wasPresent", value)}
-          />
+          <ParticipationToggle size="sm" initialValue={evaluation.wasPresent} onChange={(value) => onChanged("wasPresent", value)} />
         </Flex>
       )}
       <Box position="relative">
         <Text as="h3">Taidot:</Text>
-        <RatingSelector
-          initialRating={evaluation.skillsRating}
-          onChange={(rating) => onChanged("skillsRating", rating)}
-          mb="6"
-        />
+        <RatingSelector initialRating={evaluation.skillsRating} onChange={(rating) => onChanged("skillsRating", rating)} mb="6" />
         <Text as="h3">Työskentely:</Text>
-        <RatingSelector
-          initialRating={evaluation.behaviourRating}
-          onChange={(rating) => onChanged("behaviourRating", rating)}
-          mb="6"
-        />
+        <RatingSelector initialRating={evaluation.behaviourRating} onChange={(rating) => onChanged("behaviourRating", rating)} mb="6" />
         <Text as="h3">
-          Sanallinen palaute (annettu {givenNotesCount}{" "}
-          {formatAmountString(givenNotesCount)}):
+          Sanallinen palaute (annettu {givenNotesCount} {formatAmountString(givenNotesCount)}):
         </Text>
         <Box position="relative">
           <Textarea
@@ -154,22 +119,11 @@ export default function UpdateEvaluationCard({
             placeholder="Sanallinen palaute oppilaan toiminnasta tunnilla..."
             position="relative"
           />
-          <SpeechRecognition
-            position="absolute"
-            bottom="1"
-            right="1"
-            aria-label="Puhu tekstiksi"
-            onResult={changeNotes}
-          />
+          <SpeechRecognition position="absolute" bottom="1" right="1" aria-label="Puhu tekstiksi" onResult={changeNotes} />
         </Box>
         {children}
         {!evaluation.wasPresent && hasParticipationToggle && (
-          <Overlay
-            bgColor="white"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Overlay bgColor="white" display="flex" alignItems="center" justifyContent="center">
             <Text color="black" fontWeight="bold" textAlign="center" mx="3">
               Merkkaa henkilö paikalla olleeksi muokataksesi arviointia
             </Text>

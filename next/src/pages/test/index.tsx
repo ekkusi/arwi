@@ -24,10 +24,7 @@ export default function TestPage() {
         <Text as="h1">Test page</Text>
         <Box>
           <Text as="h2">Speech recognition</Text>
-          <Button
-            onClick={toggleSpeechRecognition}
-            colorScheme={active ? "red" : "green"}
-          >
+          <Button onClick={toggleSpeechRecognition} colorScheme={active ? "red" : "green"}>
             {active ? "Stop" : "Record"}
           </Button>
           <Text as="h3">Result:</Text>

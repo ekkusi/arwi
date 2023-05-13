@@ -1,10 +1,4 @@
-import {
-  getClassYearInfo,
-  getEnvironment,
-  getLearningObjectives,
-  getSubject,
-  getSubjectCode,
-} from "@/utils/subjectUtils";
+import { getClassYearInfo, getEnvironment, getLearningObjectives, getSubject, getSubjectCode } from "@/utils/subjectUtils";
 import { ClassYearCode, Resolvers } from "../types";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
@@ -64,8 +58,7 @@ const resolvers: TypeResolvers = {
     },
     subject: ({ subjectCode }) => {
       const matchingSubject = getSubject(subjectCode);
-      if (!matchingSubject)
-        throw new Error(`Subject not found with code: ${subjectCode}`);
+      if (!matchingSubject) throw new Error(`Subject not found with code: ${subjectCode}`);
       return {
         code: matchingSubject.code,
         label: matchingSubject.label,
@@ -109,27 +102,17 @@ const resolvers: TypeResolvers = {
     },
     environment: ({ environmentCode }) => {
       const environment = getEnvironment(environmentCode);
-      if (!environment)
-        throw new Error(`Environment not found with code: ${environmentCode}`);
+      if (!environment) throw new Error(`Environment not found with code: ${environmentCode}`);
       return environment;
     },
-    learningObjectives: async (
-      { classYearId, learningObjectiveCodes },
-      _,
-      { prisma }
-    ) => {
+    learningObjectives: async ({ classYearId, learningObjectiveCodes }, _, { prisma }) => {
       const group = await prisma.group.findFirstOrThrow({
         where: {
           classYears: { some: { id: classYearId } },
         },
       });
-      const subjectObjectives = getLearningObjectives(
-        group.subjectCode,
-        ClassYearCode[group.currentYearCode]
-      );
-      return subjectObjectives.filter((objective) =>
-        learningObjectiveCodes.includes(objective.code)
-      );
+      const subjectObjectives = getLearningObjectives(group.subjectCode, ClassYearCode[group.currentYearCode]);
+      return subjectObjectives.filter((objective) => learningObjectiveCodes.includes(objective.code));
     },
   },
   Student: {

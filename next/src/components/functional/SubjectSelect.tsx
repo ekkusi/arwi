@@ -1,19 +1,12 @@
 import { getSubjects, SubjectMinimal } from "@/utils/subjectUtils";
 import Select, { SelectProps } from "../general/Select";
 
-type SubjectSelectProps = Omit<
-  SelectProps<SubjectMinimal, boolean>,
-  "getOptionValue"
-> & {
+type SubjectSelectProps = Omit<SelectProps<SubjectMinimal, boolean>, "getOptionValue"> & {
   initialSubjectCode?: string;
   onChange?: (value: SubjectMinimal | null) => void;
 };
 
-export default function SubjectSelect({
-  onChange,
-  initialSubjectCode,
-  ...rest
-}: SubjectSelectProps) {
+export default function SubjectSelect({ onChange, initialSubjectCode, ...rest }: SubjectSelectProps) {
   const subjects = getSubjects();
 
   return (
