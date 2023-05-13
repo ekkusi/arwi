@@ -8,9 +8,6 @@ on:
 
 jobs:
   tests:
-    defaults:
-      run:
-        working-directory: next
     name: Run tests
     runs-on: ubuntu-latest
     services:
@@ -31,15 +28,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: 'Create .env.test file'
+        defaults:
+          run:
+            working-directory: next
         run: |
           touch .env.test
           echo DATABASE_URL=postgresql://user:password@localhost:5432/arwi-test >> .env.test
           cat .env.test
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install
       - name: Run tests
-        run: npm run test-with-setup
+        run: yarn test-with-setup
   docker:
     defaults:
       run:

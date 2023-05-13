@@ -4,8 +4,8 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN  npm install
+COPY package.json ./
+RUN  yarn install
 
 FROM base AS builder
 WORKDIR /app
@@ -30,7 +30,7 @@ RUN --mount=type=secret,id=secret  \
     NEXTAUTH_URL=$(cat /run/secrets/next_auth_url) \
     OPENAI_API_KEY=$(cat /run/secrets/openai_api_key) \
     IS_HTTPS=$(cat /run/secrets/is_https) \
-    npm run build
+    yarn build
 
 FROM base AS runner
 WORKDIR /app
