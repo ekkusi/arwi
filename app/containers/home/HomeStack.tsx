@@ -17,7 +17,7 @@ export type HomeStackParamList = {
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParamList>();
 
-export default function DesignStack() {
+export default function HomeStack() {
   return (
     <HomeStackNavigator.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <HomeStackNavigator.Screen name="Home" component={HomeView} initialParams={{}} />
