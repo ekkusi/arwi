@@ -3,9 +3,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import schema from "@/graphql-server";
 import prisma from "@/graphql-server/prismaClient";
-import { getServerSession } from "next-auth";
 import { CustomContext } from "@/graphql-server/types/contextTypes";
-import { authOptions } from "./auth/[...nextauth]";
+import { ADMIN_USER } from "@/config";
 
 export const config = {
   api: {
@@ -24,31 +23,18 @@ export const options: YogaServerOptions<ServerContext, CustomContext> = {
   // Needed to be defined explicitly because our endpoint lives at a different path other than `/graphql`
   graphqlEndpoint: "/api/graphql",
   context: async ({ req, res }) => {
-    const session = await getServerSession(req, res, authOptions);
+    // const session = await getServerSession(req, res, authOptions);
+
     return {
       prisma,
       req,
       res,
-      user: session?.user,
+      user: ADMIN_USER,
     };
   },
   logging: "debug",
 };
 
-const yoga = createYoga<ServerContext>({
-  schema,
-  // Needed to be defined explicitly because our endpoint lives at a different path other than `/graphql`
-  graphqlEndpoint: "/api/graphql",
-  context: async ({ req, res }) => {
-    const session = await getServerSession(req, res, authOptions);
-    return {
-      prisma,
-      req,
-      res,
-      user: session?.user,
-    };
-  },
-  logging: "debug",
-});
+const yoga = createYoga<ServerContext, CustomContext>(options);
 
 export default yoga;

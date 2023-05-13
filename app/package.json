@@ -3,27 +3,37 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
+    "start-mac": "GRAPHQL_API_URL=http://$(ipconfig getifaddr en0):3000/api/graphql expo start",
+    "start-win": "GRAPHQL_API_URL=http://$(for /f \"tokens=2 delims=[]\" %a in ('ping -n 1 -4 \"%computername%\"') do @echo %a):3000/api/graphql expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "codegen": "graphql-codegen",
+    "codegen:watch": "graphql-codegen --watch"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.14",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@types/react-native-vector-icons": "^6.4.13",
     "expo": "~48.0.15",
+    "expo-constants": "^14.2.1",
     "expo-status-bar": "~1.4.4",
+    "graphql": "^16.6.0",
     "react": "18.2.0",
     "react-native": "0.71.7",
+    "react-native-dotenv": "^3.4.8",
     "react-native-safe-area-context": "^4.5.2",
     "react-native-screens": "^3.20.0",
     "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@graphql-codegen/add": "^4.0.1",
+    "@graphql-codegen/cli": "^3.3.1",
+    "@graphql-codegen/client-preset": "^3.0.1",
     "@types/react": "~18.0.14"
   },
   "private": true
