@@ -1,8 +1,4 @@
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationOptions,
-} from "@react-navigation/native-stack";
-import { View } from "react-native";
+import { createNativeStackNavigator, NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import HomeView from "./HomeView";
 
 export const screenOptions: NativeStackNavigationOptions = {
@@ -23,15 +19,8 @@ const HomeStackNavigator = createNativeStackNavigator<HomeStackParamList>();
 
 export default function DesignStack() {
   return (
-    <HomeStackNavigator.Navigator
-      initialRouteName="Home"
-      screenOptions={screenOptions}
-    >
-      <HomeStackNavigator.Screen
-        name="Home"
-        component={HomeView}
-        initialParams={{}}
-      />
+    <HomeStackNavigator.Navigator initialRouteName="Home" screenOptions={screenOptions}>
+      <HomeStackNavigator.Screen name="Home" component={HomeView} initialParams={{}} />
     </HomeStackNavigator.Navigator>
   );
 }
