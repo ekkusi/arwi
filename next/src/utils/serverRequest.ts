@@ -4,7 +4,7 @@ import { CustomContext } from "@/graphql-server/types/contextTypes";
 import { options, ServerContext } from "@/pages/api/graphql";
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { PrismaClient } from "@prisma/client";
-import { RemoveIndex } from "graphql-request/dist/types";
+import { RemoveIndex } from "graphql-request/build/esm/helpers";
 import { createYoga } from "graphql-yoga";
 import { getErrorMessage } from "./errorUtils";
 

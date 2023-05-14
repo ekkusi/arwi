@@ -1,24 +1,31 @@
+import { useQuery } from "@apollo/client";
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CustomButton from "../../components/CustomButton";
 import GroupListItem from "../../components/GroupListItem";
-import { Group } from "../../mikanlelutyypit";
+import LoadingIndicator from "../../components/LoadingIndicator";
+import { graphql } from "../../gql";
+import { Group, Teacher } from "../../mikanlelutyypit";
 import { COLORS, FONT_SIZES } from "../../theme";
 import { HomeStackParamList } from "./types";
 
-// const MainPage_GetTeacher_Query = graphql(`
-//  query MainPage_GetTeacher($teacherId: ID!) {
-//    getTeacher(id: $teacherId) {
-//      email
-//      id
-//      groups {
-//        ...GroupList_GroupFragment
-//      }
-//    }
-//  }
-// `);
+const MainPage_GetTeacher_Query = graphql(`
+  query MainPage_GetTeacher($teacherId: ID!) {
+    getTeacher(id: $teacherId) {
+      email
+      id
+      groups {
+        id
+        name
+        subject {
+          label
+        }
+      }
+    }
+  }
+`);
 //
 // type MainPageProps = {
 //  data: MainPage_GetTeacherQuery;
@@ -33,9 +40,15 @@ const openGroupCreation = (navigation: NativeStackNavigationProp<HomeStackParamL
   navigation.navigate("GroupCreation", {});
 };
 
-// eslint-disable-next-line react/function-component-definition
-const HomeView: React.FC<HomeViewProps> = ({ route, navigation }) => {
-  const { teacher } = route.params;
+export default function HomePage({ navigation, route }: HomeViewProps) {
+  const {teacher} = route.params
+  const { data, loading } = useQuery(MainPage_GetTeacher_Query, {
+    variables: {
+      teacherId: "357d5bd3-e865-48ee-b96d-acf36834c481",
+    },
+  });
+
+  if (loading || !data) return <LoadingIndicator />;
 
   if (!teacher) throw new Error("Unexpected error, no teacher");
 
@@ -65,17 +78,3 @@ const HomeView: React.FC<HomeViewProps> = ({ route, navigation }) => {
     </View>
   );
 };
-
-export default HomeView;
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//  const session = await getServerSession(context.req, context.res, authOptions);
-//  if (!session) throw new Error("Unexpected error, no session");
-//
-//  const data = await serverRequest(MainPage_GetTeacher_Query, {
-//    teacherId: session.user.id,
-//  });
-//
-//  // Pass data to the page via props
-//  return { props: { data } };
-// };

@@ -5,7 +5,7 @@ import { HomeStackParamList } from "../types";
 
 type GroupViewProps = NativeStackScreenProps<HomeStackParamList, "GroupView">;
 
-export default function GroupView({ navigation, route }: GroupViewProps) {
+export default function GroupView({ route }: GroupViewProps) {
   const { group } = route.params;
   return (
     <View style={{ alignItems: "center" }}>
