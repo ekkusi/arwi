@@ -14,7 +14,7 @@
       }
     ],
     "react-native/no-unused-styles": "error",
-    "react-native/no-raw-text": "error"
+    "react-native/no-raw-text": ["error", {"skip": ["CText"]}]
   },
   "ignorePatterns": [
     "metro.config.js",

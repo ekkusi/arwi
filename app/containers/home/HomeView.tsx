@@ -4,6 +4,7 @@ import React from "react";
 import { FlatList, Text, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import GroupListItem from "../../components/GroupListItem";
+import LoadingIndicator from "../../components/LoadingIndicator";
 import { graphql } from "../../gql";
 import { Group, Teacher } from "../../mikanlelutyypit";
 import { COLORS, FONT_SIZES } from "../../theme";
@@ -62,7 +63,7 @@ export default function HomePage({ navigation }: HomeViewProps) {
     },
   });
 
-  if (loading || !data) return <Text>Ladataan...</Text>;
+  if (loading || !data) return <LoadingIndicator />;
 
   if (!teacher) throw new Error("Unexpected error, no teacher");
 
