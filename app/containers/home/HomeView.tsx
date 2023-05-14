@@ -71,7 +71,7 @@ export default function HomePage({ navigation }: HomeViewProps) {
       <Text>Kirjautunut käyttäjä: {data.getTeacher.email}</Text>
       <View style={{ height: 80, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <Text style={{ fontSize: FONT_SIZES.large }}>Omat ryhmät:</Text>
-        <MaterialCommunityIcon name="plus-thick" size={20} color={COLORS.green} />;
+        <MaterialCommunityIcon name="plus-thick" size={20} color={COLORS.green} />
       </View>
       <FlatList
         data={teacher.groups}
