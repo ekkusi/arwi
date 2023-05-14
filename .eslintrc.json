@@ -17,6 +17,7 @@
     "react/no-array-index-key": "off",
     "react/style-prop-object": "off",
     "no-restricted-exports": "off",
+    "react/prop-types": ["error", { "ignore": ["navigation", "route"] }],
     // "prettier/prettier": [
     //   "error",
     //   {

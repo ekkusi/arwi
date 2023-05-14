@@ -1,7 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, View } from "react-native";
-import { Group } from "../../../mikanlelutyypit";
-import { COLORS, FONT_SIZES } from "../../../theme";
+import { FONT_SIZES } from "../../../theme";
 import { HomeStackParamList } from "../types";
 
 type GroupViewProps = NativeStackScreenProps<HomeStackParamList, "GroupView">;
