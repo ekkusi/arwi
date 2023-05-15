@@ -4,8 +4,8 @@ export const COLORS = {
   lightgray: "gray",
   darkgray: "#202020",
   sport: "blue",
-  language: "red",
-  class: "violet",
+  biology: "red",
+  psychology: "violet",
   art: "turquoise",
   error: "darkred",
 };

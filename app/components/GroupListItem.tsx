@@ -1,42 +1,35 @@
 import { View, ViewProps, Text, TouchableOpacity } from "react-native";
-import { Group } from "../mikanlelutyypit";
+import { FragmentType, getFragmentData, graphql } from "../gql";
+import { Group, GroupListItemFragment, Subject } from "../gql/graphql";
 import { COLORS, FONT_SIZES } from "../theme";
 import Card from "./Card";
 
-export type CardProps = ViewProps;
+export const GroupListItem_Fragment = graphql(`
+  fragment GroupListItem on Group {
+    id
+    name
+    subject {
+      label
+      code
+    }
+  }
+`);
 
-const getColorForId = (id: string) => {
-  switch (id) {
-    case "sport":
+const getColorForCode = (code: string) => {
+  switch (code) {
+    case "LI":
       return COLORS.sport;
-    case "language":
-      return COLORS.language;
-    case "art":
-      return COLORS.art;
-    case "class":
-      return COLORS.class;
+    case "BI":
+      return COLORS.biology;
+    case "PY":
+      return COLORS.psychology;
     default:
       return COLORS.white;
   }
 };
 
-const getNameForId = (id: string) => {
-  switch (id) {
-    case "sport":
-      return "liikunta";
-    case "language":
-      return "kielet";
-    case "art":
-      return "kuvaamataito";
-    case "class":
-      return "luokanopettaja";
-    default:
-      return "";
-  }
-};
-
 type GroupListItemProps = {
-  group: Group;
+  group: GroupListItemFragment;
   onListItemPress: () => void;
 };
 export default function GroupListItem({ group, onListItemPress }: GroupListItemProps) {
@@ -48,8 +41,8 @@ export default function GroupListItem({ group, onListItemPress }: GroupListItemP
       >
         <Text style={{ fontSize: FONT_SIZES.medium, fontWeight: "600", color: COLORS.darkgray, flex: 1 }}>{group.name}</Text>
         <View style={{ flexDirection: "row", justifyContent: "flex-end", flex: 1, gap: 10 }}>
-          <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForId(group.type) }} />
-          <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.lightgray }}>{getNameForId(group.type)}</Text>
+          <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForCode(group.subject.code) }} />
+          <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.lightgray }}>{group.subject.label}</Text>
         </View>
       </TouchableOpacity>
     </Card>

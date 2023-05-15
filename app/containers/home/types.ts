@@ -1,11 +1,9 @@
-import { Group, Teacher } from "../../mikanlelutyypit";
+import { Group } from "../../gql/graphql";
 
 export type HomeStackParamList = {
-  Home: {
-    teacher: Teacher;
-  };
+  Home: {};
   GroupView: {
-    group: Group;
+    groupId: string;
   };
   GroupCreation: {
     createGroupButton: () => React.ReactNode;

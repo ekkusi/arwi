@@ -8,7 +8,7 @@ import GroupListItem from "../../components/GroupListItem";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import ShadowButton from "../../components/ShadowButton";
 import { graphql } from "../../gql";
-import { Group, Teacher } from "../../mikanlelutyypit";
+import { Group, GroupListItemFragment } from "../../gql/graphql";
 import { COLORS, FONT_SIZES } from "../../theme";
 import { HomeStackParamList } from "./types";
 
@@ -22,19 +22,16 @@ const MainPage_GetTeacher_Query = graphql(`
         name
         subject {
           label
+          code
         }
       }
     }
   }
 `);
-//
-// type MainPageProps = {
-//  data: MainPage_GetTeacherQuery;
-// };
 
 type HomeViewProps = NativeStackScreenProps<HomeStackParamList, "Home">;
-const onGroupListItemPress = (group: Group, navigation: NativeStackNavigationProp<HomeStackParamList, "Home", undefined>) => {
-  navigation.navigate("GroupView", { group });
+const onGroupListItemPress = (group: GroupListItemFragment, navigation: NativeStackNavigationProp<HomeStackParamList, "Home", undefined>) => {
+  navigation.navigate("GroupView", { groupId: group.id });
 };
 
 const createGroupButton = (action: () => void) => (
@@ -52,19 +49,22 @@ const openGroupCreation = (navigation: NativeStackNavigationProp<HomeStackParamL
   navigation.navigate("GroupCreation", { createGroupButton: () => createGroupButton(navigation.goBack) });
 };
 
-export default function HomePage({ navigation, route }: HomeViewProps) {
-  const { teacher } = route.params;
-  const { loading } = useQuery(MainPage_GetTeacher_Query, {
+export default function HomePage({ navigation }: HomeViewProps) {
+  const { data, loading } = useQuery(MainPage_GetTeacher_Query, {
     variables: {
       teacherId: "357d5bd3-e865-48ee-b96d-acf36834c481",
     },
   });
 
-  if (loading) return <LoadingIndicator />;
+  if (loading || !data) return <LoadingIndicator />;
+
+  const { getTeacher: teacher } = data;
 
   if (!teacher) throw new Error("Unexpected error, no teacher");
 
-  const renderListItem = ({ item }: { item: Group }) => <GroupListItem group={item} onListItemPress={() => onGroupListItemPress(item, navigation)} />;
+  const renderListItem = ({ item }: { item: GroupListItemFragment }) => (
+    <GroupListItem group={item} onListItemPress={() => onGroupListItemPress(item, navigation)} />
+  );
   return (
     <View style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
       {teacher.groups.length > 0 ? (

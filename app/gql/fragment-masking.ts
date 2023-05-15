@@ -1,9 +1,13 @@
-import { ResultOf, DocumentTypeDecoration } from "@graphql-typed-document-node/core";
+import { ResultOf, DocumentTypeDecoration,  } from '@graphql-typed-document-node/core';
 
-export type FragmentType<TDocumentType extends DocumentTypeDecoration<any, any>> = TDocumentType extends DocumentTypeDecoration<infer TType, any>
-  ? TType extends { " $fragmentName"?: infer TKey }
+
+export type FragmentType<TDocumentType extends DocumentTypeDecoration<any, any>> = TDocumentType extends DocumentTypeDecoration<
+  infer TType,
+  any
+>
+  ? TType extends { ' $fragmentName'?: infer TKey }
     ? TKey extends string
-      ? { " $fragmentRefs"?: { [key in TKey]: TType } }
+      ? { ' $fragmentRefs'?: { [key in TKey]: TType } }
       : never
     : never
   : never;
@@ -35,6 +39,10 @@ export function getFragmentData<TType>(
   return fragmentType as any;
 }
 
-export function makeFragmentData<F extends DocumentTypeDecoration<any, any>, FT extends ResultOf<F>>(data: FT, _fragment: F): FragmentType<F> {
+
+export function makeFragmentData<
+  F extends DocumentTypeDecoration<any, any>,
+  FT extends ResultOf<F>
+>(data: FT, _fragment: F): FragmentType<F> {
   return data as FragmentType<F>;
 }
