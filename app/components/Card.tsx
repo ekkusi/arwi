@@ -1,13 +1,15 @@
 import { forwardRef, LegacyRef } from "react";
 import { View, ViewProps, StyleSheet } from "react-native";
 
-export type CardProps = ViewProps & { containerProps?: ViewProps };
+export type CardProps = ViewProps & { innerViewProps?: ViewProps };
 
 export default forwardRef((props: CardProps, ref: LegacyRef<View>) => {
-  const { containerProps, ...rest } = props;
+  const { innerViewProps, ...rest } = props;
   return (
-    <View {...containerProps} style={[styles.shadow, containerProps?.style]}>
-      <View ref={ref} {...rest} style={[styles.defaultCard, rest.style]} />
+    <View {...rest} style={[styles.shadow, rest.style]}>
+      <View ref={ref} {...innerViewProps} style={[styles.defaultCard, innerViewProps?.style]}>
+        {rest.children}
+      </View>
     </View>
   );
 });

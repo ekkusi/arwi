@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, TextStyle } from "react-native";
+import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, TextStyle, View } from "react-native";
+import { COLORS, FONT_SIZES } from "../theme";
 
 type CustomButtonProps = {
   title: string;
@@ -8,13 +9,24 @@ type CustomButtonProps = {
   titleColor?: string;
   buttonStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  disabled: boolean;
+  disabled?: boolean;
+  children?: JSX.Element;
 };
 
-export default function CustomButton({ title, onPress, buttonColor, titleColor, buttonStyle, textStyle, disabled = false }: CustomButtonProps) {
+export default function CustomButton({
+  title,
+  onPress,
+  buttonColor,
+  titleColor,
+  buttonStyle,
+  textStyle,
+  children,
+  disabled = false,
+}: CustomButtonProps) {
   const text = <Text style={[styles.title, textStyle, { color: titleColor || "#fff" }]}>{title}</Text>;
   return (
     <TouchableOpacity style={[styles.container, buttonStyle, { backgroundColor: buttonColor || "#512DA8" }]} onPress={onPress} disabled={disabled}>
+      {children}
       {text}
     </TouchableOpacity>
   );
@@ -27,10 +39,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 24,
     overflow: "hidden",
+    flexDirection: "row",
+    gap: 10,
   },
   title: {
-    color: "#fff",
-    fontSize: 14,
-    paddingHorizontal: 20,
+    color: COLORS.white,
+    fontSize: FONT_SIZES.medium,
+    fontWeight: "700",
   },
 });

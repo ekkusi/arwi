@@ -1,12 +1,13 @@
 export const COLORS = {
   white: "white",
   green: "green",
-  lightgray: "lightgray",
-  darkgray: "darkgray",
+  lightgray: "gray",
+  darkgray: "#202020",
   sport: "blue",
   language: "red",
   class: "violet",
   art: "turquoise",
+  error: "darkred",
 };
 
 export const FONT_SIZES = {

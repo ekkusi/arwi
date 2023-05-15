@@ -40,13 +40,8 @@ type GroupListItemProps = {
   onListItemPress: () => void;
 };
 export default function GroupListItem({ group, onListItemPress }: GroupListItemProps) {
-  const containerProps: ViewProps = {
-    style: {
-      marginBottom: 10,
-    },
-  };
   return (
-    <Card containerProps={containerProps}>
+    <Card style={{ marginBottom: 10 }}>
       <TouchableOpacity
         style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 50 }}
         onPress={onListItemPress}

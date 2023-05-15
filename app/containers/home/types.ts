@@ -7,5 +7,7 @@ export type HomeStackParamList = {
   GroupView: {
     group: Group;
   };
-  GroupCreation: {};
+  GroupCreation: {
+    createGroupButton: () => React.ReactNode;
+  };
 };
