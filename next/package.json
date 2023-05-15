@@ -17,6 +17,7 @@
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
     "prisma:deploy-prod": "npx dotenv -e .env.production -- npx prisma migrate deploy",
     "init-mock-data": "ts-node ./src/graphql-server/utils/initMockData.ts",
+    "init-db": "npx prisma migrate dev && yarn init-mock-data",
     "test": "dotenv -e .env.test jest -i",
     "test-individual": "dotenv -e .env.test jest",
     "test-with-setup": "npm run prisma:migrate-test && npm run test"
