@@ -26,20 +26,13 @@ If you want to use docker-compose to host the dev database, set the env variable
 DATABASE_URL=postgresql://user:password@localhost:5432/arwi
 ```
 
-- Run local Postgres database by running:
+- Run local Postgres database:
 
   ```bash
   docker-compose up
   ```
 
-
-- Start docker to run local postgre database (needs to be up for backend to work)
-
-  ```bash
-  docker-compose up
-  ```
-
-- Start backend and frontend development servers
+- Start app and frontend development servers
   
 Windows:
 
