@@ -5,10 +5,10 @@
 - Clone this repository
 
   ```bash
-  git clone https://github.com/ekkusi/zen-tracking.git
+  git clone https://github.com/ekkusi/arwi.git
   ```
 
-- Install packages, generate prisma client and build backend
+- Install packages and generate prisma client (runs automatically in the postinstall script)
 
   ```bash
   yarn install
@@ -23,7 +23,7 @@ On first setup, you also need to setup:
 If you want to use docker-compose to host the dev database, set the env variable to:
 
 ```
-DATABASE_URL=postgresql://user:password@localhost:5432/zen-tracking
+DATABASE_URL=postgresql://user:password@localhost:5432/arwi
 ```
 
 - Run local Postgres database by running:
