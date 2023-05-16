@@ -18,7 +18,9 @@
     "init-db": "yarn --cwd next init-db",
     "next:dev": "yarn --cwd next run dev",
     "lint:fix": "yarn --cwd next lint:fix && yarn --cwd app lint:fix",
-    "test-with-setup": "yarn --cwd next prisma:migrate-test && yarn --cwd next test"
+    "test-with-setup": "yarn --cwd next prisma:migrate-test && yarn --cwd next test",
+    "codegen:next": "yarn --cwd next codegen",
+    "codegen:app": "yarn --cwd app codegen"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.52.0",
