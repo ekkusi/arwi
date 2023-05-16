@@ -11,7 +11,7 @@
   "author": "Ekku Sipilä <ekku.eki@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prepare": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
+    "prepare": "husky install",
     "postinstall": "npx -w next prisma generate",
     "start-win": "concurrently \"yarn --cwd next dev\" \"yarn --cwd app start-win\"",
     "start-mac": "concurrently \"yarn --cwd next dev\" \"yarn --cwd app start-mac\"",
