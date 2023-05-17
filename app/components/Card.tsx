@@ -17,7 +17,7 @@ export default forwardRef((props: CardProps, ref: LegacyRef<View>) => {
 const styles = StyleSheet.create({
   defaultCard: {
     flex: 1,
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: "white",
     paddingHorizontal: 10,
     paddingVertical: 8,
@@ -28,15 +28,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: "transparent",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1.5,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });

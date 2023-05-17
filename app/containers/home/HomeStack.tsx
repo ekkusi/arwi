@@ -9,9 +9,9 @@ import { HomeStackParamList } from "./types";
 
 export const screenOptions: NativeStackNavigationOptions = {
   headerStyle: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.green,
   },
-  headerTintColor: COLORS.darkgray,
+  headerTintColor: COLORS.white,
   headerTitleStyle: {
     fontWeight: "bold",
   },

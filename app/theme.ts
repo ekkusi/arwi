@@ -1,12 +1,13 @@
 export const COLORS = {
   white: "white",
-  green: "green",
+  green: "#06d6a0",
   lightgray: "gray",
   darkgray: "#202020",
-  sport: "blue",
-  biology: "red",
-  psychology: "violet",
-  art: "turquoise",
+  sport: "#3a86ff",
+  biology: "#fb5607",
+  psychology: "#8338ec",
+  art: "#ff006e",
+  class: "#ffbe0b",
   error: "darkred",
 };
 
