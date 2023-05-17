@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run kill && next dev",
+    "dev-win": "next dev",
+    "dev-mac": "npm run kill && next dev",
     "kill": "bash ./scripts/kill-process.sh",
     "build": "next build",
     "build:standalone": "next build && cp -r .next/static .next/standalone/.next/static && cp -r public .next/standalone/public",

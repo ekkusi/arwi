@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { withAuth } from "next-auth/middleware";
+import { FALLBACK_SECRET } from "./config";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico|icons|manifest.json|.well-known|sw|workbox|fallback).*)"],
 };
 
-const ALLOWED_PATHS = ["/register"];
+const ALLOWED_PATHS = ["/register", "/login"];
 
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
@@ -26,6 +27,6 @@ export default withAuth(
     callbacks: {
       authorized: () => true, // Always return true to pass the handling to middleware function above
     },
-    secret: process.env.SECRET,
+    secret: process.env.SECRET || FALLBACK_SECRET,
   }
 );

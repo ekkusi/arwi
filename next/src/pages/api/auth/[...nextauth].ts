@@ -1,3 +1,4 @@
+import { FALLBACK_SECRET } from "@/config";
 import ValidationError from "@/graphql-server/errors/ValidationError";
 import prisma from "@/graphql-server/prismaClient";
 import { compare } from "bcryptjs";
@@ -67,7 +68,7 @@ export const authOptions: AuthOptions = {
     },
   },
   debug: !IS_PROD,
-  secret: process.env.SECRET,
+  secret: process.env.SECRET || FALLBACK_SECRET,
 };
 
 export default NextAuth(authOptions);

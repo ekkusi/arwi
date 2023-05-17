@@ -13,8 +13,8 @@
   "scripts": {
     "prepare": "husky install",
     "postinstall": "npx -w next prisma generate",
-    "start-win": "concurrently \"yarn --cwd next dev\" \"yarn --cwd app start-win\"",
-    "start-mac": "concurrently \"yarn --cwd next dev\" \"yarn --cwd app start-mac\"",
+    "start-win": "concurrently \"yarn --cwd next dev-win\" \"yarn --cwd app start-win\"",
+    "start-mac": "concurrently \"yarn --cwd next dev-mac\" \"yarn --cwd app start-mac\"",
     "init-db": "yarn --cwd next init-db",
     "next:dev": "yarn --cwd next run dev",
     "lint:fix": "yarn --cwd next lint:fix && yarn --cwd app lint:fix",
