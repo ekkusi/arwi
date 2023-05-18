@@ -1,7 +1,9 @@
 import { Group } from "../../gql/graphql";
 
 export type HomeStackParamList = {
-  Home: {};
+  Home: {
+    teacherId: string;
+  };
   GroupView: {
     groupId: string;
   };

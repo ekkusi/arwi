@@ -5,7 +5,7 @@ import { graphql } from "../gql";
 import { Group, GroupListItemFragment, Subject } from "../gql/graphql";
 import { COLORS, FONT_SIZES } from "../theme";
 import Card from "./Card";
-import { timeSince } from "./helpers/dateHelpers";
+import { timeSince } from "../helpers/dateHelpers";
 
 export const GroupListItem_Fragment = graphql(`
   fragment GroupListItem on Group {

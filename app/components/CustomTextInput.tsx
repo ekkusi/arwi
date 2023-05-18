@@ -22,7 +22,7 @@ export default function CustomTextInput(props: CustomTextInputProps) {
     }
   };
   return (
-    <View>
+    <View style={{ width: "100%" }}>
       {title && <Text style={styles.titleStyle}>{title}</Text>}
       <TextInput onChange={validateText} {...generalProps} style={allStyles} placeholderTextColor={COLORS.lightgray} />
       {errorText && <Text style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.small }}>{errorText}</Text>}

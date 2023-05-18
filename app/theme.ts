@@ -1,8 +1,10 @@
 export const COLORS = {
   white: "white",
-  green: "#06d6a0",
-  lightgray: "gray",
-  darkgray: "#202020",
+  green: "#38ee93",
+  primary: "#38ee93",
+  secondary: "#293e4d",
+  lightgray: "#3b596e",
+  darkgray: "#17232c",
   sport: "#3a86ff",
   biology: "#fb5607",
   psychology: "#8338ec",
