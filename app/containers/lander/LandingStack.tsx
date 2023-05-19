@@ -12,10 +12,10 @@ type LandingStackProps = {
 
 export default function LandingStack({ setTeacherId }: LandingStackProps) {
   return (
-    <LandingStackNavigator.Navigator initialRouteName="LandingPage" screenOptions={{ headerShown: false }}>
-      <LandingStackNavigator.Screen name="LandingPage" component={LandingPage} initialParams={{ setTeacherId }} />
-      <LandingStackNavigator.Screen name="LoginPage" component={LoginPage} />
-      <LandingStackNavigator.Screen name="SignupPage" component={SignupPage} />
+    <LandingStackNavigator.Navigator initialRouteName="LandingPage" screenOptions={{ headerTransparent: true }}>
+      <LandingStackNavigator.Screen name="LandingPage" component={LandingPage} initialParams={{ setTeacherId }} options={{ title: "" }} />
+      <LandingStackNavigator.Screen name="LoginPage" component={LoginPage} options={{ title: "" }} />
+      <LandingStackNavigator.Screen name="SignupPage" component={SignupPage} options={{ title: "" }} />
     </LandingStackNavigator.Navigator>
   );
 }

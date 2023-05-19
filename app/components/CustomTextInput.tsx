@@ -6,15 +6,21 @@ import { COLORS, FONT_SIZES } from "../theme";
 type CustomTextInputProps = TextInputProps & {
   textValidation?: (text: string) => string | undefined;
   title?: string;
+  lightTheme?: boolean;
   errorStyle?: StyleProp<TextStyle>;
 };
 
 export default function CustomTextInput(props: CustomTextInputProps) {
-  const { textValidation, errorStyle, title, ...generalProps } = props;
+  const { textValidation, errorStyle, title, lightTheme = false, ...generalProps } = props;
   const [errorText, setError] = useState<string | undefined>(undefined);
   const allStyles = errorText
     ? [styles.regularInputStyle, generalProps.style, styles.errorInputStyle, errorStyle]
     : [styles.regularInputStyle, generalProps.style];
+  const textStyles: StyleProp<TextStyle>[] = [styles.titleStyle];
+  if (lightTheme) {
+    textStyles.push({ color: COLORS.white });
+    allStyles.push({ color: COLORS.white, borderColor: COLORS.white });
+  }
   const validateText = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
     if (textValidation) {
       const newError = textValidation(event.nativeEvent.text);
@@ -23,8 +29,8 @@ export default function CustomTextInput(props: CustomTextInputProps) {
   };
   return (
     <View style={{ width: "100%" }}>
-      {title && <Text style={styles.titleStyle}>{title}</Text>}
-      <TextInput onChange={validateText} {...generalProps} style={allStyles} placeholderTextColor={COLORS.lightgray} />
+      {title && <Text style={textStyles}>{title}</Text>}
+      <TextInput onChange={validateText} {...generalProps} style={allStyles} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} />
       {errorText && <Text style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.small }}>{errorText}</Text>}
     </View>
   );
@@ -34,7 +40,7 @@ const styles = StyleSheet.create({
   regularInputStyle: {
     borderBottomWidth: 1,
     color: COLORS.darkgray,
-    borderColor: COLORS.lightgray,
+    borderColor: COLORS.darkgray,
     height: 54,
     width: "100%",
     fontSize: FONT_SIZES.large,
