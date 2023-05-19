@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   regularInputStyle: {
     borderBottomWidth: 1,
     color: COLORS.darkgray,
-    borderColor: COLORS.darkgray,
+    borderColor: COLORS.gray,
     height: 54,
     width: "100%",
     fontSize: FONT_SIZES.large,

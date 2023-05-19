@@ -98,7 +98,11 @@ export default function HomePage({ navigation }: HomeViewProps) {
   if (!teacher) throw new Error("Unexpected error, no teacher");
 
   const renderListItem = ({ item }: { item: GroupListItemFragment }) => (
-    <GroupListItem group={item} onListItemPress={() => onGroupListItemPress(item, navigation)} />
+    <GroupListItem
+      group={item}
+      onEvaluateIconPress={() => console.log("open evaluate")}
+      onListItemPress={() => onGroupListItemPress(item, navigation)}
+    />
   );
   return (
     <View style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>

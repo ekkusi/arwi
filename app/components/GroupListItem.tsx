@@ -35,8 +35,9 @@ const getColorForCode = (code: string) => {
 type GroupListItemProps = {
   group: GroupListItemFragment;
   onListItemPress: () => void;
+  onEvaluateIconPress: () => void;
 };
-export default function GroupListItem({ group, onListItemPress }: GroupListItemProps) {
+export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress }: GroupListItemProps) {
   return (
     <Card style={{ marginBottom: 10 }}>
       <TouchableOpacity
@@ -48,13 +49,15 @@ export default function GroupListItem({ group, onListItemPress }: GroupListItemP
             <Text style={{ fontSize: FONT_SIZES.large, fontWeight: "700", color: COLORS.darkgray, flex: 1 }}>{group.name}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
-            <MaterialCommunityIcon name="history" color={COLORS.lightgray} />
-            <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.lightgray }}>{timeSince(group.updatedAt)} ago</Text>
+            <MaterialCommunityIcon name="history" color={COLORS.gray} />
+            <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.gray }}>{timeSince(group.updatedAt)} ago</Text>
             <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForCode(group.subject.code) }} />
-            <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.lightgray }}>{group.subject.label}</Text>
+            <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.gray }}>{group.subject.label}</Text>
           </View>
         </View>
-        <Entypo name="dots-three-vertical" color={COLORS.darkgray} />
+        <TouchableOpacity onPress={onEvaluateIconPress} style={{ width: 30, height: 30, justifyContent: "center", alignItems: "center" }}>
+          <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />
+        </TouchableOpacity>
       </TouchableOpacity>
     </Card>
   );
