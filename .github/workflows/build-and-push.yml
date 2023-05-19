@@ -57,8 +57,8 @@ jobs:
       -
         name: Build and push
         uses: docker/build-push-action@v4
+        working-directory: next
         with:
-          working-directory: next
           context: .
           push: true
           tags: ekkusi/arwi:latest
