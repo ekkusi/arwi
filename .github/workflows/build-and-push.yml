@@ -58,7 +58,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: next
+          context: .
+          file: ./Dockerfile.backend
           push: true
           tags: ekkusi/arwi:latest
           platforms: linux/amd64
