@@ -55,7 +55,7 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.gray }}>{group.subject.label}</Text>
           </View>
         </View>
-        <TouchableOpacity onPress={onEvaluateIconPress} style={{ width: 30, height: 30, justifyContent: "center", alignItems: "center" }}>
+        <TouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
           <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />
         </TouchableOpacity>
       </TouchableOpacity>
