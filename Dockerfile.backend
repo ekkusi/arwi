@@ -4,13 +4,13 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json ./
+COPY next/package.json  yarn.lock ./
 RUN  yarn install
 
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY next .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -45,7 +45,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.well-known ./public/.well-known
+COPY --from=builder /app/.well-known ./public/next/.well-known
 
 USER nextjs
 
