@@ -24,10 +24,36 @@ const initMockData = async () => {
   });
   const testGroup = await prisma.group.create({
     data: {
-      name: "Testiryhmä",
+      name: "1A",
       subjectCode: "LI",
       teacherId: testTeacher.id,
       currentYearCode: ClassYearCode.PRIMARY_FIRST,
+    },
+  });
+  await prisma.group.create({
+    data: {
+      name: "Lukio 1.",
+      subjectCode: "PY",
+      teacherId: testTeacher.id,
+      currentYearCode: ClassYearCode.HIGH_SCHOOL_FIRST,
+      classYears: {
+        create: {
+          code: ClassYearCode.HIGH_SCHOOL_FIRST,
+        },
+      },
+    },
+  });
+  await prisma.group.create({
+    data: {
+      name: "8B",
+      subjectCode: "BI",
+      teacherId: testTeacher.id,
+      currentYearCode: ClassYearCode.PRIMARY_EIGHTH,
+      classYears: {
+        create: {
+          code: ClassYearCode.PRIMARY_EIGHTH,
+        },
+      },
     },
   });
   const classYear = await prisma.classYear.create({

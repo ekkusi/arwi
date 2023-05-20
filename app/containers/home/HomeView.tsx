@@ -68,7 +68,7 @@ export default function HomePage({ navigation }: HomeViewProps) {
     <View style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
       {teacher.groups.length > 0 ? (
         <FlatList
-          data={teacher.groups.sort((a, b) => {
+          data={[...teacher.groups].sort((a, b) => {
             return a.updatedAt < b.updatedAt ? 1 : -1;
           })}
           renderItem={renderListItem}
