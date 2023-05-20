@@ -1,4 +1,5 @@
 type Query {
+  getCurrentUser: Teacher!
   getTeacher(id: ID!): Teacher!
   getTeachers: [Teacher!]!
   getGroups(teacherId: ID!): [Group!]!

@@ -12,9 +12,9 @@ import { Group, GroupListItemFragment, Teacher } from "../../gql/graphql";
 import { COLORS, FONT_SIZES } from "../../theme";
 import { HomeStackParamList } from "./types";
 
-const MainPage_GetTeacher_Query = graphql(`
-  query MainPage_GetTeacher($teacherId: ID!) {
-    getTeacher(id: $teacherId) {
+const MainPage_GetCurrentUser_Query = graphql(`
+  query MainPage_GetCurrentUser {
+    getCurrentUser {
       email
       id
       groups {
@@ -51,51 +51,47 @@ const openGroupCreation = (navigation: NativeStackNavigationProp<HomeStackParamL
 };
 
 export default function HomePage({ navigation }: HomeViewProps) {
-  // const { data, loading } = useQuery(MainPage_GetTeacher_Query, {
-  //  variables: {
-  //    teacherId: "357d5bd3-e865-48ee-b96d-acf36834c481",
-  //  },
-  // });
-  //
-  // if (loading || !data) return <LoadingIndicator />;
+  const { data, loading } = useQuery(MainPage_GetCurrentUser_Query);
 
-  // const { getTeacher: teacher } = data;
+  if (loading || !data) return <LoadingIndicator />;
 
-  const teacher = {
-    id: "1",
-    email: "testi@awri.fi",
-    groups: [
-      {
-        id: "11",
-        name: "6A",
-        updatedAt: "2023-05-17T06:00:00Z",
-        subject: {
-          label: "Liikunta",
-          code: "LI",
-        },
-      },
-      {
-        id: "12",
-        name: "6B",
-        updatedAt: "2023-05-16T18:00:00Z",
-        subject: {
-          label: "Liikunta",
-          code: "LI",
-        },
-      },
-      {
-        id: "13",
-        name: "6C",
-        updatedAt: "2023-05-12T09:00:00Z",
-        subject: {
-          label: "Biologia",
-          code: "BI",
-        },
-      },
-    ],
-  };
+  const { getCurrentUser: teacher } = data;
 
-  if (!teacher) throw new Error("Unexpected error, no teacher");
+  // const teacher = {
+  //   id: "1",
+  //   email: "testi@awri.fi",
+  //   groups: [
+  //     {
+  //       id: "11",
+  //       name: "6A",
+  //       updatedAt: "2023-05-17T06:00:00Z",
+  //       subject: {
+  //         label: "Liikunta",
+  //         code: "LI",
+  //       },
+  //     },
+  //     {
+  //       id: "12",
+  //       name: "6B",
+  //       updatedAt: "2023-05-16T18:00:00Z",
+  //       subject: {
+  //         label: "Liikunta",
+  //         code: "LI",
+  //       },
+  //     },
+  //     {
+  //       id: "13",
+  //       name: "6C",
+  //       updatedAt: "2023-05-12T09:00:00Z",
+  //       subject: {
+  //         label: "Biologia",
+  //         code: "BI",
+  //       },
+  //     },
+  //   ],
+  // };
+
+  // if (!teacher) throw new Error("Unexpected error, no teacher");
 
   const renderListItem = ({ item }: { item: GroupListItemFragment }) => (
     <GroupListItem

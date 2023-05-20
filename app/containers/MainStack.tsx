@@ -11,7 +11,7 @@ import { MainStackParamList } from "./types";
 
 const BottomTab = createBottomTabNavigator<MainStackParamList>();
 
-export default function MainStack({ teacherId }: { teacherId: string }) {
+export default function MainStack() {
   return (
     <BottomTab.Navigator
       screenOptions={({ route }) => ({
@@ -35,7 +35,7 @@ export default function MainStack({ teacherId }: { teacherId: string }) {
         tabBarStyle: { backgroundColor: COLORS.white },
       })}
     >
-      <BottomTab.Screen name="HomeStack" component={HomeStack} options={{ title: "Koti" }} initialParams={{ teacherId }} />
+      <BottomTab.Screen name="HomeStack" component={HomeStack} options={{ title: "Koti" }} />
       <BottomTab.Screen name="ProfileStack" component={ProfileStack} options={{ title: "Profiili" }} />
       <BottomTab.Screen name="DesignStack" component={DesignStack} options={{ title: "Design" }} />
     </BottomTab.Navigator>

@@ -29,6 +29,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: "Query";
+  getCurrentUser: Teacher;
   getTeacher: Teacher;
   getTeachers: Array<Teacher>;
   getGroups: Array<Group>;
@@ -484,6 +485,7 @@ export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<Resolv
 }
 
 export type QueryResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
+  getCurrentUser?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
   getTeacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType, RequireFields<QueryGetTeacherArgs, "id">>;
   getTeachers?: Resolver<Array<ResolversTypes["Teacher"]>, ParentType, ContextType>;
   getGroups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType, RequireFields<QueryGetGroupsArgs, "teacherId">>;

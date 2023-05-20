@@ -6,8 +6,7 @@ import { COLORS, FONT_SIZES } from "../../theme";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
 
-export default function LandingPage({ navigation, route }: NativeStackScreenProps<LandingStackParamList, "LandingPage">) {
-  const { setTeacherId } = route.params;
+export default function LandingPage({ navigation }: NativeStackScreenProps<LandingStackParamList, "LandingPage">) {
   return (
     <LandingComponent
       bottomChildren={
@@ -18,7 +17,7 @@ export default function LandingPage({ navigation, route }: NativeStackScreenProp
             title="Kirjaudu sisään"
             buttonStyle={{ width: "90%" }}
             onPress={() => {
-              navigation.navigate("LoginPage", { handleLogin: setTeacherId });
+              navigation.navigate("LoginPage", {});
             }}
           />
           <CustomButton
@@ -27,7 +26,7 @@ export default function LandingPage({ navigation, route }: NativeStackScreenProp
             title="Rekisteröidy"
             buttonStyle={{ width: "90%" }}
             onPress={() => {
-              navigation.navigate("SignupPage", { handleSignup: setTeacherId });
+              navigation.navigate("SignupPage", {});
             }}
           />
         </View>

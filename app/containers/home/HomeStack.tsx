@@ -21,11 +21,10 @@ export const screenOptions: NativeStackNavigationOptions = {
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParamList>();
 type HomeStackProps = NativeStackScreenProps<MainStackParamList, "HomeStack">;
 
-export default function HomeStack({ navigation, route: homeRoute }: HomeStackProps) {
-  const { teacherId } = homeRoute.params;
+export default function HomeStack() {
   return (
     <HomeStackNavigator.Navigator initialRouteName="Home" screenOptions={screenOptions}>
-      <HomeStackNavigator.Screen name="Home" component={HomeView} options={{ title: "Omat ryhmät" }} initialParams={{ teacherId }} />
+      <HomeStackNavigator.Screen name="Home" component={HomeView} options={{ title: "Omat ryhmät" }} />
       <HomeStackNavigator.Screen name="GroupView" component={GroupView} />
       <HomeStackNavigator.Screen
         name="GroupCreation"

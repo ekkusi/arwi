@@ -12,6 +12,10 @@ import {
 } from "../utils/auth";
 
 const resolvers: QueryResolvers<CustomContext> = {
+  getCurrentUser: async (_, __, { user }) => {
+    if (!user) throw new AuthenticationError("Not authenticated");
+    return user;
+  },
   getTeacher: async (_, { id }, { prisma, user }) => {
     checkAuthenticatedByTeacher(user, id);
     const teacher = await prisma.teacher.findUnique({

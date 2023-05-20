@@ -1,11 +1,15 @@
 /* eslint-disable global-require */
+import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { Image, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
 import CustomTextInput from "../../components/CustomTextInput";
+import { graphql } from "../../gql";
+import { getErrorMessage, getGraphqlErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
+import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import { COLORS } from "../../theme";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
@@ -15,18 +19,35 @@ const initialValues = {
   password: "",
 };
 
-export default function LoginPage({ navigation, route }: NativeStackScreenProps<LandingStackParamList, "LoginPage">) {
-  const { handleLogin } = route.params;
+const LoginPage_Login_Mutation = graphql(`
+  mutation LoginPage_Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      accessToken
+    }
+  }
+`);
+
+export default function LoginPage({ navigation }: NativeStackScreenProps<LandingStackParamList, "LoginPage">) {
+  const { setToken } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
-  const [loading, setLoading] = useState(false);
+
+  const [login] = useMutation(LoginPage_Login_Mutation);
 
   const handleSubmit = async (values: typeof initialValues) => {
     setGeneralError(undefined);
-    setLoading(true);
     // TODO: Authentication and get teacherId
-    handleLogin("teacherId");
+    // handleLogin("teacherId");
+    const { data, errors } = await login({ variables: { email: values.email, password: values.password } });
+    const accessToken = data?.login?.accessToken;
+    if (errors) {
+      setGeneralError(getGraphqlErrorMessage(errors));
+    }
+    if (!accessToken) {
+      throw new Error("Unexpected error");
+    }
+    setToken(accessToken);
   };
   return (
     <LandingComponent
@@ -63,7 +84,7 @@ export default function LoginPage({ navigation, route }: NativeStackScreenProps<
               <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>Eikö sinulla ole vielä käyttäjää? </Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("SignupPage", { handleSignup: handleLogin });
+                  navigation.navigate("SignupPage", {});
                 }}
               >
                 <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.primary }}>Rekisteröidy</Text>

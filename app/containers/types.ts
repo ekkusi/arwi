@@ -1,7 +1,5 @@
 export type MainStackParamList = {
-  HomeStack: {
-    teacherId: string;
-  };
+  HomeStack: {};
   ProfileStack: {};
   DesignStack: {};
 };

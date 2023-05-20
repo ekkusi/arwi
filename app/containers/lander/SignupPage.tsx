@@ -1,10 +1,14 @@
 /* eslint-disable global-require */
+import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import CustomTextInput from "../../components/CustomTextInput";
+import { graphql } from "../../gql";
+import { getGraphqlErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
+import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import { COLORS } from "../../theme";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
@@ -14,18 +18,34 @@ const initialValues = {
   password: "",
 };
 
-export default function SignupPage({ navigation, route }: NativeStackScreenProps<LandingStackParamList, "SignupPage">) {
-  const { handleSignup } = route.params;
+const RegisterPage_Register_Mutation = graphql(`
+  mutation RegisterPage_Register($input: CreateTeacherInput!) {
+    register(data: $input) {
+      accessToken
+    }
+  }
+`);
+
+export default function SignupPage({ navigation }: NativeStackScreenProps<LandingStackParamList, "SignupPage">) {
+  const { setToken } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
-  const [loading, setLoading] = useState(false);
+
+  const [register] = useMutation(RegisterPage_Register_Mutation);
 
   const handleSubmit = async (values: typeof initialValues) => {
     setGeneralError(undefined);
-    setLoading(true);
     // TODO: Authentication and get teacherId
-    handleSignup("teacherId");
+    const { data, errors } = await register({ variables: { input: { email: values.email, password: values.password } } });
+    const accessToken = data?.register?.accessToken;
+    if (errors) {
+      setGeneralError(getGraphqlErrorMessage(errors));
+    }
+    if (!accessToken) {
+      throw new Error("Unexpected error");
+    }
+    setToken(accessToken);
   };
   return (
     <LandingComponent
@@ -74,7 +94,7 @@ export default function SignupPage({ navigation, route }: NativeStackScreenProps
               <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>Oletko jo rekisteröitynyt? </Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("LoginPage", { handleLogin: handleSignup });
+                  navigation.navigate("LoginPage", {});
                 }}
               >
                 <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.primary }}>Kirjaudu sisään</Text>
