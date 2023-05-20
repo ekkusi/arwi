@@ -1,0 +1,346 @@
+{
+  "subjects": [
+    {
+      "label": "Liikunta",
+      "code": "LI",
+      "environments": [
+        {
+          "label": "Talviliikunta",
+          "code": "LI_TALVI",
+          "color": "#718096"
+        },
+        {
+          "label": "Palloilu",
+          "code": "LI_PALLO",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Vesiliikunta",
+          "code": "LI_VESI",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Voimistelu",
+          "code": "LI_VOIM",
+          "color": "#975A16"
+        },
+        {
+          "label": "Luontoliikunta",
+          "code": "LI_LUONTO",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Tanssi",
+          "code": "LI_TANSSI",
+          "color": "#F6E05E"
+        },
+        {
+          "label": "Kuntoliikunta",
+          "code": "LI_KUNTO",
+          "color": "#9F7AEA"
+        },
+        {
+          "label": "Perusliikunta",
+          "code": "LI_PERUS",
+          "color": "#F56565"
+        },
+        {
+          "label": "Muu",
+          "code": "LI_MUU",
+          "color": "#ED64A6"
+        }
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": "Havaintomotoristen taitojen harjoittelu",
+            "description": "Ohjata oppilasta harjaannuttamaan havaintomotorisia taitojaan eli havainnoimaan itseään ja ympäristöään aistien avulla sekä tekemään liikuntatilanteisiin sopivia ratkaisuja",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T3",
+            "label": "Motoristen perustaitojen soveltaminen",
+            "description": "Vahvistaa motoristen perustaitojen (tasapaino-, liikkumis- ja välineenkäsittelytaidot) oppimista niin, että oppilas oppii soveltamaan",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T4",
+            "label": "Turvallinen liikkuminen eri ympäristöissä",
+            "description": "Harjaannuttaa oppilasta liikkumaan turvallisesti erilaisissa ympäristöissä, erilaisilla välineillä ja telineillä",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T5",
+            "label": "Vesiliikuntaan tutustuminen, alkeisuimataito",
+            "description": "Tutustuttaa oppilas vesiliikuntaan ja varmistaa alkeisuimataito",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T6",
+            "label": "Turvallinen käytös liikuntatunneilla",
+            "description": "Ohjata oppilasta turvalliseen ja asialliseen toimintaan liikuntatunneilla",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T7",
+            "label": "Vuorovaikutuksen säätely liikunnassa",
+            "description": "Ohjata oppilasta säätelemään toimintaansa ja tunneilmaisuaan vuorovaikutuksellisissa liikuntatilanteissa",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T8",
+            "label": "Yhteistyötaitojen tukeminen",
+            "description": "Tukea yhdessä työskentelyn taitoja, kuten yhdessä sovittujen sääntöjen noudattamista, ohjaamalla oppilasta ottamaan vastuuta yhteispelien ja -leikkien onnistumisesta",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T9",
+            "label": "Myönteisen minäkäsityksen vahvistaminen",
+            "description": "Tukea oppilaan myönteisen minäkäsityksen vahvistumista, ohjata itsenäiseen työskentelyyn sekä itsensä monipuoliseen ilmaisemiseen.",
+            "type": "NOT_EVALUATED"
+          },
+          {
+            "code": "T10",
+            "label": "Myönteiset liikuntakokemukset, toimintakyvyn kokeilu",
+            "description": "Varmistaa myönteisten liikunnallisten kokemusten saaminen ja rohkaista oppilasta kokeilemaan oman toimintakykynsä rajoja",
+            "type": "NOT_EVALUATED"
+          }
+        ],
+        "3-6": [
+          {
+            "code": "T1",
+            "label": "Fyysinen aktiivisuus, kokeilu",
+            "description": "Kannustaa oppilaita fyysiseen aktiivisuuteen, kokeilemaan erilaisia liikuntatehtäviä ja harjoittelemaan parhaansa yrittäen.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": "Havaintomotoristen taitojen kehittäminen",
+            "description": "Ohjata oppilasta harjaannuttamaan havaintomotorisia taitojaan eli havainnoimaan itseään ja ympäristöään aistien avulla sekä tekemään liikuntatilanteisiin sopivia ratkaisuja",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T3",
+            "label": "Tasapaino-, liikkumistaitojen soveltaminen",
+            "description": "Ohjata oppilasta sekä vahvistamaan tasapaino- ja liikkumistaitojaan että soveltamaan niitä monipuolisesti erilaisissa oppimisympäristöissä, eri vuodenaikoina sekä eri tilanteissa",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T4",
+            "label": "Välineenkäsittelytaitojen soveltaminen",
+            "description": "Ohjata oppilasta sekä vahvistamaan että soveltamaan välineenkäsittelytaitojaan monipuolisesti erilaisissa oppimisympäristöissä käyttämällä erilaisia välineitä eri vuodenaikoina erilaisissa tilanteissa.",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T5",
+            "label": "Fyysisten ominaisuuksien kehittäminen",
+            "description": "Kannustaa ja ohjata oppilasta arvioimaan, ylläpitämään ja kehittämään fyysisiä ominaisuuksiaan: nopeutta, liikkuvuutta, kestävyyttä ja voimaa.",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T6",
+            "label": "Uimataidon opettaminen",
+            "description": "Opettaa uimataito, jotta oppilas pystyy liikkumaan vedessä ja pelastautumaan vedestä.",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T7",
+            "label": "Turvallinen toiminta liikuntatunneilla",
+            "description": "Ohjata oppilasta turvalliseen ja asialliseen toimintaan liikuntatunneilla.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T8",
+            "label": "Yhteistyö, toiset huomioon ottaminen",
+            "description": "Ohjata oppilasta työskentelemään kaikkien kanssa sekä säätelemään toimintaansa ja tunneilmaisuaan liikuntatilanteissa toiset huomioon ottaen.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T9",
+            "label": "Reilun pelin periaate, vastuu",
+            "description": "Ohjata oppilasta toimimaan reilun pelin periaatteella sekä kantamaan vastuuta yhteisistä oppimistilanteista.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T10",
+            "label": "Itsenäisyys, vastuullisuus",
+            "description": "Kannustaa oppilasta ottamaan vastuuta omasta toiminnasta ja vahvistaa itsenäisen työskentelyn taitoja.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T11",
+            "label": "Myönteiset kokemukset, kehon pätevyys",
+            "description": "Huolehtia siitä, että oppilaat saavat riittävästi myönteisiä kokemuksia omasta kehosta, pätevyydestä ja yhteisöllisyydestä.",
+            "type": "NOT_EVALUATED"
+          }
+        ],
+        "7-9": [
+          {
+            "code": "T1",
+            "label": "Fyysinen aktiivisuus, kokeilu, harjoittelu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan erilaisia liikuntamuotoja ja harjoittelemaan parhaansa yrittäen.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": "Havaintomotoristen taitojen harjoittelu",
+            "description": "Ohjata oppilasta harjaannuttamaan havaintomotorisia taitojaan eli havainnoimaan itseään ja ympäristöään aistien avulla sekä tekemään liikuntatilanteisiin sopivia ratkaisuja.",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T3",
+            "label": "Tasapaino- ja liikkumistaitojen kehittäminen",
+            "description": "Ohjata oppilasta harjoittelun avulla kehittämään tasapaino- ja liikkumistaitojaan, jotta oppilas osaa käyttää, yhdistää ja soveltaa niitä monipuolisesti erilaisissa oppimisympäristöissä, eri vuodenaikoina ja eri liikuntamuodoissa.",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T4",
+            "label": "Välineenkäsittelytaitojen kehittäminen",
+            "description": "Ohjata oppilasta harjoittelun avulla kehittämään välineenkäsittelytaitojaan, jotta oppilas osaa käyttää, yhdistää ja soveltaa niitä monipuolisesti erilaisissa oppimisympäristöissä, eri välineillä, eri vuodenaikoina ja eri liikuntamuodoissa.",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T5",
+            "label": "Fyysisten ominaisuuksien arviointi ja kehittäminen",
+            "description": "Kannustaa ja ohjata oppilasta arvioimaan, ylläpitämään ja kehittämään fyysisiä ominaisuuksiaan: voimaa, nopeutta, kestävyyttä ja liikkuvuutta.",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T6",
+            "label": "Uima- ja vesipelastustaitojen vahvistaminen",
+            "description": "Vahvistaa uima- ja vesipelastustaitoja, jotta oppilas osaa sekä uida että pelastautua ja pelastaa vedestä.",
+            "type": "SKILLS"
+          },
+          {
+            "code": "T7",
+            "label": "Turvallinen ja asiallinen toiminta",
+            "description": "Ohjata oppilasta turvalliseen ja asialliseen toimintaan.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T8",
+            "label": "Yhteistyö ja tunneilmaisun säätely",
+            "description": "Ohjata oppilasta työskentelemään kaikkien kanssa sekä säätelemään toimintaansa ja tunneilmaisuaan liikuntatilanteissa toiset huomioon ottaen.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T9",
+            "label": "Reilu peli ja vastuu yhteisistä oppimistilanteista",
+            "description": "Ohjata oppilasta toimimaan reilun pelin periaatteella sekä ottamaan vastuuta yhteisistä oppimistilanteista.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T10",
+            "label": "Oman toiminnan vastuunotto ja itsenäisen työskentelyn taitojen vahvistaminen",
+            "description": "Kannustaa oppilasta ottamaan vastuuta omasta toiminnasta ja vahvistaa oppilaan itsenäisen työskentelyn taitoja.",
+            "type": "BEHAVIOUR"
+          },
+          {
+            "code": "T11",
+            "label": "Myönteiset kokemukset kehosta, pätevyydestä ja yhteisöllisyydestä",
+            "description": "Huolehtia siitä, että oppilaat saavat riittävästi myönteisiä kokemuksia omasta kehosta, pätevyydestä ja yhteisöllisyydestä.",
+            "type": "NOT_EVALUATED"
+          },
+          {
+            "code": "T12",
+            "label": "Fyysisen aktiivisuuden ja liikunnallisen elämäntavan merkitys",
+            "description": "Auttaa oppilasta ymmärtämään riittävän fyysisen aktiivisuuden ja liikunnallisen elämäntavan merkitys kokonaisvaltaiselle hyvinvoinnille.",
+            "type": "NOT_EVALUATED"
+          },
+          {
+            "code": "T13",
+            "label": "Liikuntaharrastusten tutustumisen tukeminen",
+            "description": "Tutustuttaa oppilas yleisten liikuntamuotojen harrastamiseen liittyviin mahdollisuuksiin, tietoihin ja taitoihin, jotta hän saa edellytyksiä löytää itselleen sopivia iloa ja virkistystä tuottavia liikuntaharrastuksia.",
+            "type": "NOT_EVALUATED"
+          }
+        ],
+        "high_school_1-3": [],
+        "vocational_1-4": []
+      }
+    },
+    {
+      "label": "Biologia",
+      "code": "BI",
+      "environments": [
+        {
+          "label": "Kasvit",
+          "code": "BI_KASVI",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Eläimet",
+          "code": "BI_ELAIN",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Mikrobit",
+          "code": "BI_MIKRO",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Ympäristö",
+          "code": "BI_YMPARISTO",
+          "color": "#975A16"
+        },
+        {
+          "label": "Muu",
+          "code": "BI_MUU",
+          "color": "#ED64A6"
+        }
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
+    },
+    {
+      "label": "Psykologia",
+      "code": "PY",
+      "environments": [
+        {
+          "label": "Aivot",
+          "code": "PY_AIVO",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Tunteet",
+          "code": "PY_TUNTEET",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Käyttäytyminen",
+          "code": "PY_KAYT",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "PY_MUU",
+          "color": "#ED64A6"
+        }
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
+    }
+  ]
+}

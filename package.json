@@ -2,7 +2,8 @@
   "name": "arwi",
   "workspaces": [
     "next",
-    "app"
+    "app",
+    "backend"
   ],
   "version": "1.0.0",
   "private": true,
@@ -12,14 +13,14 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
-    "postinstall": "npx -w next prisma generate",
-    "start-win": "concurrently \"yarn --cwd next dev-win\" \"yarn --cwd app start-win\"",
-    "start-mac": "concurrently \"yarn --cwd next dev-mac\" \"yarn --cwd app start-mac\"",
-    "init-db": "yarn --cwd next init-db",
-    "next:dev": "yarn --cwd next run dev",
-    "lint:fix": "yarn --cwd next lint:fix && yarn --cwd app lint:fix",
-    "test-with-setup": "yarn --cwd next prisma:migrate-test && yarn --cwd next test",
-    "codegen:next": "yarn --cwd next codegen",
+    "postinstall": "npx -w backend prisma generate",
+    "start-win": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-win\"",
+    "start-mac": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-mac\"",
+    "init-db": "yarn --cwd backend init-db",
+    "backend:dev": "yarn --cwd backend run dev",
+    "lint:fix": "yarn --cwd backend lint:fix && yarn --cwd backend lint:fix",
+    "test-with-setup": "yarn --cwd backend prisma:migrate-test && yarn --cwd backend test",
+    "codegen:backend": "yarn --cwd backend codegen",
     "codegen:app": "yarn --cwd app codegen"
   },
   "devDependencies": {
