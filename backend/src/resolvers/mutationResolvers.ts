@@ -55,6 +55,11 @@ const resolvers: MutationResolvers<CustomContext> = {
       accessToken: token,
     };
   },
+
+  logout: async (_, __, { res }) => {
+    res.clearCookie(REFRESH_TOKEN_KEY);
+    return true;
+  },
   refreshToken: async (_, __, { req, res }) => {
     const refreshToken = req.cookies[REFRESH_TOKEN_KEY];
     if (!refreshToken) throw new ValidationError("No refresh token found");

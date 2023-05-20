@@ -2,14 +2,14 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, NativeSyntheticEvent, Text, TextInputChangeEventData, TouchableOpacity, View } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import CustomTextInput from "../../components/CustomTextInput";
 import { graphql } from "../../gql";
-import { getGraphqlErrorMessage } from "../../helpers/errorUtils";
+import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
-import { COLORS } from "../../theme";
+import { COLORS, FONT_SIZES } from "../../theme";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
 
@@ -34,18 +34,26 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<Landin
 
   const [register] = useMutation(RegisterPage_Register_Mutation);
 
+  const handlePasswordChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    if (generalError) setGeneralError(undefined);
+    setPassword(event.nativeEvent.text);
+  };
+
+  const handleEmailChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    if (generalError) setGeneralError(undefined);
+    setEmail(event.nativeEvent.text);
+  };
+
   const handleSubmit = async (values: typeof initialValues) => {
-    setGeneralError(undefined);
-    // TODO: Authentication and get teacherId
-    const { data, errors } = await register({ variables: { input: { email: values.email, password: values.password } } });
-    const accessToken = data?.register?.accessToken;
-    if (errors) {
-      setGeneralError(getGraphqlErrorMessage(errors));
+    try {
+      const { data } = await register({ variables: { input: { email: values.email, password: values.password } } });
+      const accessToken = data?.register?.accessToken;
+      if (!accessToken) throw new Error("Unexpected error"); // Should get caught before this
+      setToken(accessToken);
+    } catch (error) {
+      const msg = getErrorMessage(error);
+      setGeneralError(msg);
     }
-    if (!accessToken) {
-      throw new Error("Unexpected error");
-    }
-    setToken(accessToken);
   };
   return (
     <LandingComponent
@@ -57,15 +65,18 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<Landin
               placeholder="arwioija@test.fi"
               textValidation={nameValidator}
               style={{ width: "100%" }}
-              onChange={(event) => setEmail(event.nativeEvent.text)}
+              onChange={handleEmailChange}
             />
             <CustomTextInput
               title="Salasana"
               placeholder="password"
               style={{ width: "100%" }}
               textValidation={nameValidator}
-              onChange={(event) => setPassword(event.nativeEvent.text)}
+              onChange={handlePasswordChange}
             />
+            {generalError && (
+              <Text style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.medium, marginBottom: 30 }}>{generalError}</Text>
+            )}
           </View>
           <View style={{ flex: 1, width: "90%", gap: 5 }}>
             <CustomButton

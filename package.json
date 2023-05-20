@@ -19,7 +19,7 @@
     "init-db": "yarn --cwd backend init-db",
     "backend:dev": "yarn --cwd backend run dev",
     "lint:fix": "yarn --cwd backend lint:fix && yarn --cwd backend lint:fix",
-    "test-with-setup": "yarn --cwd backend prisma:migrate-test && yarn --cwd backend test",
+    "test-with-setup": "yarn --cwd backend test-with-setup",
     "codegen:backend": "yarn --cwd backend codegen",
     "codegen:app": "yarn --cwd app codegen"
   },

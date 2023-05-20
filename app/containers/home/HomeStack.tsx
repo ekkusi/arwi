@@ -1,8 +1,5 @@
-import { TabRouter } from "@react-navigation/native";
-import { createNativeStackNavigator, NativeStackNavigationOptions, NativeStackScreenProps } from "@react-navigation/native-stack";
-import CustomButton from "../../components/CustomButton";
+import { createNativeStackNavigator, NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { COLORS } from "../../theme";
-import { MainStackParamList } from "../types";
 import GroupCreation from "./group/GroupCreation";
 import GroupView from "./group/GroupView";
 import HomeView from "./HomeView";
@@ -19,7 +16,6 @@ export const screenOptions: NativeStackNavigationOptions = {
 };
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParamList>();
-type HomeStackProps = NativeStackScreenProps<MainStackParamList, "HomeStack">;
 
 export default function HomeStack() {
   return (

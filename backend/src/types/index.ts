@@ -67,6 +67,7 @@ export type Mutation = {
   __typename?: "Mutation";
   register: AuthPayload;
   login: AuthPayload;
+  logout: Scalars["Boolean"];
   refreshToken: AuthPayload;
   createGroup: Group;
   createCollection: EvaluationCollection;
@@ -415,8 +416,8 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
@@ -451,8 +452,8 @@ export type ResolversParentTypes = {
   ID: Scalars["ID"];
   Mutation: {};
   String: Scalars["String"];
-  Int: Scalars["Int"];
   Boolean: Scalars["Boolean"];
+  Int: Scalars["Int"];
   AuthPayload: Omit<AuthPayload, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
   Teacher: UserInfoPrisma;
   LoginResult: Omit<LoginResult, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
@@ -498,6 +499,7 @@ export type QueryResolvers<ContextType = CustomContext, ParentType extends Resol
 export type MutationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]> = {
   register?: Resolver<ResolversTypes["AuthPayload"], ParentType, ContextType, RequireFields<MutationRegisterArgs, "data">>;
   login?: Resolver<ResolversTypes["AuthPayload"], ParentType, ContextType, RequireFields<MutationLoginArgs, "email" | "password">>;
+  logout?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   refreshToken?: Resolver<ResolversTypes["AuthPayload"], ParentType, ContextType>;
   createGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationCreateGroupArgs, "data">>;
   createCollection?: Resolver<

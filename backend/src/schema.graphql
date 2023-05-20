@@ -12,6 +12,7 @@ type Query {
 type Mutation {
   register(data: CreateTeacherInput!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  logout: Boolean!
   refreshToken: AuthPayload!
   createGroup(data: CreateGroupInput!): Group!
   createCollection(data: CreateCollectionInput!, classYearId: ID!): EvaluationCollection!

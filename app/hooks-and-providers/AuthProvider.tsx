@@ -1,4 +1,3 @@
-// AuthContext.js
 import React, { createContext, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 

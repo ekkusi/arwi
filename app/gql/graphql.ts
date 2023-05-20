@@ -58,6 +58,7 @@ export type Mutation = {
   __typename?: "Mutation";
   register: AuthPayload;
   login: AuthPayload;
+  logout: Scalars["Boolean"];
   refreshToken: AuthPayload;
   createGroup: Group;
   createCollection: EvaluationCollection;
@@ -369,6 +370,10 @@ export type LoginPage_LoginMutationVariables = Exact<{
 
 export type LoginPage_LoginMutation = { __typename?: "Mutation"; login: { __typename?: "AuthPayload"; accessToken: string } };
 
+export type ProfileView_LogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type ProfileView_LogoutMutation = { __typename?: "Mutation"; logout: boolean };
+
 export type RegisterPage_RegisterMutationVariables = Exact<{
   input: CreateTeacherInput;
 }>;
@@ -541,6 +546,17 @@ export const LoginPage_LoginDocument = {
     },
   ],
 } as unknown as DocumentNode<LoginPage_LoginMutation, LoginPage_LoginMutationVariables>;
+export const ProfileView_LogoutDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ProfileView_Logout" },
+      selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "logout" } }] },
+    },
+  ],
+} as unknown as DocumentNode<ProfileView_LogoutMutation, ProfileView_LogoutMutationVariables>;
 export const RegisterPage_RegisterDocument = {
   kind: "Document",
   definitions: [

@@ -1,14 +1,4 @@
-import {
-  ApolloClient,
-  ApolloLink,
-  ApolloProvider as ApolloProviderBase,
-  createHttpLink,
-  FetchResult,
-  fromPromise,
-  GraphQLRequest,
-  InMemoryCache,
-  Observable,
-} from "@apollo/client";
+import { ApolloClient, ApolloLink, ApolloProvider as ApolloProviderBase, createHttpLink, fromPromise, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import * as SecureStore from "expo-secure-store";
@@ -36,6 +26,7 @@ const refreshToken = async () => {
     return accessToken;
   } catch (err) {
     await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
+    client.clearStore(); // Clear cache as user is logged out
     throw err;
   }
 };
@@ -45,7 +36,7 @@ const refreshToken = async () => {
  */
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: Constants.expoConfig?.extra?.graphqlApiUrl,
   credentials: "include",
 });
 
@@ -65,11 +56,6 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
     for (const err of graphQLErrors) {
       switch (err.extensions.code) {
         case "UNAUTHENTICATED": {
-          console.log("UNAUTHENTICATED error on: ", operation.operationName);
-
-          // ignore 401 error for a refresh request
-          if (operation.operationName === "refreshToken") break;
-
           return fromPromise(refreshToken())
             .filter((value) => Boolean(value))
             .flatMap((accessToken) => {
@@ -89,7 +75,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
     }
   }
 
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+  if (networkError) console.warn(`[Network error]: ${networkError}`);
   return forward(operation);
 });
 
