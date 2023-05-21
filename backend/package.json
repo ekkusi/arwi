@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/index.ts",
-    "start": "cross-env NODE_ENV=production node lib/index.js",
+    "start": "node lib/index.js",
     "build": "tsc -p tsconfig.prod.json && copyfiles -u 1 -e \"src/__mocks__/*\" \"src/**/*.graphql\" \"src/**/*.json\" lib",
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",

@@ -39,6 +39,7 @@ const schemaWithMiddleware = applyMiddleware(schema, isAuthenticatedMiddleware);
 
 const server = new ApolloServer({
   schema: schemaWithMiddleware,
+  introspection: process.env.NODE_ENV !== "production",
 });
 
 const app = express();

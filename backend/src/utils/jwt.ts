@@ -20,7 +20,7 @@ export const checkIfIsUser = (user: any): user is UserInfo => {
 
 export const createAccessToken = (user: UserInfo): string => {
   const token = jwt.sign({ user: mapUser(user) }, JWT_ACCESS_TOKEN_SECRET_KEY, {
-    expiresIn: "30s",
+    expiresIn: "15m",
   });
   return token;
 };
