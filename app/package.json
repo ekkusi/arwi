@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start-no-backend": "cross-env GRAPHQL_API_URL=https://arwi-test.lm.r.appspot.com/graphql expo start",
     "start-mac": "GRAPHQL_API_URL=http://$(ipconfig getifaddr en0):4000/graphql expo start",
     "start-win": "for /f \"tokens=2 delims=[]\" %a in ('ping -n 1 -4 \"%computername%\"') do set GRAPHQL_API_URL=http://%a:4000/graphql && expo start",
     "android": "expo start --android",
@@ -37,6 +38,7 @@
     "@graphql-codegen/cli": "^3.3.1",
     "@graphql-codegen/client-preset": "^3.0.1",
     "@types/react": "~18.0.14",
+    "cross-env": "^7.0.3",
     "eslint-plugin-react-native": "^4.0.0"
   },
   "private": true
