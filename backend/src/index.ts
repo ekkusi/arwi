@@ -67,6 +67,8 @@ server.start().then(() => {
   );
 
   app.listen(PORT, () => {
+    console.info("Test log for seeing if app is running");
+
     console.info(`Server listening on port ${PORT}. GraphQL API at /graphql.`);
   });
 });
