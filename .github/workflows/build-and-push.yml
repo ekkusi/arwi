@@ -22,6 +22,7 @@ jobs:
       with:
         workload_identity_provider: 'projects/264096740042/locations/global/workloadIdentityPools/arwi-pool/providers/arwi-provider'
         service_account: 'arwi-test@appspot.gserviceaccount.com'
+        project_id: 'arwi-test'
 
     - id: 'deploy'
       uses: 'google-github-actions/deploy-appengine@v1'
