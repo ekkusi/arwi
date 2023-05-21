@@ -1,4 +1,10 @@
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Only include backend project
+/next
+/app
+/scripts
 
 # dependencies
 /node_modules
@@ -7,13 +13,6 @@
 
 # testing
 /coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/lib
 
 # misc
 .DS_Store
@@ -30,21 +29,9 @@ yarn-error.log*
 .env
 .env.production
 .env.test
-env_variables.yaml
-
-# vercel
-.vercel
 
 # typescript
-*.tsbuildinfo
 next-env.d.ts
 
 # build credentials
 *.keystore
-
-# Service worker files (generated with build)
-public/sw.js
-public/sw.js.map
-public/workbox-*.js
-public/workbox-*.js.map
-public/fallback-*.js

@@ -17,6 +17,8 @@ import prisma from "./prismaClient";
 
 dotenv.config();
 
+const PORT = process.env.PORT || 4000;
+
 // Construct a schema, using GraphQL schema language
 const typeDefs = readFileSync(path.resolve(process.cwd(), "./src/schema.graphql"), "utf-8");
 
@@ -64,7 +66,7 @@ server.start().then(() => {
     })
   );
 
-  app.listen(4000, () => {
-    console.info("Running GraphQL API at http://localhost:4000/graphql");
+  app.listen(PORT, () => {
+    console.info(`Server listening on port ${PORT}. GraphQL API at /graphql.`);
   });
 });

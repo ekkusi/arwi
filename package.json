@@ -3,7 +3,8 @@
   "workspaces": [
     "next",
     "app",
-    "backend"
+    "backend",
+    "terve"
   ],
   "version": "1.0.0",
   "private": true,
@@ -14,8 +15,10 @@
   "scripts": {
     "prepare": "husky install",
     "postinstall": "yarn --cwd backend prisma:generate",
+    "start": "yarn --cwd backend start",
     "start-win": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-win\"",
     "start-mac": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-mac\"",
+    "gcp-build": "yarn --cwd backend setup-db && yarn --cwd backend build",
     "init-db": "yarn --cwd backend init-db",
     "backend:dev": "yarn --cwd backend run dev",
     "lint:fix": "yarn --cwd backend lint:fix && yarn --cwd backend lint:fix",
