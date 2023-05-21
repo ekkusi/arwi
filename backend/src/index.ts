@@ -66,6 +66,10 @@ server.start().then(() => {
     })
   );
 
+  app.get("/", (_, res) => {
+    res.send("Hello World!");
+  });
+
   app.listen(PORT, () => {
     console.info("Test log for seeing if app is running");
 
