@@ -13,7 +13,7 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
-    "postinstall": "npx -w backend prisma generate",
+    "postinstall": "yarn --cwd backend prisma:generate",
     "start-win": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-win\"",
     "start-mac": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-mac\"",
     "init-db": "yarn --cwd backend init-db",

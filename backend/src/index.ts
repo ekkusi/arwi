@@ -52,8 +52,6 @@ server.start().then(() => {
     json(),
     expressMiddleware(server, {
       context: async ({ req, res }) => {
-        console.log("Running context factory");
-
         const authHeader = req.headers.authorization || "";
         const user = parseAndVerifyToken(authHeader);
         return {
