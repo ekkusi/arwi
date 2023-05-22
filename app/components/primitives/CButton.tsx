@@ -1,7 +1,10 @@
 import React from "react";
 import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, TextStyle, View } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import { COLORS, FONT_SIZES } from "../theme";
+import { COLORS, FONT_SIZES } from "../../theme";
+import { CTextStyle } from "../../theme/types";
+import CText from "./CText";
+import CView from "./CView";
 
 type CustomButtonProps = {
   title: string;
@@ -11,12 +14,12 @@ type CustomButtonProps = {
   buttonColor?: string;
   titleColor?: string;
   buttonStyle?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
+  textStyle?: CTextStyle;
   disabled?: boolean;
   children?: JSX.Element;
 };
 
-export default function CustomButton({
+export default function CButton({
   title,
   onPress,
   generalStyle,
@@ -28,7 +31,7 @@ export default function CustomButton({
   children,
   disabled = false,
 }: CustomButtonProps) {
-  const textStyles = [styles.title, textStyle, { color: titleColor || "#fff" }];
+  const textStyles = [];
 
   const buttonStyles = [styles.container, buttonStyle, { backgroundColor: buttonColor || "#512DA8" }];
   if (generalStyle) {
@@ -67,7 +70,7 @@ export default function CustomButton({
     });
   }
 
-  const text = <Text style={textStyles}>{title}</Text>;
+  const text = <CText style={{ ...styles.title, ...textStyle, color: titleColor || "#fff" }}>{title}</CText>;
 
   return (
     <TouchableOpacity style={buttonStyles} onPress={onPress} disabled={disabled}>

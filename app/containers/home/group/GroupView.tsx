@@ -2,6 +2,8 @@ import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, View } from "react-native";
 import LoadingIndicator from "../../../components/LoadingIndicator";
+import CText from "../../../components/primitives/CText";
+import CView from "../../../components/primitives/CView";
 import { graphql } from "../../../gql";
 import { FONT_SIZES } from "../../../theme";
 import { HomeStackParamList } from "../types";
@@ -62,11 +64,11 @@ export default function GroupView({ navigation, route }: GroupViewProps) {
   navigation.setOptions({ title: group.name });
 
   return (
-    <View style={{ alignItems: "center" }}>
-      <Text style={{ fontSize: FONT_SIZES.title, fontWeight: "600" }}>{group.name}</Text>
-      <View style={{ width: "100%", aspectRatio: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text style={{ fontSize: FONT_SIZES.medium }}>Kuvaajan näyttämiseen tarvitaan vähintään 3 arviointia</Text>
-      </View>
-    </View>
+    <CView style={{ alignItems: "center" }}>
+      <CText style={{ fontSize: FONT_SIZES.title, fontWeight: "600" }}>{group.name}</CText>
+      <CView style={{ width: "100%", aspectRatio: 1, alignItems: "center", justifyContent: "center" }}>
+        <CText style={{ fontSize: FONT_SIZES.medium }}>Kuvaajan näyttämiseen tarvitaan vähintään 3 arviointia</CText>
+      </CView>
+    </CView>
   );
 }

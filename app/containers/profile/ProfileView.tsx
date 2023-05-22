@@ -1,8 +1,8 @@
 import { useMutation } from "@apollo/client";
-import { View } from "react-native";
-import CustomButton from "../../components/CustomButton";
+import CButton from "../../components/primitives/CButton";
 import { graphql } from "../../gql";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
+import CView from "../../components/primitives/CView";
 
 const ProfileView_Logout_Mutation = graphql(`
   mutation ProfileView_Logout {
@@ -21,8 +21,8 @@ export default function ProfileView() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
-      <CustomButton
+    <CView style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
+      <CButton
         title="Kirjaudu ulos"
         generalStyle="secondary"
         outlineStyle
@@ -30,6 +30,6 @@ export default function ProfileView() {
         disabled={loading}
         onPress={handleLogout}
       />
-    </View>
+    </CView>
   );
 }

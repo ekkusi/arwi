@@ -1,6 +1,9 @@
 import React from "react";
 import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, TextStyle, View } from "react-native";
 import { FONT_SIZES } from "../theme";
+import { CTextStyle, CViewStyle } from "../theme/types";
+import CText from "./primitives/CText";
+import CView from "./primitives/CView";
 
 // NOTE: THIS COMPONENT IS NOT FINISHED, does not work when set e.g. height to buttonStyle prop.
 
@@ -9,8 +12,8 @@ type ShadowButtonProps = {
   onPress: () => void;
   buttonColor?: string;
   titleColor?: string;
-  buttonStyle?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
+  buttonStyle?: CViewStyle;
+  textStyle?: CTextStyle;
   disabled?: boolean;
   children?: JSX.Element;
 };
@@ -25,14 +28,14 @@ export default function ShadowButton({
   children,
   disabled = false,
 }: ShadowButtonProps) {
-  const text = <Text style={[styles.title, textStyle, { color: titleColor || "#fff" }]}>{title}</Text>;
+  const text = <CText style={{ ...styles.title, ...textStyle, color: titleColor || "#fff" }}>{title}</CText>;
   return (
-    <View style={[styles.outerView, buttonStyle]}>
+    <CView style={{ ...styles.outerView, ...buttonStyle }}>
       <TouchableOpacity style={[styles.container, { backgroundColor: buttonColor || "#512DA8" }]} onPress={onPress} disabled={disabled}>
         {children}
         {text}
       </TouchableOpacity>
-    </View>
+    </CView>
   );
 }
 

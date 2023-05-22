@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CustomButton from "../../components/CustomButton";
+import CButton from "../../components/primitives/CButton";
 import GroupListItem from "../../components/GroupListItem";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import ShadowButton from "../../components/ShadowButton";
@@ -11,6 +11,8 @@ import { graphql } from "../../gql";
 import { GroupListItemFragment } from "../../gql/graphql";
 import { COLORS, FONT_SIZES } from "../../theme";
 import { HomeStackParamList } from "./types";
+import CView from "../../components/primitives/CView";
+import CText from "../../components/primitives/CText";
 
 const MainPage_GetCurrentUser_Query = graphql(`
   query MainPage_GetCurrentUser {
@@ -36,13 +38,7 @@ const onGroupListItemPress = (group: GroupListItemFragment, navigation: NativeSt
 };
 
 const createGroupButton = (action: () => void) => (
-  <CustomButton
-    title="Luo"
-    onPress={action}
-    buttonStyle={{ height: 36, paddingHorizontal: 25 }}
-    buttonColor={COLORS.green}
-    titleColor={COLORS.white}
-  />
+  <CButton title="Luo" onPress={action} buttonStyle={{ height: 36, paddingHorizontal: 25 }} buttonColor={COLORS.green} titleColor={COLORS.white} />
 );
 const openGroupCreation = (navigation: NativeStackNavigationProp<HomeStackParamList, "Home", undefined>) => {
   // TODO: SAVE GROUP
@@ -65,7 +61,7 @@ export default function HomePage({ navigation }: HomeViewProps) {
     />
   );
   return (
-    <View style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
+    <CView style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
       {teacher.groups.length > 0 ? (
         <FlatList
           data={[...teacher.groups].sort((a, b) => {
@@ -75,15 +71,10 @@ export default function HomePage({ navigation }: HomeViewProps) {
           keyExtractor={(group) => group.id}
         />
       ) : (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <Text style={{ fontSize: FONT_SIZES.medium }}>Sinulla ei ole ryhmiä</Text>
-          <CustomButton
-            title="Luo ensimmäinen ryhmä"
-            onPress={() => openGroupCreation(navigation)}
-            buttonColor={COLORS.green}
-            titleColor={COLORS.white}
-          />
-        </View>
+        <CView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <CText style={{ fontSize: FONT_SIZES.medium }}>Sinulla ei ole ryhmiä</CText>
+          <CButton title="Luo ensimmäinen ryhmä" onPress={() => openGroupCreation(navigation)} buttonColor={COLORS.green} titleColor={COLORS.white} />
+        </CView>
       )}
       <ShadowButton
         buttonStyle={{ position: "absolute", bottom: 20, right: 15 }}
@@ -94,6 +85,6 @@ export default function HomePage({ navigation }: HomeViewProps) {
       >
         <MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />
       </ShadowButton>
-    </View>
+    </CView>
   );
 }

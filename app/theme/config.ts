@@ -12,7 +12,7 @@ export const COLORS = {
   art: "#ff006e",
   class: "#ffbe0b",
   error: "darkred",
-};
+} as const;
 
 export const FONT_SIZES = {
   small: 10,

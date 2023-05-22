@@ -2,10 +2,12 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { Image, NativeSyntheticEvent, Text, TextInputChangeEventData, View } from "react-native";
+import { Image, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import CustomButton from "../../components/CustomButton";
-import CustomTextInput from "../../components/CustomTextInput";
+import CButton from "../../components/primitives/CButton";
+import CText from "../../components/primitives/CText";
+import CView from "../../components/primitives/CView";
+import CTextInput from "../../components/primitives/CTextInput";
 import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
@@ -59,16 +61,16 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<Landing
   return (
     <LandingComponent
       bottomChildren={
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15 }}>
-          <View style={{ flex: 2, width: "90%", gap: 10, justifyContent: "center" }}>
-            <CustomTextInput
+        <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15 }}>
+          <CView style={{ flex: 2, width: "90%", gap: 10, justifyContent: "center" }}>
+            <CTextInput
               title="Sähköpostiosoite"
               placeholder="arwioija@test.fi"
               textValidation={nameValidator}
               style={{ width: "100%" }}
               onChange={handleEmailChange}
             />
-            <CustomTextInput
+            <CTextInput
               title="Salasana"
               placeholder="password"
               style={{ width: "100%" }}
@@ -76,11 +78,11 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<Landing
               onChange={handlePasswordChange}
             />
             {generalError && (
-              <Text style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.medium, marginBottom: 30 }}>{generalError}</Text>
+              <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.medium, marginBottom: 30 }}>{generalError}</CText>
             )}
-          </View>
-          <View style={{ flex: 1, width: "90%", gap: 5 }}>
-            <CustomButton
+          </CView>
+          <CView style={{ flex: 1, width: "90%", gap: 5 }}>
+            <CButton
               title="Kirjaudu sisään"
               generalStyle="secondary"
               outlineStyle
@@ -90,27 +92,27 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<Landing
                 if (email && password) handleSubmit({ email, password });
               }}
             />
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>Eikö sinulla ole vielä käyttäjää? </Text>
+            <CView style={{ flexDirection: "row", justifyContent: "center" }}>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>Eikö sinulla ole vielä käyttäjää? </CText>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("SignupPage", {});
                 }}
               >
-                <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.primary }}>Rekisteröidy</Text>
+                <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.primary }}>Rekisteröidy</CText>
               </TouchableOpacity>
-              <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>.</Text>
-            </View>
-          </View>
-        </View>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>.</CText>
+            </CView>
+          </CView>
+        </CView>
       }
       topChildren={
-        <View style={{ width: 300, height: 300 }}>
+        <CView style={{ width: 300, height: 300 }}>
           <Image
             source={require("../../assets/arwilogo-transparent-white.png")}
             style={{ width: undefined, height: undefined, resizeMode: "contain", flex: 1 }}
           />
-        </View>
+        </CView>
       }
     />
   );

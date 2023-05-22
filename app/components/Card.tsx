@@ -1,17 +1,19 @@
 import { forwardRef, LegacyRef } from "react";
 import { View, ViewProps, StyleSheet } from "react-native";
+import CView from "./primitives/CView";
 
 export type CardProps = ViewProps & { innerViewProps?: ViewProps };
 
-export default forwardRef((props: CardProps, ref: LegacyRef<View>) => {
+export default forwardRef((props: CardProps, ref: LegacyRef<typeof CView>) => {
   const { innerViewProps, ...rest } = props;
-  return (
-    <View {...rest} style={[styles.shadow, rest.style]}>
-      <View ref={ref} {...innerViewProps} style={[styles.defaultCard, innerViewProps?.style]}>
-        {rest.children}
-      </View>
-    </View>
-  );
+  return null;
+  // return (
+  // <CView {...rest} style={[styles.shadow, rest.style]}>
+  //   <CView ref={ref} {...innerViewProps} style={[styles.defaultCard, innerViewProps?.style]}>
+  //     {rest.children}
+  //   </CView>
+  // </CView>
+  // );
 });
 
 const styles = StyleSheet.create({
