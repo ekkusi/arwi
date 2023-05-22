@@ -2,7 +2,7 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { Image, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
@@ -12,9 +12,9 @@ import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
-import { COLORS, FONT_SIZES } from "../../theme";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
+import CImage from "../../components/primitives/CImage";
 
 const initialValues = {
   email: "",
@@ -77,9 +77,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<Landing
               textValidation={nameValidator}
               onChange={handlePasswordChange}
             />
-            {generalError && (
-              <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.medium, marginBottom: 30 }}>{generalError}</CText>
-            )}
+            {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "medium", marginBottom: 30 }}>{generalError}</CText>}
           </CView>
           <CView style={{ flex: 1, width: "90%", gap: 5 }}>
             <CButton
@@ -93,22 +91,22 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<Landing
               }}
             />
             <CView style={{ flexDirection: "row", justifyContent: "center" }}>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>Eikö sinulla ole vielä käyttäjää? </CText>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>Eikö sinulla ole vielä käyttäjää? </CText>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("SignupPage", {});
                 }}
               >
-                <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.primary }}>Rekisteröidy</CText>
+                <CText style={{ fontSize: 12, fontWeight: "600", color: "primary" }}>Rekisteröidy</CText>
               </TouchableOpacity>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>.</CText>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
             </CView>
           </CView>
         </CView>
       }
       topChildren={
         <CView style={{ width: 300, height: 300 }}>
-          <Image
+          <CImage
             source={require("../../assets/arwilogo-transparent-white.png")}
             style={{ width: undefined, height: undefined, resizeMode: "contain", flex: 1 }}
           />

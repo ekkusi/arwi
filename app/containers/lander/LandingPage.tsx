@@ -1,10 +1,9 @@
 /* eslint-disable global-require */
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Image, Text, View } from "react-native";
 import CButton from "../../components/primitives/CButton";
+import CImage from "../../components/primitives/CImage";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
-import { COLORS, FONT_SIZES } from "../../theme";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
 
@@ -36,7 +35,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<Landi
       topChildren={
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <CView style={{ width: 300, height: 300 }}>
-            <Image
+            <CImage
               source={require("../../assets/arwilogo-transparent-white.png")}
               style={{ width: undefined, height: undefined, resizeMode: "contain", flex: 1 }}
             />

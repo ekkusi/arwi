@@ -62,6 +62,7 @@ export default function HomePage({ navigation }: HomeViewProps) {
   );
   return (
     <CView style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
+      <CText>Terve</CText>
       {teacher.groups.length > 0 ? (
         <FlatList
           data={[...teacher.groups].sort((a, b) => {

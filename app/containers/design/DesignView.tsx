@@ -1,4 +1,3 @@
-import { Text, View } from "react-native";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
 

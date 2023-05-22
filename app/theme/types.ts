@@ -1,13 +1,8 @@
-import { ColorValue, ImageStyle, TextStyle, ViewStyle } from "react-native";
+import { ImageStyle, TextStyle, ViewStyle } from "react-native";
 import { COLORS, FONT_SIZES } from "./config";
 
-export type CColor = keyof typeof COLORS | string | undefined;
-export type Color = keyof typeof COLORS;
-export type CFontSize = keyof typeof FONT_SIZES | number | undefined;
-
-const some: { color: Color } = { color: "art" };
-
-some.color = "white";
+export type CColor = keyof typeof COLORS | (string & Record<never, never>);
+export type CFontSize = keyof typeof FONT_SIZES | (number & Record<never, never>);
 
 export const VIEW_COLOR_PROP_KEYS = [
   "backgroundColor",
@@ -24,21 +19,6 @@ export const TEXT_COLOR_PROP_KEYS = ["color", "textDecorationColor", "textShadow
 
 export const IMAGE_COLOR_PROP_KEYS = ["backgroundColor", "borderColor", "tintColor", "overlayColor"] as const;
 
-export const COLOR_PROP_KEYS = [
-  "backgroundColor",
-  "borderColor",
-  "borderBottomColor",
-  "borderTopColor",
-  "borderLeftColor",
-  "borderRightColor",
-  "color",
-  "textDecorationColor",
-  "textShadowColor",
-  "tintColor",
-  "overlayColor",
-  "shadowColor",
-] as const;
-
 export type CTextColorProps = {
   [key in (typeof TEXT_COLOR_PROP_KEYS)[number]]?: CColor;
 };
@@ -51,21 +31,13 @@ export type CImageColorProps = {
   [key in (typeof IMAGE_COLOR_PROP_KEYS)[number]]?: CColor;
 };
 
-export type CTextStyleProps = CTextColorProps & {
+type CTextStyleProps = CTextColorProps & {
   fontSize?: CFontSize;
 };
 
-export type CViewStyleProps = CViewColorProps;
+type CViewStyleProps = CViewColorProps;
 
-export type CImageStyleProps = CImageColorProps;
-
-export type CStyles<T extends TextStyle | ViewStyle | ImageStyle> = T extends TextStyle
-  ? Omit<T, keyof CTextStyleProps> & Pick<CTextStyleProps, keyof T & keyof CTextStyleProps>
-  : T extends ViewStyle
-  ? Omit<T, keyof CViewStyleProps> & Pick<CViewStyleProps, keyof T & keyof CViewStyleProps>
-  : T extends ImageStyle
-  ? Omit<T, keyof CImageStyleProps> & Pick<CImageStyleProps, keyof T & keyof CImageStyleProps>
-  : T;
+type CImageStyleProps = CImageColorProps;
 
 export type CTextStyle = Omit<TextStyle, keyof CTextStyleProps> & Pick<CTextStyleProps, keyof TextStyle & keyof CTextStyleProps>;
 export type CViewStyle = Omit<ViewStyle, keyof CViewStyleProps> & Pick<CViewStyleProps, keyof ViewStyle & keyof CViewStyleProps>;

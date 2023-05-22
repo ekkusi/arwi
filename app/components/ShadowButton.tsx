@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, TextStyle, View } from "react-native";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import { FONT_SIZES } from "../theme";
 import { CTextStyle, CViewStyle } from "../theme/types";
 import CText from "./primitives/CText";

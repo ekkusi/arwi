@@ -1,16 +1,13 @@
 import { ImageStyle, TextStyle, ViewStyle } from "react-native";
 import { COLORS, FONT_SIZES } from "./config";
-import { COLOR_PROP_KEYS, CStyles, IMAGE_COLOR_PROP_KEYS, TEXT_COLOR_PROP_KEYS, VIEW_COLOR_PROP_KEYS } from "./types";
+import { CImageStyle, CTextStyle, CViewStyle, IMAGE_COLOR_PROP_KEYS, TEXT_COLOR_PROP_KEYS, VIEW_COLOR_PROP_KEYS } from "./types";
 
-export function createTextStyles(styles: CStyles<TextStyle>): TextStyle {
+export function createTextStyles(styles: CTextStyle): TextStyle {
   const newStyles: TextStyle = {};
 
-  const objKeys = Object.keys(styles) as (keyof CStyles<TextStyle>)[];
-  console.log(styles, "og styles");
+  const objKeys = Object.keys(styles) as (keyof CTextStyle)[];
 
   objKeys.forEach((key) => {
-    console.log("setting key", key);
-
     if (key === "fontSize") {
       const newValue = typeof styles[key] === "number" ? (styles[key] as number) : FONT_SIZES[styles[key] as keyof typeof FONT_SIZES];
       newStyles[key] = newValue;
@@ -27,10 +24,10 @@ export function createTextStyles(styles: CStyles<TextStyle>): TextStyle {
   return newStyles;
 }
 
-export function createImageStyles(styles: CStyles<ImageStyle>): ImageStyle {
+export function createImageStyles(styles: CImageStyle): ImageStyle {
   const newStyles: ImageStyle = {};
 
-  const objKeys = Object.keys(styles) as (keyof CStyles<ImageStyle>)[];
+  const objKeys = Object.keys(styles) as (keyof CImageStyle)[];
 
   objKeys.forEach((key) => {
     if (key in IMAGE_COLOR_PROP_KEYS) {
@@ -46,10 +43,10 @@ export function createImageStyles(styles: CStyles<ImageStyle>): ImageStyle {
   return newStyles;
 }
 
-export function createViewStyles(styles: CStyles<ViewStyle>): ViewStyle {
+export function createViewStyles(styles: CViewStyle): ViewStyle {
   const newStyles: ViewStyle = {};
 
-  const objKeys = Object.keys(styles) as (keyof CStyles<ViewStyle>)[];
+  const objKeys = Object.keys(styles) as (keyof CViewStyle)[];
 
   objKeys.forEach((key) => {
     if (VIEW_COLOR_PROP_KEYS.includes(key as (typeof VIEW_COLOR_PROP_KEYS)[number])) {
@@ -64,22 +61,3 @@ export function createViewStyles(styles: CStyles<ViewStyle>): ViewStyle {
 
   return newStyles;
 }
-
-// export function createStyles<T extends TextStyle | ViewStyle | ImageStyle>(styles: CStyles<T>): T {
-//   const newStyles: any = {};
-
-//   Object.keys(styles).forEach((key) => {
-//     switch (key) {
-//       case "fontSize":
-//         newStyles[key] = typeof styles[key] === "number" ? styles[key] : FONT_SIZES[styles[key]];
-//         break;
-//       case COLOR_PROP_KEYS:
-
-//       default:
-//         newStyles[key] = styles[key];
-//         break;
-//     }
-//   });
-
-//   return newStyles as T;
-// }

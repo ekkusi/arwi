@@ -1,31 +1,39 @@
-import React, { useState } from "react";
-import { Text, StyleSheet, StyleProp, TextStyle, TextInputProps, NativeSyntheticEvent, TextInputChangeEventData, View } from "react-native";
+import React, { useMemo, useState } from "react";
+import { StyleSheet, TextInputProps, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { COLORS, FONT_SIZES } from "../../theme";
-import { CTextStyle, CTextStyleProps } from "../../theme/types";
+import { CTextStyle } from "../../theme/types";
+import { createTextStyles } from "../../theme/utils";
 import CText from "./CText";
 import CView from "./CView";
 
-type CustomTextInputProps = TextInputProps & {
+type CustomTextInputProps = Omit<TextInputProps, "style"> & {
   textValidation?: (text: string) => string | undefined;
   title?: string;
   lightTheme?: boolean;
-  errorStyle?: StyleProp<TextStyle>;
+  errorStyle?: CTextStyle;
+  style?: CTextStyle;
 };
 
 export default function CTextInput(props: CustomTextInputProps) {
   const { textValidation, errorStyle, title, lightTheme = false, ...generalProps } = props;
   const [errorText, setError] = useState<string | undefined>(undefined);
-  const allStyles = errorText
-    ? [styles.regularInputStyle, generalProps.style, styles.errorInputStyle, errorStyle]
-    : [styles.regularInputStyle, generalProps.style];
-  const textStyles: CTextStyleProps = {
+  const textStyles: CTextStyle = {
     ...styles.titleStyle,
+    color: lightTheme ? COLORS.white : styles.titleStyle.color,
   };
-  if (lightTheme) {
-    textStyles.color = COLORS.white;
-    allStyles.push({ color: COLORS.white, borderColor: COLORS.white });
-  }
+  const style = useMemo(() => {
+    const error = {
+      ...styles.errorInputStyle,
+      ...errorStyle,
+    };
+    return createTextStyles({
+      ...styles.regularInputStyle,
+      ...generalProps.style,
+      ...(errorText ? error : {}),
+      ...(lightTheme ? styles.lightThemeStyle : {}),
+    });
+  }, [errorText, generalProps.style, errorStyle, lightTheme]);
   const validateText = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
     if (textValidation) {
       const newError = textValidation(event.nativeEvent.text);
@@ -35,7 +43,7 @@ export default function CTextInput(props: CustomTextInputProps) {
   return (
     <CView style={{ width: "100%" }}>
       {title && <CText style={textStyles}>{title}</CText>}
-      <TextInput onChange={validateText} {...generalProps} style={allStyles} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} />
+      <TextInput onChange={validateText} {...generalProps} style={style} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} />
       {errorText && <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.small }}>{errorText}</CText>}
     </CView>
   );
@@ -50,6 +58,10 @@ const styles = StyleSheet.create({
     width: "100%",
     fontSize: FONT_SIZES.large,
     fontWeight: "600",
+  },
+  lightThemeStyle: {
+    color: COLORS.white,
+    borderColor: COLORS.white,
   },
   titleStyle: {
     fontSize: FONT_SIZES.small,

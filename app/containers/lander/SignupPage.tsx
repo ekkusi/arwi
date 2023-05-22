@@ -2,18 +2,18 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { Image, NativeSyntheticEvent, Text, TextInputChangeEventData, TouchableOpacity, View } from "react-native";
+import { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity } from "react-native";
 import CButton from "../../components/primitives/CButton";
 import CTextInput from "../../components/primitives/CTextInput";
 import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
-import { COLORS, FONT_SIZES } from "../../theme";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
+import CImage from "../../components/primitives/CImage";
 
 const initialValues = {
   email: "",
@@ -76,9 +76,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<Landin
               textValidation={nameValidator}
               onChange={handlePasswordChange}
             />
-            {generalError && (
-              <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.medium, marginBottom: 30 }}>{generalError}</CText>
-            )}
+            {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "medium", marginBottom: 30 }}>{generalError}</CText>}
           </CView>
           <CView style={{ flex: 1, width: "90%", gap: 5 }}>
             <CButton
@@ -92,34 +90,34 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<Landin
               }}
             />
             <CView style={{ flexDirection: "row", justifyContent: "center", gap: 2, marginBottom: 5 }}>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>Rekisteröitymällä hyväksyt</CText>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>Rekisteröitymällä hyväksyt</CText>
               <TouchableOpacity
                 onPress={() => {
                   // TODO: show terms
                   console.log("käyttöehdot:)");
                 }}
               >
-                <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.primary }}>käyttöehtomme</CText>
+                <CText style={{ fontSize: 12, fontWeight: "600", color: "primary" }}>käyttöehtomme</CText>
               </TouchableOpacity>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>.</CText>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
             </CView>
             <CView style={{ flexDirection: "row", justifyContent: "center" }}>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>Oletko jo rekisteröitynyt? </CText>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>Oletko jo rekisteröitynyt? </CText>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("LoginPage", {});
                 }}
               >
-                <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.primary }}>Kirjaudu sisään</CText>
+                <CText style={{ fontSize: 12, fontWeight: "600", color: "primary" }}>Kirjaudu sisään</CText>
               </TouchableOpacity>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>.</CText>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
             </CView>
           </CView>
         </CView>
       }
       topChildren={
         <CView style={{ width: 300, height: 300 }}>
-          <Image
+          <CImage
             source={require("../../assets/arwilogo-transparent-white.png")}
             style={{ width: undefined, height: undefined, resizeMode: "contain", flex: 1 }}
           />

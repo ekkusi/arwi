@@ -1,10 +1,8 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, TextStyle, View } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { COLORS, FONT_SIZES } from "../../theme";
 import { CTextStyle } from "../../theme/types";
 import CText from "./CText";
-import CView from "./CView";
 
 type CustomButtonProps = {
   title: string;
