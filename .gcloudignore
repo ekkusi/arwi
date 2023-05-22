@@ -5,6 +5,11 @@
 /next
 /app
 /scripts
+/backups
+/.github
+/.husky
+/.vscode
+Dockerfile*
 
 # dependencies
 /node_modules
