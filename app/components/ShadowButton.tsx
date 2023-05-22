@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#fff",
-    fontSize: FONT_SIZES.medium,
+    fontSize: FONT_SIZES.md,
     fontWeight: "700",
   },
   outerView: {

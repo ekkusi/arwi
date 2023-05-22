@@ -15,9 +15,31 @@ export const COLORS = {
 } as const;
 
 export const FONT_SIZES = {
-  small: 10,
-  medium: 14,
-  large: 18,
+  sm: 10,
+  md: 14,
+  lg: 18,
   title: 24,
   largeTitle: 28,
-};
+} as const;
+
+export const SPACING = {
+  none: 0,
+  xxs: 2,
+  xs: 4,
+  sm: 6,
+  md: 8,
+  lg: 12,
+  xl: 18,
+  "2xl": 24,
+  "3xl": 32,
+  "4xl": 64,
+  "-xxs": -2,
+  "-xs": -4,
+  "-sm": -6,
+  "-md": -8,
+  "-lg": -12,
+  "-xl": -18,
+  "-2xl": -24,
+  "-3xl": -32,
+  "-4xl": -64,
+} as const;

@@ -62,7 +62,6 @@ export default function HomePage({ navigation }: HomeViewProps) {
   );
   return (
     <CView style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
-      <CText>Terve</CText>
       {teacher.groups.length > 0 ? (
         <FlatList
           data={[...teacher.groups].sort((a, b) => {
@@ -73,7 +72,7 @@ export default function HomePage({ navigation }: HomeViewProps) {
         />
       ) : (
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <CText style={{ fontSize: FONT_SIZES.medium }}>Sinulla ei ole ryhmiä</CText>
+          <CText style={{ fontSize: "md" }}>Sinulla ei ole ryhmiä</CText>
           <CButton title="Luo ensimmäinen ryhmä" onPress={() => openGroupCreation(navigation)} buttonColor={COLORS.green} titleColor={COLORS.white} />
         </CView>
       )}

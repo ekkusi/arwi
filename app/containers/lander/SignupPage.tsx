@@ -76,7 +76,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<Landin
               textValidation={nameValidator}
               onChange={handlePasswordChange}
             />
-            {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "medium", marginBottom: 30 }}>{generalError}</CText>}
+            {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md", marginBottom: 30 }}>{generalError}</CText>}
           </CView>
           <CView style={{ flex: 1, width: "90%", gap: 5 }}>
             <CButton
@@ -90,27 +90,27 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<Landin
               }}
             />
             <CView style={{ flexDirection: "row", justifyContent: "center", gap: 2, marginBottom: 5 }}>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>Rekisteröitymällä hyväksyt</CText>
+              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Rekisteröitymällä hyväksyt</CText>
               <TouchableOpacity
                 onPress={() => {
                   // TODO: show terms
                   console.log("käyttöehdot:)");
                 }}
               >
-                <CText style={{ fontSize: 12, fontWeight: "600", color: "primary" }}>käyttöehtomme</CText>
+                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>käyttöehtomme</CText>
               </TouchableOpacity>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
+              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>.</CText>
             </CView>
             <CView style={{ flexDirection: "row", justifyContent: "center" }}>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>Oletko jo rekisteröitynyt? </CText>
+              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Oletko jo rekisteröitynyt? </CText>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("LoginPage", {});
                 }}
               >
-                <CText style={{ fontSize: 12, fontWeight: "600", color: "primary" }}>Kirjaudu sisään</CText>
+                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Kirjaudu sisään</CText>
               </TouchableOpacity>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
+              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>.</CText>
             </CView>
           </CView>
         </CView>

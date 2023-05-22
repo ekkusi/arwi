@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Text, TextProps } from "react-native";
+import { StyleProp, Text, TextProps } from "react-native";
 import { CTextStyle } from "../../theme/types";
 import { createTextStyles } from "../../theme/utils";
 

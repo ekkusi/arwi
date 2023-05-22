@@ -44,7 +44,7 @@ export default function CTextInput(props: CustomTextInputProps) {
     <CView style={{ width: "100%" }}>
       {title && <CText style={textStyles}>{title}</CText>}
       <TextInput onChange={validateText} {...generalProps} style={style} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} />
-      {errorText && <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.small }}>{errorText}</CText>}
+      {errorText && <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.sm }}>{errorText}</CText>}
     </CView>
   );
 }
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray,
     height: 54,
     width: "100%",
-    fontSize: FONT_SIZES.large,
+    fontSize: FONT_SIZES.lg,
     fontWeight: "600",
   },
   lightThemeStyle: {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.white,
   },
   titleStyle: {
-    fontSize: FONT_SIZES.small,
+    fontSize: FONT_SIZES.sm,
     fontWeight: "700",
     color: COLORS.darkgray,
   },

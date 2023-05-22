@@ -64,9 +64,9 @@ export default function GroupView({ navigation, route }: GroupViewProps) {
 
   return (
     <CView style={{ alignItems: "center" }}>
-      <CText style={{ fontSize: FONT_SIZES.title, fontWeight: "600" }}>{group.name}</CText>
+      <CText style={{ fontSize: "title", fontWeight: "600" }}>{group.name}</CText>
       <CView style={{ width: "100%", aspectRatio: 1, alignItems: "center", justifyContent: "center" }}>
-        <CText style={{ fontSize: FONT_SIZES.medium }}>Kuvaajan näyttämiseen tarvitaan vähintään 3 arviointia</CText>
+        <CText style={{ fontSize: "md" }}>Kuvaajan näyttämiseen tarvitaan vähintään 3 arviointia</CText>
       </CView>
     </CView>
   );
