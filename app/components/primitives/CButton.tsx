@@ -1,8 +1,7 @@
 import React, { useMemo } from "react";
-import { TouchableOpacity, StyleSheet, TouchableOpacityProps } from "react-native";
-import { COLORS, FONT_SIZES } from "../../theme";
+import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { ColorKey, CTextStyle, CViewStyle } from "../../theme/types";
-import { createViewStyles } from "../../theme/utils";
+import { createStyles, createViewStyles } from "../../theme/utils";
 import CText from "./CText";
 
 export type CButtonProps = Omit<TouchableOpacityProps, "style"> & {
@@ -81,20 +80,20 @@ export default function CButton({
   return Button;
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles({
   container: {
     height: 48,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 24,
-    paddingHorizontal: 20,
+    paddingHorizontal: "xl",
     overflow: "hidden",
     flexDirection: "row",
-    gap: 10,
+    gap: "md",
   },
   title: {
-    color: COLORS.white,
-    fontSize: FONT_SIZES.md,
+    color: "white",
+    fontSize: "md",
     fontWeight: "700",
   },
   shadow: {
@@ -109,6 +108,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 3,
-    marginHorizontal: 3,
+    marginHorizontal: "xs",
   },
 });

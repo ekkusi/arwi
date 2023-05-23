@@ -1,9 +1,10 @@
-import { Image, ImageStyle, TextStyle, ViewStyle } from "react-native";
+import { ImageStyle, TextStyle, ViewStyle } from "react-native";
 import { COLORS, FONT_SIZES, SPACING } from "./tokens";
 import {
   CImageStyle,
   ColorKey,
   CSpacing,
+  CStyles,
   CTextStyle,
   CViewStyle,
   ImageColorPropKey,
@@ -15,6 +16,10 @@ import {
   ViewColorPropKey,
   VIEW_COLOR_PROP_KEYS,
 } from "./types";
+
+export const createStyles = <T extends CStyles<T> | CStyles<any>>(styles: T): T => {
+  return styles;
+};
 
 const getSpacingValue = (value: CSpacing): number => {
   return typeof value === "number" ? value : SPACING[value as keyof typeof SPACING];
@@ -75,7 +80,6 @@ export function createImageStyles(styles: CImageStyle): ImageStyle {
 
 export function createViewStyles(styles: CViewStyle): ViewStyle {
   const newStyles: ViewStyle = {};
-
   const objKeys = Object.keys(styles) as (keyof CViewStyle)[];
 
   objKeys.forEach((key) => {

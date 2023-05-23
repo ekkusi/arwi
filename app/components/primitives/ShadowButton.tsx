@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 import { CViewStyle } from "../../theme/types";
+import { createStyles } from "../../theme/utils";
 import CButton, { CButtonProps } from "./CButton";
 import CView from "./CView";
 
@@ -18,7 +18,7 @@ export default function ShadowButton({ style, buttonStyle, ...rest }: ShadowButt
   );
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles({
   shadow: {
     alignSelf: "center",
     borderRadius: 28,
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 3,
-    marginHorizontal: 3,
+    marginHorizontal: "xs",
   },
 });

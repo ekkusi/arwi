@@ -3,7 +3,7 @@ import { StyleSheet, TextInputProps, NativeSyntheticEvent, TextInputChangeEventD
 import { TextInput } from "react-native-gesture-handler";
 import { COLORS, FONT_SIZES } from "../../theme";
 import { CTextStyle } from "../../theme/types";
-import { createTextStyles } from "../../theme/utils";
+import { createStyles, createTextStyles } from "../../theme/utils";
 import CText from "./CText";
 import CView from "./CView";
 
@@ -49,27 +49,27 @@ export default function CTextInput(props: CustomTextInputProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles({
   regularInputStyle: {
     borderBottomWidth: 1,
-    color: COLORS.darkgray,
-    borderColor: COLORS.gray,
+    color: "darkgray",
+    borderColor: "gray",
     height: 54,
     width: "100%",
-    fontSize: FONT_SIZES.lg,
+    fontSize: "lg",
     fontWeight: "600",
   },
   lightThemeStyle: {
-    color: COLORS.white,
-    borderColor: COLORS.white,
+    color: "white",
+    borderColor: "white",
   },
   titleStyle: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: "sm",
     fontWeight: "700",
-    color: COLORS.darkgray,
+    color: "darkgray",
   },
   errorInputStyle: {
     borderBottomWidth: 2,
-    borderColor: COLORS.error,
+    borderColor: "error",
   },
 });

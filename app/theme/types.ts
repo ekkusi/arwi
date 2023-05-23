@@ -84,6 +84,11 @@ type CViewStyleProps = CViewColorProps;
 type CImageStyleProps = CImageColorProps;
 
 export type CTextStyle = Override<TextStyle, CTextStyleProps & CSpacingProps>;
-
 export type CViewStyle = Override<ViewStyle, CViewStyleProps & CSpacingProps>;
 export type CImageStyle = Override<ImageStyle, CImageStyleProps & CSpacingProps>;
+
+export type CStyle = CTextStyle | CViewStyle | CImageStyle;
+
+export type CStyles<T> = {
+  [key in keyof T]: CStyle;
+};
