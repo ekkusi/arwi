@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { FlatList } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -33,16 +33,6 @@ const MainPage_GetCurrentUser_Query = graphql(`
 `);
 
 type HomeViewProps = NativeStackScreenProps<HomeStackParamList, "Home">;
-const onGroupListItemPress = (group: GroupListItemFragment, navigation: NativeStackNavigationProp<HomeStackParamList, "Home", undefined>) => {
-  navigation.navigate("GroupView", { groupId: group.id });
-};
-
-const createGroupButton = (action: () => void) => <CButton title="Luo" onPress={action} style={{ height: 36, paddingHorizontal: 25 }} />;
-const openGroupCreation = (navigation: NativeStackNavigationProp<HomeStackParamList, "Home", undefined>) => {
-  // TODO: SAVE GROUP
-  console.log("Save group");
-  navigation.navigate("GroupCreation", { createGroupButton: () => createGroupButton(navigation.goBack) });
-};
 
 export default function HomePage({ navigation }: HomeViewProps) {
   const { data, loading } = useQuery(MainPage_GetCurrentUser_Query);
@@ -55,7 +45,7 @@ export default function HomePage({ navigation }: HomeViewProps) {
     <GroupListItem
       group={item}
       onEvaluateIconPress={() => console.log("open evaluate")}
-      onListItemPress={() => onGroupListItemPress(item, navigation)}
+      onListItemPress={() => navigation.navigate("GroupView", { groupId: item.id })}
     />
   );
   return (
@@ -71,10 +61,14 @@ export default function HomePage({ navigation }: HomeViewProps) {
       ) : (
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <CText style={{ fontSize: "md" }}>Sinulla ei ole ryhmiä</CText>
-          <CButton title="Luo ensimmäinen ryhmä" onPress={() => openGroupCreation(navigation)} />
+          <CButton title="Luo ensimmäinen ryhmä" onPress={() => navigation.navigate("GroupCreation")} />
         </CView>
       )}
-      <ShadowButton style={{ position: "absolute", bottom: 20, right: 15 }} title="Luo uusi ryhmä" onPress={() => openGroupCreation(navigation)}>
+      <ShadowButton
+        style={{ position: "absolute", bottom: 20, right: 15 }}
+        title="Luo uusi ryhmä"
+        onPress={() => navigation.navigate("GroupCreation")}
+      >
         <MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />
       </ShadowButton>
     </CView>

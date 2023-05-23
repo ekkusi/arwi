@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export function timeSince(date: string) {
   const dateNumber = Date.parse(date);
   const now = Date.now();
@@ -26,3 +28,10 @@ export function timeSince(date: string) {
   }
   return `${Math.floor(seconds)} seconds`;
 }
+
+export type DateFormat = "yyyy-MM-dd" | "dd.MM.yyyy";
+
+export const formatDate = (_date: Date | string, dateFormat: DateFormat = "dd.MM.yyyy"): string => {
+  const date = typeof _date === "string" ? new Date(_date) : _date;
+  return format(date, dateFormat);
+};

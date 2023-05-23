@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../theme";
+import { COLORS, SPACING } from "../theme";
 import DesignStack from "./design/DesignStack";
 import HomeStack from "./home/HomeStack";
 import ProfileStack from "./profile/ProfileStack";
@@ -29,7 +29,8 @@ export default function MainStack() {
         tabBarActiveTintColor: COLORS.green,
         tabBarInactiveTintColor: COLORS.darkgray,
         headerShown: false,
-        tabBarStyle: { backgroundColor: COLORS.white },
+        tabBarStyle: { backgroundColor: COLORS.white, height: 60, paddingTop: SPACING.md },
+        tabBarLabelStyle: { marginBottom: SPACING.lg },
       })}
     >
       <BottomTab.Screen name="HomeStack" component={HomeStack} options={{ title: "Koti" }} />
