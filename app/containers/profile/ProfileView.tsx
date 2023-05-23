@@ -24,9 +24,9 @@ export default function ProfileView() {
     <CView style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
       <CButton
         title="Kirjaudu ulos"
-        generalStyle="secondary"
-        outlineStyle
-        buttonStyle={{ width: "100%", marginBottom: 20 }}
+        colorScheme="secondary"
+        variant="outline"
+        style={{ width: "100%", marginBottom: 20 }}
         disabled={loading}
         onPress={handleLogout}
       />

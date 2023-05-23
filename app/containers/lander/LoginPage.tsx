@@ -82,9 +82,9 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<Landing
           <CView style={{ flex: 1, width: "90%", gap: 5 }}>
             <CButton
               title="Kirjaudu sisään"
-              generalStyle="secondary"
-              outlineStyle
-              buttonStyle={{ width: "100%" }}
+              colorScheme="secondary"
+              variant="outline"
+              style={{ width: "100%" }}
               disabled={email !== undefined && password !== undefined && generalError !== undefined}
               onPress={() => {
                 if (email && password) handleSubmit({ email, password });

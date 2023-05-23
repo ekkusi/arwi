@@ -13,19 +13,19 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<Landi
       bottomChildren={
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15, marginTop: 20 }}>
           <CButton
-            generalStyle="primary"
-            outlineStyle
+            colorScheme="primary"
+            variant="outline"
             title="Kirjaudu sisään"
-            buttonStyle={{ width: "90%" }}
+            style={{ width: "90%" }}
             onPress={() => {
               navigation.navigate("LoginPage", {});
             }}
           />
           <CButton
-            generalStyle="primary"
-            outlineStyle
+            colorScheme="primary"
+            variant="outline"
             title="Rekisteröidy"
-            buttonStyle={{ width: "90%" }}
+            style={{ width: "90%" }}
             onPress={() => {
               navigation.navigate("SignupPage", {});
             }}

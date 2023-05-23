@@ -1,98 +1,84 @@
 import React, { useMemo } from "react";
-import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { TouchableOpacity, StyleSheet, TouchableOpacityProps } from "react-native";
 import { COLORS, FONT_SIZES } from "../../theme";
-import { CTextStyle, CViewStyle } from "../../theme/types";
+import { ColorKey, CTextStyle, CViewStyle } from "../../theme/types";
 import { createViewStyles } from "../../theme/utils";
 import CText from "./CText";
 
-type CustomButtonProps = {
-  title: string;
-  onPress: () => void;
-  generalStyle?: "primary" | "secondary" | undefined;
-  outlineStyle?: boolean;
-  buttonColor?: string;
-  titleColor?: string;
-  buttonStyle?: CViewStyle;
+export type CButtonProps = Omit<TouchableOpacityProps, "style"> & {
+  title?: string;
+  variant?: "filled" | "outline";
+  colorScheme?: ColorKey;
   textStyle?: CTextStyle;
-  disabled?: boolean;
-  children?: JSX.Element;
+  style?: CViewStyle;
+  shadowed?: boolean;
 };
 
 export default function CButton({
   title,
-  onPress,
-  generalStyle,
-  outlineStyle,
-  buttonColor,
-  titleColor,
-  buttonStyle,
+  colorScheme = "green",
+  variant = "filled",
   textStyle,
   children,
-  disabled = false,
-}: CustomButtonProps) {
-  const buttonStyles = [styles.container, buttonStyle, { backgroundColor: buttonColor || "#512DA8" }];
-  if (generalStyle) {
-    if (generalStyle === "primary") {
-      buttonStyles.push(styles.primaryStyle);
-      if (outlineStyle) {
-        buttonStyles.push({
+  style,
+  shadowed = false,
+  ...rest
+}: CButtonProps) {
+  const buttonVariantStyles: CViewStyle = useMemo(() => {
+    switch (variant) {
+      case "outline":
+        return {
           backgroundColor: "transparent",
           borderWidth: 2,
-          borderColor: COLORS.primary,
-        });
-      }
-    } else {
-      buttonStyles.push(styles.secondaryStyle);
-      if (outlineStyle) {
-        buttonStyles.push({
-          backgroundColor: "transparent",
-          borderWidth: 2,
-          borderColor: COLORS.secondary,
-        });
-      }
+          borderColor: colorScheme,
+        };
+      default:
+        return {
+          backgroundColor: colorScheme,
+        };
     }
-  }
-  if (outlineStyle) {
-    buttonStyles.push({
-      backgroundColor: "transparent",
-      borderWidth: 2,
-      borderColor: COLORS.secondary,
-    });
-  }
+  }, [colorScheme, variant]);
 
-  const style = useMemo(() => {
-    const outlineStyles = {
-      backgroundColor: "transparent",
-      borderWidth: 2,
-      borderColor: generalStyle === "primary" ? "primary" : "secondary",
-    };
+  const textVariantStyles: CTextStyle = useMemo(() => {
+    switch (variant) {
+      case "outline":
+        return {
+          color: colorScheme,
+        };
+      default:
+        return {
+          color: "white",
+        };
+    }
+  }, [colorScheme, variant]);
+
+  const buttonStyle = useMemo(() => {
     return createViewStyles({
       ...styles.container,
-      ...buttonStyle,
-      ...(generalStyle === "primary" ? styles.primaryStyle : styles.secondaryStyle),
-      ...(outlineStyle ? outlineStyles : {}),
+      ...buttonVariantStyles,
+      ...(shadowed ? styles.shadow : {}),
+      ...style,
     });
-  }, []);
+  }, [shadowed, style, buttonVariantStyles]);
 
-  const text = (
-    <CText
-      style={{
-        ...styles.title,
-        ...textStyle,
-        ...(generalStyle === "primary" ? styles.textStylePrimary : styles.textStyleSecondary),
-        color: titleColor || outlineStyle ? COLORS.secondary : undefined,
-      }}
-    >
-      {title}
-    </CText>
-  );
-
-  return (
-    <TouchableOpacity style={style} onPress={onPress} disabled={disabled}>
+  const Button = (
+    <TouchableOpacity style={buttonStyle} {...rest}>
       {children}
-      {text}
+      {title && (
+        <CText
+          style={{
+            ...styles.title,
+            ...textVariantStyles,
+            ...textStyle,
+          }}
+        >
+          {title}
+        </CText>
+      )}
     </TouchableOpacity>
   );
+
+  return Button;
 }
 
 const styles = StyleSheet.create({
@@ -111,16 +97,18 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.md,
     fontWeight: "700",
   },
-  primaryStyle: {
-    backgroundColor: COLORS.green,
-  },
-  secondaryStyle: {
-    backgroundColor: COLORS.secondary,
-  },
-  textStylePrimary: {
-    color: COLORS.white,
-  },
-  textStyleSecondary: {
-    color: COLORS.white,
+  shadow: {
+    alignSelf: "center",
+    borderRadius: 28,
+    // backgroundColor: "transparent",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 3,
+    marginHorizontal: 3,
   },
 });

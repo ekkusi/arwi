@@ -1,13 +1,18 @@
-import { ImageStyle, TextStyle, ViewStyle } from "react-native";
+import { Image, ImageStyle, TextStyle, ViewStyle } from "react-native";
 import { COLORS, FONT_SIZES, SPACING } from "./tokens";
 import {
   CImageStyle,
+  ColorKey,
   CSpacing,
   CTextStyle,
   CViewStyle,
+  ImageColorPropKey,
   IMAGE_COLOR_PROP_KEYS,
+  SpacingPropKey,
   SPACING_PROP_KEYS,
+  TextColorPropKey,
   TEXT_COLOR_PROP_KEYS,
+  ViewColorPropKey,
   VIEW_COLOR_PROP_KEYS,
 } from "./types";
 
@@ -16,7 +21,7 @@ const getSpacingValue = (value: CSpacing): number => {
 };
 
 const getColor = (colorKey: string): string | undefined => {
-  return COLORS[colorKey as keyof typeof COLORS] || undefined;
+  return COLORS[colorKey as ColorKey] || undefined;
 };
 
 export function createTextStyles(styles: CTextStyle): TextStyle {
@@ -28,12 +33,12 @@ export function createTextStyles(styles: CTextStyle): TextStyle {
     if (key === "fontSize") {
       const newValue = typeof styles[key] === "number" ? (styles[key] as number) : FONT_SIZES[styles[key] as keyof typeof FONT_SIZES];
       newStyles[key] = newValue;
-    } else if (TEXT_COLOR_PROP_KEYS.includes(key as (typeof TEXT_COLOR_PROP_KEYS)[number])) {
-      const typedKey = key as (typeof TEXT_COLOR_PROP_KEYS)[number];
+    } else if (TEXT_COLOR_PROP_KEYS.includes(key as TextColorPropKey)) {
+      const typedKey = key as TextColorPropKey;
       const newValue = getColor(styles[typedKey] as string) || styles[typedKey];
       newStyles[typedKey] = newValue;
-    } else if (SPACING_PROP_KEYS.includes(key as (typeof SPACING_PROP_KEYS)[number])) {
-      const typedKey = key as (typeof SPACING_PROP_KEYS)[number];
+    } else if (SPACING_PROP_KEYS.includes(key as SpacingPropKey)) {
+      const typedKey = key as SpacingPropKey;
       const newValue = getSpacingValue(styles[typedKey] as CSpacing);
       newStyles[typedKey] = newValue;
     } else {
@@ -51,12 +56,12 @@ export function createImageStyles(styles: CImageStyle): ImageStyle {
   const objKeys = Object.keys(styles) as (keyof CImageStyle)[];
 
   objKeys.forEach((key) => {
-    if (IMAGE_COLOR_PROP_KEYS.includes(key as (typeof IMAGE_COLOR_PROP_KEYS)[number])) {
-      const typedKey = key as (typeof IMAGE_COLOR_PROP_KEYS)[number];
+    if (IMAGE_COLOR_PROP_KEYS.includes(key as ImageColorPropKey)) {
+      const typedKey = key as ImageColorPropKey;
       const newValue = getColor(styles[typedKey] as string) || styles[typedKey];
       newStyles[typedKey] = newValue;
-    } else if (SPACING_PROP_KEYS.includes(key as (typeof SPACING_PROP_KEYS)[number])) {
-      const typedKey = key as (typeof SPACING_PROP_KEYS)[number];
+    } else if (SPACING_PROP_KEYS.includes(key as SpacingPropKey)) {
+      const typedKey = key as SpacingPropKey;
       const newValue = getSpacingValue(styles[typedKey] as CSpacing);
       newStyles[typedKey] = newValue;
     } else {
@@ -74,12 +79,12 @@ export function createViewStyles(styles: CViewStyle): ViewStyle {
   const objKeys = Object.keys(styles) as (keyof CViewStyle)[];
 
   objKeys.forEach((key) => {
-    if (VIEW_COLOR_PROP_KEYS.includes(key as (typeof VIEW_COLOR_PROP_KEYS)[number])) {
-      const typedKey = key as (typeof VIEW_COLOR_PROP_KEYS)[number];
+    if (VIEW_COLOR_PROP_KEYS.includes(key as ViewColorPropKey)) {
+      const typedKey = key as ViewColorPropKey;
       const newValue = getColor(styles[typedKey] as string) || styles[typedKey];
       newStyles[typedKey] = newValue;
-    } else if (SPACING_PROP_KEYS.includes(key as (typeof SPACING_PROP_KEYS)[number])) {
-      const typedKey = key as (typeof SPACING_PROP_KEYS)[number];
+    } else if (SPACING_PROP_KEYS.includes(key as SpacingPropKey)) {
+      const typedKey = key as SpacingPropKey;
       const newValue = getSpacingValue(styles[typedKey] as CSpacing);
       newStyles[typedKey] = newValue;
     } else {

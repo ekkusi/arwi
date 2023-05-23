@@ -6,7 +6,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import CButton from "../../components/primitives/CButton";
 import GroupListItem from "../../components/GroupListItem";
 import LoadingIndicator from "../../components/LoadingIndicator";
-import ShadowButton from "../../components/ShadowButton";
+import ShadowButton from "../../components/primitives/ShadowButton";
 import { graphql } from "../../gql";
 import { GroupListItemFragment } from "../../gql/graphql";
 import { COLORS, FONT_SIZES } from "../../theme";
@@ -37,9 +37,7 @@ const onGroupListItemPress = (group: GroupListItemFragment, navigation: NativeSt
   navigation.navigate("GroupView", { groupId: group.id });
 };
 
-const createGroupButton = (action: () => void) => (
-  <CButton title="Luo" onPress={action} buttonStyle={{ height: 36, paddingHorizontal: 25 }} buttonColor={COLORS.green} titleColor={COLORS.white} />
-);
+const createGroupButton = (action: () => void) => <CButton title="Luo" onPress={action} style={{ height: 36, paddingHorizontal: 25 }} />;
 const openGroupCreation = (navigation: NativeStackNavigationProp<HomeStackParamList, "Home", undefined>) => {
   // TODO: SAVE GROUP
   console.log("Save group");
@@ -73,16 +71,10 @@ export default function HomePage({ navigation }: HomeViewProps) {
       ) : (
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <CText style={{ fontSize: "md" }}>Sinulla ei ole ryhmiä</CText>
-          <CButton title="Luo ensimmäinen ryhmä" onPress={() => openGroupCreation(navigation)} buttonColor={COLORS.green} titleColor={COLORS.white} />
+          <CButton title="Luo ensimmäinen ryhmä" onPress={() => openGroupCreation(navigation)} />
         </CView>
       )}
-      <ShadowButton
-        buttonStyle={{ position: "absolute", bottom: 20, right: 15 }}
-        title="Luo uusi ryhmä"
-        buttonColor={COLORS.green}
-        titleColor={COLORS.white}
-        onPress={() => openGroupCreation(navigation)}
-      >
+      <ShadowButton style={{ position: "absolute", bottom: 20, right: 15 }} title="Luo uusi ryhmä" onPress={() => openGroupCreation(navigation)}>
         <MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />
       </ShadowButton>
     </CView>

@@ -20,7 +20,7 @@ export default function CTextInput(props: CustomTextInputProps) {
   const [errorText, setError] = useState<string | undefined>(undefined);
   const textStyles: CTextStyle = {
     ...styles.titleStyle,
-    color: lightTheme ? COLORS.white : styles.titleStyle.color,
+    color: lightTheme ? "white" : styles.titleStyle.color,
   };
   const style = useMemo(() => {
     const error = {
@@ -44,7 +44,7 @@ export default function CTextInput(props: CustomTextInputProps) {
     <CView style={{ width: "100%" }}>
       {title && <CText style={textStyles}>{title}</CText>}
       <TextInput onChange={validateText} {...generalProps} style={style} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} />
-      {errorText && <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.sm }}>{errorText}</CText>}
+      {errorText && <CText style={{ color: "error", fontWeight: "600", fontSize: FONT_SIZES.sm }}>{errorText}</CText>}
     </CView>
   );
 }

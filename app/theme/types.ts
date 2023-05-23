@@ -1,9 +1,13 @@
 import { ImageStyle, TextStyle, ViewStyle } from "react-native";
 import { COLORS, FONT_SIZES, SPACING } from "./tokens";
 
-export type CColor = keyof typeof COLORS | (string & Record<never, never>);
-export type CFontSize = keyof typeof FONT_SIZES | (number & Record<never, never>);
-export type CSpacing = keyof typeof SPACING | number;
+export type ColorKey = keyof typeof COLORS;
+export type FontKey = keyof typeof FONT_SIZES;
+export type SpacingKey = keyof typeof SPACING;
+
+export type CColor = ColorKey | (string & Record<never, never>);
+export type CFontSize = FontKey | (number & Record<never, never>);
+export type CSpacing = SpacingKey | number;
 
 export const SPACING_PROP_KEYS = [
   "bottom",
@@ -35,8 +39,10 @@ export const SPACING_PROP_KEYS = [
   "paddingHorizontal",
 ] as const;
 
+export type SpacingPropKey = (typeof SPACING_PROP_KEYS)[number];
+
 export type CSpacingProps = {
-  [key in (typeof SPACING_PROP_KEYS)[number]]?: CSpacing;
+  [key in SpacingPropKey]?: CSpacing;
 };
 
 export const VIEW_COLOR_PROP_KEYS = [
@@ -49,10 +55,13 @@ export const VIEW_COLOR_PROP_KEYS = [
   "borderStartColor",
   "borderEndColor",
 ] as const;
+export type ViewColorPropKey = (typeof VIEW_COLOR_PROP_KEYS)[number];
 
 export const TEXT_COLOR_PROP_KEYS = ["color", "textDecorationColor", "textShadowColor", ...VIEW_COLOR_PROP_KEYS] as const;
+export type TextColorPropKey = (typeof TEXT_COLOR_PROP_KEYS)[number];
 
 export const IMAGE_COLOR_PROP_KEYS = ["backgroundColor", "borderColor", "tintColor", "overlayColor"] as const;
+export type ImageColorPropKey = (typeof IMAGE_COLOR_PROP_KEYS)[number];
 
 export type CTextColorProps = {
   [key in (typeof TEXT_COLOR_PROP_KEYS)[number]]?: CColor;
@@ -76,15 +85,5 @@ type CImageStyleProps = CImageColorProps;
 
 export type CTextStyle = Override<TextStyle, CTextStyleProps & CSpacingProps>;
 
-// export type CTextStyle = Omit<TextStyle, keyof CTextStyleProps | keyof CSpacingProps> &
-//   CSpacingProps &
-//   Pick<CTextStyleProps, keyof TextStyle & keyof CTextStyleProps>;
-// export type CViewStyle = Omit<ViewStyle, keyof CViewStyleProps | keyof CSpacing> &
-//   CSpacing &
-//   Pick<CViewStyleProps, keyof ViewStyle & keyof CViewStyleProps>;
 export type CViewStyle = Override<ViewStyle, CViewStyleProps & CSpacingProps>;
-// export type CImageStyle = Omit<ImageStyle, keyof CImageStyleProps | keyof CSpacing> &
-//   CSpacing &
-//   Pick<CImageStyleProps, keyof ImageStyle & keyof CImageStyleProps>;
 export type CImageStyle = Override<ImageStyle, CImageStyleProps & CSpacingProps>;
-// export type CStyles = Omit<TextStyle, keyof CStyleProps> & Pick<CStyleProps, keyof TextStyle & keyof CStyleProps>;
