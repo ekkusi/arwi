@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { FlatList } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useTranslation } from "react-i18next";
 import CButton from "../../components/primitives/CButton";
 import GroupListItem from "../../components/GroupListItem";
 import LoadingIndicator from "../../components/LoadingIndicator";
@@ -36,6 +37,7 @@ type HomeViewProps = NativeStackScreenProps<HomeStackParamList, "Home">;
 
 export default function HomePage({ navigation }: HomeViewProps) {
   const { data, loading } = useQuery(MainPage_GetCurrentUser_Query);
+  const { t } = useTranslation();
 
   if (loading || !data) return <LoadingIndicator />;
 
@@ -60,13 +62,13 @@ export default function HomePage({ navigation }: HomeViewProps) {
         />
       ) : (
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <CText style={{ fontSize: "md" }}>Sinulla ei ole ryhmiä</CText>
-          <CButton title="Luo ensimmäinen ryhmä" onPress={() => navigation.navigate("GroupCreation")} />
+          <CText style={{ fontSize: "md" }}>{t("home-view.no-groups", "Sinulla ei ole ryhmiä")}</CText>
+          <CButton title={t("home-view.create-group", "Luo ensimmäinen ryhmä")} onPress={() => navigation.navigate("GroupCreation")} />
         </CView>
       )}
       <ShadowButton
         style={{ position: "absolute", bottom: 20, right: 15 }}
-        title="Luo uusi ryhmä"
+        title={t("home-view.create-group", "Luo ryhmä")}
         onPress={() => navigation.navigate("GroupCreation")}
       >
         <MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />
