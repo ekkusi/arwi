@@ -22,11 +22,7 @@ export default function HomeStack() {
     <HomeStackNavigator.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <HomeStackNavigator.Screen name="Home" component={HomeView} options={{ title: "Omat ryhmät" }} />
       <HomeStackNavigator.Screen name="GroupView" component={GroupView} />
-      <HomeStackNavigator.Screen
-        name="GroupCreation"
-        component={GroupCreation}
-        options={({ route }) => ({ title: "Luo ryhmä", headerRight: route.params.createGroupButton })}
-      />
+      <HomeStackNavigator.Screen name="GroupCreation" component={GroupCreation} options={{ title: "Luo ryhmä" }} />
     </HomeStackNavigator.Navigator>
   );
 }
