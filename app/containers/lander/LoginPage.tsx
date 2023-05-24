@@ -3,7 +3,6 @@ import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -15,6 +14,7 @@ import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
 import CImage from "../../components/primitives/CImage";
+import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 
 const initialValues = {
   email: "",
@@ -92,13 +92,13 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<Landing
             />
             <CView style={{ flexDirection: "row", justifyContent: "center" }}>
               <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Eikö sinulla ole vielä käyttäjää? </CText>
-              <TouchableOpacity
+              <CTouchableOpacity
                 onPress={() => {
                   navigation.navigate("SignupPage", {});
                 }}
               >
                 <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Rekisteröidy</CText>
-              </TouchableOpacity>
+              </CTouchableOpacity>
               <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
             </CView>
           </CView>

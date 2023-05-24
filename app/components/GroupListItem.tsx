@@ -1,4 +1,3 @@
-import { TouchableOpacity } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { graphql } from "../gql";
 import { GroupListItemFragment } from "../gql/graphql";
@@ -7,6 +6,7 @@ import Card from "./Card";
 import { timeSince } from "../helpers/dateHelpers";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
+import CTouchableOpacity from "./primitives/CTouchableOpacity";
 
 export const GroupListItem_Fragment = graphql(`
   fragment GroupListItem on Group {
@@ -41,7 +41,7 @@ type GroupListItemProps = {
 export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress }: GroupListItemProps) {
   return (
     <Card style={{ marginBottom: 10 }}>
-      <TouchableOpacity
+      <CTouchableOpacity
         style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
         onPress={onListItemPress}
       >
@@ -56,10 +56,10 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             <CText style={{ fontSize: "sm", color: "gray" }}>{group.subject.label}</CText>
           </CView>
         </CView>
-        <TouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
+        <CTouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
           <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />
-        </TouchableOpacity>
-      </TouchableOpacity>
+        </CTouchableOpacity>
+      </CTouchableOpacity>
     </Card>
   );
 }
