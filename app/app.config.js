@@ -27,6 +27,6 @@ module.exports = {
     favicon: "./assets/favicon.png",
   },
   extra: {
-    graphqlApiUrl: process.env.GRAPHQL_API_URL,
+    backendApiUrl: process.env.BACKEND_API_URL,
   },
 };

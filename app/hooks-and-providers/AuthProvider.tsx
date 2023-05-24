@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useCallback, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 
 type AuthState = {
@@ -33,21 +33,22 @@ export const useAuth = () => {
 function AuthProvider({ children }: React.PropsWithChildren<{}>) {
   const [authState, setAuthState] = useState<AuthState>(initialState);
 
-  const logout = async () => {
+  // Need to use useCallback to prevent infinite render loops in components that depend on these (ApolloProvider at least).
+  const logout = useCallback(async () => {
     await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
     setAuthState({
       accessToken: null,
       authenticated: false,
     });
-  };
+  }, []);
 
-  const setToken = async (token: string) => {
+  const setToken = useCallback(async (token: string) => {
     await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, token);
     setAuthState({
       accessToken: token,
       authenticated: true,
     });
-  };
+  }, []);
 
   return (
     <Provider
