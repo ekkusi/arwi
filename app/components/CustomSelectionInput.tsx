@@ -1,18 +1,7 @@
 import React, { useState } from "react";
-import {
-  Text,
-  StyleSheet,
-  StyleProp,
-  TextStyle,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  View,
-  ViewProps,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+import { StyleProp, TextStyle, ViewProps, TouchableOpacity, Modal } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS, FONT_SIZES } from "../theme";
+import { COLORS } from "../theme";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 
@@ -29,17 +18,9 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
   const [selectModalOpen, setSelectModalOpen] = useState(false);
 
-  const allStyles = errorText
-    ? [styles.regularInputStyle, generalProps.style, styles.errorInputStyle, errorStyle]
-    : [styles.regularInputStyle, generalProps.style];
-  const textStyles: StyleProp<TextStyle>[] = [styles.titleStyle];
-  if (lightTheme) {
-    textStyles.push({ color: COLORS.white });
-    allStyles.push({ borderColor: COLORS.white });
-  }
   return (
-    <View style={{ width: "100%" }}>
-      {title && <Text style={textStyles}>{title}</Text>}
+    <CView style={{ width: "100%" }}>
+      {title && <CText style={{ fontSize: "sm", fontWeight: "700", color: COLORS.darkgray }}>{title}</CText>}
       <TouchableOpacity
         style={{
           width: "100%",
@@ -52,12 +33,12 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
         }}
         onPress={() => setSelectModalOpen(true)}
       >
-        <Text style={{ fontSize: FONT_SIZES.large, fontWeight: "700", color: selected ? COLORS.darkgray : COLORS.lightgray }}>
+        <CText style={{ fontSize: "lg", fontWeight: "700", color: selected ? COLORS.darkgray : COLORS.lightgray }}>
           {selected || "Valitse luokka"}
-        </Text>
+        </CText>
         <MaterialCommunityIcon name="chevron-down" color={COLORS.darkgray} size={30} />
       </TouchableOpacity>
-      {errorText && <Text style={{ color: COLORS.error, fontWeight: "600", fontSize: FONT_SIZES.small }}>{errorText}</Text>}
+      {errorText && <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: "sm" }}>{errorText}</CText>}
       {selectModalOpen && (
         <Modal transparent visible onRequestClose={() => setSelectModalOpen(false)}>
           <CView
@@ -88,34 +69,13 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
                     setSelectModalOpen(false);
                   }}
                 >
-                  <CText style={{ fontSize: FONT_SIZES.large, fontWeight: "700", color: COLORS.darkgray }}>{option}</CText>
+                  <CText style={{ fontSize: "lg", fontWeight: "700", color: COLORS.darkgray }}>{option}</CText>
                 </TouchableOpacity>
               ))}
             </CView>
           </CView>
         </Modal>
       )}
-    </View>
+    </CView>
   );
 }
-
-const styles = StyleSheet.create({
-  regularInputStyle: {
-    borderBottomWidth: 1,
-    color: COLORS.darkgray,
-    borderColor: COLORS.gray,
-    height: 54,
-    width: "100%",
-    fontSize: FONT_SIZES.large,
-    fontWeight: "600",
-  },
-  titleStyle: {
-    fontSize: FONT_SIZES.small,
-    fontWeight: "700",
-    color: COLORS.darkgray,
-  },
-  errorInputStyle: {
-    borderBottomWidth: 2,
-    borderColor: COLORS.error,
-  },
-});
