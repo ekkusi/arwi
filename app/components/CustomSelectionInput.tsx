@@ -3,6 +3,7 @@ import { StyleProp, TextStyle, ViewProps, TouchableOpacity, Modal } from "react-
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../theme";
 import CText from "./primitives/CText";
+import CTouchableOpacity from "./primitives/CTouchableOpacity";
 import CView from "./primitives/CView";
 
 type CustomSelectionInputProps = ViewProps & {
@@ -21,10 +22,10 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
   return (
     <CView style={{ width: "100%" }}>
       {title && <CText style={{ fontSize: "sm", fontWeight: "700", color: COLORS.darkgray }}>{title}</CText>}
-      <TouchableOpacity
+      <CTouchableOpacity
         style={{
           width: "100%",
-          borderColor: COLORS.gray,
+          borderColor: "gray",
           borderBottomWidth: 1,
           height: 54,
           flexDirection: "row",
@@ -37,8 +38,8 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
           {selected || "Valitse luokka"}
         </CText>
         <MaterialCommunityIcon name="chevron-down" color={COLORS.darkgray} size={30} />
-      </TouchableOpacity>
-      {errorText && <CText style={{ color: COLORS.error, fontWeight: "600", fontSize: "sm" }}>{errorText}</CText>}
+      </CTouchableOpacity>
+      {errorText && <CText style={{ color: "error", fontWeight: "600", fontSize: "sm" }}>{errorText}</CText>}
       {selectModalOpen && (
         <Modal transparent visible onRequestClose={() => setSelectModalOpen(false)}>
           <CView
@@ -53,13 +54,13 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
               alignItems: "center",
             }}
           >
-            <CView style={{ width: "80%", height: "80%", backgroundColor: COLORS.white, borderRadius: 10, alignItems: "center" }}>
+            <CView style={{ width: "80%", height: "80%", backgroundColor: "white", borderRadius: 10, alignItems: "center" }}>
               {options.map((option, index) => (
-                <TouchableOpacity
+                <CTouchableOpacity
                   style={{
                     width: "80%",
                     height: 54,
-                    borderBottomColor: COLORS.darkgray,
+                    borderBottomColor: "darkgray",
                     borderBottomWidth: 1,
                     justifyContent: "center",
                   }}
@@ -69,8 +70,8 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
                     setSelectModalOpen(false);
                   }}
                 >
-                  <CText style={{ fontSize: "lg", fontWeight: "700", color: COLORS.darkgray }}>{option}</CText>
-                </TouchableOpacity>
+                  <CText style={{ fontSize: "lg", fontWeight: "700", color: "darkgray" }}>{option}</CText>
+                </CTouchableOpacity>
               ))}
             </CView>
           </CView>
