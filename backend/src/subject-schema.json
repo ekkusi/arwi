@@ -341,6 +341,330 @@
           }
         ]
       }
+    },
+    {
+      "label": "Maantieto",
+      "code": "GE",
+      "environments": [
+        {
+          "label": "Kartat",
+          "code": "GE_KARTTA",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Ilmasto",
+          "code": "GE_ILMASTO",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Väestö",
+          "code": "GE_VAESTO",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Muu",
+          "code": "GE_MUU",
+          "color": "#ED64A6"
+        }
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
+    },
+    {
+      "label": "Matematiikka",
+      "code": "MA",
+      "environments": [
+        {
+          "label": "Laskeminen",
+          "code": "MA_LASK",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Geometria",
+          "code": "MA_GEOM",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Todennäköisyys",
+          "code": "MA_TOD",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Muu",
+          "code": "MA_MUU",
+          "color": "#ED64A6"
+        }
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
+    },
+    {
+      "label": "Fysiikka",
+      "code": "FY",
+      "environments": [
+        {
+          "label": "Liike",
+          "code": "FY_LIIKE",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Sähkö",
+          "code": "FY_SAHKO",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Valo",
+          "code": "FY_VALO",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Muu",
+          "code": "FY_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Kemia",
+      "code": "KE",
+      "environments": [
+        {
+          "label": "Aineet",
+          "code": "KE_AINE",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Reaktiot",
+          "code": "KE_REAKTIO",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "KE_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Kielet",
+      "code": "KI",
+      "environments": [
+        {
+          "label": "Sanasto",
+          "code": "RUO_SANASTO",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Kuullunymmärtäminen",
+          "code": "RUO_KUUNN",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Puhuminen",
+          "code": "RUO_PUHUM",
+          "color": "#ED8936"
+        },
+        {
+          "label": "Muu",
+          "code": "RUO_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Musiikki",
+      "code": "MU",
+      "environments": [
+        {
+          "label": "Soittimet",
+          "code": "MU_SOITTIMET",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Laulaminen",
+          "code": "MU_LAULAMINEN",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "MU_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Kuvataide",
+      "code": "KU",
+      "environments": [
+        {
+          "label": "Piirtäminen",
+          "code": "KU_PIIRTAMINEN",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Maalaaminen",
+          "code": "KU_MAALAAMINEN",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "KU_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Käsityö",
+      "code": "KA",
+      "environments": [
+        {
+          "label": "Puutyö",
+          "code": "KA_PUUTYO",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Kangas",
+          "code": "KA_KANGAS",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "KA_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Terveystieto",
+      "code": "TE",
+      "environments": [
+        {
+          "label": "Ravitsemus",
+          "code": "TE_RAVITSEMUS",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Liikunta",
+          "code": "TE_LIIKUNTA",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "TE_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Uskonto",
+      "code": "US",
+      "environments": [
+        {
+          "label": "Kristinusko",
+          "code": "US_KRISTINUSKO",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Muu",
+          "code": "US_MUU",
+          "color": "#48BB78"
+        }
+      ]
+    },
+    {
+      "label": "Elämänkatsomustieto",
+      "code": "EK",
+      "environments": [
+        {
+          "label": "Eettiset kysymykset",
+          "code": "EK_EETTISET",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Muu",
+          "code": "EK_MUU",
+          "color": "#48BB78"
+        }
+      ]
+    },
+    {
+      "label": "Historia",
+      "code": "HI",
+      "environments": [
+        {
+          "label": "Suomi",
+          "code": "HI_SUOMI",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Eurooppa",
+          "code": "HI_EUROOPPA",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "HI_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Yhteiskuntaoppi",
+      "code": "YH",
+      "environments": [
+        {
+          "label": "Suomi",
+          "code": "YH_SUOMI",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Eurooppa",
+          "code": "YH_EUROOPPA",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "YH_MUU",
+          "color": "#ED64A6"
+        }
+      ]
+    },
+    {
+      "label": "Kotitalous",
+      "code": "KO",
+      "environments": [
+        {
+          "label": "Ruuanvalmistus",
+          "code": "KO_RUUANVALMISTUS",
+          "color": "#4299E1"
+        },
+        {
+          "label": "Siivous",
+          "code": "KO_SIIVOUS",
+          "color": "#48BB78"
+        },
+        {
+          "label": "Muu",
+          "code": "KO_MUU",
+          "color": "#ED64A6"
+        }
+      ]
     }
   ]
 }

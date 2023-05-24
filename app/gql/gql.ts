@@ -15,7 +15,8 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
 const documents = {
   "\n  fragment GroupListItem on Group {\n    id\n    name\n    subject {\n      label\n      code\n    }\n    updatedAt\n  }\n":
     types.GroupListItemFragmentDoc,
-  "\n  mutation ApolloProvider_RefreshToken {\n    refreshToken {\n      accessToken\n    }\n  }\n": types.ApolloProvider_RefreshTokenDocument,
+  "\n  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {\n    id\n    date\n    environment {\n      label\n      code\n    }\n    evaluations {\n      skillsRating\n      behaviourRating\n      wasPresent\n      isStellar\n    }\n  }\n":
+    types.CollectionsLineChart_EvaluationCollectionFragmentDoc,
   "\n  query MainPage_GetCurrentUser {\n    getCurrentUser {\n      email\n      id\n      groups {\n        id\n        name\n        updatedAt\n        subject {\n          label\n          code\n        }\n      }\n    }\n  }\n":
     types.MainPage_GetCurrentUserDocument,
   "\n  mutation LoginPage_Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      accessToken\n    }\n  }\n":
@@ -27,8 +28,6 @@ const documents = {
     types.GroupOverviewPage_GetGroupDocument,
   "\n  mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {\n    deleteGroup(groupId: $groupId)\n  }\n":
     types.GroupOverviewPage_DeleteGroupDocument,
-  "\n  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {\n    id\n    date\n    environment {\n      label\n      code\n    }\n    evaluations {\n      skillsRating\n      behaviourRating\n      wasPresent\n      isStellar\n    }\n  }\n":
-    types.CollectionsLineChart_EvaluationCollectionFragmentDoc,
 };
 
 /**
@@ -55,8 +54,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  mutation ApolloProvider_RefreshToken {\n    refreshToken {\n      accessToken\n    }\n  }\n"
-): (typeof documents)["\n  mutation ApolloProvider_RefreshToken {\n    refreshToken {\n      accessToken\n    }\n  }\n"];
+  source: "\n  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {\n    id\n    date\n    environment {\n      label\n      code\n    }\n    evaluations {\n      skillsRating\n      behaviourRating\n      wasPresent\n      isStellar\n    }\n  }\n"
+): (typeof documents)["\n  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {\n    id\n    date\n    environment {\n      label\n      code\n    }\n    evaluations {\n      skillsRating\n      behaviourRating\n      wasPresent\n      isStellar\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -93,12 +92,6 @@ export function graphql(
 export function graphql(
   source: "\n  mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {\n    deleteGroup(groupId: $groupId)\n  }\n"
 ): (typeof documents)["\n  mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {\n    deleteGroup(groupId: $groupId)\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {\n    id\n    date\n    environment {\n      label\n      code\n    }\n    evaluations {\n      skillsRating\n      behaviourRating\n      wasPresent\n      isStellar\n    }\n  }\n"
-): (typeof documents)["\n  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {\n    id\n    date\n    environment {\n      label\n      code\n    }\n    evaluations {\n      skillsRating\n      behaviourRating\n      wasPresent\n      isStellar\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -21,7 +21,7 @@ export default function Main() {
       }
       setLoading(false);
     });
-  }, []);
+  }, [setToken]);
 
   if (loading) return <LoadingIndicator />;
 

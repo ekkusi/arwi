@@ -341,9 +341,19 @@ export type GroupListItemFragment = {
   subject: { __typename?: "Subject"; label: string; code: string };
 } & { " $fragmentName"?: "GroupListItemFragment" };
 
-export type ApolloProvider_RefreshTokenMutationVariables = Exact<{ [key: string]: never }>;
-
-export type ApolloProvider_RefreshTokenMutation = { __typename?: "Mutation"; refreshToken: { __typename?: "AuthPayload"; accessToken: string } };
+export type CollectionsLineChart_EvaluationCollectionFragment = {
+  __typename?: "EvaluationCollection";
+  id: string;
+  date: string;
+  environment: { __typename?: "Environment"; label: string; code: string };
+  evaluations: Array<{
+    __typename?: "Evaluation";
+    skillsRating?: Rating | null;
+    behaviourRating?: Rating | null;
+    wasPresent: boolean;
+    isStellar: boolean;
+  }>;
+} & { " $fragmentName"?: "CollectionsLineChart_EvaluationCollectionFragment" };
 
 export type MainPage_GetCurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -409,20 +419,6 @@ export type GroupOverviewPage_DeleteGroupMutationVariables = Exact<{
 }>;
 
 export type GroupOverviewPage_DeleteGroupMutation = { __typename?: "Mutation"; deleteGroup: boolean };
-
-export type CollectionsLineChart_EvaluationCollectionFragment = {
-  __typename?: "EvaluationCollection";
-  id: string;
-  date: string;
-  environment: { __typename?: "Environment"; label: string; code: string };
-  evaluations: Array<{
-    __typename?: "Evaluation";
-    skillsRating?: Rating | null;
-    behaviourRating?: Rating | null;
-    wasPresent: boolean;
-    isStellar: boolean;
-  }>;
-} & { " $fragmentName"?: "CollectionsLineChart_EvaluationCollectionFragment" };
 
 export const GroupListItemFragmentDoc = {
   kind: "Document",
@@ -494,26 +490,6 @@ export const CollectionsLineChart_EvaluationCollectionFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<CollectionsLineChart_EvaluationCollectionFragment, unknown>;
-export const ApolloProvider_RefreshTokenDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "ApolloProvider_RefreshToken" },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "refreshToken" },
-            selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "accessToken" } }] },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ApolloProvider_RefreshTokenMutation, ApolloProvider_RefreshTokenMutationVariables>;
 export const MainPage_GetCurrentUserDocument = {
   kind: "Document",
   definitions: [

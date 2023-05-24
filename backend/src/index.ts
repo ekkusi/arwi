@@ -10,10 +10,12 @@ import express from "express";
 import path from "path";
 import { applyMiddleware } from "graphql-middleware";
 import dotenv from "dotenv";
+import { assertIsError } from "./utils/errorUtils";
 import resolvers from "./resolvers";
 import isAuthenticatedMiddleware from "./middleware/authMiddleware";
-import { parseAndVerifyToken } from "./utils/jwt";
+import { createRefreshAndAccessTokens, parseAndVerifyToken, REFRESH_TOKEN_KEY } from "./utils/jwt";
 import prisma from "./prismaClient";
+import ValidationError from "./errors/ValidationError";
 
 dotenv.config();
 
@@ -69,6 +71,24 @@ server.start().then(() => {
 
   app.get("/", (_, res) => {
     res.send("Hello World!");
+  });
+
+  app.post("/refresh-token", (req, res) => {
+    try {
+      const refreshToken = req.cookies[REFRESH_TOKEN_KEY];
+      if (!refreshToken) throw new ValidationError("No refresh token found");
+      const user = parseAndVerifyToken(refreshToken, "refresh");
+      if (!user) throw new ValidationError("Token is invalid");
+      const token = createRefreshAndAccessTokens(user, res);
+      return res.status(200).send({
+        accessToken: token,
+      });
+    } catch (error) {
+      assertIsError(error);
+      return res.status(500).send({
+        error: error.message,
+      });
+    }
   });
 
   app.listen(PORT, () => {
