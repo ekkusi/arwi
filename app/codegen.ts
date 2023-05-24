@@ -2,7 +2,7 @@ import { CodegenConfig } from "@graphql-codegen/cli";
 
 const schemaURL = "http://localhost:4000/graphql";
 
-// const schemaURL = "https://arwi-test.lm.r.appspot.com/graphql"; # For testing with deployed backend
+// const schemaURL = "https://arwi-test.lm.r.appspot.com/graphql"; // For testing with deployed backend
 
 const customScalars = {
   Date: "string",
