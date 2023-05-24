@@ -13,7 +13,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<Landi
       bottomChildren={
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15, marginTop: 20 }}>
           <CButton
-            colorScheme="primary"
+            colorScheme="secondary"
             variant="outline"
             title="Kirjaudu sisään"
             style={{ width: "90%" }}
@@ -22,7 +22,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<Landi
             }}
           />
           <CButton
-            colorScheme="primary"
+            colorScheme="secondary"
             variant="outline"
             title="Rekisteröidy"
             style={{ width: "90%" }}

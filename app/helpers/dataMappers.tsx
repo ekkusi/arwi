@@ -1,25 +1,22 @@
-import { LearningObjective } from "arwi-backend/src/utils/subjectUtils";
-import { LearningObjectiveType, Rating } from "../gql/graphql";
+import { LearningObjective, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { SvgUri } from "react-native-svg";
+import { LearningObjectiveType, Rating, Subject } from "../gql/graphql";
+import { COLORS } from "../theme";
+
+export const subjectToIcon = (subject: SubjectMinimal, color?: string) => {
+  switch (subject.code) {
+    default:
+      return <SvgUri width={25} height={25} uri="../assets/sport.svg" color={color || COLORS.darkgray} />;
+  }
+};
 
 export const formatRatingString = (rating: Rating) => {
   switch (rating) {
     case Rating.EXCELLENT:
       return "Erinomainen";
-    case Rating.GREAT:
-      return "Kiitettävä";
-    case Rating.GOOD:
-      return "Hyvä";
-    case Rating.FAIR:
-      return "Tyydyttävä";
-    default:
-      return "Välttävä";
-  }
-};
-
-export const formatRatingNumber = (rating: Rating) => {
-  switch (rating) {
-    case Rating.EXCELLENT:
-      return 10;
     case Rating.GREAT:
       return 9;
     case Rating.GOOD:

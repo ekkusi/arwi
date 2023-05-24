@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleProp, TextStyle, ViewProps, TouchableOpacity, Modal } from "react-native";
+import { FlatList, StyleProp, TextStyle, ViewProps, TouchableOpacity, Modal } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../theme";
 import CText from "./primitives/CText";
@@ -54,25 +54,29 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
               alignItems: "center",
             }}
           >
-            <CView style={{ width: "80%", height: "80%", backgroundColor: "white", borderRadius: 10, alignItems: "center" }}>
-              {options.map((option, index) => (
-                <CTouchableOpacity
-                  style={{
-                    width: "80%",
-                    height: 54,
-                    borderBottomColor: "darkgray",
-                    borderBottomWidth: 1,
-                    justifyContent: "center",
-                  }}
-                  key={index}
-                  onPress={() => {
-                    setSelected(option);
-                    setSelectModalOpen(false);
-                  }}
-                >
-                  <CText style={{ fontSize: "lg", fontWeight: "700", color: "darkgray" }}>{option}</CText>
-                </CTouchableOpacity>
-              ))}
+            <CView style={{ width: "80%", height: "80%", backgroundColor: "white", borderRadius: 20, alignItems: "center" }}>
+              <CText style={{ width: "100%", fontSize: "title", color: "darkgray" }}>{title}</CText>
+              <FlatList
+                renderItem={({ item }: { item: string }) => (
+                  <CTouchableOpacity
+                    style={{
+                      width: "80%",
+                      height: 54,
+                      borderBottomColor: "gray",
+                      borderBottomWidth: 1,
+                      justifyContent: "center",
+                    }}
+                    onPress={() => {
+                      setSelected(item);
+                      setSelectModalOpen(false);
+                    }}
+                  >
+                    <CText style={{ fontSize: "lg", fontWeight: "700", color: "darkgray" }}>{item}</CText>
+                  </CTouchableOpacity>
+                )}
+                data={options}
+                keyExtractor={(item, index) => index.toString()}
+              />
             </CView>
           </CView>
         </Modal>

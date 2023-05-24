@@ -1,6 +1,6 @@
 import { createNativeStackNavigator, NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { COLORS } from "../../theme";
-import GroupCreation from "./group/GroupCreation";
+import GroupCreationStack from "./group/creation/GroupCreationStack";
 import GroupView from "./group/GroupView";
 import HomeView from "./HomeView";
 import { HomeStackParamList } from "./types";
@@ -10,9 +10,6 @@ export const screenOptions: NativeStackNavigationOptions = {
     backgroundColor: COLORS.green,
   },
   headerTintColor: COLORS.white,
-  headerTitleStyle: {
-    fontWeight: "bold",
-  },
 };
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParamList>();
@@ -22,7 +19,7 @@ export default function HomeStack() {
     <HomeStackNavigator.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <HomeStackNavigator.Screen name="Home" component={HomeView} options={{ title: "Omat ryhmät" }} />
       <HomeStackNavigator.Screen name="GroupView" component={GroupView} />
-      <HomeStackNavigator.Screen name="GroupCreation" component={GroupCreation} options={{ title: "Luo ryhmä" }} />
+      <HomeStackNavigator.Screen name="GroupCreation" component={GroupCreationStack} options={{ title: "Uusi ryhmä", headerShown: false }} />
     </HomeStackNavigator.Navigator>
   );
 }
