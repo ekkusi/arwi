@@ -1,0 +1,6 @@
+runtime: nodejs18
+
+build_env_variables:
+  NODE_ENV: test  
+env_variables:
+  NODE_ENV: test  

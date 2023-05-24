@@ -1,6 +1,7 @@
 {
   "extends": [
     "airbnb",
+    "airbnb/hooks",
     "airbnb-typescript",
     "prettier",
     "plugin:prettier/recommended"
@@ -17,6 +18,12 @@
     "react/no-array-index-key": "off",
     "react/style-prop-object": "off",
     "no-restricted-exports": "off",
+    "no-restricted-syntax": [
+      "error",
+      "ForInStatement",
+      "LabeledStatement",
+      "WithStatement"
+    ],
     "react/prop-types": ["error", { "ignore": ["navigation", "route"] }],
     // "prettier/prettier": [
     //   "error",
@@ -29,7 +36,8 @@
       {
         "allow": [
           "warn",
-          "error"
+          "error",
+          "info"
         ]
       }
     ],
@@ -45,7 +53,8 @@
         "js": "never",
         "jsx": "never",
         "ts": "never",
-        "tsx": "never"
+        "tsx": "never",
+        "json": "always"
       }
    ],
     "import/prefer-default-export": "off",

@@ -6,7 +6,7 @@ const customScalars = {
 };
 
 const config: CodegenConfig = {
-  schema: "http://localhost:3000/api/graphql",
+  schema: "http://localhost:4000/graphql",
   documents: ["**/*.{ts,tsx}", "!gql/**/*", "!app/**/*"],
   ignoreNoDocuments: true,
   config: {

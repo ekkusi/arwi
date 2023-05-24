@@ -1,7 +1,10 @@
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Text, View } from "react-native";
+import { useEffect } from "react";
+import CollectionsLineChart from "../../../components/charts/CollectionsLineChart";
 import LoadingIndicator from "../../../components/LoadingIndicator";
+import CText from "../../../components/primitives/CText";
+import CView from "../../../components/primitives/CView";
 import { graphql } from "../../../gql";
 import { FONT_SIZES } from "../../../theme";
 import { HomeStackParamList } from "../types";
@@ -27,14 +30,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           name
         }
         evaluationCollections {
-          id
-          date
-          environment {
-            label
-          }
-          learningObjectives {
-            code
-          }
+          ...CollectionsLineChart_EvaluationCollection
         }
       }
     }
@@ -47,7 +43,7 @@ const GroupOverviewPage_DeleteGroup_Mutation = graphql(`
   }
 `);
 
-export default function GroupView({ navigation, route }: GroupViewProps) {
+export default function GroupView({ route, navigation }: GroupViewProps) {
   const { groupId } = route.params;
 
   const { data, loading } = useQuery(GroupOverviewPage_GetGroup_Query, {
@@ -56,17 +52,17 @@ export default function GroupView({ navigation, route }: GroupViewProps) {
     },
   });
 
+  useEffect(() => {
+    if (data) navigation.setOptions({ title: data.getGroup.name });
+  }, [data, navigation]);
+
   if (loading || !data) return <LoadingIndicator />;
 
   const { getGroup: group } = data;
-  navigation.setOptions({ title: group.name });
 
   return (
-    <View style={{ alignItems: "center" }}>
-      <Text style={{ fontSize: FONT_SIZES.title, fontWeight: "600" }}>{group.name}</Text>
-      <View style={{ width: "100%", aspectRatio: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text style={{ fontSize: FONT_SIZES.medium }}>Kuvaajan näyttämiseen tarvitaan vähintään 3 arviointia</Text>
-      </View>
-    </View>
+    <CView>
+      <CollectionsLineChart collections={group.currentClassYear.evaluationCollections} />
+    </CView>
   );
 }

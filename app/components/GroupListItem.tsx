@@ -1,11 +1,12 @@
-import { View, ViewProps, Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import Entypo from "react-native-vector-icons/Entypo";
 import { graphql } from "../gql";
-import { Group, GroupListItemFragment, Subject } from "../gql/graphql";
+import { GroupListItemFragment } from "../gql/graphql";
 import { COLORS, FONT_SIZES } from "../theme";
 import Card from "./Card";
 import { timeSince } from "../helpers/dateHelpers";
+import CText from "./primitives/CText";
+import CView from "./primitives/CView";
 
 export const GroupListItem_Fragment = graphql(`
   fragment GroupListItem on Group {
@@ -44,17 +45,17 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
         style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
         onPress={onListItemPress}
       >
-        <View style={{ gap: 5 }}>
-          <View style={{ flex: 2, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-            <Text style={{ fontSize: FONT_SIZES.large, fontWeight: "700", color: COLORS.darkgray, flex: 1 }}>{group.name}</Text>
-          </View>
-          <View style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
-            <MaterialCommunityIcon name="history" color={COLORS.gray} />
-            <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.gray }}>{timeSince(group.updatedAt)} ago</Text>
-            <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForCode(group.subject.code) }} />
-            <Text style={{ fontSize: FONT_SIZES.small, color: COLORS.gray }}>{group.subject.label}</Text>
-          </View>
-        </View>
+        <CView style={{ gap: 5 }}>
+          <CView style={{ flex: 2, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+            <CText style={{ fontSize: "lg", fontWeight: "700", color: "darkgray", flex: 1 }}>{group.name}</CText>
+          </CView>
+          <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
+            <MaterialCommunityIcon name="history" color="gray" />
+            <CText style={{ fontSize: "sm", color: "gray" }}>{timeSince(group.updatedAt)} ago</CText>
+            <CView style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForCode(group.subject.code) }} />
+            <CText style={{ fontSize: "sm", color: "gray" }}>{group.subject.label}</CText>
+          </CView>
+        </CView>
         <TouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
           <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />
         </TouchableOpacity>

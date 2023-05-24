@@ -20,7 +20,7 @@ import LoadingIndicator from "@/components/general/LoadingIndicator";
 import Popover, { PopoverItem } from "@/components/general/Popover";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TopNavigationBar from "@/components/functional/TopNavigationBar";
 import CollectionsChart from "@/components/functional/CollectionsChart";
 import ChangeClassYearModal from "@/components/functional/ChangeClassYearModal";

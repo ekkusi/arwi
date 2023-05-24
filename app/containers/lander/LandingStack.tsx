@@ -6,14 +6,10 @@ import { LandingStackParamList } from "./types";
 
 const LandingStackNavigator = createNativeStackNavigator<LandingStackParamList>();
 
-type LandingStackProps = {
-  setTeacherId: (teacherId: string) => void;
-};
-
-export default function LandingStack({ setTeacherId }: LandingStackProps) {
+export default function LandingStack() {
   return (
     <LandingStackNavigator.Navigator initialRouteName="LandingPage" screenOptions={{ headerTransparent: true }}>
-      <LandingStackNavigator.Screen name="LandingPage" component={LandingPage} initialParams={{ setTeacherId }} options={{ title: "" }} />
+      <LandingStackNavigator.Screen name="LandingPage" component={LandingPage} options={{ title: "" }} />
       <LandingStackNavigator.Screen name="LoginPage" component={LoginPage} options={{ title: "" }} />
       <LandingStackNavigator.Screen name="SignupPage" component={SignupPage} options={{ title: "" }} />
     </LandingStackNavigator.Navigator>

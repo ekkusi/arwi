@@ -1,17 +1,14 @@
 import { useMemo } from "react";
-import { Text, TextProps, TextStyle } from "react-native";
+import { Text, TextProps } from "react-native";
+import { CTextStyle } from "../../theme/types";
+import { createTextStyles } from "../../theme/utils";
 
 export type CTextProps = Omit<TextProps, "style"> & {
-  style?: TextStyle;
+  style?: CTextStyle;
 };
 
 export default function CText({ style, ...rest }: CTextProps) {
-  const styles = useMemo(
-    () => ({
-      ...style,
-    }),
-    [style]
-  );
+  const styles = useMemo(() => style && createTextStyles(style), [style]);
 
   return <Text style={styles} {...rest} />;
 }

@@ -1,85 +1,116 @@
 /* eslint-disable global-require */
+import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { Image, Text, View } from "react-native";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import CustomButton from "../../components/CustomButton";
-import CustomTextInput from "../../components/CustomTextInput";
+import CButton from "../../components/primitives/CButton";
+import CText from "../../components/primitives/CText";
+import CView from "../../components/primitives/CView";
+import CTextInput from "../../components/primitives/CTextInput";
+import { graphql } from "../../gql";
+import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
-import { COLORS } from "../../theme";
+import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
+import CImage from "../../components/primitives/CImage";
 
 const initialValues = {
   email: "",
   password: "",
 };
 
-export default function LoginPage({ navigation, route }: NativeStackScreenProps<LandingStackParamList, "LoginPage">) {
-  const { handleLogin } = route.params;
+const LoginPage_Login_Mutation = graphql(`
+  mutation LoginPage_Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      accessToken
+    }
+  }
+`);
+
+export default function LoginPage({ navigation }: NativeStackScreenProps<LandingStackParamList, "LoginPage">) {
+  const { setToken } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
-  const [loading, setLoading] = useState(false);
+
+  const [login] = useMutation(LoginPage_Login_Mutation);
+
+  const handlePasswordChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    if (generalError) setGeneralError(undefined);
+    setPassword(event.nativeEvent.text);
+  };
+
+  const handleEmailChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    if (generalError) setGeneralError(undefined);
+    setEmail(event.nativeEvent.text);
+  };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    setGeneralError(undefined);
-    setLoading(true);
-    // TODO: Authentication and get teacherId
-    handleLogin("teacherId");
+    try {
+      const { data } = await login({ variables: { email: values.email, password: values.password } });
+      const accessToken = data?.login?.accessToken;
+      if (!accessToken) throw new Error("Unexpected error");
+      setToken(accessToken);
+    } catch (error) {
+      const msg = getErrorMessage(error);
+      setGeneralError(msg);
+    }
   };
   return (
     <LandingComponent
       bottomChildren={
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15 }}>
-          <View style={{ flex: 2, width: "90%", gap: 10, justifyContent: "center" }}>
-            <CustomTextInput
+        <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15 }}>
+          <CView style={{ flex: 2, width: "90%", gap: 10, justifyContent: "center" }}>
+            <CTextInput
               title="Sähköpostiosoite"
               placeholder="arwioija@test.fi"
               textValidation={nameValidator}
               style={{ width: "100%" }}
-              onChange={(event) => setEmail(event.nativeEvent.text)}
+              onChange={handleEmailChange}
             />
-            <CustomTextInput
+            <CTextInput
               title="Salasana"
               placeholder="password"
               style={{ width: "100%" }}
               textValidation={nameValidator}
-              onChange={(event) => setPassword(event.nativeEvent.text)}
+              onChange={handlePasswordChange}
             />
-          </View>
-          <View style={{ flex: 1, width: "90%", gap: 5 }}>
-            <CustomButton
+            {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md", marginBottom: 30 }}>{generalError}</CText>}
+          </CView>
+          <CView style={{ flex: 1, width: "90%", gap: 5 }}>
+            <CButton
               title="Kirjaudu sisään"
-              generalStyle="secondary"
-              outlineStyle
-              buttonStyle={{ width: "100%" }}
+              colorScheme="secondary"
+              variant="outline"
+              style={{ width: "100%" }}
               disabled={email !== undefined && password !== undefined && generalError !== undefined}
               onPress={() => {
                 if (email && password) handleSubmit({ email, password });
               }}
             />
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>Eikö sinulla ole vielä käyttäjää? </Text>
+            <CView style={{ flexDirection: "row", justifyContent: "center" }}>
+              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Eikö sinulla ole vielä käyttäjää? </CText>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("SignupPage", { handleSignup: handleLogin });
+                  navigation.navigate("SignupPage", {});
                 }}
               >
-                <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.primary }}>Rekisteröidy</Text>
+                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Rekisteröidy</CText>
               </TouchableOpacity>
-              <Text style={{ fontSize: 12, fontWeight: "600", color: COLORS.gray }}>.</Text>
-            </View>
-          </View>
-        </View>
+              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
+            </CView>
+          </CView>
+        </CView>
       }
       topChildren={
-        <View style={{ width: 300, height: 300 }}>
-          <Image
+        <CView style={{ width: 300, height: 300 }}>
+          <CImage
             source={require("../../assets/arwilogo-transparent-white.png")}
             style={{ width: undefined, height: undefined, resizeMode: "contain", flex: 1 }}
           />
-        </View>
+        </CView>
       }
     />
   );

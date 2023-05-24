@@ -1,31 +1,33 @@
-import { forwardRef, LegacyRef } from "react";
-import { View, ViewProps, StyleSheet } from "react-native";
+import { forwardRef } from "react";
+import { View, StyleSheet } from "react-native";
+import { createStyles } from "../theme/utils";
+import CView, { CViewProps } from "./primitives/CView";
 
-export type CardProps = ViewProps & { innerViewProps?: ViewProps };
+export type CardProps = CViewProps & { innerViewProps?: CViewProps };
 
-export default forwardRef((props: CardProps, ref: LegacyRef<View>) => {
+export default forwardRef<View, CardProps>((props, ref) => {
   const { innerViewProps, ...rest } = props;
   return (
-    <View {...rest} style={[styles.shadow, rest.style]}>
-      <View ref={ref} {...innerViewProps} style={[styles.defaultCard, innerViewProps?.style]}>
+    <CView {...rest} style={{ ...styles.shadow, ...rest.style }}>
+      <CView ref={ref} {...innerViewProps} style={{ ...styles.defaultCard, ...innerViewProps?.style }}>
         {rest.children}
-      </View>
-    </View>
+      </CView>
+    </CView>
   );
 });
 
-const styles = StyleSheet.create({
+const styles = createStyles({
   defaultCard: {
     flex: 1,
     borderRadius: 5,
     backgroundColor: "white",
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    paddingHorizontal: "lg",
+    paddingVertical: "md",
     width: "100%",
     overflow: "hidden",
   },
   shadow: {
-    marginHorizontal: 3,
+    marginHorizontal: "xs",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
