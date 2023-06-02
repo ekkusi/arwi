@@ -223,6 +223,8 @@ b83c3bfe-9b2c-417b-a955-5d725e54f94e	PRIMARY_NINTH	562cb013-14e0-4d29-ae33-5ba18
 58e36cd2-94b9-4a74-a59c-4822cdab9e73	PRIMARY_FIFTH	1d3817aa-8325-41dc-ba5e-c7fb8d462274
 ec5578dd-ad95-4279-be72-e0326b8cfd41	PRIMARY_FIRST	fde7c856-7b1b-4ca8-a624-67809c32bd65
 f4ca4a93-f8d6-49ba-bea8-8390c99005b8	PRIMARY_THIRD	c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0
+b369b11f-64ed-4278-83d7-588c59886416	PRIMARY_SECOND	57d7802e-5dd9-44d2-a652-4185942f2b97
+c8b9bfe7-5d92-434c-97f3-97eb52714267	PRIMARY_SECOND	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
 \.
 
 
@@ -1949,6 +1951,8 @@ f4e49098-5dab-4c81-98f0-2bed180fd89b	1e2db5dd-c171-460e-bf48-4bc55f04f49e	Jonkun
 331f9ad4-8ed2-46a7-8021-d90b3639266e	5323b55b-5fa9-4285-b48a-dbf0a19c3bef	\N	d08a4fbb-2ac9-4703-aa59-fc4ca3052473	t	GREAT	GREAT	f
 1ae62aac-4b34-4b48-a8ec-adf883b2a6c9	6743208b-a2b7-4951-9d65-602313f52be8	\N	4dde4440-0413-45ca-a645-8f0adf8d2622	t	\N	\N	f
 f46cf7e8-7eca-4f3c-af5e-17ea4e77bd2a	2a397255-ca16-43dc-b47e-a977a917f032	\N	4dde4440-0413-45ca-a645-8f0adf8d2622	t	EXCELLENT	EXCELLENT	f
+bb5e9630-dec5-4419-8e11-d209e764fac5	5387fbeb-b1bf-44b0-b87f-6bfba4e12996	oli aika levoton	448295e4-1d25-49ac-80fe-8d2a6a4eab5b	t	GREAT	EXCELLENT	f
+9b63fba2-d078-46db-b15b-7627718f403c	82b08073-2503-4e40-b381-9f4c0987aa37	hyvä	448295e4-1d25-49ac-80fe-8d2a6a4eab5b	t	GOOD	EXCELLENT	f
 7c418676-74ae-4c25-8ae2-ac24deed8b1d	89f60718-5222-43f6-b185-edac3401255a	\N	32cb58ac-6a37-4bb7-9cc7-33ab7042b935	t	\N	\N	f
 8661b47a-1197-489b-a99e-9f8d85506bef	b4ad4b21-b7e4-40a5-832a-5c4dd551eb16	\N	32cb58ac-6a37-4bb7-9cc7-33ab7042b935	t	\N	\N	f
 1a47dd85-bc8a-457b-8f77-4e7d271e6d5d	61fce0ec-d49a-46fa-a981-3878c27710a9	\N	32cb58ac-6a37-4bb7-9cc7-33ab7042b935	t	EXCELLENT	EXCELLENT	f
@@ -1959,6 +1963,7 @@ ec718757-418d-468e-bdae-3b1533526a41	39724d8d-fa0b-40c5-95d8-10e3e95d6577	\N	32c
 1450cddb-d555-43e9-8cea-e832ecb1b90a	75bba92f-9f9c-47c0-a89a-2add75007cf6	Matti ui hyvin ja jaksoi treenata koko harjoituksen ajan. Hän piti tauot sopivissa väleissä ja oli ystävällinen muille uimareille.	3b32ba2c-8635-438b-a1b3-015d980e0846	t	GOOD	GOOD	f
 b7db3a94-6d36-46e0-9925-0a780bab0f3a	4c047cf3-edbb-4aa0-b879-cd84077a8257	\N	897dbbdb-d0ed-4270-8ce4-8c34c3d21c8e	f	\N	\N	f
 f77a61ec-9029-492e-aee2-40c2b9fc383b	a520a370-e1ec-4742-bcf8-1a34a4434485	Teppo harjoitteli voimistelua ja kokeili erilaisia akrobaattisia liikkeitä. Hän ei onnistunut kaikissa liikkeissä heti, mutta oli sisukas ja yritti uudelleen kunnes onnistui.	48b97ca2-cc28-4f63-a14b-26fb8422ff2f	t	GOOD	GREAT	f
+16769f99-9306-4173-b196-64d7a3acbc9f	b7b0fe22-b844-4a04-a292-3f2489f62118	\N	448295e4-1d25-49ac-80fe-8d2a6a4eab5b	f	\N	\N	f
 f80f5d1b-9fbe-4714-822f-6d8eaec2ce6e	d77c55c5-670a-4bc5-bf46-5ff9662077f6	\N	74f84fb9-64dc-4c1e-a880-ad98d9cf6b92	f	\N	\N	f
 9a171c5f-1391-47d1-b651-c5c9c7cfd928	08d712ee-e2bc-4ca6-9660-fa986c4c4158	\N	74f84fb9-64dc-4c1e-a880-ad98d9cf6b92	f	\N	\N	f
 53e9e37e-9d7a-4ceb-a541-2db55eb5b868	7131d54d-4686-4ca4-8a4f-cf090eaa7d5e	\N	74f84fb9-64dc-4c1e-a880-ad98d9cf6b92	f	\N	\N	f
@@ -2080,6 +2085,9 @@ e9db152a-6ff2-4717-b0f0-628d84b3dcf8	65752ec2-1cd1-4d97-903e-490db1a6372d	\N	32c
 5d93fe13-309a-444a-bc26-f8f1becf6b1a	75bba92f-9f9c-47c0-a89a-2add75007cf6	Matilla meni tosi hyvin tänään. Maila pysyi kädessä ja tekniikka oli kunnossa. Matti kannusti myös toisia mukaan pelaamaan	87721bf9-2237-4429-9e23-587ae97d05c1	t	GOOD	GREAT	f
 fae60611-97db-409b-8672-03937db269ef	4c047cf3-edbb-4aa0-b879-cd84077a8257	Liisa treenasi perusvoimistelutreeniä ahkerasti, mutta tarvitsi apua muutamissa liikkeissä. Hän kuunteli ohjeita ja pyrki parantamaan suoritustaan.	b1876b9c-23cd-46d2-aa93-b7980fbca7a2	t	FAIR	GOOD	t
 67cabdd3-f315-48fd-9232-ebbd2520e576	a520a370-e1ec-4742-bcf8-1a34a4434485	Teppo harjoitteli perusvoimistelua voimistelusalilla. Hän teki erilaisia liikkeitä ja hyppyjä, mutta tarvitsi vielä harjoitusta tasapainonsa säilyttämisessä. Hän yritti parhaansa ja kuunteli ohjaajan neuvoja.	b1876b9c-23cd-46d2-aa93-b7980fbca7a2	t	FAIR	GOOD	f
+f0d42430-86f6-49b3-acf1-ab817034c524	4c047cf3-edbb-4aa0-b879-cd84077a8257	\N	4e2afd6f-5320-419c-bd50-314fcddaee44	t	\N	\N	f
+cc1c86c6-ff39-4682-aef2-789a39892ea2	75bba92f-9f9c-47c0-a89a-2add75007cf6	\N	4e2afd6f-5320-419c-bd50-314fcddaee44	t	\N	\N	f
+985f1805-244d-484e-b217-c5faac038b13	a520a370-e1ec-4742-bcf8-1a34a4434485	\N	4e2afd6f-5320-419c-bd50-314fcddaee44	t	\N	\N	f
 40d00d17-4449-4e24-9cbe-187d7cfcd6cd	8f2c8d2d-5ffd-42ae-abd0-cce3cddc1dff	\N	2f72c229-ca83-4d7d-8620-11e6e77a5897	t	\N	\N	f
 4c811929-b619-48a9-a9e3-c315f4cda34e	dc2a0312-bdaf-45d4-b3a4-9c3216012e4b	\N	2f72c229-ca83-4d7d-8620-11e6e77a5897	t	\N	\N	f
 921405d3-5000-43b7-b494-527d2b1be4d1	cac00e26-1bd0-47c3-b2a8-4eb754562d6d	\N	2f72c229-ca83-4d7d-8620-11e6e77a5897	t	\N	\N	f
@@ -2555,6 +2563,7 @@ f9bbb84d-acab-4b52-a890-43dc7709963f	2023-04-09 09:00:00		Tanssitunti tanssikoul
 b1876b9c-23cd-46d2-aa93-b7980fbca7a2	2023-04-05 15:00:00		Perusvoimistelutreeniä voimistelusalilla. Treenasimme erilaisia liikkeitä ja hyppyjä. Treenin kesto oli 90 minuuttia.	LI_PERUS	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
 beee4734-91f2-424a-b01d-70bb610bfcbc	2023-03-30 15:30:00		Tanssitunti tanssikoululla. Tällä kertaa harjoittelimme latinalaistansseja, kuten salsaa ja cha chaa. Tunnin kesto oli 60 minuuttia.	LI_TANSSI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T4,T5,T7}
 4f42caa2-bcc4-47e8-bab9-1ef88e9382c2	2023-05-19 00:00:00		\N	LI_VOIM	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2,T1}
+4e2afd6f-5320-419c-bd50-314fcddaee44	2023-06-01 00:00:00		\N	LI_PERUS	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1}
 1e80e956-c012-4d76-a01a-0d32007da1db	2023-04-21 00:00:00		\N	LI_MUU	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
 5ce16688-56df-465d-bfb4-04d94f86a484	2023-03-21 00:00:00	Pesäpallo		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
 7488ce86-5522-45d1-bf90-c8d8604ca3ca	2023-04-01 00:00:00	Baletti	\N	LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
@@ -2663,6 +2672,7 @@ c222d9c2-e979-47cd-b545-1803e2849a9e	2023-03-30 00:00:00	Uinti pojat		LI_TALVI	d
 1852c993-c666-42e9-8862-e2b9bd8f8a8d	2023-03-31 11:00:00		Peruskestävyystreeniä juoksuradalla. Juoksimme noin 5 kilometrin lenkin, joka sisälsi myös muutamia mäkiä.	LI_PERUS	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T3,T5,T7,T8}
 0928afc3-d50e-4222-9adc-71d1c8dc4593	2023-03-27 17:00:00		Luontojoogaa rannalla. Joogasimme rannalla auringonlaskun aikaan ja tunnelma oli upea. Joogan kesto oli 60 minuuttia.	LI_LUONTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{}
 321aacd4-f6e1-40f9-b5ab-ed36d65f0323	2023-03-30 00:00:00	Uinti pojat		LI_TALVI	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
+448295e4-1d25-49ac-80fe-8d2a6a4eab5b	2023-06-01 00:00:00		huihai	BI_KASVI	b369b11f-64ed-4278-83d7-588c59886416	{T1}
 f68f104b-19b9-4dc8-8564-9b27d16cac5d	2023-04-01 00:00:00	Baletti	\N	LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
 8bba79e9-bfce-472d-8985-8d06407b4558	2023-04-03 00:00:00	Uinti pojat	Topias ja Eelis tyttöjen kanssa	LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
 b29e68a9-5dc8-436d-9d1c-e2dd279b8128	2023-04-04 00:00:00	Reaktiohippa+leikit, Keilapallo	\N	LI_TALVI	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
@@ -2760,6 +2770,8 @@ e61dbeae-376b-4fac-bd5b-7441b0533ee9	LI 7a/a	c71a57e7-5fb0-452d-88b0-f96072f8be2
 018cd027-6fa7-468f-b53a-cee9bbf557cf	9A	483e736f-00a6-46d1-a1c3-3099eb626012	2023-04-07 15:52:39.56	LI	PRIMARY_FIRST
 fde7c856-7b1b-4ca8-a624-67809c32bd65	Testiryhmä	e31f2fbf-4637-46e9-94c2-93f00a138edf	2023-05-19 11:44:05.791	LI	PRIMARY_FIRST
 c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0	Jsjskdjsj	8548a9c5-dfdb-48e6-936d-f221845157b4	2023-05-19 13:25:26.995	LI	PRIMARY_THIRD
+57d7802e-5dd9-44d2-a652-4185942f2b97	testiryhmä	6bcb2e61-7d1e-4697-9e41-93a8f62a3cd6	2023-06-01 10:17:04.501	BI	PRIMARY_SECOND
+723f1c8d-8a79-4484-b31b-d2e4f7f50efd	toinen ryhmä	6bcb2e61-7d1e-4697-9e41-93a8f62a3cd6	2023-06-01 10:20:17.176	LI	PRIMARY_SECOND
 23a47b66-cd2e-4a9c-ab78-d6b1a8e5643f	4AC	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-04-22 12:40:09.521	LI	PRIMARY_FOURTH
 0df0a9e8-d7d4-4a24-a2ad-e5f263696a27	Testi iso ryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-04-22 12:41:08.836	LI	PRIMARY_NINTH
 909b50c8-56c4-4618-bb55-e1a1feb7f1a9	Kettujen kerho	483e736f-00a6-46d1-a1c3-3099eb626012	2023-04-22 12:43:54.406	LI	PRIMARY_THIRD
@@ -3070,6 +3082,12 @@ df8dc5f2-c538-41df-ba15-d91d37653fb3	Uusitalo Ilona\t \t \t \t \t \t 	1d3817aa-8
 a520a370-e1ec-4742-bcf8-1a34a4434485	Teppo Tavallinen	fde7c856-7b1b-4ca8-a624-67809c32bd65
 4c047cf3-edbb-4aa0-b879-cd84077a8257	Liisa Lahtinen	fde7c856-7b1b-4ca8-a624-67809c32bd65
 75bba92f-9f9c-47c0-a89a-2add75007cf6	Matti Meikäläinen	fde7c856-7b1b-4ca8-a624-67809c32bd65
+82b08073-2503-4e40-b381-9f4c0987aa37	foobar	57d7802e-5dd9-44d2-a652-4185942f2b97
+5387fbeb-b1bf-44b0-b87f-6bfba4e12996	bar	57d7802e-5dd9-44d2-a652-4185942f2b97
+b7b0fe22-b844-4a04-a292-3f2489f62118	foo	57d7802e-5dd9-44d2-a652-4185942f2b97
+c25bff45-7223-4c61-b116-5b2d8b077a7a	testi2	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
+52911273-2826-4629-b539-5cee29431c55	testi1	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
+d836e806-1927-4cab-b779-167cd873ce79	Kalle Kehveli	fde7c856-7b1b-4ca8-a624-67809c32bd65
 \.
 
 
@@ -3096,6 +3114,7 @@ df4df12f-c686-4f62-a276-e42e8162c218	ilmariaarela@gmail.com	$2a$12$VuXJB1NAHZF8D
 94f0b047-8048-49a1-8578-889686e3127a	eaalayt@student.jyu.fi	$2a$12$HxXnq92owbp5mssYgb2QoOFgNgfjR3szgTrDlacGT0jDmdiR3JTHe
 dc1c8071-ac93-4952-8c66-85fb342f98ea	mikasip11@gmail.com	$2a$12$.qDj3BjqwGDvLQkehQlT4OHnmk9zqjqpFVbe.e.ECAhXIKfaO90Ke
 e31f2fbf-4637-46e9-94c2-93f00a138edf	testi-kayttaja@email.com	$2a$12$ZP5xqy/TpJa0veh2JJyBteNykUpMFJtT0m2PKy3CPe2cWN8FuqYPG
+6bcb2e61-7d1e-4697-9e41-93a8f62a3cd6	tommi.j.lahtonen@jyu.fi	$2a$12$1KQVmC01P8Ro7RRujQmXRu33gAeIqzcP6nK7N/u4s4b9vssmF/d/O
 \.
 
 
@@ -3448,6 +3467,12 @@ b83c3bfe-9b2c-417b-a955-5d725e54f94e	f198a966-c599-4457-ab33-bc075adefadf
 ec5578dd-ad95-4279-be72-e0326b8cfd41	a520a370-e1ec-4742-bcf8-1a34a4434485
 ec5578dd-ad95-4279-be72-e0326b8cfd41	75bba92f-9f9c-47c0-a89a-2add75007cf6
 ec5578dd-ad95-4279-be72-e0326b8cfd41	4c047cf3-edbb-4aa0-b879-cd84077a8257
+b369b11f-64ed-4278-83d7-588c59886416	82b08073-2503-4e40-b381-9f4c0987aa37
+b369b11f-64ed-4278-83d7-588c59886416	5387fbeb-b1bf-44b0-b87f-6bfba4e12996
+b369b11f-64ed-4278-83d7-588c59886416	b7b0fe22-b844-4a04-a292-3f2489f62118
+c8b9bfe7-5d92-434c-97f3-97eb52714267	c25bff45-7223-4c61-b116-5b2d8b077a7a
+c8b9bfe7-5d92-434c-97f3-97eb52714267	52911273-2826-4629-b539-5cee29431c55
+ec5578dd-ad95-4279-be72-e0326b8cfd41	d836e806-1927-4cab-b779-167cd873ce79
 \.
 
 
