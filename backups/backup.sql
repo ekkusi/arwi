@@ -2136,6 +2136,13 @@ ef391480-5101-40af-ad08-9d3d25ed832b	5323b55b-5fa9-4285-b48a-dbf0a19c3bef	Aktiiv
 88d8ae4f-947a-4745-bff8-6b59a20acebb	75bba92f-9f9c-47c0-a89a-2add75007cf6	Matti osallistui vesijumppaan innokkaasti, mutta hänellä oli vaikeuksia joissakin liikkeissä. Hän ei kuitenkaan lannistunut ja yritti parhaansa.	9e17426f-5a97-4d62-bca8-25a9312e1367	t	FAIR	GOOD	f
 069441fa-044d-4361-87d5-cc9f698b9a11	4c047cf3-edbb-4aa0-b879-cd84077a8257	Uintitreeni ei sujunut parhaalla mahdollisella tavalla. Liisa ei ollut kovin motivoitunut ja hänen tekniikkansa kaipasi parannusta.	3b32ba2c-8635-438b-a1b3-015d980e0846	t	POOR	FAIR	f
 a9bec995-c326-41b9-8ac5-de637ab4b727	a520a370-e1ec-4742-bcf8-1a34a4434485	Teppo pelasi pallopeliä hiekkakentällä ja kokeili beach tennistä. Vaikka laji oli uusi hänelle, hän oppi nopeasti ja kannusti muita pelaajia. Tunnelma oli innostunut ja hauska.	c0076c27-405b-4dcc-a944-323b279d0986	t	GOOD	EXCELLENT	f
+6c5a0f9d-141f-4e9b-9806-6054f1fc798c	404347be-f571-4254-b055-a06e9a9962f9	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+a3321da9-b510-463e-9ab8-dc079decd2b1	0819eeb9-9a87-40ba-8f9a-45cacf4a2d18	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+02222f2a-248f-4634-b263-cb642ce5c531	799b59e5-c962-4f19-9f9d-01518c57a550	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+4b358baa-6e00-4f31-a4c0-13d364456fe8	42a4fefd-c72e-4707-b0d6-14fd9bd80379	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+b6841abc-cc3d-42dc-9f8b-5fddb125f49e	046a3d24-b93f-44d1-ae1b-aa628e141bae	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+8afbf777-b998-4671-ad3a-46251a58db50	74e88236-472e-41ea-9475-73c94489ae2e	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	f	\N	\N	f
+a49de4aa-b1f6-44b9-a777-7c16f34b27b8	2e03b196-3248-4f14-9f2d-4661e503665d	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
 70570323-da1f-4912-a94c-9002f6501645	2e03b196-3248-4f14-9f2d-4661e503665d	\N	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	GREAT	f
 41f64529-c798-4e32-8e1c-f6feba989851	6ebad098-c9d7-4dd2-8e64-6dd6d0d5d859	\N	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	GREAT	f
 cfc37520-8138-4fc7-99bb-c268ca33f077	dadb6322-e514-4a92-b22b-ab9357a4ac32	\N	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	EXCELLENT	f
@@ -2146,6 +2153,17 @@ c78eef6c-26f9-4ce7-b49c-018b647e30ae	686241e9-7a4e-4eb6-bc99-26699999001b	Pieni 
 3b0849bb-65ef-4528-aae5-6b59c4d1b552	2209c4b3-b0d6-4858-9fa0-74c9b589442c	\N	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	\N	f
 18fea79a-caf0-48db-bb6f-9042d2608d6e	4943ad21-7f08-4b45-8d6c-7cccbfb05562	\N	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	GREAT	f
 e60292f2-6f6b-488e-a5c6-6fb0b5ff4706	1e2db5dd-c171-460e-bf48-4bc55f04f49e	\N	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	GREAT	f
+9832e9c4-aa91-4ab6-bfa2-d2f58fe1dcbc	6ebad098-c9d7-4dd2-8e64-6dd6d0d5d859	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+45f26a84-3cdd-4922-a9cb-c3b228be318a	dadb6322-e514-4a92-b22b-ab9357a4ac32	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+c60fe698-34ed-420f-aa7a-e2441214d8da	26d1e5d6-23ea-4577-b7d1-7a54e5e29900	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+c72c43f6-a73e-4f6d-92f1-428022aaf483	b9266745-39ba-4be3-b1a1-421801b79832	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+56bd9844-b723-448f-abb4-41235adffd4a	686241e9-7a4e-4eb6-bc99-26699999001b	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	f	\N	\N	f
+a9661d15-c79e-403a-ab9e-3f5ff39feb73	e9969c0d-58a3-4bcd-b301-5690b7290aa5	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+85ad2784-281f-46f3-abf5-1d46dd3c3e4b	2209c4b3-b0d6-4858-9fa0-74c9b589442c	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+8f2f9f1a-9eaa-4d64-8bb9-2dbc79d76d7a	4943ad21-7f08-4b45-8d6c-7cccbfb05562	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+a318e792-253b-4a0b-a265-4de5b5f0e183	1e2db5dd-c171-460e-bf48-4bc55f04f49e	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	f	\N	\N	f
+ef9b688a-80b6-41fa-be27-0e9dcfe3861f	a9fb1e6c-0ef3-4c54-99a9-3c81384b898a	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
+139fd7f3-7752-4a2f-bcbe-1439a51eba13	5323b55b-5fa9-4285-b48a-dbf0a19c3bef	\N	e21cd4c8-20e1-40ac-9a7e-cafc322dac96	t	\N	\N	f
 a707554c-3cb3-4575-8be2-34fcd2f019f6	42a4fefd-c72e-4707-b0d6-14fd9bd80379	Hyvällä asenteella heittämistä. Työskentely tuollaisella tasolla mahdollistaa oppimisen.	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	GREAT	f
 1a9d7061-85a6-4089-a66a-2dd5d8ecb63b	046a3d24-b93f-44d1-ae1b-aa628e141bae	\N	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	EXCELLENT	f
 2d6579d0-2f38-4b02-94b1-c12e83f40ff0	74e88236-472e-41ea-9475-73c94489ae2e	Pieni väsähtäminen loppu puolella. Lukuunottamatta sitä, aktiivista työskentelyä.	30371d14-fe98-4817-a945-0f0c5bad3b84	t	\N	GREAT	f
@@ -2598,6 +2616,7 @@ d54b8c42-67e5-49a5-85f3-f163230de4a7	2023-04-06 18:00:00		Luontojooga ulkona pui
 f5a560c0-2dc6-4f39-8158-9c222339bb04	2023-03-25 16:30:00		Uintitreeniä avovesialtaassa. Uinti oli hieman haastavaa, sillä vesi oli vielä melko kylmää, mutta keli oli kaunis ja aurinkoinen.	LI_VESI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T4,T8}
 a8c5e1fb-bb1a-4811-9b48-6faa29f4f619	2023-03-29 09:30:00		Kuntoilua puistossa. Teimme erilaisia lihaskunto- ja venyttelyliikkeitä puiston penkeillä ja portailla.	LI_KUNTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T2,T4,T7,T8}
 ca0b4bb1-c094-42a5-b45f-2a1c02c4fe65	2023-05-23 00:00:00		\N	LI_VESI	decdfebc-8865-4884-85e2-532e1324b324	{T2,T4}
+e21cd4c8-20e1-40ac-9a7e-cafc322dac96	2023-06-10 00:00:00		\N	LI_KUNTO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T4,T7}
 516e883e-2f2d-4cc6-be32-7ae7c52d31a5	2023-05-08 00:00:00		Tennistä ulkona	LI_PALLO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T1}
 117ab460-e5a7-4e15-a674-aed050c43bf5	2023-04-18 00:00:00		Sählypeliä.	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
 eae42717-f8ef-4cc4-bdbe-a7599e7bd261	2023-04-19 00:00:00		Koris (vanne, keppi -rinki)	LI_PALLO	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
