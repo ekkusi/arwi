@@ -225,6 +225,8 @@ ec5578dd-ad95-4279-be72-e0326b8cfd41	PRIMARY_FIRST	fde7c856-7b1b-4ca8-a624-67809
 f4ca4a93-f8d6-49ba-bea8-8390c99005b8	PRIMARY_THIRD	c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0
 b369b11f-64ed-4278-83d7-588c59886416	PRIMARY_SECOND	57d7802e-5dd9-44d2-a652-4185942f2b97
 c8b9bfe7-5d92-434c-97f3-97eb52714267	PRIMARY_SECOND	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
+38d0ac99-a402-410a-bf49-523a30d11f83	PRIMARY_FOURTH	556d49fe-2a7d-4818-8a64-3ecc6a59009c
+512b3326-704d-4ffc-b566-618cb291d69f	PRIMARY_FOURTH	668d593b-2679-480d-9c37-6a7f5d4fb257
 \.
 
 
@@ -2170,6 +2172,8 @@ a707554c-3cb3-4575-8be2-34fcd2f019f6	42a4fefd-c72e-4707-b0d6-14fd9bd80379	Hyväl
 e553f32d-e1a2-43b7-b2ea-4d2794ebb464	75bba92f-9f9c-47c0-a89a-2add75007cf6	Matti juoksi hyvin ja jaksoi koko lenkin ajan. Hän kannusti muita juoksijoita ja piti hyvää tahtia yllä.	1852c993-c666-42e9-8862-e2b9bd8f8a8d	t	GREAT	GOOD	f
 2dcdf7eb-f80d-4974-8c9e-34796b2e68f6	4c047cf3-edbb-4aa0-b879-cd84077a8257	Liisa juoksi peruskestävyystreenin aikana, mutta hänellä oli vaikeuksia mäkien kanssa. Hän pysyi kuitenkin positiivisena ja jatkoi yrittämistä.	1852c993-c666-42e9-8862-e2b9bd8f8a8d	t	FAIR	GOOD	f
 1e8365f7-aab3-4fee-9b08-6771c2f38807	a520a370-e1ec-4742-bcf8-1a34a4434485	Teppo osallistui luontojoogaan ulkona puistossa. Hän teki joogaliikkeitä rauhallisesti ja keskittyneesti, nauttien samalla raikkaasta ulkoilmasta. Hän auttoi muita osallistujia tarvittaessa.	d54b8c42-67e5-49a5-85f3-f163230de4a7	t	GOOD	GREAT	f
+c304fa48-57bb-4645-bfee-f0b54a52bd48	84c79ed7-b6e3-488d-93e7-0462a6e51139	terve tässä jotain sanallista palautetta äänellä	7da6191b-7f47-44e2-a246-68effa8168dc	t	GREAT	GOOD	f
+0fe73e3d-23c5-4e56-84ad-a5020273c4f7	2c42a7d7-10ee-46d8-b057-103c9d3773d9	\N	7da6191b-7f47-44e2-a246-68effa8168dc	t	GOOD	GREAT	f
 9ba1eb11-868d-4819-a494-1be615fff538	28426aca-f675-46f7-bafc-dc5f7eb649c5	\N	4cd87a2c-19d7-4c7c-ae7e-da90e70cd8fe	t	GREAT	EXCELLENT	f
 8ead84e9-d6d9-4468-9bff-b6a8946a8eae	251b27c1-5684-424b-b17b-7257a311bd33	\N	4cd87a2c-19d7-4c7c-ae7e-da90e70cd8fe	t	GOOD	EXCELLENT	f
 5a3bb634-5db2-4ca3-aae2-e90b451253b3	ea8d74ac-e372-4fb8-8dd7-f3591a09cd4a	\N	4cd87a2c-19d7-4c7c-ae7e-da90e70cd8fe	t	GREAT	EXCELLENT	f
@@ -2582,6 +2586,7 @@ b1876b9c-23cd-46d2-aa93-b7980fbca7a2	2023-04-05 15:00:00		Perusvoimistelutreeni�
 beee4734-91f2-424a-b01d-70bb610bfcbc	2023-03-30 15:30:00		Tanssitunti tanssikoululla. Tällä kertaa harjoittelimme latinalaistansseja, kuten salsaa ja cha chaa. Tunnin kesto oli 60 minuuttia.	LI_TANSSI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T4,T5,T7}
 4f42caa2-bcc4-47e8-bab9-1ef88e9382c2	2023-05-19 00:00:00		\N	LI_VOIM	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2,T1}
 4e2afd6f-5320-419c-bd50-314fcddaee44	2023-06-01 00:00:00		\N	LI_PERUS	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1}
+7da6191b-7f47-44e2-a246-68effa8168dc	2023-06-21 00:00:00		\N	LI_VESI	89d861be-d5e9-41a3-8672-d977b0895d54	{T1,T7}
 1e80e956-c012-4d76-a01a-0d32007da1db	2023-04-21 00:00:00		\N	LI_MUU	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
 5ce16688-56df-465d-bfb4-04d94f86a484	2023-03-21 00:00:00	Pesäpallo		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
 7488ce86-5522-45d1-bf90-c8d8604ca3ca	2023-04-01 00:00:00	Baletti	\N	LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
@@ -2793,9 +2798,11 @@ c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0	Jsjskdjsj	8548a9c5-dfdb-48e6-936d-f22184515
 723f1c8d-8a79-4484-b31b-d2e4f7f50efd	toinen ryhmä	6bcb2e61-7d1e-4697-9e41-93a8f62a3cd6	2023-06-01 10:20:17.176	LI	PRIMARY_SECOND
 23a47b66-cd2e-4a9c-ab78-d6b1a8e5643f	4AC	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-04-22 12:40:09.521	LI	PRIMARY_FOURTH
 0df0a9e8-d7d4-4a24-a2ad-e5f263696a27	Testi iso ryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-04-22 12:41:08.836	LI	PRIMARY_NINTH
+556d49fe-2a7d-4818-8a64-3ecc6a59009c	Name	483e736f-00a6-46d1-a1c3-3099eb626012	2023-06-21 12:56:04.927	LI	PRIMARY_FOURTH
 909b50c8-56c4-4618-bb55-e1a1feb7f1a9	Kettujen kerho	483e736f-00a6-46d1-a1c3-3099eb626012	2023-04-22 12:43:54.406	LI	PRIMARY_THIRD
 f118eb20-2ff4-4bec-a6b7-458e97ef062d	Nelkut	94f0b047-8048-49a1-8578-889686e3127a	2023-05-03 19:49:12.607	LI	PRIMARY_FOURTH
 562cb013-14e0-4d29-ae33-5ba1813dfec6	Testi pieni ryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-05-08 08:49:04.946	LI	PRIMARY_NINTH
+668d593b-2679-480d-9c37-6a7f5d4fb257	Name	483e736f-00a6-46d1-a1c3-3099eb626012	2023-06-21 12:56:07.627	LI	PRIMARY_FOURTH
 41f9142b-c05f-41c7-baea-7afafeabb8c7	8a	dc1c8071-ac93-4952-8c66-85fb342f98ea	2023-05-11 18:07:57.554	LI	PRIMARY_EIGHTH
 1d3817aa-8325-41dc-ba5e-c7fb8d462274	5 CD Historian ryhmätyö	df4df12f-c686-4f62-a276-e42e8162c218	2023-05-13 17:27:12.248	BI	PRIMARY_FIFTH
 \.
@@ -3107,6 +3114,10 @@ b7b0fe22-b844-4a04-a292-3f2489f62118	foo	57d7802e-5dd9-44d2-a652-4185942f2b97
 c25bff45-7223-4c61-b116-5b2d8b077a7a	testi2	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
 52911273-2826-4629-b539-5cee29431c55	testi1	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
 d836e806-1927-4cab-b779-167cd873ce79	Kalle Kehveli	fde7c856-7b1b-4ca8-a624-67809c32bd65
+c75c442f-9ccb-4adb-8055-9b152d183771	Ekku	556d49fe-2a7d-4818-8a64-3ecc6a59009c
+cafc3c2b-7729-495b-a57c-bad901ec57fb	Lou	556d49fe-2a7d-4818-8a64-3ecc6a59009c
+a856ea03-665e-4c29-9821-89b1954c87ac	Ekku	668d593b-2679-480d-9c37-6a7f5d4fb257
+6be85033-9f0a-4671-a1e4-43ef98bb9e8e	Lou	668d593b-2679-480d-9c37-6a7f5d4fb257
 \.
 
 
@@ -3492,6 +3503,10 @@ b369b11f-64ed-4278-83d7-588c59886416	b7b0fe22-b844-4a04-a292-3f2489f62118
 c8b9bfe7-5d92-434c-97f3-97eb52714267	c25bff45-7223-4c61-b116-5b2d8b077a7a
 c8b9bfe7-5d92-434c-97f3-97eb52714267	52911273-2826-4629-b539-5cee29431c55
 ec5578dd-ad95-4279-be72-e0326b8cfd41	d836e806-1927-4cab-b779-167cd873ce79
+38d0ac99-a402-410a-bf49-523a30d11f83	c75c442f-9ccb-4adb-8055-9b152d183771
+38d0ac99-a402-410a-bf49-523a30d11f83	cafc3c2b-7729-495b-a57c-bad901ec57fb
+512b3326-704d-4ffc-b566-618cb291d69f	a856ea03-665e-4c29-9821-89b1954c87ac
+512b3326-704d-4ffc-b566-618cb291d69f	6be85033-9f0a-4671-a1e4-43ef98bb9e8e
 \.
 
 
