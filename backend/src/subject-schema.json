@@ -438,7 +438,17 @@
           "code": "FY_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Kemia",
@@ -459,7 +469,17 @@
           "code": "KE_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Kielet",
@@ -485,7 +505,17 @@
           "code": "RUO_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Musiikki",
@@ -506,7 +536,17 @@
           "code": "MU_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Kuvataide",
@@ -527,7 +567,17 @@
           "code": "KU_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Käsityö",
@@ -548,7 +598,17 @@
           "code": "KA_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Terveystieto",
@@ -569,7 +629,17 @@
           "code": "TE_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Uskonto",
@@ -585,7 +655,17 @@
           "code": "US_MUU",
           "color": "#48BB78"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Elämänkatsomustieto",
@@ -601,7 +681,17 @@
           "code": "EK_MUU",
           "color": "#48BB78"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Historia",
@@ -622,7 +712,17 @@
           "code": "HI_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Yhteiskuntaoppi",
@@ -643,7 +743,17 @@
           "code": "YH_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     },
     {
       "label": "Kotitalous",
@@ -664,7 +774,17 @@
           "code": "KO_MUU",
           "color": "#ED64A6"
         }
-      ]
+      ],
+      "learning_objectives": {
+        "1-2": [
+          {
+            "code": "T1",
+            "label": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu",
+            "description": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla",
+            "type": "BEHAVIOUR"
+          }
+        ]
+      }
     }
   ]
 }

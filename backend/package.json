@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/index.ts",
+    "dev": "npm run kill && cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/index.ts",
+    "kill": "bash ./scripts/kill-process.sh",
     "start": "node lib/index.js",
     "build": "tsc -p tsconfig.prod.json && copyfiles -u 1 -e \"src/__mocks__/*\" \"src/**/*.graphql\" \"src/**/*.json\" lib",
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
