@@ -5,7 +5,7 @@
   "scripts": {
     "start-no-backend": "cross-env BACKEND_API_URL=https://arwi-test.lm.r.appspot.com expo start",
     "start-mac": "BACKEND_API_URL=http://$(ipconfig getifaddr en0):4000 expo start",
-    "start-win": "for /f \"tokens=2 delims=[]\" %a in ('ping -n 1 -4 \"%computername%\"') do set GRAPHQL_API_URL=http://%a:4000 && expo start",
+    "start-win": "for /f \"tokens=2 delims=[]\" %a in ('ping -n 1 -4 \"%computername%\"') do set BACKEND_API_URL=http://%a:4000 && expo start",
     "android": "expo start --android",
     "link": "react-native link",
     "ios": "expo start --ios",

@@ -57,7 +57,7 @@ const styles = createStyles({
     height: 54,
     width: "100%",
     fontSize: "lg",
-    fontWeight: "600",
+    fontWeight: "300",
   },
   lightThemeStyle: {
     color: "white",

@@ -21,7 +21,7 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
 
   return (
     <CView style={{ width: "100%" }}>
-      {title && <CText style={{ fontSize: "sm", fontWeight: "700", color: COLORS.darkgray }}>{title}</CText>}
+      {title && <CText style={{ fontSize: "sm", fontWeight: "300", color: COLORS.darkgray }}>{title}</CText>}
       <CTouchableOpacity
         style={{
           width: "100%",
@@ -34,7 +34,7 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
         }}
         onPress={() => setSelectModalOpen(true)}
       >
-        <CText style={{ fontSize: "lg", fontWeight: "700", color: selected ? COLORS.darkgray : COLORS.lightgray }}>
+        <CText style={{ fontSize: "lg", fontWeight: "300", color: selected ? COLORS.darkgray : COLORS.lightgray }}>
           {selected || "Valitse luokka"}
         </CText>
         <MaterialCommunityIcon name="chevron-down" color={COLORS.darkgray} size={30} />
@@ -57,21 +57,24 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
             <CView style={{ width: "80%", height: "80%", backgroundColor: "white", borderRadius: 20, alignItems: "center" }}>
               <CText style={{ width: "100%", fontSize: "title", color: "darkgray" }}>{title}</CText>
               <FlatList
+                style={{ width: "90%" }}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item }: { item: string }) => (
                   <CTouchableOpacity
                     style={{
-                      width: "80%",
+                      marginHorizontal: 5,
                       height: 54,
                       borderBottomColor: "gray",
                       borderBottomWidth: 1,
                       justifyContent: "center",
+                      width: "90%",
                     }}
                     onPress={() => {
                       setSelected(item);
                       setSelectModalOpen(false);
                     }}
                   >
-                    <CText style={{ fontSize: "lg", fontWeight: "700", color: "darkgray" }}>{item}</CText>
+                    <CText style={{ fontSize: "lg", fontWeight: "400", color: "darkgray", width: "100%" }}>{item}</CText>
                   </CTouchableOpacity>
                 )}
                 data={options}

@@ -6,7 +6,10 @@ import Constants from "expo-constants";
 import { useMemo } from "react";
 import { ACCESS_TOKEN_KEY, useAuth } from "./AuthProvider";
 
-const BACKEND_API_URL = Constants.expoConfig?.extra?.backendApiUrl;
+// const BACKEND_API_URL: string = (Constants.expoConfig?.extra?.backendApiUrl || "").trim();
+// const GRAPHQL_API_URL = `${BACKEND_API_URL}/graphql`;
+
+const BACKEND_API_URL: string = (Constants.expoConfig?.extra?.backendApiUrl || "").trim();
 const GRAPHQL_API_URL = `${BACKEND_API_URL}/graphql`;
 
 /**
