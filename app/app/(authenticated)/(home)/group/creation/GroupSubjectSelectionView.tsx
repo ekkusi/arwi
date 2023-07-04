@@ -1,19 +1,13 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Subject } from "arwi-backend/src/types";
 import { getSubjects, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
-import { FlatList } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useRouter } from "expo-router";
 import CButton from "../../../../../components/primitives/CButton";
 import CImage from "../../../../../components/primitives/CImage";
 import CText from "../../../../../components/primitives/CText";
 import CView from "../../../../../components/primitives/CView";
 import { subjectToIcon } from "../../../../../helpers/dataMappers";
 import { COLORS } from "../../../../../theme";
-import { GroupCreationStackParams } from "./types";
-import { useRouter } from "expo-router";
-
-type GroupViewProps = NativeStackScreenProps<GroupCreationStackParams, "GroupSubjectSelectionView">;
 
 export default function GroupSubjectSelectionView() {
   const [selectedSubject, setSelectedSubject] = useState<SubjectMinimal | undefined>(undefined);
