@@ -4,21 +4,20 @@ import { getSubjects, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils
 import { useState } from "react";
 import { FlatList } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CustomSelectionInput from "../../../../components/CustomSelectionInput";
-import CButton from "../../../../components/primitives/CButton";
-import CImage from "../../../../components/primitives/CImage";
-import CText from "../../../../components/primitives/CText";
-import CTextInput from "../../../../components/primitives/CTextInput";
-import CView from "../../../../components/primitives/CView";
-import { subjectToIcon } from "../../../../helpers/dataMappers";
-import { nameValidator } from "../../../../helpers/textValidation";
-import { COLORS, FONT_SIZES } from "../../../../theme";
+import CButton from "../../../../../components/primitives/CButton";
+import CImage from "../../../../../components/primitives/CImage";
+import CText from "../../../../../components/primitives/CText";
+import CView from "../../../../../components/primitives/CView";
+import { subjectToIcon } from "../../../../../helpers/dataMappers";
+import { COLORS } from "../../../../../theme";
 import { GroupCreationStackParams } from "./types";
+import { useRouter } from "expo-router";
 
 type GroupViewProps = NativeStackScreenProps<GroupCreationStackParams, "GroupSubjectSelectionView">;
 
-export default function GroupSubjectSelectionView({ navigation, route }: GroupViewProps) {
+export default function GroupSubjectSelectionView() {
   const [selectedSubject, setSelectedSubject] = useState<SubjectMinimal | undefined>(undefined);
+  const router = useRouter();
 
   const handlePress = (item: SubjectMinimal) => {
     setSelectedSubject(item);
