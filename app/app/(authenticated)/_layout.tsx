@@ -1,24 +1,19 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Tabs } from "expo-router";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS, SPACING } from "../theme";
-import DesignStack from "./design/DesignStack";
-import HomeStack from "./home/HomeStack";
-import ProfileStack from "./profile/ProfileStack";
-import { MainStackParamList } from "./types";
-
-const BottomTab = createBottomTabNavigator<MainStackParamList>();
+import { COLORS, SPACING } from "../../theme";
 
 export default function MainStack() {
   return (
-    <BottomTab.Navigator
+    <Tabs
+      initialRouteName="HomeView"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           switch (route.name) {
-            case "HomeStack":
+            case "(home)":
               return <MaterialCommunityIcon name="home-outline" size={size} color={color} />;
-            case "ProfileStack":
+            case "profile":
               return <MaterialCommunityIcon name="account-circle-outline" size={size} color={color} />;
-            case "DesignStack":
+            case "design":
               return <MaterialCommunityIcon name="pencil-ruler" size={size} color={color} />;
 
             default:
@@ -33,9 +28,9 @@ export default function MainStack() {
         tabBarLabelStyle: { marginBottom: SPACING.lg },
       })}
     >
-      <BottomTab.Screen name="HomeStack" component={HomeStack} options={{ title: "Koti" }} />
-      <BottomTab.Screen name="ProfileStack" component={ProfileStack} options={{ title: "Profiili" }} />
-      <BottomTab.Screen name="DesignStack" component={DesignStack} options={{ title: "Design" }} />
-    </BottomTab.Navigator>
+      <Tabs.Screen name="(home)" options={{ title: "Home" }} />
+      <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      <Tabs.Screen name="design" options={{ title: "Design" }} />
+    </Tabs>
   );
 }

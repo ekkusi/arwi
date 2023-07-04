@@ -1,5 +1,5 @@
 import { createNativeStackNavigator, NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import { COLORS } from "../../../../theme";
+import { COLORS } from "../../../../../theme";
 import GroupNameSelectionView from "./GroupNameSelectionView";
 import GroupStudentCreationView from "./GroupStudentCreationView";
 import GroupSubjectSelectionView from "./GroupSubjectSelectionView";

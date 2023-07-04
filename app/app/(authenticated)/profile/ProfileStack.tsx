@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { screenOptions } from "../home/HomeStack";
+import { screenOptions } from "../(home)/HomeStack";
 import ProfileView from "./ProfileView";
 
 export type ProfileStackParamList = {

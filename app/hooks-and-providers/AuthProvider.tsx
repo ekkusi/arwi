@@ -1,5 +1,6 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
+import { useRouter } from "expo-router";
 
 type AuthState = {
   accessToken: string | null;
@@ -31,7 +32,9 @@ export const useAuth = () => {
 };
 
 function AuthProvider({ children }: React.PropsWithChildren<{}>) {
+  const router = useRouter();
   const [authState, setAuthState] = useState<AuthState>(initialState);
+  const [initialized, setInitialized] = useState(false);
 
   // Need to use useCallback to prevent infinite render loops in components that depend on these (ApolloProvider at least).
   const logout = useCallback(async () => {
@@ -40,7 +43,8 @@ function AuthProvider({ children }: React.PropsWithChildren<{}>) {
       accessToken: null,
       authenticated: false,
     });
-  }, []);
+    router.replace("/LandingPage");
+  }, [router]);
 
   const setToken = useCallback(async (token: string) => {
     await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, token);
@@ -49,6 +53,27 @@ function AuthProvider({ children }: React.PropsWithChildren<{}>) {
       authenticated: true,
     });
   }, []);
+
+  useEffect(() => {
+    if (!initialized) {
+      setInitialized(true);
+      SecureStore.getItemAsync(ACCESS_TOKEN_KEY)
+        .then((accessToken) => {
+          if (accessToken) {
+            setToken(accessToken).then(() => {
+              router.replace("/HomeView");
+            });
+          } else {
+            router.replace("/LandingPage");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [initialized, router, setToken]);
+
+  // if (loading) return <LoadingIndicator />;
 
   return (
     <Provider

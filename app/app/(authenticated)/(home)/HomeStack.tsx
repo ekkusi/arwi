@@ -1,5 +1,5 @@
 import { createNativeStackNavigator, NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import { COLORS } from "../../theme";
+import { COLORS } from "../../../theme";
 import GroupCreationStack from "./group/creation/GroupCreationStack";
 import GroupView from "./group/GroupView";
 import HomeView from "./HomeView";

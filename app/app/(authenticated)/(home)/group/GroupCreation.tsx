@@ -1,10 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import CButton from "../../../components/primitives/CButton";
-import CTextInput from "../../../components/primitives/CTextInput";
-import CustomSelectionInput from "../../../components/CustomSelectionInput";
-import CView from "../../../components/primitives/CView";
-import { nameValidator } from "../../../helpers/textValidation";
-import { COLORS, FONT_SIZES } from "../../../theme";
+import { useRouter } from "expo-router";
+import CButton from "../../../../components/primitives/CButton";
+import CTextInput from "../../../../components/primitives/CTextInput";
+import CustomSelectionInput from "../../../../components/CustomSelectionInput";
+import CView from "../../../../components/primitives/CView";
+import { nameValidator } from "../../../../helpers/textValidation";
+import { COLORS, FONT_SIZES } from "../../../../theme";
 import { HomeStackParamList } from "../types";
 
 type GroupViewProps = NativeStackScreenProps<HomeStackParamList, "GroupCreation">;
@@ -24,13 +25,14 @@ const classes: Class[] = [
   { name: "8. luokka" },
   { name: "9. luokka" },
 ];
-export default function GroupCreation({ navigation, route }: GroupViewProps) {
+export default function GroupCreation({ route }: GroupViewProps) {
   const onCreated = route.params?.onCreated;
+  const router = useRouter();
 
   return (
     <CView style={{ flex: 1, margin: 15 }}>
       <CTextInput placeholder="Ryhmän nimi" title="Ryhmän nimi" textValidation={nameValidator} />
-      <CButton title="Luo" onPress={onCreated || navigation.goBack} style={{ height: 36, paddingHorizontal: 25 }} />
+      <CButton title="Luo" onPress={onCreated || router.back} style={{ height: 36, paddingHorizontal: 25 }} />
       <CustomSelectionInput title="Luokka-aste" options={classes.map((obj) => obj.name)} />
     </CView>
   );

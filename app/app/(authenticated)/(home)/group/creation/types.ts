@@ -1,4 +1,4 @@
-import { Student } from "../../../../gql/graphql";
+import { Student } from "../../../../../gql/graphql";
 
 export type GroupCreationStackParams = {
   GroupNameSelectionView: {};

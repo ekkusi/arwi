@@ -1,4 +1,4 @@
-import { Group } from "../../gql/graphql";
+import { Group } from "../../../gql/graphql";
 
 export type HomeStackParamList = {
   Home: {

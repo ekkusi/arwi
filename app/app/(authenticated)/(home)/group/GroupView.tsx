@@ -1,12 +1,12 @@
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect } from "react";
-import CollectionsLineChart from "../../../components/charts/CollectionsLineChart";
-import LoadingIndicator from "../../../components/LoadingIndicator";
-import CText from "../../../components/primitives/CText";
-import CView from "../../../components/primitives/CView";
-import { graphql } from "../../../gql";
-import { FONT_SIZES } from "../../../theme";
+import CollectionsLineChart from "../../../../components/charts/CollectionsLineChart";
+import LoadingIndicator from "../../../../components/LoadingIndicator";
+import CText from "../../../../components/primitives/CText";
+import CView from "../../../../components/primitives/CView";
+import { graphql } from "../../../../gql";
+import { FONT_SIZES } from "../../../../theme";
 import { HomeStackParamList } from "../types";
 
 type GroupViewProps = NativeStackScreenProps<HomeStackParamList, "GroupView">;
@@ -43,7 +43,7 @@ const GroupOverviewPage_DeleteGroup_Mutation = graphql(`
   }
 `);
 
-export default function GroupView({ route, navigation }: GroupViewProps) {
+export default function GroupView({ route }: GroupViewProps) {
   const { groupId } = route.params;
 
   const { data, loading } = useQuery(GroupOverviewPage_GetGroup_Query, {
@@ -52,9 +52,9 @@ export default function GroupView({ route, navigation }: GroupViewProps) {
     },
   });
 
-  useEffect(() => {
-    if (data) navigation.setOptions({ title: data.getGroup.name });
-  }, [data, navigation]);
+  // useEffect(() => {
+  //   // if (data) navigation.setOptions({ title: data.getGroup.name });
+  // }, [data, navigation]);
 
   if (loading || !data) return <LoadingIndicator />;
 

@@ -1,6 +1,6 @@
 module.exports = {
-  name: "app-blank",
-  slug: "app-blank",
+  name: "arwi-app",
+  slug: "arwi-app",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -26,6 +26,7 @@ module.exports = {
   web: {
     favicon: "./assets/favicon.png",
   },
+  scheme: "arwi-app",
   extra: {
     backendApiUrl: process.env.BACKEND_API_URL,
   },

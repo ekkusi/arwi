@@ -1,5 +1,5 @@
-import CText from "../../components/primitives/CText";
-import CView from "../../components/primitives/CView";
+import CText from "../../../components/primitives/CText";
+import CView from "../../../components/primitives/CView";
 
 export default function DesignView() {
   return (

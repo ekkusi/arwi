@@ -5,8 +5,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as SecureStore from "expo-secure-store";
 import LoadingIndicator from "./components/LoadingIndicator";
-import LandingStack from "./containers/lander/LandingStack";
-import MainStack from "./containers/MainStack";
+import LandingStack from "./app/(lander)/LandingStack";
+import MainStack from "./app/_layout";
 import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 

@@ -1,11 +1,11 @@
 import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
-import CButton from "../../components/primitives/CButton";
-import { graphql } from "../../gql";
-import { useAuth } from "../../hooks-and-providers/AuthProvider";
-import CView from "../../components/primitives/CView";
-import CText from "../../components/primitives/CText";
-import { languages } from "../../i18n";
+import CButton from "../../../components/primitives/CButton";
+import { graphql } from "../../../gql";
+import { useAuth } from "../../../hooks-and-providers/AuthProvider";
+import CView from "../../../components/primitives/CView";
+import CText from "../../../components/primitives/CText";
+import { languages } from "../../../i18n";
 
 const ProfileView_Logout_Mutation = graphql(`
   mutation ProfileView_Logout {

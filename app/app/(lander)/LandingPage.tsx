@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useRouter } from "expo-router";
 import CButton from "../../components/primitives/CButton";
 import CImage from "../../components/primitives/CImage";
 import CText from "../../components/primitives/CText";
@@ -7,7 +8,8 @@ import CView from "../../components/primitives/CView";
 import LandingComponent from "./LandingComponent";
 import { LandingStackParamList } from "./types";
 
-export default function LandingPage({ navigation }: NativeStackScreenProps<LandingStackParamList, "LandingPage">) {
+export default function LandingPage() {
+  const router = useRouter();
   return (
     <LandingComponent
       bottomChildren={
@@ -18,7 +20,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<Landi
             title="Kirjaudu sisään"
             style={{ width: "90%" }}
             onPress={() => {
-              navigation.navigate("LoginPage", {});
+              router.push("LoginPage");
             }}
           />
           <CButton
@@ -27,7 +29,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<Landi
             title="Rekisteröidy"
             style={{ width: "90%" }}
             onPress={() => {
-              navigation.navigate("SignupPage", {});
+              router.push("SignupPage");
             }}
           />
         </CView>
