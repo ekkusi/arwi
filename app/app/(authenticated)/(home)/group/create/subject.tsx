@@ -53,9 +53,14 @@ export default function GroupSubjectSelectionView() {
           automaattisesti arvioinnin tueksi.
         </CText>
       </CView>
-      <CButton style={{ position: "absolute", bottom: 20, right: 20 }} onPress={() => router.push("GroupStudentCreationView")}>
-        <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
-      </CButton>
+      <CView style={{ width: "100%", flexDirection: "row", justifyContent: "space-between" }}>
+        <CButton style={{}} onPress={() => router.back()}>
+          <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+        </CButton>
+        <CButton style={{}} onPress={() => router.push("/group/create/students")}>
+          <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
+        </CButton>
+      </CView>
     </CView>
   );
 }

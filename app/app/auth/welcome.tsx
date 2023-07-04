@@ -1,12 +1,9 @@
-/* eslint-disable global-require */
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useRouter } from "expo-router";
 import CButton from "../../components/primitives/CButton";
 import CImage from "../../components/primitives/CImage";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
-import LandingComponent from "./LandingComponent";
-import { LandingStackParamList } from "./types";
+import LandingComponent from "../../components/LandingComponent";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -20,7 +17,7 @@ export default function LandingPage() {
             title="Kirjaudu sisään"
             style={{ width: "90%" }}
             onPress={() => {
-              router.push("LoginPage");
+              router.push("/auth/login");
             }}
           />
           <CButton
@@ -29,7 +26,7 @@ export default function LandingPage() {
             title="Rekisteröidy"
             style={{ width: "90%" }}
             onPress={() => {
-              router.push("SignupPage");
+              router.push("/auth/sign-up");
             }}
           />
         </CView>

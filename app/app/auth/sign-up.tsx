@@ -1,6 +1,4 @@
-/* eslint-disable global-require */
 import { useMutation } from "@apollo/client";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { useRouter } from "expo-router";
@@ -10,8 +8,7 @@ import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
-import LandingComponent from "./LandingComponent";
-import { LandingStackParamList } from "./types";
+import LandingComponent from "../../components/LandingComponent";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
 import CImage from "../../components/primitives/CImage";
@@ -55,7 +52,7 @@ export default function SignupPage() {
       const accessToken = data?.register?.accessToken;
       if (!accessToken) throw new Error("Unexpected error"); // Should get caught before this
       setToken(accessToken);
-      router.push("HomeView");
+      router.push("/");
     } catch (error) {
       const msg = getErrorMessage(error);
       setGeneralError(msg);
@@ -109,7 +106,7 @@ export default function SignupPage() {
               <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Oletko jo rekisteröitynyt? </CText>
               <CTouchableOpacity
                 onPress={() => {
-                  router.push("LoginPage");
+                  router.push("/auth/login");
                 }}
               >
                 <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Kirjaudu sisään</CText>

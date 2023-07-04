@@ -1,18 +1,13 @@
-import { createNativeStackNavigator, NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { Stack } from "expo-router";
-import { COLORS } from "../../../theme";
-import GroupCreationStack from "./group/creation/GroupCreationStack";
-import GroupView from "./group/GroupView";
-import HomeView from "./HomeView";
-import { HomeStackParamList } from "./types";
-
-export const screenOptions = {
-  headerStyle: {
-    backgroundColor: COLORS.green,
-  },
-  headerTintColor: COLORS.white,
-};
+import { useTranslation } from "react-i18next";
+import { defaultHeaderStyles } from "../_layout";
 
 export default function HomeStack() {
-  return <Stack initialRouteName="Home" screenOptions={screenOptions} />;
+  const { t } = useTranslation();
+  return (
+    <Stack screenOptions={{ ...defaultHeaderStyles }}>
+      <Stack.Screen name="group/create" options={{ title: t("group.create.title", "Uusi ryhmä") }} />
+      <Stack.Screen name="index" />
+    </Stack>
+  );
 }

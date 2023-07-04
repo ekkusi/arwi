@@ -1,11 +1,20 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import { COLORS, SPACING } from "../../theme";
 
+export const defaultHeaderStyles = {
+  headerStyle: {
+    backgroundColor: COLORS.green,
+  },
+  headerTintColor: COLORS.white,
+};
+
 export default function MainStack() {
-  return (
+  const { authState } = useAuth();
+  return authState.authenticated ? (
     <Tabs
-      initialRouteName="HomeView"
+      initialRouteName="(home)"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           switch (route.name) {
@@ -23,14 +32,16 @@ export default function MainStack() {
         },
         tabBarActiveTintColor: COLORS.green,
         tabBarInactiveTintColor: COLORS.darkgray,
-        headerShown: false,
         tabBarStyle: { backgroundColor: COLORS.white, height: 60, paddingTop: SPACING.md },
         tabBarLabelStyle: { marginBottom: SPACING.lg },
+        headerShown: false,
       })}
     >
       <Tabs.Screen name="(home)" options={{ title: "Home" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
       <Tabs.Screen name="design" options={{ title: "Design" }} />
     </Tabs>
+  ) : (
+    <Redirect href="/auth/welcome" />
   );
 }
