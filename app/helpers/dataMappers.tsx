@@ -1,15 +1,52 @@
 import { LearningObjective, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { SvgUri } from "react-native-svg";
+import CView from "../components/primitives/CView";
+import ArtSvg from "../components/svgComponents/ArtSvg";
 import { LearningObjectiveType, Rating, Subject } from "../gql/graphql";
 import { COLORS } from "../theme";
+import CImage from "../components/primitives/CImage";
+import { ImageSourcePropType } from "react-native";
 
-export const subjectToIcon = (subject: SubjectMinimal, color?: string) => {
+export const subjectToIcon = (subject: SubjectMinimal, color?: string): ImageSourcePropType => {
   switch (subject.code) {
+    case "KU":
+      return require("../assets/art.png");
+    case "LI":
+      return require("../assets/sport.png");
+    case "PY":
+      return require("../assets/psychology.png");
+    case "BI":
+      return require("../assets/biology.png");
+    case "FY":
+      return require("../assets/physics.png");
+    case "KE":
+      return require("../assets/chemistry.png");
+    case "GE":
+      return require("../assets/geoscience.png");
+    case "MA":
+      return require("../assets/math.png");
+    case "MU":
+      return require("../assets/music.png");
+    case "GE":
+      return require("../assets/geoscience.png");
+    case "KA":
+      return require("../assets/handicraft.png");
+    case "KI":
+      return require("../assets/language.png");
+    case "KO":
+      return require("../assets/kotitalous.png");
+    case "US":
+      return require("../assets/religion.png");
+    case "TE":
+      return require("../assets/health.png");
+    case "HI":
+      return require("../assets/history.png");
+    case "EL":
+      return require("../assets/elamankatsomus.png");
+    case "YH":
+      return require("../assets/yhteiskuntaoppi.png");
     default:
-      return <SvgUri width={25} height={25} uri="../assets/sport.svg" color={color || COLORS.darkgray} />;
+      return require("../assets/language.png");
   }
 };
 
