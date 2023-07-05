@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 
 type AuthState = {
@@ -49,6 +49,16 @@ function AuthProvider({ children }: React.PropsWithChildren<{}>) {
       authenticated: true,
     });
   }, []);
+
+  useEffect(() => {
+    SecureStore.getItemAsync(ACCESS_TOKEN_KEY)
+      .then((accessToken) => {
+        if (accessToken) setToken(accessToken);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [setToken]);
 
   return (
     <Provider

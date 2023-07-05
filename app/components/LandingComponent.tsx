@@ -1,5 +1,4 @@
-/* eslint-disable global-require */
-import CView from "../../components/primitives/CView";
+import CView from "./primitives/CView";
 
 export default function LandingComponent({ bottomChildren, topChildren }: { bottomChildren?: JSX.Element; topChildren?: JSX.Element }) {
   return (
