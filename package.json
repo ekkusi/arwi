@@ -1,11 +1,12 @@
 {
   "name": "arwi",
-  "workspaces": [
-    "next",
-    "app",
-    "backend",
-    "terve"
-  ],
+  "workspaces": {
+    "packages": [
+      "next",
+      "app",
+      "backend"
+    ]
+  },
   "version": "1.0.0",
   "private": true,
   "description": "Teacher's best friend",
