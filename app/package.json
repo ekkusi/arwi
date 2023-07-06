@@ -2,9 +2,6 @@
   "name": "arwi-app",
   "version": "1.0.0",
   "main": "index.js",
-  "workspaces": {
-    "nohoist": ["expo-router", "expo-router/**"]
-  },
   "scripts": {
     "start-no-backend": "cross-env BACKEND_API_URL=https://arwi-test.lm.r.appspot.com npx expo start",
     "start-mac": "BACKEND_API_URL=http://$(ipconfig getifaddr en0):4000 npx expo start",
@@ -27,8 +24,6 @@
     "date-fns": "^2.30.0",
     "expo": "~48.0.15",
     "expo-constants": "~14.2.1",
-    "expo-linking": "~4.0.1",
-    "expo-router": "^1.0.0",
     "expo-secure-store": "~12.1.1",
     "expo-status-bar": "~1.4.4",
     "graphql": "^16.6.0",

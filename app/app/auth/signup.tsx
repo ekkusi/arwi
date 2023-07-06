@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { useRouter } from "expo-router";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import CButton from "../../components/primitives/CButton";
 import CTextInput from "../../components/primitives/CTextInput";
 import { graphql } from "../../gql";
@@ -13,6 +13,7 @@ import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
 import CImage from "../../components/primitives/CImage";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
+import { AuthStackParams } from "./types";
 
 const initialValues = {
   email: "",
@@ -27,8 +28,7 @@ const RegisterPage_Register_Mutation = graphql(`
   }
 `);
 
-export default function SignupPage() {
-  const router = useRouter();
+export default function SignupPage({ navigation }: NativeStackScreenProps<AuthStackParams, "signup">) {
   const { setToken } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
@@ -52,7 +52,6 @@ export default function SignupPage() {
       const accessToken = data?.register?.accessToken;
       if (!accessToken) throw new Error("Unexpected error"); // Should get caught before this
       setToken(accessToken);
-      router.push("/");
     } catch (error) {
       const msg = getErrorMessage(error);
       setGeneralError(msg);
@@ -106,7 +105,7 @@ export default function SignupPage() {
               <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Oletko jo rekisteröitynyt? </CText>
               <CTouchableOpacity
                 onPress={() => {
-                  router.push("/auth/login");
+                  navigation.push("login");
                 }}
               >
                 <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Kirjaudu sisään</CText>

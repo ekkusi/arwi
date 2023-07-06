@@ -1,21 +1,18 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { getSubjects, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
-import { useContext, useState } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useRouter } from "expo-router";
-import { KeyboardAvoidingView } from "react-native";
-import CButton from "../../../../../components/primitives/CButton";
-import CImage from "../../../../../components/primitives/CImage";
-import CText from "../../../../../components/primitives/CText";
-import CView from "../../../../../components/primitives/CView";
-import { subjectToIcon } from "../../../../../helpers/dataMappers";
-import { COLORS } from "../../../../../theme";
-import { GroupCreationContext } from "./_layout";
-import ProgressBar from "../../../../../components/ProgressBar";
+import CButton from "../../../../components/primitives/CButton";
+import CImage from "../../../../components/primitives/CImage";
+import CText from "../../../../components/primitives/CText";
+import CView from "../../../../components/primitives/CView";
+import ProgressBar from "../../../../components/ProgressBar";
+import { subjectToIcon } from "../../../../helpers/dataMappers";
+import { COLORS } from "../../../../theme";
+import { useGroupCreationContext } from "./GroupCreationProvider";
+import { GroupCreationStackParams } from "./types";
 
-export default function GroupSubjectSelectionView() {
-  const router = useRouter();
-
-  const { group, setGroup } = useContext(GroupCreationContext);
+export default function GroupSubjectSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "subject">) {
+  const { group, setGroup } = useGroupCreationContext();
 
   const handlePress = (item: SubjectMinimal) => {
     setGroup({ ...group, subject: item });
@@ -59,10 +56,10 @@ export default function GroupSubjectSelectionView() {
           </CText>
         </CView>
         <CView style={{ width: "100%", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15 }}>
-          <CButton onPress={() => router.back()}>
+          <CButton onPress={() => navigation.goBack()}>
             <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
           </CButton>
-          <CButton onPress={() => router.push("/group/create/students")} disabled={group.subject === undefined}>
+          <CButton onPress={() => navigation.push("students")} disabled={group.subject === undefined}>
             <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
           </CButton>
         </CView>

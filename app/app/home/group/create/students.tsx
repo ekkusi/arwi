@@ -1,18 +1,17 @@
-import { useMutation } from "@apollo/client";
-import { useRouter } from "expo-router";
-import { useContext, useState } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useState } from "react";
 import { FlatList, KeyboardAvoidingView } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CButton from "../../../../../components/primitives/CButton";
-import CText from "../../../../../components/primitives/CText";
-import CTextInput from "../../../../../components/primitives/CTextInput";
-import { useAuth } from "../../../../../hooks-and-providers/AuthProvider";
-import CView from "../../../../../components/primitives/CView";
-import { graphql } from "../../../../../gql";
-import { COLORS } from "../../../../../theme";
-import { GroupCreationContext, GroupMinimal } from "./_layout";
-import ProgressBar from "../../../../../components/ProgressBar";
+import CButton from "../../../../components/primitives/CButton";
+import CText from "../../../../components/primitives/CText";
+import CTextInput from "../../../../components/primitives/CTextInput";
+import CView from "../../../../components/primitives/CView";
+import ProgressBar from "../../../../components/ProgressBar";
+import { graphql } from "../../../../gql";
+import { COLORS } from "../../../../theme";
+import { useGroupCreationContext } from "./GroupCreationProvider";
+import { GroupCreationStackParams } from "./types";
 
 const CreateGroupPage_CreateGroup_Mutation = graphql(`
   mutation CreateGroupPage_CreateGroup($input: CreateGroupInput!) {
@@ -45,13 +44,12 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
     </TouchableOpacity>
   </CView>
 );
-export default function GroupSubjectSelectionView() {
-  const router = useRouter();
+export default function GroupStudentsSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "students">) {
   const [newStudent, setNewStudent] = useState<string>("");
 
   // const [createGroup] = useMutation(CreateGroupPage_CreateGroup_Mutation);
 
-  const { group, setGroup } = useContext(GroupCreationContext);
+  const { group, setGroup } = useGroupCreationContext();
 
   // const handleSubmit = async (values: GroupMinimal) => {
   //  try {
@@ -118,10 +116,10 @@ export default function GroupSubjectSelectionView() {
           </CView>
         </CView>
         <CView style={{ flex: 1, width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <CButton style={{}} onPress={() => router.back()}>
+          <CButton style={{}} onPress={() => navigation.goBack()}>
             <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
           </CButton>
-          <CButton title="Luo ryhmä" style={{}} onPress={() => router.push("/group/create/subject")}>
+          <CButton title="Luo ryhmä" style={{}} onPress={() => navigation.push("subject")}>
             <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />
           </CButton>
         </CView>

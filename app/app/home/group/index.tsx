@@ -1,9 +1,10 @@
 import { useQuery } from "@apollo/client";
-import { Stack, useLocalSearchParams } from "expo-router";
-import CollectionsLineChart from "../../../../components/charts/CollectionsLineChart";
-import LoadingIndicator from "../../../../components/LoadingIndicator";
-import CView from "../../../../components/primitives/CView";
-import { graphql } from "../../../../gql";
+import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
+import CollectionsLineChart from "../../../components/charts/CollectionsLineChart";
+import LoadingIndicator from "../../../components/LoadingIndicator";
+import CView from "../../../components/primitives/CView";
+import { graphql } from "../../../gql";
+import { HomeStackParams } from "../types";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -37,9 +38,8 @@ const GroupOverviewPage_DeleteGroup_Mutation = graphql(`
   }
 `);
 
-export default function GroupView() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-
+export default function GroupView({ route }: NativeStackScreenProps<HomeStackParams, "group">) {
+  const id = route.params.groupId;
   if (!id) throw new Error("No id found, incorrect route");
 
   const { data, loading } = useQuery(GroupOverviewPage_GetGroup_Query, {
@@ -53,11 +53,8 @@ export default function GroupView() {
   const { getGroup: group } = data;
 
   return (
-    <>
-      <Stack.Screen options={{ title: group.name }} />
-      <CView>
-        <CollectionsLineChart collections={group.currentClassYear.evaluationCollections} />
-      </CView>
-    </>
+    <CView>
+      <CollectionsLineChart collections={group.currentClassYear.evaluationCollections} />
+    </CView>
   );
 }

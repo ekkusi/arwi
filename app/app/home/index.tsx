@@ -4,16 +4,16 @@ import { FlatList } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { Stack, useRouter } from "expo-router";
-import CButton from "../../../components/primitives/CButton";
-import GroupListItem from "../../../components/GroupListItem";
-import LoadingIndicator from "../../../components/LoadingIndicator";
-import ShadowButton from "../../../components/primitives/ShadowButton";
-import { graphql } from "../../../gql";
-import { GroupListItemFragment } from "../../../gql/graphql";
-import { COLORS, FONT_SIZES } from "../../../theme";
-import CView from "../../../components/primitives/CView";
-import CText from "../../../components/primitives/CText";
-import { defaultHeaderStyles } from "../_layout";
+import CButton from "../../components/primitives/CButton";
+import GroupListItem from "../../components/GroupListItem";
+import LoadingIndicator from "../../components/LoadingIndicator";
+import ShadowButton from "../../components/primitives/ShadowButton";
+import { graphql } from "../../gql";
+import { GroupListItemFragment } from "../../gql/graphql";
+import { COLORS, FONT_SIZES } from "../../theme";
+import CView from "../../components/primitives/CView";
+import CText from "../../components/primitives/CText";
+import { defaultHeaderStyles } from "../_stack";
 
 const MainPage_GetCurrentUser_Query = graphql(`
   query MainPage_GetCurrentUser {
