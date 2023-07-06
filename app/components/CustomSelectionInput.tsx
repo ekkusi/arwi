@@ -11,10 +11,11 @@ type CustomSelectionInputProps = ViewProps & {
   title?: string;
   lightTheme?: boolean;
   errorStyle?: StyleProp<TextStyle>;
+  onSelect?: (item: string) => void;
 };
 
 export default function CustomSelectionInput(props: CustomSelectionInputProps) {
-  const { options, errorStyle, title, lightTheme = false, ...generalProps } = props;
+  const { options, errorStyle, title, onSelect, lightTheme = false, ...generalProps } = props;
   const [errorText, setError] = useState<string | undefined>(undefined);
   const [selected, setSelected] = useState<string | undefined>(undefined);
   const [selectModalOpen, setSelectModalOpen] = useState(false);
@@ -59,6 +60,7 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
               <FlatList
                 style={{ width: "90%" }}
                 showsVerticalScrollIndicator={false}
+                disableScrollViewPanResponder
                 renderItem={({ item }: { item: string }) => (
                   <CTouchableOpacity
                     style={{
@@ -71,6 +73,7 @@ export default function CustomSelectionInput(props: CustomSelectionInputProps) {
                     }}
                     onPress={() => {
                       setSelected(item);
+                      if (onSelect) onSelect(item);
                       setSelectModalOpen(false);
                     }}
                   >
