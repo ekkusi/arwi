@@ -10,6 +10,7 @@ import CView from "../../../../../components/primitives/CView";
 import { subjectToIcon } from "../../../../../helpers/dataMappers";
 import { COLORS } from "../../../../../theme";
 import { GroupCreationContext } from "./_layout";
+import ProgressBar from "../../../../../components/ProgressBar";
 
 export default function GroupSubjectSelectionView() {
   const router = useRouter();
@@ -22,48 +23,51 @@ export default function GroupSubjectSelectionView() {
 
   const subjects = getSubjects();
   return (
-    <CView style={{ flex: 1, padding: 15, alignItems: "center", justifyContent: "center", gap: 30, backgroundColor: "white" }}>
-      <CView style={{ height: "80%", width: "100%", gap: 10 }}>
-        <CText style={{ color: "darkgray", fontSize: "title" }}>Valitse oppiaine</CText>
-        <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%" }}>
-          {subjects.map((item) => (
-            <CButton
-              key={item.code}
-              title={item.label}
-              variant="outline"
-              colorScheme={item.code === group.subject?.code ? "darkgray" : "lightgray"}
-              style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
-              onPress={() => handlePress(item)}
-              textStyle={{ fontSize: "sm2", fontWeight: "400", color: item.code === group.subject?.code ? "darkgray" : "gray" }}
-            >
-              <CView style={{ width: 20, height: 20 }}>
-                <CImage
-                  style={{
-                    width: undefined,
-                    height: undefined,
-                    flex: 1,
-                    resizeMode: "contain",
-                    tintColor: item.code === group.subject?.code ? "black" : "darkgray",
-                  }}
-                  source={subjectToIcon(item)}
-                />
-              </CView>
-            </CButton>
-          ))}
+    <CView style={{ flex: 1 }}>
+      <CView style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 30, backgroundColor: "white" }}>
+        <CView style={{ height: "80%", width: "100%", paddingHorizontal: 15, gap: 10 }}>
+          <CText style={{ color: "darkgray", fontSize: "title" }}>Valitse oppiaine</CText>
+          <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%" }}>
+            {subjects.map((item) => (
+              <CButton
+                key={item.code}
+                title={item.label}
+                variant="outline"
+                colorScheme={item.code === group.subject?.code ? "darkgray" : "lightgray"}
+                style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
+                onPress={() => handlePress(item)}
+                textStyle={{ fontSize: "sm2", fontWeight: "400", color: item.code === group.subject?.code ? "darkgray" : "gray" }}
+              >
+                <CView style={{ width: 20, height: 20 }}>
+                  <CImage
+                    style={{
+                      width: undefined,
+                      height: undefined,
+                      flex: 1,
+                      resizeMode: "contain",
+                      tintColor: item.code === group.subject?.code ? "black" : "darkgray",
+                    }}
+                    source={subjectToIcon(item)}
+                  />
+                </CView>
+              </CButton>
+            ))}
+          </CView>
+          <CText style={{ color: "darkgray", fontSize: "sm", paddingHorizontal: 15 }}>
+            Valitsemalla oppiaineen, saat juuri kyseiselle oppiaineelle personoidun arvostelunäkymän sekä oppiainetta vastaavan opetussuunnitelman
+            automaattisesti arvioinnin tueksi.
+          </CText>
         </CView>
-        <CText style={{ color: "darkgray", fontSize: "sm" }}>
-          Valitsemalla oppiaineen, saat juuri kyseiselle oppiaineelle personoidun arvostelunäkymän sekä oppiainetta vastaavan opetussuunnitelman
-          automaattisesti arvioinnin tueksi.
-        </CText>
+        <CView style={{ width: "100%", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15 }}>
+          <CButton onPress={() => router.back()}>
+            <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+          </CButton>
+          <CButton onPress={() => router.push("/group/create/students")} disabled={group.subject === undefined}>
+            <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
+          </CButton>
+        </CView>
       </CView>
-      <CView style={{ width: "100%", flexDirection: "row", justifyContent: "space-between" }}>
-        <CButton onPress={() => router.back()}>
-          <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-        </CButton>
-        <CButton onPress={() => router.push("/group/create/students")} disabled={group.subject === undefined}>
-          <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
-        </CButton>
-      </CView>
+      <ProgressBar style={{ position: "absolute", bottom: 0 }} color={COLORS.primary} progress={2 / 3} />
     </CView>
   );
 }

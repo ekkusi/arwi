@@ -12,6 +12,7 @@ import CView from "../../../../../components/primitives/CView";
 import { graphql } from "../../../../../gql";
 import { COLORS } from "../../../../../theme";
 import { GroupCreationContext, GroupMinimal } from "./_layout";
+import ProgressBar from "../../../../../components/ProgressBar";
 
 const CreateGroupPage_CreateGroup_Mutation = graphql(`
   mutation CreateGroupPage_CreateGroup($input: CreateGroupInput!) {
@@ -76,9 +77,9 @@ export default function GroupSubjectSelectionView() {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
-      <CView style={{ flex: 1, padding: 15, backgroundColor: "white" }}>
-        <CView style={{ flex: 6, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-          <CView style={{ height: 350, gap: 10, width: "100%" }}>
+      <CView style={{ flex: 1, padding: 15, backgroundColor: "white", justifyContent: "space-between" }}>
+        <CView style={{ height: 300, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+          <CView style={{ height: 240, gap: 10, width: "100%" }}>
             <CText style={{ fontSize: "title", fontWeight: "300" }}>Oppilaat</CText>
             <FlatList
               data={group.students}
@@ -116,7 +117,7 @@ export default function GroupSubjectSelectionView() {
             </CView>
           </CView>
         </CView>
-        <CView style={{ flex: 1, width: "100%", flexDirection: "row", justifyContent: "space-between" }}>
+        <CView style={{ flex: 1, width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
           <CButton style={{}} onPress={() => router.back()}>
             <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
           </CButton>
@@ -125,6 +126,7 @@ export default function GroupSubjectSelectionView() {
           </CButton>
         </CView>
       </CView>
+      <ProgressBar style={{ position: "absolute", bottom: 0 }} color={COLORS.primary} progress={3 / 3} />
     </KeyboardAvoidingView>
   );
 }
