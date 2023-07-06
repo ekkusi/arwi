@@ -1,20 +1,23 @@
 import { getSubjects, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useRouter } from "expo-router";
+import { KeyboardAvoidingView } from "react-native";
 import CButton from "../../../../../components/primitives/CButton";
 import CImage from "../../../../../components/primitives/CImage";
 import CText from "../../../../../components/primitives/CText";
 import CView from "../../../../../components/primitives/CView";
 import { subjectToIcon } from "../../../../../helpers/dataMappers";
 import { COLORS } from "../../../../../theme";
+import { GroupCreationContext } from "./_layout";
 
 export default function GroupSubjectSelectionView() {
-  const [selectedSubject, setSelectedSubject] = useState<SubjectMinimal | undefined>(undefined);
   const router = useRouter();
 
+  const { group, setGroup } = useContext(GroupCreationContext);
+
   const handlePress = (item: SubjectMinimal) => {
-    setSelectedSubject(item);
+    setGroup({ ...group, subject: item });
   };
 
   const subjects = getSubjects();
@@ -28,10 +31,10 @@ export default function GroupSubjectSelectionView() {
               key={item.code}
               title={item.label}
               variant="outline"
-              colorScheme={item.code === selectedSubject?.code ? "darkgray" : "lightgray"}
+              colorScheme={item.code === group.subject?.code ? "darkgray" : "lightgray"}
               style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
               onPress={() => handlePress(item)}
-              textStyle={{ fontSize: "sm2", fontWeight: "400", color: item.code === selectedSubject?.code ? "darkgray" : "gray" }}
+              textStyle={{ fontSize: "sm2", fontWeight: "400", color: item.code === group.subject?.code ? "darkgray" : "gray" }}
             >
               <CView style={{ width: 20, height: 20 }}>
                 <CImage
@@ -40,7 +43,7 @@ export default function GroupSubjectSelectionView() {
                     height: undefined,
                     flex: 1,
                     resizeMode: "contain",
-                    tintColor: item.code === selectedSubject?.code ? "black" : "darkgray",
+                    tintColor: item.code === group.subject?.code ? "black" : "darkgray",
                   }}
                   source={subjectToIcon(item)}
                 />
@@ -54,10 +57,10 @@ export default function GroupSubjectSelectionView() {
         </CText>
       </CView>
       <CView style={{ width: "100%", flexDirection: "row", justifyContent: "space-between" }}>
-        <CButton style={{}} onPress={() => router.back()}>
+        <CButton onPress={() => router.back()}>
           <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
         </CButton>
-        <CButton style={{}} onPress={() => router.push("/group/create/students")}>
+        <CButton onPress={() => router.push("/group/create/students")} disabled={group.subject === undefined}>
           <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
         </CButton>
       </CView>

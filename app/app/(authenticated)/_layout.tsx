@@ -21,6 +21,7 @@ export default function MainStack() {
     <Tabs
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
+          console.log(route.name);
           switch (route.name) {
             case "(home)":
               return <MaterialCommunityIcon name="home-outline" size={size} color={color} />;
@@ -36,7 +37,12 @@ export default function MainStack() {
         },
         tabBarActiveTintColor: COLORS.green,
         tabBarInactiveTintColor: COLORS.darkgray,
-        tabBarStyle: { backgroundColor: COLORS.white, height: 60, paddingTop: SPACING.md },
+        tabBarStyle: {
+          backgroundColor: COLORS.white,
+          height: 60,
+          paddingTop: SPACING.md,
+          display: route.name !== "/group/create" ? "flex" : "none",
+        },
         tabBarLabelStyle: { marginBottom: SPACING.lg },
         headerShown: false,
       })}
