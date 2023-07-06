@@ -1,6 +1,6 @@
 import { ClassYearInfo } from "arwi-backend/src/types";
 import { SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 export type GroupMinimal = {
   name: string;

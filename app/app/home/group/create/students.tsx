@@ -1,3 +1,4 @@
+import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { FlatList, KeyboardAvoidingView } from "react-native";
@@ -9,6 +10,7 @@ import CTextInput from "../../../../components/primitives/CTextInput";
 import CView from "../../../../components/primitives/CView";
 import ProgressBar from "../../../../components/ProgressBar";
 import { graphql } from "../../../../gql";
+import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
@@ -47,22 +49,33 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
 export default function GroupStudentsSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "students">) {
   const [newStudent, setNewStudent] = useState<string>("");
 
-  // const [createGroup] = useMutation(CreateGroupPage_CreateGroup_Mutation);
+  const [createGroup] = useMutation(CreateGroupPage_CreateGroup_Mutation);
 
   const { group, setGroup } = useGroupCreationContext();
 
-  // const handleSubmit = async (values: GroupMinimal) => {
-  //  try {
-  //    const { data } = await createGroup({ variables: { input: { name: values.name, yearCode: values.class, subjectCode: values.subject?.code, students: values.students,  } } });
-  //    const accessToken = data?.register?.accessToken;
-  //    if (!accessToken) throw new Error("Unexpected error"); // Should get caught before this
-  //    setToken(accessToken);
-  //    router.push("/");
-  //  } catch (error) {
-  //    const msg = getErrorMessage(error);
-  //    setGeneralError(msg);
-  //  }
-  // };
+  const handleSubmit = async () => {
+    try {
+      if (!group.subject) throw new Error("Unexpected error"); // Should get caught before this
+      if (!group.class) throw new Error("Unexpected error"); // Should get caught before this
+      const { data } = await createGroup({
+        variables: {
+          input: {
+            name: group.name,
+            yearCode: group.class.code,
+            subjectCode: group.subject?.code,
+            students: group.students.map((it) => ({ name: it })),
+            teacherId: "123", // TODO: Add correct teacher id
+          },
+        },
+      });
+
+      // TODO: Navigate to home page
+    } catch (error) {
+      const msg = getErrorMessage(error);
+      console.error(msg);
+      // TODO: Show error in UI
+    }
+  };
 
   const removeStudent = (studentToRemove: string) => {
     const filteredStudents = group.students.filter((student) => student !== studentToRemove);

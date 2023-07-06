@@ -11,7 +11,7 @@ const customScalars = {
 
 const config: CodegenConfig = {
   schema: schemaURL,
-  documents: ["**/*.{ts,tsx}", "!gql/**/*", "!app/**/*"],
+  documents: ["**/*.{ts,tsx}", "!gql/**/*"],
   ignoreNoDocuments: true,
   config: {
     sort: false, // Disable sorting so enums will be in same order as in schema (applies to others than enums as well as side effect)
