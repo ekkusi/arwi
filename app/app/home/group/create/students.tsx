@@ -11,6 +11,7 @@ import CView from "../../../../components/primitives/CView";
 import ProgressBar from "../../../../components/ProgressBar";
 import { graphql } from "../../../../gql";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
+import { useAuthenticatedUser } from "../../../../hooks-and-providers/AuthProvider";
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";

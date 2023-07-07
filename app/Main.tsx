@@ -2,9 +2,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
+import { useTranslation } from "react-i18next";
 import LoadingIndicator from "./components/LoadingIndicator";
 import MainStack from "./app/_stack";
 import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
@@ -24,6 +25,7 @@ const Main_GetCurrentUser_Query = graphql(`
 export default function Main() {
   const { authState, setUser } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
+  const { ready } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
 
   const client = useApolloClient();
 
@@ -44,15 +46,13 @@ export default function Main() {
       });
   }, [setUserInfo]);
 
-  if (loading) return <LoadingIndicator />;
+  if (loading || !ready) return <LoadingIndicator />;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar backgroundColor={COLORS.green} />
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <NavigationContainer>
-          <Suspense fallback={<LoadingIndicator />}>{authState.authenticated ? <MainStack /> : <AuthStack />}</Suspense>
-        </NavigationContainer>
+        <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
       </GestureHandlerRootView>
     </SafeAreaView>
   );

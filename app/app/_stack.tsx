@@ -11,6 +11,7 @@ const { Navigator, Screen } = createBottomTabNavigator<RootStackParams>();
 export default function MainStack() {
   return (
     <Navigator
+      initialRouteName="home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           switch (route.name) {
