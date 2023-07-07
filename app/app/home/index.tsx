@@ -42,11 +42,7 @@ export default function HomePage({ navigation }: NativeStackScreenProps<HomeStac
   const { getCurrentUser: teacher } = data;
 
   const renderListItem = ({ item }: { item: GroupListItemFragment }) => (
-    <GroupListItem
-      group={item}
-      onEvaluateIconPress={() => console.log("open evaluate")}
-      onListItemPress={() => navigation.navigate("group", { groupId: item.id })}
-    />
+    <GroupListItem group={item} onEvaluateIconPress={() => console.log("open evaluate")} onListItemPress={() => navigation.navigate("group", item)} />
   );
   return (
     <CView style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>

@@ -1,11 +1,11 @@
 import { LearningObjective, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { SvgUri } from "react-native-svg";
+import { ImageSourcePropType } from "react-native";
 import CView from "../components/primitives/CView";
 import ArtSvg from "../components/svgComponents/ArtSvg";
 import { LearningObjectiveType, Rating, Subject } from "../gql/graphql";
 import { COLORS } from "../theme";
 import CImage from "../components/primitives/CImage";
-import { ImageSourcePropType } from "react-native";
 
 export const subjectToIcon = (subject: SubjectMinimal, color?: string): ImageSourcePropType => {
   switch (subject.code) {
@@ -27,8 +27,6 @@ export const subjectToIcon = (subject: SubjectMinimal, color?: string): ImageSou
       return require("../assets/math.png");
     case "MU":
       return require("../assets/music.png");
-    case "GE":
-      return require("../assets/geoscience.png");
     case "KA":
       return require("../assets/handicraft.png");
     case "KI":
@@ -54,6 +52,21 @@ export const formatRatingString = (rating: Rating) => {
   switch (rating) {
     case Rating.EXCELLENT:
       return "Erinomainen";
+    case Rating.GREAT:
+      return "Kiitettävä";
+    case Rating.GOOD:
+      return "Hyvä";
+    case Rating.FAIR:
+      return "Tyydyttävä";
+    default:
+      return "Välttävä";
+  }
+};
+
+export const formatRatingNumber = (rating: Rating) => {
+  switch (rating) {
+    case Rating.EXCELLENT:
+      return 10;
     case Rating.GREAT:
       return 9;
     case Rating.GOOD:

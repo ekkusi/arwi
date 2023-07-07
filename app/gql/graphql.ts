@@ -337,14 +337,6 @@ export type Main_GetCurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type Main_GetCurrentUserQuery = { __typename?: "Query"; getCurrentUser: { __typename?: "Teacher"; email: string; id: string } };
 
-export type GroupListItemFragment = {
-  __typename?: "Group";
-  id: string;
-  name: string;
-  updatedAt: string;
-  subject: { __typename?: "Subject"; label: string; code: string };
-} & { " $fragmentName"?: "GroupListItemFragment" };
-
 export type LoginPage_LoginMutationVariables = Exact<{
   email: Scalars["String"];
   password: Scalars["String"];
@@ -379,6 +371,10 @@ export type MainPage_GetCurrentUserQuery = {
   };
 };
 
+export type ProfileView_LogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type ProfileView_LogoutMutation = { __typename?: "Mutation"; logout: boolean };
+
 export type CollectionsLineChart_EvaluationCollectionFragment = {
   __typename?: "EvaluationCollection";
   id: string;
@@ -393,9 +389,13 @@ export type CollectionsLineChart_EvaluationCollectionFragment = {
   }>;
 } & { " $fragmentName"?: "CollectionsLineChart_EvaluationCollectionFragment" };
 
-export type ProfileView_LogoutMutationVariables = Exact<{ [key: string]: never }>;
-
-export type ProfileView_LogoutMutation = { __typename?: "Mutation"; logout: boolean };
+export type GroupListItemFragment = {
+  __typename?: "Group";
+  id: string;
+  name: string;
+  updatedAt: string;
+  subject: { __typename?: "Subject"; label: string; code: string };
+} & { " $fragmentName"?: "GroupListItemFragment" };
 
 export type GroupOverviewPage_GetGroupQueryVariables = Exact<{
   groupId: Scalars["ID"];
@@ -413,7 +413,7 @@ export type GroupOverviewPage_GetGroupQuery = {
       info: { __typename?: "ClassYearInfo"; code: ClassYearCode; label: string };
       students: Array<{ __typename?: "Student"; id: string; name: string }>;
       evaluationCollections: Array<
-        { __typename?: "EvaluationCollection" } & {
+        { __typename?: "EvaluationCollection"; id: string; date: string; environment: { __typename?: "Environment"; label: string } } & {
           " $fragmentRefs"?: { CollectionsLineChart_EvaluationCollectionFragment: CollectionsLineChart_EvaluationCollectionFragment };
         }
       >;
@@ -433,35 +433,6 @@ export type CreateGroupPage_CreateGroupMutationVariables = Exact<{
 
 export type CreateGroupPage_CreateGroupMutation = { __typename?: "Mutation"; createGroup: { __typename?: "Group"; id: string; name: string } };
 
-export const GroupListItemFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "GroupListItem" },
-      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Group" } },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "name" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "subject" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "label" } },
-                { kind: "Field", name: { kind: "Name", value: "code" } },
-              ],
-            },
-          },
-          { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GroupListItemFragment, unknown>;
 export const CollectionsLineChart_EvaluationCollectionFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -503,6 +474,35 @@ export const CollectionsLineChart_EvaluationCollectionFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<CollectionsLineChart_EvaluationCollectionFragment, unknown>;
+export const GroupListItemFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GroupListItem" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Group" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "subject" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "label" } },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+              ],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GroupListItemFragment, unknown>;
 export const Main_GetCurrentUserDocument = {
   kind: "Document",
   definitions: [
@@ -743,7 +743,16 @@ export const GroupOverviewPage_GetGroupDocument = {
                         name: { kind: "Name", value: "evaluationCollections" },
                         selectionSet: {
                           kind: "SelectionSet",
-                          selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "CollectionsLineChart_EvaluationCollection" } }],
+                          selections: [
+                            { kind: "Field", name: { kind: "Name", value: "id" } },
+                            { kind: "Field", name: { kind: "Name", value: "date" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "environment" },
+                              selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "label" } }] },
+                            },
+                            { kind: "FragmentSpread", name: { kind: "Name", value: "CollectionsLineChart_EvaluationCollection" } },
+                          ],
                         },
                       },
                     ],

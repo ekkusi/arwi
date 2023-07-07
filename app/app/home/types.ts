@@ -1,7 +1,19 @@
+import { Environment } from "arwi-backend/src/types";
+
 export type HomeStackParams = {
   index: undefined;
   group: {
-    groupId: string;
+    id: string;
+    name: string;
   };
   "group-create": undefined;
+  student: {
+    id: string;
+    name: string;
+  };
+  collection: {
+    id: string;
+    date: string;
+    environmentLabel: string;
+  };
 };
