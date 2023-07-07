@@ -25,7 +25,7 @@ const Main_GetCurrentUser_Query = graphql(`
 export default function Main() {
   const { authState, setUser } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
-  const { ready } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
+  const { ready: i18nReady } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
 
   const client = useApolloClient();
 
@@ -46,7 +46,7 @@ export default function Main() {
       });
   }, [setUserInfo]);
 
-  if (loading || !ready) return <LoadingIndicator />;
+  if (loading || !i18nReady) return <LoadingIndicator />;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

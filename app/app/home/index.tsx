@@ -45,7 +45,7 @@ export default function HomePage({ navigation }: NativeStackScreenProps<HomeStac
     <GroupListItem
       group={item}
       onEvaluateIconPress={() => console.log("open evaluate")}
-      onListItemPress={() => navigation.push("group", { groupId: item.id })}
+      onListItemPress={() => navigation.navigate("group", { groupId: item.id })}
     />
   );
   return (
@@ -61,13 +61,13 @@ export default function HomePage({ navigation }: NativeStackScreenProps<HomeStac
       ) : (
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <CText style={{ fontSize: "md" }}>{t("home-view.no-groups", "Sinulla ei ole ryhmiä")}</CText>
-          <CButton title={t("home-view.create-group", "Luo ensimmäinen ryhmä")} onPress={() => navigation.push("group-create")} />
+          <CButton title={t("home-view.create-group", "Luo ensimmäinen ryhmä")} onPress={() => navigation.navigate("group-create")} />
         </CView>
       )}
       <ShadowButton
         style={{ position: "absolute", bottom: 20, right: 15 }}
         title={t("home-view.create-group", "Luo ryhmä")}
-        onPress={() => navigation.push("group-create")}
+        onPress={() => navigation.navigate("group-create")}
       >
         <MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />
       </ShadowButton>

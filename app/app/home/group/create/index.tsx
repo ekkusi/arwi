@@ -44,7 +44,7 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
         <CButton
           disabled={group.name.length === 0 || group.class === undefined}
           style={{ position: "absolute", bottom: 20, right: 20 }}
-          onPress={() => navigation.push("subject")}
+          onPress={() => navigation.navigate("subject")}
         >
           <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
         </CButton>

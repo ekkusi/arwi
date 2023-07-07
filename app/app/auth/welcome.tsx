@@ -17,7 +17,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
             title="Kirjaudu sisään"
             style={{ width: "90%" }}
             onPress={() => {
-              navigation.push("login");
+              navigation.navigate("login");
             }}
           />
           <CButton
@@ -26,7 +26,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
             title="Rekisteröidy"
             style={{ width: "90%" }}
             onPress={() => {
-              navigation.push("signup");
+              navigation.navigate("signup");
             }}
           />
         </CView>

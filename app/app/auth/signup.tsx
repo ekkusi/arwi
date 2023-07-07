@@ -105,7 +105,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
               <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Oletko jo rekisteröitynyt? </CText>
               <CTouchableOpacity
                 onPress={() => {
-                  navigation.push("login");
+                  navigation.navigate("login");
                 }}
               >
                 <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Kirjaudu sisään</CText>

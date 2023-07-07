@@ -96,7 +96,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
               <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Eikö sinulla ole vielä käyttäjää? </CText>
               <CTouchableOpacity
                 onPress={() => {
-                  navigation.push("signup");
+                  navigation.navigate("signup");
                 }}
               >
                 <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Rekisteröidy</CText>

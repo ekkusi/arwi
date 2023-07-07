@@ -133,7 +133,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
           <CButton style={{}} onPress={() => navigation.goBack()}>
             <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
           </CButton>
-          <CButton title="Luo ryhmä" style={{}} onPress={() => navigation.push("subject")}>
+          <CButton title="Luo ryhmä" style={{}} onPress={() => navigation.navigate("subject")}>
             <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />
           </CButton>
         </CView>
