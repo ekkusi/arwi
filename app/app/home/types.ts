@@ -1,5 +1,5 @@
 export type HomeStackParams = {
-  home: undefined;
+  index: undefined;
   group: {
     groupId: string;
   };

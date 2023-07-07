@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Suspense } from "react";
 import LoadingIndicator from "./components/LoadingIndicator";
 import MainStack from "./app/_stack";
 import { useAuth } from "./hooks-and-providers/AuthProvider";
@@ -17,7 +18,9 @@ export default function Main() {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar backgroundColor={COLORS.green} />
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
+        <NavigationContainer>
+          <Suspense fallback={<LoadingIndicator />}>{authState.authenticated ? <MainStack /> : <AuthStack />}</Suspense>
+        </NavigationContainer>
       </GestureHandlerRootView>
     </SafeAreaView>
   );

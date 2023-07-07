@@ -11,14 +11,14 @@ export default function GroupCreationStack() {
   return (
     <GroupCreationProvider>
       <Navigator
-        initialRouteName="create"
+        initialRouteName="index"
         screenOptions={{
           animationTypeForReplace: "push",
           title: "Uusi ryhmä",
           animation: "slide_from_right",
         }}
       >
-        <Screen name="create" component={GroupNameSelectionView} />
+        <Screen name="index" component={GroupNameSelectionView} />
         <Screen name="subject" component={GroupSubjectSelectionView} />
         <Screen name="students" component={GroupStudentsSelectionView} />
       </Navigator>

@@ -14,7 +14,6 @@ function babelConfig(api) {
           allowUndefined: false,
         },
       ],
-      require.resolve("expo-router/babel"),
     ],
   };
 }

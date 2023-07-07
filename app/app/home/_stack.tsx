@@ -9,8 +9,8 @@ const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
 export default function HomeStack() {
   return (
-    <HomeStackNavigator.Navigator initialRouteName="home" screenOptions={defaultHeaderStyles}>
-      <HomeStackNavigator.Screen name="home" component={HomeView} options={{ title: "Omat ryhmät" }} />
+    <HomeStackNavigator.Navigator initialRouteName="index" screenOptions={defaultHeaderStyles}>
+      <HomeStackNavigator.Screen name="index" component={HomeView} options={{ title: "Omat ryhmät" }} />
       <HomeStackNavigator.Screen name="group" component={GroupView} />
       <HomeStackNavigator.Screen name="group-create" component={GroupCreationStack} options={{ title: "Uusi ryhmä", headerShown: false }} />
     </HomeStackNavigator.Navigator>

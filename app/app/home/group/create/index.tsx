@@ -12,7 +12,7 @@ import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 
-export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "create">) {
+export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "index">) {
   const classes = getClassYearInfos();
   const { group, setGroup } = useGroupCreationContext();
   return (

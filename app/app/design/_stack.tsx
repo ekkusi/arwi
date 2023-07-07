@@ -9,8 +9,8 @@ const { Navigator, Screen } = createNativeStackNavigator<DesignStackParams>();
 
 export default function DesignStack() {
   return (
-    <Navigator initialRouteName="design" screenOptions={defaultHeaderStyles}>
-      <Screen name="design" component={DesignView} />
+    <Navigator initialRouteName="index" screenOptions={defaultHeaderStyles}>
+      <Screen name="index" component={DesignView} />
     </Navigator>
   );
 }

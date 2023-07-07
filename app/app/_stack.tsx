@@ -14,12 +14,10 @@ export default function MainStack() {
   const { authState } = useAuth();
   const { t } = useTranslation();
 
-  console.log("Returning tabs");
   return (
     <Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          console.log(route.name);
           switch (route.name) {
             case "home":
               return <MaterialCommunityIcon name="home-outline" size={size} color={color} />;

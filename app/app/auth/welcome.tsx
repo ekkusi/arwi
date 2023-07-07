@@ -1,12 +1,12 @@
-import { useRouter } from "expo-router";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import CButton from "../../components/primitives/CButton";
 import CImage from "../../components/primitives/CImage";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
 import LandingComponent from "../../components/LandingComponent";
+import { AuthStackParams } from "./types";
 
-export default function LandingPage() {
-  const router = useRouter();
+export default function LandingPage({ navigation }: NativeStackScreenProps<AuthStackParams, "welcome">) {
   return (
     <LandingComponent
       bottomChildren={
@@ -17,7 +17,7 @@ export default function LandingPage() {
             title="Kirjaudu sisään"
             style={{ width: "90%" }}
             onPress={() => {
-              router.push("/auth/login");
+              navigation.push("login");
             }}
           />
           <CButton
@@ -26,7 +26,7 @@ export default function LandingPage() {
             title="Rekisteröidy"
             style={{ width: "90%" }}
             onPress={() => {
-              router.push("/auth/sign-up");
+              navigation.push("signup");
             }}
           />
         </CView>

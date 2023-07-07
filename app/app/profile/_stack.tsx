@@ -7,8 +7,8 @@ const ProfileStackNavigator = createNativeStackNavigator<ProfileStackParams>();
 
 export default function ProfileStack() {
   return (
-    <ProfileStackNavigator.Navigator initialRouteName="profile" screenOptions={defaultHeaderStyles}>
-      <ProfileStackNavigator.Screen name="profile" component={ProfileView} />
+    <ProfileStackNavigator.Navigator initialRouteName="index" screenOptions={defaultHeaderStyles}>
+      <ProfileStackNavigator.Screen name="index" component={ProfileView} />
     </ProfileStackNavigator.Navigator>
   );
 }
