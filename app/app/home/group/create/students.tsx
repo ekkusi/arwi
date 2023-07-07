@@ -56,6 +56,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
   const { group, setGroup } = useGroupCreationContext();
 
   const handleSubmit = async () => {
+    // TODO: Show loading indicator while creation is in progress
     try {
       if (!group.subject) throw new Error("Unexpected error"); // Should get caught before this
       if (!group.class) throw new Error("Unexpected error"); // Should get caught before this
