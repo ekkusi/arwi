@@ -2,17 +2,49 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Suspense } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
+import { useApolloClient } from "@apollo/client";
+import * as SecureStore from "expo-secure-store";
 import LoadingIndicator from "./components/LoadingIndicator";
 import MainStack from "./app/_stack";
-import { useAuth } from "./hooks-and-providers/AuthProvider";
+import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
+import { graphql } from "./gql";
+
+const Main_GetCurrentUser_Query = graphql(`
+  query Main_GetCurrentUser {
+    getCurrentUser {
+      email
+      id
+    }
+  }
+`);
 
 export default function Main() {
-  const { authState } = useAuth();
+  const { authState, setUser } = useAuth();
+  const [loading, setLoading] = useState<boolean>(true);
 
-  if (authState.loading) return <LoadingIndicator />;
+  const client = useApolloClient();
+
+  // Fetch token and current user and set them to global state if they exist
+  const setUserInfo = useCallback(async () => {
+    const { data } = await client.query({ query: Main_GetCurrentUser_Query });
+    const token = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
+    if (data && token) {
+      await setUser(token, data.getCurrentUser);
+    }
+  }, [client, setUser]);
+
+  useEffect(() => {
+    setUserInfo()
+      .then(() => setLoading(false))
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [setUserInfo]);
+
+  if (loading) return <LoadingIndicator />;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

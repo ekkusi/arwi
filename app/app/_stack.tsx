@@ -1,7 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useAuth } from "../hooks-and-providers/AuthProvider";
 import { COLORS, SPACING } from "../theme";
 import DesignStack from "./design/_stack";
 import HomeStack from "./home/_stack";
@@ -11,9 +9,6 @@ import { RootStackParams } from "./types";
 const { Navigator, Screen } = createBottomTabNavigator<RootStackParams>();
 
 export default function MainStack() {
-  const { authState } = useAuth();
-  const { t } = useTranslation();
-
   return (
     <Navigator
       screenOptions={({ route }) => ({

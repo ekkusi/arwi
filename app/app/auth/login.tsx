@@ -24,12 +24,16 @@ const LoginPage_Login_Mutation = graphql(`
   mutation LoginPage_Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       accessToken
+      teacher {
+        email
+        id
+      }
     }
   }
 `);
 
 export default function LoginPage({ navigation }: NativeStackScreenProps<AuthStackParams, "login">) {
-  const { setToken } = useAuth();
+  const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
@@ -49,9 +53,8 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
   const handleSubmit = async (values: typeof initialValues) => {
     try {
       const { data } = await login({ variables: { email: values.email, password: values.password } });
-      const accessToken = data?.login?.accessToken;
-      if (!accessToken) throw new Error("Unexpected error");
-      setToken(accessToken);
+      if (!data) throw new Error("Unexpected error");
+      setUser(data.login.accessToken, data.login.teacher);
     } catch (error) {
       const msg = getErrorMessage(error);
       setGeneralError(msg);
