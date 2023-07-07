@@ -49,6 +49,7 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
 );
 export default function GroupStudentsSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "students">) {
   const [newStudent, setNewStudent] = useState<string>("");
+  const user = useAuthenticatedUser();
 
   const [createGroup] = useMutation(CreateGroupPage_CreateGroup_Mutation);
 
@@ -58,19 +59,20 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     try {
       if (!group.subject) throw new Error("Unexpected error"); // Should get caught before this
       if (!group.class) throw new Error("Unexpected error"); // Should get caught before this
-      const { data } = await createGroup({
+      await createGroup({
         variables: {
           input: {
             name: group.name,
             yearCode: group.class.code,
             subjectCode: group.subject?.code,
             students: group.students.map((it) => ({ name: it })),
-            teacherId: "123", // TODO: Add correct teacher id
+            teacherId: user.id, // TODO: Add correct teacher id
           },
         },
+        refetchQueries: ["MainPage_GetCurrentUser"],
       });
 
-      // TODO: Navigate to home page
+      navigation.getParent()?.navigate("index");
     } catch (error) {
       const msg = getErrorMessage(error);
       console.error(msg);
@@ -133,7 +135,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
           <CButton style={{}} onPress={() => navigation.goBack()}>
             <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
           </CButton>
-          <CButton title="Luo ryhmä" style={{}} onPress={() => navigation.navigate("subject")}>
+          <CButton title="Luo ryhmä" style={{}} onPress={() => handleSubmit()}>
             <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />
           </CButton>
         </CView>
