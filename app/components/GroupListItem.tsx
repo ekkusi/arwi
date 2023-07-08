@@ -7,6 +7,8 @@ import { timeSince } from "../helpers/dateHelpers";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 import CTouchableOpacity from "./primitives/CTouchableOpacity";
+import CImage from "./primitives/CImage";
+import { subjectToIcon } from "../helpers/dataMappers";
 
 export const GroupListItem_Fragment = graphql(`
   fragment GroupListItem on Group {
@@ -45,20 +47,47 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
         style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
         onPress={onListItemPress}
       >
-        <CView style={{ gap: 5 }}>
-          <CView style={{ flex: 2, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-            <CText style={{ fontSize: "lg", fontWeight: "700", color: "darkgray", flex: 1 }}>{group.name}</CText>
+        <CView style={{ flex: 6, flexDirection: "row", gap: 10, alignItems: "center", justifyContent: "flex-start" }}>
+          <CView
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 24,
+              borderColor: "lightgray",
+              borderWidth: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CView style={{ width: 30, height: 30 }}>
+              <CImage
+                style={{
+                  width: undefined,
+                  height: undefined,
+                  flex: 1,
+                  resizeMode: "contain",
+                  tintColor: "darkgray",
+                }}
+                source={subjectToIcon(group.subject)}
+              />
+            </CView>
           </CView>
-          <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
-            <MaterialCommunityIcon name="history" color="gray" />
-            <CText style={{ fontSize: "sm", color: "gray" }}>{timeSince(group.updatedAt)} ago</CText>
-            <CView style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForCode(group.subject.code) }} />
-            <CText style={{ fontSize: "sm", color: "gray" }}>{group.subject.label}</CText>
+          <CView style={{ flexGrow: 1, gap: 5 }}>
+            <CView style={{ flex: 2, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+              <CText style={{ fontSize: "lg", fontWeight: "700", color: "darkgray", flex: 1 }}>{group.name}</CText>
+            </CView>
+            <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
+              <MaterialCommunityIcon name="history" color="gray" />
+              <CText style={{ fontSize: "sm", color: "gray" }}>{timeSince(group.updatedAt)} ago</CText>
+              <CView style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForCode(group.subject.code) }} />
+            </CView>
           </CView>
         </CView>
-        <CTouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
-          <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />
-        </CTouchableOpacity>
+        <CView style={{ flex: 1 }}>
+          <CTouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
+            <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />
+          </CTouchableOpacity>
+        </CView>
       </CTouchableOpacity>
     </Card>
   );

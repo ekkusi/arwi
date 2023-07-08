@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
-import { FlatList, KeyboardAvoidingView } from "react-native";
+import { useEffect, useState } from "react";
+import { FlatList, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
@@ -55,6 +55,22 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
 
   const { group, setGroup } = useGroupCreationContext();
 
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardVisible(true); // or some other action
+    });
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardVisible(false); // or some other action
+    });
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   const handleSubmit = async () => {
     // TODO: Show loading indicator while creation is in progress
     try {
@@ -91,17 +107,21 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
-      <CView style={{ flex: 1, padding: 15, backgroundColor: "white", justifyContent: "space-between" }}>
-        <CView style={{ height: 300, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-          <CView style={{ height: 240, gap: 10, width: "100%" }}>
+    <CView style={{ flex: 1, backgroundColor: "white", justifyContent: "space-between" }}>
+      <CView style={{ flex: 8, padding: 15, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+        <CView style={{ flex: 1, gap: 20, width: "100%" }}>
+          <CView style={{ flex: 6, gap: 10 }}>
             <CText style={{ fontSize: "title", fontWeight: "300" }}>Oppilaat</CText>
             <FlatList
-              data={group.students}
+              inverted
+              data={[...group.students].reverse()}
               renderItem={({ item }: { item: string }) => renderStudentItem(item, removeStudent)}
               keyExtractor={(_, index) => index.toString()}
               numColumns={1}
+              style={{ flexGrow: 1 }}
             />
+          </CView>
+          <CView style={{ flex: 3, width: "100%" }}>
             <CView style={{ height: 60, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
               <CView style={{ flex: 5 }}>
                 <CTextInput
@@ -110,7 +130,6 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
                   onChange={(event) => {
                     setNewStudent(event.nativeEvent.text);
                   }}
-                  autoFocus
                   onSubmitEditing={(_) => {
                     if (newStudent.length > 0) {
                       addStudent(newStudent);
@@ -132,16 +151,29 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
             </CView>
           </CView>
         </CView>
-        <CView style={{ flex: 1, width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <CButton style={{}} onPress={() => navigation.goBack()}>
-            <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-          </CButton>
-          <CButton title="Luo ryhmä" style={{}} onPress={() => handleSubmit()}>
-            <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />
-          </CButton>
-        </CView>
       </CView>
-      <ProgressBar style={{ position: "absolute", bottom: 0 }} color={COLORS.primary} progress={3 / 3} />
-    </KeyboardAvoidingView>
+      <CView style={{ flex: 2, justifyContent: "flex-end", gap: 20 }}>
+        {!isKeyboardVisible && (
+          <CView
+            style={{
+              flexGrow: 1,
+              width: "100%",
+              paddingHorizontal: 20,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+            }}
+          >
+            <CButton style={{}} onPress={() => navigation.goBack()}>
+              <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+            </CButton>
+            <CButton title="Luo ryhmä" style={{}} onPress={() => handleSubmit()}>
+              <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />
+            </CButton>
+          </CView>
+        )}
+        <ProgressBar color={COLORS.primary} progress={3 / 3} />
+      </CView>
+    </CView>
   );
 }

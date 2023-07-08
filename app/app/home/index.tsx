@@ -45,7 +45,7 @@ export default function HomePage({ navigation }: NativeStackScreenProps<HomeStac
     <GroupListItem group={item} onEvaluateIconPress={() => console.log("open evaluate")} onListItemPress={() => navigation.navigate("group", item)} />
   );
   return (
-    <CView style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
+    <CView style={{ flex: 1, paddingHorizontal: 10, paddingTop: 20 }}>
       {teacher.groups.length > 0 ? (
         <FlatList
           data={[...teacher.groups].sort((a, b) => {
