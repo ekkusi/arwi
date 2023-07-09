@@ -3,6 +3,8 @@ import HomeView from ".";
 import { formatDate } from "../../helpers/dateHelpers";
 import { defaultHeaderStyles } from "../config";
 import CollectionView from "./collection";
+import CollectionCreation from "./collection/create";
+import Evaluation from "./evaluation";
 import GroupView from "./group";
 import GroupCreationStack from "./group/create/_stack";
 import StudentView from "./student";
@@ -22,6 +24,8 @@ export default function HomeStack() {
         options={({ route }) => ({ title: `${formatDate(route.params.date)}: ${route.params.environmentLabel}` })}
       />
       <HomeStackNavigator.Screen name="group-create" component={GroupCreationStack} options={{ title: "Uusi ryhmä", headerShown: false }} />
+      <HomeStackNavigator.Screen name="collectionCreation" component={CollectionCreation} options={{ title: "Uusi arviointi" }} />
+      <HomeStackNavigator.Screen name="evaluation" component={Evaluation} options={{ title: "Uusi arviointi" }} />
     </HomeStackNavigator.Navigator>
   );
 }

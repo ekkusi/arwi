@@ -16,4 +16,8 @@ export type HomeStackParams = {
     date: string;
     environmentLabel: string;
   };
+  collectionCreation: {
+    id: string;
+  };
+  evaluation: undefined;
 };

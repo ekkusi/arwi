@@ -18,8 +18,6 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
   useEffect(() => {
     navigation.getParent("main-tab-bar")?.setOptions({ tabBarStyle: { display: "none" }, tabBarOptions: { keyboardHidesTabBar: false } });
     return () => {
-      // when leave this screen, and the hooks disposed, we set tabBarStyle to {}, means we will use the default style defined above, that is display:'flex'
-
       navigation.getParent("main-tab-bar")?.setOptions({ tabBarStyle: { backgroundColor: COLORS.white, height: 60, paddingTop: SPACING.md } });
     };
   }, [navigation]);
