@@ -2167,6 +2167,10 @@ de5f8af8-d6c8-4e0a-92d9-9c2c8d79e688	6bc63090-ea58-4189-b5d1-cba135d9da2b	\N	a75
 a3c5da14-9f86-45f5-a43b-2eaea4922d37	75bba92f-9f9c-47c0-a89a-2add75007cf6	\N	b1876b9c-23cd-46d2-aa93-b7980fbca7a2	f	\N	\N	f
 109f5a84-f0df-45ce-a30e-22b122359f7c	4c047cf3-edbb-4aa0-b879-cd84077a8257	Liisa harjoitteli latinalaistansseja tanssitunnilla ja oppi nopeasti uudet askeleet. Hän auttoi muita oppimaan ja piti tunnelman kevyenä.	beee4734-91f2-424a-b01d-70bb610bfcbc	t	EXCELLENT	GREAT	t
 6258b7c3-dc4c-449f-8a62-a20e66704946	a520a370-e1ec-4742-bcf8-1a34a4434485	Teppo osallistui uintiharjoituksiin ja näytti erinomaisia taitojaan eri uintitekniikoissa. Hän ui nopeasti ja kehitti tekniikkaansa jatkuvasti. Hän myös auttoi ja kannusti muita uimareita.	ffcf41a8-c5c9-406d-8062-a9f9f40bf827	t	EXCELLENT	EXCELLENT	f
+26f23f78-75bf-4a89-84de-52eecb22c2ae	df05106e-6e95-4a82-af93-c5f6f8a58047	\N	566dc2b8-667a-428f-bf64-2947669dae99	t	EXCELLENT	EXCELLENT	f
+8a6472be-f0f3-4dc8-802a-78da2aa43ee1	24bd87c1-454d-412e-a843-595ffdc4892b	\N	566dc2b8-667a-428f-bf64-2947669dae99	t	GREAT	GOOD	t
+90e84a0c-4deb-450b-99ff-3fe306da10bf	e459564c-d6aa-4fec-8790-508218a41435	\N	566dc2b8-667a-428f-bf64-2947669dae99	t	GREAT	EXCELLENT	f
+50fa6540-b3dc-4018-a522-8f6afc79de8a	c99cbc5a-d88b-4022-bc5a-aae33f51e30b	\N	566dc2b8-667a-428f-bf64-2947669dae99	t	EXCELLENT	EXCELLENT	t
 664bdf7f-ea3d-4d50-b37b-de76718f8976	4fa0db05-161f-4165-b00c-52528866490c	\N	4c015819-9b68-4634-83d1-ee1114c9be59	t	\N	\N	f
 836b5be2-9f68-40bc-b1c6-a5e81222aad3	d77c55c5-670a-4bc5-bf46-5ff9662077f6	\N	4c015819-9b68-4634-83d1-ee1114c9be59	t	\N	\N	f
 57545676-a122-4ed6-98a3-dbbf55624780	8f2c8d2d-5ffd-42ae-abd0-cce3cddc1dff	\N	4c015819-9b68-4634-83d1-ee1114c9be59	t	\N	\N	f
@@ -2543,6 +2547,7 @@ f5a560c0-2dc6-4f39-8158-9c222339bb04	2023-03-25 16:30:00		Uintitreeniä avovesia
 a8c5e1fb-bb1a-4811-9b48-6faa29f4f619	2023-03-29 09:30:00		Kuntoilua puistossa. Teimme erilaisia lihaskunto- ja venyttelyliikkeitä puiston penkeillä ja portailla.	LI_KUNTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T2,T4,T7,T8}
 ca0b4bb1-c094-42a5-b45f-2a1c02c4fe65	2023-05-23 00:00:00		\N	LI_VESI	decdfebc-8865-4884-85e2-532e1324b324	{T2,T4}
 e21cd4c8-20e1-40ac-9a7e-cafc322dac96	2023-06-10 00:00:00		\N	LI_KUNTO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T4,T7}
+566dc2b8-667a-428f-bf64-2947669dae99	2023-07-08 00:00:00		\N	LI_TALVI	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2}
 516e883e-2f2d-4cc6-be32-7ae7c52d31a5	2023-05-08 00:00:00		Tennistä ulkona	LI_PALLO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T1}
 117ab460-e5a7-4e15-a674-aed050c43bf5	2023-04-18 00:00:00		Sählypeliä.	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
 eae42717-f8ef-4cc4-bdbe-a7599e7bd261	2023-04-19 00:00:00		Koris (vanne, keppi -rinki)	LI_PALLO	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
