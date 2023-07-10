@@ -43,6 +43,7 @@ export default function Main() {
       .then(() => setLoading(false))
       .catch((err) => {
         console.error(err);
+        setLoading(false);
       });
   }, [setUserInfo]);
 
