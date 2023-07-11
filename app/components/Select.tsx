@@ -6,7 +6,7 @@ import CText from "./primitives/CText";
 import CTouchableOpacity from "./primitives/CTouchableOpacity";
 import CView from "./primitives/CView";
 
-type CustomSelectionInputProps = ViewProps & {
+type SelectProps = ViewProps & {
   options: string[];
   title?: string;
   lightTheme?: boolean;
@@ -14,7 +14,7 @@ type CustomSelectionInputProps = ViewProps & {
   onSelect?: (item: string) => void;
 };
 
-export default function CustomSelectionInput(props: CustomSelectionInputProps) {
+export default function Select(props: SelectProps) {
   const { options, errorStyle, title, onSelect, lightTheme = false, ...generalProps } = props;
   const [errorText, setError] = useState<string | undefined>(undefined);
   const [selected, setSelected] = useState<string | undefined>(undefined);
