@@ -1,5 +1,12 @@
 import { readFileSync } from "fs";
-import { DateResolver, DateTypeDefinition, EmailAddressResolver, EmailAddressTypeDefinition } from "graphql-scalars";
+import {
+  DateResolver,
+  DateTimeResolver,
+  DateTimeTypeDefinition,
+  DateTypeDefinition,
+  EmailAddressResolver,
+  EmailAddressTypeDefinition,
+} from "graphql-scalars";
 import { ApolloServer } from "@apollo/server";
 import cors from "cors";
 import { json } from "body-parser";
@@ -27,11 +34,13 @@ const typeDefs = readFileSync(path.resolve(process.cwd(), "./src/schema.graphql"
 const schema = makeExecutableSchema({
   typeDefs: `
     ${DateTypeDefinition}
+    ${DateTimeTypeDefinition}
     ${EmailAddressTypeDefinition}
     ${typeDefs}
   `,
   resolvers: {
     Date: DateResolver,
+    DateTime: DateTimeResolver,
     EmailAddress: EmailAddressResolver,
     ...resolvers,
   },

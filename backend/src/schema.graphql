@@ -75,7 +75,7 @@ type Group {
   students: [Student!]!
   subject: Subject!
   teacher: Teacher!
-  updatedAt: Date!
+  updatedAt: DateTime!
   currentClassYear: ClassYear!
   classYears: [ClassYear!]!
 }
@@ -95,7 +95,7 @@ type ClassYear {
 
 type EvaluationCollection {
   id: ID!
-  date: Date!
+  date: DateTime!
   type: String!
   environment: Environment!
   description: String
@@ -175,7 +175,7 @@ input UpdateStudentInput {
 }
 
 input CreateCollectionInput {
-  date: Date!
+  date: DateTime!
   type: String
   environmentCode: ID!
   description: String
@@ -184,7 +184,7 @@ input CreateCollectionInput {
 }
 
 input UpdateCollectionInput {
-  date: Date
+  date: DateTime
   type: String
   environmentCode: ID
   description: String
