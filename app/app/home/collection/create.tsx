@@ -3,13 +3,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { getEnvironment, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import React, { useState } from "react";
 import { TouchableOpacity } from "react-native";
-import DatePicker from "react-native-date-picker";
-import CustomSelectionInput from "../../../components/CustomSelectionInput";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Select from "../../../components/Select";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import { getFragmentData, graphql } from "../../../gql";
 import { HomeStackParams } from "../types";
+import { COLORS } from "../../../theme";
 
 const UpdateCollectionForm_Group_Fragment = graphql(`
   fragment UpdateCollectionForm_Group on Group {
@@ -57,7 +58,7 @@ export default function CollectionCreation({ navigation, route }: NativeStackScr
   });
 
   const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
+  const [isDateOpen, setIsDateOpen] = useState(false);
 
   if (loading || !data) return <LoadingIndicator />;
 
@@ -67,23 +68,24 @@ export default function CollectionCreation({ navigation, route }: NativeStackScr
 
   return (
     <CView style={{ flex: 1, paddingHorizontal: 10, paddingTop: 20, gap: 20 }}>
-      <CustomSelectionInput title="Ympäristö" options={[]} />
-      <CustomSelectionInput title="Oppimistavoitteet" options={learningObjectives.map((obj) => obj.label)} />
-      <TouchableOpacity style={{ width: "100%", height: 60, borderBottomWidth: 1, borderBottomColor: "darkgray" }} onPress={() => setOpen(true)}>
+      <Select title="Ympäristö" options={[]} />
+      <Select title="Oppimistavoitteet" options={learningObjectives.map((obj) => obj.label)} />
+      <TouchableOpacity
+        style={{ width: "100%", height: 60, borderBottomWidth: 1, borderBottomColor: "darkgray" }}
+        onPress={() => setIsDateOpen(true)}
+      >
         <CText>{date.toDateString()}</CText>
       </TouchableOpacity>
-      <DatePicker
-        modal
-        open={open}
-        date={date}
-        onConfirm={(newDate) => {
-          setOpen(false);
-          setDate(newDate);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
+      {isDateOpen && (
+        <DateTimePicker
+          textColor={COLORS.primary}
+          value={date}
+          onChange={(_, newDate) => {
+            setIsDateOpen(false);
+            if (newDate) setDate(newDate);
+          }}
+        />
+      )}
     </CView>
   );
 }

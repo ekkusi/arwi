@@ -3,7 +3,7 @@ import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
 import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, StatusBar, TouchableWithoutFeedback } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CustomSelectionInput from "../../../../components/CustomSelectionInput";
+import Select from "../../../../components/Select";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CTextInput from "../../../../components/primitives/CTextInput";
@@ -40,7 +40,7 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
         </CView>
         <CView style={{ width: "100%" }}>
           <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>Luokka-aste</CText>
-          <CustomSelectionInput
+          <Select
             style={{ width: "100%" }}
             title=""
             options={classes.map((obj) => obj.label)}

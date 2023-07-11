@@ -148,6 +148,7 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
           const borderColor: CColor = i === index ? "primary" : "lightgray";
           return (
             <CTouchableOpacity
+              key={route.key}
               onPress={() => setIndex(i)}
               style={{ padding: "lg", borderBottomColor: borderColor, borderBottomWidth: 3, flex: 1, alignItems: "center" }}
             >

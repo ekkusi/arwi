@@ -40,9 +40,10 @@ export default function Main() {
 
   useEffect(() => {
     setUserInfo()
-      .then(() => setLoading(false))
       .catch((err) => {
-        console.error(err);
+        console.info(err);
+      })
+      .finally(() => {
         setLoading(false);
       });
   }, [setUserInfo]);
