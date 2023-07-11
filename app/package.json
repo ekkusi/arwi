@@ -31,6 +31,7 @@
     "graphql": "^16.6.0",
     "i18next": "^22.5.0",
     "i18next-gridly-backend": "^1.0.6",
+    "openai": "^3.3.0",
     "react": "18.2.0",
     "react-i18next": "^12.3.1",
     "react-native": "0.71.8",
