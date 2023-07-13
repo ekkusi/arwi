@@ -7,8 +7,8 @@ export type CTextProps = Omit<TextProps, "style"> & {
   style?: CTextStyle;
 };
 
-export default function CText({ style, ...rest }: CTextProps) {
-  const styles = useMemo(() => style && createTextStyles(style), [style]);
+export default function CText({ style = {}, ...rest }: CTextProps) {
+  const styles = useMemo(() => createTextStyles({ fontSize: "md", ...style }), [style]);
 
   return <Text style={styles} {...rest} />;
 }

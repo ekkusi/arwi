@@ -1,6 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { FragmentType, getFragmentData, graphql } from "../gql";
+import { formatAmountString } from "../helpers/dataMappers";
 import { analyzeEvaluations } from "../helpers/evaluationUtils";
-import { CViewProps } from "./primitives/CView";
+import Card from "./Card";
+import EvaluationsLineChart from "./charts/EvaluationsLineChart";
+import FlippingCard from "./FlippingCard";
+import CText from "./primitives/CText";
+import CView, { CViewProps } from "./primitives/CView";
 
 const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
   fragment StudentEvaluationRecap_Evaluation on Evaluation {
@@ -34,6 +40,7 @@ export default function StudentEvaluationsRecap({
   student: studentFragment,
   ...rest
 }: StudentEvaluationsRecapProps) {
+  const { t } = useTranslation();
   const evaluations = getFragmentData(StudentEvaluationRecap_Evaluation_Fragment, evaluationFragments);
   const student = getFragmentData(StudentEvaluationRecap_Student_Fragment, studentFragment);
 
@@ -41,7 +48,52 @@ export default function StudentEvaluationsRecap({
 
   const starRowCount = Math.ceil(isStellarCount / 12);
 
-  return null;
+  return (
+    <FlippingCard
+      style={{ padding: "lg" }}
+      height={600}
+      front={
+        <>
+          <EvaluationsLineChart evaluations={evaluations} style={{ marginBottom: "md" }} />
+          <CView style={{ width: "100%", paddingHorizontal: "md" }}>
+            <CView style={{ flexDirection: "row" }}>
+              <CText style={{ fontWeight: "600" }}>Paikalla: </CText>
+              <CText>{presencesAmount}</CText>
+            </CView>
+            <CView style={{ flexDirection: "row" }}>
+              <CText style={{ fontWeight: "600" }}>Poissa: </CText>
+              <CText>{absencesAmount}</CText>
+            </CView>
+            <CView style={{ flexDirection: "row" }}>
+              <CText style={{ fontWeight: "600" }}>Taitojen keskiarvo: </CText>
+              <CText>
+                {!Number.isNaN(skillsAverage)
+                  ? `${skillsAverage.toFixed(2)}`
+                  : t("components.StudentEvaluationsRecap.skillsNotEvaluated", "Taitoja ei vielä arvioitu")}
+              </CText>
+            </CView>
+            <CView style={{ flexDirection: "row" }}>
+              <CText style={{ fontWeight: "600" }}>Työskentelyn keskiarvo: </CText>
+              <CText>
+                {!Number.isNaN(behaviourAverage)
+                  ? `${behaviourAverage.toFixed(2)}`
+                  : t("components.StudentEvaluationsRecap", "Työskentelyä ei vielä arvioitu")}
+              </CText>
+            </CView>
+          </CView>
+          <CView style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
+            <CText style={{ marginBottom: "sm" }}>Numeroehdotus:</CText>
+            <CView style={{ borderWidth: 2, borderColor: "lightgray", borderRadius: 50, padding: "3xl", alignContent: "center" }}>
+              <CView style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center" }}>
+                <CText style={{ fontSize: "2xl" }}>{gradeSuggestion > 0 ? gradeSuggestion : "–"}</CText>
+              </CView>
+            </CView>
+          </CView>
+        </>
+      }
+      back={<CText style={{ fontSize: "largeTitle" }}>TerveTerve</CText>}
+    />
+  );
   // return (
   // <FlippingCard
   //   width="100%"

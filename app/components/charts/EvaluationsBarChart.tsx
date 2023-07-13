@@ -1,4 +1,5 @@
 import { FragmentType, getFragmentData, graphql } from "../../gql";
+import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
 import { formatRatingNumber } from "../../helpers/dataMappers";
 import { BarChartBaseProps, DataType } from "./BarChartBase";
 

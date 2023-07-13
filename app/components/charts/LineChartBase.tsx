@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { VictoryAxis, VictoryChart, VictoryLegend, VictoryLine } from "victory-native";
+import { COLORS } from "../../theme";
+import CText from "../primitives/CText";
+import CView, { CViewProps } from "../primitives/CView";
 
 export type DataType = {
   date: string;
@@ -6,54 +10,51 @@ export type DataType = {
   behaviour?: Maybe<number>;
 };
 
-export type LineChartBaseProps = {
-  data: any[];
+export type LineChartBaseProps = CViewProps & {
+  data: DataType[];
+  minItems?: number;
 };
+export default function LineChartBase({ data, minItems = 3, ...rest }: LineChartBaseProps) {
+  const { t } = useTranslation();
 
-// export type LineChartBaseProps = Omit<BoxProps, "onClick"> & {
-//   data: any[];
-//   tooltipContent?: React.ReactElement;
-//   skillsKey?: string;
-//   behaviourKey?: string;
-//   minItems?: number;
-//   overlayBgColor?: string;
-//   yLabel?: string;
-// };
-
-// function TooltipContent({ active, payload, label }: TooltipProps<"number", "string">) {
-//   if (!payload || !active) return null;
-
-//   return (
-//     <Box p="2" bg="white" border="1px" borderColor="gray.200" borderRadius="md">
-//       <Text mb="1">{label}</Text>
-//       {payload[0] && (
-//         <Text color={payload[0].stroke}>
-//           {payload[0].name}: {payload[0].payload.skills || payload[0].payload.behaviour}
-//         </Text>
-//       )}
-//       {payload[1] && (
-//         <Text color={payload[1].stroke}>
-//           {payload[1].name}: {payload[1].payload.behaviour}
-//         </Text>
-//       )}
-//     </Box>
-//   );
-// }
-// function AxisTick({ x = 0, y = 0, payload }: SVGProps<SVGGElement> & { payload?: any }) {
-//   const isFirstTick = Number(x) < 50;
-//   const xConverted = Number(x);
-
-//   return (
-//     <g transform={`translate(${isFirstTick ? xConverted - 15 : xConverted + 15},${y})`}>
-//       <text x={0} y={3} dy={16} textAnchor={isFirstTick ? "start" : "end"} fill="#666">
-//         {payload.value}
-//       </text>
-//     </g>
-//   );
-// }
-
-export default function LineChartBase({ data }: LineChartBaseProps) {
-  console.info(data);
-
-  return null;
+  return (
+    <CView {...rest} style={{ position: "relative", ...rest.style }}>
+      <VictoryChart>
+        <VictoryLine data={data} x="date" y="skills" style={{ data: { stroke: COLORS.primary } }} />
+        <VictoryLine data={data} x="date" y="behaviour" style={{ data: { stroke: COLORS.secondary } }} />
+        <VictoryAxis dependentAxis domain={{ y: [4, 10] }} />
+        <VictoryAxis tickCount={2} />
+        <VictoryLegend
+          orientation="horizontal"
+          gutter={20}
+          symbolSpacer={10}
+          x={100}
+          y={225}
+          data={[
+            { name: t("components.lineChartBase.skills", "Taidot"), symbol: { fill: COLORS.primary } },
+            { name: t("components.lineChartBase.behaviour", "Työskentely"), symbol: { fill: COLORS.secondary } },
+          ]}
+        />
+      </VictoryChart>
+      {data.length < minItems && (
+        <CView
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(255,255,255,0.5)",
+          }}
+        >
+          <CText style={{ fontSize: "lg", marginHorizontal: "2xl", textAlign: "center" }}>
+            {t("components.lineChartBase.notEnoughData", "Kuvaajan näyttämiseen tarvitaan vähintään {{count}} arviointia", { count: minItems })}
+          </CText>
+        </CView>
+      )}
+    </CView>
+  );
 }

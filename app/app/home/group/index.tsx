@@ -152,7 +152,7 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
               onPress={() => setIndex(i)}
               style={{ padding: "lg", borderBottomColor: borderColor, borderBottomWidth: 3, flex: 1, alignItems: "center" }}
             >
-              <CText style={{ fontSize: "lg" }}>{route.title}</CText>
+              <CText style={{ fontSize: "md" }}>{route.title}</CText>
             </CTouchableOpacity>
           );
         })}

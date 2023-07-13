@@ -1,8 +1,8 @@
-import { Environment } from "arwi-backend/src/types";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
+import { EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
 import { formatRatingNumber } from "../../helpers/dataMappers";
 import { formatDate } from "../../helpers/dateHelpers";
-import { DataType as BaseDataType, LineChartBaseProps } from "./LineChartBase";
+import LineChartBase, { DataType as BaseDataType, LineChartBaseProps } from "./LineChartBase";
 
 const EvaluationsLineChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsLineChart_Evaluation on Evaluation {
@@ -23,10 +23,6 @@ const EvaluationsLineChart_Evaluation_Fragment = graphql(`
 
 type DataType = BaseDataType & {
   environment: EvaluationsLineChart_EvaluationFragment["collection"]["environment"];
-};
-
-type DataTypeByEnvironments = {
-  [key: string]: DataType;
 };
 
 const mapData = (evaluations: EvaluationsLineChart_EvaluationFragment[], pushThreshHold: number) => {
@@ -57,30 +53,15 @@ const mapData = (evaluations: EvaluationsLineChart_EvaluationFragment[], pushThr
   return data;
 };
 
-const mapDataByEnvironments = (data: DataType[]) => {
-  const dataByEnvironments: DataTypeByEnvironments[] = [];
-  data.forEach((it) => {
-    const newData: DataTypeByEnvironments = {};
-    newData[it.environment.code] = it;
-    dataByEnvironments.push(newData);
-  });
-  return dataByEnvironments;
-};
-
 type EvaluationsLineChartProps = Omit<LineChartBaseProps, "data"> & {
-  studentId: string;
   evaluations: readonly FragmentType<typeof EvaluationsLineChart_Evaluation_Fragment>[];
-  firstIndexToPush?: number;
-  environments?: Environment[];
-  type?: "skills" | "behaviour" | "both" | "avg";
+  showAvgThreshhold?: number;
 };
 
 export default function EvaluationsLineChart({
   evaluations: evaluationFragments,
-  studentId: _,
-  firstIndexToPush = 2,
-  environments = [],
-  type = "both",
+  showAvgThreshhold = 2,
+  minItems = 3,
   ...rest
 }: EvaluationsLineChartProps) {
   const evaluations = getFragmentData(EvaluationsLineChart_Evaluation_Fragment, evaluationFragments);
@@ -89,27 +70,10 @@ export default function EvaluationsLineChart({
     .sort((a, b) => new Date(a.collection.date).getTime() - new Date(b.collection.date).getTime())
     .filter((it) => it.wasPresent);
 
-  const showAvg = sortedEvaluations.length >= firstIndexToPush + 3;
-  const data = mapData(sortedEvaluations, showAvg ? firstIndexToPush : 0);
-  const dataByEnvironments = mapDataByEnvironments(data);
+  // Start pushing item to data array after the avg threshhold is reached (to avoid showing data that is not yet balanced)
+  // If there are less than minItems, start pushing items from beginning
+  const showAvg = sortedEvaluations.length >= showAvgThreshhold + minItems;
+  const data = mapData(sortedEvaluations, showAvg ? showAvgThreshhold : 0);
 
-  return null;
-  // return (
-  // <ChartBase data={type === "both" ? data : dataByEnvironments} {...rest}>
-  //   {type !== "both" &&
-  //     environments.map((it) => (
-  //       <Line
-  //         key={it.code}
-  //         connectNulls
-  //         type="monotone"
-  //         name={it.label}
-  //         dataKey={`${it.code}.${type}`}
-  //         stroke={it.color}
-  //         strokeWidth="2"
-  //         dot={false}
-  //         // // activeDot={isTooltipVisible}
-  //       />
-  //     ))}
-  // </ChartBase>
-  // );
+  return <LineChartBase data={data} {...rest} />;
 }

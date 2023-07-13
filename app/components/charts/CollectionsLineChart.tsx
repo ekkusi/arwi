@@ -1,12 +1,8 @@
-import { VictoryAxis, VictoryChart, VictoryLine } from "victory-native";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
 import { analyzeEvaluations } from "../../helpers/evaluationUtils";
-import { COLORS } from "../../theme";
-import CText from "../primitives/CText";
-import CView, { CViewProps } from "../primitives/CView";
-import { DataType } from "./LineChartBase";
+import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
 
 const CollectionsLineChart_Collection_Fragment = graphql(`
   fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {
@@ -50,44 +46,15 @@ const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[
   return data;
 };
 
-type CollectionsChartProps = CViewProps & {
+type CollectionsChartProps = Omit<LineChartBaseProps, "data"> & {
   collections: readonly FragmentType<typeof CollectionsLineChart_Collection_Fragment>[];
-  minItems?: number;
 };
 
-export default function CollectionsLineChart({ collections: collectionFragments, minItems = 3, ...rest }: CollectionsChartProps) {
+export default function CollectionsLineChart({ collections: collectionFragments, ...rest }: CollectionsChartProps) {
   const collections = getFragmentData(CollectionsLineChart_Collection_Fragment, collectionFragments);
 
   const sortedCollections = [...collections].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const data = mapData(sortedCollections);
 
-  return (
-    <CView {...rest} style={{ position: "relative", ...rest.style }}>
-      <VictoryChart>
-        <VictoryLine data={data} x="date" y="skills" style={{ data: { stroke: COLORS.primary } }} />
-        <VictoryLine data={data} x="date" y="behaviour" style={{ data: { stroke: COLORS.secondary } }} />
-        <VictoryAxis dependentAxis domain={{ y: [4, 10] }} />
-        <VictoryAxis tickCount={2} />
-      </VictoryChart>
-      {data.length < minItems && (
-        <CView
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(255,255,255,0.5)",
-          }}
-        >
-          <CText style={{ fontSize: "lg", marginHorizontal: "2xl", textAlign: "center" }}>
-            Kuvaajan näyttämiseen tarvitaan vähintään 3 arviointia
-          </CText>
-        </CView>
-      )}
-    </CView>
-  );
+  return <LineChartBase data={data} {...rest} />;
 }

@@ -73,8 +73,8 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             </CView>
           </CView>
           <CView style={{ flexGrow: 1, gap: 5 }}>
-            <CView style={{ flex: 2, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-              <CText style={{ fontSize: "lg", fontWeight: "700", color: "darkgray", flex: 1 }}>{group.name}</CText>
+            <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+              <CText style={{ fontWeight: "700", color: "darkgray", flex: 1 }}>{group.name}</CText>
             </CView>
             <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
               <MaterialCommunityIcon name="history" color="gray" />

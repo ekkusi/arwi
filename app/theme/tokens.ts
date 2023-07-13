@@ -19,12 +19,14 @@ export const COLORS = {
 } as const;
 
 export const FONT_SIZES = {
-  sm: 10,
-  sm2: 12,
-  md: 14,
-  lg: 18,
+  xs: 12,
+  sm: 14,
+  md: 18,
+  lg: 22,
   title: 24,
+  xl: 24,
   largeTitle: 28,
+  "2xl": 28,
 } as const;
 
 export const SPACING = {

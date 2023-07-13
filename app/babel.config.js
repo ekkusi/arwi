@@ -14,6 +14,7 @@ function babelConfig(api) {
           allowUndefined: false,
         },
       ],
+      "react-native-reanimated/plugin",
     ],
   };
 }

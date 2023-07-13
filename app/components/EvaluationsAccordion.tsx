@@ -1,5 +1,12 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FragmentType, getFragmentData, graphql } from "../gql";
+import { formatRatingStringWithNull } from "../helpers/dataMappers";
+import { formatDate } from "../helpers/dateHelpers";
+import { Accordion } from "./Accordion";
+import CButton from "./primitives/CButton";
+import CText from "./primitives/CText";
+import CView from "./primitives/CView";
 
 const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
   fragment EvaluationsAccordion_Evaluation on Evaluation {
@@ -33,6 +40,7 @@ export type EvaluationsAccordionHandlers = {
 
 export default forwardRef<EvaluationsAccordionHandlers, EvaluationsAccordionProps>(
   ({ evaluations: evaluationFragments, titleFrom = "collection", ...rest }: EvaluationsAccordionProps, ref) => {
+    const { t } = useTranslation();
     const evaluations = getFragmentData(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
     const sortedEvaluations = [...evaluations].sort((a, b) =>
       titleFrom === "collection"
@@ -67,7 +75,46 @@ export default forwardRef<EvaluationsAccordionHandlers, EvaluationsAccordionProp
     const closeAll = () => {
       setExpandedIndexes([]);
     };
-    return null;
+
+    return (
+      <Accordion
+        data={sortedEvaluations.map((it, index) => ({
+          title: titleFrom === "collection" ? `${formatDate(it.collection.date)} - ${it.collection.environment.label}` : it.student.name,
+          expanded: expandedIndexes.includes(index),
+          onHeaderPress: () => {
+            setExpandedIndexes([index]);
+          },
+          content: (
+            <>
+              <CText style={{ color: it.wasPresent ? "green" : "red" }}>{it.wasPresent ? "Paikalla" : "Poissa"}</CText>
+              {it.wasPresent ? (
+                <>
+                  <CText>
+                    {t("behaviour", "Työskentely")}: {formatRatingStringWithNull(it.behaviourRating)}
+                  </CText>
+                  <CText>
+                    {t("skills", "Taidot")}: {formatRatingStringWithNull(it.skillsRating)}
+                  </CText>
+                  {it.notes ? (
+                    <CView style={{ marginTop: "md" }}>
+                      <CText style={{ marginBottom: "sm" }}>{t("components.EvaluationsAccordion.verbalFeedback", "Sanallinen palaute")}:</CText>
+                      <CText>{it.notes}</CText>
+                    </CView>
+                  ) : (
+                    <CText style={{ marginTop: "md" }}>
+                      {t("components.EvaluationsAccordion.verbalFeedbackNotGiven", "Sanallista palautetta ei annettu")}
+                    </CText>
+                  )}
+                </>
+              ) : (
+                <CText>{t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}</CText>
+              )}
+              <CButton title={t("edit", "Muokkaa")} style={{ marginTop: "md" }} onPress={() => console.log("Route to evaluation edit")} />
+            </>
+          ),
+        }))}
+      />
+    );
 
     //   return (
     //     <>
