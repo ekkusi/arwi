@@ -68,9 +68,8 @@ export default function HomePage({ navigation }: NativeStackScreenProps<HomeStac
         style={{ position: "absolute", bottom: 20, right: 15 }}
         title={t("home-view.create-group", "Luo ryhmä")}
         onPress={() => navigation.navigate("group-create")}
-      >
-        <MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />
-      </ShadowButton>
+        leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
+      />
     </CView>
   );
 }

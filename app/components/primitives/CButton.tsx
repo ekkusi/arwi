@@ -1,28 +1,37 @@
 import React, { useMemo } from "react";
-import { TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { ActivityIndicator, TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { ColorKey, CTextStyle, CViewStyle } from "../../theme/types";
 import { createStyles, createViewStyles } from "../../theme/utils";
 import CText from "./CText";
 
 export type CButtonProps = Omit<TouchableOpacityProps, "style"> & {
+  loading?: boolean;
   title?: string;
   variant?: "filled" | "outline";
   colorScheme?: ColorKey;
   textStyle?: CTextStyle;
   style?: CViewStyle;
   shadowed?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 };
 
 export default function CButton({
+  loading,
   title,
   colorScheme = "green",
   variant = "filled",
   textStyle,
   children,
   style,
+  rightIcon,
+  leftIcon,
+  disabled,
   shadowed = false,
   ...rest
 }: CButtonProps) {
+  if (children && title)
+    console.warn("CButton children overrides title prop, title prop won't be rendered. You should only define one of these two.");
   const buttonVariantStyles: CViewStyle = useMemo(() => {
     switch (variant) {
       case "outline":
@@ -56,23 +65,31 @@ export default function CButton({
       ...styles.container,
       ...buttonVariantStyles,
       ...(shadowed ? styles.shadow : {}),
+      ...(disabled || loading ? styles.disabled : {}),
       ...style,
     });
-  }, [shadowed, style, buttonVariantStyles]);
+  }, [buttonVariantStyles, shadowed, disabled, loading, style]);
+
+  const titleStyle = useMemo(
+    () => ({
+      ...styles.title,
+      ...textVariantStyles,
+      ...textStyle,
+    }),
+    [textStyle, textVariantStyles]
+  );
 
   const Button = (
-    <TouchableOpacity style={buttonStyle} {...rest}>
-      {children}
-      {title && (
-        <CText
-          style={{
-            ...styles.title,
-            ...textVariantStyles,
-            ...textStyle,
-          }}
-        >
-          {title}
-        </CText>
+    <TouchableOpacity disabled={disabled || loading} style={buttonStyle} {...rest}>
+      {loading ? (
+        <ActivityIndicator color={titleStyle.color} size="large" />
+      ) : (
+        <>
+          {leftIcon}
+          {children || (title && <CText style={titleStyle}>{title}</CText>)}
+          {/* {title && <CText style={titleStyle}>{title}</CText>} */}
+          {rightIcon}
+        </>
       )}
     </TouchableOpacity>
   );
@@ -81,6 +98,9 @@ export default function CButton({
 }
 
 const styles = createStyles({
+  disabled: {
+    opacity: 0.7,
+  },
   container: {
     height: 48,
     alignItems: "center",

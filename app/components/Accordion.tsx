@@ -1,7 +1,9 @@
-import { PropsWithChildren, useState } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { LayoutAnimation } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../theme";
+import { COLORS, SPACING } from "../theme";
+import CPressable from "./primitives/CPressable";
 import CText from "./primitives/CText";
 import CTouchableOpacity from "./primitives/CTouchableOpacity";
 import CView, { CViewProps } from "./primitives/CView";
@@ -9,22 +11,22 @@ import CView, { CViewProps } from "./primitives/CView";
 type AccordionData = {
   title: string;
   content: JSX.Element | string;
-  expanded: boolean;
-  onHeaderPress: () => void;
+  icons?: React.ReactNode;
 };
 
-type AccordionItemProps = PropsWithChildren & Omit<AccordionData, "content">;
+export type AccordionItemProps = CViewProps &
+  Omit<AccordionData, "content"> & {
+    expanded: boolean;
+    onHeaderPress: () => void;
+  };
 
-type AccordionProps = CViewProps & { data: AccordionData[] };
-
-export function AccordionItem({ children, title, expanded, onHeaderPress }: AccordionItemProps): JSX.Element {
+export function AccordionItem({ children, title, expanded, onHeaderPress, icons, ...rest }: AccordionItemProps): JSX.Element {
   return (
-    <CView style={{ paddingBottom: "md" }}>
+    <CView style={{ marginBottom: "xxs" }} {...rest}>
       <CTouchableOpacity
         style={{
           padding: "lg",
           backgroundColor: "primary",
-          color: "darkgrey",
           flex: 1,
           flexDirection: "row",
           justifyContent: "space-between",
@@ -32,56 +34,74 @@ export function AccordionItem({ children, title, expanded, onHeaderPress }: Acco
         onPress={onHeaderPress}
       >
         <CText>{title}</CText>
-        <MaterialCommunityIcon name={expanded ? "chevron-up" : "chevron-down"} size={20} color={COLORS.darkgray} />
+        <CView style={{ flexDirection: "row", alignItems: "center" }}>
+          {icons}
+          <MaterialCommunityIcon
+            name={expanded ? "chevron-up" : "chevron-down"}
+            size={24}
+            color={COLORS.darkgray}
+            style={{ marginLeft: SPACING.sm }}
+          />
+        </CView>
       </CTouchableOpacity>
       {expanded && <CView style={{ padding: "md" }}>{children}</CView>}
     </CView>
   );
 }
 
-export function Accordion({ data, ...rest }: AccordionProps): JSX.Element {
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+export type AccordionProps = CViewProps & { data: AccordionData[]; allowMultiple?: boolean; showAllButton?: boolean };
 
-  function handleHeaderPress(index: number) {
+export function Accordion({ data, allowMultiple = false, showAllButton = allowMultiple, ...rest }: AccordionProps): JSX.Element {
+  const { t } = useTranslation();
+  const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
+
+  const expandIndex = (index: number) => {
+    if (allowMultiple) {
+      setExpandedIndexes([...expandedIndexes, index]);
+    } else {
+      setExpandedIndexes([index]);
+    }
+  };
+
+  const removeIndex = (index: number) => {
+    setExpandedIndexes(expandedIndexes.filter((i) => i !== index));
+  };
+
+  const handleHeaderPress = (index: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpandedIndex(expandedIndex === index ? null : index);
-  }
+    if (expandedIndexes.includes(index)) {
+      removeIndex(index);
+    } else {
+      expandIndex(index);
+    }
+  };
+
+  const showAll = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpandedIndexes(data.map((_, index) => index));
+  };
+
+  const hideAll = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpandedIndexes([]);
+  };
 
   return (
     <CView {...rest}>
+      {showAllButton && (
+        <CView style={{ flexDirection: "row", justifyContent: "flex-end", paddingBottom: "sm" }}>
+          <CPressable onPress={expandedIndexes.length > 0 ? hideAll : showAll}>
+            <CText>
+              {expandedIndexes.length > 0 ? t("components.Accordion.hideAll", "Piilota kaikki") : t("components.Accordion.showAll", "Näytä kaikki")}
+            </CText>
+          </CPressable>
+        </CView>
+      )}
       {data.map((item, index) => (
-        <AccordionItem key={index} title={item.title} expanded={expandedIndex === index} onHeaderPress={() => handleHeaderPress(index)}>
+        <AccordionItem key={index} expanded={expandedIndexes.includes(index)} onHeaderPress={() => handleHeaderPress(index)} {...item}>
           {item.content}
         </AccordionItem>
       ))}
     </CView>
   );
 }
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   accordContainer: {
-//     paddingBottom: 4,
-//   },
-//   accordHeader: {
-//     padding: 12,
-//     backgroundColor: "#666",
-//     color: "#eee",
-//     flex: 1,
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//   },
-//   accordTitle: {
-//     fontSize: 20,
-//   },
-//   accordBody: {
-//     padding: 12,
-//   },
-//   textSmall: {
-//     fontSize: 16,
-//   },
-//   seperator: {
-//     height: 12,
-//   },
-// });

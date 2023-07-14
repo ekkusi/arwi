@@ -24,12 +24,16 @@ const RegisterPage_Register_Mutation = graphql(`
   mutation RegisterPage_Register($input: CreateTeacherInput!) {
     register(data: $input) {
       accessToken
+      teacher {
+        email
+        id
+      }
     }
   }
 `);
 
 export default function SignupPage({ navigation }: NativeStackScreenProps<AuthStackParams, "signup">) {
-  const { setToken } = useAuth();
+  const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
@@ -51,7 +55,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
       const { data } = await register({ variables: { input: { email: values.email, password: values.password } } });
       const accessToken = data?.register?.accessToken;
       if (!accessToken) throw new Error("Unexpected error"); // Should get caught before this
-      setToken(accessToken);
+      setUser(accessToken, data.register.teacher);
     } catch (error) {
       const msg = getErrorMessage(error);
       setGeneralError(msg);

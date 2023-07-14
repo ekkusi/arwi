@@ -1,7 +1,8 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
-import { FlatList, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
+import { useTranslation } from "react-i18next";
+import { FlatList, Keyboard } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
@@ -48,6 +49,7 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
   </CView>
 );
 export default function GroupStudentsSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "students">) {
+  const { t } = useTranslation();
   const [newStudent, setNewStudent] = useState<string>("");
   const user = useAuthenticatedUser();
 
@@ -111,7 +113,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
       <CView style={{ flex: 8, padding: 15, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
         <CView style={{ flex: 1, gap: 20, width: "100%" }}>
           <CView style={{ flex: 6, gap: 10 }}>
-            <CText style={{ fontSize: "title", fontWeight: "300" }}>Oppilaat</CText>
+            <CText style={{ fontSize: "title", fontWeight: "300" }}>{t("students", "Oppilaat")}</CText>
             <FlatList
               inverted
               data={[...group.students].reverse()}
@@ -125,7 +127,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
             <CView style={{ height: 60, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
               <CView style={{ flex: 5 }}>
                 <CTextInput
-                  placeholder="Uusi oppilas"
+                  placeholder={t("GroupStudentsSelectionView.newStudent", "Uusi oppilas")}
                   value={newStudent}
                   onChange={(event) => {
                     setNewStudent(event.nativeEvent.text);
@@ -164,12 +166,14 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
               alignItems: "flex-end",
             }}
           >
-            <CButton style={{}} onPress={() => navigation.goBack()}>
+            <CButton onPress={() => navigation.goBack()}>
               <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
             </CButton>
-            <CButton title="Luo ryhmä" style={{}} onPress={() => handleSubmit()}>
-              <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />
-            </CButton>
+            <CButton
+              title={t("GroupStudentsSelectionView.createGroup", "Luo ryhmä")}
+              onPress={() => handleSubmit()}
+              leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
+            />
           </CView>
         )}
         <ProgressBar color={COLORS.primary} progress={3 / 3} />
