@@ -1,12 +1,13 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { FragmentType, getFragmentData, graphql } from "../gql";
 import { formatRatingStringWithNull } from "../helpers/dataMappers";
 import { formatDate } from "../helpers/dateHelpers";
-import { Accordion } from "./Accordion";
+import { Accordion, AccordionProps } from "./Accordion";
 import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
+import { SPACING } from "../theme";
 
 const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
   fragment EvaluationsAccordion_Evaluation on Evaluation {
@@ -28,160 +29,66 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
   }
 `);
 
-type EvaluationsAccordionProps = {
+type EvaluationsAccordionProps = Omit<AccordionProps, "data"> & {
   evaluations: FragmentType<typeof EvaluationsAccordion_Evaluation_Fragment>[];
   titleFrom?: "student" | "collection";
 };
 
-export type EvaluationsAccordionHandlers = {
-  expandEvaluations: (evaluationIds: string[]) => void;
-  scrollTo: (evaluationId: string, delay?: number) => void;
-};
+export default function EvaluationsAccordion({
+  evaluations: evaluationFragments,
+  titleFrom = "collection",
+  allowMultiple = true,
+  ...rest
+}: EvaluationsAccordionProps) {
+  const { t } = useTranslation();
+  const evaluations = getFragmentData(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
+  const sortedEvaluations = [...evaluations].sort((a, b) =>
+    titleFrom === "collection"
+      ? new Date(b.collection.date).getTime() - new Date(a.collection.date).getTime()
+      : a.student.name.localeCompare(b.student.name)
+  );
 
-export default forwardRef<EvaluationsAccordionHandlers, EvaluationsAccordionProps>(
-  ({ evaluations: evaluationFragments, titleFrom = "collection", ...rest }: EvaluationsAccordionProps, ref) => {
-    const { t } = useTranslation();
-    const evaluations = getFragmentData(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
-    const sortedEvaluations = [...evaluations].sort((a, b) =>
-      titleFrom === "collection"
-        ? new Date(b.collection.date).getTime() - new Date(a.collection.date).getTime()
-        : a.student.name.localeCompare(b.student.name)
-    );
-    const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
-    const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
-
-    const scrollTo = (evaluationId: string) => {
-      const index = sortedEvaluations.findIndex((it) => it.id === evaluationId);
-
-      if (index === -1) return;
-      itemRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    useImperativeHandle(ref, () => ({
-      expandEvaluations(expandedEvaluationIds) {
-        const indexes = expandedEvaluationIds.map((id) => sortedEvaluations.findIndex((it) => it.id === id)).filter((i) => i !== -1);
-
-        setExpandedIndexes(indexes);
-      },
-      scrollTo(evaluationId) {
-        scrollTo(evaluationId);
-      },
-    }));
-
-    const openAll = () => {
-      setExpandedIndexes(sortedEvaluations.map((_, i) => i));
-    };
-
-    const closeAll = () => {
-      setExpandedIndexes([]);
-    };
-
-    return (
-      <Accordion
-        data={sortedEvaluations.map((it, index) => ({
-          title: titleFrom === "collection" ? `${formatDate(it.collection.date)} - ${it.collection.environment.label}` : it.student.name,
-          expanded: expandedIndexes.includes(index),
-          onHeaderPress: () => {
-            setExpandedIndexes([index]);
-          },
-          content: (
-            <>
-              <CText style={{ color: it.wasPresent ? "green" : "red" }}>{it.wasPresent ? "Paikalla" : "Poissa"}</CText>
-              {it.wasPresent ? (
-                <>
-                  <CText>
-                    {t("behaviour", "Työskentely")}: {formatRatingStringWithNull(it.behaviourRating)}
+  return (
+    <Accordion
+      allowMultiple={allowMultiple}
+      data={sortedEvaluations.map((it) => ({
+        title: titleFrom === "collection" ? `${formatDate(it.collection.date)} - ${it.collection.environment.label}` : it.student.name,
+        icons: it.wasPresent && (
+          <>
+            {it.isStellar && <MaterialCommunityIcon name="star-outline" size={20} />}
+            {!!it.notes && <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />}
+          </>
+        ),
+        content: (
+          <>
+            <CText style={{ color: it.wasPresent ? "green" : "red" }}>{it.wasPresent ? "Paikalla" : "Poissa"}</CText>
+            {it.wasPresent ? (
+              <>
+                <CText>
+                  {t("behaviour", "Työskentely")}: {formatRatingStringWithNull(it.behaviourRating)}
+                </CText>
+                <CText>
+                  {t("skills", "Taidot")}: {formatRatingStringWithNull(it.skillsRating)}
+                </CText>
+                {it.notes ? (
+                  <CView style={{ marginTop: "md" }}>
+                    <CText style={{ marginBottom: "sm" }}>{t("components.EvaluationsAccordion.verbalFeedback", "Sanallinen palaute")}:</CText>
+                    <CText>{it.notes}</CText>
+                  </CView>
+                ) : (
+                  <CText style={{ marginTop: "md" }}>
+                    {t("components.EvaluationsAccordion.verbalFeedbackNotGiven", "Sanallista palautetta ei annettu")}
                   </CText>
-                  <CText>
-                    {t("skills", "Taidot")}: {formatRatingStringWithNull(it.skillsRating)}
-                  </CText>
-                  {it.notes ? (
-                    <CView style={{ marginTop: "md" }}>
-                      <CText style={{ marginBottom: "sm" }}>{t("components.EvaluationsAccordion.verbalFeedback", "Sanallinen palaute")}:</CText>
-                      <CText>{it.notes}</CText>
-                    </CView>
-                  ) : (
-                    <CText style={{ marginTop: "md" }}>
-                      {t("components.EvaluationsAccordion.verbalFeedbackNotGiven", "Sanallista palautetta ei annettu")}
-                    </CText>
-                  )}
-                </>
-              ) : (
-                <CText>{t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}</CText>
-              )}
-              <CButton title={t("edit", "Muokkaa")} style={{ marginTop: "md" }} onPress={() => console.log("Route to evaluation edit")} />
-            </>
-          ),
-        }))}
-      />
-    );
-
-    //   return (
-    //     <>
-    //       <Flex justifyContent="end" pb="1" pr="1">
-    //         <Text color="light-text" onClick={expandedIndexes.length > 0 ? closeAll : openAll}>
-    //           {expandedIndexes.length > 0 ? "Piilota kaikki" : "Avaa kaikki"}
-    //         </Text>
-    //       </Flex>
-    //       <Accordion index={expandedIndexes} allowMultiple onChange={(i) => setExpandedIndexes(Array.isArray(i) ? i : [i])} {...rest}>
-    //         {sortedEvaluations.map((it, i) => (
-    //           <AccordionItem
-    //             title={titleFrom === "collection" ? `${formatDate(it.collection.date)} - ${it.collection.environment.label}` : it.student.name}
-    //             key={it.id}
-    //             ref={(itemRef) => {
-    //               itemRefs.current[i] = itemRef;
-    //             }}
-    //             titleProps={{
-    //               bg: it.wasPresent ? "green.100" : "red.100",
-    //               _hover: {
-    //                 bg: it.wasPresent ? "green.200" : "red.200",
-    //               },
-    //             }}
-    //             borderColor="light-gray"
-    //             titleIcons={
-    //               it.wasPresent && (
-    //                 <>
-    //                   {it.isStellar && <Icon as={AiOutlineStar} mr="1" />}
-    //                   {!!it.notes && <Icon as={CgNotes} />}
-    //                 </>
-    //               )
-    //             }
-    //           >
-    //             <Text color={it.wasPresent ? "green" : "red"}>{it.wasPresent ? "Paikalla" : "Poissa"}</Text>
-    //             {it.wasPresent ? (
-    //               <>
-    //                 <Text>Työskentely: {formatRatingStringWithNull(it.behaviourRating)}</Text>
-    //                 <Text>Taidot: {formatRatingStringWithNull(it.skillsRating)}</Text>
-    //                 {it.notes ? (
-    //                   <Box mt="3">
-    //                     <Text mb="1">Sanallinen palaute:</Text>
-    //                     <Text>{it.notes}</Text>
-    //                   </Box>
-    //                 ) : (
-    //                   <Text mt="3">Sanallista palautetta ei annettu</Text>
-    //                 )}
-    //               </>
-    //             ) : (
-    //               <Text>Oppilas ei ollut paikalla, ei arviointeja</Text>
-    //             )}
-    //             <Button
-    //               as={Link}
-    //               href={{
-    //                 pathname: `/evaluation/${it.id}/edit`,
-    //                 query: {
-    //                   prevPath: typeof window !== "undefined" && window.location.pathname,
-    //                 },
-    //               }}
-    //               mt="3"
-    //               size="sm"
-    //             >
-    //               Muokkaa
-    //             </Button>
-    //           </AccordionItem>
-    //         ))}
-    //       </Accordion>
-    //     </>
-    //   );
-    // }
-  }
-);
+                )}
+              </>
+            ) : (
+              <CText>{t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}</CText>
+            )}
+            <CButton title={t("edit", "Muokkaa")} style={{ marginTop: "md" }} onPress={() => console.log("Route to evaluation edit")} />
+          </>
+        ),
+      }))}
+      {...rest}
+    />
+  );
+}

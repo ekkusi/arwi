@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { getSubjects, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
 import CImage from "../../../../components/primitives/CImage";
@@ -12,6 +13,7 @@ import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 
 export default function GroupSubjectSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "subject">) {
+  const { t } = useTranslation();
   const { group, setGroup } = useGroupCreationContext();
 
   const handlePress = (item: SubjectMinimal) => {
@@ -23,7 +25,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
     <CView style={{ flex: 1 }}>
       <CView style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 30, backgroundColor: "white" }}>
         <CView style={{ flex: 10, width: "100%", paddingHorizontal: 15, gap: 10, justifyContent: "center" }}>
-          <CText style={{ color: "darkgray", fontSize: "title" }}>Valitse oppiaine</CText>
+          <CText style={{ color: "darkgray", fontSize: "title" }}>{t("GroupSubjectSelectionView.selectSubject", "Valitse oppiaine")}</CText>
           <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%" }}>
             {subjects.map((item) => (
               <CButton
@@ -33,26 +35,29 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
                 colorScheme={item.code === group.subject?.code ? "darkgray" : "lightgray"}
                 style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
                 onPress={() => handlePress(item)}
-                textStyle={{ fontSize: "sm2", fontWeight: "400", color: item.code === group.subject?.code ? "darkgray" : "gray" }}
-              >
-                <CView style={{ width: 20, height: 20 }}>
-                  <CImage
-                    style={{
-                      width: undefined,
-                      height: undefined,
-                      flex: 1,
-                      resizeMode: "contain",
-                      tintColor: item.code === group.subject?.code ? "black" : "darkgray",
-                    }}
-                    source={subjectToIcon(item)}
-                  />
-                </CView>
-              </CButton>
+                textStyle={{ fontSize: "xs", fontWeight: "400", color: item.code === group.subject?.code ? "darkgray" : "gray" }}
+                leftIcon={
+                  <CView style={{ width: 20, height: 20 }}>
+                    <CImage
+                      style={{
+                        width: undefined,
+                        height: undefined,
+                        flex: 1,
+                        resizeMode: "contain",
+                        tintColor: item.code === group.subject?.code ? "black" : "darkgray",
+                      }}
+                      source={subjectToIcon(item)}
+                    />
+                  </CView>
+                }
+              />
             ))}
           </CView>
           <CText style={{ color: "darkgray", fontSize: "sm", paddingHorizontal: 15 }}>
-            Valitsemalla oppiaineen, saat juuri kyseiselle oppiaineelle personoidun arvostelunäkymän sekä oppiainetta vastaavan opetussuunnitelman
-            automaattisesti arvioinnin tueksi.
+            {t(
+              "GroupSubjectSelectionView.description",
+              "Valitsemalla oppiaineen, saat juuri kyseiselle oppiaineelle personoidun arvostelunäkymän sekä oppiainetta vastaavan opetussuunnitelman automaattisesti arvioinnin tueksi."
+            )}
           </CText>
         </CView>
         <CView style={{ flex: 2, justifyContent: "flex-end", gap: 20, width: "100%" }}>
@@ -62,7 +67,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
             <CButton style={{}} onPress={() => navigation.goBack()}>
               <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
             </CButton>
-            <CButton title="" style={{}} onPress={() => navigation.navigate("students")}>
+            <CButton style={{}} onPress={() => navigation.navigate("students")}>
               <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
             </CButton>
           </CView>

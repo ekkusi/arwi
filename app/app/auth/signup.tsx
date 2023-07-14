@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useTranslation } from "react-i18next";
 import CButton from "../../components/primitives/CButton";
 import CTextInput from "../../components/primitives/CTextInput";
 import { graphql } from "../../gql";
@@ -24,15 +25,21 @@ const RegisterPage_Register_Mutation = graphql(`
   mutation RegisterPage_Register($input: CreateTeacherInput!) {
     register(data: $input) {
       accessToken
+      teacher {
+        email
+        id
+      }
     }
   }
 `);
 
 export default function SignupPage({ navigation }: NativeStackScreenProps<AuthStackParams, "signup">) {
-  const { setToken } = useAuth();
+  const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const [register] = useMutation(RegisterPage_Register_Mutation);
 
@@ -47,15 +54,17 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setLoading(true);
     try {
       const { data } = await register({ variables: { input: { email: values.email, password: values.password } } });
       const accessToken = data?.register?.accessToken;
       if (!accessToken) throw new Error("Unexpected error"); // Should get caught before this
-      setToken(accessToken);
+      setUser(accessToken, data.register.teacher);
     } catch (error) {
       const msg = getErrorMessage(error);
       setGeneralError(msg);
     }
+    setLoading(false);
   };
   return (
     <LandingComponent
@@ -63,14 +72,14 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15 }}>
           <CView style={{ flex: 2, width: "90%", gap: 10, justifyContent: "center" }}>
             <CTextInput
-              title="Sähköpostiosoite"
+              title={t("email", "Sähköpostiosoite")}
               placeholder="arwioija@test.fi"
               textValidation={nameValidator}
               style={{ width: "100%" }}
               onChange={handleEmailChange}
             />
             <CTextInput
-              title="Salasana"
+              title={t("password", "Salasana")}
               placeholder="password"
               style={{ width: "100%" }}
               textValidation={nameValidator}
@@ -80,7 +89,8 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
           </CView>
           <CView style={{ flex: 1, width: "90%", gap: 5 }}>
             <CButton
-              title="Rekisteröidy"
+              loading={loading}
+              title={t("register", "Rekisteröidy")}
               colorScheme="secondary"
               variant="outline"
               style={{ width: "100%" }}
@@ -90,25 +100,29 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
               }}
             />
             <CView style={{ flexDirection: "row", justifyContent: "center", gap: 2, marginBottom: 5 }}>
-              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Rekisteröitymällä hyväksyt</CText>
+              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>
+                {t("SignupView.byRegisteringYouAccept", "Rekisteröitymällä hyväksyt")}
+              </CText>
               <CTouchableOpacity
                 onPress={() => {
                   // TODO: show terms
                   console.log("käyttöehdot:)");
                 }}
               >
-                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>käyttöehtomme</CText>
+                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>{t("SignupView.ourConditions", "käyttöehtomme")}</CText>
               </CTouchableOpacity>
               <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>.</CText>
             </CView>
             <CView style={{ flexDirection: "row", justifyContent: "center" }}>
-              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Oletko jo rekisteröitynyt? </CText>
+              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>
+                {t("SignupView.haveYouAlreadyRegistered", "Oletko jo rekisteröitynyt?")}{" "}
+              </CText>
               <CTouchableOpacity
                 onPress={() => {
                   navigation.navigate("login");
                 }}
               >
-                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Kirjaudu sisään</CText>
+                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>{t("login", "Kirjaudu sisään")}</CText>
               </CTouchableOpacity>
               <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>.</CText>
             </CView>

@@ -9,13 +9,14 @@ import CView from "./primitives/CView";
 type SelectProps = ViewProps & {
   options: string[];
   title?: string;
+  placeholder?: string;
   lightTheme?: boolean;
   errorStyle?: StyleProp<TextStyle>;
   onSelect?: (item: string) => void;
 };
 
 export default function Select(props: SelectProps) {
-  const { options, errorStyle, title, onSelect, lightTheme = false, ...generalProps } = props;
+  const { options, errorStyle, title, onSelect, lightTheme = false, placeholder, ...generalProps } = props;
   const [errorText, setError] = useState<string | undefined>(undefined);
   const [selected, setSelected] = useState<string | undefined>(undefined);
   const [selectModalOpen, setSelectModalOpen] = useState(false);
@@ -35,9 +36,7 @@ export default function Select(props: SelectProps) {
         }}
         onPress={() => setSelectModalOpen(true)}
       >
-        <CText style={{ fontSize: "lg", fontWeight: "300", color: selected ? COLORS.darkgray : COLORS.lightgray }}>
-          {selected || "Valitse luokka"}
-        </CText>
+        <CText style={{ fontSize: "lg", fontWeight: "300", color: selected ? COLORS.darkgray : COLORS.lightgray }}>{selected || placeholder}</CText>
         <MaterialCommunityIcon name="chevron-down" color={COLORS.darkgray} size={30} />
       </CTouchableOpacity>
       {errorText && <CText style={{ color: "error", fontWeight: "600", fontSize: "sm" }}>{errorText}</CText>}

@@ -1,6 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS, SPACING } from "../theme";
+import { tabBarStyles } from "./config";
 import DesignStack from "./design/_stack";
 import HomeStack from "./home/_stack";
 import ProfileStack from "./profile/_stack";
@@ -9,6 +11,7 @@ import { RootStackParams } from "./types";
 const { Navigator, Screen } = createBottomTabNavigator<RootStackParams>();
 
 export default function MainStack() {
+  const { t } = useTranslation();
   return (
     <Navigator
       id="main-tab-bar"
@@ -30,19 +33,14 @@ export default function MainStack() {
         },
         tabBarActiveTintColor: COLORS.green,
         tabBarInactiveTintColor: COLORS.darkgray,
-        tabBarStyle: {
-          backgroundColor: COLORS.white,
-          height: 60,
-          paddingTop: SPACING.md,
-          // display: route !== "/group/create" ? "flex" : "none",
-        },
+        tabBarStyle: tabBarStyles,
         tabBarLabelStyle: { marginBottom: SPACING.lg },
         headerShown: false,
       })}
     >
-      <Screen name="home" component={HomeStack} options={{ title: "Home" }} />
-      <Screen name="profile" component={ProfileStack} options={{ title: "Profile" }} />
-      <Screen name="design" component={DesignStack} options={{ title: "Design" }} />
+      <Screen name="home" component={HomeStack} options={{ title: t("MainStack.home", "Koti") }} />
+      <Screen name="profile" component={ProfileStack} options={{ title: t("MainStack.profile", "Profiili") }} />
+      <Screen name="design" component={DesignStack} options={{ title: t("MainStack.design", "Design") }} />
     </Navigator>
   );
 }

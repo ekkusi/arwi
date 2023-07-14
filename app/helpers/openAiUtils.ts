@@ -42,7 +42,9 @@ export async function generateStudentSummary(evaluationFragments: FragmentType<t
     }
     throw new Error(`Error with generateSumamry: no message found from result`);
   } catch (error: any) {
-    console.error("error", error?.response?.data);
+    // console.log();
+
+    console.error("error", error?.response?.data || error);
     throw new Error(`Unknown error: ${error?.response?.data?.error}` || "");
   }
 }
