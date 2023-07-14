@@ -4,7 +4,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
-import Clipboard from "@react-native-clipboard/clipboard";
+import * as Clipboard from "expo-clipboard";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
@@ -77,7 +77,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const copySummaryToClipboard = async () => {
     if (!summary) return;
-    Clipboard.setString(summary);
+    await Clipboard.setStringAsync(summary);
     setIsCopied(true);
   };
 

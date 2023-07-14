@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useTranslation } from "react-i18next";
 import CButton from "../../components/primitives/CButton";
 import CImage from "../../components/primitives/CImage";
 import CText from "../../components/primitives/CText";
@@ -7,6 +8,7 @@ import LandingComponent from "../../components/LandingComponent";
 import { AuthStackParams } from "./types";
 
 export default function LandingPage({ navigation }: NativeStackScreenProps<AuthStackParams, "welcome">) {
+  const { t } = useTranslation();
   return (
     <LandingComponent
       bottomChildren={
@@ -14,7 +16,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
           <CButton
             colorScheme="secondary"
             variant="outline"
-            title="Kirjaudu sisään"
+            title={t("login", "Kirjaudu sisään")}
             style={{ width: "90%" }}
             onPress={() => {
               navigation.navigate("login");
@@ -23,7 +25,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
           <CButton
             colorScheme="secondary"
             variant="outline"
-            title="Rekisteröidy"
+            title={t("register", "Rekisteröidy")}
             style={{ width: "90%" }}
             onPress={() => {
               navigation.navigate("signup");
@@ -39,7 +41,9 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
               style={{ width: undefined, height: undefined, resizeMode: "contain", flex: 1 }}
             />
           </CView>
-          <CText style={{ color: "white", fontWeight: "200", fontSize: 16, marginTop: -60 }}>{"Laadukkaampaa arviointia".toLocaleUpperCase()}</CText>
+          <CText style={{ color: "white", fontWeight: "200", fontSize: 16, marginTop: -60 }}>
+            {t("LandingPage.betterEvaluation", "Laadukkaampaa arviointia").toLocaleUpperCase()}
+          </CText>
         </CView>
       }
     />

@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useTranslation } from "react-i18next";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -37,6 +38,8 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const [login] = useMutation(LoginPage_Login_Mutation);
 
@@ -51,6 +54,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setLoading(true);
     try {
       const { data } = await login({ variables: { email: values.email, password: values.password } });
       if (!data) throw new Error("Unexpected error");
@@ -59,6 +63,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
       const msg = getErrorMessage(error);
       setGeneralError(msg);
     }
+    setLoading(false);
   };
   return (
     <LandingComponent
@@ -66,14 +71,14 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15 }}>
           <CView style={{ flex: 2, width: "90%", gap: 10, justifyContent: "center" }}>
             <CTextInput
-              title="Sähköpostiosoite"
+              title={t("email", "Sähköposti")}
               placeholder="arwioija@test.fi"
               textValidation={nameValidator}
               style={{ width: "100%" }}
               onChange={handleEmailChange}
             />
             <CTextInput
-              title="Salasana"
+              title={t("password", "Salasana")}
               placeholder="password"
               style={{ width: "100%" }}
               textValidation={nameValidator}
@@ -83,7 +88,8 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
           </CView>
           <CView style={{ flex: 1, width: "90%", gap: 5 }}>
             <CButton
-              title="Kirjaudu sisään"
+              loading={loading}
+              title={t("login", "Kirjaudu sisään")}
               colorScheme="secondary"
               variant="outline"
               style={{ width: "100%" }}
@@ -93,13 +99,15 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
               }}
             />
             <CView style={{ flexDirection: "row", justifyContent: "center" }}>
-              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>Eikö sinulla ole vielä käyttäjää? </CText>
+              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>
+                {t("LoginView.noUserYet", "Eikö sinulla ole vielä käyttäjää?")}{" "}
+              </CText>
               <CTouchableOpacity
                 onPress={() => {
                   navigation.navigate("signup");
                 }}
               >
-                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>Rekisteröidy</CText>
+                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>{t("register", "Rekisteröidy")}</CText>
               </CTouchableOpacity>
               <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
             </CView>

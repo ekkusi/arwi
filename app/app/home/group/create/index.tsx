@@ -11,7 +11,7 @@ import CTextInput from "../../../../components/primitives/CTextInput";
 import CView from "../../../../components/primitives/CView";
 import ProgressBar from "../../../../components/ProgressBar";
 import { nameValidator } from "../../../../helpers/textValidation";
-import { COLORS, SPACING } from "../../../../theme";
+import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 import { tabBarStyles } from "../../../config";

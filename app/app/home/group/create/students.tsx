@@ -51,6 +51,7 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
 export default function GroupStudentsSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "students">) {
   const { t } = useTranslation();
   const [newStudent, setNewStudent] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const user = useAuthenticatedUser();
 
   const [createGroup] = useMutation(CreateGroupPage_CreateGroup_Mutation);
@@ -74,7 +75,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
   }, []);
 
   const handleSubmit = async () => {
-    // TODO: Show loading indicator while creation is in progress
+    setLoading(true);
     try {
       if (!group.subject) throw new Error("Unexpected error"); // Should get caught before this
       if (!group.class) throw new Error("Unexpected error"); // Should get caught before this
@@ -97,6 +98,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
       console.error(msg);
       // TODO: Show error in UI
     }
+    setLoading(false);
   };
 
   const removeStudent = (studentToRemove: string) => {
@@ -170,6 +172,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
               <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
             </CButton>
             <CButton
+              loading={loading}
               title={t("GroupStudentsSelectionView.createGroup", "Luo ryhmä")}
               onPress={() => handleSubmit()}
               leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
