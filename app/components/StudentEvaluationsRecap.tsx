@@ -49,9 +49,9 @@ export default function StudentEvaluationsRecap({
   const evaluations = getFragmentData(StudentEvaluationRecap_Evaluation_Fragment, evaluationFragments);
   const student = getFragmentData(StudentEvaluationRecap_Student_Fragment, studentFragment);
 
-  const { absencesAmount, presencesAmount, skillsAverage, behaviourAverage, gradeSuggestion, isStellarCount } = analyzeEvaluations([...evaluations]);
+  const { absencesAmount, presencesAmount, skillsAverage, behaviourAverage, gradeSuggestion } = analyzeEvaluations([...evaluations]);
 
-  const starRowCount = Math.ceil(isStellarCount / 12);
+  // const starRowCount = Math.ceil(isStellarCount / 12);
 
   return (
     <FlippingCard
@@ -63,15 +63,15 @@ export default function StudentEvaluationsRecap({
           <EvaluationsLineChart evaluations={evaluations} />
           <CView style={{ width: "100%", paddingHorizontal: "md", marginBottom: "md" }}>
             <CView style={{ flexDirection: "row" }}>
-              <CText style={{ fontWeight: "600" }}>Paikalla: </CText>
+              <CText style={{ fontWeight: "600" }}>{t("components.StudentEvaluationsRecap.present", "Paikalla")}: </CText>
               <CText>{presencesAmount}</CText>
             </CView>
             <CView style={{ flexDirection: "row" }}>
-              <CText style={{ fontWeight: "600" }}>Poissa: </CText>
+              <CText style={{ fontWeight: "600" }}>{t("components.StudentEvaluationsRecap.notPresent", "Poissa")}: </CText>
               <CText>{absencesAmount}</CText>
             </CView>
             <CView style={{ flexDirection: "row" }}>
-              <CText style={{ fontWeight: "600" }}>Taitojen keskiarvo: </CText>
+              <CText style={{ fontWeight: "600" }}>{t("components.StudentEvaluationsRecap.skillsAverage", "Taitojen keskiarvo")}: </CText>
               <CText>
                 {!Number.isNaN(skillsAverage)
                   ? `${skillsAverage.toFixed(2)}`
@@ -79,7 +79,7 @@ export default function StudentEvaluationsRecap({
               </CText>
             </CView>
             <CView style={{ flexDirection: "row" }}>
-              <CText style={{ fontWeight: "600" }}>Työskentelyn keskiarvo: </CText>
+              <CText style={{ fontWeight: "600" }}>{t("components.StudentEvaluationsRecap.behaviourAverage", "Työskentelyn keskiarvo")}: </CText>
               <CText>
                 {!Number.isNaN(behaviourAverage)
                   ? `${behaviourAverage.toFixed(2)}`
@@ -88,7 +88,7 @@ export default function StudentEvaluationsRecap({
             </CView>
           </CView>
           <CView style={{ alignItems: "center", justifyContent: "center" }}>
-            <CText style={{ marginBottom: "sm" }}>Numeroehdotus:</CText>
+            <CText style={{ marginBottom: "sm" }}>{t("components.StudentEvaluationsRecap.numberSuggestment", "Numeroehdotus")}:</CText>
             <CView style={{ borderWidth: 2, borderColor: "lightgray", borderRadius: 50, padding: "3xl", alignContent: "center" }}>
               <CView style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center" }}>
                 <CText style={{ fontSize: "2xl" }}>{gradeSuggestion > 0 ? gradeSuggestion : "–"}</CText>
