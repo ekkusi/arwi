@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { Animated } from "react-native";
 import { CViewStyle } from "../theme/types";
 import { createViewStyles } from "../theme/utils";
@@ -19,9 +19,13 @@ const styles: CViewStyle = {
   padding: "md",
 };
 
-export default function FlippingCard({ front, back, height, style }: FlippingCardProps) {
-  const frontStyle = createViewStyles({ ...styles, height, position: "absolute", ...style });
-  const backStyle = createViewStyles({ ...styles, height, backfaceVisibility: "hidden", ...style });
+export type FlippingCardHandle = {
+  spinCard: () => void;
+};
+
+const FlippingCard = forwardRef<FlippingCardHandle, FlippingCardProps>(({ front, back, height, style }, ref) => {
+  const frontStyle = createViewStyles({ ...styles, height, position: "absolute", zIndex: 1, ...style });
+  const backStyle = createViewStyles({ ...styles, height, backfaceVisibility: "hidden", zIndex: 1, ...style });
 
   const flipAnimation = useRef(new Animated.Value(0)).current;
 
@@ -71,10 +75,16 @@ export default function FlippingCard({ front, back, height, style }: FlippingCar
     else flipToFront();
   };
 
+  useImperativeHandle(ref, () => ({
+    spinCard,
+  }));
+
   return (
     <CPressable onPress={spinCard}>
       <Animated.View style={[frontStyle, flipToFrontStyle]}>{front}</Animated.View>
       <Animated.View style={[backStyle, flipToBackStyle]}>{back}</Animated.View>
     </CPressable>
   );
-}
+});
+
+export default FlippingCard;

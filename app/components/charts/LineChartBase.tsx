@@ -19,7 +19,7 @@ export default function LineChartBase({ data, minItems = 3, ...rest }: LineChart
 
   return (
     <CView {...rest} style={{ position: "relative", ...rest.style }}>
-      <VictoryChart>
+      <VictoryChart padding={{ top: 50, bottom: 50, left: 60, right: 50 }}>
         <VictoryLine data={data} x="date" y="skills" style={{ data: { stroke: COLORS.primary } }} />
         <VictoryLine data={data} x="date" y="behaviour" style={{ data: { stroke: COLORS.secondary } }} />
         <VictoryAxis dependentAxis domain={{ y: [4, 10] }} />
