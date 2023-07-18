@@ -84,7 +84,7 @@ type EvaluationsBarChartProps = CViewProps & {
 };
 
 export default function EvaluationsBarChart({ evaluations: evaluationFragments, ...rest }: EvaluationsBarChartProps) {
-  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null); // Crashes on ios if is set to width: 0 and height: 0 at start
   const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = evaluations.filter((it) => it.wasPresent);
 
@@ -97,17 +97,19 @@ export default function EvaluationsBarChart({ evaluations: evaluationFragments, 
       }}
       {...rest}
     >
-      <VictoryChart
-        horizontal
-        padding={{ top: 50, left: 50, right: 15, bottom: 50 }}
-        containerComponent={<VictoryContainer disableContainerEvents />}
-        {...size}
-      >
-        <VictoryGroup offset={20}>
-          <VictoryBar data={data} x="environment" y="skills" style={{ data: { fill: ({ datum }) => datum.fill } }} />
-          <VictoryBar data={data} x="environment" y="behaviour" style={{ data: { fill: ({ datum }) => hexToRgbA(datum.fill, 0.8) } }} />
-        </VictoryGroup>
-      </VictoryChart>
+      {size && (
+        <VictoryChart
+          horizontal
+          padding={{ top: 50, left: 50, right: 15, bottom: 50 }}
+          containerComponent={<VictoryContainer disableContainerEvents />}
+          {...size}
+        >
+          <VictoryGroup offset={20}>
+            <VictoryBar data={data} x="environment" y="skills" style={{ data: { fill: ({ datum }) => datum.fill } }} />
+            <VictoryBar data={data} x="environment" y="behaviour" style={{ data: { fill: ({ datum }) => hexToRgbA(datum.fill, 0.8) } }} />
+          </VictoryGroup>
+        </VictoryChart>
+      )}
     </CView>
   );
 }

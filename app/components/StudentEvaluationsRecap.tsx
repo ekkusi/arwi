@@ -1,10 +1,8 @@
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { TouchableWithoutFeedback, TouchableOpacity, TouchableHighlight } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { FragmentType, getFragmentData, graphql } from "../gql";
-import { formatAmountString } from "../helpers/dataMappers";
 import { analyzeEvaluations } from "../helpers/evaluationUtils";
-import Card from "./Card";
 import EvaluationsBarChart from "./charts/EvaluationsBarChart";
 import EvaluationsLineChart from "./charts/EvaluationsLineChart";
 import FlippingCard, { FlippingCardHandle } from "./FlippingCard";

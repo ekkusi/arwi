@@ -5,7 +5,7 @@ import { createViewStyles } from "../theme/utils";
 import CPressable from "./primitives/CPressable";
 
 type FlippingCardProps = {
-  height: number | string;
+  height: number;
   front: React.ReactNode;
   back: React.ReactNode;
   style?: CViewStyle;
@@ -24,8 +24,8 @@ export type FlippingCardHandle = {
 };
 
 const FlippingCard = forwardRef<FlippingCardHandle, FlippingCardProps>(({ front, back, height, style }, ref) => {
-  const frontStyle = createViewStyles({ ...styles, height, position: "absolute", zIndex: 1, ...style });
-  const backStyle = createViewStyles({ ...styles, height, backfaceVisibility: "hidden", zIndex: 1, ...style });
+  const frontStyle = createViewStyles({ ...styles, height, position: "absolute", ...style });
+  const backStyle = createViewStyles({ ...styles, height, backfaceVisibility: "hidden", ...style });
 
   const flipAnimation = useRef(new Animated.Value(0)).current;
 
