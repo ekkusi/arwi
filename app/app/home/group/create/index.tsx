@@ -3,6 +3,7 @@ import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
 import { useEffect } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
+import { Alert, BackHandler } from "react-native";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
@@ -24,10 +25,25 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
       tabBarStyle: { display: "none" },
       tabBarOptions: { keyboardHidesTabBar: false },
     });
+    const backAction = () => {
+      Alert.alert("", t("GroupCreationStack.cancelPopUpMessage", "Oletko varma, että haluat perua ryhmän luonnin?"), [
+        {
+          text: t("Dialog.no", "Ei"),
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: t("Dialog.yes", "Kyllä"), onPress: () => navigation.getParent("main-tab-bar")?.navigate("index") },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
     return () => {
       navigation.getParent("main-tab-bar")?.setOptions({ tabBarStyle: tabBarStyles });
+      backHandler.remove();
     };
-  }, [navigation]);
+  }, [navigation, t]);
 
   const classes = getClassYearInfos();
   const { group, setGroup } = useGroupCreationContext();

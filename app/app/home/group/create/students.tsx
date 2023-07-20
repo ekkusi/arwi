@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { FlatList, Keyboard } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import PopUpDialog from "../../../../components/PopUpDialog";
 import TextFormField from "../../../../components/form/TextFormField";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
@@ -137,6 +136,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
                     onChange={(text) => {
                       setNewStudent(text);
                     }}
+                    blurOnSubmit={false}
                     onSubmitEditing={(_) => {
                       if (newStudent.length > 0) {
                         addStudent(newStudent);

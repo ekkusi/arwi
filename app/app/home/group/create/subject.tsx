@@ -24,7 +24,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
   const subjects = getSubjects();
   return (
     <GroupCreationBody navigation={navigation}>
-      <CView style={{ flex: 1 }}>
+      <CView style={{ flex: 1, marginTop: 20 }}>
         <CView style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 30, backgroundColor: "white" }}>
           <CView style={{ flex: 10, width: "100%", paddingHorizontal: 15, gap: 10, justifyContent: "center" }}>
             <CText style={{ color: "darkgray", fontSize: "title" }}>{t("GroupSubjectSelectionView.selectSubject", "Valitse oppiaine")}</CText>
