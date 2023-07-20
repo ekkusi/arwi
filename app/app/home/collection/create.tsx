@@ -1,40 +1,11 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { getLearningObjectives, getSubject } from "arwi-backend/src/utils/subjectUtils";
-import React, { useState } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { useTranslation } from "react-i18next";
+import React from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import CView from "../../../components/primitives/CView";
-import { getFragmentData, graphql } from "../../../gql";
+import { graphql } from "../../../gql";
 import { HomeStackParams } from "../types";
-import { COLORS } from "../../../theme";
-import CTextInput from "../../../components/primitives/CTextInput";
-import { formatDate } from "../../../helpers/dateHelpers";
-import SelectFormField from "../../../components/form/SelectFormField";
-import FormField from "../../../components/form/FormField";
-import CButton from "../../../components/primitives/CButton";
 import { getErrorMessage } from "../../../helpers/errorUtils";
-import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
-
-const UpdateCollectionForm_Group_Fragment = graphql(`
-  fragment UpdateCollectionForm_Group on Group {
-    id
-    subject {
-      code
-    }
-    currentClassYear {
-      id
-      info {
-        code
-      }
-    }
-    students {
-      id
-      name
-    }
-  }
-`);
+import UpdateCollectionForm, { UpdateCollectionFormData } from "../../../components/UpdateCollectionForm";
 
 const CreateCollectionPage_GetGroup_Query = graphql(`
   query CreateCollectionPage_GetGroup($groupId: ID!) {
@@ -57,12 +28,6 @@ const CreateCollectionPage_CreateCollection_Mutation = graphql(`
 `);
 
 export default function CollectionCreationView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "collection-create">) {
-  const [submitting, setSubmitting] = useState(false);
-  const [selectedEnvironmentCode, setSelectedEnvironmentCode] = useState<string>();
-  const [selectedLearningObjectiveCode, setSelectedLearningObjectivesCode] = useState<string>();
-  const [environmentError, setEnvironmentError] = useState<string>();
-
-  const { t } = useTranslation();
   const { groupId } = route.params;
   const { data, loading } = useQuery(CreateCollectionPage_GetGroup_Query, {
     variables: {
@@ -72,33 +37,15 @@ export default function CollectionCreationView({ navigation, route }: NativeStac
 
   const [createCollection] = useMutation(CreateCollectionPage_CreateCollection_Mutation);
 
-  const [date, setDate] = useState(new Date());
-  const [isDateOpen, setIsDateOpen] = useState(false);
-
   if (loading || !data) return <LoadingIndicator />;
 
-  const group = getFragmentData(UpdateCollectionForm_Group_Fragment, data.getGroup);
-
-  const learningObjectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
-  const subject = getSubject(group.subject.code);
-  const environments = subject?.environments || [];
-
-  const handleSubmit = async () => {
-    if (!selectedEnvironmentCode) {
-      setEnvironmentError(t("CollectionCreationView.environmentError", "Valitse ympäristö"));
-      return;
-    }
-    setSubmitting(true);
-
+  const handleSubmit = async (values: UpdateCollectionFormData) => {
     try {
+      // TODO: Change to save to Provider instead and just move to next phase (add students or evaluation)
       const result = await createCollection({
         variables: {
           classYearId: data.getGroup.currentClassYear.id,
-          createCollectionInput: {
-            date: date.toISOString(),
-            environmentCode: selectedEnvironmentCode,
-            learningObjectiveCodes: selectedLearningObjectiveCode ? [selectedLearningObjectiveCode] : [], // TODO: Change learning objective select to multiselect and change learning objectives to be array by default
-          },
+          createCollectionInput: values,
         },
         refetchQueries: [],
       });
@@ -108,48 +55,49 @@ export default function CollectionCreationView({ navigation, route }: NativeStac
       const msg = getErrorMessage(e);
       console.error(msg);
     }
-    setSubmitting(false);
   };
+  return <UpdateCollectionForm onSubmit={handleSubmit} group={data.getGroup} />;
 
-  return (
-    <CView style={{ flex: 1, paddingHorizontal: 10, paddingTop: 20, gap: 20 }}>
-      <SelectFormField
-        error={environmentError}
-        onSelect={(item) => {
-          setSelectedEnvironmentCode(item.value);
-          setEnvironmentError(undefined);
-        }}
-        title={t("environment", "Ympäristö")}
-        options={environments.map((it) => ({ value: it.code, label: it.label }))}
-      />
-      <SelectFormField
-        onSelect={(item) => setSelectedLearningObjectivesCode(item.value)}
-        title={t("learningObjectives", "Oppimistavoitteet")}
-        options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
-      />
-      <FormField title={t("date", "Päivämäärä")}>
-        <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
-          <CView pointerEvents="none">
-            <CTextInput value={formatDate(date)} editable={false} />
-          </CView>
-        </CTouchableOpacity>
-      </FormField>
-      {isDateOpen && (
-        <DateTimePicker
-          textColor={COLORS.primary}
-          value={date}
-          onChange={(_, newDate) => {
-            setIsDateOpen(false);
-            if (newDate) setDate(newDate);
-          }}
-        />
-      )}
-      <CButton
-        disabled={!!environmentError}
-        loading={submitting}
-        title={t("CollectionCreationView.startEvaluation", "Aloita arviointi")}
-        onPress={() => handleSubmit()}
-      />
-    </CView>
-  );
+  // return (
+  //   <CView style={{ flex: 1, paddingHorizontal: 10, paddingTop: 20, gap: 20 }}>
+  //     <SelectFormField
+  //       error={environmentError}
+  //       onSelect={(item) => {
+  //         setSelectedEnvironmentCode(item.value);
+  //         setEnvironmentError(undefined);
+  //       }}
+  //       title={t("environment", "Ympäristö")}
+  //       options={environments.map((it) => ({ value: it.code, label: it.label }))}
+  //     />
+  //     <SelectFormField
+  //       onSelect={(item) => setSelectedLearningObjectivesCode(item.value)}
+  //       title={t("learningObjectives", "Oppimistavoitteet")}
+  //       options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
+  //     />
+  //     <FormField title={t("date", "Päivämäärä")}>
+  //       <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
+  //         <CView pointerEvents="none">
+  //           <CTextInput value={formatDate(date)} editable={false} />
+  //         </CView>
+  //       </CTouchableOpacity>
+  //     </FormField>
+  //     {isDateOpen && (
+  //       <DateTimePicker
+  //         textColor={COLORS.primary}
+  //         value={date}
+  //         onChange={(_, newDate) => {
+  //           setIsDateOpen(false);
+  //           if (newDate) setDate(newDate);
+  //         }}
+  //       />
+  //     )}
+  //     {/* <StudentParticipationList initialParticipations={} /> */}
+  //     <CButton
+  //       disabled={!!environmentError}
+  //       loading={submitting}
+  //       title={t("CollectionCreationView.startEvaluation", "Aloita arviointi")}
+  //       onPress={() => handleSubmit()}
+  //     />
+  //   </CView>
+  // );
 }

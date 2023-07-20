@@ -77,12 +77,12 @@ export function Accordion({ data, allowMultiple = false, showAllButton = allowMu
   };
 
   const showAll = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedIndexes(data.map((_, index) => index));
   };
 
   const hideAll = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedIndexes([]);
   };
 
@@ -98,7 +98,12 @@ export function Accordion({ data, allowMultiple = false, showAllButton = allowMu
         </CView>
       )}
       {data.map((item, index) => (
-        <AccordionItem key={index} expanded={expandedIndexes.includes(index)} onHeaderPress={() => handleHeaderPress(index)} {...item}>
+        <AccordionItem
+          key={`${item.title}-${index}`}
+          expanded={expandedIndexes.includes(index)}
+          onHeaderPress={() => handleHeaderPress(index)}
+          {...item}
+        >
           {item.content}
         </AccordionItem>
       ))}

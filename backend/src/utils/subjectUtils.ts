@@ -112,3 +112,9 @@ export const getLearningObjectives = (subjectCode: string, yearCode: ClassYearCo
     type: it.type as LearningObjectiveType,
   }));
 };
+
+export const getEnvironments = (subjectCode: string): Environment[] => {
+  const subject = getSubject(subjectCode);
+  if (!subject) return [];
+  return subject.environments;
+};

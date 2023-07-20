@@ -95,7 +95,7 @@ type ClassYear {
 
 type EvaluationCollection {
   id: ID!
-  date: DateTime!
+  date: Date!
   type: String!
   environment: Environment!
   description: String
@@ -175,7 +175,7 @@ input UpdateStudentInput {
 }
 
 input CreateCollectionInput {
-  date: DateTime!
+  date: Date!
   type: String
   environmentCode: ID!
   description: String
@@ -184,7 +184,7 @@ input CreateCollectionInput {
 }
 
 input UpdateCollectionInput {
-  date: DateTime
+  date: Date
   type: String
   environmentCode: ID
   description: String
