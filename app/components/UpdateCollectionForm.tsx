@@ -43,6 +43,7 @@ const UpdateCollectionForm_Collection_Fragment = graphql(`
       color
     }
     classYear {
+      id
       info {
         code
       }
@@ -79,13 +80,13 @@ type UpdateCollectionFormDataProps =
 
 export type UpdateCollectionFormData = {
   description: string;
-  date: string;
+  date: Date;
   environmentCode: string;
   learningObjectiveCodes: string[];
 };
 
 export type UpdateCollectionFormProps = UpdateCollectionFormDataProps & {
-  onSubmit: (values: UpdateCollectionFormData, participations: StudentParticipation[]) => Promise<void>;
+  onSubmit: (values: UpdateCollectionFormData, participations: StudentParticipation[]) => Promise<void> | void;
 };
 
 export default function UpdateCollectionForm({ onSubmit, group: groupFragment, collection: collectionFragment }: UpdateCollectionFormProps) {
@@ -123,10 +124,6 @@ export default function UpdateCollectionForm({ onSubmit, group: groupFragment, c
     return initialParticipations.sort((a, b) => a.student.name.localeCompare(b.student.name));
   });
 
-  const onParticipationsChanged = useCallback((newParticipations: StudentParticipation[]) => {
-    setParticipations(newParticipations);
-  }, []);
-
   const handleSubmit = async () => {
     if (!selectedEnvironmentCode) {
       setEnvironmentError(t("CollectionCreationView.environmentError", "Valitse ympäristö"));
@@ -136,7 +133,7 @@ export default function UpdateCollectionForm({ onSubmit, group: groupFragment, c
 
     await onSubmit(
       {
-        date: formatDate(date, "yyyy-MM-dd"),
+        date,
         description,
         environmentCode: selectedEnvironmentCode,
         learningObjectiveCodes: selectedLearningObjectiveCode,
@@ -180,7 +177,6 @@ export default function UpdateCollectionForm({ onSubmit, group: groupFragment, c
         />
       )}
       <TextFormField title={t("components.UpdateCollectionForm.moreInfo", "Lisätietoa")} onChange={(text) => setDescription(text)} />
-      <StudentParticipationList initialParticipations={participations} onChange={onParticipationsChanged} />
       <CButton
         disabled={!!environmentError}
         loading={submitting}

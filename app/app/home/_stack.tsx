@@ -4,8 +4,8 @@ import HomeView from ".";
 import { formatDate } from "../../helpers/dateHelpers";
 import { defaultHeaderStyles } from "../config";
 import CollectionView from "./collection";
-import CollectionCreationView from "./collection/create";
-import CollectionEditView from "./collection/edit";
+import CollectionEditView from "./collection/create/participations";
+import CollectionCreationStack from "./collection/create/_stack";
 import Evaluation from "./evaluation";
 import GroupView from "./group";
 import GroupCreationStack from "./group/create/_stack";
@@ -33,8 +33,8 @@ export default function HomeStack() {
       />
       <HomeStackNavigator.Screen
         name="collection-create"
-        component={CollectionCreationView}
-        options={{ title: t("HomeStack.newEvaluation", "Uusi arviointi") }}
+        component={CollectionCreationStack}
+        options={{ title: t("HomeStack.newEvaluation", "Uusi arviointi"), headerShown: false }}
       />
       <HomeStackNavigator.Screen
         name="collection-edit"

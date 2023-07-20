@@ -15,7 +15,7 @@ export default function GroupCreationStack() {
     <GroupCreationProvider>
       <Navigator
         initialRouteName="name"
-        screenOptions={({ navigation }) => ({
+        screenOptions={() => ({
           animationTypeForReplace: "push",
           title: t("GroupCreationStack.newGroup", "Uusi ryhmä"),
           animation: "slide_from_right",
