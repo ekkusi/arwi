@@ -1,5 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
+import { Alert, TouchableOpacity } from "react-native";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeView from ".";
 import { formatDate } from "../../helpers/dateHelpers";
 import { defaultHeaderStyles } from "../config";
@@ -19,7 +21,22 @@ export default function HomeStack() {
   return (
     <HomeStackNavigator.Navigator initialRouteName="index" screenOptions={defaultHeaderStyles}>
       <HomeStackNavigator.Screen name="index" component={HomeView} options={{ title: t("HomeStack.ownGroups", "Omat ryhmät") }} />
-      <HomeStackNavigator.Screen name="group" component={GroupView} options={({ route }) => ({ title: route.params.name })} />
+      <HomeStackNavigator.Screen
+        name="group"
+        component={GroupView}
+        options={({ route }) => ({
+          title: route.params.name,
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert("Popup menu");
+              }}
+            >
+              <MaterialCommunityIcon name="dots-vertical" size={25} color="white" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
       <HomeStackNavigator.Screen name="student" component={StudentView} options={({ route }) => ({ title: route.params.name })} />
       <HomeStackNavigator.Screen
         name="collection"
