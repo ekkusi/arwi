@@ -50,7 +50,7 @@ export default function LineChartBase({ data, minItems = 3, ...rest }: LineChart
             backgroundColor: "rgba(255,255,255,0.5)",
           }}
         >
-          <CText style={{ fontSize: "lg", marginHorizontal: "2xl", textAlign: "center" }}>
+          <CText style={{ fontSize: "sm", marginHorizontal: "2xl", textAlign: "center" }}>
             {t("components.lineChartBase.notEnoughData", "Kuvaajan näyttämiseen tarvitaan vähintään {{count}} arviointia", { count: minItems })}
           </CText>
         </CView>
