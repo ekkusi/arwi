@@ -27,7 +27,7 @@ export const useGroupCreationContext = () => {
 
 const initialGroup: GroupMinimal = { name: "", students: [] };
 
-function GroupCreationProvider({ children }: React.PropsWithChildren<{}>) {
+function GroupCreationProvider({ children }: React.PropsWithChildren) {
   const [group, setGroup] = useState<GroupMinimal>(initialGroup);
 
   return <Provider value={{ group, setGroup }}>{children}</Provider>;

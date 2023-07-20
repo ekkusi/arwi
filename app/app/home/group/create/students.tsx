@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { FlatList, Keyboard } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import PopUpDialog from "../../../../components/PopUpDialog";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CTextInput from "../../../../components/primitives/CTextInput";
@@ -16,6 +17,7 @@ import { useAuthenticatedUser } from "../../../../hooks-and-providers/AuthProvid
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
+import GroupCreationBody from "./_body";
 
 const CreateGroupPage_CreateGroup_Mutation = graphql(`
   mutation CreateGroupPage_CreateGroup($input: CreateGroupInput!) {
@@ -111,76 +113,78 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
   };
 
   return (
-    <CView style={{ flex: 1, backgroundColor: "white", justifyContent: "space-between" }}>
-      <CView style={{ flex: 8, padding: 15, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-        <CView style={{ flex: 1, gap: 20, width: "100%" }}>
-          <CView style={{ flex: 6, gap: 10 }}>
-            <CText style={{ fontSize: "title", fontWeight: "300" }}>{t("students", "Oppilaat")}</CText>
-            <FlatList
-              inverted
-              data={[...group.students].reverse()}
-              renderItem={({ item }: { item: string }) => renderStudentItem(item, removeStudent)}
-              keyExtractor={(_, index) => index.toString()}
-              numColumns={1}
-              style={{ flexGrow: 1 }}
-            />
-          </CView>
-          <CView style={{ flex: 3, width: "100%" }}>
-            <CView style={{ height: 60, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-              <CView style={{ flex: 5 }}>
-                <CTextInput
-                  placeholder={t("GroupStudentsSelectionView.newStudent", "Uusi oppilas")}
-                  value={newStudent}
-                  onChange={(event) => {
-                    setNewStudent(event.nativeEvent.text);
+    <GroupCreationBody navigation={navigation}>
+      <CView style={{ flex: 1, justifyContent: "space-between" }}>
+        <CView style={{ flex: 8, padding: 15, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+          <CView style={{ flex: 1, gap: 20, width: "100%" }}>
+            <CView style={{ flex: 6, gap: 10 }}>
+              <CText style={{ fontSize: "title", fontWeight: "300" }}>{t("students", "Oppilaat")}</CText>
+              <FlatList
+                inverted
+                data={[...group.students].reverse()}
+                renderItem={({ item }: { item: string }) => renderStudentItem(item, removeStudent)}
+                keyExtractor={(_, index) => index.toString()}
+                numColumns={1}
+                style={{ flexGrow: 1 }}
+              />
+            </CView>
+            <CView style={{ flex: 3, width: "100%" }}>
+              <CView style={{ height: 60, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                <CView style={{ flex: 5 }}>
+                  <CTextInput
+                    placeholder={t("GroupStudentsSelectionView.newStudent", "Uusi oppilas")}
+                    value={newStudent}
+                    onChange={(event) => {
+                      setNewStudent(event.nativeEvent.text);
+                    }}
+                    onSubmitEditing={(_) => {
+                      if (newStudent.length > 0) {
+                        addStudent(newStudent);
+                        setNewStudent("");
+                      }
+                    }}
+                  />
+                </CView>
+                <CButton
+                  style={{ flex: 1, position: "absolute", right: 0, height: 48, width: 48, paddingHorizontal: 0 }}
+                  disabled={newStudent.length === 0}
+                  onPress={() => {
+                    if (newStudent.length > 0) addStudent(newStudent);
+                    setNewStudent("");
                   }}
-                  onSubmitEditing={(_) => {
-                    if (newStudent.length > 0) {
-                      addStudent(newStudent);
-                      setNewStudent("");
-                    }
-                  }}
-                />
+                >
+                  <MaterialCommunityIcon size={25} name="plus" color={COLORS.white} />
+                </CButton>
               </CView>
-              <CButton
-                style={{ flex: 1, position: "absolute", right: 0, height: 48, width: 48, paddingHorizontal: 0 }}
-                disabled={newStudent.length === 0}
-                onPress={() => {
-                  if (newStudent.length > 0) addStudent(newStudent);
-                  setNewStudent("");
-                }}
-              >
-                <MaterialCommunityIcon size={25} name="plus" color={COLORS.white} />
-              </CButton>
             </CView>
           </CView>
         </CView>
+        <CView style={{ flex: 2, justifyContent: "flex-end", gap: 20 }}>
+          {!isKeyboardVisible && (
+            <CView
+              style={{
+                flexGrow: 1,
+                width: "100%",
+                paddingHorizontal: 20,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+              }}
+            >
+              <CButton onPress={() => navigation.goBack()}>
+                <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+              </CButton>
+              <CButton
+                loading={loading}
+                title={t("GroupStudentsSelectionView.createGroup", "Luo ryhmä")}
+                onPress={() => handleSubmit()}
+                leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
+              />
+            </CView>
+          )}
+          <ProgressBar color={COLORS.primary} progress={3 / 3} />
+        </CView>
       </CView>
-      <CView style={{ flex: 2, justifyContent: "flex-end", gap: 20 }}>
-        {!isKeyboardVisible && (
-          <CView
-            style={{
-              flexGrow: 1,
-              width: "100%",
-              paddingHorizontal: 20,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-            }}
-          >
-            <CButton onPress={() => navigation.goBack()}>
-              <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-            </CButton>
-            <CButton
-              loading={loading}
-              title={t("GroupStudentsSelectionView.createGroup", "Luo ryhmä")}
-              onPress={() => handleSubmit()}
-              leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
-            />
-          </CView>
-        )}
-        <ProgressBar color={COLORS.primary} progress={3 / 3} />
-      </CView>
-    </CView>
+    </GroupCreationBody>
   );
 }
