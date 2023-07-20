@@ -1,5 +1,5 @@
 export type GroupCreationStackParams = {
-  index: undefined;
+  name: undefined;
   subject: undefined;
   students: undefined;
 };

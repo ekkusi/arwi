@@ -7,7 +7,7 @@ import CText from "./CText";
 export type CButtonProps = Omit<TouchableOpacityProps, "style"> & {
   loading?: boolean;
   title?: string;
-  variant?: "filled" | "outline";
+  variant?: "filled" | "outline" | "empty";
   colorScheme?: ColorKey;
   textStyle?: CTextStyle;
   style?: CViewStyle;
@@ -39,6 +39,11 @@ export default function CButton({
           backgroundColor: "transparent",
           borderWidth: 2,
           borderColor: colorScheme,
+        };
+      case "empty":
+        return {
+          backgroundColor: "transparent",
+          borderWidth: 0,
         };
       default:
         return {

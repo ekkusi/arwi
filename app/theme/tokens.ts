@@ -9,6 +9,7 @@ export const COLORS = {
   lightgray: "#D8D8D8",
   gray: "#919191",
   // darkgray: "#17232c",
+  black: "#000000",
   darkgray: "#35352A",
   sport: "#3a86ff",
   biology: "#fb5607",
