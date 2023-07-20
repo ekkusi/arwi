@@ -45,6 +45,26 @@ const refreshToken = async () => {
   }
 };
 
+const cache = new InMemoryCache({
+  typePolicies: {
+    AuthPayload: {
+      keyFields: ["accessToken"],
+    },
+    ClassYearInfo: {
+      keyFields: false,
+    },
+    LearningObjective: {
+      keyFields: false,
+    },
+    Subject: {
+      keyFields: ["code"],
+    },
+    Environment: {
+      keyFields: ["code"],
+    },
+  },
+});
+
 export default function ApolloProvider({ children }: { children: React.ReactNode }) {
   const { logout } = useAuth();
 
@@ -94,7 +114,7 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
       new ApolloClient({
         uri: GRAPHQL_API_URL,
         link: ApolloLink.from([errorLink, authLink, httpLink]),
-        cache: new InMemoryCache(),
+        cache,
       }),
     [errorLink]
   );

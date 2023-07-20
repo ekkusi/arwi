@@ -1,5 +1,3 @@
-import { Environment } from "arwi-backend/src/types";
-
 export type HomeStackParams = {
   index: undefined;
   group: {
@@ -16,7 +14,10 @@ export type HomeStackParams = {
     date: string;
     environmentLabel: string;
   };
-  collectionCreation: {
+  "collection-create": {
+    groupId: string;
+  };
+  "collection-edit": {
     id: string;
   };
   evaluation: undefined;

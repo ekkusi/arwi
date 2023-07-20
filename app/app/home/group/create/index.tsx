@@ -1,13 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
-import { useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform, StatusBar, TouchableWithoutFeedback } from "react-native";
+import { useEffect } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import Select from "../../../../components/Select";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
-import CTextInput from "../../../../components/primitives/CTextInput";
 import CView from "../../../../components/primitives/CView";
 import ProgressBar from "../../../../components/ProgressBar";
 import { nameValidator } from "../../../../helpers/textValidation";
@@ -15,6 +12,8 @@ import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 import { tabBarStyles } from "../../../config";
+import TextFormField from "../../../../components/form/TextFormField";
+import SelectFormField from "../../../../components/form/SelectFormField";
 
 export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "index", "main-tab-bar">) {
   const { t } = useTranslation();
@@ -32,22 +31,21 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
       <CView style={{ flex: 8, padding: 15, alignItems: "center", justifyContent: "center", gap: 30 }}>
         <CView style={{ width: "100%" }}>
           <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("GroupNameSelection.groupName", "Ryhmän nimi")}</CText>
-          <CTextInput
+          <TextFormField
             style={{ width: "100%" }}
             placeholder={t("GroupNameSelection.groupName", "Ryhmän nimi")}
             value={group.name}
-            onChange={(event) => setGroup({ ...group, name: event.nativeEvent.text })}
-            textValidation={nameValidator}
+            onChange={(text) => setGroup({ ...group, name: text })}
+            validate={nameValidator}
           />
         </CView>
         <CView style={{ width: "100%" }}>
           <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("GroupNameSelection.classYear", "Luokka-aste")}</CText>
-          <Select
-            style={{ width: "100%" }}
+          <SelectFormField
             placeholder={t("GroupNameSelection.selectClass", "Valitse luokka")}
-            options={classes.map((obj) => obj.label)}
+            options={classes.map((obj) => ({ value: obj.code, label: obj.label }))}
             onSelect={(item) => {
-              const selectedClass = classes.find((obj) => obj.label === item);
+              const selectedClass = classes.find((obj) => obj.code === item.value);
               setGroup({ ...group, class: selectedClass });
             }}
           />

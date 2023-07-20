@@ -1,33 +1,36 @@
 import React, { useState } from "react";
-import { FlatList, StyleProp, TextStyle, ViewProps, TouchableOpacity, Modal } from "react-native";
+import { useTranslation } from "react-i18next";
+import { FlatList, Modal } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../theme";
-import CText from "./primitives/CText";
-import CTouchableOpacity from "./primitives/CTouchableOpacity";
-import CView from "./primitives/CView";
+import { COLORS } from "../../theme";
+import CText from "../primitives/CText";
+import CTouchableOpacity from "../primitives/CTouchableOpacity";
+import CView from "../primitives/CView";
 
-type SelectProps = ViewProps & {
-  options: string[];
-  title?: string;
+export type OptionType = {
+  value: string;
+  label: string;
+};
+
+export type SelectProps = {
+  options: OptionType[];
+  error?: boolean;
   placeholder?: string;
-  lightTheme?: boolean;
-  errorStyle?: StyleProp<TextStyle>;
-  onSelect?: (item: string) => void;
+  onSelect?: (item: OptionType) => void;
 };
 
 export default function Select(props: SelectProps) {
-  const { options, errorStyle, title, onSelect, lightTheme = false, placeholder, ...generalProps } = props;
-  const [errorText, setError] = useState<string | undefined>(undefined);
-  const [selected, setSelected] = useState<string | undefined>(undefined);
+  const { t } = useTranslation();
+  const { options, error, onSelect, placeholder = t("components.Select.defaultPlaceholder", "Valitse") } = props;
+  const [selected, setSelected] = useState<OptionType | undefined>(undefined);
   const [selectModalOpen, setSelectModalOpen] = useState(false);
 
   return (
-    <CView style={{ width: "100%" }}>
-      {title && <CText style={{ fontSize: "sm", fontWeight: "300", color: COLORS.darkgray }}>{title}</CText>}
+    <>
       <CTouchableOpacity
         style={{
           width: "100%",
-          borderColor: "gray",
+          borderColor: error ? "error" : "gray",
           borderBottomWidth: 1,
           height: 54,
           flexDirection: "row",
@@ -36,10 +39,11 @@ export default function Select(props: SelectProps) {
         }}
         onPress={() => setSelectModalOpen(true)}
       >
-        <CText style={{ fontSize: "lg", fontWeight: "300", color: selected ? COLORS.darkgray : COLORS.lightgray }}>{selected || placeholder}</CText>
+        <CText style={{ fontSize: "lg", fontWeight: "300", color: selected ? COLORS.darkgray : COLORS.lightgray }}>
+          {selected ? selected.label : placeholder}
+        </CText>
         <MaterialCommunityIcon name="chevron-down" color={COLORS.darkgray} size={30} />
       </CTouchableOpacity>
-      {errorText && <CText style={{ color: "error", fontWeight: "600", fontSize: "sm" }}>{errorText}</CText>}
       {selectModalOpen && (
         <Modal transparent visible onRequestClose={() => setSelectModalOpen(false)}>
           <CView
@@ -55,12 +59,12 @@ export default function Select(props: SelectProps) {
             }}
           >
             <CView style={{ width: "80%", height: "80%", backgroundColor: "white", borderRadius: 20, alignItems: "center" }}>
-              <CText style={{ width: "100%", fontSize: "title", color: "darkgray" }}>{title}</CText>
+              {/* <CText style={{ width: "100%", fontSize: "title", color: "darkgray" }}>{title}</CText> */}
               <FlatList
                 style={{ width: "90%" }}
                 showsVerticalScrollIndicator={false}
                 disableScrollViewPanResponder
-                renderItem={({ item }: { item: string }) => (
+                renderItem={({ item }) => (
                   <CTouchableOpacity
                     style={{
                       marginHorizontal: 5,
@@ -76,7 +80,7 @@ export default function Select(props: SelectProps) {
                       setSelectModalOpen(false);
                     }}
                   >
-                    <CText style={{ fontSize: "lg", fontWeight: "400", color: "darkgray", width: "100%" }}>{item}</CText>
+                    <CText style={{ fontSize: "lg", fontWeight: "400", color: "darkgray", width: "100%" }}>{item.label}</CText>
                   </CTouchableOpacity>
                 )}
                 data={options}
@@ -86,6 +90,6 @@ export default function Select(props: SelectProps) {
           </CView>
         </Modal>
       )}
-    </CView>
+    </>
   );
 }

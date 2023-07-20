@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { FlatList, Keyboard } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import TextFormField from "../../../../components/form/TextFormField";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
-import CTextInput from "../../../../components/primitives/CTextInput";
 import CView from "../../../../components/primitives/CView";
 import ProgressBar from "../../../../components/ProgressBar";
 import { graphql } from "../../../../gql";
@@ -128,11 +128,11 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
           <CView style={{ flex: 3, width: "100%" }}>
             <CView style={{ height: 60, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
               <CView style={{ flex: 5 }}>
-                <CTextInput
+                <TextFormField
                   placeholder={t("GroupStudentsSelectionView.newStudent", "Uusi oppilas")}
                   value={newStudent}
-                  onChange={(event) => {
-                    setNewStudent(event.nativeEvent.text);
+                  onChange={(text) => {
+                    setNewStudent(text);
                   }}
                   onSubmitEditing={(_) => {
                     if (newStudent.length > 0) {
