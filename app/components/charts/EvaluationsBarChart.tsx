@@ -1,7 +1,11 @@
+import { VictoryBar, VictoryChart, VictoryContainer, VictoryGroup } from "victory-native";
+import { useState } from "react";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
 import { formatRatingNumber } from "../../helpers/dataMappers";
-import { BarChartBaseProps, DataType } from "./BarChartBase";
+import { DataType } from "./BarChartBase";
+import { hexToRgbA } from "../../helpers/color";
+import CView, { CViewProps } from "../primitives/CView";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on Evaluation {
@@ -75,77 +79,37 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
   return data;
 };
 
-type EvaluationsBarChartProps = Omit<BarChartBaseProps, "data"> & {
+type EvaluationsBarChartProps = CViewProps & {
   evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
 };
 
-// function TooltipContent({ active, payload, label }: TooltipProps<"number", "string">) {
-//   if (!payload || !active) return null;
-
-//   return (
-//     <Box p="2" bg="white" border="1px" borderColor="gray.200" borderRadius="md">
-//       <Text color={payload[0]?.payload.fill} mb="1">
-//         {label}
-//       </Text>
-//       {payload[0] && (
-//         <Text>
-//           {payload[0].name}: {payload[0].payload.skills || payload[0].payload.behaviour}
-//         </Text>
-//       )}
-//       {payload[1] && (
-//         <Text>
-//           {payload[1].name}: {payload[1].payload.behaviour}
-//         </Text>
-//       )}
-//     </Box>
-//   );
-// }
-
-// function LegendContent({ data }: { data: DataType[] }) {
-//   return (
-//     <Flex wrap="wrap" justifyContent="center">
-//       {data.map((entry) => (
-//         <Flex key={entry.environment} mr="2" alignItems="center">
-//           <Box width="2" height="2" bg={entry.fill as string} mr="1" borderRadius="sm" />
-//           <Text color={entry.fill as string}>{entry.environment}</Text>
-//         </Flex>
-//       ))}
-//     </Flex>
-//   );
-// }
-
 export default function EvaluationsBarChart({ evaluations: evaluationFragments, ...rest }: EvaluationsBarChartProps) {
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null); // Crashes on ios if is set to width: 0 and height: 0 at start
   const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = evaluations.filter((it) => it.wasPresent);
 
   const data = mapData(filteredEvaluations);
-  return null;
-  // return (
-  //   <BarChartBase
-  //     data={data}
-  //     tooltipContent={<TooltipContent />}
-  //     legend={<LegendContent data={data.slice().reverse()} />}
-  //     notEnoughDataText={`Kuvaajan näyttämiseen tarvitaan vähintään 2 ympäristöä, joilla on vähintään ${INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD} arviointia`}
-  //     {...rest}
-  //   >
-  //     <Bar name="Taidot" dataKey="skills" isAnimationActive={false}>
-  //       <LabelList position="middle" stroke="white" fontSize="12px">
-  //         Taidot
-  //       </LabelList>
-  //       <LabelList dataKey="skills" position="right" />
-  //       {data.map((entry, index) => (
-  //         <Cell key={`cell-${index}`} fill={entry.fill ? hexToRgbA(entry.fill, 0.7) : undefined} />
-  //       ))}
-  //     </Bar>
-  //     <Bar name="Työskentely" dataKey="behaviour" isAnimationActive={false}>
-  //       <LabelList position="middle" stroke="white" fontSize="12px">
-  //         Työskentely
-  //       </LabelList>
-  //       <LabelList dataKey="behaviour" position="right" />
-  //       {data.map((entry, index) => (
-  //         <Cell key={`cell-${index}`} fill={entry.fill || undefined} />
-  //       ))}
-  //     </Bar>
-  //   </BarChartBase>
-  // );
+  return (
+    <CView
+      style={{ flex: 1, width: "100%" }}
+      onLayout={(event) => {
+        setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height });
+      }}
+      {...rest}
+    >
+      {size && (
+        <VictoryChart
+          horizontal
+          padding={{ top: 50, left: 50, right: 15, bottom: 50 }}
+          containerComponent={<VictoryContainer disableContainerEvents />}
+          {...size}
+        >
+          <VictoryGroup offset={20}>
+            <VictoryBar data={data} x="environment" y="skills" style={{ data: { fill: ({ datum }) => datum.fill } }} />
+            <VictoryBar data={data} x="environment" y="behaviour" style={{ data: { fill: ({ datum }) => hexToRgbA(datum.fill, 0.8) } }} />
+          </VictoryGroup>
+        </VictoryChart>
+      )}
+    </CView>
+  );
 }

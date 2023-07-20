@@ -44,7 +44,7 @@ export default function HomePage({ navigation }: NativeStackScreenProps<HomeStac
   const renderListItem = ({ item }: { item: GroupListItemFragment }) => (
     <GroupListItem
       group={item}
-      onEvaluateIconPress={() => navigation.navigate("collectionCreation", { id: item.id })}
+      onEvaluateIconPress={() => navigation.navigate("collection-create", { groupId: item.id })}
       onListItemPress={() => navigation.navigate("group", item)}
     />
   );

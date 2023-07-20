@@ -1,10 +1,12 @@
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { FragmentType, getFragmentData, graphql } from "../gql";
-import { formatAmountString } from "../helpers/dataMappers";
 import { analyzeEvaluations } from "../helpers/evaluationUtils";
-import Card from "./Card";
+import EvaluationsBarChart from "./charts/EvaluationsBarChart";
 import EvaluationsLineChart from "./charts/EvaluationsLineChart";
-import FlippingCard from "./FlippingCard";
+import FlippingCard, { FlippingCardHandle } from "./FlippingCard";
+import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
 
@@ -40,32 +42,34 @@ export default function StudentEvaluationsRecap({
   student: studentFragment,
   ...rest
 }: StudentEvaluationsRecapProps) {
+  const cardRef = useRef<FlippingCardHandle>(null);
   const { t } = useTranslation();
   const evaluations = getFragmentData(StudentEvaluationRecap_Evaluation_Fragment, evaluationFragments);
   const student = getFragmentData(StudentEvaluationRecap_Student_Fragment, studentFragment);
 
-  const { absencesAmount, presencesAmount, skillsAverage, behaviourAverage, gradeSuggestion, isStellarCount } = analyzeEvaluations([...evaluations]);
+  const { absencesAmount, presencesAmount, skillsAverage, behaviourAverage, gradeSuggestion } = analyzeEvaluations([...evaluations]);
 
-  const starRowCount = Math.ceil(isStellarCount / 12);
+  // const starRowCount = Math.ceil(isStellarCount / 12);
 
   return (
     <FlippingCard
-      style={{ padding: "lg" }}
+      ref={cardRef}
+      style={{ paddingHorizontal: "lg" }}
       height={600}
       front={
         <>
-          <EvaluationsLineChart evaluations={evaluations} style={{ marginBottom: "md" }} />
-          <CView style={{ width: "100%", paddingHorizontal: "md" }}>
+          <EvaluationsLineChart evaluations={evaluations} />
+          <CView style={{ width: "100%", paddingHorizontal: "md", marginBottom: "md" }}>
             <CView style={{ flexDirection: "row" }}>
-              <CText style={{ fontWeight: "600" }}>Paikalla: </CText>
+              <CText style={{ fontWeight: "600" }}>{t("components.StudentEvaluationsRecap.present", "Paikalla")}: </CText>
               <CText>{presencesAmount}</CText>
             </CView>
             <CView style={{ flexDirection: "row" }}>
-              <CText style={{ fontWeight: "600" }}>Poissa: </CText>
+              <CText style={{ fontWeight: "600" }}>{t("components.StudentEvaluationsRecap.notPresent", "Poissa")}: </CText>
               <CText>{absencesAmount}</CText>
             </CView>
             <CView style={{ flexDirection: "row" }}>
-              <CText style={{ fontWeight: "600" }}>Taitojen keskiarvo: </CText>
+              <CText style={{ fontWeight: "600" }}>{t("components.StudentEvaluationsRecap.skillsAverage", "Taitojen keskiarvo")}: </CText>
               <CText>
                 {!Number.isNaN(skillsAverage)
                   ? `${skillsAverage.toFixed(2)}`
@@ -73,7 +77,7 @@ export default function StudentEvaluationsRecap({
               </CText>
             </CView>
             <CView style={{ flexDirection: "row" }}>
-              <CText style={{ fontWeight: "600" }}>Työskentelyn keskiarvo: </CText>
+              <CText style={{ fontWeight: "600" }}>{t("components.StudentEvaluationsRecap.behaviourAverage", "Työskentelyn keskiarvo")}: </CText>
               <CText>
                 {!Number.isNaN(behaviourAverage)
                   ? `${behaviourAverage.toFixed(2)}`
@@ -81,85 +85,38 @@ export default function StudentEvaluationsRecap({
               </CText>
             </CView>
           </CView>
-          <CView style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
-            <CText style={{ marginBottom: "sm" }}>Numeroehdotus:</CText>
+          <CView style={{ alignItems: "center", justifyContent: "center" }}>
+            <CText style={{ marginBottom: "sm" }}>{t("components.StudentEvaluationsRecap.numberSuggestment", "Numeroehdotus")}:</CText>
             <CView style={{ borderWidth: 2, borderColor: "lightgray", borderRadius: 50, padding: "3xl", alignContent: "center" }}>
               <CView style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center" }}>
                 <CText style={{ fontSize: "2xl" }}>{gradeSuggestion > 0 ? gradeSuggestion : "–"}</CText>
               </CView>
             </CView>
           </CView>
+          {/* A stupid workaround. onPress in TouchableOpacity from react-native isn't triggered in absolute positioned parents.  */}
+          {/* This TouchableOpacity is from react-native-gesture-handler. This way opacity is shown in button click even though parent click is still triggered. */}
+          <TouchableOpacity>
+            <CButton
+              title={t("components.StudentEvaluationsRecap.viewByEnvironments", "Tarkastele ympäristöttäin")}
+              style={{ marginVertical: "lg" }}
+            />
+          </TouchableOpacity>
         </>
       }
-      back={<CText style={{ fontSize: "largeTitle" }}>TerveTerve</CText>}
+      back={
+        <>
+          <EvaluationsBarChart evaluations={evaluations} />
+          <CButton
+            onPress={(event) => {
+              event.preventDefault();
+              cardRef.current?.spinCard();
+            }}
+            title={t("components.StudentEvaluationsRecap.back", "Takaisin")}
+            style={{ marginVertical: "lg" }}
+          />
+        </>
+      }
+      {...rest}
     />
   );
-  // return (
-  // <FlippingCard
-  //   width="100%"
-  //   height={650 + starRowCount * 25}
-  //   front={
-  //     <>
-  //       <Text as="h1" textAlign="center" mb="-1">
-  //         {student.name}
-  //       </Text>
-  //       <Text as="h2" fontSize="lg" textAlign="center" mb="2">
-  //         {student.group.name}
-  //       </Text>
-  //       <>
-  //         <Box>
-  //           <EvaluationsLineChart studentId={student.id} evaluations={evaluations} overlayBgColor="white" />
-  //         </Box>
-  //         {isStellarCount > 0 && (
-  //           <Flex justifyContent="center" mb="3" wrap="wrap">
-  //             {[...Array(isStellarCount)].map((_, i) => (
-  //               <Icon key={i} as={AiOutlineStar} color="yellow.400" w={6} h={6} />
-  //             ))}
-  //           </Flex>
-  //         )}
-  //         <Box>
-  //           <Text fontWeight="bold" as="span">
-  //             Paikalla:{" "}
-  //           </Text>
-  //           <Text as="span">
-  //             {presencesAmount} {formatAmountString(presencesAmount)}
-  //           </Text>
-  //         </Box>
-  //         <Box>
-  //           <Text fontWeight="bold" as="span">
-  //             Poissa:{" "}
-  //           </Text>
-  //           <Text as="span">
-  //             {absencesAmount} {formatAmountString(absencesAmount)}
-  //           </Text>
-  //         </Box>
-  //         <Box>
-  //           <Text fontWeight="bold" as="span">
-  //             Taitojen keskiarvo:{" "}
-  //           </Text>
-  //           <Text as="span">{!Number.isNaN(skillsAverage) ? `${skillsAverage.toFixed(2)}` : "Taitoja ei vielä arvioitu"}</Text>
-  //         </Box>
-  //         <Box>
-  //           <Text fontWeight="bold" as="span">
-  //             Työskentelyn keskiarvo:{" "}
-  //           </Text>
-  //           <Text as="span">{!Number.isNaN(behaviourAverage) ? `${behaviourAverage.toFixed(2)}` : "Työskentelyä ei vielä arvioitu"}</Text>
-  //         </Box>
-  //         <Flex alignItems="center" justifyContent="center" flexDirection="column" flex="1">
-  //           <Text mb="1" as="span">
-  //             Numeroehdotus:
-  //           </Text>
-  //           <Box position="relative" border="1px" boxShadow="md" borderColor="gray" borderRadius="full" p="10">
-  //             <CenteredContainer as="span" fontSize="4xl" fontFamily="special" textAlign="center" lineHeight={1.0}>
-  //               {gradeSuggestion > 0 ? gradeSuggestion : "–"}
-  //             </CenteredContainer>
-  //           </Box>
-  //         </Flex>
-  //       </>
-  //     </>
-  //   }
-  //   back={<EvaluationsBarChart evaluations={evaluations} overlayBgColor="white" />}
-  //   {...rest}
-  // />
-  // );
 }
