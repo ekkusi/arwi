@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Link } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, ScrollView, useWindowDimensions } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -137,7 +137,7 @@ function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroup
   );
 }
 
-function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
+const EvaluationList = memo(function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
   return (
@@ -168,9 +168,9 @@ function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGr
       />
     </CView>
   );
-}
+});
 
-function ObjectiveList({ getGroup: group }: GroupOverviewPage_GetGroupQuery) {
+const ObjectiveList = memo(function ObjectiveList({ getGroup: group }: GroupOverviewPage_GetGroupQuery) {
   const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
   const { t } = useTranslation();
 
@@ -202,9 +202,9 @@ function ObjectiveList({ getGroup: group }: GroupOverviewPage_GetGroupQuery) {
       )}
     </CView>
   );
-}
+});
 
-function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
+const StatisticsView = memo(function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
   const lastEvaluation = [...group.currentClassYear.evaluationCollections].sort((a, b) => (a.date > b.date ? 1 : -1))[0];
@@ -337,7 +337,7 @@ function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGr
       />
     </CView>
   );
-}
+});
 
 export default function GroupView({ route: { params }, navigation }: NativeStackScreenProps<HomeStackParams, "group">) {
   const { id } = params;
