@@ -17,8 +17,5 @@ export type HomeStackParams = {
   "collection-create": {
     groupId: string;
   };
-  "collection-edit": {
-    id: string;
-  };
   evaluation: undefined;
 };

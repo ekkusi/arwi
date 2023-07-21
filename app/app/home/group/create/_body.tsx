@@ -7,7 +7,6 @@ import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { COLORS } from "../../../../theme";
 import { GroupCreationStackParams } from "./types";
-import PopUpDialog from "../../../../components/PopUpDialog";
 
 export default function GroupCreationBody({
   navigation,
@@ -27,11 +26,11 @@ export default function GroupCreationBody({
           onPress={() => {
             Alert.alert("", t("GroupCreationStack.cancelPopUpMessage", "Oletko varma, että haluat perua ryhmän luonnin?"), [
               {
-                text: t("Dialog.no", "Ei"),
+                text: t("no", "Ei"),
                 onPress: () => null,
                 style: "cancel",
               },
-              { text: t("Dialog.yes", "Kyllä"), onPress: () => navigation.getParent("main-tab-bar")?.navigate("index") },
+              { text: t("yes", "Kyllä"), onPress: () => navigation.getParent("main-tab-bar")?.navigate("index") },
             ]);
           }}
           leftIcon={<MaterialCommunityIcon name="close" size={30} color={COLORS.white} />}
