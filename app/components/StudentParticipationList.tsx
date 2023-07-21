@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Switch } from "react-native";
+import { COLORS } from "../theme";
 import ParticipationToggle from "./ParticipationToggle";
 import CFlatList from "./primitives/CFlatList";
 import CText from "./primitives/CText";
@@ -7,7 +9,6 @@ import CView, { CViewProps } from "./primitives/CView";
 type StudentParticipationListProps = Omit<CViewProps, "onChange"> & {
   initialParticipations: StudentParticipation[];
   onChange?: (participations: StudentParticipation[]) => void;
-  disabled?: boolean;
 };
 
 export type StudentParticipation = {
@@ -18,7 +19,7 @@ export type StudentParticipation = {
   wasPresent: boolean;
 };
 
-export default function StudentParticipationList({ initialParticipations, onChange, disabled = false, ...rest }: StudentParticipationListProps) {
+export default function StudentParticipationList({ initialParticipations, onChange, ...rest }: StudentParticipationListProps) {
   const [participations, setParticipations] = useState<StudentParticipation[]>(() => initialParticipations);
 
   const onToggle = (participation: StudentParticipation, value: boolean) => {
@@ -35,23 +36,18 @@ export default function StudentParticipationList({ initialParticipations, onChan
     <CFlatList
       data={participations}
       renderItem={({ item }) => (
-        <CView key={item.student.id} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: "sm" }}>
+        <CView key={item.student.id} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: "-md" }}>
           <CText>{item.student.name}</CText>
-          <ParticipationToggle disabled={disabled} initialValue={item.wasPresent} onChange={(value) => onToggle(item, value)} />
+          <Switch
+            trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
+            thumbColor={COLORS.white}
+            ios_backgroundColor={COLORS.lightgray}
+            onValueChange={(value) => onToggle(item, value)}
+            value={item.wasPresent}
+          />
         </CView>
       )}
       {...rest}
     />
   );
-
-  // return (
-  //   <Box {...rest}>
-  //     {participations.map((it, index) => (
-  //       <Flex key={`${it.student.name}-${index}`} alignItems="center" justifyContent="space-between" mb="2">
-  //         <Text mr="1">{it.student.name}</Text>
-  //         <ParticipationToggle isDisabled={isDisabled} initialValue={it.wasPresent} onChange={(value) => onToggle(it, value)} />
-  //       </Flex>
-  //     ))}
-  //   </Box>
-  // );
 }

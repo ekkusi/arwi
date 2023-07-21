@@ -7,10 +7,10 @@ type CollectionCreationLayoutProps = CViewProps;
 
 // All this component does is check if the context is loaded and render the children if it is
 // All screens in collection creation must be wrapped in this
-export default function CollectionCreationLayout(props: CollectionCreationLayoutProps) {
+export default function CollectionCreationLayout({ style, ...rest }: CollectionCreationLayoutProps) {
   const context = useContext(CollectionCreationContext);
 
   if (!context || context?.loading) return <LoadingIndicator />;
 
-  return <CView style={{ flex: 1 }} {...props} />;
+  return <CView style={{ flex: 1, padding: "lg", ...style }} {...rest} />;
 }

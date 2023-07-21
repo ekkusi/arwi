@@ -15,7 +15,7 @@ const CollectionCreationProvider_GetGroup_Query = graphql(`
         id
         name
       }
-      ...UpdateCollectionForm_Group
+      ...CollectionGeneralInfoView_Group
     }
   }
 `);
@@ -49,7 +49,7 @@ const { Provider } = CollectionCreationContext;
 export const useCollectionCreationContext = (): Required<Omit<CollectionCreationContextParams, "loading">> => {
   const context = useContext(CollectionCreationContext);
   if (!context) {
-    throw new Error("useCollectionCreationContext must be used within an CollectionCreationProvider");
+    throw new Error("useCollectionCreationContext context not found or not loaded. Make sure view is wrapped with CollectionCreationLayout.");
   }
   const { groupInfo, evaluations } = context;
   if (!groupInfo || !evaluations)

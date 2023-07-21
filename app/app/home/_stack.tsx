@@ -54,11 +54,6 @@ export default function HomeStack() {
         options={{ title: t("HomeStack.newEvaluation", "Uusi arviointi"), headerShown: false }}
       />
       <HomeStackNavigator.Screen
-        name="collection-edit"
-        component={CollectionEditView}
-        options={{ title: t("HomeStack.newEvaluation", "Uusi arviointi") }}
-      />
-      <HomeStackNavigator.Screen
         name="evaluation"
         component={Evaluation}
         options={{ title: t("HomeStack.evaluationOverview", "Arvioinnin yhteenveto") }}

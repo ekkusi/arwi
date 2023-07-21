@@ -1,5 +1,5 @@
-import { getEnvironments, getLearningObjectives, getSubject } from "arwi-backend/src/utils/subjectUtils";
-import React, { useCallback, useState } from "react";
+import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ClassYearCode } from "arwi-backend/src/types";
@@ -8,11 +8,10 @@ import { formatDate } from "../helpers/dateHelpers";
 import { COLORS } from "../theme";
 import FormField from "./form/FormField";
 import SelectFormField from "./form/SelectFormField";
-import CButton from "./primitives/CButton";
 import CTextInput from "./primitives/CTextInput";
 import CTouchableOpacity from "./primitives/CTouchableOpacity";
-import CView from "./primitives/CView";
-import StudentParticipationList, { StudentParticipation } from "./StudentParticipationList";
+import CView, { CViewProps } from "./primitives/CView";
+import { StudentParticipation } from "./StudentParticipationList";
 import TextFormField from "./form/TextFormField";
 
 const UpdateCollectionForm_Group_Fragment = graphql(`
@@ -85,11 +84,18 @@ export type UpdateCollectionFormData = {
   learningObjectiveCodes: string[];
 };
 
-export type UpdateCollectionFormProps = UpdateCollectionFormDataProps & {
-  onSubmit: (values: UpdateCollectionFormData, participations: StudentParticipation[]) => Promise<void> | void;
-};
+export type UpdateCollectionFormProps = Omit<CViewProps, "children"> &
+  UpdateCollectionFormDataProps & {
+    onSubmit: (values: UpdateCollectionFormData, participations: StudentParticipation[]) => Promise<void> | void;
+  };
 
-export default function UpdateCollectionForm({ onSubmit, group: groupFragment, collection: collectionFragment }: UpdateCollectionFormProps) {
+export default function UpdateCollectionForm({
+  onSubmit,
+  group: groupFragment,
+  collection: collectionFragment,
+  style,
+  ...rest
+}: UpdateCollectionFormProps) {
   const group = getFragmentData(UpdateCollectionForm_Group_Fragment, groupFragment);
   const collection = getFragmentData(UpdateCollectionForm_Collection_Fragment, collectionFragment);
 
@@ -144,7 +150,7 @@ export default function UpdateCollectionForm({ onSubmit, group: groupFragment, c
   };
 
   return (
-    <CView style={{ flex: 1, paddingHorizontal: 10, paddingTop: 20, gap: 20 }}>
+    <CView style={{ flex: 1, gap: 20, ...style }} {...rest}>
       <SelectFormField
         error={environmentError}
         onSelect={(item) => {
@@ -177,12 +183,6 @@ export default function UpdateCollectionForm({ onSubmit, group: groupFragment, c
         />
       )}
       <TextFormField title={t("components.UpdateCollectionForm.moreInfo", "Lisätietoa")} onChange={(text) => setDescription(text)} />
-      <CButton
-        disabled={!!environmentError}
-        loading={submitting}
-        title={t("CollectionCreationView.startEvaluation", "Aloita arviointi")}
-        onPress={() => handleSubmit()}
-      />
     </CView>
   );
 }

@@ -2,12 +2,14 @@ import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
+import { COLORS } from "../../../../theme";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import { CollectionCreationStackParams } from "./types";
 import CollectionCreationLayout from "./_layout";
@@ -54,10 +56,26 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     setSubmitting(false);
   };
   return (
-    <>
-      <CText>Terve</CText>
-      <CButton loading={submitting} title={t("save", "Tallenna")} onPress={handleSubmit} />
-    </>
+    <CView
+      style={{
+        flexGrow: 1,
+        width: "100%",
+        paddingHorizontal: 20,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "flex-end",
+      }}
+    >
+      <CButton onPress={() => navigation.goBack()}>
+        <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+      </CButton>
+      <CButton
+        loading={submitting}
+        title={t("save", "Tallenna")}
+        onPress={() => handleSubmit()}
+        leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
+      />
+    </CView>
   );
 }
 
