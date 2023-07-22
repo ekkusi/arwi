@@ -1,10 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { Alert, TouchableOpacity } from "react-native";
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
+import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeView from ".";
 import CText from "../../components/primitives/CText";
+import CView from "../../components/primitives/CView";
 import { formatDate } from "../../helpers/dateHelpers";
 import { defaultHeaderStyles } from "../config";
 import CollectionView from "./collection";
@@ -35,27 +36,29 @@ export default function HomeStack() {
                 <MaterialCommunityIcon name="dots-vertical" size={25} color="white" />
               </MenuTrigger>
               <MenuOptions>
-                <MenuOption
-                  onSelect={() => {
-                    Alert.alert("Uusi oppilas");
-                  }}
-                >
-                  <CText>{t("group.edit-students", "Lisää oppilas")}</CText>
-                </MenuOption>
-                <MenuOption
-                  onSelect={() => {
-                    navigation.navigate("collection-create", { groupId: route.params.id });
-                  }}
-                >
-                  <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
-                </MenuOption>
-                <MenuOption
-                  onSelect={() => {
-                    Alert.alert("Oletko varma?", "Jos poistat ryhmän, takaisin ei ole enää paluuta :(");
-                  }}
-                >
-                  <CText>{t("group.delete-group", "Poista ryhmä")}</CText>
-                </MenuOption>
+                <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
+                  <MenuOption
+                    onSelect={() => {
+                      Alert.alert("Uusi oppilas");
+                    }}
+                  >
+                    <CText>{t("group.edit-students", "Lisää oppilas")}</CText>
+                  </MenuOption>
+                  <MenuOption
+                    onSelect={() => {
+                      navigation.navigate("collection-create", { groupId: route.params.id });
+                    }}
+                  >
+                    <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
+                  </MenuOption>
+                  <MenuOption
+                    onSelect={() => {
+                      Alert.alert("Oletko varma?", "Jos poistat ryhmän, takaisin ei ole enää paluuta :(");
+                    }}
+                  >
+                    <CText>{t("group.delete-group", "Poista ryhmä")}</CText>
+                  </MenuOption>
+                </CView>
               </MenuOptions>
             </Menu>
           ),

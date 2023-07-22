@@ -2,9 +2,9 @@ import { useQuery } from "@apollo/client";
 import { Link } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, ScrollView, useWindowDimensions } from "react-native";
+import { Alert, ScrollView, TextInput, useWindowDimensions } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -28,6 +28,7 @@ import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import { COLORS, SPACING } from "../../../theme";
 import { CColor } from "../../../theme/types";
 import { HomeStackParams } from "../types";
+import CTextInput from "../../../components/primitives/CTextInput";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -126,30 +127,43 @@ type NavigationProps = {
 const StudentList = memo(function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
+  const [searchText, setSearchText] = useState("");
+  const filteredStudents = group.currentClassYear.students.filter((student) => student.name.includes(searchText));
+
   return (
-    <CView style={{ flexGrow: 1, paddingHorizontal: "lg" }}>
+    <CView style={{ flexGrow: 1, paddingHorizontal: "md", backgroundColor: "white" }}>
       {group.currentClassYear.students.length > 0 ? (
-        <CFlatList
-          contentContainerStyle={{ paddingTop: 20, paddingBottom: 100 }}
-          showsVerticalScrollIndicator={false}
-          data={group.currentClassYear.students}
-          renderItem={({ item }) => {
-            const presentClasses = item.currentClassEvaluations.reduce((prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal), 0);
-            const allClasses = group.currentClassYear.evaluationCollections.length;
-            return (
-              <Card style={{ marginBottom: "md" }} key={item.id}>
-                <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
-                  <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
-                  <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                    <CText style={{ fontSize: "sm", color: "gray" }}>
-                      {t("present", "Paikalla")} {presentClasses}/{allClasses}
-                    </CText>
-                  </CView>
-                </CTouchableOpacity>
-              </Card>
-            );
-          }}
-        />
+        <CView style={{ paddingTop: "lg" }}>
+          <CView style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialCommunityIcon name="magnify" size={25} color={COLORS.darkgray} style={{ position: "absolute", left: 10 }} />
+            <TextInput
+              placeholder="Etsi nimellä..."
+              onChange={(e) => setSearchText(e.nativeEvent.text)}
+              style={{ height: 48, borderRadius: 24, width: "100%", borderWidth: 1, borderColor: "gray", paddingLeft: 50 }}
+            />
+          </CView>
+          <CFlatList
+            contentContainerStyle={{ paddingTop: 20, paddingBottom: 100 }}
+            showsVerticalScrollIndicator={false}
+            data={filteredStudents}
+            renderItem={({ item }) => {
+              const presentClasses = item.currentClassEvaluations.reduce((prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal), 0);
+              const allClasses = group.currentClassYear.evaluationCollections.length;
+              return (
+                <Card style={{ marginBottom: "md" }} key={item.id}>
+                  <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
+                    <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
+                    <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                      <CText style={{ fontSize: "sm", color: "gray" }}>
+                        {t("present", "Paikalla")} {presentClasses}/{allClasses}
+                      </CText>
+                    </CView>
+                  </CTouchableOpacity>
+                </Card>
+              );
+            }}
+          />
+        </CView>
       ) : (
         <CView style={{ height: 300, justifyContent: "center", alignItems: "center" }}>
           <CText style={{ width: "60%" }}>{t("group.no-students", "Ryhmässä ei ole oppilaita")}</CText>
