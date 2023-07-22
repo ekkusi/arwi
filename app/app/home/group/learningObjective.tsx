@@ -8,9 +8,9 @@ export default function LearningObjective({ navigation, route }: NativeStackScre
   const { code, label, description, type } = route.params;
   const { t } = useTranslation();
   return (
-    <CView style={{ flex: 1, gap: 30, padding: "lg" }}>
+    <CView style={{ flex: 1, gap: 30, padding: "lg", backgroundColor: "white" }}>
       <CText>
-        <CText style={{ fontSize: "largeTitle", fontWeight: "600" }}>{code}: </CText>
+        <CText style={{ fontSize: "title", fontWeight: "600" }}>{code}: </CText>
         <CText style={{ fontSize: "title", fontWeight: "400" }}>{label}</CText>
       </CText>
       <CView style={{ gap: 8 }}>

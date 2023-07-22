@@ -16,7 +16,7 @@ type StyledBarChartProps = CViewProps & {
 export default function StyledBarChart({ data, ...rest }: StyledBarChartProps) {
   const [size, setSize] = useState<{ width: number; height: number } | null>(null); // Crashes on ios if is set to width: 0 and height: 0 at start
 
-  const barWidth = Math.min((size?.width || 0) / data.length - 1, 35);
+  const barWidth = Math.min((size?.width || 0) / (data.length > 1 ? data.length : 2) - 1, 35);
   const noZeroData = data.map((obj) => {
     return { ...obj, y: obj.y === 0 ? 0.5 : obj.y };
   });

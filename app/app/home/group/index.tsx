@@ -8,6 +8,7 @@ import { Alert, ScrollView, TextInput, useWindowDimensions } from "react-native"
 import { FlatList } from "react-native-gesture-handler";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import Card from "../../../components/Card";
 import CollectionsLineChart from "../../../components/charts/CollectionsLineChart";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
@@ -127,23 +128,50 @@ type NavigationProps = {
 const StudentList = memo(function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
+  const translateY = useSharedValue(0);
+  const isScrolling = useSharedValue(false);
+  const lastContentOffset = useSharedValue(0);
+
+  const searchBarStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(translateY.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      if (lastContentOffset.value > event.contentOffset.y && isScrolling.value) {
+        translateY.value = 0;
+      } else if (lastContentOffset.value < event.contentOffset.y && isScrolling.value) {
+        translateY.value = -100;
+      }
+      lastContentOffset.value = event.contentOffset.y;
+    },
+    onBeginDrag: (_) => {
+      isScrolling.value = true;
+    },
+    onEndDrag: (_) => {
+      isScrolling.value = false;
+    },
+  });
+
   const [searchText, setSearchText] = useState("");
   const filteredStudents = group.currentClassYear.students.filter((student) => student.name.includes(searchText));
 
   return (
-    <CView style={{ flexGrow: 1, paddingHorizontal: "md", backgroundColor: "white" }}>
+    <CView style={{ flexGrow: 1 }}>
       {group.currentClassYear.students.length > 0 ? (
-        <CView style={{ paddingTop: "lg" }}>
-          <CView style={{ flexDirection: "row", alignItems: "center" }}>
-            <MaterialCommunityIcon name="magnify" size={25} color={COLORS.darkgray} style={{ position: "absolute", left: 10 }} />
-            <TextInput
-              placeholder="Etsi nimellä..."
-              onChange={(e) => setSearchText(e.nativeEvent.text)}
-              style={{ height: 48, borderRadius: 24, width: "100%", borderWidth: 1, borderColor: "gray", paddingLeft: 50 }}
-            />
-          </CView>
-          <CFlatList
-            contentContainerStyle={{ paddingTop: 20, paddingBottom: 100 }}
+        <CView>
+          <Animated.FlatList
+            onScroll={scrollHandler}
+            contentContainerStyle={{ paddingTop: SPACING.md * 2 + 48, paddingBottom: 50, paddingHorizontal: SPACING.md }}
             showsVerticalScrollIndicator={false}
             data={filteredStudents}
             renderItem={({ item }) => {
@@ -163,6 +191,24 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
               );
             }}
           />
+          <Animated.View style={[{ position: "absolute", paddingTop: SPACING.md, paddingHorizontal: SPACING.md }, searchBarStyle]}>
+            <CView style={{ flexDirection: "row", alignItems: "center" }}>
+              <TextInput
+                placeholder="Etsi nimellä..."
+                onChange={(e) => setSearchText(e.nativeEvent.text)}
+                style={{
+                  backgroundColor: "white",
+                  height: 48,
+                  borderRadius: 24,
+                  width: "100%",
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  paddingLeft: 50,
+                }}
+              />
+              <MaterialCommunityIcon name="magnify" size={25} color={COLORS.darkgray} style={{ position: "absolute", left: 10 }} />
+            </CView>
+          </Animated.View>
         </CView>
       ) : (
         <CView style={{ height: 300, justifyContent: "center", alignItems: "center" }}>
@@ -176,12 +222,47 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
 const EvaluationList = memo(function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
+  const translateY = useSharedValue(0);
+  const isScrolling = useSharedValue(false);
+  const lastContentOffset = useSharedValue(0);
+
+  const newEvaluationButtonStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(translateY.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      if (lastContentOffset.value > event.contentOffset.y && isScrolling.value) {
+        translateY.value = 0;
+      } else if (lastContentOffset.value < event.contentOffset.y && isScrolling.value) {
+        translateY.value = 100;
+      }
+      lastContentOffset.value = event.contentOffset.y;
+    },
+    onBeginDrag: (e) => {
+      isScrolling.value = true;
+    },
+    onEndDrag: (e) => {
+      isScrolling.value = false;
+    },
+  });
+
   return (
-    <CView style={{ flexGrow: 1, paddingHorizontal: "lg" }}>
+    <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
       {group.currentClassYear.evaluationCollections.length > 0 ? (
-        <CFlatList
+        <Animated.FlatList
+          onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: 20, paddingBottom: 100 }}
+          contentContainerStyle={{ paddingTop: SPACING.md, paddingBottom: 100 }}
           data={group.currentClassYear.evaluationCollections}
           renderItem={({ item }) => (
             <Card style={{ marginBottom: "md" }} key={item.id}>
@@ -196,14 +277,15 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
           )}
         />
       ) : (
-        <CText>{t("group.no-collections", "Ryhmälle ei vielä olla tehty arviointeja")}</CText>
+        <CText style={{ paddingTop: 50, alignSelf: "center" }}>{t("group.no-collections", "Ryhmälle ei vielä olla tehty arviointeja")}</CText>
       )}
-      <ShadowButton
-        style={{ position: "absolute", bottom: 20, right: 15 }}
-        title={t("new-evaluation", "Uusi arviointi")}
-        onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
-        leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
-      />
+      <Animated.View style={[{ position: "absolute", bottom: 20, right: 15, backgroundColor: "rgba(0,0,0,0)" }, newEvaluationButtonStyle]}>
+        <ShadowButton
+          title={t("new-evaluation", "Uusi arviointi")}
+          onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
+          leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
+        />
+      </Animated.View>
     </CView>
   );
 });
@@ -223,14 +305,14 @@ const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation 
   });
 
   return (
-    <CView style={{ flexGrow: 1, paddingHorizontal: "lg" }}>
+    <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
       {objectives.length > 0 ? (
         // TODO: Show pie chart and make list into accordion with more info about the objective when opened
         // Add REAL objective count to string
         <CFlatList
           data={learningObjectiveCounts}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: 20, paddingBottom: 50 }}
+          contentContainerStyle={{ paddingTop: SPACING.md, paddingBottom: 50 }}
           renderItem={({ item }) => (
             <CTouchableOpacity
               key={item.code}
@@ -303,9 +385,48 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
   const behaviourMean =
     evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) / evaluationsWithBehaviour.length;
 
+  const translateY = useSharedValue(0);
+  const isScrolling = useSharedValue(false);
+  const lastContentOffset = useSharedValue(0);
+
+  const newEvaluationButtonStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(translateY.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      if (lastContentOffset.value > event.contentOffset.y && isScrolling.value) {
+        translateY.value = 0;
+      } else if (lastContentOffset.value < event.contentOffset.y && isScrolling.value) {
+        translateY.value = 100;
+      }
+      lastContentOffset.value = event.contentOffset.y;
+    },
+    onBeginDrag: (e) => {
+      isScrolling.value = true;
+    },
+    onEndDrag: (e) => {
+      isScrolling.value = false;
+    },
+  });
+
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }} showsVerticalScrollIndicator={false}>
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }}
+        showsVerticalScrollIndicator={false}
+      >
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
           <CView>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name}</CText>
@@ -380,7 +501,7 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
                   alignItems: "center",
                 }}
               >
-                <CText style={{ fontSize: "title", fontWeight: "700" }}>{skillsMean.toFixed(1)}</CText>
+                <CText style={{ fontSize: "title", fontWeight: "700" }}>{Number.isNaN(skillsMean) ? "-" : skillsMean.toFixed(1)}</CText>
               </CView>
             </CView>
             <CView style={{ justifyContent: "center", alignItems: "center", gap: 5 }}>
@@ -396,34 +517,37 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
                   alignItems: "center",
                 }}
               >
-                <CText style={{ fontSize: "title", fontWeight: "700" }}>{behaviourMean.toFixed(1)}</CText>
+                <CText style={{ fontSize: "title", fontWeight: "700" }}>{Number.isNaN(behaviourMean) ? "-" : behaviourMean.toFixed(1)}</CText>
               </CView>
             </CView>
           </CView>
         </CView>
-        <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.objectives", "Tavoitteet")}</CText>
-          <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.objective-counts", "Arviointikerrat tavoitteittain")}</CText>
-          <StyledBarChart data={learningObjectivesAndCounts} style={{ height: 200 }} />
-          <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
-            {learningObjectivesAndCounts.map((objAndCount, idx) => (
-              <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "100%", paddingRight: 30 }}>
-                <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
-                  <CView style={{ width: 10, height: 10, backgroundColor: objAndCount.color }} />
-                  <CText style={{ fontSize: "xs" }}>{objAndCount.x}</CText>
+        {objectives.length > 0 && (
+          <CView style={{ gap: 10 }}>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.objectives", "Tavoitteet")}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.objective-counts", "Arviointikerrat tavoitteittain")}</CText>
+            <StyledBarChart data={learningObjectivesAndCounts} style={{ height: 200 }} />
+            <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
+              {learningObjectivesAndCounts.map((objAndCount, idx) => (
+                <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "100%", paddingRight: 30 }}>
+                  <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
+                    <CView style={{ width: 10, height: 10, backgroundColor: objAndCount.color }} />
+                    <CText style={{ fontSize: "xs" }}>{objAndCount.x}</CText>
+                  </CView>
+                  <CText style={{ fontSize: "sm", fontWeight: "600" }}>{objAndCount.y}</CText>
                 </CView>
-                <CText style={{ fontSize: "sm", fontWeight: "600" }}>{objAndCount.y}</CText>
-              </CView>
-            ))}
+              ))}
+            </CView>
           </CView>
-        </CView>
-      </ScrollView>
-      <ShadowButton
-        style={{ position: "absolute", bottom: 20, right: 15 }}
-        title={t("new-evaluation", "Uusi arviointi")}
-        onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
-        leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
-      />
+        )}
+      </Animated.ScrollView>
+      <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
+        <ShadowButton
+          title={t("new-evaluation", "Uusi arviointi")}
+          onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
+          leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
+        />
+      </Animated.View>
     </CView>
   );
 });

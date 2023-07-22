@@ -17,6 +17,7 @@ export const COLORS = {
   art: "#ff006e",
   class: "#ffbe0b",
   error: "darkred",
+  transparent: "transparent",
 } as const;
 
 export const FONT_SIZES = {
