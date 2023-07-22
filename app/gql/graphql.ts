@@ -502,13 +502,25 @@ export type GroupOverviewPage_GetGroupQuery = {
     currentClassYear: {
       __typename?: "ClassYear";
       info: { __typename?: "ClassYearInfo"; code: ClassYearCode; label: string };
-      students: Array<{ __typename?: "Student"; id: string; name: string }>;
+      students: Array<{
+        __typename?: "Student";
+        id: string;
+        name: string;
+        currentClassEvaluations: Array<{ __typename?: "Evaluation"; id: string; wasPresent: boolean }>;
+      }>;
       evaluationCollections: Array<
         {
           __typename?: "EvaluationCollection";
           id: string;
           date: string;
           environment: { __typename?: "Environment"; label: string; color: string };
+          learningObjectives: Array<{
+            __typename?: "LearningObjective";
+            code: string;
+            label: string;
+            description: string;
+            type: LearningObjectiveType;
+          }>;
         } & { " $fragmentRefs"?: { CollectionsLineChart_EvaluationCollectionFragment: CollectionsLineChart_EvaluationCollectionFragment } }
       >;
     };
@@ -1370,6 +1382,17 @@ export const GroupOverviewPage_GetGroupDocument = {
                           selections: [
                             { kind: "Field", name: { kind: "Name", value: "id" } },
                             { kind: "Field", name: { kind: "Name", value: "name" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "currentClassEvaluations" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  { kind: "Field", name: { kind: "Name", value: "id" } },
+                                  { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+                                ],
+                              },
+                            },
                           ],
                         },
                       },
@@ -1389,6 +1412,19 @@ export const GroupOverviewPage_GetGroupDocument = {
                                 selections: [
                                   { kind: "Field", name: { kind: "Name", value: "label" } },
                                   { kind: "Field", name: { kind: "Name", value: "color" } },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "learningObjectives" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  { kind: "Field", name: { kind: "Name", value: "code" } },
+                                  { kind: "Field", name: { kind: "Name", value: "label" } },
+                                  { kind: "Field", name: { kind: "Name", value: "description" } },
+                                  { kind: "Field", name: { kind: "Name", value: "type" } },
                                 ],
                               },
                             },

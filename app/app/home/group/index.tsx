@@ -10,7 +10,7 @@ import { TabView, SceneRendererProps, Route, NavigationState } from "react-nativ
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Card from "../../../components/Card";
 import CollectionsLineChart from "../../../components/charts/CollectionsLineChart";
-import EnvironmentsBarChart, { EnvironmentBarChartDataType } from "../../../components/charts/EnvironmentsBarChart";
+import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
 import LineChartBase, { DataType } from "../../../components/charts/LineChartBase";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
@@ -46,6 +46,10 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
         students {
           id
           name
+          currentClassEvaluations {
+            id
+            wasPresent
+          }
         }
         evaluationCollections {
           id
@@ -53,6 +57,12 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           environment {
             label
             color
+          }
+          learningObjectives {
+            code
+            label
+            description
+            type
           }
           ...CollectionsLineChart_EvaluationCollection
         }
@@ -113,20 +123,32 @@ type NavigationProps = {
   navigation: NativeStackScreenProps<HomeStackParams, "group">["navigation"];
 };
 
-function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
+const StudentList = memo(function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
+
   return (
-    <CView style={{ flexGrow: 1, padding: "lg" }}>
+    <CView style={{ flexGrow: 1, paddingHorizontal: "lg" }}>
       {group.currentClassYear.students.length > 0 ? (
         <CFlatList
+          contentContainerStyle={{ paddingTop: 20, paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
           data={group.currentClassYear.students}
-          renderItem={({ item }) => (
-            <Card style={{ marginBottom: "md" }}>
-              <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
-                <CText style={{ fontSize: "md", fontWeight: "400" }}>{item.name}</CText>
-              </CTouchableOpacity>
-            </Card>
-          )}
+          renderItem={({ item }) => {
+            const presentClasses = item.currentClassEvaluations.reduce((prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal), 0);
+            const allClasses = group.currentClassYear.evaluationCollections.length;
+            return (
+              <Card style={{ marginBottom: "md" }} key={item.id}>
+                <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
+                  <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
+                  <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                    <CText style={{ fontSize: "sm", color: "gray" }}>
+                      {t("present", "Paikalla")} {presentClasses}/{allClasses}
+                    </CText>
+                  </CView>
+                </CTouchableOpacity>
+              </Card>
+            );
+          }}
         />
       ) : (
         <CView style={{ height: 300, justifyContent: "center", alignItems: "center" }}>
@@ -135,18 +157,20 @@ function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroup
       )}
     </CView>
   );
-}
+});
 
 const EvaluationList = memo(function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
   return (
-    <CView style={{ flexGrow: 1, padding: "lg" }}>
+    <CView style={{ flexGrow: 1, paddingHorizontal: "lg" }}>
       {group.currentClassYear.evaluationCollections.length > 0 ? (
         <CFlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 20, paddingBottom: 100 }}
           data={group.currentClassYear.evaluationCollections}
           renderItem={({ item }) => (
-            <Card style={{ marginBottom: "md" }}>
+            <Card style={{ marginBottom: "md" }} key={item.id}>
               <CTouchableOpacity onPress={() => navigation.navigate("collection", { ...item, environmentLabel: item.environment.label })}>
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.environment.label}</CText>
                 <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -162,7 +186,7 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
       )}
       <ShadowButton
         style={{ position: "absolute", bottom: 20, right: 15 }}
-        title={t("group.new-evaluation", "Uusi arviointi")}
+        title={t("new-evaluation", "Uusi arviointi")}
         onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
         leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
       />
@@ -170,24 +194,43 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
   );
 });
 
-const ObjectiveList = memo(function ObjectiveList({ getGroup: group }: GroupOverviewPage_GetGroupQuery) {
+const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
   const { t } = useTranslation();
 
+  const learningObjectiveCounts = objectives.map((objective, idx) => {
+    return {
+      ...objective,
+      count: group.currentClassYear.evaluationCollections.reduce(
+        (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
+        0
+      ),
+    };
+  });
+
   return (
-    <CView style={{ flexGrow: 1, padding: "lg" }}>
+    <CView style={{ flexGrow: 1, paddingHorizontal: "lg" }}>
       {objectives.length > 0 ? (
         // TODO: Show pie chart and make list into accordion with more info about the objective when opened
         // Add REAL objective count to string
         <CFlatList
-          data={objectives}
+          data={learningObjectiveCounts}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 20, paddingBottom: 50 }}
           renderItem={({ item }) => (
-            <Card style={{ marginBottom: "md" }}>
-              <CText>{`${item.code}: ${item.label}`}</CText>
-              <CText style={{ fontSize: "sm", fontWeight: "400", color: "gray" }}>
-                {t("group.objective-evaluation-count", "Arvioitu {{count}} kertaa", { count: 10 })}
-              </CText>
-            </Card>
+            <CTouchableOpacity
+              key={item.code}
+              onPress={() =>
+                navigation.navigate("learning-objective", { code: item.code, label: item.label, description: item.description, type: item.type })
+              }
+            >
+              <Card style={{ marginBottom: "md" }}>
+                <CText>{`${item.code}: ${item.label}`}</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "400", color: "gray" }}>
+                  {t("group.objective-evaluation-count", "Arvioitu {{count}} kertaa", { count: item.count })}
+                </CText>
+              </Card>
+            </CTouchableOpacity>
           )}
         />
       ) : (
@@ -209,13 +252,26 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
 
   const lastEvaluation = [...group.currentClassYear.evaluationCollections].sort((a, b) => (a.date > b.date ? 1 : -1))[0];
   const environments = getEnvironments(group.subject.code);
+  const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
+  const colorPalette = getPredefinedColors(objectives.length);
 
-  const environmentsAndCounts: EnvironmentBarChartDataType[] = environments.map((environment, idx) => {
+  const environmentsAndCounts: StyledBarChartDataType[] = environments.map((environment, idx) => {
     return {
       x: environment.label,
       color: environment.color,
       y: group.currentClassYear.evaluationCollections.reduce(
         (val, evaluation) => (evaluation.environment.label === environment.label ? val + 1 : val),
+        0
+      ),
+    };
+  });
+
+  const learningObjectivesAndCounts: StyledBarChartDataType[] = objectives.map((objective, idx) => {
+    return {
+      x: `${objective.code}: ${objective.label}`,
+      color: colorPalette[idx],
+      y: group.currentClassYear.evaluationCollections.reduce(
+        (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
         0
       ),
     };
@@ -235,12 +291,15 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
 
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }} showsVerticalScrollIndicator={false}>
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
           <CView>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.currentClassYear.info.label}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.subject.label}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>
+              {t("group.student-count", "{{count}} oppilasta", { count: group.currentClassYear.students.length })}
+            </CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>
               {t("group.evaluation-count", "{{count}} arviointia", { count: group.currentClassYear.evaluationCollections.length })}
             </CText>
@@ -274,12 +333,12 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
         </CView>
 
         <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.environment-counts-title", "Ympäristöt")}</CText>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.environments", "Ympäristöt")}</CText>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.environment-counts", "Arviointikerrat ympäristöittäin")}</CText>
-          <EnvironmentsBarChart data={environmentsAndCounts} style={{ height: 200 }} />
+          <StyledBarChart data={environmentsAndCounts} style={{ height: 200 }} />
           <CView style={{ gap: 2, flexDirection: "row", alignItems: "flex-start", flexWrap: "wrap", width: "100%" }}>
-            {environmentsAndCounts.map((envAndCount) => (
-              <CView style={{ justifyContent: "space-between", flexDirection: "row", width: "40%", marginRight: 30 }}>
+            {environmentsAndCounts.map((envAndCount, idx) => (
+              <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "40%", marginRight: 30 }}>
                 <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
                   <CView style={{ width: 10, height: 10, backgroundColor: envAndCount.color }} />
                   <CText style={{ fontSize: "sm" }}>{envAndCount.x}</CText>
@@ -328,10 +387,26 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
             </CView>
           </CView>
         </CView>
+        <CView style={{ gap: 10 }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.objectives", "Tavoitteet")}</CText>
+          <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.objective-counts", "Arviointikerrat tavoitteittain")}</CText>
+          <StyledBarChart data={learningObjectivesAndCounts} style={{ height: 200 }} />
+          <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
+            {learningObjectivesAndCounts.map((objAndCount, idx) => (
+              <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "100%", paddingRight: 30 }}>
+                <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
+                  <CView style={{ width: 10, height: 10, backgroundColor: objAndCount.color }} />
+                  <CText style={{ fontSize: "xs" }}>{objAndCount.x}</CText>
+                </CView>
+                <CText style={{ fontSize: "sm", fontWeight: "600" }}>{objAndCount.y}</CText>
+              </CView>
+            ))}
+          </CView>
+        </CView>
       </ScrollView>
       <ShadowButton
         style={{ position: "absolute", bottom: 20, right: 15 }}
-        title={t("group.new-evaluation", "Uusi arviointi")}
+        title={t("new-evaluation", "Uusi arviointi")}
         onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
         leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
       />
@@ -406,7 +481,7 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
       case "students":
         return <StudentList {...data} navigation={navigation} />;
       case "objectives":
-        return <ObjectiveList {...data} />;
+        return <ObjectiveList {...data} navigation={navigation} />;
       case "statistics":
         return <StatisticsView {...data} navigation={navigation} />;
       default:

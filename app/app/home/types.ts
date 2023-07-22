@@ -18,4 +18,13 @@ export type HomeStackParams = {
     groupId: string;
   };
   evaluation: undefined;
+  "edit-students": {
+    groupId: string;
+  };
+  "learning-objective": {
+    code: string;
+    label: string;
+    description: string;
+    type: string;
+  };
 };
