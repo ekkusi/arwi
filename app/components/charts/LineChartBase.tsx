@@ -14,7 +14,7 @@ export type LineChartBaseProps = CViewProps & {
   data: DataType[];
   minItems?: number;
 };
-export default function LineChartBase({ data, minItems = 3, ...rest }: LineChartBaseProps) {
+export default function LineChartBase({ data, minItems = 2, ...rest }: LineChartBaseProps) {
   const { t } = useTranslation();
 
   return (

@@ -2,13 +2,14 @@ import { useQuery } from "@apollo/client";
 import { Link } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import { memo, useEffect, useLayoutEffect, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, ScrollView, TextInput, useWindowDimensions } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 import Card from "../../../components/Card";
 import CollectionsLineChart from "../../../components/charts/CollectionsLineChart";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
@@ -30,6 +31,8 @@ import { COLORS, SPACING } from "../../../theme";
 import { CColor } from "../../../theme/types";
 import { HomeStackParams } from "../types";
 import CTextInput from "../../../components/primitives/CTextInput";
+import CircledNumber from "../../../components/CircledNumber";
+import CollectionStatistics from "../../../components/charts/CollectionStatistics";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -72,48 +75,6 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
     }
   }
 `);
-
-const CollectionsLineChart_Collection_Fragment = graphql(`
-  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {
-    id
-    date
-    environment {
-      label
-      code
-    }
-    evaluations {
-      skillsRating
-      behaviourRating
-      wasPresent
-      isStellar
-    }
-  }
-`);
-
-const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[]) => {
-  const data: DataType[] = [];
-  let currentSkillsSum = 0;
-  let notNullSkillsCount = 0;
-  let currentBehaviourSum = 0;
-  let notNullBehaviourCount = 0;
-  collections.forEach((it) => {
-    const { skillsAverage, behaviourAverage } = analyzeEvaluations(it.evaluations);
-    if (skillsAverage > 0) {
-      notNullSkillsCount += 1;
-      currentSkillsSum += skillsAverage;
-    }
-    if (behaviourAverage > 0) {
-      notNullBehaviourCount += 1;
-      currentBehaviourSum += behaviourAverage;
-    }
-    data.push({
-      date: formatDate(it.date),
-      skills: skillsAverage > 0 ? Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100 : null,
-      behaviour: behaviourAverage > 0 ? Math.round((currentBehaviourSum / notNullBehaviourCount) * 100) / 100 : null,
-    });
-  });
-  return data;
-};
 
 const GroupOverviewPage_DeleteGroup_Mutation = graphql(`
   mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {
@@ -248,10 +209,10 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
       }
       lastContentOffset.value = event.contentOffset.y;
     },
-    onBeginDrag: (e) => {
+    onBeginDrag: (_) => {
       isScrolling.value = true;
     },
-    onEndDrag: (e) => {
+    onEndDrag: (_) => {
       isScrolling.value = false;
     },
   });
@@ -343,6 +304,18 @@ const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation 
   );
 });
 
+const EvaluationGraph = memo(function EvaluationGraph({ data }: { data: DataType[] }) {
+  return <LineChartBase data={data} style={{ marginBottom: "xl" }} />;
+});
+
+const ObjectiveGraph = memo(function ObjectiveGraph({ data }: { data: StyledBarChartDataType[] }) {
+  return <StyledBarChart data={data} style={{ height: 200 }} />;
+});
+
+const EnvironmentGraph = memo(function EnvironmentGraph({ data }: { data: StyledBarChartDataType[] }) {
+  return <StyledBarChart data={data} style={{ height: 200 }} />;
+});
+
 const StatisticsView = memo(function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
@@ -351,39 +324,35 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
   const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
   const colorPalette = getPredefinedColors(objectives.length);
 
-  const environmentsAndCounts: StyledBarChartDataType[] = environments.map((environment, idx) => {
-    return {
-      x: environment.label,
-      color: environment.color,
-      y: group.currentClassYear.evaluationCollections.reduce(
-        (val, evaluation) => (evaluation.environment.label === environment.label ? val + 1 : val),
-        0
-      ),
-    };
-  });
+  const environmentsAndCounts: StyledBarChartDataType[] = useMemo(
+    () =>
+      environments.map((environment, idx) => {
+        return {
+          x: environment.label,
+          color: environment.color,
+          y: group.currentClassYear.evaluationCollections.reduce(
+            (val, evaluation) => (evaluation.environment.label === environment.label ? val + 1 : val),
+            0
+          ),
+        };
+      }),
+    [group, environments]
+  );
 
-  const learningObjectivesAndCounts: StyledBarChartDataType[] = objectives.map((objective, idx) => {
-    return {
-      x: `${objective.code}: ${objective.label}`,
-      color: colorPalette[idx],
-      y: group.currentClassYear.evaluationCollections.reduce(
-        (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
-        0
-      ),
-    };
-  });
-
-  const collections = getFragmentData(CollectionsLineChart_Collection_Fragment, group.currentClassYear.evaluationCollections);
-
-  const sortedCollections = [...collections].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  const evaluationData = mapData(sortedCollections);
-
-  const evaluationsWithSkills = evaluationData.filter((obj) => obj.skills !== undefined);
-  const skillsMean = evaluationsWithSkills.reduce((prev, evaluation) => prev + (evaluation.skills || 0), 0) / evaluationsWithSkills.length;
-
-  const evaluationsWithBehaviour = evaluationData.filter((obj) => obj.behaviour !== undefined);
-  const behaviourMean =
-    evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) / evaluationsWithBehaviour.length;
+  const learningObjectivesAndCounts: StyledBarChartDataType[] = useMemo(
+    () =>
+      objectives.map((objective, idx) => {
+        return {
+          x: `${objective.code}: ${objective.label}`,
+          color: colorPalette[idx],
+          y: group.currentClassYear.evaluationCollections.reduce(
+            (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
+            0
+          ),
+        };
+      }),
+    [group, objectives, colorPalette]
+  );
 
   const translateY = useSharedValue(0);
   const isScrolling = useSharedValue(false);
@@ -411,10 +380,10 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
       }
       lastContentOffset.value = event.contentOffset.y;
     },
-    onBeginDrag: (e) => {
+    onBeginDrag: (_) => {
       isScrolling.value = true;
     },
-    onEndDrag: (e) => {
+    onEndDrag: (_) => {
       isScrolling.value = false;
     },
   });
@@ -470,7 +439,7 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
         <CView style={{ gap: 10 }}>
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.environments", "Ympäristöt")}</CText>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.environment-counts", "Arviointikerrat ympäristöittäin")}</CText>
-          <StyledBarChart data={environmentsAndCounts} style={{ height: 200 }} />
+          <EnvironmentGraph data={environmentsAndCounts} />
           <CView style={{ gap: 2, flexDirection: "row", alignItems: "flex-start", flexWrap: "wrap", width: "100%" }}>
             {environmentsAndCounts.map((envAndCount, idx) => (
               <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "40%", marginRight: 30 }}>
@@ -483,50 +452,16 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
             ))}
           </CView>
         </CView>
-        <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.evaluation-means-title", "Arvioinnit")}</CText>
-          <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.evaluations-over-time", "Arvointien keskiarvojen kehitys")}</CText>
-          <LineChartBase data={evaluationData} style={{ marginBottom: "xl" }} />
-          <CView style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-            <CView style={{ justifyContent: "center", alignItems: "center", gap: 5 }}>
-              <CText style={{ fontSize: "xs", fontWeight: "500" }}>{t("group.skills-mean", "Taitojen keskiarvo")}</CText>
-              <CView
-                style={{
-                  width: 70,
-                  height: 70,
-                  borderRadius: 35,
-                  borderWidth: 1,
-                  borderColor: "lightgray",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <CText style={{ fontSize: "title", fontWeight: "700" }}>{Number.isNaN(skillsMean) ? "-" : skillsMean.toFixed(1)}</CText>
-              </CView>
-            </CView>
-            <CView style={{ justifyContent: "center", alignItems: "center", gap: 5 }}>
-              <CText style={{ fontSize: "xs", fontWeight: "500" }}>{t("group.behaviour-mean", "Työskentelyn keskiarvo")}</CText>
-              <CView
-                style={{
-                  width: 70,
-                  height: 70,
-                  borderRadius: 35,
-                  borderWidth: 1,
-                  borderColor: "lightgray",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <CText style={{ fontSize: "title", fontWeight: "700" }}>{Number.isNaN(behaviourMean) ? "-" : behaviourMean.toFixed(1)}</CText>
-              </CView>
-            </CView>
-          </CView>
-        </CView>
+        <CollectionStatistics
+          title={t("group.evaluation-means-title", "Arvioinnit")}
+          subjectCode={group.subject.code}
+          collections={group.currentClassYear.evaluationCollections}
+        />
         {objectives.length > 0 && (
           <CView style={{ gap: 10 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.objectives", "Tavoitteet")}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.objective-counts", "Arviointikerrat tavoitteittain")}</CText>
-            <StyledBarChart data={learningObjectivesAndCounts} style={{ height: 200 }} />
+            <ObjectiveGraph data={learningObjectivesAndCounts} />
             <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
               {learningObjectivesAndCounts.map((objAndCount, idx) => (
                 <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "100%", paddingRight: 30 }}>

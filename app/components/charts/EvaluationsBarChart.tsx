@@ -1,11 +1,14 @@
-import { VictoryBar, VictoryChart, VictoryContainer, VictoryGroup } from "victory-native";
-import { useState } from "react";
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryContainer, VictoryGroup } from "victory-native";
+import { useMemo, useState } from "react";
+import { t } from "i18next";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
 import { formatRatingNumber } from "../../helpers/dataMappers";
-import { DataType } from "./BarChartBase";
+
 import { hexToRgbA } from "../../helpers/color";
 import CView, { CViewProps } from "../primitives/CView";
+import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
+import CText from "../primitives/CText";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on Evaluation {
@@ -35,10 +38,14 @@ type TempDataType = {
   behaviour: TempDataValue;
 };
 
+type EvaluationsBarChartDataType = StyledBarChartDataType & {
+  type: "skills" | "behaviour";
+};
+
 const INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD = 0;
 
 const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
-  const data: DataType[] = [];
+  const data: EvaluationsBarChartDataType[] = [];
   const tempData: { [key: string]: TempDataType } = {};
   evaluations.forEach((evaluation) => {
     const envCode = evaluation.collection.environment.code;
@@ -70,46 +77,66 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
   Object.keys(tempData).forEach((key) => {
     if (tempData[key].skills.count < INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD) return;
     data.push({
-      environment: tempData[key].label,
-      fill: tempData[key].color,
-      skills: tempData[key].skills.count > 0 ? Math.round((tempData[key].skills.value / tempData[key].skills.count) * 100) / 100 : null,
-      behaviour: tempData[key].behaviour.count > 0 ? Math.round((tempData[key].behaviour.value / tempData[key].behaviour.count) * 100) / 100 : null,
+      x: `${tempData[key].label}1`,
+      color: tempData[key].color,
+      y: tempData[key].skills.count > 0 ? Math.round((tempData[key].skills.value / tempData[key].skills.count) * 100) / 100 : 0,
+      type: "skills",
+    });
+    data.push({
+      x: `${tempData[key].label}2`,
+      color: hexToRgbA(tempData[key].color, 0.8),
+      y: tempData[key].behaviour.count > 0 ? Math.round((tempData[key].behaviour.value / tempData[key].behaviour.count) * 100) / 100 : 0,
+      type: "behaviour",
     });
   });
+
   return data;
 };
 
 type EvaluationsBarChartProps = CViewProps & {
   evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
+  filter?: string;
 };
 
-export default function EvaluationsBarChart({ evaluations: evaluationFragments, ...rest }: EvaluationsBarChartProps) {
-  const [size, setSize] = useState<{ width: number; height: number } | null>(null); // Crashes on ios if is set to width: 0 and height: 0 at start
-  const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
-  const filteredEvaluations = evaluations.filter((it) => it.wasPresent);
+const getFilteredData = (data: EvaluationsBarChartDataType[], filter: string) => {
+  switch (filter) {
+    case "skills":
+      return data.filter((obj) => obj.type === "skills");
+    case "behaviour":
+      return data.filter((obj) => obj.type === "behaviour");
+    default:
+      return data;
+  }
+};
 
-  const data = mapData(filteredEvaluations);
+export default function EvaluationsBarChart({ evaluations: evaluationFragments, filter = "all", ...rest }: EvaluationsBarChartProps) {
+  const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
+  const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
+
+  const data = useMemo(() => mapData(filteredEvaluations), [filteredEvaluations]);
+  const filteredData = getFilteredData(data, filter);
+
   return (
-    <CView
-      style={{ flex: 1, width: "100%" }}
-      onLayout={(event) => {
-        setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height });
-      }}
-      {...rest}
-    >
-      {size && (
-        <VictoryChart
-          horizontal
-          padding={{ top: 50, left: 50, right: 15, bottom: 50 }}
-          containerComponent={<VictoryContainer disableContainerEvents />}
-          {...size}
-        >
-          <VictoryGroup offset={20}>
-            <VictoryBar data={data} x="environment" y="skills" style={{ data: { fill: ({ datum }) => datum.fill } }} />
-            <VictoryBar data={data} x="environment" y="behaviour" style={{ data: { fill: ({ datum }) => hexToRgbA(datum.fill, 0.8) } }} />
-          </VictoryGroup>
-        </VictoryChart>
-      )}
+    <CView style={{ width: "100%" }}>
+      <StyledBarChart data={filteredData} style={{ height: 200 }} gradeAxis {...rest} />
+
+      <CView style={{ gap: 2, flexDirection: "row", justifyContent: "flex-start", flexWrap: "wrap", width: "100%" }}>
+        {filter === "all" && (
+          <CView style={{ width: "100%", flexDirection: "row" }}>
+            <CText style={{ flex: 1, fontSize: "xs", fontWeight: "500" }}>{t("skills", "Taidot")}</CText>
+            <CText style={{ flex: 1, fontSize: "xs", fontWeight: "500" }}>{t("behaviour", "Työskentely")}</CText>
+          </CView>
+        )}
+        {filteredData.map((obj, idx) => (
+          <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "40%", marginRight: 30 }}>
+            <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
+              <CView style={{ width: 10, height: 10, backgroundColor: obj.color }} />
+              <CText style={{ fontSize: "xs" }}>{obj.x.slice(0, -1)}</CText>
+            </CView>
+            <CText style={{ fontSize: "sm", fontWeight: "600" }}>{obj.y}</CText>
+          </CView>
+        ))}
+      </CView>
     </CView>
   );
 }
