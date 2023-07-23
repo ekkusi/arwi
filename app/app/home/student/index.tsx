@@ -12,7 +12,7 @@ import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
-import StudentEvaluationsRecap from "../../../components/StudentEvaluationsRecap";
+import StudentEvaluationsRecap, { StudentEvaluationRecap_Evaluation_Fragment } from "../../../components/StudentEvaluationsRecap";
 import { getFragmentData, graphql } from "../../../gql";
 import { HomeStackParams } from "../types";
 import { COLORS } from "../../../theme";
@@ -51,28 +51,6 @@ const StudentPage_GetStudent_Query = graphql(`
         ...StudentEvaluationRecap_Evaluation
         ...OpenAIUtils_Evaluation
       }
-    }
-  }
-`);
-
-const StudentEvaluationRecap_Evaluation_Fragment = graphql(`
-  fragment StudentEvaluationRecap_Evaluation on Evaluation {
-    id
-    wasPresent
-    behaviourRating
-    skillsRating
-    isStellar
-    ...EvaluationsLineChart_Evaluation
-    ...EvaluationsBarChart_Evaluation
-  }
-`);
-
-const StudentEvaluationRecap_Student_Fragment = graphql(`
-  fragment StudentEvaluationRecap_Student on Student {
-    id
-    name
-    group {
-      name
     }
   }
 `);
@@ -126,7 +104,17 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   const environments = getEnvironments(student.group.subject.code);
   const evaluations = getFragmentData(StudentEvaluationRecap_Evaluation_Fragment, evaluationsSimple);
 
-  const { absencesAmount, presencesAmount, skillsAverage, behaviourAverage, gradeSuggestion } = analyzeEvaluations([...evaluations]);
+  const {
+    absencesAmount,
+    presencesAmount,
+    skillsAverage,
+    skillsMedian,
+    skillsMode,
+    behaviourAverage,
+    behaviourMedian,
+    behaviourMode,
+    gradeSuggestion,
+  } = analyzeEvaluations([...evaluations]);
 
   return (
     <ScrollView ref={scrollView}>
@@ -149,6 +137,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           <CircledNumber value={(skillsAverage + behaviourAverage) / 2} title={t("mean", "Keskiarvo")} />
         </CView>
         <CView style={{ width: "100%", gap: 10 }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("statistics", "Tilastot")}</CText>
           <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>
               {t("evaluation-means-by-environments", "Arvointien keskiarvot ympäristöittäin")}
@@ -210,6 +199,17 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           <EvaluationsBarChart evaluations={evaluations} filter={evaluationsByEnvironmentsFilter} />
         </CView>
         <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} />
+        <CView style={{ gap: 10 }}>
+          <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>{t("charasteristics", "Tunnusluvut")}</CText>
+          <CView style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
+            <CircledNumber value={skillsMedian} title={t("skill-median", "Taitojen mediaani")} />
+            <CircledNumber value={behaviourMedian} title={t("behaviour-median", "Työskentelyn mediaani")} />
+          </CView>
+          <CView style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
+            <CircledNumber value={skillsMode} title={t("skill-mode", "Taitojen moodi")} />
+            <CircledNumber value={behaviourMode} title={t("behaviour-mode", "Työskentelyn moodi")} />
+          </CView>
+        </CView>
         <CText style={{ marginTop: "xl", fontSize: "xl" }}>{t("StudentView.allEvaluations", "Kaikki arvioinnit")}</CText>
         <EvaluationsAccordion evaluations={student.currentClassEvaluations} />
         <CView style={{ marginTop: "lg" }} onLayout={(event) => setScrollYPos(event.nativeEvent.layout.y)}>

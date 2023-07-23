@@ -10,13 +10,20 @@ import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
 
-const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
+export const StudentEvaluationRecap_Evaluation_Fragment = graphql(/* GraphQL */ `
   fragment StudentEvaluationRecap_Evaluation on Evaluation {
     id
     wasPresent
     behaviourRating
     skillsRating
     isStellar
+    collection {
+      id
+      environment {
+        code
+        label
+      }
+    }
     ...EvaluationsLineChart_Evaluation
     ...EvaluationsBarChart_Evaluation
   }
