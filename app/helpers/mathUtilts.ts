@@ -17,3 +17,35 @@ export function stdev(arr: number[], meanParam?: number) {
   // Returning the standard deviation
   return Math.sqrt(sum / arr.length);
 }
+
+export function median(arr: number[]) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const isEven = sorted.length % 2 === 0;
+
+  const middle = (arr.length + 1) / 2;
+
+  return isEven ? (sorted[middle - 1.5] + sorted[middle - 0.5]) / 2 : sorted[middle - 1];
+}
+
+export function mode(arr: number[]) {
+  const res: { [id: number]: number } = {};
+  let max = 0;
+  let count = 0;
+
+  for (let i = 0; i < arr.length; i += 1) {
+    const item = arr[i];
+
+    if (res[item]) {
+      res[item] += 1;
+    } else {
+      res[item] = 1;
+    }
+
+    if (count < res[item]) {
+      max = item;
+      count = res[item];
+    }
+  }
+
+  return max;
+}

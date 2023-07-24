@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
+import { MenuProvider } from "react-native-popup-menu";
 import LoadingIndicator from "./components/LoadingIndicator";
 import MainStack from "./app/_stack";
 import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
@@ -54,7 +55,9 @@ export default function Main() {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar backgroundColor={COLORS.green} />
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
+        <MenuProvider>
+          <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
+        </MenuProvider>
       </GestureHandlerRootView>
     </SafeAreaView>
   );

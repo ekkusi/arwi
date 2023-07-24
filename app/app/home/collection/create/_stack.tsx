@@ -24,7 +24,7 @@ export default function CollectionCreationStack({ route, navigation }: NativeSta
         screenOptions={() => ({
           ...defaultHeaderStyles,
           animation: "slide_from_right",
-          title: t("CollectionCreationStack.newCollection", "Uusi arviointi"),
+          title: t("new-evaluation", "Uusi arviointi"),
           headerLeft: () => <CView />,
           headerRight: () => (
             <CButton

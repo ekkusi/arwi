@@ -14,15 +14,15 @@ export type LineChartBaseProps = CViewProps & {
   data: DataType[];
   minItems?: number;
 };
-export default function LineChartBase({ data, minItems = 3, ...rest }: LineChartBaseProps) {
+export default function LineChartBase({ data, minItems = 2, ...rest }: LineChartBaseProps) {
   const { t } = useTranslation();
 
   return (
-    <CView {...rest} style={{ position: "relative", ...rest.style }}>
-      <VictoryChart padding={{ top: 50, bottom: 50, left: 60, right: 50 }}>
-        <VictoryLine data={data} x="date" y="skills" style={{ data: { stroke: COLORS.primary } }} />
-        <VictoryLine data={data} x="date" y="behaviour" style={{ data: { stroke: COLORS.secondary } }} />
-        <VictoryAxis dependentAxis domain={{ y: [4, 10] }} />
+    <CView {...rest} style={{ position: "relative", backgroundColor: "white", ...rest.style }}>
+      <VictoryChart padding={{ top: 20, bottom: 50, left: 40, right: 60 }}>
+        <VictoryLine interpolation="natural" data={data} x="date" y="skills" style={{ data: { stroke: COLORS.primary, strokeWidth: 5 } }} />
+        <VictoryLine interpolation="natural" data={data} x="date" y="behaviour" style={{ data: { stroke: COLORS.secondary, strokeWidth: 5 } }} />
+        <VictoryAxis dependentAxis domain={{ y: [4, 10] }} tickValues={[4, 5, 6, 7, 8, 9, 10]} />
         <VictoryAxis tickCount={2} />
         <VictoryLegend
           orientation="horizontal"
@@ -50,7 +50,7 @@ export default function LineChartBase({ data, minItems = 3, ...rest }: LineChart
             backgroundColor: "rgba(255,255,255,0.5)",
           }}
         >
-          <CText style={{ fontSize: "sm", marginHorizontal: "2xl", textAlign: "center" }}>
+          <CText style={{ fontSize: "sm", width: "50%", textAlign: "center" }}>
             {t("components.lineChartBase.notEnoughData", "Kuvaajan näyttämiseen tarvitaan vähintään {{count}} arviointia", { count: minItems })}
           </CText>
         </CView>

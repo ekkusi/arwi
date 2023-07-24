@@ -1,28 +1,38 @@
 import { useQuery } from "@apollo/client";
 import { Link } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
-import { getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import { useEffect, useState } from "react";
+import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
+import { memo, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, useWindowDimensions } from "react-native";
+import { Alert, ScrollView, TextInput, useWindowDimensions } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 import Card from "../../../components/Card";
 import CollectionsLineChart from "../../../components/charts/CollectionsLineChart";
+import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
+import LineChartBase, { DataType } from "../../../components/charts/LineChartBase";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CFlatList from "../../../components/primitives/CFlatList";
+import CImage from "../../../components/primitives/CImage";
 import CText from "../../../components/primitives/CText";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CView from "../../../components/primitives/CView";
 import ShadowButton from "../../../components/primitives/ShadowButton";
-import { graphql } from "../../../gql";
-import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
+import { getFragmentData, graphql } from "../../../gql";
+import { CollectionsLineChart_EvaluationCollectionFragment, GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
+import { getPredefinedColors, subjectToIcon } from "../../../helpers/dataMappers";
 import { formatDate } from "../../../helpers/dateHelpers";
+import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import { COLORS, SPACING } from "../../../theme";
 import { CColor } from "../../../theme/types";
 import { HomeStackParams } from "../types";
+import CTextInput from "../../../components/primitives/CTextInput";
+import CircledNumber from "../../../components/CircledNumber";
+import CollectionStatistics from "../../../components/charts/CollectionStatistics";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -41,12 +51,23 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
         students {
           id
           name
+          currentClassEvaluations {
+            id
+            wasPresent
+          }
         }
         evaluationCollections {
           id
           date
           environment {
             label
+            color
+          }
+          learningObjectives {
+            code
+            label
+            description
+            type
           }
           ...CollectionsLineChart_EvaluationCollection
         }
@@ -65,75 +86,406 @@ type NavigationProps = {
   navigation: NativeStackScreenProps<HomeStackParams, "group">["navigation"];
 };
 
-function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
+const StudentList = memo(function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
-  return group.currentClassYear.students.length > 0 ? (
-    <CFlatList
-      data={group.currentClassYear.students}
-      renderItem={({ item }) => (
-        <Card style={{ marginBottom: "md" }}>
-          <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
-            <CText>{item.name}</CText>
-          </CTouchableOpacity>
-        </Card>
-      )}
-    />
-  ) : (
-    <CText>{t("group.no-students", "Ryhmässä ei ole oppilaita")}</CText>
-  );
-}
 
-function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
-  const { t } = useTranslation();
+  const translateY = useSharedValue(0);
+  const isScrolling = useSharedValue(false);
+  const lastContentOffset = useSharedValue(0);
+
+  const searchBarStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(translateY.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      if (lastContentOffset.value > event.contentOffset.y && isScrolling.value) {
+        translateY.value = 0;
+      } else if (lastContentOffset.value < event.contentOffset.y && isScrolling.value) {
+        translateY.value = -100;
+      }
+      lastContentOffset.value = event.contentOffset.y;
+    },
+    onBeginDrag: (_) => {
+      isScrolling.value = true;
+    },
+    onEndDrag: (_) => {
+      isScrolling.value = false;
+    },
+  });
+
+  const [searchText, setSearchText] = useState("");
+  const filteredStudents = group.currentClassYear.students.filter((student) => student.name.includes(searchText));
+
   return (
-    <CView style={{ flexGrow: 1, paddingHorizontal: "sm" }}>
+    <CView style={{ flexGrow: 1 }}>
+      {group.currentClassYear.students.length > 0 ? (
+        <CView>
+          <Animated.FlatList
+            onScroll={scrollHandler}
+            contentContainerStyle={{ paddingTop: SPACING.md * 2 + 48, paddingBottom: 50, paddingHorizontal: SPACING.md }}
+            showsVerticalScrollIndicator={false}
+            data={filteredStudents}
+            renderItem={({ item }) => {
+              const presentClasses = item.currentClassEvaluations.reduce((prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal), 0);
+              const allClasses = group.currentClassYear.evaluationCollections.length;
+              return (
+                <Card style={{ marginBottom: "md" }} key={item.id}>
+                  <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
+                    <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
+                    <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                      <CText style={{ fontSize: "sm", color: "gray" }}>
+                        {t("present", "Paikalla")} {presentClasses}/{allClasses}
+                      </CText>
+                    </CView>
+                  </CTouchableOpacity>
+                </Card>
+              );
+            }}
+          />
+          <Animated.View style={[{ position: "absolute", paddingTop: SPACING.md, paddingHorizontal: SPACING.md }, searchBarStyle]}>
+            <CView style={{ flexDirection: "row", alignItems: "center" }}>
+              <TextInput
+                placeholder="Etsi nimellä..."
+                onChange={(e) => setSearchText(e.nativeEvent.text)}
+                style={{
+                  backgroundColor: "white",
+                  height: 48,
+                  borderRadius: 24,
+                  width: "100%",
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  paddingLeft: 50,
+                }}
+              />
+              <MaterialCommunityIcon name="magnify" size={25} color={COLORS.darkgray} style={{ position: "absolute", left: 10 }} />
+            </CView>
+          </Animated.View>
+        </CView>
+      ) : (
+        <CView style={{ height: 300, justifyContent: "center", alignItems: "center" }}>
+          <CText style={{ width: "60%" }}>{t("group.no-students", "Ryhmässä ei ole oppilaita")}</CText>
+        </CView>
+      )}
+    </CView>
+  );
+});
+
+const EvaluationList = memo(function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
+  const { t } = useTranslation();
+
+  const translateY = useSharedValue(0);
+  const isScrolling = useSharedValue(false);
+  const lastContentOffset = useSharedValue(0);
+
+  const newEvaluationButtonStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(translateY.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      if (lastContentOffset.value > event.contentOffset.y && isScrolling.value) {
+        translateY.value = 0;
+      } else if (lastContentOffset.value < event.contentOffset.y && isScrolling.value) {
+        translateY.value = 100;
+      }
+      lastContentOffset.value = event.contentOffset.y;
+    },
+    onBeginDrag: (_) => {
+      isScrolling.value = true;
+    },
+    onEndDrag: (_) => {
+      isScrolling.value = false;
+    },
+  });
+
+  return (
+    <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
       {group.currentClassYear.evaluationCollections.length > 0 ? (
-        <CFlatList
+        <Animated.FlatList
+          onScroll={scrollHandler}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: SPACING.md, paddingBottom: 100 }}
           data={group.currentClassYear.evaluationCollections}
           renderItem={({ item }) => (
-            <Card style={{ marginBottom: "md" }}>
+            <Card style={{ marginBottom: "md" }} key={item.id}>
               <CTouchableOpacity onPress={() => navigation.navigate("collection", { ...item, environmentLabel: item.environment.label })}>
-                <CText>{`${formatDate(item.date)}: ${item.environment.label}`}</CText>
+                <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.environment.label}</CText>
+                <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                  <CView style={{ height: 20, width: 20, borderRadius: 10, backgroundColor: item.environment.color }} />
+                  <CText style={{ fontSize: "sm", color: "gray" }}>{formatDate(item.date)}</CText>
+                </CView>
               </CTouchableOpacity>
             </Card>
           )}
         />
       ) : (
-        <CText>{t("group.no-collections", "Ryhmälle ei vielä olla tehty arviointeja")}</CText>
+        <CText style={{ paddingTop: 50, alignSelf: "center" }}>{t("group.no-collections", "Ryhmälle ei vielä olla tehty arviointeja")}</CText>
       )}
-      <ShadowButton
-        style={{ position: "absolute", bottom: 20, right: 15 }}
-        title={t("group.new-evaluation", "Uusi arviointi")}
-        onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
-        leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
-      />
+      <Animated.View style={[{ position: "absolute", bottom: 20, right: 15, backgroundColor: "rgba(0,0,0,0)" }, newEvaluationButtonStyle]}>
+        <ShadowButton
+          title={t("new-evaluation", "Uusi arviointi")}
+          onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
+          leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
+        />
+      </Animated.View>
     </CView>
   );
-}
+});
 
-function ObjectiveList({ getGroup: group }: GroupOverviewPage_GetGroupQuery) {
+const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
   const { t } = useTranslation();
-  return objectives.length > 0 ? (
-    // TODO: Show pie chart and make list into accordion with more info about the objective when opened
-    <CFlatList
-      data={objectives}
-      renderItem={({ item }) => (
-        <Card style={{ marginBottom: "md" }}>
-          <CText>{`${item.code}: ${item.label}`}</CText>
-        </Card>
-      )}
-    />
-  ) : (
-    <CText>
-      {t("group.no-objectives", "Annetulle aineelle ei olla kirjattu tavoitteita tai jotain muuta on pielessä. Ilmoita tieto kehittäjille, kiitos.")}
-    </CText>
-  );
-}
 
-function StatisticsView({ getGroup: group }: GroupOverviewPage_GetGroupQuery) {
-  return <CollectionsLineChart collections={group.currentClassYear.evaluationCollections} style={{ marginBottom: "xl" }} />;
-}
+  const learningObjectiveCounts = objectives.map((objective, idx) => {
+    return {
+      ...objective,
+      count: group.currentClassYear.evaluationCollections.reduce(
+        (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
+        0
+      ),
+    };
+  });
+
+  return (
+    <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
+      {objectives.length > 0 ? (
+        // TODO: Show pie chart and make list into accordion with more info about the objective when opened
+        // Add REAL objective count to string
+        <CFlatList
+          data={learningObjectiveCounts}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: SPACING.md, paddingBottom: 50 }}
+          renderItem={({ item }) => (
+            <CTouchableOpacity
+              key={item.code}
+              onPress={() =>
+                navigation.navigate("learning-objective", { code: item.code, label: item.label, description: item.description, type: item.type })
+              }
+            >
+              <Card style={{ marginBottom: "md" }}>
+                <CText>{`${item.code}: ${item.label}`}</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "400", color: "gray" }}>
+                  {t("group.objective-evaluation-count", "Arvioitu {{count}} kertaa", { count: item.count })}
+                </CText>
+              </Card>
+            </CTouchableOpacity>
+          )}
+        />
+      ) : (
+        <CView style={{ height: 300, justifyContent: "center", alignItems: "center" }}>
+          <CText style={{ width: "80%" }}>
+            {t(
+              "group.no-objectives",
+              "Annetulle aineelle ei olla kirjattu tavoitteita tai jotain muuta on pielessä. Ilmoita tieto kehittäjille, kiitos."
+            )}
+          </CText>
+        </CView>
+      )}
+    </CView>
+  );
+});
+
+const EvaluationGraph = memo(function EvaluationGraph({ data }: { data: DataType[] }) {
+  return <LineChartBase data={data} style={{ marginBottom: "xl" }} />;
+});
+
+const ObjectiveGraph = memo(function ObjectiveGraph({ data }: { data: StyledBarChartDataType[] }) {
+  return <StyledBarChart data={data} style={{ height: 200 }} />;
+});
+
+const EnvironmentGraph = memo(function EnvironmentGraph({ data }: { data: StyledBarChartDataType[] }) {
+  return <StyledBarChart data={data} style={{ height: 200 }} />;
+});
+
+const StatisticsView = memo(function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
+  const { t } = useTranslation();
+
+  const lastEvaluation = [...group.currentClassYear.evaluationCollections].sort((a, b) => (a.date > b.date ? 1 : -1))[0];
+  const environments = getEnvironments(group.subject.code);
+  const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
+  const colorPalette = getPredefinedColors(objectives.length);
+
+  const environmentsAndCounts: StyledBarChartDataType[] = useMemo(
+    () =>
+      environments.map((environment, idx) => {
+        return {
+          x: environment.label,
+          color: environment.color,
+          y: group.currentClassYear.evaluationCollections.reduce(
+            (val, evaluation) => (evaluation.environment.label === environment.label ? val + 1 : val),
+            0
+          ),
+        };
+      }),
+    [group, environments]
+  );
+
+  const learningObjectivesAndCounts: StyledBarChartDataType[] = useMemo(
+    () =>
+      objectives.map((objective, idx) => {
+        return {
+          x: `${objective.code}: ${objective.label}`,
+          color: colorPalette[idx],
+          y: group.currentClassYear.evaluationCollections.reduce(
+            (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
+            0
+          ),
+        };
+      }),
+    [group, objectives, colorPalette]
+  );
+
+  const translateY = useSharedValue(0);
+  const isScrolling = useSharedValue(false);
+  const lastContentOffset = useSharedValue(0);
+
+  const newEvaluationButtonStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(translateY.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      if (lastContentOffset.value > event.contentOffset.y && isScrolling.value) {
+        translateY.value = 0;
+      } else if (lastContentOffset.value < event.contentOffset.y && isScrolling.value) {
+        translateY.value = 100;
+      }
+      lastContentOffset.value = event.contentOffset.y;
+    },
+    onBeginDrag: (_) => {
+      isScrolling.value = true;
+    },
+    onEndDrag: (_) => {
+      isScrolling.value = false;
+    },
+  });
+
+  return (
+    <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
+          <CView>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.currentClassYear.info.label}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.subject.label}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>
+              {t("group.student-count", "{{count}} oppilasta", { count: group.currentClassYear.students.length })}
+            </CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>
+              {t("group.evaluation-count", "{{count}} arviointia", { count: group.currentClassYear.evaluationCollections.length })}
+            </CText>
+          </CView>
+          <CView>
+            <CView
+              style={{
+                width: 70,
+                height: 70,
+                borderRadius: 35,
+                borderColor: "lightgray",
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CView style={{ width: 45, height: 45 }}>
+                <CImage
+                  style={{
+                    width: undefined,
+                    height: undefined,
+                    flex: 1,
+                    resizeMode: "contain",
+                    tintColor: "darkgray",
+                  }}
+                  source={subjectToIcon(group.subject)}
+                />
+              </CView>
+            </CView>
+          </CView>
+        </CView>
+
+        <CView style={{ gap: 10 }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.environments", "Ympäristöt")}</CText>
+          <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.environment-counts", "Arviointikerrat ympäristöittäin")}</CText>
+          <EnvironmentGraph data={environmentsAndCounts} />
+          <CView style={{ gap: 2, flexDirection: "row", alignItems: "flex-start", flexWrap: "wrap", width: "100%" }}>
+            {environmentsAndCounts.map((envAndCount, idx) => (
+              <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "40%", marginRight: 30 }}>
+                <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
+                  <CView style={{ width: 10, height: 10, backgroundColor: envAndCount.color }} />
+                  <CText style={{ fontSize: "sm" }}>{envAndCount.x}</CText>
+                </CView>
+                <CText style={{ fontSize: "sm", fontWeight: "600" }}>{envAndCount.y}</CText>
+              </CView>
+            ))}
+          </CView>
+        </CView>
+        <CollectionStatistics
+          title={t("group.evaluation-means-title", "Arvioinnit")}
+          subjectCode={group.subject.code}
+          collections={group.currentClassYear.evaluationCollections}
+        />
+        {objectives.length > 0 && (
+          <CView style={{ gap: 10 }}>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.objectives", "Tavoitteet")}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.objective-counts", "Arviointikerrat tavoitteittain")}</CText>
+            <ObjectiveGraph data={learningObjectivesAndCounts} />
+            <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
+              {learningObjectivesAndCounts.map((objAndCount, idx) => (
+                <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "100%", paddingRight: 30 }}>
+                  <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
+                    <CView style={{ width: 10, height: 10, backgroundColor: objAndCount.color }} />
+                    <CText style={{ fontSize: "xs" }}>{objAndCount.x}</CText>
+                  </CView>
+                  <CText style={{ fontSize: "sm", fontWeight: "600" }}>{objAndCount.y}</CText>
+                </CView>
+              ))}
+            </CView>
+          </CView>
+        )}
+      </Animated.ScrollView>
+      <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
+        <ShadowButton
+          title={t("new-evaluation", "Uusi arviointi")}
+          onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
+          leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
+        />
+      </Animated.View>
+    </CView>
+  );
+});
 
 export default function GroupView({ route: { params }, navigation }: NativeStackScreenProps<HomeStackParams, "group">) {
   const { id } = params;
@@ -141,10 +493,10 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
   const [index, setIndex] = useState(0);
   const { t } = useTranslation();
   const [routes] = useState([
+    { key: "statistics", title: t("group.statistics", "Tiedot") },
     { key: "evaluations", title: t("group.evaluations", "Arvioinnit") },
     { key: "students", title: t("group.students", "Oppilaat") },
     { key: "objectives", title: t("group.objectives", "Tavoitteet") },
-    { key: "statistics", title: t("group.statistics", "Kuvaajat") },
   ]);
 
   if (!id) throw new Error("No id found, incorrect route");
@@ -202,9 +554,9 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
       case "students":
         return <StudentList {...data} navigation={navigation} />;
       case "objectives":
-        return <ObjectiveList {...data} />;
+        return <ObjectiveList {...data} navigation={navigation} />;
       case "statistics":
-        return <StatisticsView {...data} />;
+        return <StatisticsView {...data} navigation={navigation} />;
       default:
         return null;
     }
@@ -218,7 +570,6 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
         renderTabBar={renderTabBar}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
-        sceneContainerStyle={{ paddingTop: SPACING.lg }}
       />
     </CView>
   );

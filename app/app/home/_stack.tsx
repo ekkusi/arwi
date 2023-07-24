@@ -1,8 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { Alert, TouchableOpacity } from "react-native";
+import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeView from ".";
+import CText from "../../components/primitives/CText";
+import CView from "../../components/primitives/CView";
 import { formatDate } from "../../helpers/dateHelpers";
 import { defaultHeaderStyles } from "../config";
 import CollectionView from "./collection";
@@ -11,6 +14,7 @@ import CollectionCreationStack from "./collection/create/_stack";
 import Evaluation from "./evaluation";
 import GroupView from "./group";
 import GroupCreationStack from "./group/create/_stack";
+import LearningObjective from "./group/learningObjective";
 import StudentView from "./student";
 import { HomeStackParams } from "./types";
 
@@ -24,16 +28,39 @@ export default function HomeStack() {
       <HomeStackNavigator.Screen
         name="group"
         component={GroupView}
-        options={({ route }) => ({
+        options={({ navigation, route }) => ({
           title: route.params.name,
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() => {
-                Alert.alert("Popup menu");
-              }}
-            >
-              <MaterialCommunityIcon name="dots-vertical" size={25} color="white" />
-            </TouchableOpacity>
+            <Menu>
+              <MenuTrigger>
+                <MaterialCommunityIcon name="dots-vertical" size={25} color="white" />
+              </MenuTrigger>
+              <MenuOptions>
+                <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
+                  <MenuOption
+                    onSelect={() => {
+                      Alert.alert("Uusi oppilas");
+                    }}
+                  >
+                    <CText>{t("group.edit-students", "Lisää oppilas")}</CText>
+                  </MenuOption>
+                  <MenuOption
+                    onSelect={() => {
+                      navigation.navigate("collection-create", { groupId: route.params.id });
+                    }}
+                  >
+                    <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
+                  </MenuOption>
+                  <MenuOption
+                    onSelect={() => {
+                      Alert.alert("Oletko varma?", "Jos poistat ryhmän, takaisin ei ole enää paluuta :(");
+                    }}
+                  >
+                    <CText>{t("group.delete-group", "Poista ryhmä")}</CText>
+                  </MenuOption>
+                </CView>
+              </MenuOptions>
+            </Menu>
           ),
         })}
       />
@@ -51,13 +78,16 @@ export default function HomeStack() {
       <HomeStackNavigator.Screen
         name="collection-create"
         component={CollectionCreationStack}
-        options={{ title: t("HomeStack.newEvaluation", "Uusi arviointi"), headerShown: false }}
+        options={{ title: t("new-evaluation", "Uusi arviointi"), headerShown: false }}
       />
       <HomeStackNavigator.Screen
         name="evaluation"
         component={Evaluation}
         options={{ title: t("HomeStack.evaluationOverview", "Arvioinnin yhteenveto") }}
       />
+      <HomeStackNavigator.Group screenOptions={{ presentation: "modal" }}>
+        <HomeStackNavigator.Screen name="learning-objective" component={LearningObjective} options={({ route }) => ({ title: route.params.code })} />
+      </HomeStackNavigator.Group>
     </HomeStackNavigator.Navigator>
   );
 }

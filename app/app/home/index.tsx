@@ -49,9 +49,12 @@ export default function HomePage({ navigation }: NativeStackScreenProps<HomeStac
     />
   );
   return (
-    <CView style={{ flex: 1, paddingHorizontal: 10, paddingTop: 20 }}>
+    <CView style={{ flex: 1, paddingHorizontal: 10 }}>
       {teacher.groups.length > 0 ? (
         <FlatList
+          contentContainerStyle={{ paddingTop: 20, paddingBottom: 80 }}
+          style={{ paddingBottom: 50 }}
+          showsVerticalScrollIndicator={false}
           data={[...teacher.groups].sort((a, b) => {
             return a.updatedAt < b.updatedAt ? 1 : -1;
           })}

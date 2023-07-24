@@ -1,13 +1,8 @@
 import { LearningObjective, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
-import { SvgUri } from "react-native-svg";
 import { ImageSourcePropType } from "react-native";
-import CView from "../components/primitives/CView";
-import ArtSvg from "../components/svgComponents/ArtSvg";
-import { LearningObjectiveType, Rating, Subject } from "../gql/graphql";
-import { COLORS } from "../theme";
-import CImage from "../components/primitives/CImage";
+import { LearningObjectiveType, Rating } from "../gql/graphql";
 
-export const subjectToIcon = (subject: SubjectMinimal, color?: string): ImageSourcePropType => {
+export const subjectToIcon = (subject: SubjectMinimal): ImageSourcePropType => {
   switch (subject.code) {
     case "KU":
       return require("../assets/art.png");
@@ -46,6 +41,27 @@ export const subjectToIcon = (subject: SubjectMinimal, color?: string): ImageSou
     default:
       return require("../assets/language.png");
   }
+};
+
+const palette = [
+  "#513667",
+  "#74352e",
+  "#cb4d78",
+  "#b089ce",
+  "#799ec4",
+  "#c84ac2",
+  "#6443bf",
+  "#caae46",
+  "#d35933",
+  "#76b9a9",
+  "#7bcc40",
+  "#3f483d",
+  "#c69782",
+  "#6bc57a",
+  "#5c7534",
+];
+export const getPredefinedColors = (count: number) => {
+  return palette.slice(0, count);
 };
 
 export const formatRatingString = (rating: Rating) => {
