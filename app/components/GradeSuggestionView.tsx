@@ -42,6 +42,7 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean }: { ski
                 borderTopWidth: 1,
               }}
             >
+              <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("modify-weights", "Muokkaa painoja")}</CText>
               <CView style={{ justifyContent: "center", alignItems: "stretch", gap: 5 }}>
                 <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                   <CView style={{ justifyContent: "center", alignItems: "center", gap: 3 }}>
