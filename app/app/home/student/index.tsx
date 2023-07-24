@@ -5,24 +5,20 @@ import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as Clipboard from "expo-clipboard";
 import { ScrollView } from "react-native-gesture-handler";
-import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
 import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 import { Alert } from "react-native";
-import { Slider } from "@miblanchard/react-native-slider";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
-import StudentEvaluationsRecap, { StudentEvaluationRecap_Evaluation_Fragment } from "../../../components/StudentEvaluationsRecap";
+import { StudentEvaluationRecap_Evaluation_Fragment } from "../../../components/StudentEvaluationsRecap";
 import { getFragmentData, graphql } from "../../../gql";
 import { HomeStackParams } from "../types";
 import { COLORS } from "../../../theme";
 import { generateStudentSummary } from "../../../helpers/openAiUtils";
-import StyledBarChart from "../../../components/charts/StyledBarChart";
 import CircledNumber from "../../../components/CircledNumber";
 import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
-import EvaluationsLineChart from "../../../components/charts/EvaluationsLineChart";
 import EvaluationsBarChart from "../../../components/charts/EvaluationsBarChart";
 import EvaluationStatistics from "../../../components/charts/EvaluationStatistics";
 import InfoButton from "../../../components/InfoButton";
@@ -59,7 +55,7 @@ const StudentPage_GetStudent_Query = graphql(`
   }
 `);
 
-export default function StudentView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "student">) {
+export default function StudentView({ route }: NativeStackScreenProps<HomeStackParams, "student">) {
   const studentId = route.params.id;
 
   const { data } = useQuery(StudentPage_GetStudent_Query, { variables: { studentId } });
@@ -67,7 +63,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const [summary, setSummary] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const [gradeSuggestionSkillProportion, setGradeSuggestionSkillProportion] = useState(0.5);
   const [evaluationsByEnvironmentsFilter, setEvaluationsByEnvironmentsFilter] = useState<string>("all");
   const [isGeneratingSummary, setIsGeneratingSumamry] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -106,7 +101,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     setIsCopied(true);
   };
 
-  const environments = getEnvironments(student.group.subject.code);
   const evaluations = getFragmentData(StudentEvaluationRecap_Evaluation_Fragment, evaluationsSimple);
 
   const {
@@ -120,7 +114,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     behaviourMedian,
     behaviourMode,
     behaviourMeanByEnvironments,
-    gradeSuggestion,
   } = analyzeEvaluations([...evaluations]);
 
   return (
@@ -179,6 +172,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                       { text: t("behaviour", "Työskentely"), value: "behaviour" },
                     ].map((obj) => (
                       <MenuOption
+                        key={obj.value}
                         onSelect={() => {
                           setEvaluationsByEnvironmentsFilter(obj.value);
                         }}

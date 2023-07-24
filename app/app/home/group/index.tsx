@@ -1,37 +1,28 @@
 import { useQuery } from "@apollo/client";
-import { Link } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import { memo, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, ScrollView, TextInput, useWindowDimensions } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { TextInput, useWindowDimensions } from "react-native";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 import Card from "../../../components/Card";
-import CollectionsLineChart from "../../../components/charts/CollectionsLineChart";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
-import LineChartBase, { DataType } from "../../../components/charts/LineChartBase";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import CButton from "../../../components/primitives/CButton";
 import CFlatList from "../../../components/primitives/CFlatList";
 import CImage from "../../../components/primitives/CImage";
 import CText from "../../../components/primitives/CText";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CView from "../../../components/primitives/CView";
 import ShadowButton from "../../../components/primitives/ShadowButton";
-import { getFragmentData, graphql } from "../../../gql";
+import { graphql } from "../../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment, GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { getPredefinedColors, subjectToIcon } from "../../../helpers/dataMappers";
 import { formatDate } from "../../../helpers/dateHelpers";
-import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import { COLORS, SPACING } from "../../../theme";
 import { CColor } from "../../../theme/types";
 import { HomeStackParams } from "../types";
-import CTextInput from "../../../components/primitives/CTextInput";
-import CircledNumber from "../../../components/CircledNumber";
 import CollectionStatistics from "../../../components/charts/CollectionStatistics";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
@@ -183,6 +174,8 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
 const EvaluationList = memo(function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
+  const collections = [...group.currentClassYear.evaluationCollections].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   const translateY = useSharedValue(0);
   const isScrolling = useSharedValue(false);
   const lastContentOffset = useSharedValue(0);
@@ -219,12 +212,12 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
 
   return (
     <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
-      {group.currentClassYear.evaluationCollections.length > 0 ? (
+      {collections.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: SPACING.md, paddingBottom: 100 }}
-          data={group.currentClassYear.evaluationCollections}
+          data={collections}
           renderItem={({ item }) => (
             <Card style={{ marginBottom: "md" }} key={item.id}>
               <CTouchableOpacity onPress={() => navigation.navigate("collection", { ...item, environmentLabel: item.environment.label })}>
@@ -255,7 +248,7 @@ const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation 
   const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
   const { t } = useTranslation();
 
-  const learningObjectiveCounts = objectives.map((objective, idx) => {
+  const learningObjectiveCounts = objectives.map((objective) => {
     return {
       ...objective,
       count: group.currentClassYear.evaluationCollections.reduce(
@@ -304,10 +297,6 @@ const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation 
   );
 });
 
-const EvaluationGraph = memo(function EvaluationGraph({ data }: { data: DataType[] }) {
-  return <LineChartBase data={data} style={{ marginBottom: "xl" }} />;
-});
-
 const ObjectiveGraph = memo(function ObjectiveGraph({ data }: { data: StyledBarChartDataType[] }) {
   return <StyledBarChart data={data} style={{ height: 200 }} />;
 });
@@ -319,14 +308,13 @@ const EnvironmentGraph = memo(function EnvironmentGraph({ data }: { data: Styled
 const StatisticsView = memo(function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
-  const lastEvaluation = [...group.currentClassYear.evaluationCollections].sort((a, b) => (a.date > b.date ? 1 : -1))[0];
   const environments = getEnvironments(group.subject.code);
   const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
   const colorPalette = getPredefinedColors(objectives.length);
 
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(
     () =>
-      environments.map((environment, idx) => {
+      environments.map((environment) => {
         return {
           x: environment.label,
           color: environment.color,
@@ -506,8 +494,6 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
   });
 
   if (loading || !data) return <LoadingIndicator />;
-
-  const { getGroup: group } = data;
 
   const renderTabBar = (props: SceneRendererProps & { navigationState: NavigationState<Route> }) => {
     return (
