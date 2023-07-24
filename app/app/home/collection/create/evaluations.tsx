@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
-import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
 import UpdateEvaluationCard from "../../../../components/UpdateEvaluationCard";
 import { graphql } from "../../../../gql";
@@ -27,6 +26,7 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
 function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "evaluations">) {
   const { t } = useTranslation();
   const [createCollection] = useMutation(CollectionEvaluationsView_CreateCollection_Mutation);
+  const [cardHeight, setCardHeight] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const { generalData, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
 
@@ -44,7 +44,14 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
             ...generalData,
             environmentCode,
             date: formatDate(generalData.date, "yyyy-MM-dd"),
-            evaluations: evaluations.map((it) => ({ ...it, studentId: it.student.id })),
+            evaluations: evaluations.map((it) => ({
+              wasPresent: it.wasPresent,
+              skillsRating: it.skillsRating,
+              behaviourRating: it.behaviourRating,
+              notes: it.notes,
+              isStellar: it.isStellar,
+              studentId: it.student.id,
+            })),
           },
         },
         refetchQueries: [],
@@ -61,23 +68,34 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     <>
       <CFlatList
         data={evaluations}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <UpdateEvaluationCard
+            key={item.student.id}
+            onLayout={index === 0 ? (event) => setCardHeight(event.nativeEvent.layout.height) : undefined}
             evaluation={item}
-            // onChanged={(value) => {
-            //   value;
-            // }}
+            hasParticipationToggle={false}
+            onChanged={(value) => {
+              setEvaluations(evaluations.map((it) => (it.student.id === value.student.id ? value : it)));
+            }}
+            style={{ marginBottom: index === evaluations.length - 1 ? 80 : "lg" }}
           />
         )}
+        snapToInterval={cardHeight}
+        decelerationRate={0.8}
+        snapToAlignment="center"
+        style={{ flex: 1, padding: "lg" }}
       />
       <CView
         style={{
-          flexGrow: 1,
+          bottom: 10,
+          left: 0,
+          right: 0,
+          position: "absolute",
           width: "100%",
-          paddingHorizontal: 20,
+          paddingHorizontal: "xl",
+          backgroundColor: "transparent",
           flexDirection: "row",
           justifyContent: "space-between",
-          alignItems: "flex-end",
         }}
       >
         <CButton onPress={() => navigation.goBack()}>
@@ -85,6 +103,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         </CButton>
         <CButton
           loading={submitting}
+          style={{ marginRight: 0 }}
           title={t("save", "Tallenna")}
           onPress={() => handleSubmit()}
           leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
@@ -96,7 +115,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
 
 export default function CollectionEvaluationsView(props: NativeStackScreenProps<CollectionCreationStackParams, "evaluations">) {
   return (
-    <CollectionCreationLayout>
+    <CollectionCreationLayout style={{ padding: 0 }}>
       <CollectionEvaluationsContent {...props} />
     </CollectionCreationLayout>
   );

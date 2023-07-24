@@ -11,5 +11,5 @@ export function hexToRgbA(hex: string, opacity: number = 1) {
     // eslint-disable-next-line
     return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c & 255].join(",")},${opacity})`;
   }
-  throw new Error("Bad Hex");
+  throw new Error(`Bad Hex: ${hex}`);
 }

@@ -2,6 +2,7 @@ import i18n from "i18next";
 import GridlyBackend, { GridlyBackendOptions } from "i18next-gridly-backend";
 import { initReactI18next } from "react-i18next";
 import { GRIDLY_API_KEY, GRIDLY_VIEW_ID } from "@env";
+import "intl-pluralrules";
 
 import { Platform, NativeModules } from "react-native";
 
@@ -29,9 +30,9 @@ i18n
   .use(initReactI18next)
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    compatibilityJSON: "v3",
     debug: true,
     returnNull: false,
+    keySeparator: false,
     fallbackLng: !__DEV__ && deviceLanguageExists ? deviceLanguage : "fi_FI", // In dev or if device language is not supported, use Finnish
     backend: gridlyOptions,
     saveMissing: __DEV__,

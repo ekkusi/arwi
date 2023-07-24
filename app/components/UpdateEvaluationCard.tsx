@@ -1,172 +1,107 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import ParticipationToggle from "./ParticipationToggle";
-import {
-  CreateEvaluationInput,
-  UpdateEvaluationCard_EvaluationFragment as EvaluationFragment,
-  UpdateEvaluationCard_StudentFragment as StudentFragment,
-} from "../gql/graphql";
-import { FragmentType, getFragmentData, graphql } from "../gql";
-import { CardProps } from "./Card";
-
-export const UpdateEvaluationCard_EvaluationFragment = graphql(`
-  fragment UpdateEvaluationCard_Evaluation on Evaluation {
-    id
-    skillsRating
-    behaviourRating
-    notes
-    wasPresent
-    isStellar
-    student {
-      id
-      name
-      currentClassEvaluations {
-        notes
-      }
-    }
-  }
-`);
-
-export const UpdateEvaluationCard_StudentFragment = graphql(`
-  fragment UpdateEvaluationCard_Student on Student {
-    id
-    name
-    currentClassEvaluations {
-      notes
-    }
-  }
-`);
+import { Student } from "arwi-backend/src/types";
+import { useCallback, useMemo, useState } from "react";
+import debounce from "lodash.debounce";
+import { useTranslation } from "react-i18next";
+import { Switch } from "react-native";
+import { CreateEvaluationInput } from "../gql/graphql";
+import Card from "./Card";
+import CText from "./primitives/CText";
+import CView, { CViewProps } from "./primitives/CView";
+import { COLORS } from "../theme";
+import CTextInput from "./primitives/CTextInput";
+import RatingSelector from "./RatingSelector";
 
 export type Evaluation = Omit<CreateEvaluationInput, "studentId"> & {
-  student: FragmentType<typeof UpdateEvaluationCard_StudentFragment>;
+  student: Pick<Student, "id" | "name"> & {
+    currentClassEvaluations: Pick<Evaluation, "notes">[];
+  };
 };
 
-export type EvaluationUnFragmented = Omit<Evaluation, "student"> & {
-  student: StudentFragment;
-};
-
-type UpdateEvaluationCardProps = CardProps & {
+type UpdateEvaluationCardProps = Omit<CViewProps, "children"> & {
   hasParticipationToggle?: boolean;
-} & (
-    | {
-        evaluation: FragmentType<typeof UpdateEvaluationCard_EvaluationFragment>;
-        onChanged?: (evaluation: EvaluationFragment) => void;
-      }
-    | {
-        evaluation: Evaluation;
-        onChanged?: (evaluation: EvaluationUnFragmented) => void;
-      }
-  );
+  evaluation: Evaluation;
+  onChanged?: (evaluation: Evaluation) => void;
+};
 
 type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
 
-export function isEvaluationFragment(
-  value: FragmentType<typeof UpdateEvaluationCard_EvaluationFragment> | Evaluation
-): value is FragmentType<typeof UpdateEvaluationCard_EvaluationFragment> {
-  console.log((value as Evaluation).wasPresent === undefined);
-
-  return (value as Evaluation).wasPresent === undefined;
-}
-
 export default function UpdateEvaluationCard({
-  children,
-  evaluation: evaluationData,
+  evaluation: initialEvaluation,
   onChanged: onChangedCallback,
   hasParticipationToggle = true,
   ...rest
 }: UpdateEvaluationCardProps) {
-  const initialEvaluation = isEvaluationFragment(evaluationData)
-    ? getFragmentData(UpdateEvaluationCard_EvaluationFragment, evaluationData)
-    : {
-        ...evaluationData,
-        student: getFragmentData(UpdateEvaluationCard_StudentFragment, evaluationData.student),
+  const [evaluation, setEvaluation] = useState(initialEvaluation);
+  const [notes, setNotes] = useState(() => evaluation.notes || "");
+
+  const { t } = useTranslation();
+
+  const onChanged = useCallback(
+    (key: EvaluationPropKeys, value: any) => {
+      const newEvaluation = {
+        ...evaluation,
+        [key]: value,
       };
-  // const [evaluation, setEvaluation] = useState(() => initialEvaluation);
-  // const [notes, setNotes] = useState(() => evaluation.notes || "");
+      setEvaluation(newEvaluation);
 
-  // useEffect(() => {
-  //   setNotes(initialEvaluation.notes || "");
-  //   setEvaluation(initialEvaluation);
-  // }, [initialEvaluation]);
+      if (onChangedCallback) {
+        onChangedCallback(newEvaluation);
+      }
+    },
+    [evaluation, onChangedCallback]
+  );
 
-  // const onChanged = useCallback(
-  //   (key: EvaluationPropKeys, value: any) => {
-  //     const newEvaluation = {
-  //       ...evaluation,
-  //       [key]: value,
-  //     };
-  //     setEvaluation(newEvaluation);
+  const debouncedOnChanged = useMemo(() => debounce(onChanged, 300), [onChanged]);
 
-  //     if (onChangedCallback) {
-  //       onChangedCallback(newEvaluation);
-  //     }
-  //   },
-  //   [evaluation, onChangedCallback]
-  // );
+  const changeNotes = (value: string) => {
+    setNotes(value);
 
-  // const debouncedOnChanged = useMemo(() => debounce(onChanged, 300), [onChanged]);
+    debouncedOnChanged("notes", value);
+  };
 
-  // const changeNotes = (value: string) => {
-  //   setNotes(value);
+  const givenNotesCount = useMemo(() => {
+    return evaluation.student.currentClassEvaluations.filter((it) => !!it.notes).length;
+  }, [evaluation]);
 
-  //   debouncedOnChanged("notes", value);
-  // };
-
-  // const givenNotesCount = useMemo(() => {
-  //   return evaluation.student.currentclassevaluations.filter((it) => !!it.notes).length;
-  // }, [evaluation]);
-
-  return null;
-
-  // return (
-  //   <Card mb="3" {...rest}>
-  //     <Tag as="h2" size="lg" mx="auto" display="block" textAlign="center" mb="4" position="relative">
-  //       {evaluation.student.name}
-  //       <IconButton
-  //         position="absolute"
-  //         top="50%"
-  //         transform="translateY(-50%)"
-  //         right="3"
-  //         variant="ghost"
-  //         colorScheme="yellow"
-  //         size="lg"
-  //         icon={evaluation.isStellar ? <AiFillStar /> : <AiOutlineStar />}
-  //         onClick={() => onChanged("isStellar", !evaluation.isStellar)}
-  //         aria-label="Merkkaa arviointi tähtiarvioinniksi"
-  //       />
-  //     </Tag>
-  //     {hasParticipationToggle && (
-  //       <Flex justifyContent="center" mb="3">
-  //         <ParticipationToggle size="sm" initialValue={evaluation.wasPresent} onChange={(value) => onChanged("wasPresent", value)} />
-  //       </Flex>
-  //     )}
-  //     <Box position="relative">
-  //       <Text as="h3">Taidot:</Text>
-  //       <RatingSelector initialRating={evaluation.skillsRating} onChange={(rating) => onChanged("skillsRating", rating)} mb="6" />
-  //       <Text as="h3">Työskentely:</Text>
-  //       <RatingSelector initialRating={evaluation.behaviourRating} onChange={(rating) => onChanged("behaviourRating", rating)} mb="6" />
-  //       <Text as="h3">
-  //         Sanallinen palaute (annettu {givenNotesCount} {formatAmountString(givenNotesCount)}):
-  //       </Text>
-  //       <Box position="relative">
-  //         <Textarea
-  //           value={notes}
-  //           onChange={(e) => changeNotes(e.target.value)}
-  //           colorScheme="green"
-  //           minHeight="32"
-  //           placeholder="Sanallinen palaute oppilaan toiminnasta tunnilla..."
-  //           position="relative"
-  //         />
-  //         <SpeechRecognition position="absolute" bottom="1" right="1" aria-label="Puhu tekstiksi" onResult={changeNotes} />
-  //       </Box>
-  //       {children}
-  //       {!evaluation.wasPresent && hasParticipationToggle && (
-  //         <Overlay bgColor="white" display="flex" alignItems="center" justifyContent="center">
-  //           <Text color="black" fontWeight="bold" textAlign="center" mx="3">
-  //             Merkkaa henkilö paikalla olleeksi muokataksesi arviointia
-  //           </Text>
-  //         </Overlay>
-  //       )}
-  //     </Box>
-  //   </Card>
-  // );
+  return (
+    <Card {...rest} innerViewProps={{ style: { paddingHorizontal: "2xl", paddingVertical: "xl" } }} style={{ alignItems: "center", ...rest.style }}>
+      <CText style={{ fontSize: "lg", textAlign: "center", marginBottom: "md" }}>{evaluation.student.name}</CText>
+      {/* TODO: Add isStellar star-button */}
+      {hasParticipationToggle && (
+        <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 0 }}>
+          <CText style={{ textAlign: "center" }}>{t("present", "Paikalla")}</CText>
+          <Switch
+            trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
+            thumbColor={COLORS.white}
+            ios_backgroundColor={COLORS.lightgray}
+            onValueChange={(value) => onChanged("wasPresent", value)}
+            value={evaluation.wasPresent}
+          />
+        </CView>
+      )}
+      <CText style={{ marginBottom: "sm" }}>{t("skills", "Taidot")}:</CText>
+      <RatingSelector
+        initialRating={evaluation.skillsRating}
+        onChange={(rating) => onChanged("skillsRating", rating)}
+        style={{ marginBottom: "lg" }}
+      />
+      <CText style={{ marginBottom: "sm" }}>{t("behaviour", "Työskentely")}:</CText>
+      <RatingSelector
+        initialRating={evaluation.behaviourRating}
+        onChange={(rating) => onChanged("behaviourRating", rating)}
+        style={{ marginBottom: "lg" }}
+      />
+      <CText style={{ marginBottom: "md" }}>
+        {t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}
+      </CText>
+      <CTextInput
+        as="textarea"
+        value={notes}
+        onChange={(e) => changeNotes(e.nativeEvent.text)}
+        placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
+        multiline
+      />
+      {/*  TODO: Add speech to text to note text input */}
+    </Card>
+  );
 }

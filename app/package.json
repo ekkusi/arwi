@@ -32,6 +32,8 @@
     "graphql": "^16.6.0",
     "i18next": "^22.5.0",
     "i18next-gridly-backend": "^1.0.6",
+    "intl-pluralrules": "^2.0.1",
+    "lodash.debounce": "^4.0.8",
     "openai": "^3.3.0",
     "react": "18.2.0",
     "react-i18next": "^12.3.1",
@@ -54,6 +56,7 @@
     "@graphql-codegen/add": "^4.0.1",
     "@graphql-codegen/cli": "^3.3.1",
     "@graphql-codegen/client-preset": "^3.0.1",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/react": "~18.2.14",
     "cross-env": "^7.0.3",
     "eslint-plugin-react-native": "^4.0.0"

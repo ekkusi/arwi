@@ -14,16 +14,15 @@ const CollectionCreationProvider_GetGroup_Query = graphql(`
       students {
         id
         name
-        ...UpdateEvaluationCard_Student
+        currentClassEvaluations {
+          id
+          notes
+        }
       }
       ...CollectionGeneralInfoView_Group
     }
   }
 `);
-
-// type EvaluationData = Omit<CreateEvaluationInput, "studentId"> & {
-//   student: { id: string; name: string } & Upd;
-// };
 
 export type CollectionData = {
   description: string;

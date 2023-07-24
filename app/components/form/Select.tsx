@@ -39,9 +39,7 @@ export default function Select(props: SelectProps) {
         }}
         onPress={() => setSelectModalOpen(true)}
       >
-        <CText style={{ fontSize: "lg", fontWeight: "300", color: selected ? COLORS.darkgray : COLORS.lightgray }}>
-          {selected ? selected.label : placeholder}
-        </CText>
+        <CText style={{ fontWeight: "300", color: selected ? COLORS.darkgray : COLORS.lightgray }}>{selected ? selected.label : placeholder}</CText>
         <MaterialCommunityIcon name="chevron-down" color={COLORS.darkgray} size={30} />
       </CTouchableOpacity>
       {selectModalOpen && (

@@ -401,11 +401,9 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.currentClassYear.info.label}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.subject.label}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.student-count", { count: group.currentClassYear.students.length })}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>
-              {t("group.student-count", "{{count}} oppilasta", { count: group.currentClassYear.students.length })}
-            </CText>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>
-              {t("group.evaluation-count", "{{count}} arviointia", { count: group.currentClassYear.evaluationCollections.length })}
+              {t("group.evaluation-count", { count: group.currentClassYear.evaluationCollections.length })}
             </CText>
           </CView>
           <CView>

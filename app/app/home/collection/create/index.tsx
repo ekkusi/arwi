@@ -24,6 +24,7 @@ const CollectionGeneralInfoView_Group_Fragment = graphql(`
       code
     }
     currentClassYear {
+      id
       info {
         code
       }
@@ -52,7 +53,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
 
   const handleSubmit = () => {
     if (!selectedEnvironmentCode) {
-      setEnvironmentError(t("CollectionGeneralInfoView.environmentError", "Ympäristö on pakollinen"));
+      setEnvironmentError(t("environment-is-obligatory", "Ympäristö on pakollinen"));
       return;
     }
     setGeneralData({
@@ -98,7 +99,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
             }}
           />
         )}
-        <TextFormField title={t("CollectionGeneralInfoView.moreInfo", "Lisätietoa")} onChange={(text) => setDescription(text)} />
+        <TextFormField title={t("more-info", "Lisätietoa")} placeholder={`${t("more-info")}...`} onChange={(text) => setDescription(text)} />
       </CView>
       <CView style={{ justifyContent: "flex-end", flexDirection: "row" }}>
         <CButton

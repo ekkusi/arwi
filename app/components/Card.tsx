@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { createStyles } from "../theme/utils";
 import CView, { CViewProps } from "./primitives/CView";
 
