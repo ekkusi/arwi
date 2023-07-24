@@ -59,6 +59,7 @@ export default function StatisticsFilterMenu({
               </MenuOption>
               {environments.map((item) => (
                 <MenuOption
+                  key={item.code}
                   onSelect={() => {
                     setFilter(item.label);
                   }}

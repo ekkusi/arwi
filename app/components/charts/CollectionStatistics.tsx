@@ -1,15 +1,10 @@
-import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment, EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
-import { analyzeEvaluations } from "../../helpers/evaluationUtils";
-import { COLORS } from "../../theme";
+import { analyzeEvaluations, analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
 import CircledNumber from "../CircledNumber";
-import CButton from "../primitives/CButton";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
@@ -43,7 +38,7 @@ const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[
   let currentBehaviourSum = 0;
   let notNullBehaviourCount = 0;
   collections.forEach((it) => {
-    const { skillsAverage, behaviourAverage } = analyzeEvaluations(it.evaluations);
+    const { skillsAverage, behaviourAverage } = analyzeEvaluationsSimple(it.evaluations);
     if (skillsAverage > 0) {
       notNullSkillsCount += 1;
       currentSkillsSum += skillsAverage;

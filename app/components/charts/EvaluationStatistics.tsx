@@ -115,8 +115,8 @@ export default function EvaluationsStatistics({
       />
       <LineChartBase data={filteredData} />
       <CView style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-        <CircledNumber value={skillsMean} title={t("group.skills-mean", "Taitojen keskiarvo")} />
-        <CircledNumber value={behaviourMean} title={t("group.behaviour-mean", "Työskentelyn keskiarvo")} />
+        <CircledNumber value={skillsMean} title={t("skills-mean", "Taitojen keskiarvo")} />
+        <CircledNumber value={behaviourMean} title={t("behaviour-mean", "Työskentelyn keskiarvo")} />
       </CView>
     </CView>
   );

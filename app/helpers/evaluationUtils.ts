@@ -1,34 +1,45 @@
-import { Evaluation as BaseEvaluation } from "../gql/graphql";
+import { Alert } from "react-native";
+import { Environment, Evaluation as BaseEvaluation, EvaluationCollection } from "../gql/graphql";
 import { formatRatingNumber } from "./dataMappers";
 import { median, mode, stdev } from "./mathUtilts";
 
-type EvaluationResult = {
+type EvaluationResultSimple = {
   skillsAverage: number;
-  skillsMedian: number;
-  skillsMode: number;
-  skillsStdev: number;
   behaviourAverage: number;
-  behaviourMedian: number;
-  behaviourMode: number;
-  behaviourStdev: number;
   absencesAmount: number;
   presencesAmount: number;
   gradeSuggestion: number;
   isStellarCount: number;
 };
 
-type Evaluation = Pick<BaseEvaluation, "skillsRating" | "behaviourRating" | "wasPresent" | "isStellar">;
+type EvaluationResult = EvaluationResultSimple & {
+  skillsMedian: number;
+  skillsMode: number;
+  skillsStdev: number;
+  skillsEnvironmentMeans: { [id: string]: number };
+  skillsMeanByEnvironments: number;
+  behaviourMedian: number;
+  behaviourMode: number;
+  behaviourStdev: number;
+  behaviourEnvironmentMeans: { [id: string]: number };
+  behaviourMeanByEnvironments: number;
+};
 
-export const analyzeEvaluations = (evaluations: Evaluation[]) => {
-  const result: EvaluationResult = {
+type EvaluationSimple = Pick<BaseEvaluation, "skillsRating" | "behaviourRating" | "wasPresent" | "isStellar">;
+
+type Evaluation = EvaluationSimple & {
+  collection: {
+    id: string;
+    environment: {
+      code: string;
+      label: string;
+    };
+  };
+};
+export const analyzeEvaluationsSimple = (evaluations: EvaluationSimple[]) => {
+  const result: EvaluationResultSimple = {
     skillsAverage: 0,
-    skillsStdev: 0,
-    skillsMedian: 0,
-    skillsMode: 0,
     behaviourAverage: 0,
-    behaviourMedian: 0,
-    behaviourMode: 0,
-    behaviourStdev: 0,
     absencesAmount: 0,
     presencesAmount: 0,
     gradeSuggestion: 0,
@@ -36,7 +47,6 @@ export const analyzeEvaluations = (evaluations: Evaluation[]) => {
   };
   const skillsArray: number[] = [];
   const behaviourArray: number[] = [];
-  const skillEnvironmentMeans: { [id: string]: number } = {};
   evaluations.forEach((evaluation) => {
     if (evaluation.skillsRating) {
       const rating = formatRatingNumber(evaluation.skillsRating);
@@ -59,12 +69,85 @@ export const analyzeEvaluations = (evaluations: Evaluation[]) => {
   });
   result.skillsAverage /= skillsArray.length;
   result.behaviourAverage /= behaviourArray.length;
+
+  if (result.behaviourAverage > 0 && result.skillsAverage > 0)
+    result.gradeSuggestion = Math.round((result.behaviourAverage + result.skillsAverage) / 2);
+  return result;
+};
+
+export const analyzeEvaluations = (evaluations: Evaluation[]) => {
+  const result: EvaluationResult = {
+    skillsAverage: 0,
+    skillsStdev: 0,
+    skillsMedian: 0,
+    skillsMode: 0,
+    skillsEnvironmentMeans: {},
+    skillsMeanByEnvironments: 0,
+    behaviourAverage: 0,
+    behaviourMedian: 0,
+    behaviourMode: 0,
+    behaviourStdev: 0,
+    behaviourEnvironmentMeans: {},
+    behaviourMeanByEnvironments: 0,
+    absencesAmount: 0,
+    presencesAmount: 0,
+    gradeSuggestion: 0,
+    isStellarCount: 0,
+  };
+  const { skillsAverage, behaviourAverage, absencesAmount, presencesAmount, gradeSuggestion, isStellarCount } = analyzeEvaluationsSimple(evaluations);
+  const skillsArray: number[] = [];
+  const behaviourArray: number[] = [];
+  const skillEnvironmentSums: { [id: string]: number } = {};
+  const skillEnvironmentCounts: { [id: string]: number } = {};
+  const skillEnvironmentMeans: { [id: string]: number } = {};
+  const behaviourEnvironmentSums: { [id: string]: number } = {};
+  const behaviourEnvironmentCounts: { [id: string]: number } = {};
+  const behaviourEnvironmentMeans: { [id: string]: number } = {};
+  evaluations.forEach((evaluation) => {
+    const envCode = evaluation.collection.environment.code;
+    if (evaluation.skillsRating) {
+      const rating = formatRatingNumber(evaluation.skillsRating);
+      skillsArray.push(rating);
+      if (skillEnvironmentSums[envCode]) skillEnvironmentSums[envCode] += rating;
+      else skillEnvironmentSums[envCode] = rating;
+      if (skillEnvironmentCounts[envCode]) skillEnvironmentCounts[envCode] += 1;
+      else skillEnvironmentCounts[envCode] = 1;
+    }
+    if (evaluation.behaviourRating) {
+      const rating = formatRatingNumber(evaluation.behaviourRating);
+      behaviourArray.push(rating);
+      if (behaviourEnvironmentSums[envCode]) behaviourEnvironmentSums[envCode] += rating;
+      else behaviourEnvironmentSums[envCode] = rating;
+      if (behaviourEnvironmentCounts[envCode]) behaviourEnvironmentCounts[envCode] += 1;
+      else behaviourEnvironmentCounts[envCode] = 1;
+    }
+  });
+  Object.keys(skillEnvironmentSums).forEach((key) => {
+    const environmentMean = skillEnvironmentSums[key] / skillEnvironmentCounts[key];
+    skillEnvironmentMeans[key] = environmentMean;
+    result.skillsMeanByEnvironments += environmentMean;
+  });
+  Object.keys(behaviourEnvironmentSums).forEach((key) => {
+    const environmentMean = behaviourEnvironmentSums[key] / behaviourEnvironmentCounts[key];
+    behaviourEnvironmentMeans[key] = environmentMean;
+    result.behaviourMeanByEnvironments += environmentMean;
+  });
+  result.absencesAmount = absencesAmount;
+  result.presencesAmount = presencesAmount;
+  result.isStellarCount = isStellarCount;
+  result.skillsEnvironmentMeans = skillEnvironmentMeans;
+  result.behaviourEnvironmentMeans = behaviourEnvironmentMeans;
+  result.skillsAverage = skillsAverage;
+  result.behaviourAverage = behaviourAverage;
   result.skillsStdev = stdev(skillsArray, result.skillsAverage);
   result.skillsMedian = median(skillsArray);
   result.skillsMode = mode(skillsArray);
+  result.skillsMeanByEnvironments /= Object.keys(skillEnvironmentMeans).length;
+
   result.behaviourMedian = median(behaviourArray);
   result.behaviourMode = mode(behaviourArray);
   result.behaviourStdev = stdev(behaviourArray, result.behaviourAverage);
+  result.behaviourMeanByEnvironments /= Object.keys(behaviourEnvironmentMeans).length;
   if (result.behaviourAverage > 0 && result.skillsAverage > 0)
     result.gradeSuggestion = Math.round((result.behaviourAverage + result.skillsAverage) / 2);
   return result;
