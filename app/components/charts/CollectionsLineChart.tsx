@@ -1,7 +1,7 @@
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
-import { analyzeEvaluations } from "../../helpers/evaluationUtils";
+import { analyzeEvaluations, analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
 
 const CollectionsLineChart_Collection_Fragment = graphql(`
@@ -28,7 +28,7 @@ const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[
   let currentBehaviourSum = 0;
   let notNullBehaviourCount = 0;
   collections.forEach((it) => {
-    const { skillsAverage, behaviourAverage } = analyzeEvaluations(it.evaluations);
+    const { skillsAverage, behaviourAverage } = analyzeEvaluationsSimple(it.evaluations);
     if (skillsAverage > 0) {
       notNullSkillsCount += 1;
       currentSkillsSum += skillsAverage;

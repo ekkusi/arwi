@@ -7,6 +7,8 @@ import * as Clipboard from "expo-clipboard";
 import { ScrollView } from "react-native-gesture-handler";
 import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
 import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
+import { Alert } from "react-native";
+import { Slider } from "@miblanchard/react-native-slider";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
@@ -23,6 +25,8 @@ import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import EvaluationsLineChart from "../../../components/charts/EvaluationsLineChart";
 import EvaluationsBarChart from "../../../components/charts/EvaluationsBarChart";
 import EvaluationStatistics from "../../../components/charts/EvaluationStatistics";
+import InfoButton from "../../../components/InfoButton";
+import GradeSuggestionView from "../../../components/GradeSuggestionView";
 
 const StudentPage_GetStudent_Query = graphql(`
   query StudentPage_GetStudent($studentId: ID!) {
@@ -63,6 +67,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const [summary, setSummary] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
+  const [gradeSuggestionSkillProportion, setGradeSuggestionSkillProportion] = useState(0.5);
   const [evaluationsByEnvironmentsFilter, setEvaluationsByEnvironmentsFilter] = useState<string>("all");
   const [isGeneratingSummary, setIsGeneratingSumamry] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -110,9 +115,11 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     skillsAverage,
     skillsMedian,
     skillsMode,
+    skillsMeanByEnvironments,
     behaviourAverage,
     behaviourMedian,
     behaviourMode,
+    behaviourMeanByEnvironments,
     gradeSuggestion,
   } = analyzeEvaluations([...evaluations]);
 
@@ -200,17 +207,76 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
         </CView>
         <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} />
         <CView style={{ gap: 10 }}>
-          <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>{t("charasteristics", "Tunnusluvut")}</CText>
-          <CView style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-            <CircledNumber value={skillsMedian} title={t("skill-median", "Taitojen mediaani")} />
-            <CircledNumber value={behaviourMedian} title={t("behaviour-median", "Työskentelyn mediaani")} />
+          <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10 }}>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("characteristics", "Tunnusluvut")}</CText>
+            <InfoButton
+              size={36}
+              onPress={() => {
+                Alert.alert(
+                  t("characteristics", "Tunnusluvut"),
+                  t(
+                    "characteristics-info",
+                    "Oppilaan taitojen ja työskentelyn tunnuslukuja tarkastelemalla saadaan nopeasti yleiskuva oppilaan menestyksestä. Useita eri tunnuslukuja on hyvä tarkastella pelkän keskiarvon sijasta. Moodi ja mediaani reagoivat vähemmän yksittäisiin poikkeaviin havaintoihin ja siten antavat paremman kuvan oppilaan keskimääräisestä tasosta, jos oppilaalla on esimerkiksi yksittäisiä notkahduksia arvosanoissa\n\nMediaani kuvaa järjestettyjen havaintojen keskimmäistä arvoa, ja se lasketaan järjestämällä luvut suuruusjärjestykseen ja valitsemalla keskimmäinen havainto tai kahden keskimmäisen havainnon keskiarvo\n\nMoodi kuvaa arvoa, joka on havaittu kaikista useimmin. Arvosanojen moodi tarkoittaa siis sitä arvosanaa, joka on esiintynyt oppilaan arvioinneissa eniten. \n \nYmpärisöjen keskiarvolla tarkoitetaan keskiarvoa, joka on laskettu antamalla kaikille ympäristöille yhtä suuret painot riippumatta siitä, minkä verran kullakin ympäristöllä on arviointikertoja. Tämä antaa paremman kuvan oppilaan taitotasosta, jos oppilas on esimerkiksi loistanut lajeissa, jota on arvioitu vain harvoin."
+                  )
+                );
+              }}
+            />
           </CView>
-          <CView style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-            <CircledNumber value={skillsMode} title={t("skill-mode", "Taitojen moodi")} />
-            <CircledNumber value={behaviourMode} title={t("behaviour-mode", "Työskentelyn moodi")} />
+          <CView style={{ gap: 5 }}>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+              <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("skills-mean", "Taitojen keskiarvo")} </CText>
+              <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
+                {Number.isNaN(skillsAverage) ? "-" : skillsAverage.toPrecision(2)}
+              </CText>
+            </CView>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+              <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("behaviour-mean", "Työskentelyn keskiarvo")} </CText>
+              <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
+                {Number.isNaN(behaviourAverage) ? "-" : behaviourAverage.toPrecision(2)}
+              </CText>
+            </CView>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+              <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("skill-median", "Taitojen mediaani")} </CText>
+              <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
+                {Number.isNaN(skillsMedian) ? "-" : skillsMedian}
+              </CText>
+            </CView>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+              <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("behaviour-median", "Työskentelyn mediaani")} </CText>
+              <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
+                {Number.isNaN(behaviourMedian) ? "-" : behaviourMedian}
+              </CText>
+            </CView>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+              <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("skill-mode", "Taitojen moodi")} </CText>
+              <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>{Number.isNaN(skillsMode) ? "-" : skillsMode}</CText>
+            </CView>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+              <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("behaviour-mode", "Työskentelyn moodi")} </CText>
+              <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
+                {Number.isNaN(behaviourMode) ? "-" : behaviourMode}
+              </CText>
+            </CView>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+              <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>
+                {t("skills-mean-by-environments", "Ympäristöjen keskiarvo taidoille")}{" "}
+              </CText>
+              <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
+                {Number.isNaN(skillsMeanByEnvironments) ? "-" : skillsMeanByEnvironments.toPrecision(2)}
+              </CText>
+            </CView>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+              <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>
+                {t("behaviour-mean-by-environments", "Ympäristöjen keskiarvo työskentelylle")}{" "}
+              </CText>
+              <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
+                {Number.isNaN(behaviourMeanByEnvironments) ? "-" : behaviourMeanByEnvironments.toPrecision(2)}
+              </CText>
+            </CView>
           </CView>
         </CView>
-        <CText style={{ marginTop: "xl", fontSize: "xl" }}>{t("StudentView.allEvaluations", "Kaikki arvioinnit")}</CText>
+        <GradeSuggestionView skillsMean={skillsAverage} behaviourMean={behaviourAverage} />
+        <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
         <EvaluationsAccordion evaluations={student.currentClassEvaluations} />
         <CView style={{ marginTop: "lg" }} onLayout={(event) => setScrollYPos(event.nativeEvent.layout.y)}>
           <CText style={{ fontSize: "xl", marginBottom: "lg" }}>{t("StudentView.feedbackGeneration", "Loppupalautteen generointi")}</CText>
