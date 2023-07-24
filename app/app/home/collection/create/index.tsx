@@ -11,7 +11,6 @@ import CView from "../../../../components/primitives/CView";
 import CButton from "../../../../components/primitives/CButton";
 import { COLORS } from "../../../../theme";
 import SelectFormField from "../../../../components/form/SelectFormField";
-import { StudentParticipation } from "../../../../components/StudentParticipationList";
 import { getFragmentData, graphql } from "../../../../gql";
 import CTouchableOpacity from "../../../../components/primitives/CTouchableOpacity";
 import FormField from "../../../../components/form/FormField";

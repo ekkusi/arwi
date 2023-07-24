@@ -448,10 +448,6 @@ export type MainPage_GetCurrentUserQuery = {
   };
 };
 
-export type ProfileView_LogoutMutationVariables = Exact<{ [key: string]: never }>;
-
-export type ProfileView_LogoutMutation = { __typename?: "Mutation"; logout: boolean };
-
 export type CollectionsLineChart_EvaluationCollectionFragment = {
   __typename?: "EvaluationCollection";
   id: string;
@@ -466,15 +462,6 @@ export type CollectionsLineChart_EvaluationCollectionFragment = {
   }>;
 } & { " $fragmentName"?: "CollectionsLineChart_EvaluationCollectionFragment" };
 
-export type EvaluationsBarChart_EvaluationFragment = {
-  __typename?: "Evaluation";
-  id: string;
-  skillsRating?: Rating | null;
-  behaviourRating?: Rating | null;
-  wasPresent: boolean;
-  collection: { __typename?: "EvaluationCollection"; environment: { __typename?: "Environment"; label: string; code: string; color: string } };
-} & { " $fragmentName"?: "EvaluationsBarChart_EvaluationFragment" };
-
 export type EvaluationsLineChart_EvaluationFragment = {
   __typename?: "Evaluation";
   id: string;
@@ -487,6 +474,19 @@ export type EvaluationsLineChart_EvaluationFragment = {
     environment: { __typename?: "Environment"; label: string; code: string; color: string };
   };
 } & { " $fragmentName"?: "EvaluationsLineChart_EvaluationFragment" };
+
+export type EvaluationsBarChart_EvaluationFragment = {
+  __typename?: "Evaluation";
+  id: string;
+  skillsRating?: Rating | null;
+  behaviourRating?: Rating | null;
+  wasPresent: boolean;
+  collection: { __typename?: "EvaluationCollection"; environment: { __typename?: "Environment"; label: string; code: string; color: string } };
+} & { " $fragmentName"?: "EvaluationsBarChart_EvaluationFragment" };
+
+export type ProfileView_LogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type ProfileView_LogoutMutation = { __typename?: "Mutation"; logout: boolean };
 
 export type GroupOverviewPage_GetGroupQueryVariables = Exact<{
   groupId: Scalars["ID"];
@@ -541,6 +541,24 @@ export type StudentPage_GetStudentQuery = {
   } & { " $fragmentRefs"?: { StudentEvaluationRecap_StudentFragment: StudentEvaluationRecap_StudentFragment } };
 };
 
+export type UpdateEvaluationCard_EvaluationFragment = {
+  __typename?: "Evaluation";
+  id: string;
+  skillsRating?: Rating | null;
+  behaviourRating?: Rating | null;
+  notes?: string | null;
+  wasPresent: boolean;
+  isStellar: boolean;
+  student: { __typename?: "Student"; id: string; name: string; currentClassEvaluations: Array<{ __typename?: "Evaluation"; notes?: string | null }> };
+} & { " $fragmentName"?: "UpdateEvaluationCard_EvaluationFragment" };
+
+export type UpdateEvaluationCard_StudentFragment = {
+  __typename?: "Student";
+  id: string;
+  name: string;
+  currentClassEvaluations: Array<{ __typename?: "Evaluation"; notes?: string | null }>;
+} & { " $fragmentName"?: "UpdateEvaluationCard_StudentFragment" };
+
 export type CollectionCreationProvider_GetGroupQueryVariables = Exact<{
   groupId: Scalars["ID"];
 }>;
@@ -551,15 +569,13 @@ export type CollectionCreationProvider_GetGroupQuery = {
     __typename?: "Group";
     id: string;
     currentClassYear: { __typename?: "ClassYear"; id: string };
-    students: Array<{ __typename?: "Student"; id: string; name: string }>;
+    students: Array<
+      { __typename?: "Student"; id: string; name: string } & {
+        " $fragmentRefs"?: { UpdateEvaluationCard_StudentFragment: UpdateEvaluationCard_StudentFragment };
+      }
+    >;
   } & { " $fragmentRefs"?: { CollectionGeneralInfoView_GroupFragment: CollectionGeneralInfoView_GroupFragment } };
 };
-
-export type CollectionGeneralInfoView_GroupFragment = {
-  __typename?: "Group";
-  subject: { __typename?: "Subject"; code: string };
-  currentClassYear: { __typename?: "ClassYear"; info: { __typename?: "ClassYearInfo"; code: ClassYearCode } };
-} & { " $fragmentName"?: "CollectionGeneralInfoView_GroupFragment" };
 
 export type CollectionEvaluationsView_CreateCollectionMutationVariables = Exact<{
   createCollectionInput: CreateCollectionInput;
@@ -575,6 +591,12 @@ export type CollectionParticipationsView_GroupFragment = {
   __typename?: "Group";
   students: Array<{ __typename?: "Student"; id: string; name: string }>;
 } & { " $fragmentName"?: "CollectionParticipationsView_GroupFragment" };
+
+export type CollectionGeneralInfoView_GroupFragment = {
+  __typename?: "Group";
+  subject: { __typename?: "Subject"; code: string };
+  currentClassYear: { __typename?: "ClassYear"; info: { __typename?: "ClassYearInfo"; code: ClassYearCode } };
+} & { " $fragmentName"?: "CollectionGeneralInfoView_GroupFragment" };
 
 export type CreateGroupPage_CreateGroupMutationVariables = Exact<{
   input: CreateGroupInput;
@@ -1059,6 +1081,91 @@ export const CollectionsLineChart_EvaluationCollectionFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<CollectionsLineChart_EvaluationCollectionFragment, unknown>;
+export const UpdateEvaluationCard_EvaluationFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "UpdateEvaluationCard_Evaluation" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Evaluation" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
+          { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
+          { kind: "Field", name: { kind: "Name", value: "notes" } },
+          { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+          { kind: "Field", name: { kind: "Name", value: "isStellar" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "student" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "currentClassEvaluations" },
+                  selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "notes" } }] },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateEvaluationCard_EvaluationFragment, unknown>;
+export const UpdateEvaluationCard_StudentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "UpdateEvaluationCard_Student" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Student" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "currentClassEvaluations" },
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "notes" } }] },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateEvaluationCard_StudentFragment, unknown>;
+export const CollectionParticipationsView_GroupFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "CollectionParticipationsView_Group" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Group" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "students" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CollectionParticipationsView_GroupFragment, unknown>;
 export const CollectionGeneralInfoView_GroupFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -1093,32 +1200,6 @@ export const CollectionGeneralInfoView_GroupFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<CollectionGeneralInfoView_GroupFragment, unknown>;
-export const CollectionParticipationsView_GroupFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "CollectionParticipationsView_Group" },
-      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Group" } },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "students" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<CollectionParticipationsView_GroupFragment, unknown>;
 export const Main_GetCurrentUserDocument = {
   kind: "Document",
   definitions: [
@@ -1728,12 +1809,30 @@ export const CollectionCreationProvider_GetGroupDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      { kind: "FragmentSpread", name: { kind: "Name", value: "UpdateEvaluationCard_Student" } },
                     ],
                   },
                 },
                 { kind: "FragmentSpread", name: { kind: "Name", value: "CollectionGeneralInfoView_Group" } },
               ],
             },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "UpdateEvaluationCard_Student" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Student" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "currentClassEvaluations" },
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "notes" } }] },
           },
         ],
       },

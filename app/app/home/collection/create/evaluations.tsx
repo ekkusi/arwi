@@ -4,8 +4,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
+import CFlatList from "../../../../components/primitives/CFlatList";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
+import UpdateEvaluationCard from "../../../../components/UpdateEvaluationCard";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
@@ -26,7 +28,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const { t } = useTranslation();
   const [createCollection] = useMutation(CollectionEvaluationsView_CreateCollection_Mutation);
   const [submitting, setSubmitting] = useState(false);
-  const { generalData, evaluations, groupInfo } = useCollectionCreationContext();
+  const { generalData, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -56,26 +58,39 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     setSubmitting(false);
   };
   return (
-    <CView
-      style={{
-        flexGrow: 1,
-        width: "100%",
-        paddingHorizontal: 20,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "flex-end",
-      }}
-    >
-      <CButton onPress={() => navigation.goBack()}>
-        <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-      </CButton>
-      <CButton
-        loading={submitting}
-        title={t("save", "Tallenna")}
-        onPress={() => handleSubmit()}
-        leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
+    <>
+      <CFlatList
+        data={evaluations}
+        renderItem={({ item }) => (
+          <UpdateEvaluationCard
+            evaluation={item}
+            // onChanged={(value) => {
+            //   value;
+            // }}
+          />
+        )}
       />
-    </CView>
+      <CView
+        style={{
+          flexGrow: 1,
+          width: "100%",
+          paddingHorizontal: 20,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+        }}
+      >
+        <CButton onPress={() => navigation.goBack()}>
+          <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+        </CButton>
+        <CButton
+          loading={submitting}
+          title={t("save", "Tallenna")}
+          onPress={() => handleSubmit()}
+          leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
+        />
+      </CView>
+    </>
   );
 }
 
