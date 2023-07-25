@@ -1,7 +1,6 @@
 import i18n from "i18next";
 import GridlyBackend, { GridlyBackendOptions } from "i18next-gridly-backend";
 import { initReactI18next } from "react-i18next";
-import { GRIDLY_API_KEY, GRIDLY_VIEW_ID } from "@env";
 import "intl-pluralrules";
 
 import { Platform, NativeModules } from "react-native";
@@ -19,6 +18,12 @@ const deviceLanguage =
     : NativeModules.I18nManager.localeIdentifier;
 
 const deviceLanguageExists = languages.findIndex((lang) => lang.value === deviceLanguage) >= 0;
+
+const GRIDLY_API_KEY = process.env.EXPO_PUBLIC_GRIDLY_API_KEY;
+const GRIDLY_VIEW_ID = process.env.EXPO_PUBLIC_GRIDLY_VIEW_ID;
+
+if (!GRIDLY_API_KEY || !GRIDLY_VIEW_ID)
+  throw new Error("Missing Gridly API key or view ID, define EXPO_PUBLIC_GRIDLY_API_KEY and EXPO_PUBLIC_GRIDLY_VIEW_ID in .env");
 
 const gridlyOptions: GridlyBackendOptions = {
   apiKey: GRIDLY_API_KEY,

@@ -20,6 +20,7 @@ const UpdateCollectionForm_Group_Fragment = graphql(`
       code
     }
     currentClassYear {
+      id
       info {
         code
       }
@@ -112,42 +113,11 @@ export default function UpdateCollectionForm({
   const [description, setDescription] = useState(collection?.description || "");
 
   const [environmentError, setEnvironmentError] = useState<string>();
-  const [submitting, setSubmitting] = useState(false);
 
   const subjectCode = collection ? collection.classYear.group.subject.code : (group?.subject.code as string);
   const classYearCode = collection ? collection.classYear.info.code : (group?.currentClassYear.info.code as ClassYearCode);
   const learningObjectives = getLearningObjectives(subjectCode, classYearCode);
   const environments = getEnvironments(subjectCode);
-
-  const [participations, setParticipations] = useState<StudentParticipation[]>(() => {
-    let initialParticipations: StudentParticipation[] = [];
-    if (collection) initialParticipations = collection.evaluations;
-    else if (group)
-      initialParticipations = group.students.map((student) => ({
-        wasPresent: true,
-        student,
-      }));
-    return initialParticipations.sort((a, b) => a.student.name.localeCompare(b.student.name));
-  });
-
-  const handleSubmit = async () => {
-    if (!selectedEnvironmentCode) {
-      setEnvironmentError(t("CollectionCreationView.environmentError", "Valitse ympäristö"));
-      return;
-    }
-    setSubmitting(true);
-
-    await onSubmit(
-      {
-        date,
-        description,
-        environmentCode: selectedEnvironmentCode,
-        learningObjectiveCodes: selectedLearningObjectiveCode,
-      },
-      participations
-    );
-    setSubmitting(false);
-  };
 
   return (
     <CView style={{ flex: 1, gap: 20, ...style }} {...rest}>

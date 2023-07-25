@@ -18,6 +18,8 @@ module.exports = {
     },
   },
   android: {
+    package: "fi.arwi.twa",
+    versionCode: 1,
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#ffffff",
@@ -28,6 +30,8 @@ module.exports = {
   },
   scheme: "arwi-app",
   extra: {
-    backendApiUrl: process.env.BACKEND_API_URL,
+    eas: {
+      projectId: "630de596-103e-469d-968f-bd0339f5f4c8",
+    },
   },
 };

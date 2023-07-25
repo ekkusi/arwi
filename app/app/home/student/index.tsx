@@ -38,6 +38,7 @@ const StudentPage_GetStudent_Query = graphql(`
           label
         }
         currentClassYear {
+          id
           info {
             code
             label

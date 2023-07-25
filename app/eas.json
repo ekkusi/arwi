@@ -1,0 +1,9 @@
+{
+  "build": {
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com"
+      }
+    }
+  }
+}

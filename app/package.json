@@ -3,16 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start-no-backend": "cross-env BACKEND_API_URL=https://arwi-test.lm.r.appspot.com npx expo start",
-    "start-mac": "BACKEND_API_URL=http://$(ipconfig getifaddr en0):4000 npx expo start",
-    "start-win": "for /f \"tokens=2 delims=[]\" %a in ('ping -n 1 -4 \"%computername%\"') do set BACKEND_API_URL=http://%a:4000 && npx expo start",
+    "start-no-backend": "cross-env EXPO_PUBLIC_BACKEND_API_URL=https://arwi-test.lm.r.appspot.com npx expo start",
+    "start-mac": "EXPO_PUBLIC_BACKEND_API_URL=http://$(ipconfig getifaddr en0):4000 npx expo start",
+    "start-win": "for /f \"tokens=2 delims=[]\" %a in ('ping -n 1 -4 \"%computername%\"') do set EXPO_PUBLIC_BACKEND_API_URL=http://%a:4000 && npx expo start",
     "android": "expo start --android",
     "link": "react-native link",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint:fix": "eslint --fix .",
     "codegen": "graphql-codegen",
-    "codegen:watch": "graphql-codegen --watch"
+    "codegen:watch": "graphql-codegen --watch",
+    "postinstall": "cd .. && yarn install"
   },
   "dependencies": {
     "@apollo/client": "^3.7.14",
@@ -27,7 +28,6 @@
     "date-fns": "^2.30.0",
     "expo": "^49.0.0",
     "expo-clipboard": "~4.3.0",
-    "expo-constants": "~14.4.2",
     "expo-secure-store": "~12.3.1",
     "expo-status-bar": "~1.6.0",
     "graphql": "^16.6.0",
@@ -39,7 +39,6 @@
     "react": "18.2.0",
     "react-i18next": "^12.3.1",
     "react-native": "0.72.3",
-    "react-native-dotenv": "^3.4.8",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-pager-view": "6.2.0",
     "react-native-popup-menu": "^0.16.1",
