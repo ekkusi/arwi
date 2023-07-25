@@ -210,7 +210,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10 }}>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("characteristics", "Tunnusluvut")}</CText>
             <InfoButton
-              size={36}
               onPress={() => {
                 Alert.alert(
                   t("characteristics", "Tunnusluvut"),

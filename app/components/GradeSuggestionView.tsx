@@ -27,6 +27,11 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean }: { ski
               colorScheme="darkgray"
               style={{ width: "auto" }}
               leftIcon={<MaterialCommunityIcon name="chevron-down" size={25} color={COLORS.darkgray} />}
+              rightIcon={
+                gradeSuggestionSkillsWeight !== 0.5 ? (
+                  <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} />
+                ) : undefined
+              }
               disableTouchEvent
             />
           </MenuTrigger>
@@ -42,7 +47,16 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean }: { ski
                 borderTopWidth: 1,
               }}
             >
-              <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("modify-weights", "Muokkaa painoja")}</CText>
+              <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <CText style={{ fontSize: "lg", fontWeight: "500" }}>{t("modify-weights", "Muokkaa painoja")}</CText>
+                <CButton
+                  title={t("default-settings", "Oletus asetukset")}
+                  size="small"
+                  variant="outline"
+                  colorScheme="darkgray"
+                  onPress={() => setGradeSuggestionSkillWeight(0.5)}
+                />
+              </CView>
               <CView style={{ justifyContent: "center", alignItems: "stretch", gap: 5 }}>
                 <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                   <CView style={{ justifyContent: "center", alignItems: "center", gap: 3 }}>
@@ -58,6 +72,7 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean }: { ski
                   minimumTrackTintColor={COLORS.primary}
                   maximumTrackTintColor={COLORS.secondary}
                   value={gradeSuggestionSkillsWeight}
+                  step={0.01}
                   onValueChange={(value) => setGradeSuggestionSkillWeight(value[0])}
                 />
                 <CView style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
