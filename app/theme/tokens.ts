@@ -62,6 +62,7 @@ export const COLORS = {
   // secondary: "#33414C",
   secondary: "#35352A",
   lightgray: "#D8D8D8",
+  "extra-light-gray": "#ECECEC",
   gray: "#919191",
   // darkgray: "#17232c",
   black: "#000000",

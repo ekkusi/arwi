@@ -17,6 +17,7 @@ import FormField from "../../../../components/form/FormField";
 import CTextInput from "../../../../components/primitives/CTextInput";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import TextFormField from "../../../../components/form/TextFormField";
+import MultiSelectFormField from "../../../../components/form/MultiSelectFormField";
 
 const CollectionGeneralInfoView_Group_Fragment = graphql(`
   fragment CollectionGeneralInfoView_Group on Group {
@@ -77,8 +78,8 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
           title={t("environment", "Ympäristö")}
           options={environments.map((it) => ({ value: it.code, label: it.label }))}
         />
-        <SelectFormField
-          onSelect={(item) => setSelectedLearningObjectivesCode([item.value])}
+        <MultiSelectFormField
+          onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
           title={t("learningObjectives", "Oppimistavoitteet")}
           options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
         />
