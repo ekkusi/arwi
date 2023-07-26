@@ -1,14 +1,18 @@
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryContainer, VictoryGroup } from "victory-native";
 import { useMemo, useState } from "react";
 import { t } from "i18next";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
+import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
-import { formatRatingNumber } from "../../helpers/dataMappers";
-
+import { formatRatingNumber, getColorForGrade } from "../../helpers/dataMappers";
 import { hexToRgbA } from "../../helpers/color";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
 import CText from "../primitives/CText";
+import CButton from "../primitives/CButton";
+import { COLORS } from "../../theme";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on Evaluation {
@@ -26,116 +30,173 @@ const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   }
 `);
 
-type TempDataValue = {
-  value: number;
-  count: number;
-};
-
 type TempDataType = {
-  label: string;
-  color: string;
-  skills: TempDataValue;
-  behaviour: TempDataValue;
+  skillCount: number;
+  behaviourCount: number;
+  environment: string;
 };
-
-type EvaluationsBarChartDataType = StyledBarChartDataType & {
-  type: "skills" | "behaviour";
-};
+type TempDataHash = { [grade: number]: { [environment: string]: TempDataType } };
 
 const INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD = 0;
 
-const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
-  const data: EvaluationsBarChartDataType[] = [];
-  const tempData: { [key: string]: TempDataType } = {};
-  evaluations.forEach((evaluation) => {
-    const envCode = evaluation.collection.environment.code;
-    if (!tempData[envCode]) {
-      tempData[envCode] = {
-        color: evaluation.collection.environment.color,
-        label: evaluation.collection.environment.label,
-        skills: {
-          value: 0,
-          count: 0,
-        },
-        behaviour: {
-          value: 0,
-          count: 0,
-        },
+const mapDataToTempData = (evaluations: EvaluationsBarChart_EvaluationFragment[], environments: string[]) => {
+  const tempData: TempDataHash = {};
+  [4, 5, 6, 7, 8, 9, 10].forEach((grade, idx) => {
+    tempData[grade] = {};
+    environments.forEach((env) => {
+      tempData[grade][env] = {
+        skillCount: 0,
+        behaviourCount: 0,
+        environment: env,
       };
-    }
-    const matchingEnvironment = tempData[envCode];
-
-    if (evaluation.skillsRating) {
-      matchingEnvironment.skills.value += formatRatingNumber(evaluation.skillsRating);
-      matchingEnvironment.skills.count += 1;
-    }
+    });
+  });
+  evaluations.forEach((evaluation) => {
     if (evaluation.behaviourRating) {
-      matchingEnvironment.behaviour.value += formatRatingNumber(evaluation.behaviourRating);
-      matchingEnvironment.behaviour.count += 1;
+      const behaviourNumber = formatRatingNumber(evaluation.behaviourRating);
+      tempData[behaviourNumber][evaluation.collection.environment.label].behaviourCount += 1;
+    }
+    if (evaluation.skillsRating) {
+      const skillNumber = formatRatingNumber(evaluation.skillsRating);
+      tempData[skillNumber][evaluation.collection.environment.label].skillCount += 1;
     }
   });
-  Object.keys(tempData).forEach((key) => {
-    if (tempData[key].skills.count < INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD) return;
-    data.push({
-      x: `${tempData[key].label}1`,
-      color: tempData[key].color,
-      y: tempData[key].skills.count > 0 ? Math.round((tempData[key].skills.value / tempData[key].skills.count) * 100) / 100 : 0,
-      type: "skills",
+  return tempData;
+};
+
+const filterTempDataToChartData = (data: TempDataHash, typeFilter: string, environmentFilter: string) => {
+  const filteredData: StyledBarChartDataType[] = [];
+  Object.keys(data).forEach((key) => {
+    const grade = parseInt(key, 10);
+    const gradeObj = data[grade];
+    let count = 0;
+    if (environmentFilter !== "all") {
+      const envObj = gradeObj[environmentFilter];
+      if (["all", "skills"].includes(typeFilter)) {
+        count += envObj.skillCount;
+      }
+      if (["all", "behaviour"].includes(typeFilter)) {
+        count += envObj.behaviourCount;
+      }
+    }
+    Object.values(gradeObj).forEach((envObj) => {
+      if (["all", "skills"].includes(typeFilter)) {
+        count += envObj.skillCount;
+      }
+      if (["all", "behaviour"].includes(typeFilter)) {
+        count += envObj.behaviourCount;
+      }
     });
-    data.push({
-      x: `${tempData[key].label}2`,
-      color: hexToRgbA(tempData[key].color, 0.8),
-      y: tempData[key].behaviour.count > 0 ? Math.round((tempData[key].behaviour.value / tempData[key].behaviour.count) * 100) / 100 : 0,
-      type: "behaviour",
-    });
+    filteredData.push({ x: key, y: count, color: getColorForGrade(grade) });
   });
-
-  return data;
+  return filteredData;
 };
 
-type EvaluationsBarChartProps = CViewProps & {
+type EvaluationsHistogramProps = CViewProps & {
   evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
-  filter?: string;
+  subjectCode: string;
 };
 
-const getFilteredData = (data: EvaluationsBarChartDataType[], filter: string) => {
-  switch (filter) {
-    case "skills":
-      return data.filter((obj) => obj.type === "skills");
-    case "behaviour":
-      return data.filter((obj) => obj.type === "behaviour");
-    default:
-      return data;
-  }
-};
+export default function EvaluationsHistogram({ evaluations: evaluationFragments, subjectCode, ...rest }: EvaluationsHistogramProps) {
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [environmentFilter, setEnvironmentFilter] = useState("all");
 
-export default function EvaluationsHistogram({ evaluations: evaluationFragments, filter = "all", ...rest }: EvaluationsBarChartProps) {
+  const environments = getEnvironments(subjectCode);
+  const environmentLabels = environments.map((env) => env.label);
+
   const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
 
-  const data = useMemo(() => mapData(filteredEvaluations), [filteredEvaluations]);
-  const filteredData = getFilteredData(data, filter);
+  const data = useMemo(() => mapDataToTempData(filteredEvaluations, environmentLabels), [filteredEvaluations, environmentLabels]);
+  const filteredData = useMemo(() => filterTempDataToChartData(data, typeFilter, environmentFilter), [data, typeFilter, environmentFilter]);
 
   return (
     <CView style={{ width: "100%" }}>
-      <StyledBarChart data={filteredData} style={{ height: 200 }} gradeAxis {...rest} />
-
-      <CView style={{ gap: 2, flexDirection: "row", justifyContent: "flex-start", flexWrap: "wrap", width: "100%" }}>
-        {filter === "all" && (
-          <CView style={{ width: "100%", flexDirection: "row" }}>
-            <CText style={{ flex: 1, fontSize: "xs", fontWeight: "500" }}>{t("skills", "Taidot")}</CText>
-            <CText style={{ flex: 1, fontSize: "xs", fontWeight: "500" }}>{t("behaviour", "Työskentely")}</CText>
-          </CView>
-        )}
-        {filteredData.map((obj, idx) => (
-          <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "40%", marginRight: 30 }}>
-            <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
-              <CView style={{ width: 10, height: 10, backgroundColor: obj.color }} />
-              <CText style={{ fontSize: "xs" }}>{obj.x.slice(0, -1)}</CText>
-            </CView>
-            <CText style={{ fontSize: "sm", fontWeight: "600" }}>{obj.y}</CText>
-          </CView>
-        ))}
+      <CView style={{ flexDirection: "row", alignItems: "center" }}>
+        <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>{t("evaluation-distribution", "Arvosanajakauma")}</CText>
+        <CView style={{ flex: 1, alignItems: "flex-end" }}>
+          <Menu renderer={renderers.SlideInMenu}>
+            <MenuTrigger style={{ borderRadius: 24 }}>
+              <CButton
+                size="small"
+                variant="outline"
+                title={t("filter", "Suodata")}
+                colorScheme="darkgray"
+                style={{ width: "auto" }}
+                leftIcon={<MaterialCommunityIcon name="chevron-down" size={25} color={COLORS.darkgray} />}
+                rightIcon={
+                  typeFilter !== "all" || environmentFilter !== "all" ? (
+                    <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} />
+                  ) : undefined
+                }
+                disableTouchEvent
+              />
+            </MenuTrigger>
+            <MenuOptions>
+              <CView style={{ padding: "md", gap: 20 }}>
+                <CView style={{ gap: 10 }}>
+                  <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("environment", "Ympäristöt")}</CText>
+                  <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%", padding: "md" }}>
+                    <CButton
+                      key="all"
+                      title={t("all", "Kaikki")}
+                      variant="outline"
+                      colorScheme={environmentFilter !== "all" ? "lightgray" : "darkgray"}
+                      style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
+                      onPress={() => setEnvironmentFilter("all")}
+                      textStyle={{ fontSize: "xs", fontWeight: "400", color: environmentFilter !== "all" ? "gray" : "darkgray" }}
+                      leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: "black" }} />}
+                    />
+                    {environments.map((item) => (
+                      <CButton
+                        key={item.code}
+                        title={item.label}
+                        variant="outline"
+                        colorScheme={item.label === environmentFilter ? "darkgray" : "lightgray"}
+                        style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
+                        onPress={() => setEnvironmentFilter(item.label)}
+                        textStyle={{ fontSize: "xs", fontWeight: "400", color: item.label === environmentFilter ? "darkgray" : "gray" }}
+                        leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: item.color }} />}
+                      />
+                    ))}
+                  </CView>
+                </CView>
+                <CView style={{ gap: 10 }}>
+                  <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("skills-and-behaviour", "Taidot ja työskentely")}</CText>
+                  <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%", padding: "md" }}>
+                    <CButton
+                      key="all"
+                      title={t("all", "Kaikki")}
+                      variant="outline"
+                      colorScheme={typeFilter !== "all" ? "lightgray" : "darkgray"}
+                      style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
+                      onPress={() => setEnvironmentFilter("all")}
+                      textStyle={{ fontSize: "xs", fontWeight: "400", color: environmentFilter !== "all" ? "gray" : "darkgray" }}
+                      leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: "black" }} />}
+                    />
+                    {["skills", "behaviour"].map((item) => (
+                      <CButton
+                        key={item}
+                        title={t(item)}
+                        variant="outline"
+                        colorScheme={item === typeFilter ? "darkgray" : "lightgray"}
+                        style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
+                        onPress={() => setTypeFilter(item)}
+                        textStyle={{ fontSize: "xs", fontWeight: "400", color: item === typeFilter ? "darkgray" : "gray" }}
+                      />
+                    ))}
+                  </CView>
+                </CView>
+                <MenuOption onSelect={() => {}}>
+                  <CButton title={t("use", "Käytä")} disableTouchEvent />
+                </MenuOption>
+              </CView>
+            </MenuOptions>
+          </Menu>
+        </CView>
+      </CView>
+      <CView style={{ width: "80%" }}>
+        <StyledBarChart data={filteredData} countAxis showAxisLabels style={{ height: 200 }} {...rest} />
       </CView>
     </CView>
   );
