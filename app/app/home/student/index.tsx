@@ -23,6 +23,7 @@ import EvaluationsBarChart from "../../../components/charts/EvaluationsBarChart"
 import EvaluationStatistics from "../../../components/charts/EvaluationStatistics";
 import InfoButton from "../../../components/InfoButton";
 import GradeSuggestionView from "../../../components/GradeSuggestionView";
+import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogram";
 
 const StudentPage_GetStudent_Query = graphql(`
   query StudentPage_GetStudent($studentId: ID!) {
@@ -200,12 +201,12 @@ export default function StudentView({ route }: NativeStackScreenProps<HomeStackP
           </CView>
           <EvaluationsBarChart evaluations={evaluations} filter={evaluationsByEnvironmentsFilter} />
         </CView>
+        <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} />
         <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} />
         <CView style={{ gap: 10 }}>
           <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10 }}>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("characteristics", "Tunnusluvut")}</CText>
             <InfoButton
-              size={36}
               onPress={() => {
                 Alert.alert(
                   t("characteristics", "Tunnusluvut"),

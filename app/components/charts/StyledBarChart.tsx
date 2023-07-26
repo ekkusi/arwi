@@ -12,10 +12,19 @@ export type StyledBarChartDataType = {
 type StyledBarChartProps = CViewProps & {
   data: StyledBarChartDataType[];
   gradeAxis?: boolean;
+  countAxis?: boolean;
   showToolTips?: boolean;
+  showAxisLabels?: boolean;
 };
 
-export default function StyledBarChart({ data, gradeAxis = false, showToolTips = true, ...rest }: StyledBarChartProps) {
+export default function StyledBarChart({
+  data,
+  gradeAxis = false,
+  countAxis = false,
+  showAxisLabels = false,
+  showToolTips = true,
+  ...rest
+}: StyledBarChartProps) {
   const [size, setSize] = useState<{ width: number; height: number } | null>(null); // Crashes on ios if is set to width: 0 and height: 0 at start
 
   const leftPadding = gradeAxis ? 30 : 0;
@@ -43,7 +52,7 @@ export default function StyledBarChart({ data, gradeAxis = false, showToolTips =
           <VictoryBar
             alignment="start"
             data={noZeroData}
-            width={gradeAxis ? size.width - leftPadding : size.width}
+            width={gradeAxis || countAxis ? size.width - leftPadding : size.width}
             height={size.height}
             barWidth={barWidth}
             maxDomain={{ y: maxCount > 3 ? maxCount : 3 }}
@@ -73,12 +82,10 @@ export default function StyledBarChart({ data, gradeAxis = false, showToolTips =
               )
             }
           />
-          {gradeAxis ? (
-            <VictoryAxis dependentAxis tickValues={[4, 5, 6, 7, 8, 9, 10]} />
-          ) : (
-            <VictoryAxis dependentAxis axisComponent={<CView />} tickFormat={() => ""} />
-          )}
-          <VictoryAxis tickFormat={() => ""} width={size.width - leftPadding} />
+          {gradeAxis && <VictoryAxis dependentAxis tickValues={[4, 5, 6, 7, 8, 9, 10]} />}
+          {countAxis && <VictoryAxis dependentAxis tickCount={6} tickFormat={(val) => val.toFixed(1)} />}
+          {!gradeAxis && !countAxis && <VictoryAxis dependentAxis axisComponent={<CView />} tickFormat={() => ""} />}
+          {!showAxisLabels ? <VictoryAxis tickFormat={() => ""} width={size.width - leftPadding} /> : <VictoryAxis offsetX={barWidth / 2} />}
         </VictoryChart>
       )}
     </CView>
