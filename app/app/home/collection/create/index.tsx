@@ -100,7 +100,12 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
             }}
           />
         )}
-        <TextFormField title={t("more-info", "Lisätietoa")} placeholder={`${t("more-info")}...`} onChange={(text) => setDescription(text)} />
+        <TextFormField
+          as="textarea"
+          title={t("more-info", "Lisätietoa")}
+          placeholder={`${t("more-info")}...`}
+          onChange={(text) => setDescription(text)}
+        />
       </CView>
       <CView style={{ justifyContent: "flex-end", flexDirection: "row" }}>
         <CButton
