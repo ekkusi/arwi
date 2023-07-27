@@ -1,4 +1,5 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
+import { Platform } from "react-native";
 import { COLORS, SPACING } from "../theme";
 
 export const defaultHeaderStyles: NativeStackNavigationOptions = {
@@ -10,6 +11,7 @@ export const defaultHeaderStyles: NativeStackNavigationOptions = {
 
 export const tabBarStyles = {
   backgroundColor: COLORS.white,
-  height: 60,
-  paddingTop: SPACING.md,
+  height: 75,
+  paddingTop: SPACING.lg,
+  paddingBottom: Platform.OS === "ios" ? SPACING.lg : SPACING.md,
 };

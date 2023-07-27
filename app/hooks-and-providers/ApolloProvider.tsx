@@ -6,7 +6,8 @@ import { useMemo } from "react";
 import { ACCESS_TOKEN_KEY, useAuth } from "./AuthProvider";
 
 const BACKEND_API_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;
-if (!BACKEND_API_URL) throw new Error("process.env.EXPO_PUBLIC_BACKEND_API_URL is not defined");
+if (!BACKEND_API_URL) throw new Error("Backend API URL not defined, define EXPO_PUBLIC_BACKEND_API_URL in .env");
+
 const GRAPHQL_API_URL = `${BACKEND_API_URL}/graphql`;
 
 /**
