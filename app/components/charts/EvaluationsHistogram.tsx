@@ -78,15 +78,16 @@ const filterTempDataToChartData = (data: TempDataHash, typeFilter: string, envir
       if (["all", "behaviour"].includes(typeFilter)) {
         count += envObj.behaviourCount;
       }
+    } else {
+      Object.values(gradeObj).forEach((envObj) => {
+        if (["all", "skills"].includes(typeFilter)) {
+          count += envObj.skillCount;
+        }
+        if (["all", "behaviour"].includes(typeFilter)) {
+          count += envObj.behaviourCount;
+        }
+      });
     }
-    Object.values(gradeObj).forEach((envObj) => {
-      if (["all", "skills"].includes(typeFilter)) {
-        count += envObj.skillCount;
-      }
-      if (["all", "behaviour"].includes(typeFilter)) {
-        count += envObj.behaviourCount;
-      }
-    });
     filteredData.push({ x: key, y: count, color: getColorForGrade(grade) });
   });
   return filteredData;
@@ -195,7 +196,7 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
           </Menu>
         </CView>
       </CView>
-      <CView style={{ width: "80%" }}>
+      <CView style={{ width: "100%" }}>
         <StyledBarChart data={filteredData} countAxis showAxisLabels style={{ height: 200 }} {...rest} />
       </CView>
     </CView>

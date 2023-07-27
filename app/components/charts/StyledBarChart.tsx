@@ -27,7 +27,7 @@ export default function StyledBarChart({
 }: StyledBarChartProps) {
   const [size, setSize] = useState<{ width: number; height: number } | null>(null); // Crashes on ios if is set to width: 0 and height: 0 at start
 
-  const leftPadding = gradeAxis ? 30 : 0;
+  const leftPadding = gradeAxis || countAxis ? 30 : 0;
   const barWidth = Math.min(((size?.width || 0) - leftPadding) / (data.length > 1 ? data.length : 2) - 1, 35);
   const noZeroData = data.map((obj) => {
     return { ...obj, y: obj.y === 0 ? 0.5 : obj.y };
@@ -45,12 +45,12 @@ export default function StyledBarChart({
       {size && (
         <VictoryChart
           {...size}
-          domainPadding={{ x: [0, barWidth] }}
+          domainPadding={{ x: [barWidth / 2, barWidth / 2] }}
           padding={{ left: leftPadding, right: 0, top: 50, bottom: 30 }}
           minDomain={gradeAxis ? { y: 4 } : {}}
         >
           <VictoryBar
-            alignment="start"
+            alignment="middle"
             data={noZeroData}
             width={gradeAxis || countAxis ? size.width - leftPadding : size.width}
             height={size.height}
@@ -68,22 +68,14 @@ export default function StyledBarChart({
             }}
             labelComponent={
               showToolTips ? (
-                <VictoryTooltip
-                  dy={-2}
-                  dx={barWidth / 2}
-                  active
-                  flyoutHeight={20}
-                  flyoutWidth={20}
-                  style={{ fontWeight: "500" }}
-                  renderInPortal={false}
-                />
+                <VictoryTooltip dy={-2} dx={0} active flyoutHeight={20} flyoutWidth={20} style={{ fontWeight: "500" }} renderInPortal={false} />
               ) : (
                 <CView />
               )
             }
           />
           {gradeAxis && <VictoryAxis dependentAxis tickValues={[4, 5, 6, 7, 8, 9, 10]} />}
-          {countAxis && <VictoryAxis dependentAxis tickCount={6} tickFormat={(val) => val.toFixed(1)} />}
+          {countAxis && <VictoryAxis dependentAxis tickFormat={(val) => (Number.isInteger(val) ? val.toFixed(0) : "")} />}
           {!gradeAxis && !countAxis && <VictoryAxis dependentAxis axisComponent={<CView />} tickFormat={() => ""} />}
           {!showAxisLabels ? <VictoryAxis tickFormat={() => ""} width={size.width - leftPadding} /> : <VictoryAxis offsetX={barWidth / 2} />}
         </VictoryChart>

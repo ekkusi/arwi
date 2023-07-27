@@ -66,12 +66,12 @@ export const getPredefinedColors = (count: number) => {
 
 export const GRADE_COLORS: { [grade: number]: string } = {
   4: "#ff0000",
-  5: "#ff5500",
-  6: "#ffaa00",
-  7: "#ffff00",
-  8: "#aeff00",
-  9: "#96ff00",
-  10: "#32e600",
+  5: "#ff6600",
+  6: "#ff9900",
+  7: "#ffcc00",
+  8: "#ffff00",
+  9: "#66cc00",
+  10: "#009900",
 };
 export const getColorForGrade = (grade: number) => {
   if (GRADE_COLORS[grade]) {
