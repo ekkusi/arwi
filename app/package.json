@@ -12,8 +12,7 @@
     "web": "expo start --web",
     "lint:fix": "eslint --fix .",
     "codegen": "graphql-codegen",
-    "codegen:watch": "graphql-codegen --watch",
-    "postinstall": "cd .. && yarn install"
+    "codegen:watch": "graphql-codegen --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.7.14",

@@ -1,8 +1,37 @@
 {
   "build": {
+    "test": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
+        "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
+        "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
+        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",
+        "EXPO_PUBLIC_OPENAI_API_KEY": "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"
+      }
+    },
     "production": {
       "env": {
-        "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com"
+        "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
+        "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
+        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",
+        "EXPO_PUBLIC_OPENAI_API_KEY": "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"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./google-credentials.json",
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "ekku.eki@gmail.com",
+        "ascAppId": "6446094776",
+        "appleTeamId": "354D4S8Q3Z",
+        "language": "fi_FI"
       }
     }
   }

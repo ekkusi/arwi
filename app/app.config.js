@@ -1,5 +1,5 @@
 module.exports = {
-  name: "arwi-app",
+  name: "Arwi",
   slug: "arwi-app",
   version: "1.0.0",
   orientation: "portrait",
@@ -16,9 +16,10 @@ module.exports = {
     config: {
       usesNonExemptEncryption: false,
     },
+    bundleIdentifier: "com.zen-tracking.arwi",
   },
   android: {
-    package: "fi.arwi.twa",
+    package: "net.arwi.twa",
     versionCode: 1,
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
