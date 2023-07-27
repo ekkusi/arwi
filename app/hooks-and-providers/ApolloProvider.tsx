@@ -2,11 +2,11 @@ import { ApolloClient, ApolloLink, ApolloProvider as ApolloProviderBase, createH
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import * as SecureStore from "expo-secure-store";
-import Constants from "expo-constants";
 import { useMemo } from "react";
 import { ACCESS_TOKEN_KEY, useAuth } from "./AuthProvider";
 
-const BACKEND_API_URL: string = (Constants.expoConfig?.extra?.backendApiUrl || "").trim();
+const BACKEND_API_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;
+if (!BACKEND_API_URL) throw new Error("process.env.EXPO_PUBLIC_BACKEND_API_URL is not defined");
 const GRAPHQL_API_URL = `${BACKEND_API_URL}/graphql`;
 
 /**
@@ -62,6 +62,13 @@ const cache = new InMemoryCache({
     Environment: {
       keyFields: ["code"],
     },
+    ClassYear: {
+      fields: {
+        info: {
+          merge: true,
+        },
+      },
+    },
   },
 });
 
@@ -103,7 +110,9 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
           }
         }
 
-        if (networkError) console.warn(`[Network error]: ${networkError}`);
+        if (networkError) {
+          console.warn(`[Network error]: ${networkError}`);
+        }
         return forward(operation);
       }),
     [logout]

@@ -1,11 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useCallback } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
-import StudentParticipationList, { StudentParticipation } from "../../../../components/StudentParticipationList";
+import StudentParticipationList from "../../../../components/StudentParticipationList";
 import { graphql } from "../../../../gql";
 import { COLORS } from "../../../../theme";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
@@ -25,17 +25,15 @@ function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<
   const { evaluations, setEvaluations } = useCollectionCreationContext();
   const { t } = useTranslation();
 
-  const onParticipationsChanged = useCallback(
-    (newParticipations: StudentParticipation[]) => {
-      setEvaluations(newParticipations);
-    },
-    [setEvaluations]
-  );
-
   return (
     <>
       <CText style={{ fontSize: "lg", fontWeight: "bold" }}>{t("CollectionParticipationsView.participations", "Paikallaolot")}</CText>
-      <StudentParticipationList initialParticipations={evaluations} onChange={onParticipationsChanged} />
+      <StudentParticipationList
+        initialParticipations={evaluations}
+        onChange={(participations) => {
+          setEvaluations(participations);
+        }}
+      />
       <CView
         style={{
           flexGrow: 1,

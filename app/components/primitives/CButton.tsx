@@ -3,7 +3,6 @@ import { ActivityIndicator, TouchableOpacity, TouchableOpacityProps, View } from
 import { ColorKey, CTextStyle, CViewStyle } from "../../theme/types";
 import { createStyles, createViewStyles } from "../../theme/utils";
 import CText from "./CText";
-import CView from "./CView";
 
 export type CButtonProps = Omit<TouchableOpacityProps, "style"> & {
   loading?: boolean;
@@ -51,6 +50,8 @@ export default function CButton({
         return {
           backgroundColor: "transparent",
           borderWidth: 0,
+          paddingHorizontal: 0,
+          paddingVertical: 0,
           height: size === "large" ? 48 : 36,
           borderRadius: size === "large" ? 24 : 18,
         };

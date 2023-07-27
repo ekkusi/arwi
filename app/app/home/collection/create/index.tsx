@@ -11,13 +11,13 @@ import CView from "../../../../components/primitives/CView";
 import CButton from "../../../../components/primitives/CButton";
 import { COLORS } from "../../../../theme";
 import SelectFormField from "../../../../components/form/SelectFormField";
-import { StudentParticipation } from "../../../../components/StudentParticipationList";
 import { getFragmentData, graphql } from "../../../../gql";
 import CTouchableOpacity from "../../../../components/primitives/CTouchableOpacity";
 import FormField from "../../../../components/form/FormField";
 import CTextInput from "../../../../components/primitives/CTextInput";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import TextFormField from "../../../../components/form/TextFormField";
+import MultiSelectFormField from "../../../../components/form/MultiSelectFormField";
 
 const CollectionGeneralInfoView_Group_Fragment = graphql(`
   fragment CollectionGeneralInfoView_Group on Group {
@@ -25,6 +25,7 @@ const CollectionGeneralInfoView_Group_Fragment = graphql(`
       code
     }
     currentClassYear {
+      id
       info {
         code
       }
@@ -53,7 +54,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
 
   const handleSubmit = () => {
     if (!selectedEnvironmentCode) {
-      setEnvironmentError(t("CollectionGeneralInfoView.environmentError", "Ympäristö on pakollinen"));
+      setEnvironmentError(t("environment-is-obligatory", "Ympäristö on pakollinen"));
       return;
     }
     setGeneralData({
@@ -77,8 +78,8 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
           title={t("environment", "Ympäristö")}
           options={environments.map((it) => ({ value: it.code, label: it.label }))}
         />
-        <SelectFormField
-          onSelect={(item) => setSelectedLearningObjectivesCode([item.value])}
+        <MultiSelectFormField
+          onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
           title={t("learningObjectives", "Oppimistavoitteet")}
           options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
         />
@@ -99,7 +100,12 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
             }}
           />
         )}
-        <TextFormField title={t("CollectionGeneralInfoView.moreInfo", "Lisätietoa")} onChange={(text) => setDescription(text)} />
+        <TextFormField
+          as="textarea"
+          title={t("more-info", "Lisätietoa")}
+          placeholder={`${t("more-info")}...`}
+          onChange={(text) => setDescription(text)}
+        />
       </CView>
       <CView style={{ justifyContent: "flex-end", flexDirection: "row" }}>
         <CButton

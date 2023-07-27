@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Switch } from "react-native";
+import { Platform, Switch } from "react-native";
 import { COLORS } from "../theme";
-import ParticipationToggle from "./ParticipationToggle";
 import CFlatList from "./primitives/CFlatList";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
 
-type StudentParticipationListProps = Omit<CViewProps, "onChange"> & {
-  initialParticipations: StudentParticipation[];
-  onChange?: (participations: StudentParticipation[]) => void;
+type StudentParticipationListProps<T extends StudentParticipation> = Omit<CViewProps, "onChange"> & {
+  initialParticipations: T[];
+  onChange?: (participations: T[]) => void;
 };
 
 export type StudentParticipation = {
@@ -19,10 +18,14 @@ export type StudentParticipation = {
   wasPresent: boolean;
 };
 
-export default function StudentParticipationList({ initialParticipations, onChange, ...rest }: StudentParticipationListProps) {
-  const [participations, setParticipations] = useState<StudentParticipation[]>(() => initialParticipations);
+export default function StudentParticipationList<T extends StudentParticipation>({
+  initialParticipations,
+  onChange,
+  ...rest
+}: StudentParticipationListProps<T>) {
+  const [participations, setParticipations] = useState<T[]>(() => initialParticipations);
 
-  const onToggle = (participation: StudentParticipation, value: boolean) => {
+  const onToggle = (participation: T, value: boolean) => {
     // Copy old array -> update matching participation -> set copy as new state
     const participationsCopy = [...participations];
     const matching = participationsCopy.find((it) => it === participation);
@@ -36,7 +39,10 @@ export default function StudentParticipationList({ initialParticipations, onChan
     <CFlatList
       data={participations}
       renderItem={({ item }) => (
-        <CView key={item.student.id} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: "-md" }}>
+        <CView
+          key={item.student.id}
+          style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: Platform.OS === "ios" ? "sm" : "-md" }}
+        >
           <CText>{item.student.name}</CText>
           <Switch
             trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}

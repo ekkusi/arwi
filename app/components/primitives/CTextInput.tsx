@@ -1,6 +1,5 @@
-import React, { useMemo } from "react";
-import { TextInputProps } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import React, { forwardRef, useMemo } from "react";
+import { TextInput, TextInputProps } from "react-native";
 import { COLORS, FONT_SIZES } from "../../theme";
 import { CTextStyle } from "../../theme/types";
 import { createStyles, createTextStyles } from "../../theme/utils";
@@ -10,10 +9,11 @@ export type CTextInputProps = Omit<TextInputProps, "style"> & {
   errorStyle?: CTextStyle;
   lightTheme?: boolean;
   style?: CTextStyle;
+  as?: "input" | "textarea";
 };
 
-export default function CTextInput(props: CTextInputProps) {
-  const { error: hasError = false, errorStyle, lightTheme = false, style, ...rest } = props;
+export default forwardRef<TextInput, CTextInputProps>((props, ref) => {
+  const { error: hasError = false, errorStyle, lightTheme = false, style, as = "input", ...rest } = props;
   const allStyles = useMemo(() => {
     const error = {
       ...styles.errorInputStyle,
@@ -23,11 +23,12 @@ export default function CTextInput(props: CTextInputProps) {
       ...styles.regularInputStyle,
       ...style,
       ...(hasError ? error : {}),
+      ...(as === "textarea" ? styles.textAreaStyle : {}),
       ...(lightTheme ? styles.lightThemeStyle : {}),
     });
-  }, [errorStyle, style, hasError, lightTheme]);
-  return <TextInput style={allStyles} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} {...rest} />;
-}
+  }, [errorStyle, style, hasError, as, lightTheme]);
+  return <TextInput ref={ref} style={allStyles} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} {...rest} />;
+});
 
 const styles = createStyles({
   regularInputStyle: {
@@ -36,8 +37,17 @@ const styles = createStyles({
     borderColor: "gray",
     height: 54,
     width: "100%",
-    fontSize: "lg",
+    fontSize: "md",
     fontWeight: "300",
+  },
+  textAreaStyle: {
+    height: 150,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "lightgray",
+    textAlignVertical: "top",
+    paddingVertical: "sm",
+    paddingHorizontal: "lg",
   },
   lightThemeStyle: {
     color: "white",

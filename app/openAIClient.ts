@@ -1,5 +1,8 @@
 import { Configuration, OpenAIApi } from "openai";
-import { OPENAI_API_KEY } from "@env";
+
+const OPENAI_API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
+
+if (!OPENAI_API_KEY) throw new Error("Missing OpenAI API key, define EXPO_PUBLIC_OPENAI_API_KEY in .env");
 
 const configuration = new Configuration({
   organization: "org-KD2e9drn2SMwNPVdV1bPuzWx",

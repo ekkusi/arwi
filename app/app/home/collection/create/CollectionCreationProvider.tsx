@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
-import { CreateEvaluationInput } from "arwi-backend/src/types";
 import { createContext, useContext, useEffect, useState } from "react";
+import { Evaluation } from "../../../../components/UpdateEvaluationCard";
 import { graphql } from "../../../../gql";
 import { CollectionCreationProvider_GetGroupQuery } from "../../../../gql/graphql";
 
@@ -14,21 +14,25 @@ const CollectionCreationProvider_GetGroup_Query = graphql(`
       students {
         id
         name
+        currentClassEvaluations {
+          id
+          notes
+        }
       }
       ...CollectionGeneralInfoView_Group
     }
   }
 `);
 
-type EvaluationData = Omit<CreateEvaluationInput, "studentId"> & {
-  student: { id: string; name: string };
-};
-
 export type CollectionData = {
   description: string;
   date: Date;
   environmentCode: string | undefined;
   learningObjectiveCodes: string[];
+};
+
+export type EvaluationData = Omit<Evaluation, "student"> & {
+  student: { id: string; name: string } & Evaluation["student"];
 };
 
 type CollectionCreationContextParams = {

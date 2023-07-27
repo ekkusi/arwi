@@ -1,7 +1,8 @@
 import { ImageStyle, TextStyle, ViewStyle } from "react-native";
-import { COLORS, FONT_SIZES, SPACING } from "./tokens";
+import { COLORS, FONT_SIZES, SPACING, COLOR_PALETTE } from "./tokens";
 
 export type ColorKey = keyof typeof COLORS;
+export type ColorPaletteKey = keyof typeof COLOR_PALETTE;
 export type FontKey = keyof typeof FONT_SIZES;
 export type SpacingKey = keyof typeof SPACING;
 
