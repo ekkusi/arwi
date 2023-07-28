@@ -1,10 +1,8 @@
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import CButton from "../../components/primitives/CButton";
-import CTextInput from "../../components/primitives/CTextInput";
 import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
@@ -15,6 +13,7 @@ import CView from "../../components/primitives/CView";
 import CImage from "../../components/primitives/CImage";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
+import TextFormField from "../../components/form/TextFormField";
 
 const initialValues = {
   email: "",
@@ -43,14 +42,14 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
 
   const [register] = useMutation(RegisterPage_Register_Mutation);
 
-  const handlePasswordChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+  const handlePasswordChange = (text: string) => {
     if (generalError) setGeneralError(undefined);
-    setPassword(event.nativeEvent.text);
+    setPassword(text);
   };
 
-  const handleEmailChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+  const handleEmailChange = (text: string) => {
     if (generalError) setGeneralError(undefined);
-    setEmail(event.nativeEvent.text);
+    setEmail(text);
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -71,18 +70,18 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
       bottomChildren={
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15 }}>
           <CView style={{ flex: 2, width: "90%", gap: 10, justifyContent: "center" }}>
-            <CTextInput
+            <TextFormField
               title={t("email", "Sähköpostiosoite")}
               placeholder="arwioija@test.fi"
-              textValidation={nameValidator}
+              validate={nameValidator}
               style={{ width: "100%" }}
               onChange={handleEmailChange}
             />
-            <CTextInput
+            <TextFormField
               title={t("password", "Salasana")}
               placeholder="password"
               style={{ width: "100%" }}
-              textValidation={nameValidator}
+              validate={nameValidator}
               onChange={handlePasswordChange}
             />
             {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md", marginBottom: 30 }}>{generalError}</CText>}
