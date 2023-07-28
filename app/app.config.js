@@ -1,6 +1,7 @@
 module.exports = {
   name: "Arwi",
   slug: "arwi-app",
+  owner: "arwi",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
