@@ -7,12 +7,13 @@ import { useApolloClient } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { MenuProvider } from "react-native-popup-menu";
-import LoadingIndicator from "./components/LoadingIndicator";
+import * as SplashScreen from "expo-splash-screen";
 import MainStack from "./app/_stack";
 import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
 import { graphql } from "./gql";
+import ModalProvider from "./hooks-and-providers/ModalProvider";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -22,6 +23,8 @@ const Main_GetCurrentUser_Query = graphql(`
     }
   }
 `);
+
+SplashScreen.preventAutoHideAsync();
 
 export default function Main() {
   const { authState, setUser } = useAuth();
@@ -49,14 +52,20 @@ export default function Main() {
       });
   }, [setUserInfo]);
 
-  if (loading || !i18nReady) return <LoadingIndicator />;
+  const onRootLayout = useCallback(async () => {
+    await SplashScreen.hideAsync();
+  }, []);
+
+  if (loading || !i18nReady) return null;
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} onLayout={onRootLayout}>
       <StatusBar backgroundColor={COLORS.green} />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <MenuProvider>
-          <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
+          <ModalProvider>
+            <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
+          </ModalProvider>
         </MenuProvider>
       </GestureHandlerRootView>
     </SafeAreaView>

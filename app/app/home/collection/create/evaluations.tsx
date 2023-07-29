@@ -19,6 +19,21 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
   mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateCollectionInput!, $classYearId: ID!) {
     createCollection(data: $createCollectionInput, classYearId: $classYearId) {
       id
+      date
+      evaluations {
+        id
+        wasPresent
+        skillsRating
+        behaviourRating
+        notes
+        isStellar
+        student {
+          id
+        }
+      }
+      classYear {
+        id
+      }
     }
   }
 `);
@@ -36,8 +51,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     if (!environmentCode) throw new Error("Environment code is missing, shouldn't happen at this point");
 
     try {
-      // TODO: Change to save to Provider instead and just move to next phase (add students or evaluation)
-      const result = await createCollection({
+      await createCollection({
         variables: {
           classYearId: groupInfo.currentClassYear.id,
           createCollectionInput: {
@@ -54,9 +68,38 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
             })),
           },
         },
-        refetchQueries: [],
+        update: (cache, { data }) => {
+          if (!data) throw new Error("Unexpected error");
+          const { createCollection: newCollection } = data;
+          cache.modify({
+            id: cache.identify(newCollection.classYear),
+            fields: {
+              evaluationCollections(existingCollections, { readField, toReference }) {
+                const newCollectionRef = toReference(newCollection);
+                if (existingCollections.some((ref: any) => readField("id", ref) === newCollection.id)) {
+                  return existingCollections;
+                }
+                return [...existingCollections, newCollectionRef];
+              },
+            },
+          });
+          const newEvaluations = newCollection.evaluations;
+          newEvaluations.forEach((it) => {
+            cache.modify({
+              id: cache.identify(it.student),
+              fields: {
+                currentClassEvaluations(existingEvaluations, { readField, toReference }) {
+                  const newEvaluationRef = toReference(it);
+                  if (existingEvaluations.some((ref: any) => readField("id", ref) === it.id)) {
+                    return existingEvaluations;
+                  }
+                  return [...existingEvaluations, newEvaluationRef];
+                },
+              },
+            });
+          });
+        },
       });
-      if (!result.data) throw new Error("Unexpected error");
       navigation.getParent()?.navigate("index");
     } catch (e) {
       const msg = getErrorMessage(e);

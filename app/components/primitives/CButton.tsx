@@ -64,22 +64,38 @@ export default function CButton({
     }
   }, [colorScheme, variant, size]);
 
+  const textSizeStyles: CTextStyle = useMemo(() => {
+    switch (size) {
+      case "large":
+        return {
+          fontSize: "md",
+          fontWeight: "700",
+        };
+      default:
+        return {
+          fontSize: "sm",
+          fontWeight: "500",
+        };
+    }
+  }, [size]);
+
   const textVariantStyles: CTextStyle = useMemo(() => {
     switch (variant) {
       case "outline":
         return {
           color: colorScheme,
-          fontSize: size === "large" ? "md" : "sm",
-          fontWeight: size === "large" ? "700" : "500",
+        };
+      case "empty":
+        return {
+          color: "black",
+          fontWeight: "600",
         };
       default:
         return {
           color: "white",
-          fontSize: size === "large" ? "md" : "sm",
-          fontWeight: size === "large" ? "700" : "500",
         };
     }
-  }, [colorScheme, variant, size]);
+  }, [colorScheme, variant]);
 
   const buttonStyle = useMemo(() => {
     return createViewStyles({
@@ -94,10 +110,11 @@ export default function CButton({
   const titleStyle = useMemo(
     () => ({
       ...styles.title,
+      ...textSizeStyles,
       ...textVariantStyles,
       ...textStyle,
     }),
-    [textStyle, textVariantStyles]
+    [textSizeStyles, textStyle, textVariantStyles]
   );
 
   const Button = disableTouchEvent ? (

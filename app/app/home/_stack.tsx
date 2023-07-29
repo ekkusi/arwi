@@ -1,15 +1,16 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
-import { Alert, TouchableOpacity } from "react-native";
-import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
+import { Alert } from "react-native";
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeView from ".";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
 import { formatDate } from "../../helpers/dateHelpers";
+import { useModal } from "../../hooks-and-providers/ModalProvider";
 import { defaultHeaderStyles } from "../config";
+import ChangeGroupName from "./ChangeGroupName";
 import CollectionView from "./collection";
-import CollectionEditView from "./collection/create/participations";
 import CollectionCreationStack from "./collection/create/_stack";
 import Evaluation from "./evaluation";
 import GroupView from "./group";
@@ -22,6 +23,7 @@ const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
 export default function HomeStack() {
   const { t } = useTranslation();
+  const { openModal, closeModal } = useModal();
   return (
     <HomeStackNavigator.Navigator initialRouteName="index" screenOptions={defaultHeaderStyles}>
       <HomeStackNavigator.Screen name="index" component={HomeView} options={{ title: t("HomeStack.ownGroups", "Omat ryhmät") }} />
@@ -37,6 +39,26 @@ export default function HomeStack() {
               </MenuTrigger>
               <MenuOptions>
                 <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
+                  <MenuOption
+                    onSelect={() => {
+                      openModal({
+                        title: t("change-group-name", "Muuta ryhmän nimeä"),
+                        children: (
+                          <ChangeGroupName
+                            id={route.params.id}
+                            name={route.params.name}
+                            onCancel={closeModal}
+                            onSaved={(name) => {
+                              navigation.setParams({ name });
+                              closeModal();
+                            }}
+                          />
+                        ),
+                      });
+                    }}
+                  >
+                    <CText>{t("change-name", "Muuta nimeä")}</CText>
+                  </MenuOption>
                   <MenuOption
                     onSelect={() => {
                       Alert.alert("Uusi oppilas");
