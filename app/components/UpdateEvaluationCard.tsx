@@ -6,8 +6,8 @@ import { Alert, Switch } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Voice from "@react-native-voice/voice";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 import { CreateEvaluationInput } from "../gql/graphql";
-import Card from "./Card";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
 import { COLORS } from "../theme";
@@ -37,6 +37,13 @@ export default function UpdateEvaluationCard({
   const [evaluation, setEvaluation] = useState(initialEvaluation);
   const [notes, setNotes] = useState(() => evaluation.notes || "");
 
+  const microphoneOpenScale = useSharedValue(1);
+  const microphoneAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: microphoneOpenScale.value }],
+    };
+  });
+
   const { t } = useTranslation();
 
   const onChanged = useCallback(
@@ -62,46 +69,38 @@ export default function UpdateEvaluationCard({
     debouncedOnChanged("notes", value);
   };
 
-  Voice.isAvailable()
-    .then((val) => {
-      Alert.alert(`voice val: ${val}`);
-    })
-    .catch((err) => {
-      Alert.alert(`voice error: ${err}`);
-    });
-
   const [currentRecordingAsText, setCurrentRecordingAsText] = useState("");
   const [recording, setRecording] = useState(false);
   const [microphoneAvailable, setMicrophoneAvailable] = useState(true);
 
-  // Voice.isAvailable().then((val) => {
-  //  if (val === 1) setMicrophoneAvailable(true);
-  // });
   const startRecording = () => {
+    microphoneOpenScale.value = 1;
+    const microphoneOpenAnimation = withRepeat(withTiming(0.8, { duration: 700, easing: Easing.ease }), -1, true, () => {});
+    microphoneOpenScale.value = microphoneOpenAnimation;
     try {
-      Voice.start("fi-FI").catch((err) => Alert.alert(t("recording-error", "Tapahtui virhe")));
+      Voice.onSpeechError = (_) => {
+        setRecording(false);
+      };
+      Voice.onSpeechPartialResults = (event) => {
+        if (event.value) {
+          setCurrentRecordingAsText(event.value[0]);
+        }
+      };
+      Voice.onSpeechResults = (event) => {
+        if (event.value) {
+          setCurrentRecordingAsText("");
+          setNotes(`${notes} ${event.value[0]}`);
+        }
+      };
+      Voice.start("fi-FI")
+        .then(() => setRecording(true))
+        .catch((err) => Alert.alert(t("recording-error", "Tapahtui virhe"), err));
     } catch (err) {
-      Alert.alert(t("recording-error", "Tapahtui virhe."));
+      Alert.alert(t("recording-error", "Tapahtui virhe."), err);
     }
   };
 
   useEffect(() => {
-    Voice.onSpeechStart = () => setRecording(true);
-    Voice.onSpeechError = () => {
-      setRecording(false);
-      Alert.alert(t("recording-error", "Tapahtui virhe."));
-    };
-    Voice.onSpeechResults = (event) => {
-      if (event.value) {
-        setCurrentRecordingAsText(event.value[0]);
-      }
-    };
-    Voice.onSpeechResults = (event) => {
-      if (event.value) {
-        setCurrentRecordingAsText("");
-        setNotes(`${notes} ${event.value[0]}`);
-      }
-    };
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
@@ -110,6 +109,7 @@ export default function UpdateEvaluationCard({
   const stopRecording = async () => {
     try {
       await Voice.stop();
+      microphoneOpenScale.value = 1;
       setRecording(false);
     } catch (error) {
       Alert.alert(t("recording-error", "Tapahtui virhe."));
@@ -149,24 +149,30 @@ export default function UpdateEvaluationCard({
         <CTextInput
           style={{ width: "100%", height: "100%" }}
           as="textarea"
+          editable={!recording}
           value={recording ? `${notes} ${currentRecordingAsText}` : notes}
           onChange={(e) => changeNotes(e.nativeEvent.text)}
           placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
           multiline
         />
         {microphoneAvailable && (
-          <CView style={{ position: "absolute", bottom: 3, right: 3 }}>
+          <CView style={{ position: "absolute", bottom: 3, right: 3, width: 40, height: 40 }}>
+            {recording && (
+              <Animated.View
+                style={[{ position: "absolute", width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.primary }, microphoneAnimatedStyle]}
+              />
+            )}
             <TouchableOpacity
               onPress={() => (recording ? stopRecording() : startRecording())}
               style={{
-                padding: 20,
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 20,
-                backgroundColor: recording ? COLORS.primary : "transparent",
+                width: 40,
+                height: 40,
               }}
             >
-              <MaterialCommunityIcon name="microphone" size={25} color={COLORS.secondary} />
+              <MaterialCommunityIcon name="microphone" size={25} color={recording ? COLORS.white : COLORS.secondary} />
             </TouchableOpacity>
           </CView>
         )}

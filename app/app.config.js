@@ -49,5 +49,10 @@ module.exports = {
     android: {
       package: "net.arwi.twa",
     },
+    extra: {
+      eas: {
+        projectId: "ed0fb964-b3ce-4ba7-9158-f24745f0e11f",
+      },
+    },
   },
 };

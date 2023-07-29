@@ -43,8 +43,8 @@ export default function StudentParticipationList<T extends StudentParticipation>
     <CFlatList
       data={participations}
       renderItem={({ item }) => (
-        <Card key={item.student.id}>
-          <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: "md" }}>
+        <Card key={item.student.id} style={{ marginBottom: "md" }}>
+          <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{item.student.name}</CText>
             <CView style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", paddingRight: 20 }}>
               <Switch

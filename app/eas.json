@@ -10,6 +10,11 @@
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
         "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",
         "EXPO_PUBLIC_OPENAI_API_KEY": "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"
+      },
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
       }
     },
     "production": {

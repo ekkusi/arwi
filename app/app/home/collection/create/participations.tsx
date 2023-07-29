@@ -28,8 +28,8 @@ function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<
 
   return (
     <CView style={{ padding: "sm", justifyContent: "space-between", flex: 1 }}>
-      <CView>
-        <CText style={{ fontSize: "lg", fontWeight: "bold" }}>{t("CollectionParticipationsView.participations", "Paikallaolot")}</CText>
+      <CView style={{ gap: "xl", paddingTop: "xl" }}>
+        <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("CollectionParticipationsView.participations", "Paikallaolot")}</CText>
         <StudentParticipationList
           initialParticipations={evaluations}
           onChange={(participations) => {
