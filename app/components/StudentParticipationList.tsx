@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Platform, Switch } from "react-native";
 import { COLORS } from "../theme";
+import Card from "./Card";
 import CFlatList from "./primitives/CFlatList";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
@@ -42,19 +43,21 @@ export default function StudentParticipationList<T extends StudentParticipation>
     <CFlatList
       data={participations}
       renderItem={({ item }) => (
-        <CView key={item.student.id} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: "md" }}>
-          <CText style={{ fontSize: "md", fontWeight: "300" }}>{item.student.name}</CText>
-          <CView style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", paddingRight: 20 }}>
-            <Switch
-              trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
-              thumbColor={COLORS.white}
-              ios_backgroundColor={COLORS.lightgray}
-              onValueChange={(value) => onToggle(item, value)}
-              value={item.wasPresent}
-              style={{ transform: [{ scale: 1.4 }] }}
-            />
+        <Card key={item.student.id}>
+          <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: "md" }}>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{item.student.name}</CText>
+            <CView style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", paddingRight: 20 }}>
+              <Switch
+                trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
+                thumbColor={COLORS.white}
+                ios_backgroundColor={COLORS.lightgray}
+                onValueChange={(value) => onToggle(item, value)}
+                value={item.wasPresent}
+                style={{ transform: [{ scale: 1.4 }] }}
+              />
+            </CView>
           </CView>
-        </CView>
+        </Card>
       )}
       {...rest}
     />

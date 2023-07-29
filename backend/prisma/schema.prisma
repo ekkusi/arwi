@@ -71,6 +71,8 @@ model Student {
 }
 
 enum Rating {
+  FAILED
+  PASSABLE
   POOR
   FAIR
   GOOD

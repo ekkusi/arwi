@@ -62,6 +62,14 @@ export default function UpdateEvaluationCard({
     debouncedOnChanged("notes", value);
   };
 
+  Voice.isAvailable()
+    .then((val) => {
+      Alert.alert(`voice val: ${val}`);
+    })
+    .catch((err) => {
+      Alert.alert(`voice error: ${err}`);
+    });
+
   const [currentRecordingAsText, setCurrentRecordingAsText] = useState("");
   const [recording, setRecording] = useState(false);
   const [microphoneAvailable, setMicrophoneAvailable] = useState(true);
