@@ -80,18 +80,22 @@ export const getColorForGrade = (grade: number) => {
   return "#000000";
 };
 
-export const formatRatingString = (rating: Rating) => {
+export const formatRatingKey = (rating: Rating) => {
   switch (rating) {
     case Rating.EXCELLENT:
-      return "Erinomainen";
+      return "excellent";
     case Rating.GREAT:
-      return "Kiitettävä";
+      return "great";
     case Rating.GOOD:
-      return "Hyvä";
+      return "good";
+    case Rating.POOR:
+      return "poor";
     case Rating.FAIR:
-      return "Tyydyttävä";
+      return "fair";
+    case Rating.PASSABLE:
+      return "passable";
     default:
-      return "Välttävä";
+      return "failed";
   }
 };
 
@@ -105,8 +109,12 @@ export const formatRatingNumber = (rating: Rating) => {
       return 8;
     case Rating.FAIR:
       return 7;
-    default:
+    case Rating.POOR:
       return 6;
+    case Rating.PASSABLE:
+      return 5;
+    default:
+      return 4;
   }
 };
 
@@ -120,8 +128,12 @@ export const formatRatingNumberString = (rating: Rating) => {
       return "8";
     case Rating.FAIR:
       return "7";
+    case Rating.POOR:
+      return "6";
+    case Rating.PASSABLE:
+      return "5";
     default:
-      return "< 6";
+      return "4";
   }
 };
 

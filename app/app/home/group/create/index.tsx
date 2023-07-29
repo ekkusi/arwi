@@ -50,7 +50,7 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
   return (
     <GroupCreationBody navigation={navigation}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
-        <CView style={{ flex: 8, padding: 15, alignItems: "center", justifyContent: "center", gap: 30 }}>
+        <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
           <CView style={{ width: "100%" }}>
             <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("GroupNameSelection.groupName", "Ryhmän nimi")}</CText>
             <TextFormField
@@ -82,7 +82,6 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
               leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
             />
           </CView>
-          <ProgressBar color={COLORS.primary} progress={1 / 3} />
         </CView>
       </CView>
     </GroupCreationBody>

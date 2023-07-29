@@ -1,7 +1,7 @@
 import { Rating } from "arwi-backend/src/types";
 import { useState } from "react";
 import { hexToRgbA } from "../helpers/color";
-import { formatRatingNumberString } from "../helpers/dataMappers";
+import { formatRatingNumber, formatRatingNumberString, getColorForGrade } from "../helpers/dataMappers";
 import { COLORS } from "../theme";
 import CPressable from "./primitives/CPressable";
 import CText from "./primitives/CText";
@@ -28,18 +28,11 @@ export default function RatingSelecter({ onChange, initialRating, ...rest }: Rat
   };
 
   const getRatingColor = (rating: Rating) => {
-    switch (rating) {
-      case Rating.POOR:
-        return selectedRating === rating ? "red" : hexToRgbA(COLORS.red, 0.7);
-      case Rating.FAIR:
-        return selectedRating === rating ? "orange" : hexToRgbA(COLORS.orange, 0.7);
-      case Rating.GOOD:
-        return selectedRating === rating ? "yellow" : hexToRgbA(COLORS.yellow, 0.7);
-      case Rating.GREAT:
-        return selectedRating === rating ? "light-green" : hexToRgbA(COLORS["light-green"], 0.7);
-      default:
-        return selectedRating === rating ? "green" : hexToRgbA(COLORS.green, 0.7);
+    const color = getColorForGrade(formatRatingNumber(rating));
+    if (selectedRating === rating) {
+      return hexToRgbA(color, 0.7);
     }
+    return color;
   };
 
   return (

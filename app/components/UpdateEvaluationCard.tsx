@@ -1,8 +1,11 @@
 import { Student } from "arwi-backend/src/types";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
-import { Switch } from "react-native";
+import { Alert, Switch } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Voice from "@react-native-voice/voice";
 import { CreateEvaluationInput } from "../gql/graphql";
 import Card from "./Card";
 import CText from "./primitives/CText";
@@ -59,13 +62,59 @@ export default function UpdateEvaluationCard({
     debouncedOnChanged("notes", value);
   };
 
+  const [currentRecordingAsText, setCurrentRecordingAsText] = useState("");
+  const [recording, setRecording] = useState(false);
+  const [microphoneAvailable, setMicrophoneAvailable] = useState(true);
+
+  // Voice.isAvailable().then((val) => {
+  //  if (val === 1) setMicrophoneAvailable(true);
+  // });
+  const startRecording = () => {
+    try {
+      Voice.start("fi-FI").catch((err) => Alert.alert(t("recording-error", "Tapahtui virhe")));
+    } catch (err) {
+      Alert.alert(t("recording-error", "Tapahtui virhe."));
+    }
+  };
+
+  useEffect(() => {
+    Voice.onSpeechStart = () => setRecording(true);
+    Voice.onSpeechError = () => {
+      setRecording(false);
+      Alert.alert(t("recording-error", "Tapahtui virhe."));
+    };
+    Voice.onSpeechResults = (event) => {
+      if (event.value) {
+        setCurrentRecordingAsText(event.value[0]);
+      }
+    };
+    Voice.onSpeechResults = (event) => {
+      if (event.value) {
+        setCurrentRecordingAsText("");
+        setNotes(`${notes} ${event.value[0]}`);
+      }
+    };
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, [t, notes]);
+
+  const stopRecording = async () => {
+    try {
+      await Voice.stop();
+      setRecording(false);
+    } catch (error) {
+      Alert.alert(t("recording-error", "Tapahtui virhe."));
+    }
+  };
+
   const givenNotesCount = useMemo(() => {
     return evaluation.student.currentClassEvaluations.filter((it) => !!it.notes).length;
   }, [evaluation]);
 
   return (
-    <Card {...rest} innerViewProps={{ style: { paddingHorizontal: "2xl", paddingVertical: "xl" } }} style={{ alignItems: "center", ...rest.style }}>
-      <CText style={{ fontSize: "lg", textAlign: "center", marginBottom: "md" }}>{evaluation.student.name}</CText>
+    <CView style={{ alignItems: "center", gap: "lg" }} {...rest}>
+      <CText style={{ fontSize: "lg", textAlign: "center" }}>{evaluation.student.name}</CText>
       {/* TODO: Add isStellar star-button */}
       {hasParticipationToggle && (
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 0 }}>
@@ -79,29 +128,41 @@ export default function UpdateEvaluationCard({
           />
         </CView>
       )}
-      <CText style={{ marginBottom: "sm" }}>{t("skills", "Taidot")}:</CText>
-      <RatingSelector
-        initialRating={evaluation.skillsRating}
-        onChange={(rating) => onChanged("skillsRating", rating)}
-        style={{ marginBottom: "lg" }}
-      />
-      <CText style={{ marginBottom: "sm" }}>{t("behaviour", "Työskentely")}:</CText>
-      <RatingSelector
-        initialRating={evaluation.behaviourRating}
-        onChange={(rating) => onChanged("behaviourRating", rating)}
-        style={{ marginBottom: "lg" }}
-      />
-      <CText style={{ marginBottom: "md" }}>
-        {t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}
-      </CText>
-      <CTextInput
-        as="textarea"
-        value={notes}
-        onChange={(e) => changeNotes(e.nativeEvent.text)}
-        placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
-        multiline
-      />
-      {/*  TODO: Add speech to text to note text input */}
-    </Card>
+      <CView style={{ alignItems: "center", gap: "sm" }}>
+        <CText>{t("skills", "Taidot")}:</CText>
+        <RatingSelector initialRating={evaluation.skillsRating} onChange={(rating) => onChanged("skillsRating", rating)} />
+      </CView>
+      <CView style={{ alignItems: "center", gap: "sm" }}>
+        <CText>{t("behaviour", "Työskentely")}:</CText>
+        <RatingSelector initialRating={evaluation.behaviourRating} onChange={(rating) => onChanged("behaviourRating", rating)} />
+      </CView>
+      <CText>{t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}</CText>
+      <CView style={{ width: "100%", height: 150 }}>
+        <CTextInput
+          style={{ width: "100%", height: "100%" }}
+          as="textarea"
+          value={recording ? `${notes} ${currentRecordingAsText}` : notes}
+          onChange={(e) => changeNotes(e.nativeEvent.text)}
+          placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
+          multiline
+        />
+        {microphoneAvailable && (
+          <CView style={{ position: "absolute", bottom: 3, right: 3 }}>
+            <TouchableOpacity
+              onPress={() => (recording ? stopRecording() : startRecording())}
+              style={{
+                padding: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 20,
+                backgroundColor: recording ? COLORS.primary : "transparent",
+              }}
+            >
+              <MaterialCommunityIcon name="microphone" size={25} color={COLORS.secondary} />
+            </TouchableOpacity>
+          </CView>
+        )}
+      </CView>
+    </CView>
   );
 }

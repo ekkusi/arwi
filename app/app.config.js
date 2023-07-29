@@ -36,4 +36,13 @@ module.exports = {
       projectId: "630de596-103e-469d-968f-bd0339f5f4c8",
     },
   },
+  plugins: [
+    [
+      "@react-native-voice/voice",
+      {
+        microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone",
+        speechRecogntionPermission: "Allow $(PRODUCT_NAME) to securely recognize user speech",
+      },
+    ],
+  ],
 };

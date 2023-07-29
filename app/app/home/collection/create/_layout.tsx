@@ -12,5 +12,5 @@ export default function CollectionCreationLayout({ style, ...rest }: CollectionC
 
   if (!context || context?.loading) return <LoadingIndicator />;
 
-  return <CView style={{ flex: 1, padding: "lg", ...style }} {...rest} />;
+  return <CView style={{ flex: 1, ...style }} {...rest} />;
 }

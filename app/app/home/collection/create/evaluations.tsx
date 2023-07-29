@@ -65,7 +65,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     setSubmitting(false);
   };
   return (
-    <>
+    <CView style={{ flex: 1, padding: "md" }}>
       <CFlatList
         data={evaluations}
         renderItem={({ item, index }) => (
@@ -85,31 +85,29 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         snapToAlignment="center"
         style={{ flex: 1, padding: "lg" }}
       />
-      <CView
-        style={{
-          bottom: 10,
-          left: 0,
-          right: 0,
-          position: "absolute",
-          width: "100%",
-          paddingHorizontal: "xl",
-          backgroundColor: "transparent",
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <CButton onPress={() => navigation.goBack()}>
-          <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-        </CButton>
-        <CButton
-          loading={submitting}
-          style={{ marginRight: 0 }}
-          title={t("save", "Tallenna")}
-          onPress={() => handleSubmit()}
-          leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
-        />
+      <CView style={{ justifyContent: "flex-end", position: "absolute", bottom: 0, left: 0, right: 0, width: "100%" }}>
+        <CView
+          style={{
+            width: "100%",
+            padding: "lg",
+            backgroundColor: "transparent",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <CButton onPress={() => navigation.goBack()}>
+            <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+          </CButton>
+          <CButton
+            loading={submitting}
+            style={{ marginRight: 0 }}
+            title={t("save", "Tallenna")}
+            onPress={() => handleSubmit()}
+            leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
+          />
+        </CView>
       </CView>
-    </>
+    </CView>
   );
 }
 

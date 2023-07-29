@@ -21,10 +21,10 @@ export default forwardRef<TextInput, CTextInputProps>((props, ref) => {
     };
     return createTextStyles({
       ...styles.regularInputStyle,
-      ...style,
       ...(hasError ? error : {}),
       ...(as === "textarea" ? styles.textAreaStyle : {}),
       ...(lightTheme ? styles.lightThemeStyle : {}),
+      ...style,
     });
   }, [errorStyle, style, hasError, as, lightTheme]);
   return <TextInput ref={ref} style={allStyles} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} {...rest} />;

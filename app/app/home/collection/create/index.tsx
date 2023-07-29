@@ -4,6 +4,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useTranslation } from "react-i18next";
+import { ScrollView } from "react-native";
 import { CollectionCreationStackParams } from "./types";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import CollectionCreationLayout from "./_layout";
@@ -18,6 +19,8 @@ import CTextInput from "../../../../components/primitives/CTextInput";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import TextFormField from "../../../../components/form/TextFormField";
 import MultiSelectFormField from "../../../../components/form/MultiSelectFormField";
+import CText from "../../../../components/primitives/CText";
+import ProgressBar from "../../../../components/ProgressBar";
 
 const CollectionGeneralInfoView_Group_Fragment = graphql(`
   fragment CollectionGeneralInfoView_Group on Group {
@@ -67,55 +70,64 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
   };
 
   return (
-    <>
-      <CView style={{ flex: 1, gap: 20 }}>
-        <SelectFormField
-          error={environmentError}
-          onSelect={(item) => {
-            setSelectedEnvironmentCode(item.value);
-            setEnvironmentError(undefined);
-          }}
-          title={t("environment", "Ympäristö")}
-          options={environments.map((it) => ({ value: it.code, label: it.label }))}
-        />
-        <MultiSelectFormField
-          onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
-          title={t("learningObjectives", "Oppimistavoitteet")}
-          options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
-        />
-        <FormField title={t("date", "Päivämäärä")}>
-          <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
-            <CView pointerEvents="none">
-              <CTextInput value={formatDate(date)} editable={false} />
-            </CView>
-          </CTouchableOpacity>
-        </FormField>
-        {isDateOpen && (
-          <DateTimePicker
-            textColor={COLORS.primary}
-            value={date}
-            onChange={(_, newDate) => {
-              setIsDateOpen(false);
-              if (newDate) setDate(newDate);
-            }}
+    <CView style={{ flex: 1 }}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
+          <CView style={{ width: "100%" }}>
+            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("environment", "Ympäristö")}</CText>
+            <SelectFormField
+              error={environmentError}
+              onSelect={(item) => {
+                setSelectedEnvironmentCode(item.value);
+                setEnvironmentError(undefined);
+              }}
+              options={environments.map((it) => ({ value: it.code, label: it.label }))}
+            />
+          </CView>
+          <CView style={{ width: "100%" }}>
+            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("learningObjectives", "Oppimistavoitteet")}</CText>
+            <MultiSelectFormField
+              onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
+              options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
+            />
+          </CView>
+          <CView style={{ width: "100%" }}>
+            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("date", "Päivämäärä")}</CText>
+            <FormField>
+              <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
+                <CView pointerEvents="none">
+                  <CTextInput value={formatDate(date)} editable={false} />
+                </CView>
+              </CTouchableOpacity>
+            </FormField>
+            {isDateOpen && (
+              <DateTimePicker
+                textColor={COLORS.secondary}
+                accentColor={COLORS.primary}
+                value={date}
+                onChange={(_, newDate) => {
+                  setIsDateOpen(false);
+                  if (newDate) setDate(newDate);
+                }}
+              />
+            )}
+          </CView>
+          <CView style={{ width: "100%", paddingBottom: 20 }}>
+            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("more-info", "Lisätietoa")}</CText>
+            <TextFormField as="textarea" placeholder={`${t("more-info")}...`} onChange={(text) => setDescription(text)} />
+          </CView>
+        </CView>
+      </ScrollView>
+      <CView style={{ position: "absolute", justifyContent: "flex-end", bottom: "md", right: "md", padding: "lg" }}>
+        <CView style={{ justifyContent: "flex-end", flexDirection: "row" }}>
+          <CButton
+            disabled={!!environmentError}
+            onPress={handleSubmit}
+            leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
           />
-        )}
-        <TextFormField
-          as="textarea"
-          title={t("more-info", "Lisätietoa")}
-          placeholder={`${t("more-info")}...`}
-          onChange={(text) => setDescription(text)}
-        />
+        </CView>
       </CView>
-      <CView style={{ justifyContent: "flex-end", flexDirection: "row" }}>
-        <CButton
-          disabled={!!environmentError}
-          style={{ marginRight: 20 }}
-          onPress={handleSubmit}
-          leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
-        />
-      </CView>
-    </>
+    </CView>
   );
 }
 

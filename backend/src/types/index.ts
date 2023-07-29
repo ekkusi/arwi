@@ -255,6 +255,8 @@ export type Student = {
 };
 
 export enum Rating {
+  FAILED = "FAILED",
+  PASSABLE = "PASSABLE",
   POOR = "POOR",
   FAIR = "FAIR",
   GOOD = "GOOD",
