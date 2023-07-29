@@ -51,37 +51,30 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
     <GroupCreationBody navigation={navigation}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
         <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
-          <CView style={{ width: "100%" }}>
-            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("GroupNameSelection.groupName", "Ryhmän nimi")}</CText>
-            <TextFormField
-              style={{ width: "100%" }}
-              placeholder={t("GroupNameSelection.groupName", "Ryhmän nimi")}
-              value={group.name}
-              onChange={(text) => setGroup({ ...group, name: text })}
-              validate={nameValidator}
-            />
-          </CView>
-          <CView style={{ width: "100%" }}>
-            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("GroupNameSelection.classYear", "Luokka-aste")}</CText>
-            <SelectFormField
-              placeholder={t("GroupNameSelection.selectClass", "Valitse luokka")}
-              options={classes.map((obj) => ({ value: obj.code, label: obj.label }))}
-              onSelect={(item) => {
-                const selectedClass = classes.find((obj) => obj.code === item.value);
-                setGroup({ ...group, class: selectedClass });
-              }}
-            />
-          </CView>
+          <TextFormField
+            title={t("group-name", "Ryhmän nimi")}
+            placeholder={t("GroupNameSelection.groupName", "Ryhmän nimi")}
+            value={group.name}
+            onChange={(text) => setGroup({ ...group, name: text })}
+            validate={nameValidator}
+          />
+          <SelectFormField
+            title={t("class-year", "Luokka-aste")}
+            placeholder={t("GroupNameSelection.selectClass", "Valitse luokka")}
+            options={classes.map((obj) => ({ value: obj.code, label: obj.label }))}
+            onSelect={(item) => {
+              const selectedClass = classes.find((obj) => obj.code === item.value);
+              setGroup({ ...group, class: selectedClass });
+            }}
+          />
         </CView>
-        <CView style={{ flex: 2, justifyContent: "flex-end", gap: 20 }}>
-          <CView style={{ justifyContent: "flex-end", flexDirection: "row" }}>
-            <CButton
-              disabled={group.name.length === 0 || group.class === undefined}
-              style={{ marginRight: 20 }}
-              onPress={() => navigation.navigate("subject")}
-              leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
-            />
-          </CView>
+        <CView style={{ flexDirection: "row", justifyContent: "flex-end", paddingBottom: "2xl" }}>
+          <CButton
+            disabled={group.name.length === 0 || group.class === undefined}
+            style={{ marginRight: 20 }}
+            onPress={() => navigation.navigate("subject")}
+            leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
+          />
         </CView>
       </CView>
     </GroupCreationBody>
