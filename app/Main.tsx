@@ -13,6 +13,7 @@ import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
 import { graphql } from "./gql";
+import ModalProvider from "./hooks-and-providers/ModalProvider";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -62,7 +63,9 @@ export default function Main() {
       <StatusBar backgroundColor={COLORS.green} />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <MenuProvider>
-          <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
+          <ModalProvider>
+            <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
+          </ModalProvider>
         </MenuProvider>
       </GestureHandlerRootView>
     </SafeAreaView>

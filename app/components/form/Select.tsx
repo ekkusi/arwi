@@ -112,17 +112,21 @@ export default function Select(props: SelectProps) {
         )}
         <MaterialCommunityIcon name="chevron-down" color={COLORS.darkgray} size={30} />
       </CTouchableOpacity>
-      <CModal isOpen={selectModalOpen} onClose={() => setSelectModalOpen(false)} placement="bottom">
-        <CView style={{ width: "100%", flexDirection: "row", alignItems: "center", marginBottom: "lg" }}>
-          {title && <CText style={{ flex: 1, color: "darkgray", fontWeight: "bold" }}>{title}</CText>}
-          <CButton variant="empty" style={{}} onPress={() => setSelectModalOpen(false)}>
+      <CModal
+        isOpen={selectModalOpen}
+        onClose={() => setSelectModalOpen(false)}
+        placement="bottom"
+        title={title}
+        closeButton={
+          <CButton variant="empty" style={{ marginLeft: "auto" }} onPress={() => setSelectModalOpen(false)}>
             {isMulti ? (
               <CText style={{ color: "primary", fontWeight: "bold" }}>{t("done", "Valmis")}</CText>
             ) : (
               <MaterialCommunityIcon name="close" size={25} />
             )}
           </CButton>
-        </CView>
+        }
+      >
         <CFlatList
           style={{ width: "100%", paddingTop: "md" }}
           renderItem={({ item, index }) => {
@@ -134,7 +138,6 @@ export default function Select(props: SelectProps) {
                   flexDirection: "row",
                   alignItems: "center",
                   paddingVertical: "md",
-                  // backgroundColor: "rgba(0, 0, 0, 0.05)",
                   backgroundColor: "extra-light-gray",
                   paddingHorizontal: "lg",
                   borderRadius: 10,

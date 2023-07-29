@@ -12,15 +12,20 @@ import {
   ZoomIn,
   ZoomOut,
 } from "react-native-reanimated";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CViewStyle } from "../theme/types";
 import CAnimatedView from "./primitives/CAnimatedView";
+import CButton from "./primitives/CButton";
+import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 
-type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
+export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   isOpen: boolean;
   placement?: "top" | "bottom" | "center";
   outerViewStyles?: CViewStyle;
   innerViewStyles?: CViewStyle;
+  title?: string | JSX.Element;
+  closeButton?: boolean | JSX.Element;
   animated?: boolean;
   onClose?: () => void;
   exitingAnimation?: BaseAnimationBuilder | typeof BaseAnimationBuilder;
@@ -43,8 +48,6 @@ const innerViewStyle: CViewStyle = {
   paddingHorizontal: "xl",
   paddingTop: "md",
   backgroundColor: "white",
-  borderTopLeftRadius: 20,
-  borderTopRightRadius: 20,
   alignItems: "center",
 };
 
@@ -55,6 +58,8 @@ export default function CModal({
   statusBarTranslucent = true,
   transparent = true,
   placement = "center",
+  title,
+  closeButton = true,
   outerViewStyles: _outerViewStyles,
   innerViewStyles: _innerViewStyles,
   isOpen,
@@ -90,7 +95,7 @@ export default function CModal({
         placementStyles = { borderTopLeftRadius: 20, borderTopRightRadius: 20 };
         break;
       default:
-        placementStyles = { borderRadius: 20 };
+        placementStyles = { borderRadius: 10, width: "90%" };
         break;
     }
     return { ...innerViewStyle, ...placementStyles, ..._innerViewStyles };
@@ -104,7 +109,7 @@ export default function CModal({
       case "bottom":
         return SlideOutDown;
       default:
-        return ZoomIn;
+        return ZoomOut;
     }
   }, [exitingAnimation, placement]);
 
@@ -116,7 +121,7 @@ export default function CModal({
       case "bottom":
         return SlideInDown;
       default:
-        return ZoomOut;
+        return ZoomIn;
     }
   }, [enteringAnimation, placement]);
 
@@ -141,6 +146,34 @@ export default function CModal({
     }
   });
 
+  const body = useMemo(() => {
+    return (
+      <>
+        {(title || closeButton) && (
+          <CView
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: title ? "space-between" : "flex-end",
+              alignItems: "center",
+              marginBottom: title ? "md" : 0,
+            }}
+          >
+            {typeof title === "string" ? <CText style={{ flex: 1, color: "darkgray", fontWeight: "bold" }}>{title}</CText> : title}
+            {typeof closeButton === "boolean"
+              ? closeButton && (
+                  <CButton variant="empty" style={{ marginLeft: "auto" }} onPress={onClose}>
+                    <MaterialCommunityIcon name="close" size={25} />
+                  </CButton>
+                )
+              : closeButton}
+          </CView>
+        )}
+        {children}
+      </>
+    );
+  }, [children, closeButton, onClose, title]);
+
   return (
     <Modal
       statusBarTranslucent={statusBarTranslucent}
@@ -155,7 +188,7 @@ export default function CModal({
             <CAnimatedView entering={FadeIn} exiting={FadeOut} style={outerViewStyles}>
               <TouchableWithoutFeedback>
                 <CAnimatedView entering={enterAnimation} exiting={exitAnimationWithCallback} style={innerViewStyles}>
-                  {children}
+                  {body}
                 </CAnimatedView>
               </TouchableWithoutFeedback>
             </CAnimatedView>
@@ -165,7 +198,7 @@ export default function CModal({
         <TouchableWithoutFeedback onPress={onClose}>
           <CView style={outerViewStyles}>
             <TouchableWithoutFeedback>
-              <CView style={innerViewStyles}>{children}</CView>
+              <CView style={innerViewStyles}>{body}</CView>
             </TouchableWithoutFeedback>
           </CView>
         </TouchableWithoutFeedback>
