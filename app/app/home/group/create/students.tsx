@@ -159,13 +159,13 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
             </CView>
           </CView>
         </CView>
-        <CView style={{ flex: 2, justifyContent: "flex-end", gap: 20 }}>
+        <CView style={{ flex: 2, justifyContent: "flex-end", paddingBottom: "xl" }}>
           {!isKeyboardVisible && (
             <CView
               style={{
                 flexGrow: 1,
                 width: "100%",
-                paddingHorizontal: 20,
+                paddingHorizontal: "xl",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "flex-end",

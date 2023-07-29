@@ -41,7 +41,8 @@ export default function FormField(props: FormFieldProps) {
 
 const styles = createStyles({
   titleStyle: {
-    fontWeight: "700",
+    fontSize: "title",
+    fontWeight: "300",
     color: "darkgray",
   },
   titleErrorStyle: {

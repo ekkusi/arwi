@@ -73,49 +73,45 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
     <CView style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
-          <CView style={{ width: "100%" }}>
-            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("environment", "Ympäristö")}</CText>
-            <SelectFormField
-              error={environmentError}
-              onSelect={(item) => {
-                setSelectedEnvironmentCode(item.value);
-                setEnvironmentError(undefined);
+          <SelectFormField
+            title={t("environment", "Ympäristö")}
+            error={environmentError}
+            onSelect={(item) => {
+              setSelectedEnvironmentCode(item.value);
+              setEnvironmentError(undefined);
+            }}
+            options={environments.map((it) => ({ value: it.code, label: it.label }))}
+          />
+          <MultiSelectFormField
+            title={t("learningObjectives", "Oppimistavoitteet")}
+            onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
+            options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
+          />
+          <FormField title={t("date", "Päivämäärä")}>
+            <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
+              <CView pointerEvents="none">
+                <CTextInput value={formatDate(date)} editable={false} />
+              </CView>
+            </CTouchableOpacity>
+          </FormField>
+          {isDateOpen && (
+            <DateTimePicker
+              textColor={COLORS.secondary}
+              accentColor={COLORS.primary}
+              value={date}
+              onChange={(_, newDate) => {
+                setIsDateOpen(false);
+                if (newDate) setDate(newDate);
               }}
-              options={environments.map((it) => ({ value: it.code, label: it.label }))}
             />
-          </CView>
-          <CView style={{ width: "100%" }}>
-            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("learningObjectives", "Oppimistavoitteet")}</CText>
-            <MultiSelectFormField
-              onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
-              options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
-            />
-          </CView>
-          <CView style={{ width: "100%" }}>
-            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("date", "Päivämäärä")}</CText>
-            <FormField>
-              <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
-                <CView pointerEvents="none">
-                  <CTextInput value={formatDate(date)} editable={false} />
-                </CView>
-              </CTouchableOpacity>
-            </FormField>
-            {isDateOpen && (
-              <DateTimePicker
-                textColor={COLORS.secondary}
-                accentColor={COLORS.primary}
-                value={date}
-                onChange={(_, newDate) => {
-                  setIsDateOpen(false);
-                  if (newDate) setDate(newDate);
-                }}
-              />
-            )}
-          </CView>
-          <CView style={{ width: "100%", paddingBottom: 20 }}>
-            <CText style={{ fontSize: "title", fontWeight: "300", color: "darkgray" }}>{t("more-info", "Lisätietoa")}</CText>
-            <TextFormField as="textarea" placeholder={`${t("more-info")}...`} onChange={(text) => setDescription(text)} />
-          </CView>
+          )}
+          <TextFormField
+            title={t("more-info", "Lisätietoa")}
+            as="textarea"
+            placeholder={`${t("more-info")}...`}
+            onChange={(text) => setDescription(text)}
+            style={{ paddingBottom: 20 }}
+          />
         </CView>
       </ScrollView>
       <CView style={{ position: "absolute", justifyContent: "flex-end", bottom: "md", right: "md", padding: "lg" }}>
