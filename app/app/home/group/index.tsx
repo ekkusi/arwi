@@ -224,7 +224,7 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
               <CTouchableOpacity onPress={() => navigation.navigate("collection", { ...item, environmentLabel: item.environment.label })}>
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.environment.label}</CText>
                 <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                  <CView style={{ height: 20, width: 20, borderRadius: 10, backgroundColor: item.environment.color }} />
+                  <CView style={{ height: 12, width: 12, borderRadius: 6, backgroundColor: item.environment.color }} />
                   <CText style={{ fontSize: "sm", color: "gray" }}>{formatDate(item.date)}</CText>
                 </CView>
               </CTouchableOpacity>

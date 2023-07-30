@@ -11,7 +11,7 @@ export default function CircledNumber({
   title,
 }: {
   size?: number;
-  value: number;
+  value?: number;
   decimals?: number;
   borderWidth?: number;
   borderColor?: CColor;
@@ -21,6 +21,11 @@ export default function CircledNumber({
   if (size < 40) fontSize = "sm";
   else if (size < 50) fontSize = "md";
   else if (size < 60) fontSize = "lg";
+
+  let valueText = "-";
+  if (value) {
+    valueText = Number.isNaN(value) ? "-" : value.toFixed(decimals);
+  }
   return (
     <CView style={{ justifyContent: "center", alignItems: "center", gap: 5 }}>
       <CText style={{ fontSize: "xs", fontWeight: "500" }}>{title}</CText>
@@ -35,7 +40,7 @@ export default function CircledNumber({
           alignItems: "center",
         }}
       >
-        <CText style={{ fontSize, fontWeight: "700" }}>{Number.isNaN(value) ? "-" : value.toFixed(decimals)}</CText>
+        <CText style={{ fontSize, fontWeight: "700" }}>{valueText}</CText>
       </CView>
     </CView>
   );

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { LayoutAnimation } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS, SPACING } from "../theme";
+import Card from "./Card";
 import CPressable from "./primitives/CPressable";
 import CText from "./primitives/CText";
 import CTouchableOpacity from "./primitives/CTouchableOpacity";
@@ -10,6 +11,8 @@ import CView, { CViewProps } from "./primitives/CView";
 
 type AccordionData = {
   title: string;
+  date?: string;
+  color?: string;
   content: JSX.Element | string;
   icons?: React.ReactNode;
 };
@@ -20,20 +23,27 @@ export type AccordionItemProps = CViewProps &
     onHeaderPress: () => void;
   };
 
-export function AccordionItem({ children, title, expanded, onHeaderPress, icons, ...rest }: AccordionItemProps): JSX.Element {
+export function AccordionItem({ children, title, date, color, expanded, onHeaderPress, icons, ...rest }: AccordionItemProps): JSX.Element {
   return (
-    <CView style={{ marginBottom: "xxs" }} {...rest}>
+    <Card style={{ marginBottom: "xs" }} {...rest}>
       <CTouchableOpacity
         style={{
-          padding: "lg",
-          backgroundColor: "primary",
           flex: 1,
-          flexDirection: "row",
           justifyContent: "space-between",
+          flexDirection: "row",
+          alignItems: "center",
         }}
         onPress={onHeaderPress}
       >
-        <CText>{title}</CText>
+        <CView>
+          <CText style={{ fontSize: "md", fontWeight: "500" }}>{title}</CText>
+          {color && date && (
+            <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+              <CView style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />
+              <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>
+            </CView>
+          )}
+        </CView>
         <CView style={{ flexDirection: "row", alignItems: "center" }}>
           {icons}
           <MaterialCommunityIcon
@@ -44,8 +54,8 @@ export function AccordionItem({ children, title, expanded, onHeaderPress, icons,
           />
         </CView>
       </CTouchableOpacity>
-      {expanded && <CView style={{ padding: "md" }}>{children}</CView>}
-    </CView>
+      {expanded && <CView style={{ paddingVertical: "md" }}>{children}</CView>}
+    </Card>
   );
 }
 

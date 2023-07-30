@@ -4,6 +4,7 @@ import { Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeView from ".";
 import CText from "../../components/primitives/CText";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
@@ -48,7 +49,7 @@ export default function HomeStack() {
                   alignItems: "center",
                 }}
               >
-                <MaterialCommunityIcon name="account-outline" size={30} color={COLORS.white} />
+                <Ionicons name="person-outline" size={25} color={COLORS.white} />
               </CTouchableOpacity>
             ),
           };
