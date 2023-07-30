@@ -171,9 +171,8 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
                       variant="outline"
                       colorScheme={typeFilter !== "all" ? "lightgray" : "darkgray"}
                       style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
-                      onPress={() => setEnvironmentFilter("all")}
+                      onPress={() => setTypeFilter("all")}
                       textStyle={{ fontSize: "xs", fontWeight: "400", color: environmentFilter !== "all" ? "gray" : "darkgray" }}
-                      leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: "black" }} />}
                     />
                     {["skills", "behaviour"].map((item) => (
                       <CButton
