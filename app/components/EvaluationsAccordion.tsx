@@ -96,7 +96,9 @@ export default function EvaluationsAccordion({
                 )}
               </CView>
             ) : (
-              <CText>{t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}</CText>
+              <CText style={{ fontSize: "sm" }}>
+                {t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}
+              </CText>
             )}
             <CButton size="small" title={t("edit", "Muokkaa")} style={{ marginTop: "md" }} onPress={() => Alert.alert("Muokkaa")} />
           </>
