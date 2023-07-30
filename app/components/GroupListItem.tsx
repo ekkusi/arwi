@@ -22,19 +22,6 @@ export const GroupListItem_Fragment = graphql(`
   }
 `);
 
-const getColorForCode = (code: string) => {
-  switch (code) {
-    case "LI":
-      return COLORS.sport;
-    case "BI":
-      return COLORS.biology;
-    case "PY":
-      return COLORS.psychology;
-    default:
-      return COLORS.white;
-  }
-};
-
 type GroupListItemProps = {
   group: GroupListItemFragment;
   onListItemPress: () => void;
@@ -79,7 +66,6 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
               <MaterialCommunityIcon name="history" color="gray" />
               <CText style={{ fontSize: "sm", color: "gray" }}>{timeSince(group.updatedAt)} ago</CText>
-              <CView style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForCode(group.subject.code) }} />
             </CView>
           </CView>
         </CView>
