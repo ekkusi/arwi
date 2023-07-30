@@ -1,5 +1,6 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 import { graphql } from "../gql";
 import { GroupListItemFragment } from "../gql/graphql";
 import { COLORS, FONT_SIZES } from "../theme";
@@ -30,7 +31,20 @@ type GroupListItemProps = {
 };
 export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress }: GroupListItemProps) {
   const { t } = useTranslation();
-  const { count, key } = timeSince(group.updatedAt);
+
+  const { count: tempCount, key: tempKey } = timeSince(group.updatedAt);
+  const [key, setKey] = useState(tempKey);
+  const [count, setCount] = useState(tempCount);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const { count: newCount, key: newKey } = timeSince(group.updatedAt);
+      setKey(newKey);
+      setCount(newCount);
+    }, 60 * 1000);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [group.updatedAt]);
+
   return (
     <Card style={{ marginBottom: 10 }}>
       <CTouchableOpacity

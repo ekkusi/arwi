@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
