@@ -26,7 +26,7 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean }: { ski
               title={t("edit", "Muokkaa")}
               colorScheme="darkgray"
               style={{ width: "auto" }}
-              leftIcon={<MaterialCommunityIcon name="chevron-down" size={25} color={COLORS.darkgray} />}
+              leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
               rightIcon={
                 gradeSuggestionSkillsWeight !== 0.5 ? (
                   <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} />

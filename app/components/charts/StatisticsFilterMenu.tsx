@@ -35,7 +35,7 @@ export default function StatisticsFilterMenu({
               title={filter || t("all", "Kaikki")}
               colorScheme="darkgray"
               style={{ width: "auto" }}
-              leftIcon={<MaterialCommunityIcon name="chevron-down" size={25} color={COLORS.darkgray} />}
+              leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
               disableTouchEvent
             />
           </MenuTrigger>

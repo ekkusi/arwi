@@ -153,7 +153,7 @@ export default function StudentView({ route }: NativeStackScreenProps<HomeStackP
                     title={t(evaluationsByEnvironmentsFilter, "")}
                     colorScheme="darkgray"
                     style={{ width: "auto" }}
-                    leftIcon={<MaterialCommunityIcon name="chevron-down" size={25} color={COLORS.darkgray} />}
+                    leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
                     disableTouchEvent
                   />
                 </MenuTrigger>
