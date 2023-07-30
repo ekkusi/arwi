@@ -1,8 +1,11 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Keyboard, KeyboardEventListener } from "react-native";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import CAnimatedView from "../../../../components/primitives/CAnimatedView";
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
@@ -44,6 +47,39 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const [cardHeight, setCardHeight] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const { generalData, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
+
+  const offsetButtons = useSharedValue(0);
+
+  const buttonsAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(offsetButtons.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
+  const keyboardShows = useCallback<KeyboardEventListener>(() => {
+    offsetButtons.value = 100;
+  }, [offsetButtons]);
+
+  const keyboardHides = useCallback<KeyboardEventListener>(() => {
+    offsetButtons.value = 0;
+  }, [offsetButtons]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", keyboardShows);
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", keyboardHides);
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, [keyboardShows, keyboardHides]);
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -128,7 +164,9 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         snapToAlignment="center"
         style={{ flex: 1, padding: "lg" }}
       />
-      <CView style={{ justifyContent: "flex-end", position: "absolute", bottom: 0, left: 0, right: 0, width: "100%" }}>
+      <Animated.View
+        style={[{ justifyContent: "flex-end", position: "absolute", bottom: 0, left: 0, right: 0, width: "100%" }, buttonsAnimatedStyle]}
+      >
         <CView
           style={{
             width: "100%",
@@ -149,7 +187,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
             leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
           />
         </CView>
-      </CView>
+      </Animated.View>
     </CView>
   );
 }
