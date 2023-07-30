@@ -3,7 +3,8 @@ import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
 import { useEffect } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { Alert, BackHandler } from "react-native";
+import { Alert, BackHandler, Keyboard } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
@@ -50,34 +51,36 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
   return (
     <GroupCreationBody navigation={navigation}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
-        <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
-          <TextFormField
-            title={t("group-name", "Ryhmän nimi")}
-            placeholder={t("GroupNameSelection.groupName", "Ryhmän nimi")}
-            value={group.name}
-            onChange={(text) => setGroup({ ...group, name: text })}
-            validate={nameValidator}
-          />
-          <SelectFormField
-            title={t("class-year", "Luokka-aste")}
-            placeholder={t("GroupNameSelection.selectClass", "Valitse luokka")}
-            options={classes.map((obj) => ({ value: obj.code, label: obj.label }))}
-            onSelect={(item) => {
-              const selectedClass = classes.find((obj) => obj.code === item.value);
-              setGroup({ ...group, class: selectedClass });
-            }}
-          />
-        </CView>
-        <CView style={{ justifyContent: "flex-end" }}>
-          <CView style={{ flexDirection: "row", justifyContent: "flex-end", padding: "xl" }}>
-            <CButton
-              disabled={group.name.length === 0 || group.class === undefined}
-              onPress={() => navigation.navigate("subject")}
-              leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
+        <TouchableWithoutFeedback accessible={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
+          <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
+            <TextFormField
+              title={t("group-name", "Ryhmän nimi")}
+              placeholder={t("GroupNameSelection.groupName", "Ryhmän nimi")}
+              value={group.name}
+              onChange={(text) => setGroup({ ...group, name: text })}
+              validate={nameValidator}
+            />
+            <SelectFormField
+              title={t("class-year", "Luokka-aste")}
+              placeholder={t("GroupNameSelection.selectClass", "Valitse luokka")}
+              options={classes.map((obj) => ({ value: obj.code, label: obj.label }))}
+              onSelect={(item) => {
+                const selectedClass = classes.find((obj) => obj.code === item.value);
+                setGroup({ ...group, class: selectedClass });
+              }}
             />
           </CView>
-          <ProgressBar color={COLORS.primary} progress={1 / 3} />
-        </CView>
+          <CView style={{ justifyContent: "flex-end" }}>
+            <CView style={{ flexDirection: "row", justifyContent: "flex-end", padding: "xl" }}>
+              <CButton
+                disabled={group.name.length === 0 || group.class === undefined}
+                onPress={() => navigation.navigate("subject")}
+                leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
+              />
+            </CView>
+            <ProgressBar color={COLORS.primary} progress={1 / 3} />
+          </CView>
+        </TouchableWithoutFeedback>
       </CView>
     </GroupCreationBody>
   );

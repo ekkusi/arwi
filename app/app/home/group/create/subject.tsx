@@ -76,7 +76,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
               <CButton style={{}} onPress={() => navigation.goBack()}>
                 <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
               </CButton>
-              <CButton style={{}} onPress={() => navigation.navigate("students")}>
+              <CButton disabled={group.subject === undefined} style={{}} onPress={() => navigation.navigate("students")}>
                 <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
               </CButton>
             </CView>
