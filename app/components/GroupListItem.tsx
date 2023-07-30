@@ -1,4 +1,5 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useTranslation } from "react-i18next";
 import { graphql } from "../gql";
 import { GroupListItemFragment } from "../gql/graphql";
 import { COLORS, FONT_SIZES } from "../theme";
@@ -28,6 +29,8 @@ type GroupListItemProps = {
   onEvaluateIconPress: () => void;
 };
 export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress }: GroupListItemProps) {
+  const { t } = useTranslation();
+  const { count, key } = timeSince(group.updatedAt);
   return (
     <Card style={{ marginBottom: 10 }}>
       <CTouchableOpacity
@@ -65,7 +68,7 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             </CView>
             <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
               <MaterialCommunityIcon name="history" color="gray" />
-              <CText style={{ fontSize: "sm", color: "gray" }}>{timeSince(group.updatedAt)} ago</CText>
+              <CText style={{ fontSize: "sm", color: "gray" }}>{count ? t(key, { count }) : t(key)}</CText>
             </CView>
           </CView>
         </CView>
