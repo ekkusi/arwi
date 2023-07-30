@@ -8,6 +8,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import TextFormField from "../../../../components/form/TextFormField";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
+import CTouchableOpacity from "../../../../components/primitives/CTouchableOpacity";
 import CView from "../../../../components/primitives/CView";
 import ProgressBar from "../../../../components/ProgressBar";
 import { graphql } from "../../../../gql";
@@ -107,8 +108,10 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     setGroup({ ...group, students: filteredStudents });
   };
 
-  const addStudent = (student: string) => {
-    setGroup({ ...group, students: [...group.students, student] });
+  const addStudents = (studentString: string) => {
+    const students = studentString.split(/\r?\n/);
+    const nonemptyStudents = students.filter((name) => name.length > 0);
+    setGroup({ ...group, students: [...group.students, ...nonemptyStudents] });
   };
 
   return (
@@ -132,6 +135,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
                 <CView style={{ flex: 5 }}>
                   <TextFormField
                     placeholder={t("GroupStudentsSelectionView.newStudent", "Uusi oppilas")}
+                    multiline
                     value={newStudent}
                     onChange={(text) => {
                       setNewStudent(text);
@@ -139,7 +143,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
                     blurOnSubmit={false}
                     onSubmitEditing={(_) => {
                       if (newStudent.length > 0) {
-                        addStudent(newStudent);
+                        addStudents(newStudent);
                         setNewStudent("");
                       }
                     }}
@@ -149,23 +153,29 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
                   style={{ flex: 1, position: "absolute", right: 0, height: 48, width: 48, paddingHorizontal: 0 }}
                   disabled={newStudent.length === 0}
                   onPress={() => {
-                    if (newStudent.length > 0) addStudent(newStudent);
+                    if (newStudent.length > 0) addStudents(newStudent);
                     setNewStudent("");
                   }}
                 >
                   <MaterialCommunityIcon size={25} name="plus" color={COLORS.white} />
                 </CButton>
               </CView>
+              <CText style={{ fontSize: "sm", fontWeight: "300" }}>
+                {t(
+                  "add-multiple-students-info",
+                  "Voit lisätä oppilaita listana kopioimalla tekstikenttään tekstin, jossa jokaisella rivillä on yhden oppilaan nimi."
+                )}
+              </CText>
             </CView>
           </CView>
         </CView>
-        <CView style={{ flex: 2, justifyContent: "flex-end", paddingBottom: "xl" }}>
+        <CView style={{ flex: 2, justifyContent: "flex-end" }}>
           {!isKeyboardVisible && (
             <CView
               style={{
                 flexGrow: 1,
                 width: "100%",
-                paddingHorizontal: "xl",
+                padding: "xl",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "flex-end",

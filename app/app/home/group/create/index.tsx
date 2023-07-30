@@ -68,13 +68,15 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
             }}
           />
         </CView>
-        <CView style={{ flexDirection: "row", justifyContent: "flex-end", paddingBottom: "2xl" }}>
-          <CButton
-            disabled={group.name.length === 0 || group.class === undefined}
-            style={{ marginRight: 20 }}
-            onPress={() => navigation.navigate("subject")}
-            leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
-          />
+        <CView style={{ justifyContent: "flex-end" }}>
+          <CView style={{ flexDirection: "row", justifyContent: "flex-end", padding: "xl" }}>
+            <CButton
+              disabled={group.name.length === 0 || group.class === undefined}
+              onPress={() => navigation.navigate("subject")}
+              leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
+            />
+          </CView>
+          <ProgressBar color={COLORS.primary} progress={1 / 3} />
         </CView>
       </CView>
     </GroupCreationBody>
