@@ -18,14 +18,10 @@ import GroupCreationBody from "./_body";
 import TextFormField from "../../../../components/form/TextFormField";
 import SelectFormField from "../../../../components/form/SelectFormField";
 
-export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "name", "main-tab-bar">) {
+export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "name", "home-stack">) {
   const { t } = useTranslation();
 
   useEffect(() => {
-    navigation.getParent("main-tab-bar")?.setOptions({
-      tabBarStyle: { display: "none" },
-      tabBarOptions: { keyboardHidesTabBar: false },
-    });
     const backAction = () => {
       Alert.alert("", t("GroupCreationStack.cancelPopUpMessage", "Oletko varma, että haluat perua ryhmän luonnin?"), [
         {
@@ -33,7 +29,7 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
           onPress: () => null,
           style: "cancel",
         },
-        { text: t("Dialog.yes", "Kyllä"), onPress: () => navigation.getParent("main-tab-bar")?.navigate("index") },
+        { text: t("Dialog.yes", "Kyllä"), onPress: () => navigation.getParent("home-stack")?.navigate("index") },
       ]);
       return true;
     };
@@ -41,7 +37,6 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
     const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
 
     return () => {
-      navigation.getParent("main-tab-bar")?.setOptions({ tabBarStyle: tabBarStyles });
       backHandler.remove();
     };
   }, [navigation, t]);

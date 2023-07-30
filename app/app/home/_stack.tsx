@@ -1,14 +1,18 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeView from ".";
 import CText from "../../components/primitives/CText";
+import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import CView from "../../components/primitives/CView";
 import { formatDate } from "../../helpers/dateHelpers";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
+import { COLORS } from "../../theme";
 import { defaultHeaderStyles } from "../config";
+import ProfileView from "../profile";
 import ChangeGroupName from "./ChangeGroupName";
 import CollectionView from "./collection";
 import CollectionCreationStack from "./collection/create/_stack";
@@ -25,8 +29,31 @@ export default function HomeStack() {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   return (
-    <HomeStackNavigator.Navigator initialRouteName="index" screenOptions={defaultHeaderStyles}>
-      <HomeStackNavigator.Screen name="index" component={HomeView} options={{ title: t("HomeStack.ownGroups", "Omat ryhmät") }} />
+    <HomeStackNavigator.Navigator id="home-stack" initialRouteName="index" screenOptions={defaultHeaderStyles}>
+      <HomeStackNavigator.Screen
+        name="index"
+        component={HomeView}
+        options={({ navigation }) => {
+          return {
+            title: t("HomeStack.ownGroups", "Omat ryhmät"),
+            headerRight: () => (
+              <CTouchableOpacity
+                onPress={() => navigation.navigate("profile")}
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 18,
+                  backgroundColor: "transparent",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialCommunityIcon name="account-outline" size={30} color={COLORS.white} />
+              </CTouchableOpacity>
+            ),
+          };
+        }}
+      />
       <HomeStackNavigator.Screen
         name="group"
         component={GroupView}
@@ -107,6 +134,7 @@ export default function HomeStack() {
         component={Evaluation}
         options={{ title: t("HomeStack.evaluationOverview", "Arvioinnin yhteenveto") }}
       />
+      <HomeStackNavigator.Screen name="profile" component={ProfileView} options={{ title: t("profile", "Profiili") }} />
       <HomeStackNavigator.Group screenOptions={{ presentation: "modal" }}>
         <HomeStackNavigator.Screen name="learning-objective" component={LearningObjective} options={({ route }) => ({ title: route.params.code })} />
       </HomeStackNavigator.Group>

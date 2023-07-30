@@ -8,12 +8,12 @@ import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { MenuProvider } from "react-native-popup-menu";
 import * as SplashScreen from "expo-splash-screen";
-import MainStack from "./app/_stack";
 import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
 import { graphql } from "./gql";
 import ModalProvider from "./hooks-and-providers/ModalProvider";
+import HomeStack from "./app/home/_stack";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -64,7 +64,7 @@ export default function Main() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <MenuProvider>
           <ModalProvider>
-            <NavigationContainer>{authState.authenticated ? <MainStack /> : <AuthStack />}</NavigationContainer>
+            <NavigationContainer>{authState.authenticated ? <HomeStack /> : <AuthStack />}</NavigationContainer>
           </ModalProvider>
         </MenuProvider>
       </GestureHandlerRootView>

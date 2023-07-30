@@ -24,6 +24,28 @@ export const GroupListItem_Fragment = graphql(`
   }
 `);
 
+const translationDefaultForKey = (key: string) => {
+  switch (key) {
+    case "just-now":
+      return "juuri äsken";
+    case "minutes-ago":
+      return "{{count}} minuuttia sitten";
+    case "hours-ago":
+      return "{{count}} tuntia sitten";
+    case "days-ago":
+      return "{{count}} päivää sitten";
+    case "weeks-ago":
+      return "{{count}} viikkoa sitten";
+    case "months-ago":
+      return "{{count}} kuukautta sitten";
+    case "years-ago":
+      return "{{count}} vuotta sitten";
+
+    default:
+      return "";
+  }
+};
+
 type GroupListItemProps = {
   group: GroupListItemFragment;
   onListItemPress: () => void;
@@ -82,7 +104,9 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             </CView>
             <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
               <MaterialCommunityIcon name="history" color="gray" />
-              <CText style={{ fontSize: "sm", color: "gray" }}>{count ? t(key, { count }) : t(key)}</CText>
+              <CText style={{ fontSize: "sm", color: "gray" }}>
+                {count ? t(key, translationDefaultForKey(key), { count }) : t(key, translationDefaultForKey(key))}
+              </CText>
             </CView>
           </CView>
         </CView>
