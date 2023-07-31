@@ -46,6 +46,6 @@ const styles = createStyles({
     color: "darkgray",
   },
   titleErrorStyle: {
-    color: "error",
+    color: "darkgray",
   },
 });
