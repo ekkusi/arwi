@@ -5,9 +5,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { useTranslation } from "react-i18next";
 import { Alert, BackHandler } from "react-native";
 import CButton from "../../../../components/primitives/CButton";
-import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
-import ProgressBar from "../../../../components/ProgressBar";
 import { nameValidator } from "../../../../helpers/textValidation";
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
