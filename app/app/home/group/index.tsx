@@ -1,12 +1,13 @@
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TextInput, useWindowDimensions } from "react-native";
+import { Keyboard, Platform, TextInput, useWindowDimensions } from "react-native";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Card from "../../../components/Card";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
 import LoadingIndicator from "../../../components/LoadingIndicator";
@@ -24,6 +25,7 @@ import { COLORS, SPACING } from "../../../theme";
 import { CColor } from "../../../theme/types";
 import { HomeStackParams } from "../types";
 import CollectionStatistics from "../../../components/charts/CollectionStatistics";
+import CAnimatedView from "../../../components/primitives/CAnimatedView";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -78,12 +80,99 @@ type NavigationProps = {
   navigation: NativeStackScreenProps<HomeStackParams, "group">["navigation"];
 };
 
+const SearchBar = memo(function SearchBar({
+  setSearchText,
+  onChangeSearchState,
+}: {
+  setSearchText: (text: string) => void;
+  onChangeSearchState: (open: boolean) => void;
+}) {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [width, setWidth] = useState(48);
+  const inputRef = useRef<TextInput>(null);
+
+  const searchBarWidth = useSharedValue(48);
+  const searchBarAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      width: withTiming(searchBarWidth.value, { duration: 300, easing: Easing.inOut(Easing.ease) }),
+    };
+  });
+  useEffect(() => {
+    if (width !== 0) {
+      searchBarWidth.value = searchOpen ? width : 48;
+    }
+  }, [searchOpen, searchBarWidth, width]);
+
+  useEffect(() => {
+    const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      setSearchOpen(false);
+      onChangeSearchState(false);
+      inputRef.current?.blur();
+    });
+    return () => {
+      keyboardHideListener.remove();
+    };
+  });
+  return (
+    <CView style={{ width: "100%", alignItems: "flex-end" }} onLayout={(ev) => setWidth(ev.nativeEvent.layout.width)}>
+      <Animated.View style={[{ height: 48, borderRadius: 24, borderWidth: 1, borderColor: COLORS.gray, overflow: "hidden" }, searchBarAnimatedStyle]}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            if (inputRef.current) inputRef.current.focus();
+            setSearchOpen(true);
+            onChangeSearchState(true);
+          }}
+          disabled={searchOpen}
+        >
+          <CView pointerEvents={searchOpen ? undefined : "none"}>
+            <TextInput
+              ref={inputRef}
+              showSoftInputOnFocus
+              placeholder="Etsi nimellä..."
+              onChange={(e) => setSearchText(e.nativeEvent.text)}
+              onEndEditing={() => setSearchOpen(false)}
+              style={{
+                backgroundColor: "white",
+                height: 48,
+                width,
+                paddingLeft: 48,
+              }}
+            />
+            <CView style={{ position: "absolute", left: 0, width: 48, height: 48, justifyContent: "center", alignItems: "center" }}>
+              <MaterialCommunityIcon name="magnify" size={25} color={COLORS.darkgray} />
+            </CView>
+          </CView>
+        </TouchableWithoutFeedback>
+      </Animated.View>
+    </CView>
+  );
+});
 const StudentList = memo(function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
   const translateY = useSharedValue(0);
   const isScrolling = useSharedValue(false);
   const lastContentOffset = useSharedValue(0);
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  const flatlistOffsetY = useSharedValue(0);
+
+  useEffect(() => {
+    flatlistOffsetY.value = searchOpen ? 48 : 0;
+  }, [flatlistOffsetY, searchOpen]);
+
+  const flatlistStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(flatlistOffsetY.value, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
 
   const searchBarStyle = useAnimatedStyle(() => {
     return {
@@ -103,7 +192,9 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
       if (lastContentOffset.value > event.contentOffset.y && isScrolling.value) {
         translateY.value = 0;
       } else if (lastContentOffset.value < event.contentOffset.y && isScrolling.value) {
-        translateY.value = -100;
+        if (!searchOpen) {
+          translateY.value = -100;
+        }
       }
       lastContentOffset.value = event.contentOffset.y;
     },
@@ -119,50 +210,45 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
   const filteredStudents = group.currentClassYear.students.filter((student) => student.name.includes(searchText));
 
   return (
-    <CView style={{ flexGrow: 1 }}>
+    <CView style={{ flex: 1 }}>
       {group.currentClassYear.students.length > 0 ? (
-        <CView>
-          <Animated.FlatList
-            onScroll={scrollHandler}
-            contentContainerStyle={{ paddingTop: SPACING.md * 2 + 48, paddingBottom: 50, paddingHorizontal: SPACING.md }}
-            showsVerticalScrollIndicator={false}
-            data={filteredStudents}
-            renderItem={({ item }) => {
-              const presentClasses = item.currentClassEvaluations.reduce((prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal), 0);
-              const allClasses = group.currentClassYear.evaluationCollections.length;
-              return (
-                <Card style={{ marginBottom: "md" }} key={item.id}>
-                  <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
-                    <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
-                    <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                      <CText style={{ fontSize: "sm", color: "gray" }}>
-                        {t("present", "Paikalla")} {presentClasses}/{allClasses}
-                      </CText>
-                    </CView>
-                  </CTouchableOpacity>
-                </Card>
-              );
-            }}
-          />
-          <Animated.View style={[{ position: "absolute", paddingTop: SPACING.md, paddingHorizontal: SPACING.md }, searchBarStyle]}>
-            <CView style={{ flexDirection: "row", alignItems: "center" }}>
-              <TextInput
-                placeholder="Etsi nimellä..."
-                onChange={(e) => setSearchText(e.nativeEvent.text)}
-                style={{
-                  backgroundColor: "white",
-                  height: 48,
-                  borderRadius: 24,
-                  width: "100%",
-                  borderWidth: 1,
-                  borderColor: "gray",
-                  paddingLeft: 50,
-                }}
-              />
-              <MaterialCommunityIcon name="magnify" size={25} color={COLORS.darkgray} style={{ position: "absolute", left: 10 }} />
-            </CView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ height: "100%" }}>
+          <Animated.View style={[{ flex: 1 }, flatlistStyle]}>
+            <Animated.FlatList
+              onScroll={scrollHandler}
+              contentContainerStyle={{ paddingTop: SPACING.md * 2, paddingBottom: 50, paddingHorizontal: SPACING.md }}
+              showsVerticalScrollIndicator={false}
+              data={filteredStudents}
+              renderItem={({ item }) => {
+                const presentClasses = item.currentClassEvaluations.reduce(
+                  (prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal),
+                  0
+                );
+                const allClasses = group.currentClassYear.evaluationCollections.length;
+                return (
+                  <Card style={{ marginBottom: "md" }} key={item.id}>
+                    <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
+                      <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
+                      <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                        <CText style={{ fontSize: "sm", color: "gray" }}>
+                          {t("present", "Paikalla")} {presentClasses}/{allClasses}
+                        </CText>
+                      </CView>
+                    </CTouchableOpacity>
+                  </Card>
+                );
+              }}
+            />
           </Animated.View>
-        </CView>
+          <Animated.View style={[{ position: "absolute", width: "100%", paddingTop: SPACING.md, paddingHorizontal: SPACING.md }, searchBarStyle]}>
+            <SearchBar
+              onChangeSearchState={(open) => {
+                setSearchOpen(open);
+              }}
+              setSearchText={(text) => setSearchText(text)}
+            />
+          </Animated.View>
+        </TouchableWithoutFeedback>
       ) : (
         <CView style={{ height: 300, justifyContent: "center", alignItems: "center" }}>
           <CText style={{ width: "60%" }}>{t("group.no-students", "Ryhmässä ei ole oppilaita")}</CText>
