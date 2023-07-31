@@ -7,16 +7,23 @@ import CText from "./CText";
 export type CButtonProps = Omit<TouchableOpacityProps, "style"> & {
   loading?: boolean;
   title?: string;
-  variant?: "filled" | "outline" | "empty";
   size?: "large" | "small";
   colorScheme?: ColorKey;
   textStyle?: CTextStyle;
   style?: CViewStyle;
-  shadowed?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   disableTouchEvent?: boolean;
-};
+} & (
+    | {
+        variant: "empty";
+        shadowed?: never;
+      }
+    | {
+        variant?: "filled" | "outline";
+        shadowed?: boolean;
+      }
+  );
 
 export default function CButton({
   loading,
@@ -40,7 +47,7 @@ export default function CButton({
     switch (variant) {
       case "outline":
         return {
-          backgroundColor: "transparent",
+          backgroundColor: "white",
           borderWidth: 2,
           borderColor: colorScheme,
           height: size === "large" ? 48 : 36,
@@ -158,7 +165,6 @@ const styles = createStyles({
     justifyContent: "center",
     borderRadius: 24,
     paddingHorizontal: "xl",
-    overflow: "hidden",
     flexDirection: "row",
     gap: "md",
   },
@@ -174,9 +180,9 @@ const styles = createStyles({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1.5,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 3,
     marginHorizontal: "xs",

@@ -13,7 +13,6 @@ import { GroupListItemFragment, MainPage_GetCurrentUserQuery } from "../../gql/g
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { HomeStackParams } from "./types";
 import CButton from "../../components/primitives/CButton";
-import ShadowButton from "../../components/primitives/ShadowButton";
 import { COLORS } from "../../theme";
 
 const MainPage_GetCurrentUser_Query = graphql(`
@@ -88,11 +87,11 @@ function HomePageContent({
   });
 
   return (
-    <CView style={{ flex: 1, paddingHorizontal: 10 }}>
+    <CView style={{ flex: 1, paddingHorizontal: "sm" }}>
       {teacher.groups.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
-          contentContainerStyle={{ paddingTop: 20, paddingBottom: 20 }}
+          contentContainerStyle={{ paddingTop: 10, overflow: "visible" }}
           showsVerticalScrollIndicator={false}
           data={[...teacher.groups].sort((a, b) => {
             return a.updatedAt < b.updatedAt ? 1 : -1;
@@ -106,8 +105,9 @@ function HomePageContent({
           <CButton title={t("home-view.create-group", "Luo ensimmäinen ryhmä")} onPress={() => navigation.navigate("group-create")} />
         </CView>
       )}
-      <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
-        <ShadowButton
+      <Animated.View style={[{ overflow: "visible", position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
+        <CButton
+          shadowed
           title={t("home-view.create-group", "Luo ryhmä")}
           onPress={() => navigation.navigate("group-create")}
           leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}

@@ -3,42 +3,34 @@ import { View } from "react-native";
 import { createStyles } from "../theme/utils";
 import CView, { CViewProps } from "./primitives/CView";
 
-export type CardProps = CViewProps & { innerViewProps?: CViewProps };
+export type CardProps = CViewProps;
 
-export default forwardRef<View, CardProps>((props, ref) => {
-  const { innerViewProps, ...rest } = props;
+export default forwardRef<View, CardProps>(({ style, children, ...rest }, ref) => {
   return (
-    <CView {...rest} style={{ ...styles.shadow, ...rest.style }}>
-      <CView ref={ref} {...innerViewProps} style={{ ...styles.defaultCard, ...innerViewProps?.style }}>
-        {rest.children}
-      </CView>
+    <CView ref={ref} {...rest} style={{ ...styles.shadow, ...styles.defaultCard, ...style }}>
+      {children}
     </CView>
   );
 });
 
 const styles = createStyles({
   defaultCard: {
-    flex: 1,
     borderRadius: 5,
-    backgroundColor: "white",
     paddingHorizontal: "lg",
     paddingVertical: "md",
-    width: "100%",
-    overflow: "hidden",
+    marginHorizontal: "xs",
+    marginBottom: "sm",
   },
   shadow: {
-    marginHorizontal: "xs",
-    justifyContent: "center",
-    alignItems: "center",
     borderRadius: 5,
-    backgroundColor: "transparent",
+    backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1.5,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.2,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 3,
   },
 });
