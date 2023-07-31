@@ -31,6 +31,11 @@ module.exports = {
     favicon: "./assets/logo-new.jpg",
   },
   scheme: "arwi-app",
+  extra: {
+    eas: {
+      projectId: "630de596-103e-469d-968f-bd0339f5f4c8",
+    },
+  },
   plugins: [
     [
       "@react-native-voice/voice",
