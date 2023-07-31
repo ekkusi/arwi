@@ -117,6 +117,20 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
     });
 
+    // Should always only find one group, updateMany only here because of typescript constraint
+    await prisma.group.updateMany({
+      data: {
+        updatedAt: new Date(),
+      },
+      where: {
+        classYears: {
+          some: {
+            id: classYearId,
+          },
+        },
+      },
+    });
+
     return createdCollection;
   },
   createStudent: async (_, { data, classYearId }, { prisma }) => {

@@ -31,28 +31,13 @@ module.exports = {
     favicon: "./assets/logo-new.jpg",
   },
   scheme: "arwi-app",
-  extra: {
-    eas: {
-      projectId: "630de596-103e-469d-968f-bd0339f5f4c8",
-    },
-  },
-  expo: {
-    plugins: [
-      [
-        "@react-native-voice/voice",
-        {
-          microphonePermission: "CUSTOM: Allow $(PRODUCT_NAME) to access the microphone",
-          speechRecognitionPermission: "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech",
-        },
-      ],
-    ],
-    android: {
-      package: "net.arwi.twa",
-    },
-    extra: {
-      eas: {
-        projectId: "ed0fb964-b3ce-4ba7-9158-f24745f0e11f",
+  plugins: [
+    [
+      "@react-native-voice/voice",
+      {
+        microphonePermission: "CUSTOM: Allow $(PRODUCT_NAME) to access the microphone",
+        speechRecognitionPermission: "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech",
       },
-    },
-  },
+    ],
+  ],
 };

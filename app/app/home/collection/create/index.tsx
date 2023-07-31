@@ -19,8 +19,6 @@ import CTextInput from "../../../../components/primitives/CTextInput";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import TextFormField from "../../../../components/form/TextFormField";
 import MultiSelectFormField from "../../../../components/form/MultiSelectFormField";
-import CText from "../../../../components/primitives/CText";
-import ProgressBar from "../../../../components/ProgressBar";
 
 const CollectionGeneralInfoView_Group_Fragment = graphql(`
   fragment CollectionGeneralInfoView_Group on Group {
