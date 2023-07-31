@@ -12,7 +12,7 @@ export default function ProgressBar({ color, progress, style, ...rest }: Progres
   else if (widthPercent > 100) widthPercent = 100;
   return (
     <CView style={{ height: 5, width: "100%", ...style }} {...rest}>
-      <CView style={{ width: `${widthPercent.toString()}%`, height: "100%", left: 0, backgroundColor: color }} />
+      <CView style={{ width: `${widthPercent}%`, height: "100%", left: 0, backgroundColor: color }} />
       <CText style={{ fontSize: "lg" }}>Ladataan...</CText>
     </CView>
   );
