@@ -1,10 +1,11 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { Layout, SlideInLeft, SlideOutRight } from "react-native-reanimated";
 import { graphql } from "../gql";
 import { GroupListItemFragment } from "../gql/graphql";
 import { COLORS, FONT_SIZES } from "../theme";
-import Card from "./Card";
+import Card, { CardProps } from "./Card";
 import { timeSince } from "../helpers/dateHelpers";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
@@ -46,12 +47,12 @@ const translationDefaultForKey = (key: string) => {
   }
 };
 
-type GroupListItemProps = {
+type GroupListItemProps = CardProps & {
   group: GroupListItemFragment;
   onListItemPress: () => void;
   onEvaluateIconPress: () => void;
 };
-export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress }: GroupListItemProps) {
+export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress, ...rest }: GroupListItemProps) {
   const { t } = useTranslation();
 
   const [{ count, key, updatedAt }, setTimeSince] = useState(() => ({ ...timeSince(group.updatedAt), updatedAt: group.updatedAt }));
@@ -70,7 +71,7 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
   }, [group.updatedAt, updatedAt]);
 
   return (
-    <Card style={{ marginBottom: 10 }}>
+    <Card style={{ marginBottom: 10 }} {...rest}>
       <CTouchableOpacity
         style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
         onPress={onListItemPress}

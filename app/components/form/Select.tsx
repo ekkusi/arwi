@@ -118,7 +118,7 @@ export default function Select(props: SelectProps) {
         placement="bottom"
         title={title}
         closeButton={
-          <CButton variant="empty" style={{ marginLeft: "auto" }} onPress={() => setSelectModalOpen(false)}>
+          <CButton variant="empty" onPress={() => setSelectModalOpen(false)}>
             {isMulti ? (
               <CText style={{ color: "primary", fontWeight: "bold" }}>{t("done", "Valmis")}</CText>
             ) : (
@@ -165,94 +165,6 @@ export default function Select(props: SelectProps) {
           data={options}
         />
       </CModal>
-      {/* {selectModalOpen && ( */}
-      {/* <Modal statusBarTranslucent transparent visible={selectModalOpen} onRequestClose={() => toggleModal(false)}>
-        {modalChildrenVisible && (
-          <TouchableWithoutFeedback onPress={() => toggleModal(false)}>
-            <Animated.View
-              entering={FadeIn}
-              exiting={FadeOut}
-              style={{
-                position: "absolute",
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                backgroundColor: "rgba(0,0,0,0.6)",
-                justifyContent: "flex-end",
-                alignItems: "center",
-              }}
-            >
-              <TouchableWithoutFeedback>
-                <Animated.View
-                  entering={SlideInDown}
-                  exiting={slideOutExit}
-                  onLayout={(event) => event.type}
-                  style={{
-                    width: "100%",
-                    maxHeight: "80%",
-                    paddingHorizontal: SPACING.xl,
-                    paddingTop: SPACING.md,
-                    backgroundColor: COLORS.white,
-                    borderRadius: 20,
-                    alignItems: "center",
-                  }}
-                >
-                  <CView style={{ width: "100%", flexDirection: "row", alignItems: "center", marginBottom: "lg" }}>
-                    {title && <CText style={{ flex: 1, color: "darkgray", fontWeight: "bold" }}>{title}</CText>}
-                    <CButton variant="empty" style={{}} onPress={() => toggleModal(false)}>
-                      {isMulti ? (
-                        <CText style={{ color: "primary", fontWeight: "bold" }}>{t("done", "Valmis")}</CText>
-                      ) : (
-                        <MaterialCommunityIcon name="close" size={25} />
-                      )}
-                    </CButton>
-                  </CView>
-                  <CFlatList
-                    style={{ width: "100%", paddingTop: "md" }}
-                    renderItem={({ item, index }) => {
-                      const isSelected = selected.findIndex((s) => s.value === item.value) >= 0;
-                      return (
-                        <CTouchableOpacity
-                          key={item.value}
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            paddingVertical: "md",
-                            // backgroundColor: "rgba(0, 0, 0, 0.05)",
-                            backgroundColor: "extra-light-gray",
-                            paddingHorizontal: "lg",
-                            borderRadius: 10,
-                            marginBottom: index === options.length - 1 ? "2xl" : "md",
-                          }}
-                          onPress={() => {
-                            onSelect(item);
-                          }}
-                        >
-                          <CText
-                            style={{
-                              flex: 1,
-                              fontWeight: "400",
-                              color: isSelected ? "primary" : "darkgray",
-                              width: "100%",
-                              marginRight: isSelected ? 10 : 30,
-                            }}
-                          >
-                            {item.label}
-                          </CText>
-                          {isSelected && <MaterialCommunityIcon name="check" size={23} color={COLORS.primary} />}
-                        </CTouchableOpacity>
-                      );
-                    }}
-                    data={options}
-                  />
-                </Animated.View>
-              </TouchableWithoutFeedback>
-            </Animated.View>
-          </TouchableWithoutFeedback>
-        )}
-      </Modal> */}
-      {/* )} */}
     </>
   );
 }

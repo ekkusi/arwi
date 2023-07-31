@@ -16,7 +16,6 @@ import CImage from "../../../components/primitives/CImage";
 import CText from "../../../components/primitives/CText";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CView from "../../../components/primitives/CView";
-import ShadowButton from "../../../components/primitives/ShadowButton";
 import { graphql } from "../../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment, GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { getPredefinedColors, subjectToIcon } from "../../../helpers/dataMappers";
@@ -25,7 +24,7 @@ import { COLORS, SPACING } from "../../../theme";
 import { CColor } from "../../../theme/types";
 import { HomeStackParams } from "../types";
 import CollectionStatistics from "../../../components/charts/CollectionStatistics";
-import CAnimatedView from "../../../components/primitives/CAnimatedView";
+import CButton from "../../../components/primitives/CButton";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -331,7 +330,8 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
         <CText style={{ paddingTop: 50, alignSelf: "center" }}>{t("group.no-collections", "Ryhmälle ei vielä olla tehty arviointeja")}</CText>
       )}
       <Animated.View style={[{ position: "absolute", bottom: 20, right: 15, backgroundColor: "rgba(0,0,0,0)" }, newEvaluationButtonStyle]}>
-        <ShadowButton
+        <CButton
+          shadowed
           title={t("new-evaluation", "Uusi arviointi")}
           onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
           leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
@@ -560,7 +560,8 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
         )}
       </Animated.ScrollView>
       <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
-        <ShadowButton
+        <CButton
+          shadowed
           title={t("new-evaluation", "Uusi arviointi")}
           onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
           leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}

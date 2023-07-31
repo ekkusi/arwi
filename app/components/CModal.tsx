@@ -162,7 +162,7 @@ export default function CModal({
             {typeof title === "string" ? <CText style={{ flex: 1, color: "darkgray", fontWeight: "bold" }}>{title}</CText> : title}
             {typeof closeButton === "boolean"
               ? closeButton && (
-                  <CButton variant="empty" style={{ marginLeft: "auto" }} onPress={onClose}>
+                  <CButton variant="empty" onPress={onClose}>
                     <MaterialCommunityIcon name="close" size={25} />
                   </CButton>
                 )
