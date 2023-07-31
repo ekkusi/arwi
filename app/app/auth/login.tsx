@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -14,6 +15,7 @@ import CImage from "../../components/primitives/CImage";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
+import { COLORS } from "../../theme";
 
 const initialValues = {
   email: "",
@@ -38,6 +40,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { t } = useTranslation();
 
   const [login] = useMutation(LoginPage_Login_Mutation);
@@ -74,15 +77,26 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
               placeholder="arwioija@test.fi"
               validate={nameValidator}
               style={{ width: "100%" }}
+              titleStyle={{ fontSize: "md", fontWeight: "500" }}
               onChange={handleEmailChange}
             />
-            <TextFormField
-              title={t("password", "Salasana")}
-              placeholder="password"
-              style={{ width: "100%" }}
-              validate={nameValidator}
-              onChange={handlePasswordChange}
-            />
+            <CView>
+              <TextFormField
+                title={t("password", "Salasana")}
+                placeholder={t("password", "Salasana")}
+                style={{ width: "100%" }}
+                secureTextEntry={secureTextEntry}
+                titleStyle={{ fontSize: "md", fontWeight: "500" }}
+                validate={nameValidator}
+                onChange={handlePasswordChange}
+              />
+              <CTouchableOpacity
+                onPress={() => setSecureTextEntry(!secureTextEntry)}
+                style={{ position: "absolute", right: 0, bottom: 0, justifyContent: "center", alignItems: "center", height: 54, width: 54 }}
+              >
+                <MaterialCommunityIcon name={secureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
+              </CTouchableOpacity>
+            </CView>
             {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md", marginBottom: 30 }}>{generalError}</CText>}
           </CView>
           <CView style={{ flex: 1, width: "90%", gap: 5 }}>
@@ -98,7 +112,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
               }}
             />
             <CView style={{ flexDirection: "row", justifyContent: "center" }}>
-              <CText style={{ fontSize: "md", fontWeight: "600", color: "gray" }}>
+              <CText style={{ fontSize: "sm", fontWeight: "500", color: "gray" }}>
                 {t("LoginView.noUserYet", "Eikö sinulla ole vielä käyttäjää?")}{" "}
               </CText>
               <CTouchableOpacity
@@ -106,9 +120,9 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
                   navigation.navigate("signup");
                 }}
               >
-                <CText style={{ fontSize: "md", fontWeight: "600", color: "primary" }}>{t("register", "Rekisteröidy")}</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "500", color: "primary" }}>{t("register", "Rekisteröidy")}</CText>
               </CTouchableOpacity>
-              <CText style={{ fontSize: 12, fontWeight: "600", color: "gray" }}>.</CText>
+              <CText style={{ fontSize: "sm", fontWeight: "500", color: "gray" }}>.</CText>
             </CView>
           </CView>
         </CView>
