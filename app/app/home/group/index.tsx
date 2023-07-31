@@ -81,9 +81,11 @@ type NavigationProps = {
 };
 
 const SearchBar = memo(function SearchBar({
+  searchText,
   setSearchText,
   onChangeSearchState,
 }: {
+  searchText: string;
   setSearchText: (text: string) => void;
   onChangeSearchState: (open: boolean) => void;
 }) {
@@ -105,8 +107,10 @@ const SearchBar = memo(function SearchBar({
 
   useEffect(() => {
     const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
-      setSearchOpen(false);
-      onChangeSearchState(false);
+      if (searchText.length <= 0) {
+        setSearchOpen(false);
+        onChangeSearchState(false);
+      }
       inputRef.current?.blur();
     });
     return () => {
@@ -114,7 +118,7 @@ const SearchBar = memo(function SearchBar({
     };
   });
   return (
-    <CView style={{ width: "100%", alignItems: "flex-end" }} onLayout={(ev) => setWidth(ev.nativeEvent.layout.width)}>
+    <CView style={{ width: "100%", alignItems: "flex-end" }} onLayout={(ev) => setWidth(ev.nativeEvent.layout.width)} pointerEvents="box-none">
       <Animated.View style={[{ height: 48, borderRadius: 24, borderWidth: 1, borderColor: COLORS.gray, overflow: "hidden" }, searchBarAnimatedStyle]}>
         <TouchableWithoutFeedback
           onPress={() => {
@@ -130,7 +134,9 @@ const SearchBar = memo(function SearchBar({
               showSoftInputOnFocus
               placeholder="Etsi nimellä..."
               onChange={(e) => setSearchText(e.nativeEvent.text)}
-              onEndEditing={() => setSearchOpen(false)}
+              onEndEditing={() => {
+                if (searchText.length <= 0) setSearchOpen(false);
+              }}
               style={{
                 backgroundColor: "white",
                 height: 48,
@@ -240,8 +246,12 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
               }}
             />
           </Animated.View>
-          <Animated.View style={[{ position: "absolute", width: "100%", paddingTop: SPACING.md, paddingHorizontal: SPACING.md }, searchBarStyle]}>
+          <Animated.View
+            pointerEvents="box-none"
+            style={[{ position: "absolute", width: "100%", paddingTop: SPACING.md, paddingHorizontal: SPACING.md }, searchBarStyle]}
+          >
             <SearchBar
+              searchText={searchText}
               onChangeSearchState={(open) => {
                 setSearchOpen(open);
               }}
