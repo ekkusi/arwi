@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Keyboard, KeyboardEventListener } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CAnimatedView from "../../../../components/primitives/CAnimatedView";
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
@@ -36,6 +35,10 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
       }
       classYear {
         id
+        group {
+          id
+          updatedAt
+        }
       }
     }
   }
