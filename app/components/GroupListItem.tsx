@@ -1,4 +1,6 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 import { graphql } from "../gql";
 import { GroupListItemFragment } from "../gql/graphql";
 import { COLORS, FONT_SIZES } from "../theme";
@@ -22,16 +24,25 @@ export const GroupListItem_Fragment = graphql(`
   }
 `);
 
-const getColorForCode = (code: string) => {
-  switch (code) {
-    case "LI":
-      return COLORS.sport;
-    case "BI":
-      return COLORS.biology;
-    case "PY":
-      return COLORS.psychology;
+const translationDefaultForKey = (key: string) => {
+  switch (key) {
+    case "just-now":
+      return "juuri äsken";
+    case "minutes-ago":
+      return "{{count}} minuuttia sitten";
+    case "hours-ago":
+      return "{{count}} tuntia sitten";
+    case "days-ago":
+      return "{{count}} päivää sitten";
+    case "weeks-ago":
+      return "{{count}} viikkoa sitten";
+    case "months-ago":
+      return "{{count}} kuukautta sitten";
+    case "years-ago":
+      return "{{count}} vuotta sitten";
+
     default:
-      return COLORS.white;
+      return "";
   }
 };
 
@@ -41,6 +52,21 @@ type GroupListItemProps = {
   onEvaluateIconPress: () => void;
 };
 export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress }: GroupListItemProps) {
+  const { t } = useTranslation();
+
+  const { count: tempCount, key: tempKey } = timeSince(group.updatedAt);
+  const [key, setKey] = useState(tempKey);
+  const [count, setCount] = useState(tempCount);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const { count: newCount, key: newKey } = timeSince(group.updatedAt);
+      setKey(newKey);
+      setCount(newCount);
+    }, 60 * 1000);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [group.updatedAt]);
+
   return (
     <Card style={{ marginBottom: 10 }}>
       <CTouchableOpacity
@@ -78,8 +104,9 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             </CView>
             <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
               <MaterialCommunityIcon name="history" color="gray" />
-              <CText style={{ fontSize: "sm", color: "gray" }}>{timeSince(group.updatedAt)} ago</CText>
-              <CView style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: getColorForCode(group.subject.code) }} />
+              <CText style={{ fontSize: "sm", color: "gray" }}>
+                {count ? t(key, translationDefaultForKey(key), { count }) : t(key, translationDefaultForKey(key))}
+              </CText>
             </CView>
           </CView>
         </CView>

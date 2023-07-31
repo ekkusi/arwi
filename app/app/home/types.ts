@@ -21,6 +21,7 @@ export type HomeStackParams = {
   "edit-students": {
     groupId: string;
   };
+  profile: undefined;
   "learning-objective": {
     code: string;
     label: string;

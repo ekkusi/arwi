@@ -62,7 +62,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
               )}
             </CText>
           </CView>
-          <CView style={{ flex: 2, justifyContent: "flex-end", paddingBottom: "xl", width: "100%" }}>
+          <CView style={{ flex: 2, justifyContent: "flex-end", width: "100%" }}>
             <CView
               style={{
                 flex: 1,
@@ -70,13 +70,13 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "flex-end",
-                paddingHorizontal: "xl",
+                padding: "xl",
               }}
             >
               <CButton style={{}} onPress={() => navigation.goBack()}>
                 <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
               </CButton>
-              <CButton style={{}} onPress={() => navigation.navigate("students")}>
+              <CButton disabled={group.subject === undefined} style={{}} onPress={() => navigation.navigate("students")}>
                 <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
               </CButton>
             </CView>

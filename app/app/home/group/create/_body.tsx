@@ -12,7 +12,7 @@ export default function GroupCreationBody({
   navigation,
   children,
 }: {
-  navigation: NativeStackNavigationProp<GroupCreationStackParams, "name" | "students" | "subject", "main-tab-bar">;
+  navigation: NativeStackNavigationProp<GroupCreationStackParams, "name" | "students" | "subject", "home-stack">;
   children: JSX.Element;
 }) {
   const { t } = useTranslation();
@@ -30,7 +30,7 @@ export default function GroupCreationBody({
                 onPress: () => null,
                 style: "cancel",
               },
-              { text: t("yes", "Kyllä"), onPress: () => navigation.getParent("main-tab-bar")?.navigate("index") },
+              { text: t("yes", "Kyllä"), onPress: () => navigation.getParent("home-stack")?.navigate("index") },
             ]);
           }}
           leftIcon={<MaterialCommunityIcon name="close" size={30} color={COLORS.white} />}

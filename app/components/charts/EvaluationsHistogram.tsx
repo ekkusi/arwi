@@ -124,7 +124,7 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
                 title={t("filter", "Suodata")}
                 colorScheme="darkgray"
                 style={{ width: "auto" }}
-                leftIcon={<MaterialCommunityIcon name="chevron-down" size={25} color={COLORS.darkgray} />}
+                leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
                 rightIcon={
                   typeFilter !== "all" || environmentFilter !== "all" ? (
                     <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} />
@@ -171,9 +171,8 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
                       variant="outline"
                       colorScheme={typeFilter !== "all" ? "lightgray" : "darkgray"}
                       style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
-                      onPress={() => setEnvironmentFilter("all")}
+                      onPress={() => setTypeFilter("all")}
                       textStyle={{ fontSize: "xs", fontWeight: "400", color: environmentFilter !== "all" ? "gray" : "darkgray" }}
-                      leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: "black" }} />}
                     />
                     {["skills", "behaviour"].map((item) => (
                       <CButton
