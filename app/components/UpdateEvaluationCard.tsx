@@ -89,7 +89,7 @@ export default function UpdateEvaluationCard({
       Voice.onSpeechResults = (event) => {
         if (event.value) {
           setCurrentRecordingAsText("");
-          setNotes(`${notes} ${event.value[0]}`);
+          onChanged("notes", `${notes} ${event.value[0]}`);
         }
       };
       Voice.start("fi-FI")
@@ -102,7 +102,11 @@ export default function UpdateEvaluationCard({
 
   useEffect(() => {
     return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
+      try {
+        Voice.destroy().then(Voice.removeAllListeners);
+      } catch (error) {
+        console.error(error);
+      }
     };
   }, [t, notes]);
 

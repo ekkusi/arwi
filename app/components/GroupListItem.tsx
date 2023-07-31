@@ -54,18 +54,20 @@ type GroupListItemProps = {
 export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress }: GroupListItemProps) {
   const { t } = useTranslation();
 
-  const { count: tempCount, key: tempKey } = timeSince(group.updatedAt);
-  const [key, setKey] = useState(tempKey);
-  const [count, setCount] = useState(tempCount);
+  const [{ count, key, updatedAt }, setTimeSince] = useState(() => ({ ...timeSince(group.updatedAt), updatedAt: group.updatedAt }));
+
   useEffect(() => {
+    // Only calculate and set initial time since if the updatedAt has changed
+    if (updatedAt !== group.updatedAt) {
+      setTimeSince({ ...timeSince(group.updatedAt), updatedAt: group.updatedAt });
+    }
+
     const interval = setInterval(() => {
-      const { count: newCount, key: newKey } = timeSince(group.updatedAt);
-      setKey(newKey);
-      setCount(newCount);
+      setTimeSince({ ...timeSince(group.updatedAt), updatedAt });
     }, 60 * 1000);
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, [group.updatedAt]);
+  }, [group.updatedAt, updatedAt]);
 
   return (
     <Card style={{ marginBottom: 10 }}>

@@ -7,23 +7,23 @@ export function timeSince(date: string) {
 
   let interval = seconds / 31536000;
 
-  if (interval > 1) {
+  if (interval >= 1) {
     return { count: Math.floor(interval), key: "years-ago" };
   }
   interval = seconds / 2592000;
-  if (interval > 1) {
+  if (interval >= 1) {
     return { count: Math.floor(interval), key: "months-ago" };
   }
   interval = seconds / 86400;
-  if (interval > 1) {
+  if (interval >= 1) {
     return { count: Math.floor(interval), key: "days-ago" };
   }
   interval = seconds / 3600;
-  if (interval > 1) {
+  if (interval >= 1) {
     return { count: Math.floor(interval), key: "hours-ago" };
   }
   interval = seconds / 60;
-  if (interval > 1) {
+  if (interval >= 1) {
     return { count: Math.floor(interval), key: "minutes-ago" };
   }
   return { count: undefined, key: "just-now" };
