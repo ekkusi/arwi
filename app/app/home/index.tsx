@@ -2,12 +2,9 @@ import React, { useEffect, useMemo, useRef } from "react";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
-import { FlatList, ScrollView } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Animated, {
   Easing,
-  FadeIn,
-  Layout,
   SlideInLeft,
   SlideOutRight,
   useAnimatedScrollHandler,
@@ -19,12 +16,11 @@ import { graphql } from "../../gql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
 import GroupListItem from "../../components/GroupListItem";
-import { GroupListItemFragment, MainPage_GetCurrentUserQuery } from "../../gql/graphql";
+import { MainPage_GetCurrentUserQuery } from "../../gql/graphql";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { HomeStackParams } from "./types";
 import CButton from "../../components/primitives/CButton";
 import { COLORS } from "../../theme";
-import CFlatList from "../../components/primitives/CFlatList";
 
 const MainPage_GetCurrentUser_Query = graphql(`
   query MainPage_GetCurrentUser {

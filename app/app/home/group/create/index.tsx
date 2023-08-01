@@ -10,12 +10,10 @@ import { nameValidator } from "../../../../helpers/textValidation";
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
-import { tabBarStyles } from "../../../config";
 import GroupCreationBody from "./_body";
 import TextFormField from "../../../../components/form/TextFormField";
 import SelectFormField from "../../../../components/form/SelectFormField";
 import ProgressBar from "../../../../components/ProgressBar";
-import { OptionType } from "../../../../components/form/Select";
 
 export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "name", "home-stack">) {
   const { t } = useTranslation();
