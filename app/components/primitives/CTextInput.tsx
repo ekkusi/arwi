@@ -27,7 +27,15 @@ export default forwardRef<TextInput, CTextInputProps>((props, ref) => {
       ...style,
     });
   }, [errorStyle, style, hasError, as, lightTheme]);
-  return <TextInput ref={ref} style={allStyles} placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray} {...rest} />;
+  return (
+    <TextInput
+      multiline={as === "textarea"}
+      ref={ref}
+      style={allStyles}
+      placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray}
+      {...rest}
+    />
+  );
 });
 
 const styles = createStyles({
@@ -48,6 +56,8 @@ const styles = createStyles({
     textAlignVertical: "top",
     paddingVertical: "sm",
     paddingHorizontal: "lg",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
   lightThemeStyle: {
     color: "white",

@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/types
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Keyboard, Platform, TextInput, useWindowDimensions } from "react-native";
+import { Keyboard, TextInput, useWindowDimensions } from "react-native";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
