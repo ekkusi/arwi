@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { Alert, BackHandler, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { Alert, BackHandler, Keyboard, TextInput, TouchableWithoutFeedback } from "react-native";
 import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { nameValidator } from "../../../../helpers/textValidation";
@@ -42,13 +42,24 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
 
   const classes = getClassYearInfos();
   const { group, setGroup } = useGroupCreationContext();
+
+  const inputRef = useRef<TextInput>(null);
+  useEffect(() => {
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      inputRef.current?.blur();
+    });
+    return () => {
+      keyboardDidHideListener.remove();
+    };
+  });
   return (
     <GroupCreationBody navigation={navigation}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
-        <TouchableWithoutFeedback style={{ height: "100%" }} onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback accessible={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
           <CView style={{ height: "100%" }}>
             <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
               <TextFormField
+                ref={inputRef}
                 title={t("group-name", "Ryhmän nimi")}
                 placeholder={t("GroupNameSelection.groupName", "Ryhmän nimi")}
                 value={group.name}

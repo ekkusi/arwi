@@ -1,8 +1,9 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, Keyboard, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import TextFormField from "../../../../components/form/TextFormField";
 import CButton from "../../../../components/primitives/CButton";
@@ -112,10 +113,20 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     setGroup({ ...group, students: [...group.students, ...nonemptyStudents] });
   };
 
+  const inputRef = useRef<TextInput>(null);
+  useEffect(() => {
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      inputRef.current?.blur();
+    });
+    return () => {
+      keyboardDidHideListener.remove();
+    };
+  });
+
   return (
     <GroupCreationBody navigation={navigation}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
-        <TouchableWithoutFeedback accessible={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback style={{ height: "100%" }} onPress={Keyboard.dismiss}>
           <CView style={{ height: "100%" }}>
             <CView style={{ flex: 8, padding: 15, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
               <CView style={{ flex: 1, gap: 20, width: "100%" }}>
@@ -134,6 +145,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
                   <CView style={{ height: 60, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                     <CView style={{ flex: 5 }}>
                       <TextFormField
+                        ref={inputRef}
                         placeholder={t("GroupStudentsSelectionView.newStudent", "Uusi oppilas")}
                         multiline
                         value={newStudent}
