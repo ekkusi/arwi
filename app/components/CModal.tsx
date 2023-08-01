@@ -17,7 +17,7 @@ import { CViewStyle } from "../theme/types";
 import CAnimatedView from "./primitives/CAnimatedView";
 import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
-import CView from "./primitives/CView";
+import CView, { CViewProps } from "./primitives/CView";
 
 export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   isOpen: boolean;
@@ -174,6 +174,14 @@ export default function CModal({
     );
   }, [children, closeButton, onClose, title]);
 
+  const innerViewProps: CViewProps = useMemo(
+    () => ({
+      style: innerViewStyles,
+      onStartShouldSetResponder: () => true, // Prevents the outer onPress close to trigger when pressing modal body
+    }),
+    [innerViewStyles]
+  );
+
   return (
     <Modal
       statusBarTranslucent={statusBarTranslucent}
@@ -186,20 +194,16 @@ export default function CModal({
         isOpen && (
           <TouchableWithoutFeedback onPress={onClose}>
             <CAnimatedView entering={FadeIn} exiting={FadeOut} style={outerViewStyles}>
-              <TouchableWithoutFeedback>
-                <CAnimatedView entering={enterAnimation} exiting={exitAnimationWithCallback} style={innerViewStyles}>
-                  {body}
-                </CAnimatedView>
-              </TouchableWithoutFeedback>
+              <CAnimatedView entering={enterAnimation} exiting={exitAnimationWithCallback} {...innerViewProps}>
+                {body}
+              </CAnimatedView>
             </CAnimatedView>
           </TouchableWithoutFeedback>
         )
       ) : (
         <TouchableWithoutFeedback onPress={onClose}>
           <CView style={outerViewStyles}>
-            <TouchableWithoutFeedback>
-              <CView style={innerViewStyles}>{body}</CView>
-            </TouchableWithoutFeedback>
+            <CView {...innerViewProps}>{body}</CView>
           </CView>
         </TouchableWithoutFeedback>
       )}

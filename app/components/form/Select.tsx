@@ -132,34 +132,35 @@ export default function Select(props: SelectProps) {
           renderItem={({ item, index }) => {
             const isSelected = selected.findIndex((s) => s.value === item.value) >= 0;
             return (
-              <CTouchableOpacity
-                key={item.value}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingVertical: "md",
-                  backgroundColor: "extra-light-gray",
-                  paddingHorizontal: "lg",
-                  borderRadius: 10,
-                  marginBottom: index === options.length - 1 ? "2xl" : "md",
-                }}
-                onPress={() => {
-                  onSelect(item);
-                }}
-              >
-                <CText
+              <CView key={item.value} onStartShouldSetResponder={() => true}>
+                <CTouchableOpacity
                   style={{
-                    flex: 1,
-                    fontWeight: "400",
-                    color: isSelected ? "primary" : "darkgray",
-                    width: "100%",
-                    marginRight: isSelected ? 10 : 30,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingVertical: "md",
+                    backgroundColor: "extra-light-gray",
+                    paddingHorizontal: "lg",
+                    borderRadius: 10,
+                    marginBottom: index === options.length - 1 ? "2xl" : "md",
+                  }}
+                  onPress={() => {
+                    onSelect(item);
                   }}
                 >
-                  {item.label}
-                </CText>
-                {isSelected && <MaterialCommunityIcon name="check" size={23} color={COLORS.primary} />}
-              </CTouchableOpacity>
+                  <CText
+                    style={{
+                      flex: 1,
+                      fontWeight: "400",
+                      color: isSelected ? "primary" : "darkgray",
+                      width: "100%",
+                      marginRight: isSelected ? 10 : 30,
+                    }}
+                  >
+                    {item.label}
+                  </CText>
+                  {isSelected && <MaterialCommunityIcon name="check" size={23} color={COLORS.primary} />}
+                </CTouchableOpacity>
+              </CView>
             );
           }}
           data={options}

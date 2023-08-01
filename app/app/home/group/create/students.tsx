@@ -37,6 +37,7 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
       alignItems: "center",
       height: 35,
     }}
+    onStartShouldSetResponder={() => true}
   >
     <CText style={{ fontSize: "md", fontWeight: "300", color: "darkgray" }}>{item}</CText>
     <TouchableOpacity
@@ -134,6 +135,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
                   <CText style={{ fontSize: "title", fontWeight: "300" }}>{t("students", "Oppilaat")}</CText>
                   <FlatList
                     inverted
+                    scrollEnabled
                     data={[...group.students].reverse()}
                     renderItem={({ item }: { item: string }) => renderStudentItem(item, removeStudent)}
                     keyExtractor={(_, index) => index.toString()}
