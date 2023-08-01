@@ -58,7 +58,7 @@ export default function CollectionView({ route: { params }, navigation }: Native
   const collection = data.getCollection;
 
   return (
-    <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
+    <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white", paddingHorizontal: "lg" }}>
       <ScrollView
         style={{ flex: 1, width: "100%" }}
         contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }}
