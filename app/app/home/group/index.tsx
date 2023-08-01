@@ -54,6 +54,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           date
           environment {
             label
+            code
             color
           }
           learningObjectives {
@@ -312,11 +313,13 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
         <Animated.FlatList
           onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: SPACING.md, paddingBottom: 100 }}
+          contentContainerStyle={{ paddingVertical: SPACING.md }}
           data={collections}
           renderItem={({ item }) => (
             <Card style={{ marginBottom: "md" }} key={item.id}>
-              <CTouchableOpacity onPress={() => navigation.navigate("collection", { ...item, environmentLabel: item.environment.label })}>
+              <CTouchableOpacity
+                onPress={() => navigation.navigate("collection", { id: item.id, date: item.date, environmentLabel: item.environment.label })}
+              >
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.environment.label}</CText>
                 <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                   <CView style={{ height: 12, width: 12, borderRadius: 6, backgroundColor: item.environment.color }} />

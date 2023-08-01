@@ -12,6 +12,7 @@ import CView, { CViewProps } from "./primitives/CView";
 type AccordionData = {
   title: string;
   date?: string;
+  isEvaluated?: boolean;
   color?: string;
   content: JSX.Element | string;
   icons?: React.ReactNode;
@@ -23,7 +24,18 @@ export type AccordionItemProps = CViewProps &
     onHeaderPress: () => void;
   };
 
-export function AccordionItem({ children, title, date, color, expanded, onHeaderPress, icons, ...rest }: AccordionItemProps): JSX.Element {
+export function AccordionItem({
+  children,
+  title,
+  date,
+  isEvaluated,
+  color,
+  expanded,
+  onHeaderPress,
+  icons,
+  ...rest
+}: AccordionItemProps): JSX.Element {
+  const { t } = useTranslation();
   return (
     <Card style={{ marginBottom: "xs" }} {...rest}>
       <CTouchableOpacity
@@ -42,6 +54,11 @@ export function AccordionItem({ children, title, date, color, expanded, onHeader
               <CView style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />
               <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>
             </CView>
+          )}
+          {isEvaluated !== undefined && (
+            <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>
+              {isEvaluated ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu")}
+            </CText>
           )}
         </CView>
         <CView style={{ flexDirection: "row", alignItems: "center" }}>
