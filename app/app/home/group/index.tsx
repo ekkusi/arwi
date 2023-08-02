@@ -6,7 +6,16 @@ import { useTranslation } from "react-i18next";
 import { Keyboard, TextInput, useWindowDimensions } from "react-native";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  Easing,
+  interpolateColor,
+  useAnimatedProps,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Card from "../../../components/Card";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
@@ -80,6 +89,7 @@ type NavigationProps = {
   navigation: NativeStackScreenProps<HomeStackParams, "group">["navigation"];
 };
 
+const AnimatedIcon = Animated.createAnimatedComponent(MaterialCommunityIcon);
 const SearchBar = memo(function SearchBar({
   searchText,
   setSearchText,
@@ -89,14 +99,26 @@ const SearchBar = memo(function SearchBar({
   setSearchText: (text: string) => void;
   onChangeSearchState: (open: boolean) => void;
 }) {
+  const { t } = useTranslation();
   const [searchOpen, setSearchOpen] = useState(false);
   const [width, setWidth] = useState(48);
   const inputRef = useRef<TextInput>(null);
 
+  const colorProgress = useDerivedValue(() => {
+    return withTiming(searchOpen ? 1 : 0, { duration: 300 });
+  });
+
+  const iconAnimatedProps = useAnimatedProps(() => {
+    const color = interpolateColor(colorProgress.value, [0, 1], [COLORS.white, COLORS.darkgray]);
+    return { color };
+  });
+
   const searchBarWidth = useSharedValue(48);
   const searchBarAnimatedStyle = useAnimatedStyle(() => {
+    const backgroundColor = interpolateColor(colorProgress.value, [0, 1], [COLORS.primary, COLORS.white]);
     return {
       width: withTiming(searchBarWidth.value, { duration: 300, easing: Easing.inOut(Easing.ease) }),
+      backgroundColor,
     };
   });
   useEffect(() => {
@@ -132,20 +154,19 @@ const SearchBar = memo(function SearchBar({
             <TextInput
               ref={inputRef}
               showSoftInputOnFocus
-              placeholder="Etsi nimellä..."
+              placeholder={t("find-by-name", "Etsi nimellä...")}
               onChange={(e) => setSearchText(e.nativeEvent.text)}
               onEndEditing={() => {
                 if (searchText.length <= 0) setSearchOpen(false);
               }}
               style={{
-                backgroundColor: "white",
                 height: 48,
                 width,
                 paddingLeft: 48,
               }}
             />
             <CView style={{ position: "absolute", left: 0, width: 48, height: 48, justifyContent: "center", alignItems: "center" }}>
-              <MaterialCommunityIcon name="magnify" size={25} color={COLORS.darkgray} />
+              <AnimatedIcon name="magnify" size={25} animatedProps={iconAnimatedProps} />
             </CView>
           </CView>
         </TouchableWithoutFeedback>
