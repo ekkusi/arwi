@@ -68,7 +68,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
   };
 
   return (
-    <CView style={{ flex: 1 }}>
+    <CView style={{ flex: 1, backgroundColor: "white" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
           <SelectFormField
