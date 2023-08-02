@@ -1,11 +1,10 @@
 import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import HomeView from ".";
 import CText from "../../components/primitives/CText";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
@@ -24,13 +23,31 @@ import GroupCreationStack from "./group/create/_stack";
 import LearningObjective from "./group/learningObjective";
 import StudentView from "./student";
 import { HomeStackParams } from "./types";
-import { CollectionPage_DeleteCollectionDocument } from "../../gql/graphql";
+import { graphql } from "../../gql";
+
+const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
+  mutation CollectionHeaderRightButton_DeleteCollection($id: ID!) {
+    deleteCollection(collectionId: $id) {
+      id
+      classYear {
+        id
+        evaluationCollections {
+          id
+        }
+        group {
+          id
+          name
+        }
+      }
+    }
+  }
+`);
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
 function CollectionHeaderRightButton({ id, navigation }: { id: string; navigation: NativeStackNavigationProp<HomeStackParams, "collection"> }) {
   const { t } = useTranslation();
-  const [deleteCollection] = useMutation(CollectionPage_DeleteCollectionDocument);
+  const [deleteCollection] = useMutation(CollectionHeaderRightButton_DeleteCollection_Mutation);
   return (
     <Menu>
       <MenuTrigger>
@@ -66,7 +83,12 @@ function CollectionHeaderRightButton({ id, navigation }: { id: string; navigatio
                   {
                     text: t("yes", "Kyllä"),
                     onPress: async () => {
-                      await deleteCollection({ variables: { id } });
+                      await deleteCollection({
+                        variables: { id },
+                        update: (cache, { data }) => {
+                          if (!data) throw new Error("Unexpected error: No data returned from mutation");
+                        },
+                      });
                       navigation.goBack();
                     },
                   },

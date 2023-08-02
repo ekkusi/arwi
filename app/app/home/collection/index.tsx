@@ -17,12 +17,12 @@ const CollectionPage_GetCollection_Query = graphql(`
     getCollection(id: $collectionId) {
       id
       date
+      description
       environment {
         label
         code
         color
       }
-      description
       classYear {
         group {
           name
@@ -38,12 +38,6 @@ const CollectionPage_GetCollection_Query = graphql(`
         ...EvaluationsAccordion_Evaluation
       }
     }
-  }
-`);
-
-const CollectionPage_DeleteCollection_Mutation = graphql(`
-  mutation CollectionPage_DeleteCollection($id: ID!) {
-    deleteCollection(collectionId: $id)
   }
 `);
 

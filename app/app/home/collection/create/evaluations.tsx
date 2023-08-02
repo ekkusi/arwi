@@ -1,8 +1,8 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Keyboard, KeyboardEventListener } from "react-native";
+import { KeyboardEventListener } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
@@ -23,6 +23,18 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
     createCollection(data: $createCollectionInput, classYearId: $classYearId) {
       id
       date
+      description
+      learningObjectives {
+        code
+        label
+        description
+        type
+      }
+      environment {
+        label
+        code
+        color
+      }
       evaluations {
         id
         wasPresent
@@ -32,10 +44,16 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
         isStellar
         student {
           id
+          currentClassEvaluations {
+            id
+          }
         }
       }
       classYear {
         id
+        evaluationCollections {
+          id
+        }
         group {
           id
           updatedAt
@@ -99,37 +117,6 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
               studentId: it.student.id,
             })),
           },
-        },
-        update: (cache, { data }) => {
-          if (!data) throw new Error("Unexpected error");
-          const { createCollection: newCollection } = data;
-          cache.modify({
-            id: cache.identify(newCollection.classYear),
-            fields: {
-              evaluationCollections(existingCollections, { readField, toReference }) {
-                const newCollectionRef = toReference(newCollection);
-                if (existingCollections.some((ref: any) => readField("id", ref) === newCollection.id)) {
-                  return existingCollections;
-                }
-                return [...existingCollections, newCollectionRef];
-              },
-            },
-          });
-          const newEvaluations = newCollection.evaluations;
-          newEvaluations.forEach((it) => {
-            cache.modify({
-              id: cache.identify(it.student),
-              fields: {
-                currentClassEvaluations(existingEvaluations, { readField, toReference }) {
-                  const newEvaluationRef = toReference(it);
-                  if (existingEvaluations.some((ref: any) => readField("id", ref) === it.id)) {
-                    return existingEvaluations;
-                  }
-                  return [...existingEvaluations, newEvaluationRef];
-                },
-              },
-            });
-          });
         },
       });
       navigation.getParent()?.navigate("index");

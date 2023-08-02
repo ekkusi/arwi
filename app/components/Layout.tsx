@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import CKeyboardAvoidingView, { CKeyboardAvoidingViewProps } from "./primitives/CKeyboardAvoidingView";
 
 export type LayoutProps = CKeyboardAvoidingViewProps;

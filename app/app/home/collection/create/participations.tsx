@@ -5,7 +5,6 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
-import ProgressBar from "../../../../components/ProgressBar";
 import StudentParticipationList from "../../../../components/StudentParticipationList";
 import { graphql } from "../../../../gql";
 import { COLORS } from "../../../../theme";

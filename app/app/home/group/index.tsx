@@ -82,7 +82,9 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
 
 const GroupOverviewPage_DeleteGroup_Mutation = graphql(`
   mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {
-    deleteGroup(groupId: $groupId)
+    deleteGroup(groupId: $groupId) {
+      id
+    }
   }
 `);
 

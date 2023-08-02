@@ -40,9 +40,10 @@ export default function StudentParticipationList<T extends StudentParticipation>
   return (
     <CFlatList
       style={{ flex: 1 }}
+      contentContainerStyle={{ paddingBottom: 20 }}
       data={participations}
       renderItem={({ item }) => (
-        <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+        <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: "xs" }}>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>{item.student.name}</CText>
           <CView style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", paddingRight: 20 }}>
             <Switch
@@ -51,7 +52,7 @@ export default function StudentParticipationList<T extends StudentParticipation>
               ios_backgroundColor={COLORS.lightgray}
               onValueChange={(value) => onToggle(item, value)}
               value={item.wasPresent}
-              style={{ transform: [{ scale: 1.4 }] }}
+              style={{ transform: [{ scale: Platform.OS === "ios" ? 1 : 1.4 }] }}
             />
           </CView>
         </CView>
