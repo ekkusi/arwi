@@ -71,7 +71,7 @@ export default function CollectionView({ route: { params }, navigation }: Native
           <CText style={{ fontSize: "md", fontWeight: "300" }}>
             {t("evaluation-count", "{{count}} arviointia", { count: collection.evaluations.length })}
           </CText>
-          <CText style={{ fontSize: "md", fontWeight: "500" }}>{t("learning-objectives", "Oppimistavoitteet:")}</CText>
+          <CText style={{ paddingTop: "md", fontSize: "md", fontWeight: "500" }}>{t("learning-objectives", "Oppimistavoitteet:")}</CText>
           {collection.learningObjectives.map((obj) => {
             return (
               <CText key={obj.code}>
@@ -85,7 +85,7 @@ export default function CollectionView({ route: { params }, navigation }: Native
           <SingleEvaluationHistogram evaluations={collection.evaluations} />
         </CView>
         <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("students", "Oppilaat")}</CText>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
           <EvaluationsAccordion evaluations={collection.evaluations} titleFrom="student" />
         </CView>
       </ScrollView>

@@ -1,10 +1,11 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useMutation, useQuery } from "@apollo/client";
 import HomeView from ".";
 import CText from "../../components/primitives/CText";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
@@ -23,8 +24,63 @@ import GroupCreationStack from "./group/create/_stack";
 import LearningObjective from "./group/learningObjective";
 import StudentView from "./student";
 import { HomeStackParams } from "./types";
+import { CollectionPage_DeleteCollectionDocument } from "../../gql/graphql";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
+
+function CollectionHeaderRightButton({ id, navigation }: { id: string; navigation: NativeStackNavigationProp<HomeStackParams, "collection"> }) {
+  const { t } = useTranslation();
+  const [deleteCollection] = useMutation(CollectionPage_DeleteCollectionDocument);
+  return (
+    <Menu>
+      <MenuTrigger>
+        <MaterialCommunityIcon name="dots-vertical" size={25} color="white" />
+      </MenuTrigger>
+      <MenuOptions>
+        <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
+          <MenuOption
+            onSelect={() => {
+              Alert.alert("Muokkaa yleistietoja");
+            }}
+          >
+            <CText>{t("edit-general-details", "Muokkaa yleistietoja")}</CText>
+          </MenuOption>
+          <MenuOption
+            onSelect={() => {
+              Alert.alert("Muokkaa arviointeja");
+            }}
+          >
+            <CText>{t("edit-evaluations", "Muokkaa arviointeja")}</CText>
+          </MenuOption>
+          <MenuOption
+            onSelect={() => {
+              Alert.alert(
+                t("delete-evaluation-confirmation-title", "Oletko varma?"),
+                t("delete-evaluation-confirmation-info", "Jos poistat arvioinnin, menetät kaikki arviointiin liittyvät tietot :("),
+                [
+                  {
+                    text: t("no", "Ei"),
+                    onPress: () => null,
+                    style: "cancel",
+                  },
+                  {
+                    text: t("yes", "Kyllä"),
+                    onPress: async () => {
+                      await deleteCollection({ variables: { id } });
+                      navigation.goBack();
+                    },
+                  },
+                ]
+              );
+            }}
+          >
+            <CText>{t("delete-evaluation", "Poista arviointi")}</CText>
+          </MenuOption>
+        </CView>
+      </MenuOptions>
+    </Menu>
+  );
+}
 
 export default function HomeStack() {
   const { t } = useTranslation();
@@ -118,7 +174,10 @@ export default function HomeStack() {
       <HomeStackNavigator.Screen
         name="collection"
         component={CollectionView}
-        options={({ route }) => ({ title: `${formatDate(route.params.date)}: ${route.params.environmentLabel}` })}
+        options={({ route, navigation }) => ({
+          title: `${formatDate(route.params.date)}: ${route.params.environmentLabel}`,
+          headerRight: () => <CollectionHeaderRightButton id={route.params.id} navigation={navigation} />,
+        })}
       />
       <HomeStackNavigator.Screen
         name="group-create"
