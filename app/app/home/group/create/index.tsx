@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { Alert, BackHandler, Keyboard, TextInput, TouchableWithoutFeedback } from "react-native";
+import { Alert, BackHandler, Keyboard, KeyboardAvoidingView, TextInput, TouchableWithoutFeedback } from "react-native";
 import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { nameValidator } from "../../../../helpers/textValidation";
@@ -14,9 +14,21 @@ import GroupCreationBody from "./_body";
 import TextFormField from "../../../../components/form/TextFormField";
 import SelectFormField from "../../../../components/form/SelectFormField";
 import ProgressBar from "../../../../components/ProgressBar";
+import { useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
 
 export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "name", "home-stack">) {
   const { t } = useTranslation();
+
+  const classes = getClassYearInfos();
+  const { group, setGroup } = useGroupCreationContext();
+
+  const inputRef = useRef<TextInput>(null);
+
+  const blurInput = useCallback(() => {
+    inputRef.current?.blur();
+  }, []);
+
+  useKeyboardListener({ onHide: blurInput });
 
   useEffect(() => {
     const backAction = () => {
@@ -38,18 +50,6 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
     };
   }, [navigation, t]);
 
-  const classes = getClassYearInfos();
-  const { group, setGroup } = useGroupCreationContext();
-
-  const inputRef = useRef<TextInput>(null);
-  useEffect(() => {
-    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
-      inputRef.current?.blur();
-    });
-    return () => {
-      keyboardDidHideListener.remove();
-    };
-  });
   return (
     <GroupCreationBody navigation={navigation}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>

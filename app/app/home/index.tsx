@@ -21,6 +21,7 @@ import LoadingIndicator from "../../components/LoadingIndicator";
 import { HomeStackParams } from "./types";
 import CButton from "../../components/primitives/CButton";
 import { COLORS } from "../../theme";
+import Layout from "../../components/Layout";
 
 const MainPage_GetCurrentUser_Query = graphql(`
   query MainPage_GetCurrentUser {
@@ -97,7 +98,7 @@ function HomePageContent({
   }, [teacher.groups]);
 
   return (
-    <CView style={{ flex: 1, paddingHorizontal: "sm" }}>
+    <Layout style={{ paddingHorizontal: "sm" }}>
       {teacher.groups.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
@@ -129,7 +130,7 @@ function HomePageContent({
           leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
         />
       </Animated.View>
-    </CView>
+    </Layout>
   );
 }
 export default function HomePage({ navigation }: NativeStackScreenProps<HomeStackParams, "index">) {

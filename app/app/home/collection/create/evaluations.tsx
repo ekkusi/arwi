@@ -12,6 +12,7 @@ import UpdateEvaluationCard from "../../../../components/UpdateEvaluationCard";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
+import { useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
 import { COLORS } from "../../../../theme";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import { CollectionCreationStackParams } from "./types";
@@ -74,15 +75,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     offsetButtons.value = 0;
   }, [offsetButtons]);
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", keyboardShows);
-    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", keyboardHides);
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, [keyboardShows, keyboardHides]);
+  useKeyboardListener({ onHide: keyboardHides, onShow: keyboardShows });
 
   const handleSubmit = async () => {
     setSubmitting(true);

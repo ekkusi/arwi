@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Keyboard, TextInput, useWindowDimensions } from "react-native";
 import { TabView, SceneRendererProps, Route, NavigationState } from "react-native-tab-view";
@@ -25,6 +25,7 @@ import { CColor } from "../../../theme/types";
 import { HomeStackParams } from "../types";
 import CollectionStatistics from "../../../components/charts/CollectionStatistics";
 import CButton from "../../../components/primitives/CButton";
+import { useKeyboardListener } from "../../../hooks-and-providers/keyboardHooks";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -92,6 +93,18 @@ const SearchBar = memo(function SearchBar({
   const [width, setWidth] = useState(48);
   const inputRef = useRef<TextInput>(null);
 
+  const onHideKeyboard = useCallback(() => {
+    if (searchText.length <= 0) {
+      setSearchOpen(false);
+      onChangeSearchState(false);
+    }
+    inputRef.current?.blur();
+  }, [onChangeSearchState, searchText.length]);
+
+  useKeyboardListener({
+    onHide: onHideKeyboard,
+  });
+
   const searchBarWidth = useSharedValue(48);
   const searchBarAnimatedStyle = useAnimatedStyle(() => {
     return {
@@ -104,18 +117,6 @@ const SearchBar = memo(function SearchBar({
     }
   }, [searchOpen, searchBarWidth, width]);
 
-  useEffect(() => {
-    const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
-      if (searchText.length <= 0) {
-        setSearchOpen(false);
-        onChangeSearchState(false);
-      }
-      inputRef.current?.blur();
-    });
-    return () => {
-      keyboardHideListener.remove();
-    };
-  });
   return (
     <CView style={{ width: "100%", alignItems: "flex-end" }} onLayout={(ev) => setWidth(ev.nativeEvent.layout.width)} pointerEvents="box-none">
       <Animated.View style={[{ height: 48, borderRadius: 24, borderWidth: 1, borderColor: COLORS.gray, overflow: "hidden" }, searchBarAnimatedStyle]}>

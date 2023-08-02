@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, Keyboard, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -13,6 +13,7 @@ import ProgressBar from "../../../../components/ProgressBar";
 import { graphql } from "../../../../gql";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { useAuthenticatedUser } from "../../../../hooks-and-providers/AuthProvider";
+import { useIsKeyboardVisible, useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
@@ -54,27 +55,20 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
   const { t } = useTranslation();
   const [newStudent, setNewStudent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const inputRef = useRef<TextInput>(null);
   const user = useAuthenticatedUser();
 
   const [createGroup] = useMutation(CreateGroupPage_CreateGroup_Mutation);
 
   const { group, setGroup } = useGroupCreationContext();
 
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const isKeyboardVisible = useIsKeyboardVisible();
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardVisible(true); // or some other action
-    });
-    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardVisible(false); // or some other action
-    });
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
+  const onShowKeyboard = useCallback(() => {
+    inputRef.current?.focus();
   }, []);
+
+  useKeyboardListener({ onShow: onShowKeyboard });
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -113,16 +107,6 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     const nonemptyStudents = students.filter((name) => name.length > 0);
     setGroup({ ...group, students: [...group.students, ...nonemptyStudents] });
   };
-
-  const inputRef = useRef<TextInput>(null);
-  useEffect(() => {
-    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
-      inputRef.current?.blur();
-    });
-    return () => {
-      keyboardDidHideListener.remove();
-    };
-  });
 
   return (
     <GroupCreationBody navigation={navigation}>

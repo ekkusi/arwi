@@ -4,7 +4,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useTranslation } from "react-i18next";
-import { ScrollView } from "react-native";
+import { Platform, ScrollView } from "react-native";
 import { CollectionCreationStackParams } from "./types";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import CollectionCreationLayout from "./_layout";
@@ -19,6 +19,8 @@ import CTextInput from "../../../../components/primitives/CTextInput";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import TextFormField from "../../../../components/form/TextFormField";
 import MultiSelectFormField from "../../../../components/form/MultiSelectFormField";
+import CModal from "../../../../components/CModal";
+import CDateTimePicker from "../../../../components/form/CDateTimePicker";
 
 const CollectionGeneralInfoView_Group_Fragment = graphql(`
   fragment CollectionGeneralInfoView_Group on Group {
@@ -92,20 +94,16 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
               </CView>
             </CTouchableOpacity>
           </FormField>
-          {isDateOpen && (
-            <DateTimePicker
-              textColor={COLORS.secondary}
-              accentColor={COLORS.primary}
-              value={date}
-              onChange={(_, newDate) => {
-                setIsDateOpen(false);
-                if (newDate) setDate(newDate);
-              }}
-            />
-          )}
+          <CDateTimePicker
+            value={date}
+            isOpen={isDateOpen}
+            onClose={() => setIsDateOpen(false)}
+            onChange={(_, newDate) => newDate && setDate(newDate)}
+          />
+          {/* )} */}
           <TextFormField
-            title={t("more-info", "Lisätietoa")}
             as="textarea"
+            title={t("more-info", "Lisätietoa")}
             placeholder={`${t("more-info")}...`}
             onChange={(text) => setDescription(text)}
             style={{ paddingBottom: 20 }}
@@ -127,7 +125,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
 
 export default function CollectionGeneralInfoView(props: NativeStackScreenProps<CollectionCreationStackParams, "index">) {
   return (
-    <CollectionCreationLayout>
+    <CollectionCreationLayout keyboardVerticalOffset={100}>
       <CollectionGeneralInfoContent {...props} />
     </CollectionCreationLayout>
   );
