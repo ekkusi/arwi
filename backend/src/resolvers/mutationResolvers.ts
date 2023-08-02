@@ -218,24 +218,24 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   deleteStudent: async (_, { studentId }, { prisma, user }) => {
     await checkAuthenticatedByStudent(user, studentId);
-    await prisma.student.delete({
+    const student = await prisma.student.delete({
       where: { id: studentId },
     });
-    return true;
+    return student;
   },
   deleteGroup: async (_, { groupId }, { prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
-    await prisma.group.delete({
+    const group = await prisma.group.delete({
       where: { id: groupId },
     });
-    return true;
+    return group;
   },
   deleteCollection: async (_, { collectionId }, { prisma, user }) => {
     await checkAuthenticatedByCollection(user, collectionId);
-    await prisma.evaluationCollection.delete({
+    const collection = await prisma.evaluationCollection.delete({
       where: { id: collectionId },
     });
-    return true;
+    return collection;
   },
   changeGroupYear: async (_, { groupId, newYearCode, transferEvaluations }, { prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);

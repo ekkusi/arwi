@@ -24,6 +24,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: string;
+  DateTime: any;
   EmailAddress: string;
 };
 
@@ -78,9 +79,9 @@ export type Mutation = {
   updateGroup: Group;
   changeGroupYear: Group;
   updateEvaluation: Evaluation;
-  deleteStudent: Scalars["Boolean"];
-  deleteGroup: Scalars["Boolean"];
-  deleteCollection: Scalars["Boolean"];
+  deleteStudent: Student;
+  deleteGroup: Group;
+  deleteCollection: EvaluationCollection;
 };
 
 export type MutationRegisterArgs = {
@@ -202,7 +203,7 @@ export type Group = {
   students: Array<Student>;
   subject: Subject;
   teacher: Teacher;
-  updatedAt: Scalars["Date"];
+  updatedAt: Scalars["DateTime"];
   currentClassYear: ClassYear;
   classYears: Array<ClassYear>;
 };
@@ -255,8 +256,6 @@ export type Student = {
 };
 
 export enum Rating {
-  FAILED = "FAILED",
-  PASSABLE = "PASSABLE",
   POOR = "POOR",
   FAIR = "FAIR",
   GOOD = "GOOD",
@@ -413,6 +412,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars["Date"]>;
+  DateTime: ResolverTypeWrapper<Scalars["DateTime"]>;
   EmailAddress: ResolverTypeWrapper<Scalars["EmailAddress"]>;
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
@@ -449,6 +449,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Date: Scalars["Date"];
+  DateTime: Scalars["DateTime"];
   EmailAddress: Scalars["EmailAddress"];
   Query: {};
   ID: Scalars["ID"];
@@ -481,6 +482,10 @@ export type ResolversParentTypes = {
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
   name: "Date";
+}
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["DateTime"], any> {
+  name: "DateTime";
 }
 
 export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["EmailAddress"], any> {
@@ -522,9 +527,14 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   updateGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, "data" | "groupId">>;
   changeGroupYear?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">>;
   updateEvaluation?: Resolver<ResolversTypes["Evaluation"], ParentType, ContextType, RequireFields<MutationUpdateEvaluationArgs, "data">>;
-  deleteStudent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, "studentId">>;
-  deleteGroup?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, "groupId">>;
-  deleteCollection?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationDeleteCollectionArgs, "collectionId">>;
+  deleteStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, "studentId">>;
+  deleteGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, "groupId">>;
+  deleteCollection?: Resolver<
+    ResolversTypes["EvaluationCollection"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteCollectionArgs, "collectionId">
+  >;
 };
 
 export type AuthPayloadResolvers<
@@ -586,7 +596,7 @@ export type GroupResolvers<ContextType = CustomContext, ParentType extends Resol
   students?: Resolver<Array<ResolversTypes["Student"]>, ParentType, ContextType>;
   subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
   teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   currentClassYear?: Resolver<ResolversTypes["ClassYear"], ParentType, ContextType>;
   classYears?: Resolver<Array<ResolversTypes["ClassYear"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -653,6 +663,7 @@ export type StudentResolvers<ContextType = CustomContext, ParentType extends Res
 
 export type Resolvers<ContextType = CustomContext> = {
   Date?: GraphQLScalarType;
+  DateTime?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
