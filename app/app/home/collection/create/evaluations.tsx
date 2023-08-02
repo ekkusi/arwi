@@ -140,7 +140,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     setSubmitting(false);
   };
   return (
-    <CView style={{ flex: 1, padding: "md" }}>
+    <CView style={{ flex: 1, padding: "md", backgroundColor: "white" }}>
       <CFlatList
         data={evaluations}
         renderItem={({ item, index }) => (

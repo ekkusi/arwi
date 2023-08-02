@@ -27,34 +27,36 @@ function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<
   const { t } = useTranslation();
 
   return (
-    <CView style={{ padding: "sm", justifyContent: "space-between", flex: 1 }}>
-      <CView style={{ gap: "xl", paddingTop: "xl" }}>
+    <CView style={{ padding: "md", justifyContent: "space-between", flex: 1, backgroundColor: "white" }}>
+      <CView style={{ flexGrow: 1, gap: "lg" }}>
         <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("CollectionParticipationsView.participations", "Paikallaolot")}</CText>
-        <StudentParticipationList
-          initialParticipations={evaluations}
-          onChange={(participations) => {
-            setEvaluations(participations);
-          }}
-        />
-      </CView>
-      <CView style={{ justifyContent: "flex-end" }}>
-        <CView
-          style={{
-            flexGrow: 1,
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            padding: "lg",
-          }}
-        >
-          <CButton onPress={() => navigation.goBack()}>
-            <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-          </CButton>
-          <CButton onPress={() => navigation.navigate("evaluations")}>
-            <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
-          </CButton>
+        <CView style={{ flexGrow: 1 }}>
+          <StudentParticipationList
+            initialParticipations={evaluations}
+            onChange={(participations) => {
+              setEvaluations(participations);
+            }}
+          />
         </CView>
+      </CView>
+      <CView
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: "md",
+          right: "md",
+          padding: "lg",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+        }}
+      >
+        <CButton onPress={() => navigation.goBack()}>
+          <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+        </CButton>
+        <CButton onPress={() => navigation.navigate("evaluations")}>
+          <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
+        </CButton>
       </CView>
     </CView>
   );

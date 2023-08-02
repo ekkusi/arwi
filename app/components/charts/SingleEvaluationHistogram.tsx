@@ -5,7 +5,11 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
-import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
+import {
+  EvaluationsAccordion_EvaluationFragment,
+  EvaluationsAccordion_EvaluationFragmentDoc,
+  EvaluationsBarChart_EvaluationFragment,
+} from "../../gql/graphql";
 import { formatRatingNumber, getColorForGrade } from "../../helpers/dataMappers";
 import { hexToRgbA } from "../../helpers/color";
 import CView, { CViewProps } from "../primitives/CView";
@@ -33,60 +37,41 @@ const EvaluationsBarChart_Evaluation_Fragment = graphql(`
 type TempDataType = {
   skillCount: number;
   behaviourCount: number;
-  environment: string;
 };
-type TempDataHash = { [grade: number]: { [environment: string]: TempDataType } };
+type TempDataHash = { [grade: number]: TempDataType };
 
-const INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD = 0;
-
-const mapDataToTempData = (evaluations: EvaluationsBarChart_EvaluationFragment[], environments: string[]) => {
+const mapToTempData = (evaluations: EvaluationsAccordion_EvaluationFragment[]) => {
   const tempData: TempDataHash = {};
   [4, 5, 6, 7, 8, 9, 10].forEach((grade, idx) => {
-    tempData[grade] = {};
-    environments.forEach((env) => {
-      tempData[grade][env] = {
-        skillCount: 0,
-        behaviourCount: 0,
-        environment: env,
-      };
-    });
+    tempData[grade] = {
+      skillCount: 0,
+      behaviourCount: 0,
+    };
   });
   evaluations.forEach((evaluation) => {
     if (evaluation.behaviourRating) {
       const behaviourNumber = formatRatingNumber(evaluation.behaviourRating);
-      tempData[behaviourNumber][evaluation.collection.environment.label].behaviourCount += 1;
+      tempData[behaviourNumber].behaviourCount += 1;
     }
     if (evaluation.skillsRating) {
       const skillNumber = formatRatingNumber(evaluation.skillsRating);
-      tempData[skillNumber][evaluation.collection.environment.label].skillCount += 1;
+      tempData[skillNumber].skillCount += 1;
     }
   });
   return tempData;
 };
 
-const filterTempDataToChartData = (data: TempDataHash, typeFilter: string, environmentFilter: string) => {
+const filterTempDataToChartData = (data: TempDataHash, typeFilter: string) => {
   const filteredData: StyledBarChartDataType[] = [];
   Object.keys(data).forEach((key) => {
     const grade = parseInt(key, 10);
     const gradeObj = data[grade];
     let count = 0;
-    if (environmentFilter !== "all") {
-      const envObj = gradeObj[environmentFilter];
-      if (["all", "skills"].includes(typeFilter)) {
-        count += envObj.skillCount;
-      }
-      if (["all", "behaviour"].includes(typeFilter)) {
-        count += envObj.behaviourCount;
-      }
-    } else {
-      Object.values(gradeObj).forEach((envObj) => {
-        if (["all", "skills"].includes(typeFilter)) {
-          count += envObj.skillCount;
-        }
-        if (["all", "behaviour"].includes(typeFilter)) {
-          count += envObj.behaviourCount;
-        }
-      });
+    if (["all", "skills"].includes(typeFilter)) {
+      count += gradeObj.skillCount;
+    }
+    if (["all", "behaviour"].includes(typeFilter)) {
+      count += gradeObj.behaviourCount;
     }
     filteredData.push({ x: key, y: count, color: getColorForGrade(grade) });
   });
@@ -94,22 +79,16 @@ const filterTempDataToChartData = (data: TempDataHash, typeFilter: string, envir
 };
 
 type EvaluationsHistogramProps = CViewProps & {
-  evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
-  subjectCode: string;
+  evaluations: ({ id: string } & FragmentType<typeof EvaluationsAccordion_EvaluationFragmentDoc>)[];
 };
 
-export default function EvaluationsHistogram({ evaluations: evaluationFragments, subjectCode, ...rest }: EvaluationsHistogramProps) {
+export default function SingleEvaluationHistogram({ evaluations: evaluationFragments, ...rest }: EvaluationsHistogramProps) {
   const [typeFilter, setTypeFilter] = useState("all");
-  const [environmentFilter, setEnvironmentFilter] = useState("all");
-
-  const environments = getEnvironments(subjectCode);
-  const environmentLabels = environments.map((env) => env.label);
-
-  const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
+  const evaluations = getFragmentData(EvaluationsAccordion_EvaluationFragmentDoc, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
 
-  const data = useMemo(() => mapDataToTempData(filteredEvaluations, environmentLabels), [filteredEvaluations, environmentLabels]);
-  const filteredData = useMemo(() => filterTempDataToChartData(data, typeFilter, environmentFilter), [data, typeFilter, environmentFilter]);
+  const data = useMemo(() => mapToTempData(filteredEvaluations), [filteredEvaluations]);
+  const filteredData = useMemo(() => filterTempDataToChartData(data, typeFilter), [data, typeFilter]);
 
   return (
     <CView style={{ width: "100%" }}>
@@ -126,42 +105,13 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
                 style={{ width: "auto" }}
                 leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
                 rightIcon={
-                  typeFilter !== "all" || environmentFilter !== "all" ? (
-                    <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} />
-                  ) : undefined
+                  typeFilter !== "all" ? <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} /> : undefined
                 }
                 disableTouchEvent
               />
             </MenuTrigger>
             <MenuOptions>
               <CView style={{ padding: "md", gap: 20 }}>
-                <CView style={{ gap: 10 }}>
-                  <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("environment", "Ympäristöt")}</CText>
-                  <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%", padding: "md" }}>
-                    <CButton
-                      key="all"
-                      title={t("all", "Kaikki")}
-                      variant="outline"
-                      colorScheme={environmentFilter !== "all" ? "lightgray" : "darkgray"}
-                      style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
-                      onPress={() => setEnvironmentFilter("all")}
-                      textStyle={{ fontSize: "xs", fontWeight: "400", color: environmentFilter !== "all" ? "gray" : "darkgray" }}
-                      leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: "black" }} />}
-                    />
-                    {environments.map((item) => (
-                      <CButton
-                        key={item.code}
-                        title={item.label}
-                        variant="outline"
-                        colorScheme={item.label === environmentFilter ? "darkgray" : "lightgray"}
-                        style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
-                        onPress={() => setEnvironmentFilter(item.label)}
-                        textStyle={{ fontSize: "xs", fontWeight: "400", color: item.label === environmentFilter ? "darkgray" : "gray" }}
-                        leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: item.color }} />}
-                      />
-                    ))}
-                  </CView>
-                </CView>
                 <CView style={{ gap: 10 }}>
                   <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("skills-and-behaviour", "Taidot ja työskentely")}</CText>
                   <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%", padding: "md" }}>

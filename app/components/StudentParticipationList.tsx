@@ -27,8 +27,6 @@ export default function StudentParticipationList<T extends StudentParticipation>
 }: StudentParticipationListProps<T>) {
   const [participations, setParticipations] = useState<T[]>(() => initialParticipations);
 
-  const { t } = useTranslation();
-
   const onToggle = (participation: T, value: boolean) => {
     // Copy old array -> update matching participation -> set copy as new state
     const participationsCopy = [...participations];
@@ -41,23 +39,22 @@ export default function StudentParticipationList<T extends StudentParticipation>
 
   return (
     <CFlatList
+      style={{ flex: 1 }}
       data={participations}
       renderItem={({ item }) => (
-        <Card key={item.student.id} style={{ marginBottom: "md" }}>
-          <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>{item.student.name}</CText>
-            <CView style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", paddingRight: 20 }}>
-              <Switch
-                trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
-                thumbColor={COLORS.white}
-                ios_backgroundColor={COLORS.lightgray}
-                onValueChange={(value) => onToggle(item, value)}
-                value={item.wasPresent}
-                style={{ transform: [{ scale: 1.4 }] }}
-              />
-            </CView>
+        <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+          <CText style={{ fontSize: "md", fontWeight: "300" }}>{item.student.name}</CText>
+          <CView style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", paddingRight: 20 }}>
+            <Switch
+              trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
+              thumbColor={COLORS.white}
+              ios_backgroundColor={COLORS.lightgray}
+              onValueChange={(value) => onToggle(item, value)}
+              value={item.wasPresent}
+              style={{ transform: [{ scale: 1.4 }] }}
+            />
           </CView>
-        </Card>
+        </CView>
       )}
       {...rest}
     />
