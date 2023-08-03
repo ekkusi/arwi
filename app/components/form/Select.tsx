@@ -30,6 +30,7 @@ export type SelectProps<IsMulti = boolean> = {
   placeholder?: string;
   closeAfterSelect?: boolean;
   title?: string;
+  defaultValues?: string[];
 } & DynamicSelectProps<IsMulti>;
 
 export default function Select(props: SelectProps) {
@@ -41,9 +42,12 @@ export default function Select(props: SelectProps) {
     isMulti,
     closeAfterSelect = !isMulti,
     title,
+    defaultValues,
     placeholder = t("select-default-placeholder", "Valitse"),
   } = props;
-  const [selected, setSelected] = useState<OptionType[]>([]);
+
+  const selectedDefaults = defaultValues ? options.filter((obj) => defaultValues.includes(obj.value)) : [];
+  const [selected, setSelected] = useState<OptionType[]>(selectedDefaults);
   const [selectModalOpen, setSelectModalOpen] = useState(false);
 
   const onSelect = (value: OptionType) => {

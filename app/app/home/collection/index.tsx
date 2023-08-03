@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import SingleEvaluationHistogram from "../../../components/charts/SingleEvaluationHistogram";

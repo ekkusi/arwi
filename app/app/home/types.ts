@@ -14,6 +14,9 @@ export type HomeStackParams = {
     date: string;
     environmentLabel: string;
   };
+  "collection-edit": {
+    collectionId: string;
+  };
   "collection-create": {
     groupId: string;
   };
