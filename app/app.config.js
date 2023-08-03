@@ -4,10 +4,10 @@ module.exports = {
   owner: "arwi",
   version: "1.0.0",
   orientation: "portrait",
-  icon: "./assets/logo-new.jpg",
+  icon: "./assets/logo-new.png",
   userInterfaceStyle: "light",
   splash: {
-    image: "./assets/logo-new.jpg",
+    image: "./assets/logo-new.png",
     resizeMode: "contain",
     backgroundColor: "#65AF53",
   },
@@ -24,12 +24,12 @@ module.exports = {
     package: "net.arwi.twa",
     versionCode: 2,
     adaptiveIcon: {
-      foregroundImage: "./assets/logo-new.jpg",
+      foregroundImage: "./assets/logo-new.png",
       backgroundColor: "#FEFCFB",
     },
   },
   web: {
-    favicon: "./assets/logo-new.jpg",
+    favicon: "./assets/logo-new.png",
   },
   scheme: "arwi-app",
   extra: {
