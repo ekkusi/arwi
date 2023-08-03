@@ -21,6 +21,7 @@ import TextFormField from "../../../../components/form/TextFormField";
 import MultiSelectFormField from "../../../../components/form/MultiSelectFormField";
 import CModal from "../../../../components/CModal";
 import CDateTimePicker from "../../../../components/form/CDateTimePicker";
+import CollectionGeneralInfoForm from "../_general_info_form";
 
 const CollectionGeneralInfoView_Group_Fragment = graphql(`
   fragment CollectionGeneralInfoView_Group on Group {
@@ -42,84 +43,26 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
 
   const { t } = useTranslation();
 
-  const [selectedEnvironmentCode, setSelectedEnvironmentCode] = useState<string>();
-  const [selectedLearningObjectiveCode, setSelectedLearningObjectivesCode] = useState<string[]>([]);
-  const [date, setDate] = useState(new Date());
-  const [isDateOpen, setIsDateOpen] = useState(false);
-  const [description, setDescription] = useState("");
-
-  const [environmentError, setEnvironmentError] = useState<string>();
-
   const subjectCode = group.subject.code;
   const classYearCode = group.currentClassYear.info.code;
-  const learningObjectives = getLearningObjectives(subjectCode, classYearCode);
-  const environments = getEnvironments(subjectCode);
 
-  const handleSubmit = () => {
-    if (!selectedEnvironmentCode) {
-      setEnvironmentError(t("environment-is-obligatory", "Ympäristö on pakollinen"));
-      return;
-    }
+  const handleSubmit = (date: Date, environmentCode: string, learningObjectiveCodes: string[], description: string) => {
     setGeneralData({
       date,
       description,
-      environmentCode: selectedEnvironmentCode,
-      learningObjectiveCodes: selectedLearningObjectiveCode,
+      environmentCode,
+      learningObjectiveCodes,
     });
     navigation.navigate("participations");
   };
 
   return (
-    <CView style={{ flex: 1, backgroundColor: "white" }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
-          <SelectFormField
-            title={t("environment", "Ympäristö")}
-            error={environmentError}
-            onSelect={(item) => {
-              setSelectedEnvironmentCode(item.value);
-              setEnvironmentError(undefined);
-            }}
-            options={environments.map((it) => ({ value: it.code, label: it.label }))}
-          />
-          <MultiSelectFormField
-            title={t("learningObjectives", "Oppimistavoitteet")}
-            onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
-            options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
-          />
-          <FormField title={t("date", "Päivämäärä")}>
-            <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
-              <CView pointerEvents="none">
-                <CTextInput value={formatDate(date)} editable={false} />
-              </CView>
-            </CTouchableOpacity>
-          </FormField>
-          <CDateTimePicker
-            value={date}
-            isOpen={isDateOpen}
-            onClose={() => setIsDateOpen(false)}
-            onChange={(_, newDate) => newDate && setDate(newDate)}
-          />
-          {/* )} */}
-          <TextFormField
-            as="textarea"
-            title={t("more-info", "Lisätietoa")}
-            placeholder={`${t("more-info")}...`}
-            onChange={(text) => setDescription(text)}
-            style={{ paddingBottom: 20 }}
-          />
-        </CView>
-      </ScrollView>
-      <CView style={{ position: "absolute", justifyContent: "flex-end", bottom: "md", right: "md", padding: "lg" }}>
-        <CView style={{ justifyContent: "flex-end", flexDirection: "row" }}>
-          <CButton
-            disabled={!!environmentError}
-            onPress={handleSubmit}
-            leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
-          />
-        </CView>
-      </CView>
-    </CView>
+    <CollectionGeneralInfoForm
+      subjectCode={subjectCode}
+      classYearCode={classYearCode}
+      handleSubmit={handleSubmit}
+      buttonIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
+    />
   );
 }
 

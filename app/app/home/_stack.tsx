@@ -24,6 +24,7 @@ import LearningObjective from "./group/learningObjective";
 import StudentView from "./student";
 import { HomeStackParams } from "./types";
 import { graphql } from "../../gql";
+import EditCollectionGeneralInfoView from "./collection/edit_general_info";
 
 const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
   mutation CollectionHeaderRightButton_DeleteCollection($id: ID!) {
@@ -57,7 +58,7 @@ function CollectionHeaderRightButton({ id, navigation }: { id: string; navigatio
         <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
           <MenuOption
             onSelect={() => {
-              Alert.alert("Muokkaa yleistietoja");
+              navigation.navigate("collection-edit", { collectionId: id });
             }}
           >
             <CText>{t("edit-general-details", "Muokkaa yleistietoja")}</CText>
@@ -197,7 +198,7 @@ export default function HomeStack() {
         name="collection"
         component={CollectionView}
         options={({ route, navigation }) => ({
-          title: `${formatDate(route.params.date)}: ${route.params.environmentLabel}`,
+          title: "",
           headerRight: () => <CollectionHeaderRightButton id={route.params.id} navigation={navigation} />,
         })}
       />
@@ -211,6 +212,7 @@ export default function HomeStack() {
         component={CollectionCreationStack}
         options={{ title: t("new-evaluation", "Uusi arviointi"), headerShown: false }}
       />
+      <HomeStackNavigator.Screen name="collection-edit" component={EditCollectionGeneralInfoView} options={{ title: t("edit", "Muokkaa") }} />
       <HomeStackNavigator.Screen
         name="evaluation"
         component={Evaluation}
