@@ -14,9 +14,9 @@ export type CardProps = CViewProps & {
 export default forwardRef<View, CardProps>(({ enterAnimation, exitAnimation, layoutAnimation, style = {}, children, ...rest }, ref) => {
   return exitAnimation || enterAnimation ? (
     <CAnimatedView
-      exiting={exitAnimation}
-      entering={enterAnimation}
-      layout={layoutAnimation}
+      // exiting={exitAnimation}
+      // entering={enterAnimation}
+      // layout={layoutAnimation}
       {...rest}
       style={{ ...styles.shadow, ...styles.defaultCard, ...style }}
     >

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import SingleEvaluationHistogram from "../../../components/charts/SingleEvaluationHistogram";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
+import Layout from "../../../components/Layout";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
@@ -16,12 +17,12 @@ const CollectionPage_GetCollection_Query = graphql(`
     getCollection(id: $collectionId) {
       id
       date
+      description
       environment {
         label
         code
         color
       }
-      description
       classYear {
         group {
           name
@@ -40,12 +41,6 @@ const CollectionPage_GetCollection_Query = graphql(`
   }
 `);
 
-const CollectionPage_DeleteCollection_Mutation = graphql(`
-  mutation CollectionPage_DeleteCollection($id: ID!) {
-    deleteCollection(collectionId: $id)
-  }
-`);
-
 export default function CollectionView({ route: { params }, navigation }: NativeStackScreenProps<HomeStackParams, "collection">) {
   const { data, loading } = useQuery(CollectionPage_GetCollection_Query, {
     variables: { collectionId: params.id },
@@ -58,7 +53,7 @@ export default function CollectionView({ route: { params }, navigation }: Native
   const collection = data.getCollection;
 
   return (
-    <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white", paddingHorizontal: "lg" }}>
+    <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white", paddingHorizontal: "lg" }}>
       <ScrollView
         style={{ flex: 1, width: "100%" }}
         contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }}
@@ -89,6 +84,6 @@ export default function CollectionView({ route: { params }, navigation }: Native
           <EvaluationsAccordion evaluations={collection.evaluations} titleFrom="student" />
         </CView>
       </ScrollView>
-    </CView>
+    </Layout>
   );
 }

@@ -7,6 +7,7 @@ import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { COLORS } from "../../../../theme";
 import { GroupCreationStackParams } from "./types";
+import Layout from "../../../../components/Layout";
 
 export default function GroupCreationBody({
   navigation,
@@ -39,5 +40,5 @@ export default function GroupCreationBody({
     });
   }, [navigation, t]);
 
-  return <CView style={{ flex: 1, backgroundColor: "white" }}>{children}</CView>;
+  return <Layout style={{ backgroundColor: "white" }}>{children}</Layout>;
 }
