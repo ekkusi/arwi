@@ -18,10 +18,11 @@ module.exports = {
       usesNonExemptEncryption: false,
     },
     bundleIdentifier: "com.zen-tracking.arwi",
+    buildNumber: "2",
   },
   android: {
     package: "net.arwi.twa",
-    versionCode: 1,
+    versionCode: 2,
     adaptiveIcon: {
       foregroundImage: "./assets/logo-new.jpg",
       backgroundColor: "#FEFCFB",
