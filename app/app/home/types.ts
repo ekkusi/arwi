@@ -31,4 +31,7 @@ export type HomeStackParams = {
     description: string;
     type: string;
   };
+  "edit-all-evaluations": {
+    collectionId: string;
+  };
 };

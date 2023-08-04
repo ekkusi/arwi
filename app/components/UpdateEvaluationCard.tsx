@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Voice from "@react-native-voice/voice";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
-import { CreateEvaluationInput } from "../gql/graphql";
+import { CreateEvaluationInput, UpdateEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
 import { COLORS } from "../theme";
@@ -20,31 +20,39 @@ export type Evaluation = Omit<CreateEvaluationInput, "studentId"> & {
   };
 };
 
+export type EvaluationToUpdate = UpdateEvaluationInput & {
+  student: Pick<Student, "id" | "name"> & {
+    currentClassEvaluations: Pick<Evaluation, "notes">[];
+  };
+};
+
 type UpdateEvaluationCardProps = Omit<CViewProps, "children"> & {
+  hasParticipationToggle?: boolean;
+  evaluation: EvaluationToUpdate;
+  onChanged?: (evaluation: EvaluationToUpdate) => void;
+};
+
+type CreateEvaluationCardProps = Omit<CViewProps, "children"> & {
   hasParticipationToggle?: boolean;
   evaluation: Evaluation;
   onChanged?: (evaluation: Evaluation) => void;
 };
 
+type EvaluationCardProps = Omit<CViewProps, "children"> & {
+  hasParticipationToggle?: boolean;
+  evaluation: Evaluation | EvaluationToUpdate;
+  onChanged: (key: EvaluationPropKeys, value: any) => void;
+};
+
 type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
 
-export default function UpdateEvaluationCard({
+export function CreateEvaluationCard({
   evaluation: initialEvaluation,
   onChanged: onChangedCallback,
   hasParticipationToggle = true,
   ...rest
-}: UpdateEvaluationCardProps) {
+}: CreateEvaluationCardProps) {
   const [evaluation, setEvaluation] = useState(initialEvaluation);
-  const [notes, setNotes] = useState(() => evaluation.notes || "");
-
-  const microphoneOpenScale = useSharedValue(1);
-  const microphoneAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: microphoneOpenScale.value }],
-    };
-  });
-
-  const { t } = useTranslation();
 
   const onChanged = useCallback(
     (key: EvaluationPropKeys, value: any) => {
@@ -61,6 +69,38 @@ export default function UpdateEvaluationCard({
     [evaluation, onChangedCallback]
   );
 
+  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} {...rest} />;
+}
+
+export function UpdateEvaluationCard({
+  evaluation: initialEvaluation,
+  onChanged: onChangedCallback,
+  hasParticipationToggle = true,
+  ...rest
+}: UpdateEvaluationCardProps) {
+  const [evaluation, setEvaluation] = useState(initialEvaluation);
+
+  const onChanged = useCallback(
+    (key: EvaluationPropKeys, value: any) => {
+      const newEvaluation = {
+        ...evaluation,
+        [key]: value,
+      };
+      setEvaluation(newEvaluation);
+
+      if (onChangedCallback) {
+        onChangedCallback(newEvaluation);
+      }
+    },
+    [evaluation, onChangedCallback]
+  );
+
+  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={true} {...rest} />;
+}
+
+function EvaluationCard({ onChanged: onChanged, evaluation, hasParticipationToggle = true, ...rest }: EvaluationCardProps) {
+  const [notes, setNotes] = useState(() => evaluation.notes || "");
+
   const debouncedOnChanged = useMemo(() => debounce(onChanged, 300), [onChanged]);
 
   const changeNotes = (value: string) => {
@@ -68,6 +108,15 @@ export default function UpdateEvaluationCard({
 
     debouncedOnChanged("notes", value);
   };
+
+  const microphoneOpenScale = useSharedValue(1);
+  const microphoneAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: microphoneOpenScale.value }],
+    };
+  });
+
+  const { t } = useTranslation();
 
   const [currentRecordingAsText, setCurrentRecordingAsText] = useState("");
   const [recording, setRecording] = useState(false);
@@ -136,7 +185,7 @@ export default function UpdateEvaluationCard({
             thumbColor={COLORS.white}
             ios_backgroundColor={COLORS.lightgray}
             onValueChange={(value) => onChanged("wasPresent", value)}
-            value={evaluation.wasPresent}
+            value={evaluation.wasPresent || false}
           />
         </CView>
       )}
