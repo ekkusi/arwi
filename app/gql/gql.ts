@@ -14,8 +14,6 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  */
 const documents = {
   "\n  query Main_GetCurrentUser {\n    getCurrentUser {\n      email\n      id\n    }\n  }\n": types.Main_GetCurrentUserDocument,
-  "\n  fragment OpenAIUtils_Evaluation on Evaluation {\n    notes\n    skillsRating\n    behaviourRating\n    collection {\n      date\n      environment {\n        label\n      }\n    }\n  }\n":
-    types.OpenAiUtils_EvaluationFragmentDoc,
   "\n  fragment EvaluationsAccordion_Evaluation on Evaluation {\n    id\n    notes\n    behaviourRating\n    skillsRating\n    wasPresent\n    isStellar\n    collection {\n      date\n      environment {\n        label\n        code\n        color\n      }\n    }\n    student {\n      name\n    }\n  }\n":
     types.EvaluationsAccordion_EvaluationFragmentDoc,
   "\n  fragment GroupListItem on Group {\n    id\n    name\n    subject {\n      label\n      code\n    }\n    updatedAt\n  }\n":
@@ -28,6 +26,8 @@ const documents = {
     types.UpdateCollectionForm_GroupFragmentDoc,
   "\n  fragment UpdateCollectionForm_Collection on EvaluationCollection {\n    date\n    type\n    description\n    environment {\n      code\n      label\n      color\n    }\n    classYear {\n      id\n      info {\n        code\n      }\n      group {\n        subject {\n          code\n        }\n      }\n    }\n    learningObjectives {\n      code\n      label\n      type\n    }\n    evaluations {\n      wasPresent\n      student {\n        id\n        name\n      }\n    }\n  }\n":
     types.UpdateCollectionForm_CollectionFragmentDoc,
+  "\n  fragment OpenAIUtils_Evaluation on Evaluation {\n    notes\n    skillsRating\n    behaviourRating\n    collection {\n      date\n      environment {\n        label\n      }\n    }\n  }\n":
+    types.OpenAiUtils_EvaluationFragmentDoc,
   "\n  mutation LoginPage_Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      accessToken\n      teacher {\n        email\n        id\n      }\n    }\n  }\n":
     types.LoginPage_LoginDocument,
   "\n  mutation RegisterPage_Register($input: CreateTeacherInput!) {\n    register(data: $input) {\n      accessToken\n      teacher {\n        email\n        id\n      }\n    }\n  }\n":
@@ -45,7 +45,7 @@ const documents = {
     types.EvaluationsBarChart_EvaluationFragmentDoc,
   "\n  fragment EvaluationsLineChart_Evaluation on Evaluation {\n    id\n    skillsRating\n    behaviourRating\n    wasPresent\n    collection {\n      date\n      environment {\n        label\n        code\n        color\n      }\n    }\n  }\n":
     types.EvaluationsLineChart_EvaluationFragmentDoc,
-  "\n    query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {\n        getCollection(id: $collectionId) {\n            id\n            evaluations {\n                id\n                wasPresent\n                skillsRating\n                behaviourRating\n                notes\n                isStellar\n                student {\n                  id\n                  name\n                  currentClassEvaluations {\n                    id\n                    notes\n                  }\n                }\n            }\n        }\n    }\n":
+  "\n  query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      evaluations {\n        id\n        wasPresent\n        skillsRating\n        behaviourRating\n        notes\n        isStellar\n        student {\n          id\n          name\n          currentClassEvaluations {\n            id\n            notes\n          }\n        }\n      }\n    }\n  }\n":
     types.CollectionEditAllEvaluationsView_GetCollectionDocument,
   "\n  mutation CollectionEvaluationsView_UpdateCollection($updateCollectionInput: UpdateCollectionInput!, $collectionId: ID!) {\n    updateCollection(data: $updateCollectionInput, collectionId: $collectionId) {\n      id\n      evaluations {\n        id\n        wasPresent\n        skillsRating\n        behaviourRating\n        notes\n        isStellar\n        student {\n          id\n          name\n          currentClassEvaluations {\n            id\n            notes\n          }\n        }\n      }\n    }\n  }\n":
     types.CollectionEvaluationsView_UpdateCollectionDocument,
@@ -55,6 +55,10 @@ const documents = {
     types.EditGeneralDetails_UpdateCollectionDocument,
   "\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      description\n      environment {\n        label\n        code\n        color\n      }\n      classYear {\n        group {\n          name\n          id\n        }\n      }\n      learningObjectives {\n        code\n        label\n      }\n      evaluations {\n        id\n        ...EvaluationsAccordion_Evaluation\n      }\n    }\n  }\n":
     types.CollectionPage_GetCollectionDocument,
+  "\n  query EvaluationEditView_GetEvaluation($evaluationId: ID!) {\n    getEvaluation(id: $evaluationId) {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      notes\n      isStellar\n      student {\n        id\n        name\n        currentClassEvaluations {\n          id\n          notes\n        }\n      }\n    }\n  }\n":
+    types.EvaluationEditView_GetEvaluationDocument,
+  "\n  mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateEvaluationInput!) {\n    updateEvaluation(data: $updateEvaluationInput) {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      notes\n      isStellar\n      student {\n        id\n        name\n        currentClassEvaluations {\n          id\n          notes\n        }\n      }\n    }\n  }\n":
+    types.EvaluationEditView_UpdateEvaluationDocument,
   "\n  query GroupOverviewPage_GetGroup($groupId: ID!) {\n    getGroup(id: $groupId) {\n      id\n      name\n      subject {\n        label\n        code\n      }\n      currentClassYear {\n        id\n        info {\n          code\n          label\n        }\n        students {\n          id\n          name\n          currentClassEvaluations {\n            id\n            wasPresent\n          }\n        }\n        evaluationCollections {\n          id\n          date\n          environment {\n            label\n            code\n            color\n          }\n          learningObjectives {\n            code\n            label\n            description\n            type\n          }\n          ...CollectionsLineChart_EvaluationCollection\n        }\n      }\n    }\n  }\n":
     types.GroupOverviewPage_GetGroupDocument,
   "\n  mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {\n    deleteGroup(groupId: $groupId) {\n      id\n    }\n  }\n":
@@ -97,12 +101,6 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment OpenAIUtils_Evaluation on Evaluation {\n    notes\n    skillsRating\n    behaviourRating\n    collection {\n      date\n      environment {\n        label\n      }\n    }\n  }\n"
-): (typeof documents)["\n  fragment OpenAIUtils_Evaluation on Evaluation {\n    notes\n    skillsRating\n    behaviourRating\n    collection {\n      date\n      environment {\n        label\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
   source: "\n  fragment EvaluationsAccordion_Evaluation on Evaluation {\n    id\n    notes\n    behaviourRating\n    skillsRating\n    wasPresent\n    isStellar\n    collection {\n      date\n      environment {\n        label\n        code\n        color\n      }\n    }\n    student {\n      name\n    }\n  }\n"
 ): (typeof documents)["\n  fragment EvaluationsAccordion_Evaluation on Evaluation {\n    id\n    notes\n    behaviourRating\n    skillsRating\n    wasPresent\n    isStellar\n    collection {\n      date\n      environment {\n        label\n        code\n        color\n      }\n    }\n    student {\n      name\n    }\n  }\n"];
 /**
@@ -135,6 +133,12 @@ export function graphql(
 export function graphql(
   source: "\n  fragment UpdateCollectionForm_Collection on EvaluationCollection {\n    date\n    type\n    description\n    environment {\n      code\n      label\n      color\n    }\n    classYear {\n      id\n      info {\n        code\n      }\n      group {\n        subject {\n          code\n        }\n      }\n    }\n    learningObjectives {\n      code\n      label\n      type\n    }\n    evaluations {\n      wasPresent\n      student {\n        id\n        name\n      }\n    }\n  }\n"
 ): (typeof documents)["\n  fragment UpdateCollectionForm_Collection on EvaluationCollection {\n    date\n    type\n    description\n    environment {\n      code\n      label\n      color\n    }\n    classYear {\n      id\n      info {\n        code\n      }\n      group {\n        subject {\n          code\n        }\n      }\n    }\n    learningObjectives {\n      code\n      label\n      type\n    }\n    evaluations {\n      wasPresent\n      student {\n        id\n        name\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment OpenAIUtils_Evaluation on Evaluation {\n    notes\n    skillsRating\n    behaviourRating\n    collection {\n      date\n      environment {\n        label\n      }\n    }\n  }\n"
+): (typeof documents)["\n  fragment OpenAIUtils_Evaluation on Evaluation {\n    notes\n    skillsRating\n    behaviourRating\n    collection {\n      date\n      environment {\n        label\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -193,8 +197,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n    query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {\n        getCollection(id: $collectionId) {\n            id\n            evaluations {\n                id\n                wasPresent\n                skillsRating\n                behaviourRating\n                notes\n                isStellar\n                student {\n                  id\n                  name\n                  currentClassEvaluations {\n                    id\n                    notes\n                  }\n                }\n            }\n        }\n    }\n"
-): (typeof documents)["\n    query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {\n        getCollection(id: $collectionId) {\n            id\n            evaluations {\n                id\n                wasPresent\n                skillsRating\n                behaviourRating\n                notes\n                isStellar\n                student {\n                  id\n                  name\n                  currentClassEvaluations {\n                    id\n                    notes\n                  }\n                }\n            }\n        }\n    }\n"];
+  source: "\n  query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      evaluations {\n        id\n        wasPresent\n        skillsRating\n        behaviourRating\n        notes\n        isStellar\n        student {\n          id\n          name\n          currentClassEvaluations {\n            id\n            notes\n          }\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      evaluations {\n        id\n        wasPresent\n        skillsRating\n        behaviourRating\n        notes\n        isStellar\n        student {\n          id\n          name\n          currentClassEvaluations {\n            id\n            notes\n          }\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -219,6 +223,18 @@ export function graphql(
 export function graphql(
   source: "\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      description\n      environment {\n        label\n        code\n        color\n      }\n      classYear {\n        group {\n          name\n          id\n        }\n      }\n      learningObjectives {\n        code\n        label\n      }\n      evaluations {\n        id\n        ...EvaluationsAccordion_Evaluation\n      }\n    }\n  }\n"
 ): (typeof documents)["\n  query CollectionPage_GetCollection($collectionId: ID!) {\n    getCollection(id: $collectionId) {\n      id\n      date\n      description\n      environment {\n        label\n        code\n        color\n      }\n      classYear {\n        group {\n          name\n          id\n        }\n      }\n      learningObjectives {\n        code\n        label\n      }\n      evaluations {\n        id\n        ...EvaluationsAccordion_Evaluation\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query EvaluationEditView_GetEvaluation($evaluationId: ID!) {\n    getEvaluation(id: $evaluationId) {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      notes\n      isStellar\n      student {\n        id\n        name\n        currentClassEvaluations {\n          id\n          notes\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query EvaluationEditView_GetEvaluation($evaluationId: ID!) {\n    getEvaluation(id: $evaluationId) {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      notes\n      isStellar\n      student {\n        id\n        name\n        currentClassEvaluations {\n          id\n          notes\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateEvaluationInput!) {\n    updateEvaluation(data: $updateEvaluationInput) {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      notes\n      isStellar\n      student {\n        id\n        name\n        currentClassEvaluations {\n          id\n          notes\n        }\n      }\n    }\n  }\n"
+): (typeof documents)["\n  mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateEvaluationInput!) {\n    updateEvaluation(data: $updateEvaluationInput) {\n      id\n      wasPresent\n      skillsRating\n      behaviourRating\n      notes\n      isStellar\n      student {\n        id\n        name\n        currentClassEvaluations {\n          id\n          notes\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

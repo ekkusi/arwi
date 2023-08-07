@@ -82,7 +82,11 @@ export default function CollectionView({ route: { params }, navigation }: Native
         </CView>
         <CView style={{ gap: 10 }}>
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
-          <EvaluationsAccordion evaluations={collection.evaluations} titleFrom="student" />
+          <EvaluationsAccordion
+            evaluations={collection.evaluations}
+            titleFrom="student"
+            onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
+          />
         </CView>
       </ScrollView>
     </Layout>

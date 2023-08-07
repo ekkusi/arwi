@@ -17,7 +17,7 @@ import ProfileView from "../profile";
 import ChangeGroupName from "./ChangeGroupName";
 import CollectionView from "./collection";
 import CollectionCreationStack from "./collection/create/_stack";
-import Evaluation from "./evaluation";
+import Evaluation from "./evaluation/edit_evaluation";
 import GroupView from "./group";
 import GroupCreationStack from "./group/create/_stack";
 import LearningObjective from "./group/learningObjective";
@@ -26,6 +26,7 @@ import { HomeStackParams } from "./types";
 import { graphql } from "../../gql";
 import EditCollectionGeneralInfoView from "./collection/edit_general_info";
 import CollectionEditAllEvaluationsView from "./collection/edit_all_evaluations";
+import EvaluationEditView from "./evaluation/edit_evaluation";
 
 const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
   mutation CollectionHeaderRightButton_DeleteCollection($id: ID!) {
@@ -214,11 +215,7 @@ export default function HomeStack() {
         options={{ title: t("new-evaluation", "Uusi arviointi"), headerShown: false }}
       />
       <HomeStackNavigator.Screen name="collection-edit" component={EditCollectionGeneralInfoView} options={{ title: t("edit", "Muokkaa") }} />
-      <HomeStackNavigator.Screen
-        name="evaluation"
-        component={Evaluation}
-        options={{ title: t("HomeStack.evaluationOverview", "Arvioinnin yhteenveto") }}
-      />
+      <HomeStackNavigator.Screen name="edit-evaluation" component={EvaluationEditView} options={{ title: t("edit", "Muokkaa") }} />
       <HomeStackNavigator.Screen name="profile" component={ProfileView} options={{ title: t("profile", "Profiili") }} />
       <HomeStackNavigator.Screen name="edit-all-evaluations" component={CollectionEditAllEvaluationsView} options={{ title: t("edit", "Muokkaa") }} />
       <HomeStackNavigator.Group screenOptions={{ presentation: "modal" }}>

@@ -58,7 +58,7 @@ const StudentPage_GetStudent_Query = graphql(`
   }
 `);
 
-export default function StudentView({ route }: NativeStackScreenProps<HomeStackParams, "student">) {
+export default function StudentView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "student">) {
   const studentId = route.params.id;
 
   const { data } = useQuery(StudentPage_GetStudent_Query, { variables: { studentId } });
@@ -277,7 +277,10 @@ export default function StudentView({ route }: NativeStackScreenProps<HomeStackP
           </CView>
           <GradeSuggestionView skillsMean={skillsAverage} behaviourMean={behaviourAverage} />
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
-          <EvaluationsAccordion evaluations={student.currentClassEvaluations} />
+          <EvaluationsAccordion
+            evaluations={student.currentClassEvaluations}
+            onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
+          />
           <CView style={{ marginTop: "lg" }} onLayout={(event) => setScrollYPos(event.nativeEvent.layout.y)}>
             <CText style={{ fontSize: "xl", marginBottom: "lg" }}>{t("StudentView.feedbackGeneration", "Loppupalautteen generointi")}</CText>
             <CButton loading={isGeneratingSummary} title={t("StudentView.generateFeedback", "Luo palaute")} onPress={generateSummary} />

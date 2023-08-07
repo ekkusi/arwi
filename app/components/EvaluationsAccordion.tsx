@@ -36,12 +36,14 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
 type EvaluationsAccordionProps = Omit<AccordionProps, "data"> & {
   evaluations: FragmentType<typeof EvaluationsAccordion_Evaluation_Fragment>[];
   titleFrom?: "student" | "collection";
+  onAccordionButtonPress?: (id: string) => void;
 };
 
 export default function EvaluationsAccordion({
   evaluations: evaluationFragments,
   titleFrom = "collection",
   allowMultiple = true,
+  onAccordionButtonPress,
   ...rest
 }: EvaluationsAccordionProps) {
   const { t } = useTranslation();
@@ -105,7 +107,12 @@ export default function EvaluationsAccordion({
                 {t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}
               </CText>
             )}
-            <CButton size="small" title={t("edit", "Muokkaa")} style={{ marginTop: "md" }} onPress={() => Alert.alert("Muokkaa")} />
+            <CButton
+              size="small"
+              title={t("edit", "Muokkaa")}
+              style={{ marginTop: "md" }}
+              onPress={() => onAccordionButtonPress && onAccordionButtonPress(it.id)}
+            />
           </>
         ),
       }))}
