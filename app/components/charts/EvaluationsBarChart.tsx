@@ -75,7 +75,6 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
     }
   });
   Object.keys(tempData).forEach((key) => {
-    if (tempData[key].skills.count < INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD) return;
     data.push({
       x: `${tempData[key].label}1`,
       color: tempData[key].color,
@@ -115,10 +114,11 @@ export default function EvaluationsBarChart({ evaluations: evaluationFragments, 
 
   const data = useMemo(() => mapData(filteredEvaluations), [filteredEvaluations]);
   const filteredData = getFilteredData(data, filter);
+  const filteredDataWithoutZeroEntries = filteredData.filter((obj) => obj.y !== 0);
 
   return (
     <CView style={{ width: "100%" }}>
-      <StyledBarChart data={filteredData} style={{ height: 200 }} gradeAxis {...rest} />
+      <StyledBarChart data={filteredDataWithoutZeroEntries} style={{ height: 200 }} gradeAxis {...rest} />
 
       <CView style={{ gap: 2, flexDirection: "row", justifyContent: "flex-start", flexWrap: "wrap", width: "100%" }}>
         {filter === "all" && (
@@ -133,7 +133,7 @@ export default function EvaluationsBarChart({ evaluations: evaluationFragments, 
               <CView style={{ width: 10, height: 10, backgroundColor: obj.color }} />
               <CText style={{ fontSize: "xs" }}>{obj.x.slice(0, -1)}</CText>
             </CView>
-            <CText style={{ fontSize: "sm", fontWeight: "600" }}>{obj.y}</CText>
+            <CText style={{ fontSize: "sm", fontWeight: "600" }}>{obj.y === 0 ? "-" : obj.y}</CText>
           </CView>
         ))}
       </CView>
