@@ -384,8 +384,6 @@ const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation 
   return (
     <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
       {objectives.length > 0 ? (
-        // TODO: Show pie chart and make list into accordion with more info about the objective when opened
-        // Add REAL objective count to string
         <CFlatList
           data={learningObjectiveCounts}
           showsVerticalScrollIndicator={false}

@@ -94,7 +94,7 @@ export default function CollectionStatistics({ title, subjectCode, collections: 
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}
       />
-      <LineChartBase data={filteredData} />
+      <LineChartBase data={filteredData} {...rest} />
       <CView style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
         <CircledNumber value={skillsMean} title={t("group.skills-mean", "Taitojen keskiarvo")} />
         <CircledNumber value={behaviourMean} title={t("group.behaviour-mean", "Työskentelyn keskiarvo")} />
