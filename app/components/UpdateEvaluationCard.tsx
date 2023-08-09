@@ -2,7 +2,7 @@ import { Student } from "arwi-backend/src/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
-import { Alert, Switch } from "react-native";
+import { Alert, Platform, Switch } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Voice from "@react-native-voice/voice";
@@ -46,59 +46,7 @@ type EvaluationCardProps = Omit<CViewProps, "children"> & {
 
 type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
 
-export function CreateEvaluationCard({
-  evaluation: initialEvaluation,
-  onChanged: onChangedCallback,
-  hasParticipationToggle = true,
-  ...rest
-}: CreateEvaluationCardProps) {
-  const [evaluation, setEvaluation] = useState(initialEvaluation);
-
-  const onChanged = useCallback(
-    (key: EvaluationPropKeys, value: any) => {
-      const newEvaluation = {
-        ...evaluation,
-        [key]: value,
-      };
-      setEvaluation(newEvaluation);
-
-      if (onChangedCallback) {
-        onChangedCallback(newEvaluation);
-      }
-    },
-    [evaluation, onChangedCallback]
-  );
-
-  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} {...rest} />;
-}
-
-export function UpdateEvaluationCard({
-  evaluation: initialEvaluation,
-  onChanged: onChangedCallback,
-  hasParticipationToggle = true,
-  ...rest
-}: UpdateEvaluationCardProps) {
-  const [evaluation, setEvaluation] = useState(initialEvaluation);
-
-  const onChanged = useCallback(
-    (key: EvaluationPropKeys, value: any) => {
-      const newEvaluation = {
-        ...evaluation,
-        [key]: value,
-      };
-      setEvaluation(newEvaluation);
-
-      if (onChangedCallback) {
-        onChangedCallback(newEvaluation);
-      }
-    },
-    [evaluation, onChangedCallback]
-  );
-
-  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={true} {...rest} />;
-}
-
-function EvaluationCard({ onChanged: onChanged, evaluation, hasParticipationToggle = true, ...rest }: EvaluationCardProps) {
+function EvaluationCard({ onChanged, evaluation, hasParticipationToggle = true, ...rest }: EvaluationCardProps) {
   const [notes, setNotes] = useState(() => evaluation.notes || "");
 
   const debouncedOnChanged = useMemo(() => debounce(onChanged, 300), [onChanged]);
@@ -173,63 +121,143 @@ function EvaluationCard({ onChanged: onChanged, evaluation, hasParticipationTogg
     return evaluation.student.currentClassEvaluations.filter((it) => !!it.notes).length;
   }, [evaluation]);
 
+  let currentNotes = "";
+  if (evaluation.wasPresent) {
+    currentNotes = recording ? `${notes} ${currentRecordingAsText}` : notes;
+  }
+
   return (
-    <CView style={{ alignItems: "center", gap: "lg" }} {...rest}>
+    <CView style={{ width: "100%", alignItems: "center", gap: "lg" }} {...rest}>
       <CText style={{ fontSize: "lg", textAlign: "center" }}>{evaluation.student.name}</CText>
       {/* TODO: Add isStellar star-button */}
       {hasParticipationToggle && (
-        <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 0 }}>
-          <CText style={{ textAlign: "center" }}>{t("present", "Paikalla")}</CText>
-          <Switch
-            trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
-            thumbColor={COLORS.white}
-            ios_backgroundColor={COLORS.lightgray}
-            onValueChange={(value) => onChanged("wasPresent", value)}
-            value={evaluation.wasPresent || false}
-          />
+        <CView style={{ alignItems: "center", width: "100%" }}>
+          <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "50%" }}>
+            <CText style={{ textAlign: "center", color: evaluation.wasPresent ? "green" : "red" }}>
+              {evaluation.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
+            </CText>
+            <Switch
+              trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
+              thumbColor={COLORS.white}
+              ios_backgroundColor={COLORS.lightgray}
+              onValueChange={(value) => {
+                onChanged("wasPresent", value);
+              }}
+              value={evaluation.wasPresent || false}
+              style={{ transform: [{ scale: Platform.OS === "ios" ? 1 : 1.4 }] }}
+            />
+          </CView>
         </CView>
       )}
-      <CView style={{ alignItems: "center", gap: "sm" }}>
-        <CText>{t("skills", "Taidot")}:</CText>
-        <RatingSelector initialRating={evaluation.skillsRating} onChange={(rating) => onChanged("skillsRating", rating)} />
-      </CView>
-      <CView style={{ alignItems: "center", gap: "sm" }}>
-        <CText>{t("behaviour", "Työskentely")}:</CText>
-        <RatingSelector initialRating={evaluation.behaviourRating} onChange={(rating) => onChanged("behaviourRating", rating)} />
-      </CView>
-      <CText>{t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}</CText>
-      <CView style={{ width: "100%", height: 150 }}>
-        <CTextInput
-          style={{ width: "100%", height: "100%" }}
-          as="textarea"
-          editable={!recording}
-          value={recording ? `${notes} ${currentRecordingAsText}` : notes}
-          onChange={(e) => changeNotes(e.nativeEvent.text)}
-          placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
-          multiline
-        />
-        {microphoneAvailable && (
-          <CView style={{ position: "absolute", bottom: 3, right: 3, width: 40, height: 40 }}>
-            {recording && (
-              <Animated.View
-                style={[{ position: "absolute", width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.primary }, microphoneAnimatedStyle]}
-              />
-            )}
-            <TouchableOpacity
-              onPress={() => (recording ? stopRecording() : startRecording())}
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-                width: 40,
-                height: 40,
-              }}
-            >
-              <MaterialCommunityIcon name="microphone" size={25} color={recording ? COLORS.white : COLORS.secondary} />
-            </TouchableOpacity>
-          </CView>
+      <CView style={{ width: "100%" }}>
+        <CView style={{ alignItems: "center", gap: "sm" }}>
+          <CText>{t("skills", "Taidot")}:</CText>
+          <RatingSelector
+            disabled={!evaluation.wasPresent}
+            initialRating={evaluation.skillsRating}
+            onChange={(rating) => onChanged("skillsRating", rating)}
+          />
+        </CView>
+        <CView style={{ alignItems: "center", gap: "sm" }}>
+          <CText>{t("behaviour", "Työskentely")}:</CText>
+          <RatingSelector
+            disabled={!evaluation.wasPresent}
+            initialRating={evaluation.behaviourRating}
+            onChange={(rating) => onChanged("behaviourRating", rating)}
+          />
+        </CView>
+        <CText>{t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}</CText>
+        <CView style={{ width: "100%", height: 150 }}>
+          <CTextInput
+            style={{ width: "100%", height: "100%" }}
+            as="textarea"
+            editable={!recording}
+            value={currentNotes}
+            onChange={(e) => changeNotes(e.nativeEvent.text)}
+            placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
+            multiline
+          />
+          {microphoneAvailable && (
+            <CView style={{ position: "absolute", bottom: 3, right: 3, width: 40, height: 40 }}>
+              {recording && (
+                <Animated.View
+                  style={[
+                    { position: "absolute", width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.primary },
+                    microphoneAnimatedStyle,
+                  ]}
+                />
+              )}
+              <TouchableOpacity
+                onPress={() => (recording ? stopRecording() : startRecording())}
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 20,
+                  width: 40,
+                  height: 40,
+                }}
+              >
+                <MaterialCommunityIcon name="microphone" size={25} color={recording ? COLORS.white : COLORS.secondary} />
+              </TouchableOpacity>
+            </CView>
+          )}
+        </CView>
+        {!evaluation.wasPresent && (
+          <Animated.View style={{ position: "absolute", height: "100%", width: "100%", backgroundColor: "rgba(255,255,255,0.5)" }} />
         )}
       </CView>
     </CView>
   );
+}
+
+export function CreateEvaluationCard({
+  evaluation: initialEvaluation,
+  onChanged: onChangedCallback,
+  hasParticipationToggle = true,
+  ...rest
+}: CreateEvaluationCardProps) {
+  const [evaluation, setEvaluation] = useState(initialEvaluation);
+
+  const onChanged = useCallback(
+    (key: EvaluationPropKeys, value: any) => {
+      const newEvaluation = {
+        ...evaluation,
+        [key]: value,
+      };
+      setEvaluation(newEvaluation);
+
+      if (onChangedCallback) {
+        onChangedCallback(newEvaluation);
+      }
+    },
+    [evaluation, onChangedCallback]
+  );
+
+  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} {...rest} />;
+}
+
+export function UpdateEvaluationCard({
+  evaluation: initialEvaluation,
+  onChanged: onChangedCallback,
+  hasParticipationToggle = true,
+  ...rest
+}: UpdateEvaluationCardProps) {
+  const [evaluation, setEvaluation] = useState(initialEvaluation);
+
+  const onChanged = useCallback(
+    (key: EvaluationPropKeys, value: any) => {
+      const newEvaluation = {
+        ...evaluation,
+        [key]: value,
+      };
+      setEvaluation(newEvaluation);
+
+      if (onChangedCallback) {
+        onChangedCallback(newEvaluation);
+      }
+    },
+    [evaluation, onChangedCallback]
+  );
+
+  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle {...rest} />;
 }

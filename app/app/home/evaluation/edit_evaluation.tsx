@@ -77,10 +77,10 @@ function EvaluationEditViewContent({
           updateEvaluationInput: {
             id: evaluation.id,
             wasPresent: evaluation.wasPresent,
-            skillsRating: evaluation.skillsRating,
-            behaviourRating: evaluation.behaviourRating,
-            notes: evaluation.notes,
-            isStellar: evaluation.isStellar,
+            skillsRating: evaluation.wasPresent ? evaluation.skillsRating : undefined,
+            behaviourRating: evaluation.wasPresent ? evaluation.behaviourRating : undefined,
+            notes: evaluation.wasPresent ? evaluation.notes : undefined,
+            isStellar: evaluation.wasPresent ? evaluation.isStellar : undefined,
           },
         },
       });
@@ -95,15 +95,15 @@ function EvaluationEditViewContent({
 
   return (
     <CView style={{ backgroundColor: "white", alignItems: "center", gap: 30 }}>
-      <UpdateEvaluationCard evaluation={evaluation} onChanged={(evaluation) => setEvaluation(evaluation)} />
-      <CButton title={t("save", "Tallenna")} onPress={handleSubmit} loading={submitting}></CButton>
+      <UpdateEvaluationCard evaluation={evaluation} onChanged={(newEvaluation) => setEvaluation(newEvaluation)} />
+      <CButton title={t("save", "Tallenna")} onPress={handleSubmit} loading={submitting} />
     </CView>
   );
 }
 
 export default function EvaluationEditView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "edit-evaluation">) {
   const { evaluationId } = route.params;
-  const { data, loading } = useQuery(EvaluationEditView_GetEvaluation_Query, { variables: { evaluationId: evaluationId } });
+  const { data, loading } = useQuery(EvaluationEditView_GetEvaluation_Query, { variables: { evaluationId } });
 
   if (!data || loading) return <LoadingIndicator />;
 

@@ -87,10 +87,10 @@ function CollectionEditAllEvaluationsContent({
             evaluations: evaluations.map((it) => ({
               id: it.id,
               wasPresent: it.wasPresent,
-              skillsRating: it.skillsRating,
-              behaviourRating: it.behaviourRating,
-              notes: it.notes,
-              isStellar: it.isStellar,
+              skillsRating: it.wasPresent ? it.skillsRating : undefined,
+              behaviourRating: it.wasPresent ? it.behaviourRating : undefined,
+              notes: it.wasPresent ? it.notes : undefined,
+              isStellar: it.wasPresent ? it.isStellar : undefined,
             })),
           },
         },
@@ -140,7 +140,7 @@ function CollectionEditAllEvaluationsContent({
             key={item.student.id}
             onLayout={index === 0 ? (event) => setCardHeight(event.nativeEvent.layout.height) : undefined}
             evaluation={item}
-            hasParticipationToggle={true}
+            hasParticipationToggle
             onChanged={(value) => {
               setEvaluations(evaluations.map((it) => (it.student.id === value.student.id ? value : it)));
             }}
@@ -178,8 +178,9 @@ function CollectionEditAllEvaluationsContent({
 }
 
 export default function CollectionEditAllEvaluationsView(props: NativeStackScreenProps<HomeStackParams, "edit-all-evaluations">) {
+  const { route } = props;
   const { data, loading } = useQuery(CollectionEditAllEvaluationsView_GetCollection_Query, {
-    variables: { collectionId: props.route.params.collectionId },
+    variables: { collectionId: route.params.collectionId },
   });
 
   if (loading || !data) return <LoadingIndicator />;
