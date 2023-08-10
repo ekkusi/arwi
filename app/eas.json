@@ -47,5 +47,8 @@
         "language": "fi_FI"
       }
     }
+  },
+  "cli": {
+    "promptToConfigurePushNotifications": false
   }
 }
