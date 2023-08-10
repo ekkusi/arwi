@@ -509,45 +509,43 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
             </CText>
           </CView>
           <CView style={{ gap: 10, alignItems: "center", justifyContent: "center" }}>
-            <CView>
-              {group.archived && (
-                <CView
-                  style={{
-                    paddingHorizontal: 20,
-                    height: 36,
-                    borderRadius: 18,
-                    borderColor: "lightgray",
-                    borderWidth: 1,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <CText style={{ fontWeight: "500" }}>{t("archived", "Arkistoitu").toLocaleUpperCase()}</CText>
-                </CView>
-              )}
+            {group.archived && (
               <CView
                 style={{
-                  width: 70,
-                  height: 70,
-                  borderRadius: 35,
+                  paddingHorizontal: 20,
+                  height: 36,
+                  borderRadius: 18,
                   borderColor: "lightgray",
                   borderWidth: 1,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <CView style={{ width: 45, height: 45 }}>
-                  <CImage
-                    style={{
-                      width: undefined,
-                      height: undefined,
-                      flex: 1,
-                      resizeMode: "contain",
-                      tintColor: "darkgray",
-                    }}
-                    source={subjectToIcon(group.subject)}
-                  />
-                </CView>
+                <CText style={{ fontWeight: "500" }}>{t("archived", "Arkistoitu").toLocaleUpperCase()}</CText>
+              </CView>
+            )}
+            <CView
+              style={{
+                width: 70,
+                height: 70,
+                borderRadius: 35,
+                borderColor: "lightgray",
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CView style={{ width: 45, height: 45 }}>
+                <CImage
+                  style={{
+                    width: undefined,
+                    height: undefined,
+                    flex: 1,
+                    resizeMode: "contain",
+                    tintColor: "darkgray",
+                  }}
+                  source={subjectToIcon(group.subject)}
+                />
               </CView>
             </CView>
           </CView>

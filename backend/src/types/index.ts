@@ -298,6 +298,7 @@ export type CreateGroupInput = {
 
 export type UpdateGroupInput = {
   name?: InputMaybe<Scalars["String"]>;
+  archived?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export type CreateStudentInput = {
