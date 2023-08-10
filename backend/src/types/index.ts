@@ -204,6 +204,7 @@ export type Group = {
   subject: Subject;
   teacher: Teacher;
   updatedAt: Scalars["DateTime"];
+  archived: Scalars["Boolean"];
   currentClassYear: ClassYear;
   classYears: Array<ClassYear>;
 };
@@ -597,6 +598,7 @@ export type GroupResolvers<ContextType = CustomContext, ParentType extends Resol
   subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
   teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  archived?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   currentClassYear?: Resolver<ResolversTypes["ClassYear"], ParentType, ContextType>;
   classYears?: Resolver<Array<ResolversTypes["ClassYear"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

@@ -36,4 +36,5 @@ export type HomeStackParams = {
   "edit-all-evaluations": {
     collectionId: string;
   };
+  archive: undefined;
 };

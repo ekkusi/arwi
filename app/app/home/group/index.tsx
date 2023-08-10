@@ -41,6 +41,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
     getGroup(id: $groupId) {
       id
       name
+      archived
       subject {
         label
         code
@@ -76,14 +77,6 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           ...CollectionsLineChart_EvaluationCollection
         }
       }
-    }
-  }
-`);
-
-const GroupOverviewPage_DeleteGroup_Mutation = graphql(`
-  mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {
-    deleteGroup(groupId: $groupId) {
-      id
     }
   }
 `);
@@ -515,29 +508,46 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
               {t("group.evaluation-count", { count: group.currentClassYear.evaluationCollections.length })}
             </CText>
           </CView>
-          <CView>
-            <CView
-              style={{
-                width: 70,
-                height: 70,
-                borderRadius: 35,
-                borderColor: "lightgray",
-                borderWidth: 1,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CView style={{ width: 45, height: 45 }}>
-                <CImage
+          <CView style={{ gap: 10, alignItems: "center", justifyContent: "center" }}>
+            <CView>
+              {group.archived && (
+                <CView
                   style={{
-                    width: undefined,
-                    height: undefined,
-                    flex: 1,
-                    resizeMode: "contain",
-                    tintColor: "darkgray",
+                    paddingHorizontal: 20,
+                    height: 36,
+                    borderRadius: 18,
+                    borderColor: "lightgray",
+                    borderWidth: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  source={subjectToIcon(group.subject)}
-                />
+                >
+                  <CText style={{ fontWeight: "500" }}>{t("archived", "Arkistoitu").toLocaleUpperCase()}</CText>
+                </CView>
+              )}
+              <CView
+                style={{
+                  width: 70,
+                  height: 70,
+                  borderRadius: 35,
+                  borderColor: "lightgray",
+                  borderWidth: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CView style={{ width: 45, height: 45 }}>
+                  <CImage
+                    style={{
+                      width: undefined,
+                      height: undefined,
+                      flex: 1,
+                      resizeMode: "contain",
+                      tintColor: "darkgray",
+                    }}
+                    source={subjectToIcon(group.subject)}
+                  />
+                </CView>
               </CView>
             </CView>
           </CView>

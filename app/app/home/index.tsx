@@ -31,6 +31,7 @@ const MainPage_GetCurrentUser_Query = graphql(`
       groups {
         id
         name
+        archived
         updatedAt
         subject {
           label
@@ -91,15 +92,19 @@ function HomePageContent({
     },
   });
 
+  const notArchivedGroups = useMemo(() => {
+    return teacher.groups.filter((group) => !group.archived);
+  }, [teacher.groups]);
+
   const sortedGroups = useMemo(() => {
-    return [...teacher.groups].sort((a, b) => {
+    return [...notArchivedGroups].sort((a, b) => {
       return a.updatedAt < b.updatedAt ? 1 : -1;
     });
-  }, [teacher.groups]);
+  }, [notArchivedGroups]);
 
   return (
     <Layout style={{ paddingHorizontal: "sm" }}>
-      {teacher.groups.length > 0 ? (
+      {sortedGroups.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
           contentContainerStyle={{ paddingTop: 10 }}
