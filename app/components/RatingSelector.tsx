@@ -1,5 +1,6 @@
 import { Rating } from "arwi-backend/src/types";
 import { useState } from "react";
+import { Alert } from "react-native";
 import { hexToRgbA } from "../helpers/color";
 import { formatRatingNumber, formatRatingNumberString, getColorForGrade } from "../helpers/dataMappers";
 import { COLORS } from "../theme";
@@ -9,15 +10,19 @@ import CView, { CViewProps } from "./primitives/CView";
 
 type RatingSelecterProps = Omit<CViewProps, "onChange"> & {
   onChange: (rating: Rating | null) => void;
+  disabled?: boolean;
   initialRating?: Rating | null;
 };
 
 const ratingKeys = Object.keys(Rating) as Array<keyof typeof Rating>;
 
-export default function RatingSelecter({ onChange, initialRating, ...rest }: RatingSelecterProps) {
+export default function RatingSelecter({ onChange, disabled = false, initialRating, ...rest }: RatingSelecterProps) {
   const [selectedRating, setSelectedRating] = useState<Rating | null>(initialRating || null);
 
   const onRatingClick = (rating: Rating) => {
+    if (disabled) {
+      return;
+    }
     if (selectedRating === rating) {
       setSelectedRating(null);
       onChange(null);
@@ -39,6 +44,13 @@ export default function RatingSelecter({ onChange, initialRating, ...rest }: Rat
     <CView {...rest} style={{ width: "100%", flexDirection: "row", justifyContent: "center", ...rest.style }}>
       {ratingKeys.map((key, i) => {
         const rating = Rating[key];
+        let isSelected = true;
+        if (disabled) {
+          isSelected = false;
+        } else {
+          isSelected = selectedRating === rating;
+        }
+
         return (
           <CPressable key={key} onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
             <CView
@@ -59,10 +71,10 @@ export default function RatingSelecter({ onChange, initialRating, ...rest }: Rat
             >
               <CText
                 style={{
-                  borderWidth: selectedRating === rating ? 2 : 0,
+                  borderWidth: isSelected ? 2 : 0,
                   borderColor: "white",
-                  color: selectedRating === rating ? "white" : "black",
-                  fontWeight: selectedRating === rating ? "bold" : "normal",
+                  color: isSelected ? "white" : "black",
+                  fontWeight: isSelected ? "bold" : "normal",
                   borderRadius: 100,
                   padding: "sm",
                   width: 35,

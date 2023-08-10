@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Evaluation } from "../../../../components/UpdateEvaluationCard";
+import { Evaluation, EvaluationToUpdate } from "../../../../components/UpdateEvaluationCard";
 import { graphql } from "../../../../gql";
 import { CollectionCreationProvider_GetGroupQuery } from "../../../../gql/graphql";
 
@@ -82,6 +82,7 @@ function CollectionCreationProvider({ children, groupId }: CollectionCreationPro
   useEffect(() => {
     if (queryData?.getGroup) {
       const { getGroup } = queryData;
+      getGroup.students;
       const sortedEvaluations = getGroup.students
         .map((student) => ({ student, wasPresent: true }))
         .sort((a, b) => a.student.name.localeCompare(b.student.name));

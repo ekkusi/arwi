@@ -7,6 +7,7 @@ import SingleEvaluationHistogram from "../../../components/charts/SingleEvaluati
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import Layout from "../../../components/Layout";
 import LoadingIndicator from "../../../components/LoadingIndicator";
+import CButton from "../../../components/primitives/CButton";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import { graphql } from "../../../gql";
@@ -76,13 +77,32 @@ export default function CollectionView({ route: { params }, navigation }: Native
               </CText>
             );
           })}
+          {collection.description && (
+            <CView>
+              <CText style={{ paddingTop: "md", fontSize: "md", fontWeight: "500" }}>{t("additional-infos", "Lisätiedot: ")}</CText>
+              <CText style={{ fontSize: "sm", fontWeight: "300" }}>{collection.description}</CText>
+            </CView>
+          )}
         </CView>
         <CView style={{ gap: 10, width: "100%" }}>
           <SingleEvaluationHistogram evaluations={collection.evaluations} />
         </CView>
         <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
-          <EvaluationsAccordion evaluations={collection.evaluations} titleFrom="student" />
+          <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
+            <CButton
+              size="small"
+              title={t("edit-all", "Muokkaa kaikkia")}
+              onPress={() => {
+                navigation.navigate("edit-all-evaluations", { collectionId: collection.id });
+              }}
+            />
+          </CView>
+          <EvaluationsAccordion
+            evaluations={collection.evaluations}
+            titleFrom="student"
+            onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
+          />
         </CView>
       </ScrollView>
     </Layout>

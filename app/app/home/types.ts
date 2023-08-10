@@ -20,7 +20,9 @@ export type HomeStackParams = {
   "collection-create": {
     groupId: string;
   };
-  evaluation: undefined;
+  "edit-evaluation": {
+    evaluationId: string;
+  };
   "edit-students": {
     groupId: string;
   };
@@ -31,4 +33,8 @@ export type HomeStackParams = {
     description: string;
     type: string;
   };
+  "edit-all-evaluations": {
+    collectionId: string;
+  };
+  archive: undefined;
 };

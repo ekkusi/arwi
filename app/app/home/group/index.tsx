@@ -41,6 +41,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
     getGroup(id: $groupId) {
       id
       name
+      archived
       subject {
         label
         code
@@ -76,14 +77,6 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           ...CollectionsLineChart_EvaluationCollection
         }
       }
-    }
-  }
-`);
-
-const GroupOverviewPage_DeleteGroup_Mutation = graphql(`
-  mutation GroupOverviewPage_DeleteGroup($groupId: ID!) {
-    deleteGroup(groupId: $groupId) {
-      id
     }
   }
 `);
@@ -384,8 +377,6 @@ const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation 
   return (
     <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
       {objectives.length > 0 ? (
-        // TODO: Show pie chart and make list into accordion with more info about the objective when opened
-        // Add REAL objective count to string
         <CFlatList
           data={learningObjectiveCounts}
           showsVerticalScrollIndicator={false}
@@ -517,7 +508,22 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
               {t("group.evaluation-count", { count: group.currentClassYear.evaluationCollections.length })}
             </CText>
           </CView>
-          <CView>
+          <CView style={{ gap: 10, alignItems: "center", justifyContent: "center" }}>
+            {group.archived && (
+              <CView
+                style={{
+                  paddingHorizontal: 20,
+                  height: 36,
+                  borderRadius: 18,
+                  borderColor: "lightgray",
+                  borderWidth: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CText style={{ fontWeight: "500" }}>{t("archived", "Arkistoitu").toLocaleUpperCase()}</CText>
+              </CView>
+            )}
             <CView
               style={{
                 width: 70,

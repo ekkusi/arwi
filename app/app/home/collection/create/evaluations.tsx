@@ -8,7 +8,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
-import UpdateEvaluationCard from "../../../../components/UpdateEvaluationCard";
+import { CreateEvaluationCard } from "../../../../components/UpdateEvaluationCard";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
@@ -131,7 +131,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
       <CFlatList
         data={evaluations}
         renderItem={({ item, index }) => (
-          <UpdateEvaluationCard
+          <CreateEvaluationCard
             key={item.student.id}
             onLayout={index === 0 ? (event) => setCardHeight(event.nativeEvent.layout.height) : undefined}
             evaluation={item}
