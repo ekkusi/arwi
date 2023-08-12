@@ -3,16 +3,19 @@ export type HomeStackParams = {
   group: {
     id: string;
     name: string;
+    archived: boolean;
   };
   "group-create": undefined;
   student: {
     id: string;
     name: string;
+    archived: boolean;
   };
   collection: {
     id: string;
     date: string;
     environmentLabel: string;
+    archived: boolean;
   };
   "collection-edit": {
     collectionId: string;

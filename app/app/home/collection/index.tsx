@@ -90,15 +90,19 @@ export default function CollectionView({ route: { params }, navigation }: Native
         <CView style={{ gap: 10 }}>
           <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
-            <CButton
-              size="small"
-              title={t("edit-all", "Muokkaa kaikkia")}
-              onPress={() => {
-                navigation.navigate("edit-all-evaluations", { collectionId: collection.id });
-              }}
-            />
+            {!params.archived && (
+              <CButton
+                size="small"
+                variant="outline"
+                title={t("edit-all", "Muokkaa kaikkia")}
+                onPress={() => {
+                  navigation.navigate("edit-all-evaluations", { collectionId: collection.id });
+                }}
+              />
+            )}
           </CView>
           <EvaluationsAccordion
+            allowEditing={!params.archived}
             evaluations={collection.evaluations}
             titleFrom="student"
             onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}

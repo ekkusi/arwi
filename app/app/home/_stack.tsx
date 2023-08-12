@@ -122,10 +122,12 @@ const GroupHeaderRightButton_UpdateGroup_Mutation = graphql(`
 function GroupHeaderRightButton({
   id,
   name,
+  archived,
   navigation,
 }: {
   id: string;
   name: string;
+  archived: boolean;
   navigation: NativeStackNavigationProp<HomeStackParams, "group">;
 }) {
   const { t } = useTranslation();
@@ -133,16 +135,15 @@ function GroupHeaderRightButton({
 
   const [updateGroup, { loading }] = useMutation(GroupHeaderRightButton_UpdateGroup_Mutation);
 
-  const archiveGroup = async () => {
+  const changeGroupArchiveStatus = async (newArchived: boolean) => {
     try {
       await updateGroup({
         variables: {
           id,
           input: {
-            archived: true,
+            archived: newArchived,
           },
         },
-        refetchQueries: ["MainPage_GetCurrentUser"],
       });
       navigation.goBack();
     } catch (e) {
@@ -158,61 +159,84 @@ function GroupHeaderRightButton({
       </MenuTrigger>
       <MenuOptions>
         <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
-          <MenuOption
-            onSelect={() => {
-              openModal({
-                title: t("change-group-name", "Muuta ryhmän nimeä"),
-                children: (
-                  <ChangeGroupName
-                    id={id}
-                    name={name}
-                    onCancel={closeModal}
-                    onSaved={(newName) => {
-                      navigation.setParams({ name: newName });
-                      closeModal();
-                    }}
-                  />
-                ),
-              });
-            }}
-          >
-            <CText>{t("change-name", "Muuta nimeä")}</CText>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => {
-              Alert.alert("Uusi oppilas");
-            }}
-          >
-            <CText>{t("group.edit-students", "Lisää oppilas")}</CText>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => {
-              navigation.navigate("collection-create", { groupId: id });
-            }}
-          >
-            <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => {
-              Alert.alert(
-                t("archive-group", "Arkistoi ryhmä"),
-                t(
-                  "archive-group-info",
-                  "Arkistoimalla ryhmän, ryhmä poistuu etusivun listalta. Ryhmän tietoja pääsee kuitenkin tarkastelemaan vielä ryhmäarkistosta."
-                ),
-                [
+          {!archived && (
+            <MenuOption
+              onSelect={() => {
+                openModal({
+                  title: t("change-group-name", "Muuta ryhmän nimeä"),
+                  children: (
+                    <ChangeGroupName
+                      id={id}
+                      name={name}
+                      onCancel={closeModal}
+                      onSaved={(newName) => {
+                        navigation.setParams({ name: newName });
+                        closeModal();
+                      }}
+                    />
+                  ),
+                });
+              }}
+            >
+              <CText>{t("change-name", "Muuta nimeä")}</CText>
+            </MenuOption>
+          )}
+          {!archived && (
+            <MenuOption
+              onSelect={() => {
+                Alert.alert("Uusi oppilas");
+              }}
+            >
+              <CText>{t("group.edit-students", "Lisää oppilas")}</CText>
+            </MenuOption>
+          )}
+          {!archived && (
+            <MenuOption
+              onSelect={() => {
+                navigation.navigate("collection-create", { groupId: id });
+              }}
+            >
+              <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
+            </MenuOption>
+          )}
+          {archived ? (
+            <MenuOption
+              onSelect={() => {
+                Alert.alert(t("unarchive-group", "Palauta arkistosta"), t("unarchive-group-info", "Palauta ryhmä arkistosta takaisin etusivulle."), [
                   {
                     text: t("no", "Ei"),
                     onPress: () => null,
                     style: "cancel",
                   },
-                  { text: t("yes", "Kyllä"), onPress: () => archiveGroup() },
-                ]
-              );
-            }}
-          >
-            <CText>{t("archive-group", "Arkistoi ryhmä")}</CText>
-          </MenuOption>
+                  { text: t("yes", "Kyllä"), onPress: () => changeGroupArchiveStatus(false) },
+                ]);
+              }}
+            >
+              <CText>{t("unarchive-group", "Palauta arkistosta")}</CText>
+            </MenuOption>
+          ) : (
+            <MenuOption
+              onSelect={() => {
+                Alert.alert(
+                  t("archive-group", "Arkistoi ryhmä"),
+                  t(
+                    "archive-group-info",
+                    "Arkistoimalla ryhmän, ryhmä poistuu etusivun listalta. Ryhmän tietoja pääsee kuitenkin tarkastelemaan vielä ryhmäarkistosta."
+                  ),
+                  [
+                    {
+                      text: t("no", "Ei"),
+                      onPress: () => null,
+                      style: "cancel",
+                    },
+                    { text: t("yes", "Kyllä"), onPress: () => changeGroupArchiveStatus(true) },
+                  ]
+                );
+              }}
+            >
+              <CText>{t("archive-group", "Arkistoi ryhmä")}</CText>
+            </MenuOption>
+          )}
         </CView>
       </MenuOptions>
     </Menu>
@@ -267,7 +291,9 @@ export default function HomeStack() {
         component={GroupView}
         options={({ navigation, route }) => ({
           title: route.params.name,
-          headerRight: () => <GroupHeaderRightButton id={route.params.id} name={route.params.name} navigation={navigation} />,
+          headerRight: () => (
+            <GroupHeaderRightButton id={route.params.id} archived={route.params.archived} name={route.params.name} navigation={navigation} />
+          ),
         })}
       />
       <HomeStackNavigator.Screen name="student" component={StudentView} options={({ route }) => ({ title: route.params.name })} />
@@ -276,7 +302,7 @@ export default function HomeStack() {
         component={CollectionView}
         options={({ route, navigation }) => ({
           title: "",
-          headerRight: () => <CollectionHeaderRightButton id={route.params.id} navigation={navigation} />,
+          headerRight: () => (route.params.archived ? undefined : <CollectionHeaderRightButton id={route.params.id} navigation={navigation} />),
         })}
       />
       <HomeStackNavigator.Screen
