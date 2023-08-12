@@ -82,7 +82,6 @@ function CollectionCreationProvider({ children, groupId }: CollectionCreationPro
   useEffect(() => {
     if (queryData?.getGroup) {
       const { getGroup } = queryData;
-      getGroup.students;
       const sortedEvaluations = getGroup.students
         .map((student) => ({ student, wasPresent: true }))
         .sort((a, b) => a.student.name.localeCompare(b.student.name));

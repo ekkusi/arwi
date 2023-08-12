@@ -2,6 +2,7 @@ export type HomeStackParams = {
   index: undefined;
   group: {
     id: string;
+    classYearId: string;
     name: string;
     archived: boolean;
   };
