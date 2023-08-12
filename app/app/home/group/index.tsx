@@ -337,7 +337,7 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
                 onPress={() =>
                   navigation.navigate("collection", {
                     id: item.id,
-                    date: item.date,
+                    date: formatDate(item.date),
                     archived: group.archived,
                     environmentLabel: item.environment.label,
                   })

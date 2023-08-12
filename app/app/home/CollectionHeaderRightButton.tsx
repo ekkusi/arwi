@@ -45,7 +45,12 @@ export default function CollectionHeaderRightButton({
         <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
           <MenuOption
             onSelect={() => {
-              navigation.navigate("collection-edit", { collectionId: id });
+              navigation.navigate("collection-edit", {
+                collectionId: id,
+                onSaved: (newEnvironmentLabel, newDate) => {
+                  navigation.setParams({ environmentLabel: newEnvironmentLabel, date: newDate });
+                },
+              });
             }}
           >
             <CText>{t("edit-general-details", "Muokkaa yleistietoja")}</CText>

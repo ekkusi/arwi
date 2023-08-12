@@ -22,6 +22,7 @@ import ArchivePage from "../archive";
 import GroupHeaderRightButton from "./GroupHeaderRightButton";
 import CollectionHeaderRightButton from "./CollectionHeaderRightButton";
 import StudentHeaderRightButton from "./StudentHeaderRightButton";
+import { formatDate } from "../../helpers/dateHelpers";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -97,7 +98,7 @@ export default function HomeStack() {
         name="collection"
         component={CollectionView}
         options={({ route, navigation }) => ({
-          title: "",
+          title: `${route.params.date}: ${route.params.environmentLabel}`,
           headerRight: () => (route.params.archived ? undefined : <CollectionHeaderRightButton id={route.params.id} navigation={navigation} />),
         })}
       />

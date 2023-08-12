@@ -20,6 +20,7 @@ export type HomeStackParams = {
   };
   "collection-edit": {
     collectionId: string;
+    onSaved?: (newEnvironmentLabel: string, newDate: string) => void;
   };
   "collection-create": {
     groupId: string;

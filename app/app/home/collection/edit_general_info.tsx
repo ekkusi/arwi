@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "@apollo/client";
 import { Alert } from "react-native";
+import { getEnvironment } from "arwi-backend/src/utils/subjectUtils";
 import { HomeStackParams } from "../types";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { graphql } from "../../../gql";
@@ -73,7 +74,7 @@ const EditGeneralDetails_UpdateCollection_Mutation = graphql(`
 `);
 
 export default function EditCollectionGeneralInfoView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "collection-edit">) {
-  const { collectionId } = route.params;
+  const { collectionId, onSaved } = route.params;
 
   const [updateCollection] = useMutation(EditGeneralDetails_UpdateCollection_Mutation);
   const [submitting, setSubmitting] = useState(false);
@@ -99,6 +100,8 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
       const msg = getErrorMessage(e);
       console.error(msg);
     }
+    const newEnvironmentLabel = getEnvironment(environmentCode)?.label;
+    if (newEnvironmentLabel) onSaved?.(newEnvironmentLabel, formatDate(date));
     setSubmitting(false);
     navigation.goBack();
   };
