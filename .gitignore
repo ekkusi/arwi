@@ -9,3 +9,4 @@ env_variables.yaml
 
 # Builds
 *.apk
+*.aab
