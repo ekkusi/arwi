@@ -19,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>1.0.1</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -39,7 +39,7 @@
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>2</string>
+    <string>1</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSRequiresIPhoneOS</key>
@@ -59,6 +59,8 @@
     </dict>
     <key>NSMicrophoneUsageDescription</key>
     <string>CUSTOM: Allow $(PRODUCT_NAME) to access the microphone</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>$(PRODUCT_NAME) does not require access to the photo library.</string>
     <key>NSSpeechRecognitionUsageDescription</key>
     <string>CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech</string>
     <key>UILaunchStoryboardName</key>

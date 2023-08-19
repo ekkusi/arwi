@@ -2,7 +2,7 @@ module.exports = {
   name: "Arwi",
   slug: "arwi-app",
   owner: "arwi",
-  version: "1.0.0",
+  version: "1.0.1",
   orientation: "portrait",
   icon: "./assets/logo-new.png",
   userInterfaceStyle: "light",
@@ -18,11 +18,14 @@ module.exports = {
       usesNonExemptEncryption: false,
     },
     bundleIdentifier: "com.zen-tracking.arwi",
-    buildNumber: "2",
+    buildNumber: "1",
+    infoPlist: {
+      NSPhotoLibraryUsageDescription: "$(PRODUCT_NAME) does not require access to the photo library.",
+    },
   },
   android: {
     package: "net.arwi.twa",
-    versionCode: 2,
+    versionCode: 1,
     adaptiveIcon: {
       foregroundImage: "./assets/logo-new.png",
       backgroundColor: "#FEFCFB",
