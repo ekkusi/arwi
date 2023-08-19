@@ -27,6 +27,7 @@
     },
     "production": {
       "env": {
+        "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
         "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
         "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",

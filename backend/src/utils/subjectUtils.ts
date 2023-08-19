@@ -116,6 +116,17 @@ export const getLearningObjectives = (subjectCode: string, yearCode: ClassYearCo
   }));
 };
 
+export const getEvaluableLearningObjectives = (subjectCode: string, yearCode: ClassYearCode) => {
+  const objectives = getSubject(subjectCode)?.learning_objectives[getLearningObjectKey(yearCode)] || [];
+
+  return objectives
+    .filter((it) => it.type !== "NOT_EVALUATED")
+    .map((it) => ({
+      ...it,
+      type: it.type as LearningObjectiveType,
+    }));
+};
+
 export const getEnvironments = (subjectCode: string): Environment[] => {
   const subject = getSubject(subjectCode);
   if (!subject) return [];

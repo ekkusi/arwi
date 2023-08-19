@@ -1,4 +1,4 @@
-import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
+import { getEnvironments, getEvaluableLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
@@ -49,7 +49,7 @@ export default function CollectionGeneralInfoForm({
 
   const [environmentError, setEnvironmentError] = useState<string>();
 
-  const learningObjectives = getLearningObjectives(subjectCode, classYearCode);
+  const learningObjectives = getEvaluableLearningObjectives(subjectCode, classYearCode);
   const environments = getEnvironments(subjectCode);
 
   const handleGeneralSubmit = () => {
@@ -76,7 +76,7 @@ export default function CollectionGeneralInfoForm({
           />
           <MultiSelectFormField
             title={t("learningObjectives", "Oppimistavoitteet")}
-            defaultValues={defaultLearningObjectives ? defaultLearningObjectives : []}
+            defaultValues={defaultLearningObjectives || []}
             onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
             options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
           />

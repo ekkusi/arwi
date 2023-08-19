@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
-import { getEnvironments, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
+import { getEnvironments, getEvaluableLearningObjectives, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Keyboard, TextInput, useWindowDimensions } from "react-native";
@@ -432,7 +432,7 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
   const { t } = useTranslation();
 
   const environments = getEnvironments(group.subject.code);
-  const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
+  const objectives = getEvaluableLearningObjectives(group.subject.code, group.currentClassYear.info.code);
   const colorPalette = getPredefinedColors(objectives.length);
 
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(
