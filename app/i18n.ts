@@ -35,7 +35,7 @@ i18n
   .use(initReactI18next)
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    debug: true,
+    debug: __DEV__,
     returnNull: false,
     keySeparator: false,
     fallbackLng: !__DEV__ && deviceLanguageExists ? deviceLanguage : "fi_FI", // In dev or if device language is not supported, use Finnish
