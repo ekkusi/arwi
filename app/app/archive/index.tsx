@@ -28,6 +28,9 @@ const ArchivePage_GetCurrentUser_Query = graphql(`
           label
           code
         }
+        currentClassYear {
+          id
+        }
       }
     }
   }
@@ -67,7 +70,9 @@ function ArchivePageContent({
               exitAnimation={SlideOutRight}
               group={item}
               onEvaluateIconPress={() => navigation.navigate("collection-create", { groupId: item.id })}
-              onListItemPress={() => navigation.navigate("group", item)}
+              onListItemPress={() =>
+                navigation.navigate("group", { id: item.id, classYearId: item.currentClassYear.id, name: item.name, archived: item.archived })
+              }
             />
           )}
           keyExtractor={(group) => group.id}

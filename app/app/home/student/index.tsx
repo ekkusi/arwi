@@ -59,7 +59,7 @@ const StudentPage_GetStudent_Query = graphql(`
 `);
 
 export default function StudentView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "student">) {
-  const studentId = route.params.id;
+  const { id: studentId, archived } = route.params;
 
   const { data } = useQuery(StudentPage_GetStudent_Query, { variables: { studentId } });
   const { t } = useTranslation();
@@ -278,33 +278,36 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           <GradeSuggestionView skillsMean={skillsAverage} behaviourMean={behaviourAverage} />
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
           <EvaluationsAccordion
+            allowEditing={!archived}
             evaluations={student.currentClassEvaluations}
             onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
           />
-          <CView style={{ marginTop: "lg" }} onLayout={(event) => setScrollYPos(event.nativeEvent.layout.y)}>
-            <CText style={{ fontSize: "xl", marginBottom: "lg" }}>{t("StudentView.feedbackGeneration", "Loppupalautteen generointi")}</CText>
-            <CButton loading={isGeneratingSummary} title={t("StudentView.generateFeedback", "Luo palaute")} onPress={generateSummary} />
-            {error && <CText style={{ color: "error" }}>{error}</CText>}
-            {summary && (
-              <CView
-                style={{ marginTop: "lg" }}
-                onLayout={() => {
-                  scrollView.current?.scrollTo({ y: scrollYPos, x: 0, animated: true });
-                }}
-              >
-                <CText style={{ fontSize: "xl" }}>{t("feedback", "Palaute")}:</CText>
-                <CText style={{ marginBottom: "lg" }}>{summary}</CText>
-                <CView style={{ alignContent: "center", marginTop: "md" }}>
-                  <CButton
-                    title={isCopied ? t("StudentView.copied", "Kopioitu") : t("StudentView.copyText", "Kopioi teksti")}
-                    disabled={isCopied}
-                    onPress={copySummaryToClipboard}
-                    leftIcon={<MaterialCommunityIcon name={isCopied ? "check" : "note-text-outline"} size={25} color={COLORS.white} />}
-                  />
+          {archived && (
+            <CView style={{ marginTop: "lg" }} onLayout={(event) => setScrollYPos(event.nativeEvent.layout.y)}>
+              <CText style={{ fontSize: "xl", marginBottom: "lg" }}>{t("StudentView.feedbackGeneration", "Loppupalautteen generointi")}</CText>
+              <CButton loading={isGeneratingSummary} title={t("StudentView.generateFeedback", "Luo palaute")} onPress={generateSummary} />
+              {error && <CText style={{ color: "error" }}>{error}</CText>}
+              {summary && (
+                <CView
+                  style={{ marginTop: "lg" }}
+                  onLayout={() => {
+                    scrollView.current?.scrollTo({ y: scrollYPos, x: 0, animated: true });
+                  }}
+                >
+                  <CText style={{ fontSize: "xl" }}>{t("feedback", "Palaute")}:</CText>
+                  <CText style={{ marginBottom: "lg" }}>{summary}</CText>
+                  <CView style={{ alignContent: "center", marginTop: "md" }}>
+                    <CButton
+                      title={isCopied ? t("StudentView.copied", "Kopioitu") : t("StudentView.copyText", "Kopioi teksti")}
+                      disabled={isCopied}
+                      onPress={copySummaryToClipboard}
+                      leftIcon={<MaterialCommunityIcon name={isCopied ? "check" : "note-text-outline"} size={25} color={COLORS.white} />}
+                    />
+                  </CView>
                 </CView>
-              </CView>
-            )}
-          </CView>
+              )}
+            </CView>
+          )}
         </CView>
       </ScrollView>
     </Layout>

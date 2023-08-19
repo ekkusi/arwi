@@ -249,7 +249,7 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
                 const allClasses = group.currentClassYear.evaluationCollections.length;
                 return (
                   <Card style={{ marginBottom: "md" }} key={item.id}>
-                    <CTouchableOpacity onPress={() => navigation.navigate("student", item)}>
+                    <CTouchableOpacity onPress={() => navigation.navigate("student", { id: item.id, name: item.name, archived: group.archived })}>
                       <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
                       <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                         <CText style={{ fontSize: "sm", color: "gray" }}>
@@ -334,7 +334,14 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
           renderItem={({ item }) => (
             <Card style={{ marginBottom: "md" }} key={item.id}>
               <CTouchableOpacity
-                onPress={() => navigation.navigate("collection", { id: item.id, date: item.date, environmentLabel: item.environment.label })}
+                onPress={() =>
+                  navigation.navigate("collection", {
+                    id: item.id,
+                    date: formatDate(item.date),
+                    archived: group.archived,
+                    environmentLabel: item.environment.label,
+                  })
+                }
               >
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.environment.label}</CText>
                 <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -348,14 +355,16 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
       ) : (
         <CText style={{ paddingTop: 50, alignSelf: "center" }}>{t("group.no-collections", "Ryhmälle ei vielä olla tehty arviointeja")}</CText>
       )}
-      <Animated.View style={[{ position: "absolute", bottom: 20, right: 15, backgroundColor: "rgba(0,0,0,0)" }, newEvaluationButtonStyle]}>
-        <CButton
-          shadowed
-          title={t("new-evaluation", "Uusi arviointi")}
-          onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
-          leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
-        />
-      </Animated.View>
+      {!group.archived && (
+        <Animated.View style={[{ position: "absolute", bottom: 20, right: 15, backgroundColor: "rgba(0,0,0,0)" }, newEvaluationButtonStyle]}>
+          <CButton
+            shadowed
+            title={t("new-evaluation", "Uusi arviointi")}
+            onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
+            leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
+          />
+        </Animated.View>
+      )}
     </CView>
   );
 });
@@ -591,14 +600,16 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
           </CView>
         )}
       </Animated.ScrollView>
-      <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
-        <CButton
-          shadowed
-          title={t("new-evaluation", "Uusi arviointi")}
-          onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
-          leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
-        />
-      </Animated.View>
+      {!group.archived && (
+        <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
+          <CButton
+            shadowed
+            title={t("new-evaluation", "Uusi arviointi")}
+            onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
+            leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
+          />
+        </Animated.View>
+      )}
     </CView>
   );
 });

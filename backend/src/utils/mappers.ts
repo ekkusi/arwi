@@ -10,7 +10,7 @@ export const mapUpdateStudentInput = (data: UpdateStudentInput): Prisma.StudentU
 export const mapUpdateGroupInput = (data: UpdateGroupInput): Prisma.GroupUpdateInput => {
   return {
     name: data.name ? data.name : undefined,
-    archived: data.archived ? data.archived : undefined,
+    archived: data.archived === null ? undefined : data.archived,
   };
 };
 

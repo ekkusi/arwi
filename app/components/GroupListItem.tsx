@@ -17,6 +17,7 @@ export const GroupListItem_Fragment = graphql(`
   fragment GroupListItem on Group {
     id
     name
+    archived
     subject {
       label
       code
@@ -114,9 +115,11 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
           </CView>
         </CView>
         <CView style={{ flex: 1 }}>
-          <CTouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
-            <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />
-          </CTouchableOpacity>
+          {!group.archived && (
+            <CTouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
+              <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />
+            </CTouchableOpacity>
+          )}
         </CView>
       </CTouchableOpacity>
     </Card>
