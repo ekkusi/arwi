@@ -31,6 +31,7 @@ export type SelectProps<IsMulti = boolean> = {
   closeAfterSelect?: boolean;
   title?: string;
   defaultValues?: string[];
+  formatLabel?: (item: OptionType) => string;
 } & DynamicSelectProps<IsMulti>;
 
 export default function Select(props: SelectProps) {
@@ -43,6 +44,7 @@ export default function Select(props: SelectProps) {
     closeAfterSelect = !isMulti,
     title,
     defaultValues,
+    formatLabel,
     placeholder = t("select-default-placeholder", "Valitse"),
   } = props;
 
@@ -160,7 +162,7 @@ export default function Select(props: SelectProps) {
                       marginRight: isSelected ? 10 : 30,
                     }}
                   >
-                    {item.label}
+                    {formatLabel ? formatLabel(item) : item.label}
                   </CText>
                   {isSelected && <MaterialCommunityIcon name="check" size={23} color={COLORS.primary} />}
                 </CTouchableOpacity>

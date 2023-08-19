@@ -79,6 +79,7 @@ export default function CollectionGeneralInfoForm({
             defaultValues={defaultLearningObjectives || []}
             onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
             options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
+            formatLabel={(item) => `${item.value}: ${item.label}`}
           />
           <FormField title={t("date", "Päivämäärä")}>
             <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
