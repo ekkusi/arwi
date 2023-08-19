@@ -1,5 +1,5 @@
 import { ClassYearCode as PrismaClassYearCode } from "@prisma/client";
-import subjectSchema from "../subject-schema.json";
+import subjectSchema from "../subject-schema-only-sports.json";
 import { ClassYearCode, LearningObjectiveType } from "../types";
 
 export type Subject = (typeof subjectSchema.subjects)[number];
@@ -21,9 +21,12 @@ export const getSubjectCode = (environmentCode: string) => {
   return environmentCode.slice(0, 2);
 };
 
+// NOTE: Only temporal, remove when other subjects are added
+const sportsSubject = subjectSchema.subjects[0];
+
 export const getSubject = (subjectCode: string): Subject | null => {
   const matchingSubject = subjectSchema.subjects.find((it) => it.code === subjectCode);
-  return matchingSubject || null;
+  return matchingSubject || sportsSubject; // NOTE: Return null when other subjects are added back
 };
 
 export const getSubjects = (): SubjectMinimal[] => {
