@@ -18,7 +18,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: 'Check db url'
-      run: echo ${{ secrets.TEST_DATABASE_URL }}
+      run: |
+        touch test.txt
+        echo ${{ secrets.TEST_DATABASE_URL }} >> test.txt
+        cat test.txt
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
