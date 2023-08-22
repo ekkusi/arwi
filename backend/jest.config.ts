@@ -12,7 +12,7 @@ const config: Config = {
     "^.+\\.[tj]sx?$": [
       "ts-jest",
       {
-        tsconfig: "tsconfig.test.json",
+        tsconfig: "tsconfig.json",
       },
     ],
   },
