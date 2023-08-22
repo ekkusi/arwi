@@ -9,6 +9,7 @@
     "build": "tsc -p tsconfig.prod.json && copyfiles -u 1 -e \"src/__mocks__/*\" \"src/**/*.graphql\" \"src/**/*.json\" lib",
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:deploy-prod": "dotenv -e ../.env.production -- npx prisma migrate deploy",
     "prisma:generate": "npx prisma generate",
     "setup-db": "yarn prisma:generate && yarn prisma:deploy",
     "test": "dotenv -e .env.test jest -i",
