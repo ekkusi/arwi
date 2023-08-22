@@ -6,6 +6,8 @@ WORKDIR /app
 
 COPY backend/package.json  yarn.lock ./
 
+ENV NODE_ENV development
+
 RUN yarn install --frozen-lockfile
 
 FROM base AS builder
