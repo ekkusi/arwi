@@ -18,7 +18,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: 'Check db url'
-      run: echo ${{secrets.YOUR_SECRET}} | sed 's/./& /g'
+      run: echo ${{secrets.TEST_DATABASE_URL}} | sed 's/./& /g'
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
