@@ -44,14 +44,6 @@ const EvaluationEditView_UpdateEvaluation_Mutation = graphql(`
       behaviourRating
       notes
       isStellar
-      student {
-        id
-        name
-        currentClassEvaluations {
-          id
-          notes
-        }
-      }
     }
   }
 `);
