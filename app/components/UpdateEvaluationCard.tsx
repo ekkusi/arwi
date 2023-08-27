@@ -86,6 +86,7 @@ function EvaluationCard({ onChanged, evaluation, hasParticipationToggle = true, 
       Voice.onSpeechResults = (event) => {
         if (event.value) {
           setCurrentRecordingAsText("");
+          setNotes(`${notes} ${event.value[0]}`);
           onChanged("notes", `${notes} ${event.value[0]}`);
         }
       };
