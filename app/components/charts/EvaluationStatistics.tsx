@@ -1,86 +1,15 @@
-import { Environment } from "arwi-backend/src/types";
-import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
-import { FragmentType, getFragmentData, graphql } from "../../gql";
-import { EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
-import { formatRatingNumber } from "../../helpers/dataMappers";
-import { formatDate } from "../../helpers/dateHelpers";
+import { FragmentType, getFragmentData } from "../../gql";
 import CircledNumber from "../CircledNumber";
 import InfoButton from "../InfoButton";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
-import LineChartBase, { DataType as BaseDataType, LineChartBaseProps } from "./LineChartBase";
+import { EvaluationsLineChart_Evaluation_Fragment, mapEvaluationData } from "./EvaluationsLineChart";
+import { LineChartBaseProps } from "./LineChartBase";
+import MovingAverageLineChart from "./MovingAverageLineChart";
 import StatisticsFilterMenu from "./StatisticsFilterMenu";
-
-const EvaluationsLineChart_Evaluation_Fragment = graphql(`
-  fragment EvaluationsLineChart_Evaluation on Evaluation {
-    id
-    skillsRating
-    behaviourRating
-    wasPresent
-    collection {
-      date
-      environment {
-        label
-        code
-        color
-      }
-    }
-  }
-`);
-
-type DataType = BaseDataType & {
-  environment: EvaluationsLineChart_EvaluationFragment["collection"]["environment"];
-};
-
-const mapData = (evaluations: EvaluationsLineChart_EvaluationFragment[]) => {
-  const data: DataType[] = [];
-  evaluations.forEach((ev) => {
-    const skillsRating = ev.skillsRating && formatRatingNumber(ev.skillsRating);
-    const behaviourRating = ev.behaviourRating && formatRatingNumber(ev.behaviourRating);
-    if (skillsRating && behaviourRating) {
-      data.push({
-        date: formatDate(ev.collection.date),
-        environment: ev.collection.environment,
-        skills: skillsRating,
-        behaviour: behaviourRating,
-      });
-    }
-  });
-  return data;
-};
-
-const movingAverage = (data: DataType[], bandWidth: number) => {
-  const movingAverageData: DataType[] = [];
-  for (let i = 0; i < data.length; i += 1) {
-    let currSumSkills = 0;
-    let notNullSkillsCount = 0;
-    let currSumBehaviour = 0;
-    let notNullBehaviourCount = 0;
-    const bandWidthLeft = i - bandWidth < 0 ? 0 : i - bandWidth;
-    const bandWidthRight = i + bandWidth < data.length ? i + bandWidth : data.length - 1;
-    for (let j = bandWidthLeft; j <= bandWidthRight; j += 1) {
-      const currDataPoint = data[j];
-      if (currDataPoint.skills) {
-        currSumSkills += currDataPoint.skills;
-        notNullSkillsCount += 1;
-      }
-      if (currDataPoint.behaviour) {
-        currSumBehaviour += currDataPoint.behaviour;
-        notNullBehaviourCount += 1;
-      }
-    }
-    movingAverageData.push({
-      date: data[i].date,
-      environment: data[i].environment,
-      skills: currSumSkills / notNullSkillsCount,
-      behaviour: currSumBehaviour / notNullBehaviourCount,
-    });
-  }
-  return movingAverageData;
-};
 
 type EvaluationsLineChartProps = Omit<LineChartBaseProps, "data"> & {
   title?: string;
@@ -108,7 +37,7 @@ export default function EvaluationsStatistics({
 
   // Start pushing item to data array after the avg threshhold is reached (to avoid showing data that is not yet balanced)
   // If there are less than minItems, start pushing items from beginning
-  const data = mapData(sortedEvaluations);
+  const data = mapEvaluationData(sortedEvaluations);
 
   const filteredData = filter ? data.filter((obj) => obj.environment.label === filter) : data;
 
@@ -123,8 +52,6 @@ export default function EvaluationsStatistics({
     () => evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) / evaluationsWithBehaviour.length,
     [evaluationsWithBehaviour]
   );
-
-  const movingAverageData = movingAverage(filteredData, 2);
 
   return (
     <CView style={{ gap: 10 }}>
@@ -152,7 +79,7 @@ export default function EvaluationsStatistics({
           }
         />
       </CView>
-      <LineChartBase data={movingAverageData} minItems={minItems} {...rest} />
+      <MovingAverageLineChart data={filteredData} minItems={minItems} {...rest} />
       <CView style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
         <CircledNumber value={skillsMean} title={t("skills-mean", "Taitojen keskiarvo")} />
         <CircledNumber value={behaviourMean} title={t("behaviour-mean", "Työskentelyn keskiarvo")} />

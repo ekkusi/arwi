@@ -8,6 +8,7 @@ import CircledNumber from "../CircledNumber";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
+import MovingAverageLineChart, { EvaluationDataType } from "./MovingAverageLineChart";
 import StatisticsFilterMenu from "./StatisticsFilterMenu";
 
 const CollectionsLineChart_Collection_Fragment = graphql(`
@@ -27,12 +28,8 @@ const CollectionsLineChart_Collection_Fragment = graphql(`
   }
 `);
 
-type CollectionDataType = DataType & {
-  environment: string;
-};
-
 const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[]) => {
-  const data: CollectionDataType[] = [];
+  const data: EvaluationDataType[] = [];
   let currentSkillsSum = 0;
   let notNullSkillsCount = 0;
   let currentBehaviourSum = 0;
@@ -94,7 +91,7 @@ export default function CollectionStatistics({ title, subjectCode, collections: 
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}
       />
-      <LineChartBase data={filteredData} {...rest} />
+      <MovingAverageLineChart data={filteredData} {...rest} />
       <CView style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
         <CircledNumber value={skillsMean} title={t("group.skills-mean", "Taitojen keskiarvo")} />
         <CircledNumber value={behaviourMean} title={t("group.behaviour-mean", "Työskentelyn keskiarvo")} />
