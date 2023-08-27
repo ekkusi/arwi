@@ -2,7 +2,7 @@ import { EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
 
 export type EvaluationDataType = DataType & {
-  environment: EvaluationsLineChart_EvaluationFragment["collection"]["environment"] | string;
+  environment: EvaluationsLineChart_EvaluationFragment["collection"]["environment"]["label"] | string;
 };
 
 const movingAverage = (data: EvaluationDataType[], bandWidth: number) => {

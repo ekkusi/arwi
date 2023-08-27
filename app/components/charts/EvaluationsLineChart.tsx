@@ -30,7 +30,7 @@ export const mapEvaluationData = (evaluations: EvaluationsLineChart_EvaluationFr
     if (skillsRating && behaviourRating) {
       data.push({
         date: formatDate(ev.collection.date),
-        environment: ev.collection.environment,
+        environment: ev.collection.environment.label,
         skills: skillsRating,
         behaviour: behaviourRating,
       });

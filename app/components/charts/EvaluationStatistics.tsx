@@ -39,7 +39,7 @@ export default function EvaluationsStatistics({
   // If there are less than minItems, start pushing items from beginning
   const data = mapEvaluationData(sortedEvaluations);
 
-  const filteredData = filter ? data.filter((obj) => obj.environment.label === filter) : data;
+  const filteredData = filter !== undefined ? data.filter((obj) => obj.environment === filter) : data;
 
   const evaluationsWithSkills = useMemo(() => filteredData.filter((obj) => obj.skills !== undefined), [filteredData]);
   const skillsMean = useMemo(
