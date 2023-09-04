@@ -1,7 +1,6 @@
 import React, { createContext, useState } from "react";
 import CModal, { CModalProps } from "../components/CModal";
 
-// For test commit
 type OpenModalProps = Omit<CModalProps, "isOpen" | "children"> & {
   children: React.ReactNode;
 };
