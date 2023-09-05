@@ -14,6 +14,7 @@ import AuthStack from "./app/auth/_stack";
 import { graphql } from "./gql";
 import ModalProvider from "./hooks-and-providers/ModalProvider";
 import HomeStack from "./app/home/_stack";
+import { STORAGE_LANG_KEY } from "./i18n";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -29,7 +30,7 @@ SplashScreen.preventAutoHideAsync();
 export default function Main() {
   const { authState, setUser } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
-  const { ready: i18nReady } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
+  const { ready: i18nReady, i18n } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
 
   const client = useApolloClient();
 
@@ -40,7 +41,10 @@ export default function Main() {
     if (data && token) {
       await setUser(token, data.getCurrentUser);
     }
-  }, [client, setUser]);
+    // Fetch lang from storage and set it to i18n
+    const storedLang = await SecureStore.getItemAsync(STORAGE_LANG_KEY);
+    if (storedLang) i18n.changeLanguage(storedLang);
+  }, [client, i18n, setUser]);
 
   useEffect(() => {
     setUserInfo()
