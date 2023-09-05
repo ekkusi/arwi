@@ -3,12 +3,12 @@ import { CViewStyle } from "../../theme/types";
 import FormField, { FormFieldProps } from "./FormField";
 import Select, { SelectProps } from "./Select";
 
-export type SelectFormFieldProps = Omit<SelectProps<false>, "title" | "error" | "isMulti"> &
+export type SelectFormFieldProps<CustomOptionType = unknown> = Omit<SelectProps<CustomOptionType, false>, "title" | "error" | "isMulti"> &
   Pick<FormFieldProps, "title" | "titleStyle" | "errorTextStyle" | "error"> & {
     containerStyle?: CViewStyle;
   };
 
-export default function SelectFormField(props: SelectFormFieldProps) {
+export default function SelectFormField<CustomOptionType = unknown>(props: SelectFormFieldProps<CustomOptionType>) {
   const { title, containerStyle, errorTextStyle, titleStyle, error, ...rest } = props;
 
   return (

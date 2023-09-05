@@ -67,11 +67,12 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
               <SelectFormField
                 title={t("class-year", "Luokka-aste")}
                 placeholder={t("GroupNameSelection.selectClass", "Valitse luokka")}
-                options={classes.map((obj) => ({ value: obj.code, label: obj.label }))}
+                options={classes}
                 onSelect={(item) => {
-                  const selectedClass = classes.find((obj) => obj.code === item.value);
-                  setGroup({ ...group, class: selectedClass });
+                  setGroup({ ...group, class: item });
                 }}
+                getOptionValue={(item) => item.code}
+                formatLabel={(item) => item.label}
               />
             </CView>
             <CView style={{ justifyContent: "flex-end" }}>

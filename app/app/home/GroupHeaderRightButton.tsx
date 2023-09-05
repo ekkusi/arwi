@@ -12,6 +12,7 @@ import { useModal } from "../../hooks-and-providers/ModalProvider";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import ChangeGroupName from "./ChangeGroupName";
 import AddNewStudent from "./AddNewStudent";
+import ChangeClassYear from "./ChangeClassYear";
 
 const GroupHeaderRightButton_UpdateGroup_Mutation = graphql(`
   mutation GroupHeaderRightButton_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {
@@ -64,60 +65,88 @@ export default function GroupHeaderRightButton({
       </MenuTrigger>
       <MenuOptions>
         <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
-          {!archived && (
-            <MenuOption
-              onSelect={() => {
-                openModal({
-                  title: t("edit-group-name", "Muokkaa ryhmän nimeä"),
-                  children: (
-                    <ChangeGroupName
-                      id={id}
-                      name={name}
-                      onCancel={closeModal}
-                      onSaved={(newName) => {
-                        navigation.setParams({ name: newName });
-                        closeModal();
-                      }}
-                    />
-                  ),
-                });
-              }}
-            >
-              <CText>{t("edit-name", "Muokkaa nimeä")}</CText>
-            </MenuOption>
-          )}
-          {!archived && (
-            <MenuOption
-              onSelect={() => {
-                openModal({
-                  title: t("add-student", "Lisää oppilas"),
-                  children: (
-                    <AddNewStudent
-                      classYearId={classYearId}
-                      onCancel={closeModal}
-                      onSaved={() => {
-                        closeModal();
-                        // TODO: Indicator that adding student was completed
-                        Alert.alert("Lisäys onnistui!");
-                      }}
-                    />
-                  ),
-                });
-              }}
-            >
-              <CText>{t("group.edit-students", "Lisää oppilas")}</CText>
-            </MenuOption>
-          )}
-          {!archived && (
-            <MenuOption
-              onSelect={() => {
-                navigation.navigate("collection-create", { groupId: id });
-              }}
-            >
-              <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
-            </MenuOption>
-          )}
-          {archived ? (
+          {!archived ? (
+            <>
+              <MenuOption
+                onSelect={() => {
+                  openModal({
+                    title: t("edit-group-name", "Muokkaa ryhmän nimeä"),
+                    children: (
+                      <ChangeGroupName
+                        id={id}
+                        name={name}
+                        onCancel={closeModal}
+                        onSaved={(newName) => {
+                          navigation.setParams({ name: newName });
+                          closeModal();
+                        }}
+                      />
+                    ),
+                  });
+                }}
+              >
+                <CText>{t("edit-name", "Muokkaa nimeä")}</CText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  openModal({
+                    title: t("add-student", "Lisää oppilas"),
+                    children: (
+                      <AddNewStudent
+                        classYearId={classYearId}
+                        onCancel={closeModal}
+                        onSaved={() => {
+                          closeModal();
+                          // TODO: Indicator that adding student was completed
+                          Alert.alert(t("student-added-succesfully", "Oppilas lisätty onnistuneesti!"));
+                        }}
+                      />
+                    ),
+                  });
+                }}
+              >
+                <CText>{t("group.edit-students", "Lisää oppilas")}</CText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  navigation.navigate("collection-create", { groupId: id });
+                }}
+              >
+                <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  openModal({
+                    title: t("change-class-year", "Vaihda vuosiluokka"),
+                    children: <ChangeClassYear groupId={id} onCancel={closeModal} onSaved={closeModal} />,
+                  });
+                }}
+              >
+                <CText>{t("change-class-year", "Vaihda vuosiluokka")}</CText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  Alert.alert(
+                    t("archive-group", "Arkistoi ryhmä"),
+                    t(
+                      "archive-group-info",
+                      "Arkistoimalla ryhmän, ryhmä poistuu etusivun listalta. Ryhmän tietoja pääsee kuitenkin tarkastelemaan vielä ryhmäarkistosta."
+                    ),
+                    [
+                      {
+                        text: t("no", "Ei"),
+                        onPress: () => null,
+                        style: "cancel",
+                      },
+                      { text: t("yes", "Kyllä"), onPress: () => changeGroupArchiveStatus(true) },
+                    ]
+                  );
+                }}
+              >
+                <CText>{t("archive-group", "Arkistoi ryhmä")}</CText>
+              </MenuOption>
+            </>
+          ) : (
             <MenuOption
               onSelect={() => {
                 Alert.alert(t("unarchive-group", "Palauta arkistosta"), t("unarchive-group-info", "Palauta ryhmä arkistosta takaisin etusivulle."), [
@@ -131,28 +160,6 @@ export default function GroupHeaderRightButton({
               }}
             >
               <CText>{t("unarchive-group", "Palauta arkistosta")}</CText>
-            </MenuOption>
-          ) : (
-            <MenuOption
-              onSelect={() => {
-                Alert.alert(
-                  t("archive-group", "Arkistoi ryhmä"),
-                  t(
-                    "archive-group-info",
-                    "Arkistoimalla ryhmän, ryhmä poistuu etusivun listalta. Ryhmän tietoja pääsee kuitenkin tarkastelemaan vielä ryhmäarkistosta."
-                  ),
-                  [
-                    {
-                      text: t("no", "Ei"),
-                      onPress: () => null,
-                      style: "cancel",
-                    },
-                    { text: t("yes", "Kyllä"), onPress: () => changeGroupArchiveStatus(true) },
-                  ]
-                );
-              }}
-            >
-              <CText>{t("archive-group", "Arkistoi ryhmä")}</CText>
             </MenuOption>
           )}
         </CView>

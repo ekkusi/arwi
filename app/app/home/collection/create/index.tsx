@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Environment, LearningObjectiveMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { CollectionCreationStackParams } from "./types";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import CollectionCreationLayout from "./_layout";
@@ -29,12 +30,12 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
   const subjectCode = group.subject.code;
   const classYearCode = group.currentClassYear.info.code;
 
-  const handleSubmit = (date: Date, environmentCode: string, learningObjectiveCodes: string[], description: string) => {
+  const handleSubmit = (date: Date, environment: Environment, learningObjectives: LearningObjectiveMinimal[], description: string) => {
     setGeneralData({
       date,
       description,
-      environmentCode,
-      learningObjectiveCodes,
+      environmentCode: environment.code,
+      learningObjectiveCodes: learningObjectives.map((item) => item.code),
     });
     navigation.navigate("participations");
   };

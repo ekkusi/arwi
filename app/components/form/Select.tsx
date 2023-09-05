@@ -14,27 +14,29 @@ export type OptionType = {
   label: string;
 };
 
-type DynamicSelectProps<IsMulti = boolean> = IsMulti extends true
+type DynamicSelectProps<CustomOptionType = unknown, IsMulti = boolean> = IsMulti extends true
   ? {
-      onSelect: (value: OptionType[]) => void;
+      onSelect: (value: CustomOptionType[]) => void;
       isMulti: IsMulti;
+      defaultValue?: CustomOptionType[];
     }
   : {
-      onSelect: (value: OptionType) => void;
+      onSelect: (value: CustomOptionType) => void;
       isMulti: IsMulti;
+      defaultValue?: CustomOptionType;
     };
 
-export type SelectProps<IsMulti = boolean> = {
-  options: OptionType[];
+export type SelectProps<CustomOptionType = unknown, IsMulti = boolean> = {
+  getOptionValue: (item: CustomOptionType) => string;
+  formatLabel: (item: CustomOptionType) => string;
+  options: CustomOptionType[];
   error?: boolean;
   placeholder?: string;
   closeAfterSelect?: boolean;
   title?: string;
-  defaultValues?: string[];
-  formatLabel?: (item: OptionType) => string;
-} & DynamicSelectProps<IsMulti>;
+} & DynamicSelectProps<CustomOptionType, IsMulti>;
 
-export default function Select(props: SelectProps) {
+export default function Select<CustomOptionType = unknown>(props: SelectProps<CustomOptionType>) {
   const { t } = useTranslation();
   const {
     options,
@@ -43,20 +45,26 @@ export default function Select(props: SelectProps) {
     isMulti,
     closeAfterSelect = !isMulti,
     title,
-    defaultValues,
+    defaultValue,
     formatLabel,
+    getOptionValue,
     placeholder = t("select-default-placeholder", "Valitse"),
   } = props;
 
-  const selectedDefaults = defaultValues ? options.filter((obj) => defaultValues.includes(obj.value)) : [];
-  const [selected, setSelected] = useState<OptionType[]>(selectedDefaults);
+  const selectedDefaults = useMemo(() => {
+    if (isMulti) {
+      return defaultValue || [];
+    }
+    return defaultValue ? [defaultValue] : [];
+  }, [defaultValue, isMulti]);
+  const [selected, setSelected] = useState<CustomOptionType[]>(selectedDefaults);
   const [selectModalOpen, setSelectModalOpen] = useState(false);
 
-  const onSelect = (value: OptionType) => {
+  const onSelect = (value: CustomOptionType) => {
     if (isMulti) {
       let newSelected;
-      if (selected.find((s) => s.value === value.value)) {
-        newSelected = selected.filter((s) => s.value !== value.value);
+      if (selected.find((s) => getOptionValue(s) === getOptionValue(value))) {
+        newSelected = selected.filter((s) => getOptionValue(s) !== getOptionValue(value));
       } else {
         newSelected = [...selected, value];
       }
@@ -76,7 +84,7 @@ export default function Select(props: SelectProps) {
         <CView style={{ flexDirection: "row", flexWrap: "wrap", gap: "xs", flex: 1 }}>
           {selected.map((it) => (
             <CText
-              key={it.value}
+              key={getOptionValue(it)}
               style={{
                 paddingVertical: "xs",
                 paddingHorizontal: "lg",
@@ -88,14 +96,14 @@ export default function Select(props: SelectProps) {
                 fontSize: "sm",
               }}
             >
-              {it.value}
+              {getOptionValue(it)}
             </CText>
           ))}
         </CView>
       );
     }
-    return selected[0].label;
-  }, [isMulti, placeholder, selected]);
+    return formatLabel(selected[0]);
+  }, [formatLabel, getOptionValue, isMulti, placeholder, selected]);
 
   return (
     <>
@@ -136,9 +144,9 @@ export default function Select(props: SelectProps) {
         <CFlatList
           style={{ width: "100%", paddingTop: "md" }}
           renderItem={({ item, index }) => {
-            const isSelected = selected.findIndex((s) => s.value === item.value) >= 0;
+            const isSelected = selected.findIndex((s) => getOptionValue(s) === getOptionValue(item)) >= 0;
             return (
-              <CView key={item.value} onStartShouldSetResponder={() => true}>
+              <CView key={getOptionValue(item)} onStartShouldSetResponder={() => true}>
                 <CTouchableOpacity
                   style={{
                     flexDirection: "row",
@@ -162,7 +170,7 @@ export default function Select(props: SelectProps) {
                       marginRight: isSelected ? 10 : 30,
                     }}
                   >
-                    {formatLabel ? formatLabel(item) : item.label}
+                    {formatLabel(item)}
                   </CText>
                   {isSelected && <MaterialCommunityIcon name="check" size={23} color={COLORS.primary} />}
                 </CTouchableOpacity>

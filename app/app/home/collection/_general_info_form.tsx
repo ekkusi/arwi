@@ -1,4 +1,4 @@
-import { getEnvironments, getEvaluableLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
+import { Environment, getEnvironments, getEvaluableLearningObjectivesMinimal, LearningObjectiveMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
@@ -17,11 +17,11 @@ import { formatDate } from "../../../helpers/dateHelpers";
 type CollectionGeneralInfoFormProps = {
   subjectCode: string;
   classYearCode: ClassYearCode;
-  defaultEnvironment?: string;
-  defaultLearningObjectives?: string[];
+  defaultEnvironment?: Environment;
+  defaultLearningObjectives?: LearningObjectiveMinimal[];
   defaultDescription?: string;
   defaultDate?: Date;
-  handleSubmit: (date: Date, environmentCode: string, learningObjectives: string[], description: string) => void;
+  handleSubmit: (date: Date, environment: Environment, learningObjectives: LearningObjectiveMinimal[], description: string) => void;
   buttonIcon?: JSX.Element;
   buttonTitle?: string;
   buttonLoading?: boolean;
@@ -41,15 +41,15 @@ export default function CollectionGeneralInfoForm({
 }: CollectionGeneralInfoFormProps) {
   const { t } = useTranslation();
 
-  const [selectedEnvironmentCode, setSelectedEnvironmentCode] = useState<string>(defaultEnvironment || "");
-  const [selectedLearningObjectiveCode, setSelectedLearningObjectivesCode] = useState<string[]>(defaultLearningObjectives || []);
+  const [selectedEnvironmentCode, setSelectedEnvironmentCode] = useState<Environment | undefined>(defaultEnvironment);
+  const [selectedLearningObjectiveCode, setSelectedLearningObjectivesCode] = useState<LearningObjectiveMinimal[]>(defaultLearningObjectives || []);
   const [date, setDate] = useState(defaultDate || new Date());
   const [isDateOpen, setIsDateOpen] = useState(false);
   const [description, setDescription] = useState(defaultDescription || "");
 
   const [environmentError, setEnvironmentError] = useState<string>();
 
-  const learningObjectives = getEvaluableLearningObjectives(subjectCode, classYearCode);
+  const learningObjectives = getEvaluableLearningObjectivesMinimal(subjectCode, classYearCode);
   const environments = getEnvironments(subjectCode);
 
   const handleGeneralSubmit = () => {
@@ -67,19 +67,22 @@ export default function CollectionGeneralInfoForm({
           <SelectFormField
             title={t("environment", "Ympäristö")}
             error={environmentError}
-            defaultValues={defaultEnvironment ? [defaultEnvironment] : []}
+            defaultValue={defaultEnvironment}
             onSelect={(item) => {
-              setSelectedEnvironmentCode(item.value);
+              setSelectedEnvironmentCode(item);
               setEnvironmentError(undefined);
             }}
-            options={environments.map((it) => ({ value: it.code, label: it.label }))}
+            options={environments}
+            getOptionValue={(item) => item.code}
+            formatLabel={(item) => item.label}
           />
           <MultiSelectFormField
             title={t("learningObjectives", "Oppimistavoitteet")}
-            defaultValues={defaultLearningObjectives || []}
-            onSelect={(items) => setSelectedLearningObjectivesCode(items.map((it) => it.value))}
-            options={learningObjectives.map((obj) => ({ value: obj.code, label: obj.label }))}
-            formatLabel={(item) => `${item.value}: ${item.label}`}
+            defaultValue={defaultLearningObjectives || []}
+            onSelect={(items) => setSelectedLearningObjectivesCode(items)}
+            options={learningObjectives}
+            formatLabel={(item) => item.label}
+            getOptionValue={(item) => item.code}
           />
           <FormField title={t("date", "Päivämäärä")}>
             <CTouchableOpacity onPress={() => setIsDateOpen(true)}>
