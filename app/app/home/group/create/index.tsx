@@ -3,7 +3,7 @@ import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
 import { useCallback, useEffect, useRef } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { Alert, BackHandler, Keyboard, KeyboardAvoidingView, TextInput, TouchableWithoutFeedback } from "react-native";
+import { Alert, BackHandler, Keyboard, TextInput, TouchableWithoutFeedback } from "react-native";
 import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { nameValidator } from "../../../../helpers/textValidation";

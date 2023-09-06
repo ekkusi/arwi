@@ -2,7 +2,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Alert } from "react-native";
 import { HomeStackParams } from "./types";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -11,6 +10,7 @@ import ChangeGroupName from "./ChangeGroupName";
 import AddNewStudent from "./AddNewStudent";
 import ChangeClassYear from "./ChangeClassYear";
 import ChangeArchiveStatus from "./ChangeArchiveStatus";
+import { usePopup } from "../../hooks-and-providers/PopupProvider";
 
 export default function GroupHeaderRightButton({
   id,
@@ -27,7 +27,7 @@ export default function GroupHeaderRightButton({
 }) {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
-
+  const { openPopup } = usePopup();
   return (
     <Menu>
       <MenuTrigger>
@@ -67,7 +67,7 @@ export default function GroupHeaderRightButton({
                         onCancel={closeModal}
                         onSaved={() => {
                           closeModal();
-                          Alert.alert(t("student-added-succesfully", "Oppilas lisätty onnistuneesti!"));
+                          openPopup(t("student-added-succesfully", "Oppilas lisätty onnistuneesti!"));
                         }}
                       />
                     ),

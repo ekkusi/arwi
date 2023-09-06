@@ -15,6 +15,7 @@ import { graphql } from "./gql";
 import ModalProvider from "./hooks-and-providers/ModalProvider";
 import HomeStack from "./app/home/_stack";
 import { STORAGE_LANG_KEY } from "./i18n";
+import PopupProvider from "./hooks-and-providers/PopupProvider";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -68,7 +69,9 @@ export default function Main() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <MenuProvider>
           <ModalProvider>
-            <NavigationContainer>{authState.authenticated ? <HomeStack /> : <AuthStack />}</NavigationContainer>
+            <PopupProvider>
+              <NavigationContainer>{authState.authenticated ? <HomeStack /> : <AuthStack />}</NavigationContainer>
+            </PopupProvider>
           </ModalProvider>
         </MenuProvider>
       </GestureHandlerRootView>

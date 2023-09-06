@@ -46,7 +46,7 @@ export default function ModalProvider({ children }: React.PropsWithChildren) {
       }}
     >
       {children}
-      <CModal isOpen={!!modalProps} onClose={closeModal} {...modalProps} innerViewStyles={{ paddingHorizontal: "xl" }} />
+      <CModal isOpen={!!modalProps} onClose={closeModal} {...modalProps} />
     </Provider>
   );
 }
