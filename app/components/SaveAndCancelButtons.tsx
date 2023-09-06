@@ -5,6 +5,7 @@ import CView, { CViewProps } from "./primitives/CView";
 type SaveAndCancelButtonsProps = CViewProps & {
   onCancel?: () => void;
   onSave?: () => void;
+  variant?: "default" | "delete";
   loading?: boolean;
   disabled?: boolean;
   cancelButtonProps?: Omit<CButtonProps, "variant" | "shadowed">;
@@ -19,11 +20,12 @@ export default function SaveAndCancelButtons({
   disabled,
   cancelButtonProps,
   saveButtonProps,
+  variant = "default",
   ...rest
 }: SaveAndCancelButtonsProps) {
   const { t } = useTranslation();
   return (
-    <CView style={{ flexDirection: "row", justifyContent: "flex-end", gap: 20, ...style }} {...rest}>
+    <CView style={{ flexDirection: "row", width: "100%", justifyContent: "flex-end", gap: 20, ...style }} {...rest}>
       <CButton
         disabled={loading}
         variant="empty"
@@ -32,7 +34,14 @@ export default function SaveAndCancelButtons({
         textStyle={{ color: "gray" }}
         {...cancelButtonProps}
       />
-      <CButton disabled={disabled} loading={loading} title={t("save", "Tallenna")} onPress={onSave} {...saveButtonProps} />
+      <CButton
+        colorScheme={variant === "default" ? "primary" : "error"}
+        disabled={disabled}
+        loading={loading}
+        title={variant === "default" ? t("save", "Tallenna") : t("delete", "Poista")}
+        onPress={onSave}
+        {...saveButtonProps}
+      />
     </CView>
   );
 }

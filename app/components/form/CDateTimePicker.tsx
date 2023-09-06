@@ -11,7 +11,7 @@ type CDateTimePickerProps = BaseProps & {
 };
 
 export default function CDateTimePicker({ isOpen, onClose, onChange, ...rest }: CDateTimePickerProps) {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
 
   if (Platform.OS === "ios")
     return (

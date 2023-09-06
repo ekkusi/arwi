@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { ClassYearInfo, getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import SelectFormField from "../../components/form/SelectFormField";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import CView from "../../components/primitives/CView";
@@ -69,7 +68,6 @@ type ChangeClassYearProps = {
 };
 
 export default function ChangeClassYear({ groupId, onCancel, onSaved }: ChangeClassYearProps) {
-  const { t } = useTranslation();
   const classYearCodes = getClassYearInfos();
   const [selectedClassYear, setSelectedClassYear] = useState<ClassYearInfo | undefined>();
 
@@ -78,6 +76,7 @@ export default function ChangeClassYear({ groupId, onCancel, onSaved }: ChangeCl
       id: groupId,
     },
   });
+
   const [changeClassYear, { loading }] = useMutation(ChangeClassYear_ChangeClassYear_Mutation);
   const isValid = selectedClassYear && selectedClassYear.code !== data?.getGroup.currentClassYear.info.code;
 

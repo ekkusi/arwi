@@ -47,8 +47,8 @@ const innerViewStyle: CViewStyle = {
   maxHeight: "80%",
   paddingHorizontal: "xl",
   paddingTop: "md",
+  paddingBottom: "lg",
   backgroundColor: "white",
-  alignItems: "center",
 };
 
 export default function CModal({

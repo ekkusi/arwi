@@ -131,6 +131,7 @@ export default function Select<CustomOptionType = unknown>(props: SelectProps<Cu
         onClose={() => setSelectModalOpen(false)}
         placement="bottom"
         title={title}
+        innerViewStyles={{ paddingBottom: 0 }}
         closeButton={
           <CButton variant="empty" onPress={() => setSelectModalOpen(false)}>
             {isMulti ? (

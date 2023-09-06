@@ -8,6 +8,9 @@ import { graphql } from "../../gql";
 import { HomeStackParams } from "./types";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
+import { useModal } from "../../hooks-and-providers/ModalProvider";
+import SaveAndCancelButtons from "../../components/SaveAndCancelButtons";
+import { getErrorMessage } from "../../helpers/errorUtils";
 
 const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
   mutation CollectionHeaderRightButton_DeleteCollection($id: ID!) {
@@ -27,6 +30,27 @@ const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
   }
 `);
 
+function DeleteCollection({ collectionId, onDeleted, onCancel }: { collectionId: string; onDeleted: () => void; onCancel: () => void }) {
+  const { t } = useTranslation();
+  const [deleteCollection, { loading }] = useMutation(CollectionHeaderRightButton_DeleteCollection_Mutation, {
+    variables: { id: collectionId },
+    onCompleted: onDeleted,
+    onError: (e) => {
+      console.error(e);
+      Alert.alert(t("general-error"), getErrorMessage(e));
+    },
+  });
+
+  return (
+    <>
+      <CText style={{ marginBottom: "lg" }}>
+        {t("delete-evaluation-confirmation-info", "Jos poistat arvioinnin, menetät kaikki arviointiin liittyvät tiedot.")}
+      </CText>
+      <SaveAndCancelButtons variant="delete" loading={loading} onSave={deleteCollection} onCancel={onCancel} />
+    </>
+  );
+}
+
 export default function CollectionHeaderRightButton({
   id,
   navigation,
@@ -35,7 +59,7 @@ export default function CollectionHeaderRightButton({
   navigation: NativeStackNavigationProp<HomeStackParams, "collection">;
 }) {
   const { t } = useTranslation();
-  const [deleteCollection] = useMutation(CollectionHeaderRightButton_DeleteCollection_Mutation);
+  const { openModal, closeModal } = useModal();
   return (
     <Menu>
       <MenuTrigger>
@@ -64,29 +88,19 @@ export default function CollectionHeaderRightButton({
           </MenuOption>
           <MenuOption
             onSelect={() => {
-              Alert.alert(
-                t("delete-evaluation-confirmation-title", "Oletko varma?"),
-                t("delete-evaluation-confirmation-info", "Jos poistat arvioinnin, menetät kaikki arviointiin liittyvät tietot :("),
-                [
-                  {
-                    text: t("no", "Ei"),
-                    onPress: () => null,
-                    style: "cancel",
-                  },
-                  {
-                    text: t("yes", "Kyllä"),
-                    onPress: async () => {
-                      await deleteCollection({
-                        variables: { id },
-                        update: (cache, { data }) => {
-                          if (!data) throw new Error("Unexpected error: No data returned from mutation");
-                        },
-                      });
+              openModal({
+                title: t("delete-evaluation-confirmation-title", "Oletko varma?"),
+                children: (
+                  <DeleteCollection
+                    onCancel={closeModal}
+                    onDeleted={() => {
                       navigation.goBack();
-                    },
-                  },
-                ]
-              );
+                      closeModal();
+                    }}
+                    collectionId={id}
+                  />
+                ),
+              });
             }}
           >
             <CText>{t("delete-evaluation", "Poista arviointi")}</CText>
