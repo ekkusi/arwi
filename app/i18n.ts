@@ -5,6 +5,8 @@ import "intl-pluralrules";
 
 import { Platform, NativeModules } from "react-native";
 
+export const STORAGE_LANG_KEY = "lang";
+
 export const languages = [
   { value: "fi_FI", name: "Suomi" },
   { value: "en_US", name: "Englanti" },

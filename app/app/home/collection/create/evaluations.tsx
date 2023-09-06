@@ -13,6 +13,7 @@ import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
+import { useToast } from "../../../../hooks-and-providers/ToastProvider";
 import { COLORS } from "../../../../theme";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import { CollectionCreationStackParams } from "./types";
@@ -65,6 +66,7 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
 
 function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "evaluations">) {
   const { t } = useTranslation();
+  const { openToast } = useToast();
   const [createCollection] = useMutation(CollectionEvaluationsView_CreateCollection_Mutation);
   const [cardHeight, setCardHeight] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -120,6 +122,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         },
       });
       navigation.getParent()?.navigate("index");
+      openToast(t("collection-created-succesfully", "Arviointi luotu onnistuneesti!"));
     } catch (e) {
       const msg = getErrorMessage(e);
       console.error(msg);

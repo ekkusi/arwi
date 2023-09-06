@@ -3,7 +3,7 @@ import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
 import { useCallback, useEffect, useRef } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { Alert, BackHandler, Keyboard, KeyboardAvoidingView, TextInput, TouchableWithoutFeedback } from "react-native";
+import { Alert, BackHandler, Keyboard, TextInput, TouchableWithoutFeedback } from "react-native";
 import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { nameValidator } from "../../../../helpers/textValidation";
@@ -67,11 +67,12 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
               <SelectFormField
                 title={t("class-year", "Luokka-aste")}
                 placeholder={t("GroupNameSelection.selectClass", "Valitse luokka")}
-                options={classes.map((obj) => ({ value: obj.code, label: obj.label }))}
+                options={classes}
                 onSelect={(item) => {
-                  const selectedClass = classes.find((obj) => obj.code === item.value);
-                  setGroup({ ...group, class: selectedClass });
+                  setGroup({ ...group, class: item });
                 }}
+                getOptionValue={(item) => item.code}
+                formatLabel={(item) => item.label}
               />
             </CView>
             <CView style={{ justifyContent: "flex-end" }}>

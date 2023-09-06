@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "@apollo/client";
-import { getEnvironment } from "arwi-backend/src/utils/subjectUtils";
+import { Environment, LearningObjectiveMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { HomeStackParams } from "../types";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { graphql } from "../../../gql";
@@ -20,6 +20,7 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
       environment {
         label
         code
+        color
       }
       classYear {
         id
@@ -36,6 +37,7 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
       learningObjectives {
         code
         label
+        type
       }
     }
   }
@@ -66,6 +68,8 @@ const EditGeneralDetails_UpdateCollection_Mutation = graphql(`
       learningObjectives {
         code
         label
+        description
+        type
       }
     }
   }
@@ -79,7 +83,7 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
 
   const { t } = useTranslation();
 
-  const handleSubmit = async (date: Date, environmentCode: string, learningObjectiveCodes: string[], description: string) => {
+  const handleSubmit = async (date: Date, environment: Environment, learningObjectiveCodes: LearningObjectiveMinimal[], description: string) => {
     setSubmitting(true);
     try {
       await updateCollection({
@@ -87,8 +91,8 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
           id: collectionId,
           input: {
             date: formatDate(date, "yyyy-MM-dd"),
-            environmentCode,
-            learningObjectiveCodes,
+            environmentCode: environment.code,
+            learningObjectiveCodes: learningObjectiveCodes.map((obj) => obj.code),
             description,
           },
         },
@@ -98,7 +102,7 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
       const msg = getErrorMessage(e);
       console.error(msg);
     }
-    const newEnvironmentLabel = getEnvironment(environmentCode)?.label;
+    const newEnvironmentLabel = environment.label;
     if (newEnvironmentLabel) onSaved?.(newEnvironmentLabel, formatDate(date));
     setSubmitting(false);
     navigation.goBack();
@@ -126,8 +130,8 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
         buttonLoading={submitting}
         defaultDate={new Date(collection.date)}
         defaultDescription={collection.description || undefined}
-        defaultEnvironment={collection.environment.code}
-        defaultLearningObjectives={collection.learningObjectives.map((obj) => obj.code)}
+        defaultEnvironment={collection.environment}
+        defaultLearningObjectives={collection.learningObjectives}
       />
     </Layout>
   );

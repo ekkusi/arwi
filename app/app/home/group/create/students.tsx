@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, Keyboard, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { TextInput } from "react-native-gesture-handler";

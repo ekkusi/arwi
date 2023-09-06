@@ -10,6 +10,8 @@ import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
 import ChangeStudentName from "./ChangeStudentName";
+import { getErrorMessage } from "../../helpers/errorUtils";
+import SaveAndCancelButtons from "../../components/SaveAndCancelButtons";
 
 const StudentHeaderRightButton_DeleteStudent_Mutation = graphql(`
   mutation StudentHeaderRightButton_DeleteStudent($id: ID!) {
@@ -60,6 +62,27 @@ const StudentHeaderRightButton_DeleteStudent_Mutation = graphql(`
   }
 `);
 
+function DeleteStudent({ studentId, onDeleted, onCancel }: { studentId: string; onDeleted: () => void; onCancel: () => void }) {
+  const { t } = useTranslation();
+  const [deleteStudent, { loading }] = useMutation(StudentHeaderRightButton_DeleteStudent_Mutation, {
+    variables: { id: studentId },
+    onCompleted: onDeleted,
+    onError: (e) => {
+      console.error(e);
+      Alert.alert(t("general-error"), getErrorMessage(e));
+    },
+  });
+
+  return (
+    <>
+      <CText style={{ marginBottom: "lg" }}>
+        {t("delete-student-confirmation-info", "Jos poistat oppilaan, menetät kaikki oppilaan tiedot sekä arvioinnit.")}
+      </CText>
+      <SaveAndCancelButtons variant="delete" loading={loading} onSave={deleteStudent} onCancel={onCancel} />
+    </>
+  );
+}
+
 export default function StudentHeaderRightButton({
   id,
   name,
@@ -102,29 +125,19 @@ export default function StudentHeaderRightButton({
           </MenuOption>
           <MenuOption
             onSelect={() => {
-              Alert.alert(
-                t("delete-student-confirmation-title", "Oletko varma?"),
-                t("delete-student-confirmation-info", "Jos poistat oppilaan, menetät kaikki oppilaan tiedot sekä arvioinnit."),
-                [
-                  {
-                    text: t("no", "Ei"),
-                    onPress: () => null,
-                    style: "cancel",
-                  },
-                  {
-                    text: t("yes", "Kyllä"),
-                    onPress: async () => {
-                      await deleteStudent({
-                        variables: { id },
-                        update: (cache, { data }) => {
-                          if (!data) throw new Error("Unexpected error: No data returned from mutation");
-                        },
-                      });
+              openModal({
+                title: t("delete-student-confirmation-title", "Oletko varma?"),
+                children: (
+                  <DeleteStudent
+                    studentId={id}
+                    onCancel={closeModal}
+                    onDeleted={() => {
                       navigation.goBack();
-                    },
-                  },
-                ]
-              );
+                      closeModal();
+                    }}
+                  />
+                ),
+              });
             }}
           >
             <CText>{t("delete-student", "Poista oppilas")}</CText>
