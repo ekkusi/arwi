@@ -1,4 +1,5 @@
 import React, { createContext, useMemo, useState } from "react";
+import { Platform } from "react-native";
 import { SlideInDown, SlideInUp, SlideOutDown, SlideOutUp, ZoomIn, ZoomOut } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CAnimatedView from "../components/primitives/CAnimatedView";
@@ -8,52 +9,52 @@ import CView from "../components/primitives/CView";
 import { COLORS, SPACING } from "../theme";
 import { CViewStyle } from "../theme/types";
 
-type OpenPopupProps = {
+type OpenToastProps = {
   closeTimeout?: number;
   placement?: "top" | "bottom" | "center";
   type?: "success" | "error";
 };
 
-type PopupContextType = {
-  openPopup: (content: string, props?: OpenPopupProps) => void;
-  closePopup: () => void;
+type ToastContextType = {
+  openToast: (content: string, props?: OpenToastProps) => void;
+  closeToast: () => void;
 };
 
-const PopupContext = createContext<PopupContextType | null>(null);
+const ToastContext = createContext<ToastContextType | null>(null);
 
-const { Provider } = PopupContext;
+const { Provider } = ToastContext;
 
-export const usePopup = () => {
-  const context = React.useContext(PopupContext);
+export const useToast = () => {
+  const context = React.useContext(ToastContext);
   if (!context) {
-    throw new Error("usePopup must be used within an PopupProvider");
+    throw new Error("useToast must be used within an ToastProvider");
   }
   return context;
 };
 
 const DEFAULT_CLOSE_TIMEOUT_MS = 5000;
 
-export default function PopupProvider({ children }: React.PropsWithChildren) {
-  const [popupProps, setPopupProps] = useState<OpenPopupProps | null>(null);
-  const [popupContent, setPopupContent] = useState<string | null>(null);
+export default function ToastProvider({ children }: React.PropsWithChildren) {
+  const [toastProps, setToastProps] = useState<OpenToastProps | null>(null);
+  const [toastContent, setToastContent] = useState<string | null>(null);
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const openPopup = (content: string, props?: OpenPopupProps) => {
-    setPopupContent(content);
-    setPopupProps(props || null);
+  const openToast = (content: string, props?: OpenToastProps) => {
+    setToastContent(content);
+    setToastProps(props || null);
     closeTimer.current = setTimeout(() => {
-      closePopup();
+      closeToast();
     }, props?.closeTimeout || DEFAULT_CLOSE_TIMEOUT_MS);
   };
 
-  const closePopup = () => {
-    setPopupContent(null);
-    setPopupProps(null);
+  const closeToast = () => {
+    setToastContent(null);
+    setToastProps(null);
     if (closeTimer.current) clearInterval(closeTimer.current);
   };
 
-  const placement = popupProps?.placement || "top";
-  const type = popupProps?.type || "success";
+  const placement = toastProps?.placement || "bottom";
+  const type = toastProps?.type || "success";
 
   const outerViewStyles: CViewStyle = useMemo(() => {
     let placementStyles: CViewStyle;
@@ -62,7 +63,7 @@ export default function PopupProvider({ children }: React.PropsWithChildren) {
         placementStyles = { justifyContent: "flex-start", top: "xl" };
         break;
       case "bottom":
-        placementStyles = { justifyContent: "flex-end", bottom: "xl" };
+        placementStyles = { justifyContent: "flex-end", bottom: Platform.OS === "ios" ? "2xl" : "xl" }; // iOS bottom part of screen tends to be more rounded so tooltip has to be a little big higher
         break;
       default:
         placementStyles = { justifyContent: "center" };
@@ -96,12 +97,12 @@ export default function PopupProvider({ children }: React.PropsWithChildren) {
   return (
     <Provider
       value={{
-        openPopup,
-        closePopup,
+        openToast,
+        closeToast,
       }}
     >
       {children}
-      {popupContent && (
+      {toastContent && (
         <CView style={{ position: "absolute", top: 0, left: "md", right: "md", bottom: 0, ...outerViewStyles }}>
           <CAnimatedView
             entering={enterAnimation}
@@ -112,7 +113,7 @@ export default function PopupProvider({ children }: React.PropsWithChildren) {
               width: "100%",
               backgroundColor: type === "success" ? "light-green" : "error",
               padding: "lg",
-              borderRadius: 5,
+              borderRadius: 10,
             }}
           >
             <MaterialCommunityIcon
@@ -121,27 +122,13 @@ export default function PopupProvider({ children }: React.PropsWithChildren) {
               color={COLORS.white}
               style={{ marginRight: SPACING.md }}
             />
-            <CText style={{ color: "white", flex: 1, marginRight: "2xl" }}>{popupContent}</CText>
-            <CButton variant="empty" onPress={closePopup} style={{ position: "absolute", right: "lg", top: 0 }}>
+            <CText style={{ color: "white", flex: 1, marginRight: "2xl" }}>{toastContent}</CText>
+            <CButton variant="empty" onPress={closeToast} style={{ position: "absolute", right: "lg", top: 0 }}>
               <MaterialCommunityIcon name="close" size={20} color={COLORS.white} />
             </CButton>
           </CAnimatedView>
         </CView>
       )}
-      {/* <CModal
-        isOpen={!!popupContent}
-        onClose={closePopup}
-        placement="bottom"
-        closeOnBackgroundPress={false}
-        outerViewStyles={{
-          backgroundColor: "transparent",
-        }}
-        innerViewStyles={{
-          backgroundColor: "light-green",
-        }}
-      >
-        <CText style={{ color: "white" }}>{popupContent}</CText>
-      </CModal> */}
     </Provider>
   );
 }

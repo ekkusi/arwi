@@ -10,7 +10,7 @@ import ChangeGroupName from "./ChangeGroupName";
 import AddNewStudent from "./AddNewStudent";
 import ChangeClassYear from "./ChangeClassYear";
 import ChangeArchiveStatus from "./ChangeArchiveStatus";
-import { usePopup } from "../../hooks-and-providers/PopupProvider";
+import { useToast } from "../../hooks-and-providers/ToastProvider";
 
 export default function GroupHeaderRightButton({
   id,
@@ -27,7 +27,7 @@ export default function GroupHeaderRightButton({
 }) {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
-  const { openPopup } = usePopup();
+  const { openToast } = useToast();
   return (
     <Menu>
       <MenuTrigger>
@@ -67,7 +67,7 @@ export default function GroupHeaderRightButton({
                         onCancel={closeModal}
                         onSaved={() => {
                           closeModal();
-                          openPopup(t("student-added-succesfully", "Oppilas lisätty onnistuneesti!"));
+                          openToast(t("student-added-succesfully", "Oppilas lisätty onnistuneesti!"));
                         }}
                       />
                     ),
