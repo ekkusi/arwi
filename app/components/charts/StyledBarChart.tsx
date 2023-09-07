@@ -1,7 +1,9 @@
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryTooltip, VictoryVoronoiContainer } from "victory-native";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import CView, { CViewProps } from "../primitives/CView";
 import { COLORS } from "../../theme";
+import CText from "../primitives/CText";
 
 export type StyledBarChartDataType = {
   x: string;
@@ -25,6 +27,7 @@ export default function StyledBarChart({
   showToolTips = true,
   ...rest
 }: StyledBarChartProps) {
+  const { t } = useTranslation();
   const [size, setSize] = useState<{ width: number; height: number } | null>(null); // Crashes on ios if is set to width: 0 and height: 0 at start
 
   const leftPadding = gradeAxis || countAxis ? 30 : 0;
@@ -32,7 +35,8 @@ export default function StyledBarChart({
   const noZeroData = data.map((obj) => {
     return { ...obj, y: obj.y === 0 ? 0.5 : obj.y };
   });
-  const maxCount = Math.max(...data.map((obj) => obj.y));
+  const biggestCount = Math.max(...data.map((obj) => obj.y));
+  const yDomainMax = biggestCount > 5 ? biggestCount : 5;
 
   return (
     <CView
@@ -55,8 +59,7 @@ export default function StyledBarChart({
             width={gradeAxis || countAxis ? size.width - leftPadding : size.width}
             height={size.height}
             barWidth={barWidth}
-            maxDomain={{ y: maxCount > 3 ? maxCount : 3 }}
-            minDomain={gradeAxis ? { y: 4 } : {}}
+            domain={countAxis ? { y: [0, yDomainMax] } : undefined}
             containerComponent={
               <VictoryVoronoiContainer style={{ borderBottomColor: COLORS.darkgray, borderBottomWidth: 1 }} width={size.width} height={size.height} />
             }
@@ -79,6 +82,23 @@ export default function StyledBarChart({
           {!gradeAxis && !countAxis && <VictoryAxis dependentAxis axisComponent={<CView />} tickFormat={() => ""} />}
           {!showAxisLabels ? <VictoryAxis tickFormat={() => ""} width={size.width - leftPadding} /> : <VictoryAxis offsetX={barWidth / 2} />}
         </VictoryChart>
+      )}
+      {data.length <= 0 && (
+        <CView
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(255,255,255,0.5)",
+          }}
+        >
+          <CText style={{ fontSize: "sm", width: "50%", textAlign: "center" }}>{t("no-evaluations", "Ei arviointeja")}</CText>
+        </CView>
       )}
     </CView>
   );
