@@ -1,8 +1,7 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
 import { FragmentType, getFragmentData, graphql } from "../gql";
-import { formatRatingNumber, formatRatingNumberString, formatRatingStringWithNull } from "../helpers/dataMappers";
+import { formatRatingNumber } from "../helpers/dataMappers";
 import { formatDate } from "../helpers/dateHelpers";
 import { Accordion, AccordionProps } from "./Accordion";
 import CButton from "./primitives/CButton";
