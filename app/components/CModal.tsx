@@ -31,6 +31,7 @@ export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   onClose?: () => void;
   exitingAnimation?: BaseAnimationBuilder | typeof BaseAnimationBuilder;
   enteringAnimation?: BaseAnimationBuilder | typeof BaseAnimationBuilder;
+  animationDuration?: number;
 };
 
 const outerViewStyle: CViewStyle = {
@@ -64,6 +65,7 @@ export default function CModal({
   closeOnBackgroundPress = true,
   outerViewStyles: _outerViewStyles,
   innerViewStyles: _innerViewStyles,
+  animationDuration = 300,
   isOpen,
   onClose,
   children,
@@ -186,8 +188,12 @@ export default function CModal({
 
   const views = useMemo(() => {
     return animated ? (
-      <CAnimatedView entering={FadeIn} exiting={FadeOut} style={outerViewStyles}>
-        <CAnimatedView entering={enterAnimation} exiting={exitAnimationWithCallback} {...innerViewProps}>
+      <CAnimatedView entering={FadeIn.duration(animationDuration)} exiting={FadeOut.duration(animationDuration)} style={outerViewStyles}>
+        <CAnimatedView
+          entering={enterAnimation.duration(animationDuration)}
+          exiting={exitAnimationWithCallback.duration(animationDuration)}
+          {...innerViewProps}
+        >
           {body}
         </CAnimatedView>
       </CAnimatedView>
@@ -196,7 +202,7 @@ export default function CModal({
         <CView {...innerViewProps}>{body}</CView>
       </CView>
     );
-  }, [animated, body, enterAnimation, exitAnimationWithCallback, innerViewProps, outerViewStyles]);
+  }, [animated, animationDuration, body, enterAnimation, exitAnimationWithCallback, innerViewProps, outerViewStyles]);
 
   return (
     <Modal

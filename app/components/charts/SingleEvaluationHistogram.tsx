@@ -1,38 +1,17 @@
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryContainer, VictoryGroup } from "victory-native";
 import { useMemo, useState } from "react";
 import { t } from "i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
-import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
-import { FragmentType, getFragmentData, graphql } from "../../gql";
-import {
-  EvaluationsAccordion_EvaluationFragment,
-  EvaluationsAccordion_EvaluationFragmentDoc,
-  EvaluationsBarChart_EvaluationFragment,
-} from "../../gql/graphql";
+import { FragmentType, getFragmentData } from "../../gql";
+import { EvaluationsAccordion_EvaluationFragment, EvaluationsAccordion_EvaluationFragmentDoc } from "../../gql/graphql";
 import { formatRatingNumber, getColorForGrade } from "../../helpers/dataMappers";
-import { hexToRgbA } from "../../helpers/color";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
 import CText from "../primitives/CText";
 import CButton from "../primitives/CButton";
 import { COLORS } from "../../theme";
+import CModal from "../CModal";
 
-const EvaluationsBarChart_Evaluation_Fragment = graphql(`
-  fragment EvaluationsBarChart_Evaluation on Evaluation {
-    id
-    skillsRating
-    behaviourRating
-    wasPresent
-    collection {
-      environment {
-        label
-        code
-        color
-      }
-    }
-  }
-`);
+type FilterValue = "all" | "skills" | "behaviour";
 
 type TempDataType = {
   skillCount: number;
@@ -42,7 +21,7 @@ type TempDataHash = { [grade: number]: TempDataType };
 
 const mapToTempData = (evaluations: EvaluationsAccordion_EvaluationFragment[]) => {
   const tempData: TempDataHash = {};
-  [4, 5, 6, 7, 8, 9, 10].forEach((grade, idx) => {
+  [4, 5, 6, 7, 8, 9, 10].forEach((grade) => {
     tempData[grade] = {
       skillCount: 0,
       behaviourCount: 0,
@@ -83,7 +62,8 @@ type EvaluationsHistogramProps = CViewProps & {
 };
 
 export default function SingleEvaluationHistogram({ evaluations: evaluationFragments, ...rest }: EvaluationsHistogramProps) {
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState<FilterValue>("all");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const evaluations = getFragmentData(EvaluationsAccordion_EvaluationFragmentDoc, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
 
@@ -91,63 +71,55 @@ export default function SingleEvaluationHistogram({ evaluations: evaluationFragm
   const filteredData = useMemo(() => filterTempDataToChartData(data, typeFilter), [data, typeFilter]);
 
   return (
-    <CView style={{ width: "100%" }}>
-      <CView style={{ flexDirection: "row", alignItems: "center" }}>
-        <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>{t("evaluation-distribution", "Arvosanajakauma")}</CText>
-        <CView style={{ flex: 1, alignItems: "flex-end" }}>
-          <Menu renderer={renderers.SlideInMenu}>
-            <MenuTrigger style={{ borderRadius: 24 }}>
+    <>
+      <CModal isOpen={isFiltersOpen} onClose={() => setIsFiltersOpen(false)} closeButton={false} placement="bottom">
+        <CView style={{ padding: "md", gap: 20 }}>
+          <CView style={{ gap: 10 }}>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("skills-and-behaviour", "Taidot ja työskentely")}</CText>
+            <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%", padding: "md" }}>
               <CButton
-                size="small"
+                key="all"
+                title={t("all", "Kaikki")}
                 variant="outline"
-                title={t("filter", "Suodata")}
-                colorScheme="darkgray"
-                style={{ width: "auto" }}
-                leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
-                rightIcon={
-                  typeFilter !== "all" ? <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} /> : undefined
-                }
-                disableTouchEvent
+                colorScheme={typeFilter !== "all" ? "lightgray" : "darkgray"}
+                style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
+                onPress={() => setTypeFilter("all")}
+                textStyle={{ fontSize: "xs", fontWeight: "400", color: typeFilter !== "all" ? "gray" : "darkgray" }}
               />
-            </MenuTrigger>
-            <MenuOptions>
-              <CView style={{ padding: "md", gap: 20 }}>
-                <CView style={{ gap: 10 }}>
-                  <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("skills-and-behaviour", "Taidot ja työskentely")}</CText>
-                  <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%", padding: "md" }}>
-                    <CButton
-                      key="all"
-                      title={t("all", "Kaikki")}
-                      variant="outline"
-                      colorScheme={typeFilter !== "all" ? "lightgray" : "darkgray"}
-                      style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
-                      onPress={() => setTypeFilter("all")}
-                      textStyle={{ fontSize: "xs", fontWeight: "400", color: typeFilter !== "all" ? "gray" : "darkgray" }}
-                    />
-                    {["skills", "behaviour"].map((item) => (
-                      <CButton
-                        key={item}
-                        title={t(item)}
-                        variant="outline"
-                        colorScheme={item === typeFilter ? "darkgray" : "lightgray"}
-                        style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
-                        onPress={() => setTypeFilter(item)}
-                        textStyle={{ fontSize: "xs", fontWeight: "400", color: item === typeFilter ? "darkgray" : "gray" }}
-                      />
-                    ))}
-                  </CView>
-                </CView>
-                <MenuOption onSelect={() => {}}>
-                  <CButton title={t("use", "Käytä")} disableTouchEvent />
-                </MenuOption>
-              </CView>
-            </MenuOptions>
-          </Menu>
+              {["skills", "behaviour"].map((item) => (
+                <CButton
+                  key={item}
+                  title={t(item)}
+                  variant="outline"
+                  colorScheme={item === typeFilter ? "darkgray" : "lightgray"}
+                  style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
+                  onPress={() => setTypeFilter(item as FilterValue)}
+                  textStyle={{ fontSize: "xs", fontWeight: "400", color: item === typeFilter ? "darkgray" : "gray" }}
+                />
+              ))}
+            </CView>
+          </CView>
+          <CButton title={t("use", "Käytä")} onPress={() => setIsFiltersOpen(false)} />
+        </CView>
+      </CModal>
+      <CView style={{ width: "100%" }}>
+        <CView style={{ flexDirection: "row", alignItems: "center" }}>
+          <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>{t("evaluation-distribution", "Arvosanajakauma")}</CText>
+          <CButton
+            size="small"
+            variant="outline"
+            title={t("filter", "Suodata")}
+            colorScheme="darkgray"
+            style={{ width: "auto" }}
+            leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
+            rightIcon={typeFilter !== "all" ? <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} /> : undefined}
+            onPress={() => setIsFiltersOpen(true)}
+          />
+        </CView>
+        <CView style={{ width: "100%" }}>
+          <StyledBarChart data={filteredData} countAxis showAxisLabels style={{ height: 200 }} {...rest} />
         </CView>
       </CView>
-      <CView style={{ width: "100%" }}>
-        <StyledBarChart data={filteredData} countAxis showAxisLabels style={{ height: 200 }} {...rest} />
-      </CView>
-    </CView>
+    </>
   );
 }

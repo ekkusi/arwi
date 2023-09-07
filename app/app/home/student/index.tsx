@@ -5,7 +5,6 @@ import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as Clipboard from "expo-clipboard";
 import { ScrollView } from "react-native-gesture-handler";
-import { Menu, MenuOption, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 import { Alert } from "react-native";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
@@ -66,7 +65,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const [summary, setSummary] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const [evaluationsByEnvironmentsFilter, setEvaluationsByEnvironmentsFilter] = useState<string>("all");
   const [isGeneratingSummary, setIsGeneratingSumamry] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [scrollYPos, setScrollYPos] = useState<number>(0);
@@ -142,66 +140,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           </CView>
           <CView style={{ width: "100%", gap: 20 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("statistics", "Tilastot")}</CText>
-            <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>
-                {t("evaluation-means-by-environments", "Arvointien keskiarvot ympäristöittäin")}
-              </CText>
-              <CView style={{ flex: 1, alignItems: "flex-end" }}>
-                <Menu renderer={renderers.SlideInMenu}>
-                  <MenuTrigger style={{ borderRadius: 24 }}>
-                    <CButton
-                      size="small"
-                      variant="outline"
-                      title={t(evaluationsByEnvironmentsFilter, "")}
-                      colorScheme="darkgray"
-                      style={{ width: "auto" }}
-                      leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
-                      disableTouchEvent
-                    />
-                  </MenuTrigger>
-                  <MenuOptions>
-                    <CView
-                      style={{
-                        flexDirection: "row",
-                        gap: 1,
-                        width: "100%",
-                        padding: "md",
-                        borderTopColor: "gray",
-                        borderTopWidth: 1,
-                      }}
-                    >
-                      {[
-                        { text: t("all", "Kaikki"), value: "all" },
-                        { text: t("skills", "Taidot"), value: "skills" },
-                        { text: t("behaviour", "Työskentely"), value: "behaviour" },
-                      ].map((obj) => (
-                        <MenuOption
-                          key={obj.value}
-                          onSelect={() => {
-                            setEvaluationsByEnvironmentsFilter(obj.value);
-                          }}
-                        >
-                          <CButton
-                            key="all"
-                            title={obj.text}
-                            variant="outline"
-                            colorScheme={evaluationsByEnvironmentsFilter === obj.value ? "darkgray" : "lightgray"}
-                            style={{ flex: 1, margin: 3, paddingHorizontal: "md", gap: "sm" }}
-                            disableTouchEvent
-                            textStyle={{
-                              fontSize: "xs",
-                              fontWeight: "400",
-                              color: evaluationsByEnvironmentsFilter === obj.value ? "darkgray" : "gray",
-                            }}
-                          />
-                        </MenuOption>
-                      ))}
-                    </CView>
-                  </MenuOptions>
-                </Menu>
-              </CView>
-            </CView>
-            <EvaluationsBarChart evaluations={evaluations} filter={evaluationsByEnvironmentsFilter} />
+            <EvaluationsBarChart evaluations={evaluations} />
           </CView>
           <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} />
           <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} />
