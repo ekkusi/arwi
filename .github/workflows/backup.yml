@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with: 
+          token: ${{ secrets.PERSONAL_GIT_TOKEN }}
       - name: Get Vars
         id: get_vars
         run: |
