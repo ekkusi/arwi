@@ -109,8 +109,8 @@ type Evaluation {
   id: ID!
   student: Student!
   wasPresent: Boolean!
-  skillsRating: Rating
-  behaviourRating: Rating
+  skillsRating: Int
+  behaviourRating: Int
   notes: String
   isStellar: Boolean!
   collection: EvaluationCollection!
@@ -123,7 +123,7 @@ type Student {
   currentClassEvaluations: [Evaluation!]!
 }
 
-enum Rating {
+enum Int {
   POOR
   FAIR
   GOOD
@@ -197,8 +197,8 @@ input UpdateCollectionInput {
 input CreateEvaluationInput {
   studentId: ID!
   wasPresent: Boolean!
-  skillsRating: Rating
-  behaviourRating: Rating
+  skillsRating: Int
+  behaviourRating: Int
   notes: String
   isStellar: Boolean
 }
@@ -206,8 +206,8 @@ input CreateEvaluationInput {
 input UpdateEvaluationInput {
   id: ID!
   wasPresent: Boolean
-  skillsRating: Rating
-  behaviourRating: Rating
+  skillsRating: Int
+  behaviourRating: Int
   notes: String
   isStellar: Boolean
 }

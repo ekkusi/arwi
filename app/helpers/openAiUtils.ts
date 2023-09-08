@@ -1,6 +1,5 @@
 import { FragmentType, getFragmentData, graphql } from "../gql";
 import openAIClient from "../openAIClient";
-import { formatRatingNumber } from "./dataMappers";
 import { formatDate } from "./dateHelpers";
 
 const OpenAIUtils_Evaluation_Fragment = graphql(`
@@ -23,8 +22,8 @@ export async function generateStudentSummary(evaluationFragments: FragmentType<t
   const notes = evaluations.map((it) => {
     let note = "";
     note += `${formatDate(it.collection.date)} - ${it.collection.environment.label}\n`;
-    note += `Taidot: ${it.skillsRating ? formatRatingNumber(it.skillsRating) : "Ei arvioitu"}\n`;
-    note += `Työskentely: ${it.behaviourRating ? formatRatingNumber(it.behaviourRating) : "Ei arvioitu"}\n`;
+    note += `Taidot: ${it.skillsRating ? it.skillsRating : "Ei arvioitu"}\n`;
+    note += `Työskentely: ${it.behaviourRating ? it.behaviourRating : "Ei arvioitu"}\n`;
     note += `Huomiot: ${it.notes ? it.notes : "Ei huomioita"}`;
     return note;
   });

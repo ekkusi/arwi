@@ -1,25 +1,21 @@
-import { Rating } from "arwi-backend/src/types";
 import { useState } from "react";
-import { Alert } from "react-native";
-import { hexToRgbA } from "../helpers/color";
-import { formatRatingNumber, formatRatingNumberString, getColorForGrade } from "../helpers/dataMappers";
-import { COLORS } from "../theme";
+import { getColorForGrade, getFontWeightForGrade, getTextColorForGrade } from "../helpers/dataMappers";
 import CPressable from "./primitives/CPressable";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
 
 type RatingSelecterProps = Omit<CViewProps, "onChange"> & {
-  onChange: (rating: Rating | null) => void;
+  onChange: (rating: number | null) => void;
   disabled?: boolean;
-  initialRating?: Rating | null;
+  initialRating?: number | null;
 };
 
-const ratingKeys = Object.keys(Rating) as Array<keyof typeof Rating>;
+const RATING_VALUES = [4, 5, 6, 7, 8, 9, 10];
 
 export default function RatingSelecter({ onChange, disabled = false, initialRating, ...rest }: RatingSelecterProps) {
-  const [selectedRating, setSelectedRating] = useState<Rating | null>(initialRating || null);
+  const [selectedRating, setSelectedRating] = useState<number | null>(initialRating || null);
 
-  const onRatingClick = (rating: Rating) => {
+  const onRatingClick = (rating: number) => {
     if (disabled) {
       return;
     }
@@ -32,18 +28,9 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
     onChange(rating);
   };
 
-  const getRatingColor = (rating: Rating) => {
-    const color = getColorForGrade(formatRatingNumber(rating));
-    if (selectedRating === rating) {
-      return hexToRgbA(color, 0.7);
-    }
-    return color;
-  };
-
   return (
     <CView {...rest} style={{ width: "100%", flexDirection: "row", justifyContent: "center", ...rest.style }}>
-      {ratingKeys.map((key, i) => {
-        const rating = Rating[key];
+      {RATING_VALUES.map((rating, i) => {
         let isSelected = true;
         if (disabled) {
           isSelected = false;
@@ -52,29 +39,29 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
         }
 
         return (
-          <CPressable key={key} onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
+          <CPressable key={rating} onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
             <CView
               style={{
                 alignItems: "center",
-                backgroundColor: getRatingColor(rating),
+                backgroundColor: isSelected ? getColorForGrade(rating) : "white",
                 borderRadius: 0,
                 borderWidth: 1,
                 borderColor: "black",
                 padding: "sm",
                 borderLeftWidth: 1,
-                borderRightWidth: i === ratingKeys.length - 1 ? 1 : 0,
+                borderRightWidth: i === RATING_VALUES.length - 1 ? 1 : 0,
                 borderBottomLeftRadius: i === 0 ? 5 : 0,
                 borderTopLeftRadius: i === 0 ? 5 : 0,
-                borderBottomRightRadius: i === ratingKeys.length - 1 ? 5 : 0,
-                borderTopRightRadius: i === ratingKeys.length - 1 ? 5 : 0,
+                borderBottomRightRadius: i === RATING_VALUES.length - 1 ? 5 : 0,
+                borderTopRightRadius: i === RATING_VALUES.length - 1 ? 5 : 0,
               }}
             >
               <CText
                 style={{
-                  borderWidth: isSelected ? 2 : 0,
+                  borderWidth: 0,
                   borderColor: "white",
-                  color: isSelected ? "white" : "black",
-                  fontWeight: isSelected ? "bold" : "normal",
+                  color: isSelected ? getTextColorForGrade(rating) : "black",
+                  fontWeight: isSelected ? getFontWeightForGrade(rating) : "normal",
                   borderRadius: 100,
                   padding: "sm",
                   width: 35,
@@ -85,7 +72,7 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
                   justifyContent: "center",
                 }}
               >
-                {formatRatingNumberString(rating)}
+                {rating}
               </CText>
             </CView>
           </CPressable>

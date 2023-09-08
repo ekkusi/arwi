@@ -3,7 +3,6 @@ import { t } from "i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
-import { formatRatingNumber } from "../../helpers/dataMappers";
 
 import { hexToRgbA } from "../../helpers/color";
 import CView, { CViewProps } from "../primitives/CView";
@@ -75,11 +74,11 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
     const matchingEnvironment = tempData[envCode];
 
     if (evaluation.skillsRating) {
-      matchingEnvironment.skills.value += formatRatingNumber(evaluation.skillsRating);
+      matchingEnvironment.skills.value += evaluation.skillsRating;
       matchingEnvironment.skills.count += 1;
     }
     if (evaluation.behaviourRating) {
-      matchingEnvironment.behaviour.value += formatRatingNumber(evaluation.behaviourRating);
+      matchingEnvironment.behaviour.value += evaluation.behaviourRating;
       matchingEnvironment.behaviour.count += 1;
     }
   });

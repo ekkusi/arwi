@@ -4,7 +4,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
-import { formatRatingNumber, getColorForGrade } from "../../helpers/dataMappers";
+import { getColorForGrade } from "../../helpers/dataMappers";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
 import CText from "../primitives/CText";
@@ -51,11 +51,11 @@ const mapDataToTempData = (evaluations: EvaluationsBarChart_EvaluationFragment[]
   });
   evaluations.forEach((evaluation) => {
     if (evaluation.behaviourRating) {
-      const behaviourNumber = formatRatingNumber(evaluation.behaviourRating);
+      const behaviourNumber = evaluation.behaviourRating;
       tempData[behaviourNumber][evaluation.collection.environment.label].behaviourCount += 1;
     }
     if (evaluation.skillsRating) {
-      const skillNumber = formatRatingNumber(evaluation.skillsRating);
+      const skillNumber = evaluation.skillsRating;
       tempData[skillNumber][evaluation.collection.environment.label].skillCount += 1;
     }
   });

@@ -8,7 +8,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
-import { CreateEvaluationCard } from "../../../../components/UpdateEvaluationCard";
+import { CreateEvaluationCardMemoed, Evaluation } from "../../../../components/UpdateEvaluationCard";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
@@ -72,7 +72,9 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const [submitting, setSubmitting] = useState(false);
   const { generalData, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
 
-  const presentEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
+  const presentEvaluations = useMemo(() => {
+    return evaluations?.filter((it) => it.wasPresent) || [];
+  }, [evaluations]);
 
   const offsetButtons = useSharedValue(0);
 
@@ -131,22 +133,25 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     }
     setSubmitting(false);
   };
+
+  const onEvaluationChanged = useCallback((evaluation: Evaluation) => {
+    setEvaluations((prev) => prev?.map((it) => (it.student.id === evaluation.student.id ? evaluation : it)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <CView style={{ flex: 1, padding: "md", backgroundColor: "white" }}>
       <CFlatList
         data={presentEvaluations}
         renderItem={({ item, index }) => (
-          <CreateEvaluationCard
-            key={item.student.id}
+          <CView
             onLayout={index === 0 ? (event) => setCardHeight(event.nativeEvent.layout.height) : undefined}
-            evaluation={item}
-            hasParticipationToggle={false}
-            onChanged={(value) => {
-              setEvaluations(evaluations.map((it) => (it.student.id === value.student.id ? value : it)));
-            }}
-            style={{ marginBottom: index === evaluations.length - 1 ? 80 : "lg" }}
-          />
+            style={{ marginBottom: index === presentEvaluations.length - 1 ? 80 : "lg" }}
+          >
+            <CreateEvaluationCardMemoed evaluation={item} hasParticipationToggle={false} onChanged={onEvaluationChanged} />
+          </CView>
         )}
+        keyExtractor={(item) => item.student.id}
         snapToInterval={cardHeight}
         decelerationRate={0.8}
         snapToAlignment="center"

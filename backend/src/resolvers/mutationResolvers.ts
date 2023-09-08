@@ -55,7 +55,6 @@ const resolvers: MutationResolvers<CustomContext> = {
       accessToken: token,
     };
   },
-
   logout: async (_, __, { res }) => {
     res.clearCookie(REFRESH_TOKEN_KEY);
     return true;
@@ -92,7 +91,6 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-
     return group;
   },
   createCollection: async (_, { data, classYearId }, { prisma }) => {
@@ -116,7 +114,6 @@ const resolvers: MutationResolvers<CustomContext> = {
           : undefined,
       },
     });
-
     // Should always only find one group, updateMany only here because of typescript constraint
     await prisma.group.updateMany({
       data: {
@@ -130,7 +127,6 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-
     return createdCollection;
   },
   createStudent: async (_, { data, classYearId }, { prisma }) => {
@@ -152,7 +148,6 @@ const resolvers: MutationResolvers<CustomContext> = {
   updateEvaluations: async (_, { data, collectionId }, { prisma, user }) => {
     await checkAuthenticatedByCollection(user, collectionId);
     await validateUpdateEvaluationsInput(data, collectionId);
-
     await prisma.evaluationCollection.update({
       data: {
         evaluations: {
@@ -166,7 +161,6 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
       where: { id: collectionId },
     });
-
     return data.length;
   },
   updateEvaluation: async (_, { data }, { user }) => {
@@ -178,7 +172,6 @@ const resolvers: MutationResolvers<CustomContext> = {
     await checkAuthenticatedByCollection(user, collectionId);
     await validateUpdateCollectionInput(data, collectionId);
     const { evaluations, ...rest } = data;
-
     const updatedCollection = await prisma.evaluationCollection.update({
       data: {
         ...mapUpdateCollectionInput(rest),
@@ -195,7 +188,6 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
       where: { id: collectionId },
     });
-
     return updatedCollection;
   },
   updateStudent: async (_, { data, studentId }, { prisma, user }) => {
@@ -213,7 +205,6 @@ const resolvers: MutationResolvers<CustomContext> = {
       where: { id: groupId },
       data: mapUpdateGroupInput(data),
     });
-
     return updatedGroup;
   },
   deleteStudent: async (_, { studentId }, { prisma, user }) => {

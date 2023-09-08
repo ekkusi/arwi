@@ -3,7 +3,7 @@ import { t } from "i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { FragmentType, getFragmentData } from "../../gql";
 import { EvaluationsAccordion_EvaluationFragment, EvaluationsAccordion_EvaluationFragmentDoc } from "../../gql/graphql";
-import { formatRatingNumber, getColorForGrade } from "../../helpers/dataMappers";
+import { getColorForGrade } from "../../helpers/dataMappers";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
 import CText from "../primitives/CText";
@@ -29,11 +29,11 @@ const mapToTempData = (evaluations: EvaluationsAccordion_EvaluationFragment[]) =
   });
   evaluations.forEach((evaluation) => {
     if (evaluation.behaviourRating) {
-      const behaviourNumber = formatRatingNumber(evaluation.behaviourRating);
+      const behaviourNumber = evaluation.behaviourRating;
       tempData[behaviourNumber].behaviourCount += 1;
     }
     if (evaluation.skillsRating) {
-      const skillNumber = formatRatingNumber(evaluation.skillsRating);
+      const skillNumber = evaluation.skillsRating;
       tempData[skillNumber].skillCount += 1;
     }
   });
