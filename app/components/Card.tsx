@@ -12,11 +12,11 @@ export type CardProps = CViewProps & {
 };
 
 export default forwardRef<View, CardProps>(({ enterAnimation, exitAnimation, layoutAnimation, style = {}, children, ...rest }, ref) => {
-  return exitAnimation || enterAnimation ? (
+  return exitAnimation || enterAnimation || layoutAnimation ? (
     <CAnimatedView
-      // exiting={exitAnimation}
-      // entering={enterAnimation}
-      // layout={layoutAnimation}
+      exiting={exitAnimation}
+      entering={enterAnimation}
+      layout={layoutAnimation}
       {...rest}
       style={{ ...styles.shadow, ...styles.defaultCard, ...style }}
     >
@@ -29,7 +29,7 @@ export default forwardRef<View, CardProps>(({ enterAnimation, exitAnimation, lay
   );
 });
 
-const styles = createStyles({
+export const styles = createStyles({
   defaultCard: {
     borderRadius: 5,
     paddingHorizontal: "lg",
@@ -42,7 +42,7 @@ const styles = createStyles({
     backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: {
-      width: 0,
+      width: 0.5,
       height: 1.5,
     },
     shadowOpacity: 0.2,
@@ -50,3 +50,5 @@ const styles = createStyles({
     elevation: 3,
   },
 });
+
+export const cardStyles = { ...styles.shadow, ...styles.defaultCard };

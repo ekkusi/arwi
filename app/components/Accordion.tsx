@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LayoutAnimation } from "react-native";
+import { Layout } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS, SPACING } from "../theme";
 import Card from "./Card";
+import CAnimatedView from "./primitives/CAnimatedView";
 import CPressable from "./primitives/CPressable";
 import CText from "./primitives/CText";
 import CTouchableOpacity from "./primitives/CTouchableOpacity";
@@ -36,43 +37,46 @@ export function AccordionItem({
   ...rest
 }: AccordionItemProps): JSX.Element {
   const { t } = useTranslation();
+
   return (
-    <Card style={{ marginBottom: "xs" }} {...rest}>
-      <CTouchableOpacity
-        style={{
-          flex: 1,
-          justifyContent: "space-between",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-        onPress={onHeaderPress}
-      >
-        <CView>
-          <CText style={{ fontSize: "md", fontWeight: "500" }}>{title}</CText>
-          {color && date && (
-            <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
-              <CView style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />
-              <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>
-            </CView>
-          )}
-          {isEvaluated !== undefined && (
-            <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>
-              {isEvaluated ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu")}
-            </CText>
-          )}
-        </CView>
-        <CView style={{ flexDirection: "row", alignItems: "center" }}>
-          {icons}
-          <MaterialCommunityIcon
-            name={expanded ? "chevron-up" : "chevron-down"}
-            size={24}
-            color={COLORS.darkgray}
-            style={{ marginLeft: SPACING.sm }}
-          />
-        </CView>
-      </CTouchableOpacity>
-      {expanded && <CView style={{ paddingVertical: "md" }}>{children}</CView>}
-    </Card>
+    <CAnimatedView layout={Layout}>
+      <Card {...rest}>
+        <CTouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: "space-between",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+          onPress={onHeaderPress}
+        >
+          <CView>
+            <CText style={{ fontSize: "md", fontWeight: "500" }}>{title}</CText>
+            {color && date && (
+              <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+                <CView style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />
+                <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>
+              </CView>
+            )}
+            {isEvaluated !== undefined && (
+              <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>
+                {isEvaluated ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu")}
+              </CText>
+            )}
+          </CView>
+          <CView style={{ flexDirection: "row", alignItems: "center" }}>
+            {icons}
+            <MaterialCommunityIcon
+              name={expanded ? "chevron-up" : "chevron-down"}
+              size={24}
+              color={COLORS.darkgray}
+              style={{ marginLeft: SPACING.sm }}
+            />
+          </CView>
+        </CTouchableOpacity>
+        {expanded && <CView style={{ paddingVertical: "md" }}>{children}</CView>}
+      </Card>
+    </CAnimatedView>
   );
 }
 
@@ -95,7 +99,6 @@ export function Accordion({ data, allowMultiple = false, showAllButton = allowMu
   };
 
   const handleHeaderPress = (index: number) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     if (expandedIndexes.includes(index)) {
       removeIndex(index);
     } else {
@@ -104,12 +107,10 @@ export function Accordion({ data, allowMultiple = false, showAllButton = allowMu
   };
 
   const showAll = () => {
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedIndexes(data.map((_, index) => index));
   };
 
   const hideAll = () => {
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedIndexes([]);
   };
 

@@ -1,6 +1,5 @@
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
-import { formatRatingNumber } from "../../helpers/dataMappers";
 import { formatDate } from "../../helpers/dateHelpers";
 import LineChartBase, { DataType as BaseDataType, LineChartBaseProps } from "./LineChartBase";
 import MovingAverageLineChart, { EvaluationDataType } from "./MovingAverageLineChart";
@@ -25,8 +24,8 @@ export const EvaluationsLineChart_Evaluation_Fragment = graphql(`
 export const mapEvaluationData = (evaluations: EvaluationsLineChart_EvaluationFragment[]) => {
   const data: EvaluationDataType[] = [];
   evaluations.forEach((ev) => {
-    const skillsRating = ev.skillsRating && formatRatingNumber(ev.skillsRating);
-    const behaviourRating = ev.behaviourRating && formatRatingNumber(ev.behaviourRating);
+    const skillsRating = ev.skillsRating && ev.skillsRating;
+    const behaviourRating = ev.behaviourRating && ev.behaviourRating;
     if (skillsRating && behaviourRating) {
       data.push({
         date: formatDate(ev.collection.date),

@@ -241,8 +241,8 @@ export type Evaluation = {
   id: Scalars["ID"];
   student: Student;
   wasPresent: Scalars["Boolean"];
-  skillsRating?: Maybe<Rating>;
-  behaviourRating?: Maybe<Rating>;
+  skillsRating?: Maybe<Scalars["Int"]>;
+  behaviourRating?: Maybe<Scalars["Int"]>;
   notes?: Maybe<Scalars["String"]>;
   isStellar: Scalars["Boolean"];
   collection: EvaluationCollection;
@@ -255,14 +255,6 @@ export type Student = {
   group: Group;
   currentClassEvaluations: Array<Evaluation>;
 };
-
-export enum Rating {
-  POOR = "POOR",
-  FAIR = "FAIR",
-  GOOD = "GOOD",
-  GREAT = "GREAT",
-  EXCELLENT = "EXCELLENT",
-}
 
 export enum ClassYearCode {
   PRIMARY_FIRST = "PRIMARY_FIRST",
@@ -330,8 +322,8 @@ export type UpdateCollectionInput = {
 export type CreateEvaluationInput = {
   studentId: Scalars["ID"];
   wasPresent: Scalars["Boolean"];
-  skillsRating?: InputMaybe<Rating>;
-  behaviourRating?: InputMaybe<Rating>;
+  skillsRating?: InputMaybe<Scalars["Int"]>;
+  behaviourRating?: InputMaybe<Scalars["Int"]>;
   notes?: InputMaybe<Scalars["String"]>;
   isStellar?: InputMaybe<Scalars["Boolean"]>;
 };
@@ -339,8 +331,8 @@ export type CreateEvaluationInput = {
 export type UpdateEvaluationInput = {
   id: Scalars["ID"];
   wasPresent?: InputMaybe<Scalars["Boolean"]>;
-  skillsRating?: InputMaybe<Rating>;
-  behaviourRating?: InputMaybe<Rating>;
+  skillsRating?: InputMaybe<Scalars["Int"]>;
+  behaviourRating?: InputMaybe<Scalars["Int"]>;
   notes?: InputMaybe<Scalars["String"]>;
   isStellar?: InputMaybe<Scalars["Boolean"]>;
 };
@@ -421,7 +413,6 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
@@ -435,7 +426,7 @@ export type ResolversTypes = {
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
   Student: ResolverTypeWrapper<StudentPrisma>;
-  Rating: Rating;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
   ClassYearCode: ClassYearCode;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
@@ -458,7 +449,6 @@ export type ResolversParentTypes = {
   Mutation: {};
   String: Scalars["String"];
   Boolean: Scalars["Boolean"];
-  Int: Scalars["Int"];
   AuthPayload: Omit<AuthPayload, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
   Teacher: UserInfoPrisma;
   LoginResult: Omit<LoginResult, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
@@ -471,6 +461,7 @@ export type ResolversParentTypes = {
   EvaluationCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
   Student: StudentPrisma;
+  Int: Scalars["Int"];
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
   UpdateGroupInput: UpdateGroupInput;
@@ -648,8 +639,8 @@ export type EvaluationResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   student?: Resolver<ResolversTypes["Student"], ParentType, ContextType>;
   wasPresent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  skillsRating?: Resolver<Maybe<ResolversTypes["Rating"]>, ParentType, ContextType>;
-  behaviourRating?: Resolver<Maybe<ResolversTypes["Rating"]>, ParentType, ContextType>;
+  skillsRating?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  behaviourRating?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   isStellar?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   collection?: Resolver<ResolversTypes["EvaluationCollection"], ParentType, ContextType>;

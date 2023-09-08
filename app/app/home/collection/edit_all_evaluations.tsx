@@ -131,22 +131,24 @@ function CollectionEditAllEvaluationsContent({
 
   useKeyboardListener({ onHide: keyboardHides, onShow: keyboardShows });
 
+  const onEvaluationChanged = useCallback((evaluation: EvaluationDataToUpdate) => {
+    setEvaluations((prev) => prev?.map((it) => (it.student.id === evaluation.student.id ? evaluation : it)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <CView style={{ flex: 1, padding: "md", backgroundColor: "white" }}>
       <CFlatList
         data={evaluations}
         renderItem={({ item, index }) => (
-          <UpdateEvaluationCard
-            key={item.student.id}
+          <CView
             onLayout={index === 0 ? (event) => setCardHeight(event.nativeEvent.layout.height) : undefined}
-            evaluation={item}
-            hasParticipationToggle
-            onChanged={(value) => {
-              setEvaluations(evaluations.map((it) => (it.student.id === value.student.id ? value : it)));
-            }}
             style={{ marginBottom: index === evaluations.length - 1 ? 80 : "lg" }}
-          />
+          >
+            <UpdateEvaluationCard key={item.student.id} evaluation={item} hasParticipationToggle onChanged={onEvaluationChanged} />
+          </CView>
         )}
+        keyExtractor={(item) => item.student.id}
         snapToInterval={cardHeight}
         decelerationRate={0.8}
         snapToAlignment="center"

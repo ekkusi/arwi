@@ -1,6 +1,6 @@
 import { LearningObjective, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { ImageSourcePropType } from "react-native";
-import { LearningObjectiveType, Rating } from "../gql/graphql";
+import { LearningObjectiveType } from "../gql/graphql";
 
 export const subjectToIcon = (subject: SubjectMinimal): ImageSourcePropType => {
   switch (subject.code) {
@@ -80,75 +80,36 @@ export const getColorForGrade = (grade: number) => {
   return "#000000";
 };
 
-export const formatRatingKey = (rating: Rating) => {
+export const getTextColorForGrade = (grade: number) => {
+  if (grade === 8 || grade === 7) {
+    return "black";
+  }
+  return "white";
+};
+
+export const getFontWeightForGrade = (grade: number) => {
+  if (grade === 8 || grade === 7) {
+    return "normal";
+  }
+  return "bold";
+};
+
+export const formatRatingKey = (rating: number) => {
   switch (rating) {
-    case Rating.EXCELLENT:
+    case 10:
       return "excellent";
-    case Rating.GREAT:
+    case 9:
       return "great";
-    case Rating.GOOD:
+    case 8:
       return "good";
-    case Rating.POOR:
-      return "poor";
-    case Rating.FAIR:
+    case 7:
       return "fair";
-    case Rating.PASSABLE:
+    case 6:
+      return "poor";
+    case 5:
       return "passable";
     default:
       return "failed";
-  }
-};
-
-export const formatRatingNumber = (rating: Rating) => {
-  switch (rating) {
-    case Rating.EXCELLENT:
-      return 10;
-    case Rating.GREAT:
-      return 9;
-    case Rating.GOOD:
-      return 8;
-    case Rating.FAIR:
-      return 7;
-    case Rating.POOR:
-      return 6;
-    case Rating.PASSABLE:
-      return 5;
-    default:
-      return 4;
-  }
-};
-
-export const formatRatingNumberString = (rating: Rating) => {
-  switch (rating) {
-    case Rating.EXCELLENT:
-      return "10";
-    case Rating.GREAT:
-      return "9";
-    case Rating.GOOD:
-      return "8";
-    case Rating.FAIR:
-      return "7";
-    case Rating.POOR:
-      return "6";
-    case Rating.PASSABLE:
-      return "5";
-    default:
-      return "4";
-  }
-};
-
-export const getRatingEmoji = (rating: Rating) => {
-  switch (rating) {
-    case Rating.EXCELLENT:
-      return "🤩";
-    case Rating.GREAT:
-      return "😊";
-    case Rating.GOOD:
-      return "🙂";
-    case Rating.FAIR:
-      return "😕";
-    default:
-      return "🙁";
   }
 };
 
@@ -169,8 +130,8 @@ export const formatObjectiveTypeLabel = (type: LearningObjectiveType) => {
   }
 };
 
-export const formatRatingStringWithNull = (rating: Rating | null | undefined) => {
-  return rating ? formatRatingNumberString(rating) : "Ei arvioitu";
+export const formatRatingStringWithNull = (rating: number | null | undefined) => {
+  return rating ? `${rating}` : "Ei arvioitu";
 };
 
 type Valuable<T> = {

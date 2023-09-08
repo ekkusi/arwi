@@ -1,5 +1,5 @@
 import { Student } from "arwi-backend/src/types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
 import { Alert, Platform, Switch } from "react-native";
@@ -9,7 +9,7 @@ import Voice from "@react-native-voice/voice";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 import { CreateEvaluationInput, UpdateEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
-import CView, { CViewProps } from "./primitives/CView";
+import CView from "./primitives/CView";
 import { COLORS } from "../theme";
 import CTextInput from "./primitives/CTextInput";
 import RatingSelector from "./RatingSelector";
@@ -26,19 +26,21 @@ export type EvaluationToUpdate = UpdateEvaluationInput & {
   };
 };
 
-type UpdateEvaluationCardProps = Omit<CViewProps, "children"> & {
+// NOTE: For whatever reason you shouldn't use CView props with the EvaluationCards. This messes the memoization and causes unnecessary renders when using cards in a list.
+// If styling or other is needed, wrap the EvaluationCard in other CView
+type UpdateEvaluationCardProps = {
   hasParticipationToggle?: boolean;
   evaluation: EvaluationToUpdate;
   onChanged?: (evaluation: EvaluationToUpdate) => void;
 };
 
-type CreateEvaluationCardProps = Omit<CViewProps, "children"> & {
+type CreateEvaluationCardProps = {
   hasParticipationToggle?: boolean;
   evaluation: Evaluation;
   onChanged?: (evaluation: Evaluation) => void;
 };
 
-type EvaluationCardProps = Omit<CViewProps, "children"> & {
+type EvaluationCardProps = {
   hasParticipationToggle?: boolean;
   evaluation: Evaluation | EvaluationToUpdate;
   onChanged: (key: EvaluationPropKeys, value: any) => void;
@@ -151,7 +153,7 @@ function EvaluationCard({ onChanged, evaluation, hasParticipationToggle = true, 
         </CView>
       )}
       <CView style={{ width: "100%" }}>
-        <CView style={{ alignItems: "center", gap: "sm" }}>
+        <CView style={{ alignItems: "center", gap: "sm", marginBottom: "lg" }}>
           <CText>{t("skills", "Taidot")}:</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
@@ -159,7 +161,7 @@ function EvaluationCard({ onChanged, evaluation, hasParticipationToggle = true, 
             onChange={(rating) => onChanged("skillsRating", rating)}
           />
         </CView>
-        <CView style={{ alignItems: "center", gap: "sm" }}>
+        <CView style={{ alignItems: "center", gap: "sm", marginBottom: "xl" }}>
           <CText>{t("behaviour", "Työskentely")}:</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
@@ -215,7 +217,6 @@ export function CreateEvaluationCard({
   evaluation: initialEvaluation,
   onChanged: onChangedCallback,
   hasParticipationToggle = true,
-  ...rest
 }: CreateEvaluationCardProps) {
   const [evaluation, setEvaluation] = useState(initialEvaluation);
 
@@ -234,14 +235,15 @@ export function CreateEvaluationCard({
     [evaluation, onChangedCallback]
   );
 
-  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} {...rest} />;
+  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} />;
 }
+
+export const CreateEvaluationCardMemoed = memo(CreateEvaluationCard);
 
 export function UpdateEvaluationCard({
   evaluation: initialEvaluation,
   onChanged: onChangedCallback,
   hasParticipationToggle = true,
-  ...rest
 }: UpdateEvaluationCardProps) {
   const [evaluation, setEvaluation] = useState(initialEvaluation);
 
@@ -260,5 +262,7 @@ export function UpdateEvaluationCard({
     [evaluation, onChangedCallback]
   );
 
-  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle {...rest} />;
+  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle />;
 }
+
+export const UpdateEvaluationCardMemoed = memo(UpdateEvaluationCard);
