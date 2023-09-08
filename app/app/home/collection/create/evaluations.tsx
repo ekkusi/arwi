@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { KeyboardEventListener } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
@@ -72,6 +72,8 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const [submitting, setSubmitting] = useState(false);
   const { generalData, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
 
+  const presentEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
+
   const offsetButtons = useSharedValue(0);
 
   const buttonsAnimatedStyle = useAnimatedStyle(() => {
@@ -132,7 +134,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   return (
     <CView style={{ flex: 1, padding: "md", backgroundColor: "white" }}>
       <CFlatList
-        data={evaluations}
+        data={presentEvaluations}
         renderItem={({ item, index }) => (
           <CreateEvaluationCard
             key={item.student.id}
