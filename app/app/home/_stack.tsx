@@ -22,7 +22,7 @@ import ArchivePage from "../archive";
 import GroupHeaderRightButton from "./GroupHeaderRightButton";
 import CollectionHeaderRightButton from "./CollectionHeaderRightButton";
 import StudentHeaderRightButton from "./StudentHeaderRightButton";
-import { formatDate } from "../../helpers/dateHelpers";
+import StudentFeedbackView from "./student/feedback";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -93,6 +93,13 @@ export default function HomeStack() {
           headerRight: () =>
             route.params.archived ? undefined : <StudentHeaderRightButton id={route.params.id} name={route.params.name} navigation={navigation} />,
         })}
+      />
+      <HomeStackNavigator.Screen
+        name="student-feedback"
+        component={StudentFeedbackView}
+        options={{
+          title: t("final-feedback", "Loppuarviointi"),
+        }}
       />
       <HomeStackNavigator.Screen
         name="collection"

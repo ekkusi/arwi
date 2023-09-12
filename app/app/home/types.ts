@@ -12,6 +12,10 @@ export type HomeStackParams = {
     name: string;
     archived: boolean;
   };
+  "student-feedback": {
+    id: string;
+    name: string;
+  };
   collection: {
     id: string;
     date: string;

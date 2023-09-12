@@ -5,11 +5,16 @@ import { Slider } from "@miblanchard/react-native-slider";
 import { COLORS } from "../theme";
 import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
-import CView from "./primitives/CView";
+import CView, { CViewProps } from "./primitives/CView";
 import CircledNumber from "./CircledNumber";
 import CModal from "./CModal";
 
-export default function GradeSuggestionView({ skillsMean, behaviourMean }: { skillsMean: number; behaviourMean: number }) {
+type GradeSuggestionViewProps = CViewProps & {
+  skillsMean: number;
+  behaviourMean: number;
+};
+
+export default function GradeSuggestionView({ skillsMean, behaviourMean, ...rest }: GradeSuggestionViewProps) {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [gradeSuggestionSkillsWeight, setGradeSuggestionSkillWeight] = useState(0.5);
@@ -68,9 +73,9 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean }: { ski
           <CButton title={t("use", "Käytä")} onPress={() => setIsMenuOpen(false)} />
         </CView>
       </CModal>
-      <CView style={{ gap: 10 }}>
+      <CView {...rest} style={{ gap: 10, ...rest?.style }}>
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("grade-suggestion", "Arvosanaehdotus")}</CText>
+          <CText style={{ fontSize: "lg", fontWeight: "400" }}>{t("grade-suggestion", "Arvosanaehdotus")}</CText>
           <CButton
             size="small"
             variant="outline"

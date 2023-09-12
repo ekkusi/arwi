@@ -1,4 +1,5 @@
 import { compare, hash } from "bcryptjs";
+import { generateStudentSummary } from "../utils/openAI";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
@@ -291,6 +292,36 @@ const resolvers: MutationResolvers<CustomContext> = {
       where: { id: groupId },
     });
     return updatedGroup;
+  },
+  generateStudentFeedback: async (_, { studentId, classYearId }, { user, prisma }) => {
+    await checkAuthenticatedByStudent(user, studentId);
+    const student = await prisma.student.findUnique({
+      where: { id: studentId },
+    });
+    if (!student) throw new Error(`Student with id ${studentId} not found`);
+    const evaluations = await prisma.evaluation.findMany({
+      where: {
+        studentId,
+        evaluationCollection: {
+          classYearId,
+        },
+      },
+      include: {
+        evaluationCollection: {
+          select: {
+            environmentCode: true,
+            date: true,
+          },
+        },
+      },
+    });
+    const mappedEvaluations = evaluations.map((it) => ({
+      ...it,
+      environment: it.evaluationCollection.environmentCode,
+      date: it.evaluationCollection.date,
+    }));
+    const summary = await generateStudentSummary(mappedEvaluations);
+    return summary;
   },
 };
 
