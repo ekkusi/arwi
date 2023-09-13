@@ -278,8 +278,8 @@
       "evaluations": [
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GREAT",
+          "skillsRating": 8,
+          "behaviourRating": 9,
           "notes": "Matilla meni tosi hyvin tänään. Maila pysyi kädessä ja tekniikka oli kunnossa. Matti kannusti myös toisia mukaan pelaamaan",
           "collectionId": 2
         },
@@ -292,29 +292,29 @@
         },
         {
           "wasPresent": true,
-          "skillsRating": "POOR",
+          "skillsRating": 6,
           "behaviourRating": null,
           "notes": "Tanssi ei sujunut tänään kovin hyvin. Matti ei pysynyt rytmissä ja tanssi liian nopeasti.",
           "collectionId": 3
         },
         {
           "wasPresent": true,
-          "skillsRating": "EXCELLENT",
-          "behaviourRating": "FAIR",
+          "skillsRating": 10,
+          "behaviourRating": 7,
           "notes": "Matilla selvästi kunto on hyvä ja saa salilla tehtyä hyviä liikkeitä. Keskittyminen poikkesi kuitenkin useasti ja Matti häiritsi hieman tunnin kulkua.",
           "collectionId": 4
         },
         {
           "wasPresent": true,
           "skillsRating": null,
-          "behaviourRating": "GOOD",
+          "behaviourRating": 8,
           "notes": "Matti osallistui aktiivisesti beach tennikseen, vaikka hänellä oli hieman vaikeuksia pelin sääntöjen ymmärtämisessä.",
           "collectionId": 5
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 9,
+          "behaviourRating": 10,
           "notes": "Matti osallistui joogaan keskittyneesti ja rauhallisesti. Hän auttoi muita osallistujia ja piti positiivista ilmapiiriä yllä.",
           "collectionId": 6
         },
@@ -326,8 +326,8 @@
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GOOD",
+          "skillsRating": 8,
+          "behaviourRating": 8,
           "notes": "Matti ui hyvin ja jaksoi treenata koko harjoituksen ajan. Hän piti tauot sopivissa väleissä ja oli ystävällinen muille uimareille.",
           "collectionId": 8
         },
@@ -339,36 +339,36 @@
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
+          "skillsRating": 9,
           "behaviourRating": null,
           "notes": "Matti nautti retkeilystä metsässä ja piti huolta, että ryhmä pysyi koossa. Hän myös auttoi muita retkeläisiä tarvittaessa.",
           "collectionId": 10
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Matti osallistui vesijumppaan innokkaasti, mutta hänellä oli vaikeuksia joissakin liikkeissä. Hän ei kuitenkaan lannistunut ja yritti parhaansa.",
           "collectionId": 11
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "GOOD",
+          "skillsRating": 9,
+          "behaviourRating": 8,
           "notes": "Matti juoksi hyvin ja jaksoi koko lenkin ajan. Hän kannusti muita juoksijoita ja piti hyvää tahtia yllä.",
           "collectionId": 12
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GREAT",
+          "skillsRating": 7,
+          "behaviourRating": 9,
           "notes": "Vaikka Matti ei ollut aivan parhaimmillaan latinalaistansseissa, hän osallistui tunnille positiivisella asenteella ja kannusti muita.",
           "collectionId": 13
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 8,
+          "behaviourRating": 10,
           "notes": "Matti teki lihaskuntoliikkeet ja venyttelyt huolellisesti. Hän auttoi myös muita osallistujia ja jakoi vinkkejä parhaiden tekniikoiden suhteen.",
           "collectionId": 14
         },
@@ -380,14 +380,14 @@
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 8,
+          "behaviourRating": 10,
           "notes": "Matti osallistui luontojoogaan aktiivisesti ja nautti rannan tunnelmasta. Hän auttoi muita osallistujia tarvittaessa ja piti hyvää ilmapiiriä yllä.",
           "collectionId": 16
         },
         {
           "wasPresent": true,
-          "skillsRating": "POOR",
+          "skillsRating": 6,
           "behaviourRating": null,
           "notes": "Vaikka Matilla oli vaikeuksia voimisteluliikkeiden kanssa, hän osallistui harjoitukseen hyvällä asenteella ja yritti parhaansa.",
           "collectionId": 17
@@ -395,14 +395,14 @@
         {
           "wasPresent": true,
           "skillsRating": null,
-          "behaviourRating": "GREAT",
+          "behaviourRating": 9,
           "notes": "Matti ui avovesialtaassa hyväntuulisena, vaikka vesi oli kylmää. Hän jaksoi treenata koko harjoituksen ajan ja kannusti muita uimareita.",
           "collectionId": 18
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "GOOD",
+          "skillsRating": 9,
+          "behaviourRating": 8,
           "notes": "Matti treenasi kuntosalia tehokkaasti ja keskittyi ylävartalon lihaksiin. Hän kuitenkin keskusteli välillä liikaa muiden kanssa, mikä häiritsi hieman treeniä.",
           "collectionId": 19
         },
@@ -415,8 +415,8 @@
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 9,
+          "behaviourRating": 10,
           "notes": "Matti nautti kansallispuiston retkestä ja jakoi mielenkiintoisia tietoja maisemista ja luonnosta muiden kanssa. Hän auttoi muita tarvittaessa ja piti ryhmän yhtenäisenä.",
           "collectionId": 21
         }
@@ -427,23 +427,23 @@
       "evaluations": [
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GREAT",
+          "skillsRating": 7,
+          "behaviourRating": 9,
           "notes": "Liisa pelasi sählyä innokkaasti, vaikka pallon käsittely ei ollut vielä täydellistä. Hän kannusti joukkuettaan ja oli positiivinen.",
           "collectionId": 1
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 8,
+          "behaviourRating": 10,
           "notes": "Liisa nautti lenkkeilystä luonnonkauniilla polulla ja jakoi mielenkiintoisia havaintojaan maisemista muiden kanssa. Hän oli hyvässä kunnossa koko lenkin ajan.",
           "collectionId": 2,
           "isStellar": true
         },
         {
           "wasPresent": true,
-          "skillsRating": "EXCELLENT",
-          "behaviourRating": "GREAT",
+          "skillsRating": 10,
+          "behaviourRating": 9,
           "notes": "Liisa harjoitteli tanssin koreografiaa erittäin hyvin ja osasi seurata rytmiä. Hän auttoi muita oppimaan haastavat liikkeet ja piti tunnelman kevyenä.",
           "collectionId": 3,
           "isStellar": true
@@ -456,30 +456,30 @@
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GOOD",
+          "skillsRating": 8,
+          "behaviourRating": 8,
           "notes": "Liisa kokeili beach tennisä ensimmäistä kertaa ja sopeutui nopeasti sääntöihin. Hän ei aina osunut palloon, mutta pysyi positiivisena ja kannustavana.",
           "collectionId": 5
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 9,
+          "behaviourRating": 10,
           "notes": "Liisa osallistui luontojoogaan aktiivisesti ja keskittyi hyvin harjoitukseen. Hän auttoi muita osallistujia tarvittaessa ja nautti ulkoilmasta.",
           "collectionId": 6
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Liisa treenasi perusvoimistelutreeniä ahkerasti, mutta tarvitsi apua muutamissa liikkeissä. Hän kuunteli ohjeita ja pyrki parantamaan suoritustaan.",
           "collectionId": 7,
           "isStellar": true
         },
         {
           "wasPresent": true,
-          "skillsRating": "POOR",
-          "behaviourRating": "FAIR",
+          "skillsRating": 6,
+          "behaviourRating": 7,
           "notes": "Uintitreeni ei sujunut parhaalla mahdollisella tavalla. Liisa ei ollut kovin motivoitunut ja hänen tekniikkansa kaipasi parannusta.",
           "collectionId": 8
         },
@@ -491,90 +491,90 @@
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "GREAT",
+          "skillsRating": 9,
+          "behaviourRating": 9,
           "notes": "Liisa nautti retkeilystä metsässä ja käveli reippaasti koko 10 kilometrin lenkin. Hän ihasteli luontoa ja otti valokuvia matkan varrella.",
           "collectionId": 10,
           "isStellar": true
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 8,
+          "behaviourRating": 10,
           "notes": "Liisa osallistui vesijumppaan aktiivisesti ja suoritti liikkeitä hyvällä asenteella. Hän auttoi muita osallistujia ja kannusti heitä yrittämään parhaansa.",
           "collectionId": 11
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Liisa juoksi peruskestävyystreenin aikana, mutta hänellä oli vaikeuksia mäkien kanssa. Hän pysyi kuitenkin positiivisena ja jatkoi yrittämistä.",
           "collectionId": 12
         },
         {
           "wasPresent": true,
-          "skillsRating": "EXCELLENT",
-          "behaviourRating": "GREAT",
+          "skillsRating": 10,
+          "behaviourRating": 9,
           "notes": "Liisa harjoitteli latinalaistansseja tanssitunnilla ja oppi nopeasti uudet askeleet. Hän auttoi muita oppimaan ja piti tunnelman kevyenä.",
           "collectionId": 13,
           "isStellar": true
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "FAIR",
+          "skillsRating": 8,
+          "behaviourRating": 7,
           "notes": "Liisa teki kuntoiluharjoituksia puistossa, mutta keskittyminen herpaantui ajoittain. Hän suoritti liikkeet oikein, mutta olisi voinut olla tarkkaavaisempi.",
           "collectionId": 14,
           "isStellar": true
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Liisa pelasi sählyä salissa ja yritti parhaansa, vaikka hänen mailankäsittelynsä ei ollut vahvinta. Hän kannusti joukkuettaan ja auttoi heitä.",
           "collectionId": 15
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 9,
+          "behaviourRating": 10,
           "notes": "Liisa osallistui luontojoogaan rannalla ja harjoitteli liikkeitä keskittyneesti. Hän nautti auringonlaskun tunnelmasta ja auttoi muita osallistujia.",
           "collectionId": 16
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GOOD",
+          "skillsRating": 8,
+          "behaviourRating": 8,
           "notes": "Liisa harjoitteli voimistelutreeniä salilla ja teki hyviä hyppyjä ja liikkeitä. Hän tarvitsi apua tasapainossa, mutta oli motivoitunut ja kuunteli ohjeita.",
           "collectionId": 17,
           "isStellar": true
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GREAT",
+          "skillsRating": 7,
+          "behaviourRating": 9,
           "notes": "Liisa osallistui uintitreeniin ja yritti parantaa tekniikkaansa. Vaikka hän ei ollut nopein uimari, hän pysyi positiivisena ja kannusti muita osallistujia.",
           "collectionId": 18,
           "isStellar": true
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "GREAT",
+          "skillsRating": 9,
+          "behaviourRating": 9,
           "notes": "Liisa nautti retkeilystä järvellä ja teki tasaisen vauhdin koko 8 kilometrin lenkin. Hän otti kuvia ja nautti luonnon kauneudesta ympärillään.",
           "collectionId": 19
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 8,
+          "behaviourRating": 10,
           "notes": "Liisa osallistui vesijumppaan ja teki liikkeitä energisesti. Hän auttoi muita osallistujia ja oli positiivinen koko tunnin ajan.",
           "collectionId": 20
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Liisa juoksi kestävyystreenin aikana, mutta hänellä oli haasteita pidempien mäkien kanssa. Hän ei kuitenkaan luovuttanut ja kannusti muita osallistujia.",
           "collectionId": 21
         }
@@ -585,148 +585,148 @@
       "evaluations": [
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Teppo osallistui sählynpeluuseen sisällä salissa. Hänellä oli vaikeuksia pallon käsittelyssä aluksi, mutta paransi otettaan pelin edetessä. Hän kannusti joukkuetovereitaan ja pelasi reilusti.",
           "collectionId": 1
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GREAT",
+          "skillsRating": 8,
+          "behaviourRating": 9,
           "notes": "Teppo nautti luonnonkauniilla polulla lenkkeilystä. Hän piti hyvää vauhtia yllä ja auttoi muita osallistujia vaikeissa kohdissa. Maisemat olivat upeat ja Teppo jakoi iloaan muiden kanssa.",
           "collectionId": 2
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Teppo osallistui tanssitunnille ja yritti oppia uutta koreografiaa. Hänellä oli vaikeuksia muutamien liikkeiden kanssa, mutta hän ei luovuttanut ja jatkoi yrittämistä.",
           "collectionId": 3
         },
         {
           "wasPresent": true,
-          "skillsRating": "GREAT",
-          "behaviourRating": "GREAT",
+          "skillsRating": 9,
+          "behaviourRating": 9,
           "notes": "Teppo osallistui kuntosalitreeniin ja keskittyi erityisesti keskivartalon lihaksiin. Hän teki liikkeitä hyvällä tekniikalla ja auttoi muita osallistujia tarvittaessa. Treeni sujui hyvin.",
           "collectionId": 4
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 8,
+          "behaviourRating": 10,
           "notes": "Teppo pelasi pallopeliä hiekkakentällä ja kokeili beach tennistä. Vaikka laji oli uusi hänelle, hän oppi nopeasti ja kannusti muita pelaajia. Tunnelma oli innostunut ja hauska.",
           "collectionId": 5
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GREAT",
+          "skillsRating": 8,
+          "behaviourRating": 9,
           "notes": "Teppo osallistui luontojoogaan ulkona puistossa. Hän teki joogaliikkeitä rauhallisesti ja keskittyneesti, nauttien samalla raikkaasta ulkoilmasta. Hän auttoi muita osallistujia tarvittaessa.",
           "collectionId": 6
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Teppo harjoitteli perusvoimistelua voimistelusalilla. Hän teki erilaisia liikkeitä ja hyppyjä, mutta tarvitsi vielä harjoitusta tasapainonsa säilyttämisessä. Hän yritti parhaansa ja kuunteli ohjaajan neuvoja.",
           "collectionId": 7
         },
         {
           "wasPresent": true,
-          "skillsRating": "EXCELLENT",
-          "behaviourRating": "GREAT",
+          "skillsRating": 10,
+          "behaviourRating": 9,
           "notes": "Teppo osallistui kiipeilytunnille kiipeilyseinällä. Hän osoitti erinomaista kehonhallintaa ja voimaa, ja kiipesi nopeasti ylös seinää. Hän myös tuki muita osallistujia ja opasti heitä tarvittaessa.",
           "collectionId": 8
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GREAT",
+          "skillsRating": 8,
+          "behaviourRating": 9,
           "notes": "Teppo pelasi jalkapalloa koulun pihalla kavereiden kanssa. Hän osoitti hyviä taitoja ja teki pari maalia. Hän kannusti joukkuetovereitaan ja nautti pelistä.",
           "collectionId": 9
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GREAT",
+          "skillsRating": 7,
+          "behaviourRating": 9,
           "notes": "Teppo osallistui retkeilyyn metsässä. Hän käveli 10 kilometrin lenkin metsäpolkuja pitkin, mutta väsyi hieman loppua kohti. Hän ihasteli kaunista luontoa ja jaksoi silti hymyillä.",
           "collectionId": 10
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 8,
+          "behaviourRating": 10,
           "notes": "Teppo osallistui vesijumppaan uimahallissa. Hän treenasi erilaisia liikkeitä vedessä ja keskittyi kunnon kohottamiseen. Hän auttoi myös muita ja oli innokas oppimaan.",
           "collectionId": 11
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Teppo osallistui peruskestävyystreeniin juoksuradalla. Hän juoksi noin 5 kilometrin lenkin, mutta hengästyi muutamissa mäissä. Hän kannusti itseään ja jatkoi juoksua.",
           "collectionId": 12
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GREAT",
+          "skillsRating": 8,
+          "behaviourRating": 9,
           "notes": "Teppo osallistui tanssitunnille ja harjoitteli latinalaistansseja, kuten salsaa ja cha chaa. Hän ei ollut aivan rytmissä koko ajan, mutta nautti tanssista ja oppi nopeasti.",
           "collectionId": 13
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Teppo harjoitteli kuntoilua puistossa. Hän teki erilaisia lihaskunto- ja venyttelyliikkeitä puiston penkeillä ja portailla, mutta tarvitsi vielä harjoitusta tietyissä liikkeissä.",
           "collectionId": 14
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GREAT",
+          "skillsRating": 8,
+          "behaviourRating": 9,
           "notes": "Teppo pelasi sählyä salissa ja osallistui tiukkaan otteluun. Hän teki yhden maalin ja auttoi joukkuettaan puolustuksessa. Hän myös kannusti muita pelaajia.",
           "collectionId": 15
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 8,
+          "behaviourRating": 10,
           "notes": "Teppo osallistui joogatunnille ja harjoitteli erilaisia asentoja ja hengitystekniikoita. Hän keskittyi hyvin ja auttoi muita osallistujia, kun he tarvitsivat apua.",
           "collectionId": 16
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Teppo osallistui pyöräilyretkelle ja ajoi noin 15 kilometrin lenkin. Hänellä oli alussa vaikeuksia pysyä muiden mukana, mutta päätti kuitenkin jatkaa ja saavutti lopulta muut.",
           "collectionId": 17
         },
         {
           "wasPresent": true,
-          "skillsRating": "EXCELLENT",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 10,
+          "behaviourRating": 10,
           "notes": "Teppo osallistui koripalloharjoituksiin ja näytti erinomaisia taitojaan. Hän teki useita koreja ja antoi hyviä syöttöjä. Hän myös kannusti ja auttoi joukkuetovereitaan.",
           "collectionId": 18
         },
         {
           "wasPresent": true,
-          "skillsRating": "FAIR",
-          "behaviourRating": "GOOD",
+          "skillsRating": 7,
+          "behaviourRating": 8,
           "notes": "Teppo osallistui hiihtoretkelle ja hiihti noin 8 kilometrin lenkin. Hän kaatui muutaman kerran, mutta päätti jatkaa ja paransi tekniikkaansa matkan varrella.",
           "collectionId": 19
         },
         {
           "wasPresent": true,
-          "skillsRating": "GOOD",
-          "behaviourRating": "GREAT",
+          "skillsRating": 8,
+          "behaviourRating": 9,
           "notes": "Teppo harjoitteli voimistelua ja kokeili erilaisia akrobaattisia liikkeitä. Hän ei onnistunut kaikissa liikkeissä heti, mutta oli sisukas ja yritti uudelleen kunnes onnistui.",
           "collectionId": 20
         },
         {
           "wasPresent": true,
-          "skillsRating": "EXCELLENT",
-          "behaviourRating": "EXCELLENT",
+          "skillsRating": 10,
+          "behaviourRating": 10,
           "notes": "Teppo osallistui uintiharjoituksiin ja näytti erinomaisia taitojaan eri uintitekniikoissa. Hän ui nopeasti ja kehitti tekniikkaansa jatkuvasti. Hän myös auttoi ja kannusti muita uimareita.",
           "collectionId": 21
         }
