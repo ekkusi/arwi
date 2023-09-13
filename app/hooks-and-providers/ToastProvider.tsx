@@ -36,7 +36,7 @@ const DEFAULT_CLOSE_TIMEOUT_MS = 5000;
 
 export default function ToastProvider({ children }: React.PropsWithChildren) {
   const [toastProps, setToastProps] = useState<OpenToastProps | null>(null);
-  const [toastContent, setToastContent] = useState<string | null>("Help");
+  const [toastContent, setToastContent] = useState<string | null>(null);
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openToast = (content: string, props?: OpenToastProps) => {
