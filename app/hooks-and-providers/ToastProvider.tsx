@@ -1,6 +1,6 @@
 import React, { createContext, useMemo, useState } from "react";
 import { Platform } from "react-native";
-import { SlideInDown, SlideInUp, SlideOutDown, SlideOutUp, ZoomIn, ZoomOut } from "react-native-reanimated";
+import { SlideInDown, SlideInUp, SlideOutDown, SlideOutUp } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CAnimatedView from "../components/primitives/CAnimatedView";
 import CButton from "../components/primitives/CButton";
@@ -11,7 +11,7 @@ import { CViewStyle } from "../theme/types";
 
 type OpenToastProps = {
   closeTimeout?: number;
-  placement?: "top" | "bottom" | "center";
+  placement?: "top" | "bottom";
   type?: "success" | "error";
 };
 
@@ -36,7 +36,7 @@ const DEFAULT_CLOSE_TIMEOUT_MS = 5000;
 
 export default function ToastProvider({ children }: React.PropsWithChildren) {
   const [toastProps, setToastProps] = useState<OpenToastProps | null>(null);
-  const [toastContent, setToastContent] = useState<string | null>(null);
+  const [toastContent, setToastContent] = useState<string | null>("Help");
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openToast = (content: string, props?: OpenToastProps) => {
@@ -56,30 +56,25 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
   const placement = toastProps?.placement || "bottom";
   const type = toastProps?.type || "success";
 
-  const outerViewStyles: CViewStyle = useMemo(() => {
-    let placementStyles: CViewStyle;
+  const placementStyles: CViewStyle = useMemo(() => {
+    let styles: CViewStyle;
     switch (placement) {
       case "top":
-        placementStyles = { justifyContent: "flex-start", top: "xl" };
-        break;
-      case "bottom":
-        placementStyles = { justifyContent: "flex-end", bottom: Platform.OS === "ios" ? "2xl" : "xl" }; // iOS bottom part of screen tends to be more rounded so tooltip has to be a little big higher
+        styles = { top: Platform.OS === "ios" ? "4xl" : "2xl" };
         break;
       default:
-        placementStyles = { justifyContent: "center" };
+        styles = { bottom: Platform.OS === "ios" ? "2xl" : "xl" }; // iOS bottom part of screen tends to be more rounded so tooltip has to be a little big higher
         break;
     }
-    return placementStyles;
+    return styles;
   }, [placement]);
 
   const exitAnimation = useMemo(() => {
     switch (placement) {
       case "top":
         return SlideOutUp;
-      case "bottom":
-        return SlideOutDown;
       default:
-        return ZoomOut;
+        return SlideOutDown;
     }
   }, [placement]);
 
@@ -87,10 +82,8 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
     switch (placement) {
       case "top":
         return SlideInUp;
-      case "bottom":
-        return SlideInDown;
       default:
-        return ZoomIn;
+        return SlideInDown;
     }
   }, [placement]);
 
@@ -102,18 +95,22 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
       }}
     >
       {children}
-      {toastContent && (
-        <CView style={{ position: "absolute", top: 0, left: "md", right: "md", bottom: 0, ...outerViewStyles }}>
+      {/* Wrapper View is needed to make exit animation work in iOS */}
+      <CView style={{ position: "absolute", bottom: 0, right: 0, left: 0, top: 0 }} pointerEvents="box-none">
+        {toastContent && (
           <CAnimatedView
             entering={enterAnimation}
             exiting={exitAnimation}
             style={{
+              position: "absolute",
+              right: "md",
+              left: "md",
               flexDirection: "row",
               alignItems: "center",
-              width: "100%",
               backgroundColor: type === "success" ? "light-green" : "error",
               padding: "lg",
               borderRadius: 10,
+              ...placementStyles,
             }}
           >
             <MaterialCommunityIcon
@@ -127,8 +124,8 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
               <MaterialCommunityIcon name="close" size={20} color={COLORS.white} />
             </CButton>
           </CAnimatedView>
-        </CView>
-      )}
+        )}
+      </CView>
     </Provider>
   );
 }
