@@ -22,7 +22,6 @@ import { HomeStackParams } from "./types";
 import CButton from "../../components/primitives/CButton";
 import { COLORS } from "../../theme";
 import Layout from "../../components/Layout";
-import { useToast } from "../../hooks-and-providers/ToastProvider";
 
 const MainPage_GetCurrentUser_Query = graphql(`
   query MainPage_GetCurrentUser {
@@ -55,7 +54,6 @@ function HomePageContent({
 }) {
   const { t } = useTranslation();
   const firstRender = useRef(true);
-  const { openToast } = useToast();
 
   const { getCurrentUser: teacher } = data;
 
@@ -134,7 +132,6 @@ function HomePageContent({
           <CButton title={t("home-view.create-group", "Luo ensimmäinen ryhmä")} onPress={() => navigation.navigate("group-create")} />
         </CView>
       )}
-      <CButton title="Open" onPress={() => openToast("Terve terve")} style={{ marginBottom: 300 }} />
       <Animated.View style={[{ overflow: "visible", position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
         <CButton
           shadowed
