@@ -77,11 +77,12 @@ export type Mutation = {
   updateCollection: EvaluationCollection;
   updateStudent: Student;
   updateGroup: Group;
-  changeGroupYear: Group;
   updateEvaluation: Evaluation;
   deleteStudent: Student;
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
+  changeGroupYear: Group;
+  generateStudentFeedback: Scalars["String"];
 };
 
 export type MutationRegisterArgs = {
@@ -127,12 +128,6 @@ export type MutationUpdateGroupArgs = {
   groupId: Scalars["ID"];
 };
 
-export type MutationChangeGroupYearArgs = {
-  newYearCode: ClassYearCode;
-  groupId: Scalars["ID"];
-  transferEvaluations?: InputMaybe<Scalars["Boolean"]>;
-};
-
 export type MutationUpdateEvaluationArgs = {
   data: UpdateEvaluationInput;
 };
@@ -147,6 +142,17 @@ export type MutationDeleteGroupArgs = {
 
 export type MutationDeleteCollectionArgs = {
   collectionId: Scalars["ID"];
+};
+
+export type MutationChangeGroupYearArgs = {
+  newYearCode: ClassYearCode;
+  groupId: Scalars["ID"];
+  transferEvaluations?: InputMaybe<Scalars["Boolean"]>;
+};
+
+export type MutationGenerateStudentFeedbackArgs = {
+  studentId: Scalars["ID"];
+  classYearId: Scalars["ID"];
 };
 
 export type AuthPayload = {
@@ -518,7 +524,6 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   >;
   updateStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationUpdateStudentArgs, "data" | "studentId">>;
   updateGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, "data" | "groupId">>;
-  changeGroupYear?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">>;
   updateEvaluation?: Resolver<ResolversTypes["Evaluation"], ParentType, ContextType, RequireFields<MutationUpdateEvaluationArgs, "data">>;
   deleteStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, "studentId">>;
   deleteGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, "groupId">>;
@@ -527,6 +532,13 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
     ParentType,
     ContextType,
     RequireFields<MutationDeleteCollectionArgs, "collectionId">
+  >;
+  changeGroupYear?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">>;
+  generateStudentFeedback?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationGenerateStudentFeedbackArgs, "studentId" | "classYearId">
   >;
 };
 

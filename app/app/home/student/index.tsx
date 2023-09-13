@@ -1,21 +1,15 @@
+import { useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import * as Clipboard from "expo-clipboard";
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import CButton from "../../../components/primitives/CButton";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
-import { StudentEvaluationRecap_Evaluation_Fragment } from "../../../components/StudentEvaluationsRecap";
-import { getFragmentData, graphql } from "../../../gql";
+import { graphql } from "../../../gql";
 import { HomeStackParams } from "../types";
-import { COLORS } from "../../../theme";
-import { generateStudentSummary } from "../../../helpers/openAiUtils";
 import CircledNumber from "../../../components/CircledNumber";
 import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import EvaluationsBarChart from "../../../components/charts/EvaluationsBarChart";
@@ -24,13 +18,13 @@ import InfoButton from "../../../components/InfoButton";
 import GradeSuggestionView from "../../../components/GradeSuggestionView";
 import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogram";
 import Layout from "../../../components/Layout";
+import CButton from "../../../components/primitives/CButton";
 
 const StudentPage_GetStudent_Query = graphql(`
   query StudentPage_GetStudent($studentId: ID!) {
     getStudent(id: $studentId) {
       id
       name
-      ...StudentEvaluationRecap_Student
       group {
         id
         name
@@ -49,9 +43,20 @@ const StudentPage_GetStudent_Query = graphql(`
       currentClassEvaluations {
         id
         notes
+        wasPresent
+        behaviourRating
+        skillsRating
+        isStellar
+        collection {
+          id
+          environment {
+            code
+            label
+          }
+        }
         ...EvaluationsAccordion_Evaluation
-        ...StudentEvaluationRecap_Evaluation
-        ...OpenAIUtils_Evaluation
+        ...EvaluationsLineChart_Evaluation
+        ...EvaluationsBarChart_Evaluation
       }
     }
   }
@@ -62,47 +67,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const { data } = useQuery(StudentPage_GetStudent_Query, { variables: { studentId } });
   const { t } = useTranslation();
-
-  const [summary, setSummary] = useState<string | undefined>();
-  const [error, setError] = useState<string | undefined>();
-  const [isGeneratingSummary, setIsGeneratingSumamry] = useState<boolean>(false);
-  const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [scrollYPos, setScrollYPos] = useState<number>(0);
-  const scrollView = useRef<ScrollView>(null);
-
-  if (!data) return <LoadingIndicator />;
-  const { getStudent: student } = data;
-  const evaluationsSimple = student.currentClassEvaluations;
-
-  const generateSummary = async () => {
-    try {
-      setIsGeneratingSumamry(true);
-      setIsCopied(false);
-      setError(undefined);
-      setSummary(undefined);
-
-      const result = await generateStudentSummary(evaluationsSimple);
-
-      setSummary(result);
-      setIsGeneratingSumamry(false);
-    } catch (e) {
-      setIsGeneratingSumamry(false);
-      setError(
-        t(
-          "StudentView.summaryGenerationError",
-          "Palautteen generoinnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
-        )
-      );
-    }
-  };
-
-  const copySummaryToClipboard = async () => {
-    if (!summary) return;
-    await Clipboard.setStringAsync(summary);
-    setIsCopied(true);
-  };
-
-  const evaluations = getFragmentData(StudentEvaluationRecap_Evaluation_Fragment, evaluationsSimple);
 
   const {
     absencesAmount,
@@ -115,11 +79,18 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     behaviourMedian,
     behaviourMode,
     behaviourMeanByEnvironments,
-  } = analyzeEvaluations([...evaluations]);
+  } = useMemo(() => {
+    const evaluations = data?.getStudent.currentClassEvaluations ?? [];
+    return analyzeEvaluations([...evaluations]);
+  }, [data]);
+
+  if (!data) return <LoadingIndicator />;
+  const { getStudent: student } = data;
+  const evaluations = student.currentClassEvaluations;
 
   return (
     <Layout>
-      <ScrollView ref={scrollView}>
+      <ScrollView>
         <CView style={{ padding: "lg", backgroundColor: "white", gap: 30 }}>
           <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "3xl" }}>
             <CView>
@@ -221,31 +192,12 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             evaluations={student.currentClassEvaluations}
             onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
           />
-          {archived && (
-            <CView style={{ marginTop: "lg" }} onLayout={(event) => setScrollYPos(event.nativeEvent.layout.y)}>
-              <CText style={{ fontSize: "xl", marginBottom: "lg" }}>{t("StudentView.feedbackGeneration", "Loppupalautteen generointi")}</CText>
-              <CButton loading={isGeneratingSummary} title={t("StudentView.generateFeedback", "Luo palaute")} onPress={generateSummary} />
-              {error && <CText style={{ color: "error" }}>{error}</CText>}
-              {summary && (
-                <CView
-                  style={{ marginTop: "lg" }}
-                  onLayout={() => {
-                    scrollView.current?.scrollTo({ y: scrollYPos, x: 0, animated: true });
-                  }}
-                >
-                  <CText style={{ fontSize: "xl" }}>{t("feedback", "Palaute")}:</CText>
-                  <CText style={{ marginBottom: "lg" }}>{summary}</CText>
-                  <CView style={{ alignContent: "center", marginTop: "md" }}>
-                    <CButton
-                      title={isCopied ? t("StudentView.copied", "Kopioitu") : t("StudentView.copyText", "Kopioi teksti")}
-                      disabled={isCopied}
-                      onPress={copySummaryToClipboard}
-                      leftIcon={<MaterialCommunityIcon name={isCopied ? "check" : "note-text-outline"} size={25} color={COLORS.white} />}
-                    />
-                  </CView>
-                </CView>
-              )}
-            </CView>
+          {!archived && (
+            <CButton
+              title={t("student-final-evaluation", "Siirry loppuarviointiin")}
+              onPress={() => navigation.push("student-feedback", route.params)}
+              style={{ marginBottom: "lg" }}
+            />
           )}
         </CView>
       </ScrollView>

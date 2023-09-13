@@ -93,7 +93,6 @@ export default function StudentHeaderRightButton({
   navigation: NativeStackNavigationProp<HomeStackParams, "student">;
 }) {
   const { t } = useTranslation();
-  const [deleteStudent] = useMutation(StudentHeaderRightButton_DeleteStudent_Mutation);
 
   const { openModal, closeModal } = useModal();
   return (
@@ -141,6 +140,9 @@ export default function StudentHeaderRightButton({
             }}
           >
             <CText>{t("delete-student", "Poista oppilas")}</CText>
+          </MenuOption>
+          <MenuOption onSelect={() => navigation.push("student-feedback", { id, name })}>
+            <CText>{t("final-feedback", "Loppuarviointi")}</CText>
           </MenuOption>
         </CView>
       </MenuOptions>
