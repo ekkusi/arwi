@@ -7,9 +7,6 @@ on:
 
 jobs:
   backup:
-    defaults:
-      run:
-        working-directory: next
     permissions:
       contents: write
     runs-on: ubuntu-latest
