@@ -81,7 +81,7 @@ export default function CollectionGeneralInfoForm({
             defaultValue={defaultLearningObjectives || []}
             onSelect={(items) => setSelectedLearningObjectivesCode(items)}
             options={learningObjectives}
-            formatLabel={(item) => item.label}
+            formatLabel={(item) => `${item.code}: ${item.label}`}
             getOptionValue={(item) => item.code}
           />
           <FormField title={t("date", "Päivämäärä")}>
