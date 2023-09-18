@@ -1,14 +1,13 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import Layout from "../../../components/Layout";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
-import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
-import { UpdateEvaluationCard } from "../../../components/UpdateEvaluationCard";
+import { UpdateEvaluationCard } from "../../../components/EvaluationCard";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { EvaluationDataToUpdate } from "../collection/edit_all_evaluations";

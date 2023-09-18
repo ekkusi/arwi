@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
-import { Evaluation } from "../../../../components/UpdateEvaluationCard";
+import { Evaluation } from "../../../../components/EvaluationCard";
 import { graphql } from "../../../../gql";
 import { CollectionCreationProvider_GetGroupQuery } from "../../../../gql/graphql";
 

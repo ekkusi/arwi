@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ActivityIndicator, Platform, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
+import { ActivityIndicator, Platform, View, TouchableOpacityProps, TouchableOpacity } from "react-native";
 import { ColorKey, CTextStyle, CViewStyle } from "../../theme/types";
 import { createStyles, createViewStyles } from "../../theme/utils";
 import CText from "./CText";
