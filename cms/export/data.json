@@ -1,0 +1,668 @@
+[
+  {
+    "_createdAt": "2023-09-16T11:08:11Z",
+    "_id": "904f1f5b-b759-48bd-a281-6fa827d01267",
+    "_rev": "1UkEqB2JKGC2doTbrcK6Mz",
+    "_type": "subject",
+    "_updatedAt": "2023-09-18T11:08:35Z",
+    "code": "LI",
+    "elementarySchool": {
+      "one_to_two_years": [
+        {
+          "_key": "795c2c906926",
+          "_type": "learningObjective",
+          "code": "TI1",
+          "label": {
+            "fi": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "_key": "34297426fba4",
+          "_type": "learningObjective",
+          "code": "TI2",
+          "label": {
+            "fi": "Havaintomotoristen taitojen harjoittelu"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta harjaannuttamaan havaintomotorisia taitojaan eli havainnoimaan itseään ja ympäristöään aistien avulla sekä tekemään liikuntatilanteisiin sopivia ratkaisuja"
+          },
+          "type": "SKILLS"
+        }
+      ]
+    },
+    "environments": [
+      {
+        "_key": "728596a0f92b",
+        "_type": "environment",
+        "code": "LI_ENV_TAL",
+        "color": "#345565",
+        "name": {
+          "fi": "Talviliikunta"
+        }
+      },
+      {
+        "_key": "1838188febd9",
+        "_type": "environment",
+        "code": "LI_ENV_PAL",
+        "color": "#3c505a",
+        "name": {
+          "fi": "Palloilu"
+        }
+      }
+    ],
+    "highSchoolModules": [
+      {
+        "_key": "40b4f790056a",
+        "_type": "learningObjectiveGroup",
+        "code": "LI_HS_MODULE_LI1",
+        "learningObjectives": [
+          {
+            "_key": "c831b9320b8d",
+            "_type": "learningObjective",
+            "code": "TI1",
+            "label": {
+              "fi": "Liikuntataitojen ja -tietojen soveltaminen"
+            },
+            "longDescription": {
+              "fi": "Soveltaa liikuntataitoja ja -tietoja erilaisissa liikuntatehtävissä, -muodoissa ja -lajeissa eri vuodenaikoina ja eri olosuhteissa (kuten sisällä, ulkona ja vedessä)"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "_key": "6baba1bf0592",
+            "_type": "learningObjective",
+            "code": "T2",
+            "label": {
+              "fi": "Kunnioittava vuorovaikutus, palautteen anto ja kannustus"
+            },
+            "longDescription": {
+              "fi": "Osaa toimia vuorovaikutustilanteissa toisia kunnioittavasti, auttaa ja kannustaa muita liikuntatunneilla sekä antaa rakentavaa palautetta ja vertaisarviointia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "_key": "851789635cd5",
+            "_type": "learningObjective",
+            "code": "T3",
+            "label": {
+              "fi": "Parhaansa yrittäminen, aktiivinen ja sinnikäs työskentely"
+            },
+            "longDescription": {
+              "fi": "Yrittää parhaansa suorittaen tehtävänsä tunnollisesti ja vastuullisesti, työskennellen aktiivisesti ja asiallisesti sekä kehittäen itseään pitkäjänteisesti"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "LI1 (lukion 1. moduuli)"
+        }
+      },
+      {
+        "_key": "6267d04753ad",
+        "_type": "learningObjectiveGroup",
+        "code": "LI_HS_MODULE_LI2",
+        "name": {
+          "fi": "LI2 (lukion 2. moduuli)"
+        }
+      }
+    ],
+    "name": {
+      "en": "Sports",
+      "fi": "Liikunta"
+    },
+    "vocationalSchoolModules": [
+      {
+        "_key": "ef10ebcc484a",
+        "_type": "learningObjectiveGroup",
+        "code": "LI_VOC_MODULE_AMM",
+        "learningObjectives": [
+          {
+            "_key": "ccfb81087b7f",
+            "_type": "learningObjective",
+            "code": "T1",
+            "label": {
+              "fi": "Oppilas etsii tietoa terveytensä edistämiseksi"
+            },
+            "longDescription": {
+              "fi": "Oppilas etsii monipuolista tietoa ikäluokkansa terveyseroista ja mahdollisuuksista oman terveytensä ja toimintakykynsä edistämiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "Ammattikoulu pakollinen"
+        }
+      }
+    ]
+  },
+  {
+    "_createdAt": "2023-09-16T11:21:09Z",
+    "_id": "08f91368-71b9-47b9-84c3-048d4869308e",
+    "_rev": "CsLCqCa3bZJMelLbslelE1",
+    "_type": "subject",
+    "_updatedAt": "2023-09-18T12:25:10Z",
+    "code": "TE",
+    "elementarySchool": {
+      "seven_to_nine_years": [
+        {
+          "_key": "b8a84bfabe87",
+          "_type": "learningObjective",
+          "code": "T1",
+          "label": {
+            "fi": "Terveyden monimuotoisuuden ymmärtäminen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta ymmärtämään terveyden laaja-alaisuutta, terveyden edistämistä sekä elämänkulkua, kasvua ja kehitystä voimavaralähtöisesti "
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "7f82236687e6",
+          "_type": "learningObjective",
+          "code": "T2",
+          "label": {
+            "fi": "Tunne- ja vuorovaikutustaitojen kehittäminen "
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta kehittämään valmiuksiaan tunne- ja vuorovaikutustaidoissa ja kykyä toimia erilaisissa ristiriita- ja kriisitilanteissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "10d6b34c838c",
+          "_type": "learningObjective",
+          "code": "T3",
+          "label": {
+            "fi": "Itsetuntemuksen kehittäminen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta kehittämään itsetuntemustaan, omien arvojen ja asenteiden sekä kehon ja mielen viestien tunnistamista ja tunnistamaan ja säätelemään käyttäytymistään, oppimistaan ja opiskeluaan tukevia tekijöitä "
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "_key": "2aefedb88d9c",
+          "_type": "learningObjective",
+          "code": "T4",
+          "label": {
+            "fi": "Terveysosaamisen eettiset näkökulmat"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta pohtimaan yksilöllisyyteen, yhteisöllisyyteen ja yhdenvertaisuuteen liittyviä kysymyksiä terveyden näkökulmasta sekä tukea oppilaan valmiuksia luoda vastuullisia ratkaisuja ihmisten välisissä vuorovaikutustilanteissa."
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "8df4e008cbf1",
+          "_type": "learningObjective",
+          "code": "T5",
+          "label": {
+            "fi": "Fyysiseen, psyykkiseen ja sosiaaliseen terveyteen vaikuttaminen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta syventämään ymmärrystään fyysisestä, psyykkisestä ja sosiaalisesta terveydestä ja niitä vahvistavista ja vaarantavista tekijöistä ja mekanismeista sekä tukea oppilaan valmiuksia käyttää näihin liittyviä käsitteitä asianmukaisesti"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "10c6f6cfb123",
+          "_type": "learningObjective",
+          "code": "T6",
+          "label": {
+            "fi": "Kehittää tiedonhankintaa sairaudesta, toimia terveyttä edistävästi"
+          },
+          "longDescription": {
+            "fi": "tukea oppilaan kehittymistä terveyteen ja sairauteen liittyvän tiedon hankkijana ja käyttäjänä sekä edistää valmiuksia toimia tarkoituksenmukaisesti terveyteen, turvallisuuteen ja sairauksiin liittyvissä tilanteissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "de8315c562ed",
+          "_type": "learningObjective",
+          "code": "T7",
+          "label": {
+            "fi": "Terveystottumusten tunnistaminen ja arvioiminen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta tunnistamaan ja arvioimaan omia terveyteen ja turvallisuuteen liittyviä tottumuksiaan, valintojaan ja niiden perusteluja sekä rohkaista oppilasta pohtimaan oman terveyden kannalta merkityksellisiä voimavaroja "
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "_key": "9f1f73813be3",
+          "_type": "learningObjective",
+          "code": "T8",
+          "label": {
+            "fi": "Terveysilmiöiden tunnistaminen ja kriittinen tarkastelu"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta tunnistamaan ja tarkastelemaan kriittisesti terveyteen ja sairauteen liittyviä ilmiöitä, niihin liittyviä arvoja ja normeja sekä arvioimaan tiedon luotettavuutta ja merkitystä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "03f994684fc2",
+          "_type": "learningObjective",
+          "code": "T9",
+          "label": {
+            "fi": "Ympäristön vaikutus terveyteen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta ymmärtämään ympäristön, yhteisöjen, kulttuurin ja tieto- ja viestintäteknologian merkitystä terveydelle ja hyvinvoinnille"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "d776a74f097e",
+          "_type": "learningObjective",
+          "code": "T10",
+          "label": {
+            "fi": "Oppia ylläpitämään omaa toimintakykyä"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta luomaan perustaa opiskelu-, toiminta- ja työkyvylle ja sen ylläpitämiselle sekä kuvaamaan terveyspalvelujen asianmukaista käyttöä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "007aac43bdab",
+          "_type": "learningObjective",
+          "code": "T11",
+          "label": {
+            "fi": "Sosiaalisen piirin vaikutus omaan terveyteen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta ymmärtämään ja arvioimaan perheen ja omaan elämänpiiriin kuuluvien ihmisten ja yhteisöjen edustamia terveyskäsityksiä, tunnistamaan niiden merkitystä itselle sekä muodostamaan kuvaa itselle sopivista oppimisen keinoista"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        }
+      ]
+    },
+    "environments": [
+      {
+        "_key": "402fe0012457",
+        "_type": "environment",
+        "code": "TE_ENV_TER",
+        "color": "#24a3e3",
+        "name": {
+          "fi": "Terveyden edistäminen"
+        }
+      },
+      {
+        "_key": "a3a2b0487000",
+        "_type": "environment",
+        "code": "TE_ENV_SAI",
+        "color": "#1ec592",
+        "name": {
+          "fi": "Sairauksien ehkäisy"
+        }
+      },
+      {
+        "_key": "dfd089e18358",
+        "_type": "environment",
+        "code": "TE_ENV_KAS",
+        "color": "#a224e3",
+        "name": {
+          "fi": "Kasvu ja kehitys"
+        }
+      },
+      {
+        "_key": "6f8567c41237",
+        "_type": "environment",
+        "code": "TE_ENV_ITS",
+        "color": "#03f1e9",
+        "name": {
+          "fi": "Itsetuntemus"
+        }
+      },
+      {
+        "_key": "9fbcbed0058a",
+        "_type": "environment",
+        "code": "TE_ENV_SEK",
+        "color": "#ff6af2",
+        "name": {
+          "fi": "Seksuaaliterveys"
+        }
+      },
+      {
+        "_key": "70d8719d18d7",
+        "_type": "environment",
+        "code": "TE_ENV_TUN",
+        "color": "#ffd226",
+        "name": {
+          "fi": "Tunne- ja vuorovaikutustaidot"
+        }
+      },
+      {
+        "_key": "6666be253c47",
+        "_type": "environment",
+        "code": "TE_ENV_TER_1",
+        "color": "#0e9b00",
+        "name": {
+          "fi": "Terveystottumukset"
+        }
+      },
+      {
+        "_key": "07b693f41d0b",
+        "_type": "environment",
+        "code": "TE_ENV_TUR",
+        "color": "#ff331b",
+        "name": {
+          "fi": "Turvallisuustaidot"
+        }
+      },
+      {
+        "_key": "19cadebf534f",
+        "_type": "environment",
+        "code": "TE_ENV_TER_2",
+        "color": "#6c3800",
+        "name": {
+          "fi": "Terveyden vaaratekijät"
+        }
+      },
+      {
+        "_key": "64252191c3e1",
+        "_type": "environment",
+        "code": "TE_ENV_KES",
+        "color": "#1446b5",
+        "name": {
+          "fi": "Kestävä elämäntapa"
+        }
+      },
+      {
+        "_key": "728a5cc92b60",
+        "_type": "environment",
+        "code": "TE_ENV_MIE",
+        "color": "#6df878",
+        "name": {
+          "fi": "Mielen hyvinvointi"
+        }
+      },
+      {
+        "_key": "2e97aaa88c83",
+        "_type": "environment",
+        "code": "TE_ENV_MED",
+        "color": "#989898",
+        "name": {
+          "fi": "Media ja yhteiskunta"
+        }
+      }
+    ],
+    "name": {
+      "fi": "Terveystieto"
+    }
+  },
+  {
+    "_createdAt": "2023-09-16T11:21:09Z",
+    "_id": "drafts.08f91368-71b9-47b9-84c3-048d4869308e",
+    "_rev": "caf97322-112a-4745-9a1b-e5c8b0c1ddab",
+    "_type": "subject",
+    "_updatedAt": "2023-09-18T12:25:34Z",
+    "code": "TE",
+    "elementarySchool": {
+      "seven_to_nine_years": [
+        {
+          "_key": "b8a84bfabe87",
+          "_type": "learningObjective",
+          "code": "T1",
+          "label": {
+            "fi": "Terveyden monimuotoisuuden ymmärtäminen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta ymmärtämään terveyden laaja-alaisuutta, terveyden edistämistä sekä elämänkulkua, kasvua ja kehitystä voimavaralähtöisesti "
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "7f82236687e6",
+          "_type": "learningObjective",
+          "code": "T2",
+          "label": {
+            "fi": "Tunne- ja vuorovaikutustaitojen kehittäminen "
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta kehittämään valmiuksiaan tunne- ja vuorovaikutustaidoissa ja kykyä toimia erilaisissa ristiriita- ja kriisitilanteissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "10d6b34c838c",
+          "_type": "learningObjective",
+          "code": "T3",
+          "label": {
+            "fi": "Itsetuntemuksen kehittäminen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta kehittämään itsetuntemustaan, omien arvojen ja asenteiden sekä kehon ja mielen viestien tunnistamista ja tunnistamaan ja säätelemään käyttäytymistään, oppimistaan ja opiskeluaan tukevia tekijöitä "
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "_key": "2aefedb88d9c",
+          "_type": "learningObjective",
+          "code": "T4",
+          "label": {
+            "fi": "Terveysosaamisen eettiset näkökulmat"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta pohtimaan yksilöllisyyteen, yhteisöllisyyteen ja yhdenvertaisuuteen liittyviä kysymyksiä terveyden näkökulmasta sekä tukea oppilaan valmiuksia luoda vastuullisia ratkaisuja ihmisten välisissä vuorovaikutustilanteissa."
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "8df4e008cbf1",
+          "_type": "learningObjective",
+          "code": "T5",
+          "label": {
+            "fi": "Fyysiseen, psyykkiseen ja sosiaaliseen terveyteen vaikuttaminen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta syventämään ymmärrystään fyysisestä, psyykkisestä ja sosiaalisesta terveydestä ja niitä vahvistavista ja vaarantavista tekijöistä ja mekanismeista sekä tukea oppilaan valmiuksia käyttää näihin liittyviä käsitteitä asianmukaisesti"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "10c6f6cfb123",
+          "_type": "learningObjective",
+          "code": "T6",
+          "label": {
+            "fi": "Kehittää tiedonhankintaa sairaudesta, toimia terveyttä edistävästi"
+          },
+          "longDescription": {
+            "fi": "tukea oppilaan kehittymistä terveyteen ja sairauteen liittyvän tiedon hankkijana ja käyttäjänä sekä edistää valmiuksia toimia tarkoituksenmukaisesti terveyteen, turvallisuuteen ja sairauksiin liittyvissä tilanteissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "de8315c562ed",
+          "_type": "learningObjective",
+          "code": "T7",
+          "label": {
+            "fi": "Terveystottumusten tunnistaminen ja arvioiminen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta tunnistamaan ja arvioimaan omia terveyteen ja turvallisuuteen liittyviä tottumuksiaan, valintojaan ja niiden perusteluja sekä rohkaista oppilasta pohtimaan oman terveyden kannalta merkityksellisiä voimavaroja "
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "_key": "9f1f73813be3",
+          "_type": "learningObjective",
+          "code": "T8",
+          "label": {
+            "fi": "Terveysilmiöiden tunnistaminen ja kriittinen tarkastelu"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta tunnistamaan ja tarkastelemaan kriittisesti terveyteen ja sairauteen liittyviä ilmiöitä, niihin liittyviä arvoja ja normeja sekä arvioimaan tiedon luotettavuutta ja merkitystä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "03f994684fc2",
+          "_type": "learningObjective",
+          "code": "T9",
+          "label": {
+            "fi": "Ympäristön vaikutus terveyteen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta ymmärtämään ympäristön, yhteisöjen, kulttuurin ja tieto- ja viestintäteknologian merkitystä terveydelle ja hyvinvoinnille"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "d776a74f097e",
+          "_type": "learningObjective",
+          "code": "T10",
+          "label": {
+            "fi": "Oppia ylläpitämään omaa toimintakykyä"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta luomaan perustaa opiskelu-, toiminta- ja työkyvylle ja sen ylläpitämiselle sekä kuvaamaan terveyspalvelujen asianmukaista käyttöä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "007aac43bdab",
+          "_type": "learningObjective",
+          "code": "T11",
+          "label": {
+            "fi": "Sosiaalisen piirin vaikutus omaan terveyteen"
+          },
+          "longDescription": {
+            "fi": "ohjata oppilasta ymmärtämään ja arvioimaan perheen ja omaan elämänpiiriin kuuluvien ihmisten ja yhteisöjen edustamia terveyskäsityksiä, tunnistamaan niiden merkitystä itselle sekä muodostamaan kuvaa itselle sopivista oppimisen keinoista"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "_key": "7dc77c150f38",
+          "_type": "learningObjective",
+          "code": "T12",
+          "label": {
+            "fi": "Tukea kykyä arvioida terveysviestintää ja terveyden ymmärtämistä omassa ympäristössä"
+          },
+          "longDescription": {
+            "fi": "tukea oppilaan valmiuksia arvioida kriittisesti terveyteen ja sairauteen liittyvää viestintää sekä eritellä yksilön oikeuksia, vastuita ja vaikuttamiskeinoja terveyttä ja turvallisuutta koskevissa asioissa omassa oppimisympäristössä ja lähiyhteisöissä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        }
+      ]
+    },
+    "environments": [
+      {
+        "_key": "402fe0012457",
+        "_type": "environment",
+        "code": "TE_ENV_TER",
+        "color": "#24a3e3",
+        "name": {
+          "fi": "Terveyden edistäminen"
+        }
+      },
+      {
+        "_key": "a3a2b0487000",
+        "_type": "environment",
+        "code": "TE_ENV_SAI",
+        "color": "#1ec592",
+        "name": {
+          "fi": "Sairauksien ehkäisy"
+        }
+      },
+      {
+        "_key": "dfd089e18358",
+        "_type": "environment",
+        "code": "TE_ENV_KAS",
+        "color": "#a224e3",
+        "name": {
+          "fi": "Kasvu ja kehitys"
+        }
+      },
+      {
+        "_key": "6f8567c41237",
+        "_type": "environment",
+        "code": "TE_ENV_ITS",
+        "color": "#03f1e9",
+        "name": {
+          "fi": "Itsetuntemus"
+        }
+      },
+      {
+        "_key": "9fbcbed0058a",
+        "_type": "environment",
+        "code": "TE_ENV_SEK",
+        "color": "#ff6af2",
+        "name": {
+          "fi": "Seksuaaliterveys"
+        }
+      },
+      {
+        "_key": "70d8719d18d7",
+        "_type": "environment",
+        "code": "TE_ENV_TUN",
+        "color": "#ffd226",
+        "name": {
+          "fi": "Tunne- ja vuorovaikutustaidot"
+        }
+      },
+      {
+        "_key": "6666be253c47",
+        "_type": "environment",
+        "code": "TE_ENV_TER_1",
+        "color": "#0e9b00",
+        "name": {
+          "fi": "Terveystottumukset"
+        }
+      },
+      {
+        "_key": "07b693f41d0b",
+        "_type": "environment",
+        "code": "TE_ENV_TUR",
+        "color": "#ff331b",
+        "name": {
+          "fi": "Turvallisuustaidot"
+        }
+      },
+      {
+        "_key": "19cadebf534f",
+        "_type": "environment",
+        "code": "TE_ENV_TER_2",
+        "color": "#6c3800",
+        "name": {
+          "fi": "Terveyden vaaratekijät"
+        }
+      },
+      {
+        "_key": "64252191c3e1",
+        "_type": "environment",
+        "code": "TE_ENV_KES",
+        "color": "#1446b5",
+        "name": {
+          "fi": "Kestävä elämäntapa"
+        }
+      },
+      {
+        "_key": "728a5cc92b60",
+        "_type": "environment",
+        "code": "TE_ENV_MIE",
+        "color": "#6df878",
+        "name": {
+          "fi": "Mielen hyvinvointi"
+        }
+      },
+      {
+        "_key": "2e97aaa88c83",
+        "_type": "environment",
+        "code": "TE_ENV_MED",
+        "color": "#989898",
+        "name": {
+          "fi": "Media ja yhteiskunta"
+        }
+      }
+    ],
+    "name": {
+      "fi": "Terveystieto"
+    }
+  }
+]
