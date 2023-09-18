@@ -21,11 +21,12 @@ type Mutation {
   updateCollection(data: UpdateCollectionInput!, collectionId: ID!): EvaluationCollection!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
-  changeGroupYear(newYearCode: ClassYearCode!, groupId: ID!, transferEvaluations: Boolean): Group!
   updateEvaluation(data: UpdateEvaluationInput!): Evaluation!
   deleteStudent(studentId: ID!): Student!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
+  changeGroupYear(newYearCode: ClassYearCode!, groupId: ID!, transferEvaluations: Boolean): Group!
+  generateStudentFeedback(studentId: ID!, classYearId: ID!): String!
 }
 
 type AuthPayload {
@@ -46,6 +47,7 @@ type LoginResult {
 enum LearningObjectiveType {
   BEHAVIOUR
   SKILLS
+  SKILLS_AND_BEHAVIOUR
   NOT_EVALUATED
 }
 
@@ -109,8 +111,8 @@ type Evaluation {
   id: ID!
   student: Student!
   wasPresent: Boolean!
-  skillsRating: Rating
-  behaviourRating: Rating
+  skillsRating: Int
+  behaviourRating: Int
   notes: String
   isStellar: Boolean!
   collection: EvaluationCollection!
@@ -121,14 +123,6 @@ type Student {
   name: String!
   group: Group!
   currentClassEvaluations: [Evaluation!]!
-}
-
-enum Rating {
-  POOR
-  FAIR
-  GOOD
-  GREAT
-  EXCELLENT
 }
 
 enum ClassYearCode {
@@ -144,10 +138,11 @@ enum ClassYearCode {
   HIGH_SCHOOL_FIRST
   HIGH_SCHOOL_SECOND
   HIGH_SCHOOL_THIRD
-  VOCATIONAL_FIRST
-  VOCATIONAL_SECOND
-  VOCATIONAL_THIRD
-  VOCATIONAL_FOURTH
+  HIGH_SCHOOL_FOURTH
+  HIGH_SCHOOL_FIFTH
+  HIGH_SCHOOL_OTHER
+  VOCATIONAL_OBLIGATORY
+  VOCATIONAL_VOLUNTARY
 }
 
 input CreateTeacherInput {
@@ -197,8 +192,8 @@ input UpdateCollectionInput {
 input CreateEvaluationInput {
   studentId: ID!
   wasPresent: Boolean!
-  skillsRating: Rating
-  behaviourRating: Rating
+  skillsRating: Int
+  behaviourRating: Int
   notes: String
   isStellar: Boolean
 }
@@ -206,8 +201,8 @@ input CreateEvaluationInput {
 input UpdateEvaluationInput {
   id: ID!
   wasPresent: Boolean
-  skillsRating: Rating
-  behaviourRating: Rating
+  skillsRating: Int
+  behaviourRating: Int
   notes: String
   isStellar: Boolean
 }

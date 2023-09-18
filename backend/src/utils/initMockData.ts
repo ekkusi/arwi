@@ -2,7 +2,6 @@
 import { ClassYearCode, PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 import mockData from "../__mocks__/mockData.json";
-import { Rating } from "../types";
 
 const prisma = new PrismaClient();
 
@@ -88,8 +87,8 @@ const initMockData = async () => {
             prisma.evaluation.create({
               data: {
                 ...evaluation,
-                skillsRating: (evaluation.skillsRating as Rating) || null,
-                behaviourRating: (evaluation.behaviourRating as Rating) || null,
+                skillsRating: evaluation.skillsRating || null,
+                behaviourRating: evaluation.behaviourRating || null,
                 studentId: student.id,
                 evaluationCollectionId: collections[index].id,
               },

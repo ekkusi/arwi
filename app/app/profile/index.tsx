@@ -1,11 +1,12 @@
 import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
+import * as SecureStore from "expo-secure-store";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "../../gql";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
-import { languages } from "../../i18n";
+import { languages, STORAGE_LANG_KEY } from "../../i18n";
 
 const ProfileView_Logout_Mutation = graphql(`
   mutation ProfileView_Logout {
@@ -25,6 +26,11 @@ export default function ProfileView() {
     logout();
   };
 
+  const changeLanguage = async (language: string) => {
+    i18n.changeLanguage(language);
+    await SecureStore.setItemAsync(STORAGE_LANG_KEY, language);
+  };
+
   return (
     <CView style={{ flex: 1, alignItems: "center", padding: "lg" }}>
       <CText style={{ fontSize: "lg", marginBottom: "lg", fontWeight: "500" }}>{t("profile-view.language", "Kieli")}</CText>
@@ -35,7 +41,7 @@ export default function ProfileView() {
             title={language.name}
             key={language.value}
             style={{ marginHorizontal: "md", marginBottom: "sm" }}
-            onPress={() => i18n.changeLanguage(language.value)}
+            onPress={() => changeLanguage(language.value)}
           />
         ))}
       </CView>

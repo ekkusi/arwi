@@ -54,8 +54,8 @@ model Evaluation {
   student                Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
   wasPresent             Boolean              @default(true)
   studentId              String
-  skillsRating           Rating?
-  behaviourRating        Rating?
+  skillsRating           Int?
+  behaviourRating        Int?
   notes                  String?
   isStellar              Boolean              @default(false)
   evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id], onDelete: Cascade)
@@ -71,16 +71,6 @@ model Student {
   evaluations Evaluation[]
 }
 
-enum Rating {
-  FAILED
-  PASSABLE
-  POOR
-  FAIR
-  GOOD
-  GREAT
-  EXCELLENT
-}
-
 enum ClassYearCode {
   PRIMARY_FIRST
   PRIMARY_SECOND
@@ -94,8 +84,9 @@ enum ClassYearCode {
   HIGH_SCHOOL_FIRST
   HIGH_SCHOOL_SECOND
   HIGH_SCHOOL_THIRD
-  VOCATIONAL_FIRST
-  VOCATIONAL_SECOND
-  VOCATIONAL_THIRD
-  VOCATIONAL_FOURTH
+  HIGH_SCHOOL_FOURTH
+  HIGH_SCHOOL_FIFTH
+  HIGH_SCHOOL_OTHER
+  VOCATIONAL_OBLIGATORY
+  VOCATIONAL_VOLUNTARY
 }

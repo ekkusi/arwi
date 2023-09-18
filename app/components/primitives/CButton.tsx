@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ActivityIndicator, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
+import { ActivityIndicator, Platform, View, TouchableOpacityProps, TouchableOpacity } from "react-native";
 import { ColorKey, CTextStyle, CViewStyle } from "../../theme/types";
 import { createStyles, createViewStyles } from "../../theme/utils";
 import CText from "./CText";
@@ -127,7 +127,7 @@ export default function CButton({
   const Button = disableTouchEvent ? (
     <View style={buttonStyle}>
       {loading ? (
-        <ActivityIndicator color={titleStyle.color} size="large" />
+        <ActivityIndicator color={titleStyle.color} size={Platform.OS === "ios" ? "small" : "large"} />
       ) : (
         <>
           {leftIcon}
@@ -140,7 +140,7 @@ export default function CButton({
   ) : (
     <TouchableOpacity disabled={disabled || loading} style={buttonStyle} {...rest}>
       {loading ? (
-        <ActivityIndicator color={titleStyle.color} size="large" />
+        <ActivityIndicator color={titleStyle.color} size={Platform.OS === "ios" ? "small" : "large"} />
       ) : (
         <>
           {leftIcon}

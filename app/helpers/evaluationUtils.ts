@@ -1,6 +1,4 @@
-import { Alert } from "react-native";
-import { Environment, Evaluation as BaseEvaluation, EvaluationCollection } from "../gql/graphql";
-import { formatRatingNumber } from "./dataMappers";
+import { Evaluation as BaseEvaluation } from "../gql/graphql";
 import { median, mode, stdev } from "./mathUtilts";
 
 type EvaluationResultSimple = {
@@ -49,12 +47,12 @@ export const analyzeEvaluationsSimple = (evaluations: EvaluationSimple[]) => {
   const behaviourArray: number[] = [];
   evaluations.forEach((evaluation) => {
     if (evaluation.skillsRating) {
-      const rating = formatRatingNumber(evaluation.skillsRating);
+      const rating = evaluation.skillsRating;
       result.skillsAverage += rating;
       skillsArray.push(rating);
     }
     if (evaluation.behaviourRating) {
-      const rating = formatRatingNumber(evaluation.behaviourRating);
+      const rating = evaluation.behaviourRating;
       result.behaviourAverage += rating;
       behaviourArray.push(rating);
     }
@@ -94,7 +92,7 @@ export const analyzeEvaluations = (evaluations: Evaluation[]) => {
     gradeSuggestion: 0,
     isStellarCount: 0,
   };
-  const { skillsAverage, behaviourAverage, absencesAmount, presencesAmount, gradeSuggestion, isStellarCount } = analyzeEvaluationsSimple(evaluations);
+  const { skillsAverage, behaviourAverage, absencesAmount, presencesAmount, isStellarCount } = analyzeEvaluationsSimple(evaluations);
   const skillsArray: number[] = [];
   const behaviourArray: number[] = [];
   const skillEnvironmentSums: { [id: string]: number } = {};
@@ -106,7 +104,7 @@ export const analyzeEvaluations = (evaluations: Evaluation[]) => {
   evaluations.forEach((evaluation) => {
     const envCode = evaluation.collection.environment.code;
     if (evaluation.skillsRating) {
-      const rating = formatRatingNumber(evaluation.skillsRating);
+      const rating = evaluation.skillsRating;
       skillsArray.push(rating);
       if (skillEnvironmentSums[envCode]) skillEnvironmentSums[envCode] += rating;
       else skillEnvironmentSums[envCode] = rating;
@@ -114,7 +112,7 @@ export const analyzeEvaluations = (evaluations: Evaluation[]) => {
       else skillEnvironmentCounts[envCode] = 1;
     }
     if (evaluation.behaviourRating) {
-      const rating = formatRatingNumber(evaluation.behaviourRating);
+      const rating = evaluation.behaviourRating;
       behaviourArray.push(rating);
       if (behaviourEnvironmentSums[envCode]) behaviourEnvironmentSums[envCode] += rating;
       else behaviourEnvironmentSums[envCode] = rating;

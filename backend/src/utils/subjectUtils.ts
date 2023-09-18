@@ -58,13 +58,14 @@ export const YEAR_CODE_LABELS: Record<PrismaClassYearCode, string> = {
   PRIMARY_SEVENTH: "7. luokka",
   PRIMARY_EIGHTH: "8. luokka",
   PRIMARY_NINTH: "9. luokka",
-  HIGH_SCHOOL_FIRST: "Lukion 1. vuosi",
-  HIGH_SCHOOL_SECOND: "Lukion 2. vuosi",
-  HIGH_SCHOOL_THIRD: "Lukion 3. vuosi",
-  VOCATIONAL_FIRST: "Ammattikoulu 1. vuosi",
-  VOCATIONAL_SECOND: "Ammattikoulu 2. vuosi",
-  VOCATIONAL_THIRD: "Ammattikoulu 3. vuosi",
-  VOCATIONAL_FOURTH: "Ammattikoulu 4. vuosi",
+  HIGH_SCHOOL_FIRST: "LI 1 (lukio 1. moduuli)",
+  HIGH_SCHOOL_SECOND: "LI 2 (lukio 2. moduuli)",
+  HIGH_SCHOOL_THIRD: "LI 3 (lukio 3. moduuli)",
+  HIGH_SCHOOL_FOURTH: "LI 4 (lukio 4. moduuli)",
+  HIGH_SCHOOL_FIFTH: "LI 5 (lukio 5. moduuli)",
+  HIGH_SCHOOL_OTHER: "Lukio muu vapaavalintainen moduuli",
+  VOCATIONAL_OBLIGATORY: "Ammatillinen koulutus pakollinen",
+  VOCATIONAL_VOLUNTARY: "Ammatillinen koulutus valinnainen",
 };
 
 export const getClassYearInfo = (yearCode: PrismaClassYearCode): ClassYearInfo => {
@@ -94,14 +95,21 @@ export const getLearningObjectKey = (yearCode: ClassYearCode): LearningObjective
     case ClassYearCode.PRIMARY_NINTH:
       return "7-9";
     case ClassYearCode.HIGH_SCHOOL_FIRST:
+      return "high_school_1";
     case ClassYearCode.HIGH_SCHOOL_SECOND:
+      return "high_school_2";
     case ClassYearCode.HIGH_SCHOOL_THIRD:
-      return "high_school_1-3";
-    case ClassYearCode.VOCATIONAL_FIRST:
-    case ClassYearCode.VOCATIONAL_SECOND:
-    case ClassYearCode.VOCATIONAL_THIRD:
-    case ClassYearCode.VOCATIONAL_FOURTH:
-      return "vocational_1-4";
+      return "high_school_3";
+    case ClassYearCode.HIGH_SCHOOL_FOURTH:
+      return "high_school_4";
+    case ClassYearCode.HIGH_SCHOOL_FIFTH:
+      return "high_school_5";
+    case ClassYearCode.HIGH_SCHOOL_OTHER:
+      return "high_school_other";
+    case ClassYearCode.VOCATIONAL_OBLIGATORY:
+      return "vocational_obligatory";
+    case ClassYearCode.VOCATIONAL_VOLUNTARY:
+      return "vocational_voluntary";
     default:
       throw new Error("Invalid class year code");
   }
@@ -123,6 +131,18 @@ export const getEvaluableLearningObjectives = (subjectCode: string, yearCode: Cl
     .filter((it) => it.type !== "NOT_EVALUATED")
     .map((it) => ({
       ...it,
+      type: it.type as LearningObjectiveType,
+    }));
+};
+
+export const getEvaluableLearningObjectivesMinimal = (subjectCode: string, yearCode: ClassYearCode): LearningObjectiveMinimal[] => {
+  const objectives = getSubject(subjectCode)?.learning_objectives[getLearningObjectKey(yearCode)] || [];
+
+  return objectives
+    .filter((it) => it.type !== "NOT_EVALUATED")
+    .map((it) => ({
+      code: it.code,
+      label: it.label,
       type: it.type as LearningObjectiveType,
     }));
 };

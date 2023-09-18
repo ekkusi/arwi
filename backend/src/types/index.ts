@@ -77,11 +77,12 @@ export type Mutation = {
   updateCollection: EvaluationCollection;
   updateStudent: Student;
   updateGroup: Group;
-  changeGroupYear: Group;
   updateEvaluation: Evaluation;
   deleteStudent: Student;
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
+  changeGroupYear: Group;
+  generateStudentFeedback: Scalars["String"];
 };
 
 export type MutationRegisterArgs = {
@@ -127,12 +128,6 @@ export type MutationUpdateGroupArgs = {
   groupId: Scalars["ID"];
 };
 
-export type MutationChangeGroupYearArgs = {
-  newYearCode: ClassYearCode;
-  groupId: Scalars["ID"];
-  transferEvaluations?: InputMaybe<Scalars["Boolean"]>;
-};
-
 export type MutationUpdateEvaluationArgs = {
   data: UpdateEvaluationInput;
 };
@@ -147,6 +142,17 @@ export type MutationDeleteGroupArgs = {
 
 export type MutationDeleteCollectionArgs = {
   collectionId: Scalars["ID"];
+};
+
+export type MutationChangeGroupYearArgs = {
+  newYearCode: ClassYearCode;
+  groupId: Scalars["ID"];
+  transferEvaluations?: InputMaybe<Scalars["Boolean"]>;
+};
+
+export type MutationGenerateStudentFeedbackArgs = {
+  studentId: Scalars["ID"];
+  classYearId: Scalars["ID"];
 };
 
 export type AuthPayload = {
@@ -241,8 +247,8 @@ export type Evaluation = {
   id: Scalars["ID"];
   student: Student;
   wasPresent: Scalars["Boolean"];
-  skillsRating?: Maybe<Rating>;
-  behaviourRating?: Maybe<Rating>;
+  skillsRating?: Maybe<Scalars["Int"]>;
+  behaviourRating?: Maybe<Scalars["Int"]>;
   notes?: Maybe<Scalars["String"]>;
   isStellar: Scalars["Boolean"];
   collection: EvaluationCollection;
@@ -255,14 +261,6 @@ export type Student = {
   group: Group;
   currentClassEvaluations: Array<Evaluation>;
 };
-
-export enum Rating {
-  POOR = "POOR",
-  FAIR = "FAIR",
-  GOOD = "GOOD",
-  GREAT = "GREAT",
-  EXCELLENT = "EXCELLENT",
-}
 
 export enum ClassYearCode {
   PRIMARY_FIRST = "PRIMARY_FIRST",
@@ -277,10 +275,11 @@ export enum ClassYearCode {
   HIGH_SCHOOL_FIRST = "HIGH_SCHOOL_FIRST",
   HIGH_SCHOOL_SECOND = "HIGH_SCHOOL_SECOND",
   HIGH_SCHOOL_THIRD = "HIGH_SCHOOL_THIRD",
-  VOCATIONAL_FIRST = "VOCATIONAL_FIRST",
-  VOCATIONAL_SECOND = "VOCATIONAL_SECOND",
-  VOCATIONAL_THIRD = "VOCATIONAL_THIRD",
-  VOCATIONAL_FOURTH = "VOCATIONAL_FOURTH",
+  HIGH_SCHOOL_FOURTH = "HIGH_SCHOOL_FOURTH",
+  HIGH_SCHOOL_FIFTH = "HIGH_SCHOOL_FIFTH",
+  HIGH_SCHOOL_OTHER = "HIGH_SCHOOL_OTHER",
+  VOCATIONAL_OBLIGATORY = "VOCATIONAL_OBLIGATORY",
+  VOCATIONAL_VOLUNTARY = "VOCATIONAL_VOLUNTARY",
 }
 
 export type CreateTeacherInput = {
@@ -330,8 +329,8 @@ export type UpdateCollectionInput = {
 export type CreateEvaluationInput = {
   studentId: Scalars["ID"];
   wasPresent: Scalars["Boolean"];
-  skillsRating?: InputMaybe<Rating>;
-  behaviourRating?: InputMaybe<Rating>;
+  skillsRating?: InputMaybe<Scalars["Int"]>;
+  behaviourRating?: InputMaybe<Scalars["Int"]>;
   notes?: InputMaybe<Scalars["String"]>;
   isStellar?: InputMaybe<Scalars["Boolean"]>;
 };
@@ -339,8 +338,8 @@ export type CreateEvaluationInput = {
 export type UpdateEvaluationInput = {
   id: Scalars["ID"];
   wasPresent?: InputMaybe<Scalars["Boolean"]>;
-  skillsRating?: InputMaybe<Rating>;
-  behaviourRating?: InputMaybe<Rating>;
+  skillsRating?: InputMaybe<Scalars["Int"]>;
+  behaviourRating?: InputMaybe<Scalars["Int"]>;
   notes?: InputMaybe<Scalars["String"]>;
   isStellar?: InputMaybe<Scalars["Boolean"]>;
 };
@@ -421,7 +420,6 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
@@ -435,7 +433,7 @@ export type ResolversTypes = {
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
   Student: ResolverTypeWrapper<StudentPrisma>;
-  Rating: Rating;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
   ClassYearCode: ClassYearCode;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
@@ -458,7 +456,6 @@ export type ResolversParentTypes = {
   Mutation: {};
   String: Scalars["String"];
   Boolean: Scalars["Boolean"];
-  Int: Scalars["Int"];
   AuthPayload: Omit<AuthPayload, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
   Teacher: UserInfoPrisma;
   LoginResult: Omit<LoginResult, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
@@ -471,6 +468,7 @@ export type ResolversParentTypes = {
   EvaluationCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
   Student: StudentPrisma;
+  Int: Scalars["Int"];
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
   UpdateGroupInput: UpdateGroupInput;
@@ -527,7 +525,6 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   >;
   updateStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationUpdateStudentArgs, "data" | "studentId">>;
   updateGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, "data" | "groupId">>;
-  changeGroupYear?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">>;
   updateEvaluation?: Resolver<ResolversTypes["Evaluation"], ParentType, ContextType, RequireFields<MutationUpdateEvaluationArgs, "data">>;
   deleteStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, "studentId">>;
   deleteGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, "groupId">>;
@@ -536,6 +533,13 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
     ParentType,
     ContextType,
     RequireFields<MutationDeleteCollectionArgs, "collectionId">
+  >;
+  changeGroupYear?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">>;
+  generateStudentFeedback?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationGenerateStudentFeedbackArgs, "studentId" | "classYearId">
   >;
 };
 
@@ -648,8 +652,8 @@ export type EvaluationResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   student?: Resolver<ResolversTypes["Student"], ParentType, ContextType>;
   wasPresent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  skillsRating?: Resolver<Maybe<ResolversTypes["Rating"]>, ParentType, ContextType>;
-  behaviourRating?: Resolver<Maybe<ResolversTypes["Rating"]>, ParentType, ContextType>;
+  skillsRating?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  behaviourRating?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   isStellar?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   collection?: Resolver<ResolversTypes["EvaluationCollection"], ParentType, ContextType>;

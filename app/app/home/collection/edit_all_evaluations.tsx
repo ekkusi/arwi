@@ -1,15 +1,16 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { KeyboardEventListener } from "react-native";
+import { Dimensions, FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Constants from "expo-constants";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CFlatList from "../../../components/primitives/CFlatList";
 import CView from "../../../components/primitives/CView";
-import { UpdateEvaluationCard, EvaluationToUpdate } from "../../../components/UpdateEvaluationCard";
+import { UpdateEvaluationCard, EvaluationToUpdate } from "../../../components/EvaluationCard";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../hooks-and-providers/keyboardHooks";
@@ -68,6 +69,11 @@ export type EvaluationDataToUpdate = Omit<EvaluationToUpdate, "student"> & {
   student: { id: string; name: string } & EvaluationToUpdate["student"];
 };
 
+const WINDOW_HEIGHT = Dimensions.get("window").height;
+const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
+// NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
+const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - 50;
+
 function CollectionEditAllEvaluationsContent({
   navigation,
   route,
@@ -75,6 +81,8 @@ function CollectionEditAllEvaluationsContent({
 }: NativeStackScreenProps<HomeStackParams, "edit-all-evaluations"> & { defaultEvaluations: EvaluationDataToUpdate[] }) {
   const [submitting, setSubmitting] = useState(false);
   const [evaluations, setEvaluations] = useState<EvaluationDataToUpdate[]>(defaultEvaluations);
+  const scrollRef = useRef<FlatList<EvaluationDataToUpdate> | null>(null);
+  const [scrollOffset, setScrollOffset] = useState(0);
   const [updateCollection] = useMutation(CollectionEditAllEvaluationsView_UpdateCollection_Mutation);
 
   const handleSubmit = async () => {
@@ -104,8 +112,6 @@ function CollectionEditAllEvaluationsContent({
   };
   const { t } = useTranslation();
 
-  const [cardHeight, setCardHeight] = useState(0);
-
   const offsetButtons = useSharedValue(0);
 
   const buttonsAnimatedStyle = useAnimatedStyle(() => {
@@ -131,25 +137,41 @@ function CollectionEditAllEvaluationsContent({
 
   useKeyboardListener({ onHide: keyboardHides, onShow: keyboardShows });
 
+  const onEvaluationChanged = useCallback((evaluation: EvaluationDataToUpdate) => {
+    setEvaluations((prev) => prev?.map((it) => (it.student.id === evaluation.student.id ? evaluation : it)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setScrollOffset(event.nativeEvent.contentOffset.y);
+  };
+
+  const scrollToCard = useCallback(() => {
+    scrollRef.current?.scrollToOffset({ animated: true, offset: scrollOffset + CARD_HEIGHT });
+  }, [scrollOffset]);
+
   return (
     <CView style={{ flex: 1, padding: "md", backgroundColor: "white" }}>
       <CFlatList
+        ref={scrollRef}
         data={evaluations}
         renderItem={({ item, index }) => (
           <UpdateEvaluationCard
             key={item.student.id}
-            onLayout={index === 0 ? (event) => setCardHeight(event.nativeEvent.layout.height) : undefined}
             evaluation={item}
-            hasParticipationToggle
-            onChanged={(value) => {
-              setEvaluations(evaluations.map((it) => (it.student.id === value.student.id ? value : it)));
-            }}
-            style={{ marginBottom: index === evaluations.length - 1 ? 80 : "lg" }}
+            onChanged={onEvaluationChanged}
+            height={CARD_HEIGHT}
+            hasArrowDown={index < evaluations.length - 1}
+            onArrowDownPress={scrollToCard}
           />
         )}
-        snapToInterval={cardHeight}
-        decelerationRate={0.8}
+        onScroll={onScroll}
+        keyExtractor={(item) => item.student.id}
+        snapToInterval={CARD_HEIGHT}
+        decelerationRate="fast"
         snapToAlignment="center"
+        directionalLockEnabled
+        disableIntervalMomentum
         style={{ flex: 1, padding: "lg" }}
       />
       <Animated.View

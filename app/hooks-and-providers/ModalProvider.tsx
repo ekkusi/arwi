@@ -22,6 +22,10 @@ export const useModal = () => {
   return context;
 };
 
+// NOTE: The JSX put into openModal call (children prop) cannot include any dynamic state. This is because the JSX is put into the state when openModal is called and thus won't get updated later on.
+// This would require another openModal call. To avoid this, wrap the JSX of children prop into another component and include all the dynamic states inside that component.
+//
+// This should probably be refactored at some point.
 export default function ModalProvider({ children }: React.PropsWithChildren) {
   const [modalProps, setModalProps] = useState<OpenModalProps | null>(null);
 

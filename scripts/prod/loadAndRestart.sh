@@ -11,4 +11,5 @@ docker pull ekkusi/arwi-backend
 docker stop arwi-backend || true && docker rm arwi-backend || true
 docker run --env-file .env.production -d --name arwi-backend -p 3000:4000 ekkusi/arwi-backend
 docker rmi $(docker images -f "dangling=true" -q --no-trunc)
+cd backend && npx --yes prisma migrate deploy && cd ..
 echo "New container running and old ones removed successfully!"

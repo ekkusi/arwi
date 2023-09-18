@@ -1,8 +1,6 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
 import { FragmentType, getFragmentData, graphql } from "../gql";
-import { formatRatingNumber, formatRatingNumberString, formatRatingStringWithNull } from "../helpers/dataMappers";
 import { formatDate } from "../helpers/dateHelpers";
 import { Accordion, AccordionProps } from "./Accordion";
 import CButton from "./primitives/CButton";
@@ -81,17 +79,12 @@ export default function EvaluationsAccordion({
             {it.wasPresent ? (
               <CView style={{ gap: 10 }}>
                 <CView style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>
-                  <CircledNumber
-                    size={48}
-                    title={t("skills", "Taidot")}
-                    decimals={0}
-                    value={it.skillsRating ? formatRatingNumber(it.skillsRating) : undefined}
-                  />
+                  <CircledNumber size={48} title={t("skills", "Taidot")} decimals={0} value={it.skillsRating ? it.skillsRating : undefined} />
                   <CircledNumber
                     decimals={0}
                     size={48}
                     title={t("behaviour", "Työskentely")}
-                    value={it.behaviourRating ? formatRatingNumber(it.behaviourRating) : undefined}
+                    value={it.behaviourRating ? it.behaviourRating : undefined}
                   />
                 </CView>
                 {it.notes ? (

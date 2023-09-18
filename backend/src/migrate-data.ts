@@ -1,5 +1,4 @@
-import { ClassYearCode, PrismaClient, Rating } from "@prisma/client";
-import { writeFile } from "fs";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 

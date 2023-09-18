@@ -1,14 +1,17 @@
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryContainer, VictoryGroup } from "victory-native";
 import { useMemo, useState } from "react";
 import { t } from "i18next";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
-import { formatRatingNumber } from "../../helpers/dataMappers";
 
 import { hexToRgbA } from "../../helpers/color";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
 import CText from "../primitives/CText";
+import CModal from "../CModal";
+import CButton from "../primitives/CButton";
+import i18n from "../../i18n";
+import { COLORS } from "../../theme";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on Evaluation {
@@ -26,6 +29,13 @@ const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   }
 `);
 
+type FilterValue = "all" | "skills" | "behaviour";
+
+type Filter = {
+  text: string;
+  value: FilterValue;
+};
+
 type TempDataValue = {
   value: number;
   count: number;
@@ -41,8 +51,6 @@ type TempDataType = {
 type EvaluationsBarChartDataType = StyledBarChartDataType & {
   type: "skills" | "behaviour";
 };
-
-const INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD = 0;
 
 const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
   const data: EvaluationsBarChartDataType[] = [];
@@ -66,11 +74,11 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
     const matchingEnvironment = tempData[envCode];
 
     if (evaluation.skillsRating) {
-      matchingEnvironment.skills.value += formatRatingNumber(evaluation.skillsRating);
+      matchingEnvironment.skills.value += evaluation.skillsRating;
       matchingEnvironment.skills.count += 1;
     }
     if (evaluation.behaviourRating) {
-      matchingEnvironment.behaviour.value += formatRatingNumber(evaluation.behaviourRating);
+      matchingEnvironment.behaviour.value += evaluation.behaviourRating;
       matchingEnvironment.behaviour.count += 1;
     }
   });
@@ -94,7 +102,6 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
 
 type EvaluationsBarChartProps = CViewProps & {
   evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
-  filter?: string;
 };
 
 const getFilteredData = (data: EvaluationsBarChartDataType[], filter: string) => {
@@ -108,9 +115,17 @@ const getFilteredData = (data: EvaluationsBarChartDataType[], filter: string) =>
   }
 };
 
-export default function EvaluationsBarChart({ evaluations: evaluationFragments, filter = "all", ...rest }: EvaluationsBarChartProps) {
+export default function EvaluationsBarChart({ evaluations: evaluationFragments, ...rest }: EvaluationsBarChartProps) {
   const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
+  const [filter, setFilter] = useState<FilterValue>("all");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+  const FILTERS: Filter[] = [
+    { text: i18n.t("all", "Kaikki"), value: "all" },
+    { text: i18n.t("skills", "Taidot"), value: "skills" },
+    { text: i18n.t("behaviour", "Työskentely"), value: "behaviour" },
+  ];
 
   const data = useMemo(() => mapData(filteredEvaluations), [filteredEvaluations]);
   const filteredData = getFilteredData(data, filter);
@@ -118,6 +133,52 @@ export default function EvaluationsBarChart({ evaluations: evaluationFragments, 
 
   return (
     <CView style={{ width: "100%" }}>
+      <CModal closeButton={false} onClose={() => setIsFiltersOpen(false)} placement="bottom" isOpen={isFiltersOpen}>
+        <CText style={{ fontSize: "md", fontWeight: "300", marginBottom: "lg", marginTop: "md" }}>
+          {t("skills-and-behaviour", "Taidot ja työskentely")}
+        </CText>
+        <CView
+          style={{
+            flexDirection: "row",
+            gap: 1,
+            width: "100%",
+            padding: "md",
+          }}
+        >
+          {FILTERS.map((item) => (
+            <CButton
+              key={item.value}
+              title={item.text}
+              variant="outline"
+              colorScheme={filter === item.value ? "darkgray" : "lightgray"}
+              style={{ margin: 3, paddingHorizontal: "xl", gap: "sm" }}
+              onPress={() => {
+                setIsFiltersOpen(false);
+                setFilter(item.value);
+              }}
+              textStyle={{
+                fontSize: "xs",
+                fontWeight: "400",
+                color: filter === item.value ? "darkgray" : "gray",
+              }}
+            />
+          ))}
+        </CView>
+      </CModal>
+      <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>
+          {t("evaluation-means-by-environments", "Arvointien keskiarvot ympäristöittäin")}
+        </CText>
+        <CButton
+          size="small"
+          variant="outline"
+          title={t(filter, "")}
+          colorScheme="darkgray"
+          style={{ width: "auto" }}
+          leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
+          onPress={() => setIsFiltersOpen(true)}
+        />
+      </CView>
       <StyledBarChart data={filteredDataWithoutZeroEntries} style={{ height: 200 }} gradeAxis {...rest} />
 
       <CView style={{ gap: 2, flexDirection: "row", justifyContent: "flex-start", flexWrap: "wrap", width: "100%" }}>
