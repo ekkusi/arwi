@@ -1,6 +1,0 @@
-[{
-        "relation": ["delegate_permission/common.handle_all_urls"],
-        "target" : { "namespace": "android_app", "package_name": "fi.arwi.twa",
-                     "sha256_cert_fingerprints": ["D1:A0:B1:AB:CF:5C:29:A8:27:63:03:2B:BE:BE:68:61:CC:1D:D4:89:66:EC:3B:95:33:23:BA:DE:DC:B3:6A:44"] }
-      }
-]
