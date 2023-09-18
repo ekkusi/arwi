@@ -1,6 +1,7 @@
 import { Rating } from "arwi-backend/src/types";
 import { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { hexToRgbA } from "../helpers/color";
 import { formatRatingNumber, formatRatingNumberString, getColorForGrade } from "../helpers/dataMappers";
 import { COLORS } from "../theme";
@@ -40,57 +41,65 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
     return color;
   };
 
-  return (
-    <CView {...rest} style={{ width: "100%", flexDirection: "row", justifyContent: "center", ...rest.style }}>
-      {ratingKeys.map((key, i) => {
-        const rating = Rating[key];
-        let isSelected = true;
-        if (disabled) {
-          isSelected = false;
-        } else {
-          isSelected = selectedRating === rating;
-        }
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+  };
 
-        return (
-          <CPressable key={key} onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
-            <CView
-              style={{
-                alignItems: "center",
-                backgroundColor: getRatingColor(rating),
-                borderRadius: 0,
-                borderWidth: 1,
-                borderColor: "black",
-                padding: "sm",
-                borderLeftWidth: 1,
-                borderRightWidth: i === ratingKeys.length - 1 ? 1 : 0,
-                borderBottomLeftRadius: i === 0 ? 5 : 0,
-                borderTopLeftRadius: i === 0 ? 5 : 0,
-                borderBottomRightRadius: i === ratingKeys.length - 1 ? 5 : 0,
-                borderTopRightRadius: i === ratingKeys.length - 1 ? 5 : 0,
-              }}
-            >
-              <CText
-                style={{
-                  borderWidth: isSelected ? 2 : 0,
-                  borderColor: "white",
-                  color: isSelected ? "white" : "black",
-                  fontWeight: isSelected ? "bold" : "normal",
-                  borderRadius: 100,
-                  padding: "sm",
-                  width: 35,
-                  height: 35,
-                  alignItems: "center",
-                  textAlign: "center",
-                  textAlignVertical: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {formatRatingNumberString(rating)}
-              </CText>
-            </CView>
-          </CPressable>
-        );
-      })}
+  return (
+    <CView {...rest} style={{ width: "100%", flexDirection: "row", justifyContent: "center", height: 70, ...rest.style }}>
+      <ScrollView
+        onScroll={onScroll}
+        horizontal
+        contentContainerStyle={{ paddingHorizontal: 53 * 3 }}
+        decelerationRate={0}
+        style={{ width: "100%", height: "100%" }}
+        showsHorizontalScrollIndicator={false}
+        snapToOffsets={[53 + 53 / 2, 106 + 53 / 2, 159 + 53 / 2, 212 + 53 / 2, 265 + 53 / 2, 318 + 53 / 2, 371 + 53 / 2]}
+        snapToAlignment="center"
+      >
+        <CView {...rest} style={{ flexDirection: "row", justifyContent: "center", gap: 5, ...rest.style }}>
+          {ratingKeys.map((key, i) => {
+            const rating = Rating[key];
+            let isSelected = true;
+            if (disabled) {
+              isSelected = false;
+            } else {
+              isSelected = selectedRating === rating;
+            }
+
+            return (
+              <CPressable key={key} onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
+                <CView
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: getRatingColor(rating),
+                    borderRadius: 30,
+                    width: 60,
+                    height: 60,
+                    borderWidth: isSelected ? 2 : 1,
+                    borderColor: isSelected ? "black" : "darkgray",
+                  }}
+                >
+                  <CText
+                    style={{
+                      color: "darkgray",
+                      fontWeight: isSelected ? "bold" : "normal",
+                      fontSize: "md",
+                      alignItems: "center",
+                      textAlign: "center",
+                      textAlignVertical: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {formatRatingNumberString(rating)}
+                  </CText>
+                </CView>
+              </CPressable>
+            );
+          })}
+        </CView>
+      </ScrollView>
     </CView>
   );
 }

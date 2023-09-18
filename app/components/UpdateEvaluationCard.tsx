@@ -128,46 +128,46 @@ function EvaluationCard({ onChanged, evaluation, hasParticipationToggle = true, 
   }
 
   return (
-    <CView style={{ width: "100%", alignItems: "center", gap: "lg" }} {...rest}>
-      <CText style={{ fontSize: "lg", textAlign: "center" }}>{evaluation.student.name}</CText>
+    <CView style={{ width: "100%", gap: "xl" }} {...rest}>
+      <CText style={{ fontSize: "title", fontWeight: "500" }}>{evaluation.student.name}</CText>
       {/* TODO: Add isStellar star-button */}
       {hasParticipationToggle && (
-        <CView style={{ alignItems: "center", width: "100%" }}>
-          <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "50%" }}>
-            <CText style={{ textAlign: "center", color: evaluation.wasPresent ? "green" : "red" }}>
-              {evaluation.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
-            </CText>
-            <Switch
-              trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
-              thumbColor={COLORS.white}
-              ios_backgroundColor={COLORS.lightgray}
-              onValueChange={(value) => {
-                onChanged("wasPresent", value);
-              }}
-              value={evaluation.wasPresent || false}
-              style={{ transform: [{ scale: Platform.OS === "ios" ? 1 : 1.4 }] }}
-            />
-          </CView>
+        <CView style={{ width: "100%", flexDirection: "row", gap: 10 }}>
+          <CText style={{ fontSize: "md", fontWeight: "500", textAlign: "center", color: evaluation.wasPresent ? "green" : "red" }}>
+            {evaluation.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
+          </CText>
+          <Switch
+            trackColor={{ false: COLORS.lightgray, true: COLORS.primary }}
+            thumbColor={COLORS.white}
+            ios_backgroundColor={COLORS.lightgray}
+            onValueChange={(value) => {
+              onChanged("wasPresent", value);
+            }}
+            value={evaluation.wasPresent || false}
+            style={{ transform: [{ scale: Platform.OS === "ios" ? 1 : 1.4 }] }}
+          />
         </CView>
       )}
-      <CView style={{ width: "100%" }}>
-        <CView style={{ alignItems: "center", gap: "sm" }}>
-          <CText>{t("skills", "Taidot")}:</CText>
+      <CView style={{ width: "100%", gap: "lg" }}>
+        <CView style={{ gap: "sm" }}>
+          <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("skills", "Taidot")}:</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
             initialRating={evaluation.skillsRating}
             onChange={(rating) => onChanged("skillsRating", rating)}
           />
         </CView>
-        <CView style={{ alignItems: "center", gap: "sm" }}>
-          <CText>{t("behaviour", "Työskentely")}:</CText>
+        <CView style={{ gap: "sm" }}>
+          <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("behaviour", "Työskentely")}:</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
             initialRating={evaluation.behaviourRating}
             onChange={(rating) => onChanged("behaviourRating", rating)}
           />
         </CView>
-        <CText>{t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}</CText>
+        <CText style={{ fontSize: "md", fontWeight: "300" }}>
+          {t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}
+        </CText>
         <CView style={{ width: "100%", height: 150 }}>
           <CTextInput
             style={{ width: "100%", height: "100%" }}
