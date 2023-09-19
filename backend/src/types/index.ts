@@ -147,7 +147,6 @@ export type MutationDeleteCollectionArgs = {
 export type MutationChangeGroupYearArgs = {
   newYearCode: ClassYearCode;
   groupId: Scalars["ID"];
-  transferEvaluations?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export type MutationGenerateStudentFeedbackArgs = {
@@ -176,6 +175,7 @@ export type LoginResult = {
 export enum LearningObjectiveType {
   BEHAVIOUR = "BEHAVIOUR",
   SKILLS = "SKILLS",
+  SKILLS_AND_BEHAVIOUR = "SKILLS_AND_BEHAVIOUR",
   NOT_EVALUATED = "NOT_EVALUATED",
 }
 
@@ -420,6 +420,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
@@ -433,7 +434,6 @@ export type ResolversTypes = {
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
   Student: ResolverTypeWrapper<StudentPrisma>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
   ClassYearCode: ClassYearCode;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
@@ -456,6 +456,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   String: Scalars["String"];
   Boolean: Scalars["Boolean"];
+  Int: Scalars["Int"];
   AuthPayload: Omit<AuthPayload, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
   Teacher: UserInfoPrisma;
   LoginResult: Omit<LoginResult, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
@@ -468,7 +469,6 @@ export type ResolversParentTypes = {
   EvaluationCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
   Student: StudentPrisma;
-  Int: Scalars["Int"];
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
   UpdateGroupInput: UpdateGroupInput;

@@ -16,17 +16,10 @@ const resolvers: TypeResolvers = {
     },
   },
   Group: {
-    currentClassYear: async ({ currentYearCode, id }, _, { prisma }) => {
-      const classYear = await prisma.classYear.findFirstOrThrow({
+    currentClassYear: async ({ currentClassYearId }, _, { prisma }) => {
+      const classYear = await prisma.classYear.findUniqueOrThrow({
         where: {
-          AND: [
-            {
-              groupId: id,
-            },
-            {
-              code: currentYearCode,
-            },
-          ],
+          id: currentClassYearId,
         },
       });
       return classYear;
@@ -106,12 +99,17 @@ const resolvers: TypeResolvers = {
       return environment;
     },
     learningObjectives: async ({ classYearId, learningObjectiveCodes }, _, { prisma }) => {
+      const classYear = await prisma.classYear.findUniqueOrThrow({
+        where: {
+          id: classYearId,
+        },
+      });
       const group = await prisma.group.findFirstOrThrow({
         where: {
           classYears: { some: { id: classYearId } },
         },
       });
-      const subjectObjectives = getLearningObjectives(group.subjectCode, ClassYearCode[group.currentYearCode]);
+      const subjectObjectives = getLearningObjectives(group.subjectCode, ClassYearCode[classYear.code]);
       return subjectObjectives.filter((objective) => learningObjectiveCodes.includes(objective.code));
     },
   },
@@ -138,7 +136,7 @@ const resolvers: TypeResolvers = {
             {
               evaluationCollection: {
                 classYear: {
-                  code: group.currentYearCode,
+                  id: group.currentClassYearId,
                 },
               },
             },

@@ -31,14 +31,17 @@ export const validateCreateCollectionInput = async ({ environmentCode, learningO
   if (learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({
       where: {
-        classYears: {
-          some: {
-            id: classYearId,
+        currentClassYearId: classYearId,
+      },
+      include: {
+        currentClassYear: {
+          select: {
+            code: true,
           },
         },
       },
     });
-    validateLearningObjectives(group.subjectCode, ClassYearCode[group.currentYearCode], learningObjectiveCodes);
+    validateLearningObjectives(group.subjectCode, ClassYearCode[group.currentClassYear.code], learningObjectiveCodes);
   }
 };
 
@@ -79,16 +82,21 @@ export const validateUpdateCollectionInput = async (
   if (learningObjectiveCodes && learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({
       where: {
-        classYears: {
-          some: {
-            evaluationCollections: {
-              some: { id: collectionId },
-            },
+        currentClassYear: {
+          evaluationCollections: {
+            some: { id: collectionId },
+          },
+        },
+      },
+      include: {
+        currentClassYear: {
+          select: {
+            code: true,
           },
         },
       },
     });
-    validateLearningObjectives(group.subjectCode, ClassYearCode[group.currentYearCode], learningObjectiveCodes);
+    validateLearningObjectives(group.subjectCode, ClassYearCode[group.currentClassYear.code], learningObjectiveCodes);
   }
   if (evaluations) await validateUpdateEvaluationsInput(evaluations, collectionId);
 };
