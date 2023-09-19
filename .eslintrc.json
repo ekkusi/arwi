@@ -1,4 +1,6 @@
 {
+  "root": true,
+  // "eslint.workingDirectoreis": ["./app", "./backend", "./cms"],
   "extends": [
     "airbnb",
     "airbnb/hooks",

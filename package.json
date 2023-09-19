@@ -2,9 +2,9 @@
   "name": "arwi",
   "workspaces": {
     "packages": [
-      "next",
       "app",
-      "backend"
+      "backend",
+      "cms"
     ]
   },
   "version": "1.0.0",
