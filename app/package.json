@@ -33,6 +33,7 @@
     "expo-secure-store": "~12.3.1",
     "expo-splash-screen": "~0.20.4",
     "expo-status-bar": "~1.6.0",
+    "expo-updates": "~0.18.13",
     "graphql": "^16.6.0",
     "i18next": "^22.5.0",
     "i18next-gridly-backend": "^1.0.6",
