@@ -107,6 +107,7 @@ function HomePageContent({
 
   return (
     <Layout style={{ paddingHorizontal: "sm" }}>
+      <CText style={{ textAlign: "center", marginTop: "lg" }}>Terve tämä on oikeasta buildista</CText>
       {sortedGroups.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}

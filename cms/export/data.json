@@ -1,0 +1,1106 @@
+[
+  {
+    "code": "LI",
+    "elementarySchool": {
+      "one_to_two_years": [
+        {
+          "code": "TI1",
+          "label": {
+            "fi": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan itsenäisesti ja yhdessä uusia, erilaisia liikuntatehtäviä sekä rohkaista ilmaisemaan itseään liikunnan avulla"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI2",
+          "label": {
+            "fi": "Havaintomotoristen taitojen harjoittelu"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta harjaannuttamaan havaintomotorisia taitojaan eli havainnoimaan itseään ja ympäristöään aistien avulla sekä tekemään liikuntatilanteisiin sopivia ratkaisuja"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI3",
+          "label": {
+            "fi": "Motoristen perustaitojen soveltaminen"
+          },
+          "longDescription": {
+            "fi": "Vahvistaa motoristen perustaitojen (tasapaino-, liikkumis- ja välineenkäsittelytaidot) oppimista niin, että oppilas oppii soveltamaan"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI4",
+          "label": {
+            "fi": "Turvallinen liikkuminen eri ympäristöissä"
+          },
+          "longDescription": {
+            "fi": "Harjaannuttaa oppilasta liikkumaan turvallisesti erilaisissa ympäristöissä, erilaisilla välineillä ja telineillä"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI5",
+          "label": {
+            "fi": "Vesiliikuntaan tutustuminen, alkeisuimataito"
+          },
+          "longDescription": {
+            "fi": "Tutustuttaa oppilas vesiliikuntaan ja varmistaa alkeisuimataito"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI6",
+          "label": {
+            "fi": "Turvallinen käytös liikuntatunneilla"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta turvalliseen ja asialliseen toimintaan liikuntatunneilla"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI7",
+          "label": {
+            "fi": "Vuorovaikutuksen säätely liikunnassa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta säätelemään toimintaansa ja tunneilmaisuaan vuorovaikutuksellisissa liikuntatilanteissa"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI8",
+          "label": {
+            "fi": "Yhteistyötaitojen tukeminen"
+          },
+          "longDescription": {
+            "fi": "Tukea yhdessä työskentelyn taitoja, kuten yhdessä sovittujen sääntöjen noudattamista, ohjaamalla oppilasta ottamaan vastuuta yhteispelien ja -leikkien onnistumisesta"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI9",
+          "label": {
+            "fi": "Myönteisen minäkäsityksen vahvistaminen"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilaan myönteisen minäkäsityksen vahvistumista, ohjata itsenäiseen työskentelyyn sekä itsensä monipuoliseen ilmaisemiseen"
+          },
+          "type": "NOT_EVALUATED"
+        },
+        {
+          "code": "TI10",
+          "label": {
+            "fi": "Myönteiset liikuntakokemukset, toimintakyvyn kokeilu"
+          },
+          "longDescription": {
+            "fi": "Varmistaa myönteisten liikunnallisten kokemusten saaminen ja rohkaista oppilasta kokeilemaan oman toimintakykynsä rajoja"
+          },
+          "type": "NOT_EVALUATED"
+        }
+      ],
+      "seven_to_nine_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Fyysinen aktiivisuus, kokeilu, harjoittelu"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta fyysiseen aktiivisuuteen, kokeilemaan erilaisia liikuntamuotoja ja harjoittelemaan parhaansa yrittäen"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Havaintomotoristen taitojen harjoittelu"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta harjaannuttamaan havaintomotorisia taitojaan eli havainnoimaan itseään ja ympäristöään aistien avulla sekä tekemään liikuntatilanteisiin sopivia ratkaisuja"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Tasapaino- ja liikkumistaitojen kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta harjoittelun avulla kehittämään tasapaino- ja liikkumistaitojaan, jotta oppilas osaa käyttää, yhdistää ja soveltaa niitä monipuolisesti erilaisissa oppimisympäristöissä, eri vuodenaikoina ja eri liikuntamuodoissa"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Välineenkäsittelytaitojen kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta harjoittelun avulla kehittämään välineenkäsittelytaitojaan, jotta oppilas osaa käyttää, yhdistää ja soveltaa niitä monipuolisesti erilaisissa oppimisympäristöissä, eri välineillä, eri vuodenaikoina ja eri liikuntamuodoissa"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Fyysisten ominaisuuksien arviointi ja kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa ja ohjata oppilasta arvioimaan, ylläpitämään ja kehittämään fyysisiä ominaisuuksiaan: voimaa, nopeutta, kestävyyttä ja liikkuvuutta"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Uima- ja vesipelastustaitojen vahvistaminen"
+          },
+          "longDescription": {
+            "fi": "Vahvistaa uima- ja vesipelastustaitoja, jotta oppilas osaa sekä uida että pelastautua ja pelastaa vedestä"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Turvallinen ja asiallinen toiminta"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta turvalliseen ja asialliseen toimintaan"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Yhteistyö ja tunneilmaisun säätely"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta työskentelemään kaikkien kanssa sekä säätelemään toimintaansa ja tunneilmaisuaan liikuntatilanteissa toiset huomioon ottaen"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Reilu peli ja vastuu yhteisistä oppimistilanteista"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta toimimaan reilun pelin periaatteella sekä ottamaan vastuuta yhteisistä oppimistilanteista"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Oman toiminnan vastuunotto ja itsenäisen työskentelyn taitojen vahvistaminen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta ottamaan vastuuta omasta toiminnasta ja vahvistaa oppilaan itsenäisen työskentelyn taitoja"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "T11",
+          "label": {
+            "fi": "Myönteiset kokemukset kehosta, pätevyydestä ja yhteisöllisyydestä"
+          },
+          "longDescription": {
+            "fi": "Huolehtia siitä, että oppilaat saavat riittävästi myönteisiä kokemuksia omasta kehosta, pätevyydestä ja yhteisöllisyydestä"
+          },
+          "type": "NOT_EVALUATED"
+        },
+        {
+          "code": "T12",
+          "label": {
+            "fi": "Fyysisen aktiivisuuden ja liikunnallisen elämäntavan merkitys"
+          },
+          "longDescription": {
+            "fi": "Auttaa oppilasta ymmärtämään riittävän fyysisen aktiivisuuden ja liikunnallisen elämäntavan merkitys kokonaisvaltaiselle hyvinvoinnille"
+          },
+          "type": "NOT_EVALUATED"
+        },
+        {
+          "code": "T13",
+          "label": {
+            "fi": "Liikuntaharrastusten tutustumisen tukeminen"
+          },
+          "longDescription": {
+            "fi": "Tutustuttaa oppilas yleisten liikuntamuotojen harrastamiseen liittyviin mahdollisuuksiin, tietoihin ja taitoihin, jotta hän saa edellytyksiä löytää itselleen sopivia iloa ja virkistystä tuottavia liikuntaharrastuksia"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        }
+      ],
+      "three_to_six_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Fyysinen aktiivisuus, kokeilu"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilaita fyysiseen aktiivisuuteen, kokeilemaan erilaisia liikuntatehtäviä ja harjoittelemaan parhaansa yrittäen"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI2",
+          "label": {
+            "fi": "Havaintomotoristen taitojen kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta harjaannuttamaan havaintomotorisia taitojaan eli havainnoimaan itseään ja ympäristöään aistien avulla sekä tekemään liikuntatilanteisiin sopivia ratkaisuja"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI3",
+          "label": {
+            "fi": "Tasapaino-, liikkumistaitojen soveltaminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta sekä vahvistamaan tasapaino- ja liikkumistaitojaan että soveltamaan niitä monipuolisesti erilaisissa oppimisympäristöissä, eri vuodenaikoina sekä eri tilanteissa"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI4",
+          "label": {
+            "fi": "Välineenkäsittelytaitojen soveltaminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta sekä vahvistamaan että soveltamaan välineenkäsittelytaitojaan monipuolisesti erilaisissa oppimisympäristöissä käyttämällä erilaisia välineitä eri vuodenaikoina erilaisissa tilanteissa"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI5",
+          "label": {
+            "fi": "Fyysisten ominaisuuksien kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa ja ohjata oppilasta arvioimaan, ylläpitämään ja kehittämään fyysisiä ominaisuuksiaan: nopeutta, liikkuvuutta, kestävyyttä ja voimaa"
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI6",
+          "label": {
+            "fi": "Uimataidon opettaminen"
+          },
+          "longDescription": {
+            "fi": "Opettaa uimataito, jotta oppilas pystyy liikkumaan vedessä ja pelastautumaan vedestä."
+          },
+          "type": "SKILLS"
+        },
+        {
+          "code": "TI7",
+          "label": {
+            "fi": "Turvallinen toiminta liikuntatunneilla"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta turvalliseen ja asialliseen toimintaan liikuntatunneilla"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI8",
+          "label": {
+            "fi": "Yhteistyö, toiset huomioon ottaminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta työskentelemään kaikkien kanssa sekä säätelemään toimintaansa ja tunneilmaisuaan liikuntatilanteissa toiset huomioon ottaen"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI9",
+          "label": {
+            "fi": "Reilun pelin periaate, vastuu"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta toimimaan reilun pelin periaatteella sekä kantamaan vastuuta yhteisistä oppimistilanteista"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI10",
+          "label": {
+            "fi": "Itsenäisyys, vastuullisuus"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta ottamaan vastuuta omasta toiminnasta ja vahvistaa itsenäisen työskentelyn taitoja"
+          },
+          "type": "BEHAVIOUR"
+        },
+        {
+          "code": "TI11",
+          "label": {
+            "fi": "Myönteiset kokemukset, kehon pätevyys"
+          },
+          "longDescription": {
+            "fi": "Huolehtia siitä, että oppilaat saavat riittävästi myönteisiä kokemuksia omasta kehosta, pätevyydestä ja yhteisöllisyydestä"
+          },
+          "type": "NOT_EVALUATED"
+        }
+      ]
+    },
+    "environments": [
+      {
+        "code": "LI_ENV_TAL",
+        "color": "#718096",
+        "name": {
+          "fi": "Talviliikunta"
+        }
+      },
+      {
+        "code": "LI_ENV_PAL",
+        "color": "#ed8936",
+        "name": {
+          "fi": "Palloilu"
+        }
+      },
+      {
+        "code": "LI_ENV_VES",
+        "color": "#4299e1",
+        "name": {
+          "fi": "Vesiliikunta"
+        }
+      },
+      {
+        "code": "LI_ENV_VOI",
+        "color": "#975a16",
+        "name": {
+          "fi": "Voimistelu"
+        }
+      },
+      {
+        "code": "LI_ENV_LUO",
+        "color": "#48bb78",
+        "name": {
+          "fi": "Luontoliikunta"
+        }
+      },
+      {
+        "code": "LI_ENV_TAN",
+        "color": "#f6e05e",
+        "name": {
+          "fi": "Tanssi"
+        }
+      },
+      {
+        "code": "LI_ENV_KUN",
+        "color": "#9f7aea",
+        "name": {
+          "fi": "Kuntoliikunta"
+        }
+      },
+      {
+        "code": "LI_ENV_PER",
+        "color": "#f56565",
+        "name": {
+          "fi": "Perusliikunta"
+        }
+      },
+      {
+        "code": "LI_ENV_MUU",
+        "color": "#ed64a6",
+        "name": {
+          "fi": "Muu"
+        }
+      }
+    ],
+    "highSchoolModules": [
+      {
+        "code": "LI_HS_MODULE_LI1",
+        "learningObjectives": [
+          {
+            "code": "TI1",
+            "label": {
+              "fi": "Liikuntataitojen ja -tietojen soveltaminen"
+            },
+            "longDescription": {
+              "fi": "Soveltaa liikuntataitoja ja -tietoja erilaisissa liikuntatehtävissä, -muodoissa ja -lajeissa eri vuodenaikoina ja eri olosuhteissa (kuten sisällä, ulkona ja vedessä)"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Kunnioittava vuorovaikutus, palautteen anto ja kannustus"
+            },
+            "longDescription": {
+              "fi": "Osaa toimia vuorovaikutustilanteissa toisia kunnioittavasti, auttaa ja kannustaa muita liikuntatunneilla sekä antaa rakentavaa palautetta ja vertaisarviointia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Parhaansa yrittäminen, aktiivinen ja sinnikäs työskentely"
+            },
+            "longDescription": {
+              "fi": "Yrittää parhaansa suorittaen tehtävänsä tunnollisesti ja vastuullisesti, työskennellen aktiivisesti ja asiallisesti sekä kehittäen itseään pitkäjänteisesti"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "LI1 (lukion 1. moduuli)"
+        }
+      },
+      {
+        "code": "LI_HS_MODULE_LI2",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Fyysisten ominaisuuksien arviointi, tavoitteiden asettaminen"
+            },
+            "longDescription": {
+              "fi": "Arvioi fyysisiä ominaisuuksiaan (voima, kestävyys, liikkuvuus ja nopeus) sekä asettaa kehittämistavoitteita saadun tiedon pohjalta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Oman toimintakyvyn kehittäminen"
+            },
+            "longDescription": {
+              "fi": "Osaa tehdä oman toimintakyvyn ja -ympäristön kannalta perusteltuja valintoja fyysisen toimintakyvyn kehittämiseksi ja fyysisen aktiivisuuden lisäämiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Kunnioittava vuorovaikutus, palautteen anto ja kannustus"
+            },
+            "longDescription": {
+              "fi": "Toimii vuorovaikutustilanteissa toisia kunnioittavasti, auttaa ja kannustaa muita liikuntatunneilla sekä antaa rakentavaa palautetta ja vertaisarviointia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Parhaansa yrittäminen, aktiivinen ja sinnikäs työskentely"
+            },
+            "longDescription": {
+              "fi": "Yrittää parhaansa suorittaen tehtävänsä tunnollisesti ja vastuullisesti, työskennellen aktiivisesti ja asiallisesti sekä kehittäen itseään pitkäjänteisesti"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "LI2 (lukion 2. moduuli)"
+        }
+      },
+      {
+        "code": "LI_HS_MODULE_LI3",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Liikuntataitojen ja -tietojen soveltaminen"
+            },
+            "longDescription": {
+              "fi": "Harjoittaa ja soveltaa liikuntataitoja ja -tietoja monipuolisesti ja uusin tavoin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Kehon hallinta"
+            },
+            "longDescription": {
+              "fi": "Harjaantuu kehon hallinnassa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Tunnistaa tunteitaan, kunnioittava vuorovaikutus"
+            },
+            "longDescription": {
+              "fi": "Tunnistaa tunteitaan, toimii vuorovaikutustilanteissa toisia kunnioittaen sekä tukee yhteisöllisyyttä toisia auttaen ja kannustaen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Parhaansa yrittäminen, aktiivinen ja sinnikäs työskentely"
+            },
+            "longDescription": {
+              "fi": "Yrittää parhaansa suorittaen tehtävänsä tunnollisesti ja vastuullisesti, työskennellen aktiivisesti ja asiallisesti sekä kehittäen itseään pitkäjänteisesti"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "LI3 (lukion 3. moduuli)"
+        }
+      },
+      {
+        "code": "LI_HS_MODULE_LI4",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Toiminta yhteisen tavoitteen etee"
+            },
+            "longDescription": {
+              "fi": "Toimii yhdessä asetetun liikunnallisen tavoitteen saavuttamiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Kunnioittava vuorovaikutus, palautteen anto ja kannustus"
+            },
+            "longDescription": {
+              "fi": "Toimii vuorovaikutustilanteissa toisia kunnioittavasti, auttaa ja kannustaa muita liikuntatunneilla sekä antaa rakentavaa palautetta ja vertaisarviointia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Parhaansa yrittäminen, aktiivinen ja sinnikäs työskentely"
+            },
+            "longDescription": {
+              "fi": "Yrittää parhaansa suorittaen tehtävänsä tunnollisesti ja vastuullisesti, työskennellen aktiivisesti ja asiallisesti sekä kehittäen itseään pitkäjänteisesti"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "LI4 (liikunta 4. moduuli)"
+        }
+      },
+      {
+        "code": "LI_HS_MODULE_LI5",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Oman jaksamisen arviointi"
+            },
+            "longDescription": {
+              "fi": "Arvioi omaa jaksamistaan ja vireyttään sekä osaa tehdä perusteltuja liikunnallisia valintoja toiminta- ja opiskelukyvyn lisäämiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Jaksamisen edistäminen liikunnan avulla"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää, miten liikunnan avulla voidaan edistää jaksamista ja opiskeluvireyttä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Aktiivinen, asiallinen yhteisöllinen toiminta"
+            },
+            "longDescription": {
+              "fi": "Osallistuu toimintaan asiallisesti, aktiivisesti ja yhteisöllisyyttä edistäen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "LI5 (liikunta 5. moduuli)"
+        }
+      },
+      {
+        "code": "LI_HS_MODULE_LUK",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Liikuntataitojen ja -tietojen soveltaminen"
+            },
+            "longDescription": {
+              "fi": "Oppii soveltamaan liikuntataitoja ja -tietoja erilaisissa liikuntatehtävissä, -muodoissa ja -lajeissa eri vuodenaikoina ja eri olosuhteissa (kuten sisällä, ulkona ja vedessä)"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Fyysisten ominaisuuksien arviointi ja kehittäminen"
+            },
+            "longDescription": {
+              "fi": "Oppii arvioimaan fyysisiä ominaisuuksiaan (voima, kestävyys, liikkuvuus ja nopeus) sekä saadun tiedon pohjalta harjoittamaan niitä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Oman toimintakyvyn kehittäminen"
+            },
+            "longDescription": {
+              "fi": "Osaa tehdä perusteltuja valintoja fyysisen, sosiaalisen ja psyykkisen toimintakyvyn kehittämiseksi sekä fyysisen aktiivisuuden lisäämiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Kehittyä itsearvioinnissa"
+            },
+            "longDescription": {
+              "fi": "Kehittää taitoa itsearviointiin (tavoitteenasettelu, suunnitelma ja toteutus tavoitteiden suuntaisesti sekä edistymisen arviointi)"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Parhaansa yrittäminen, aktiivinen ja sinnikäs työskentely"
+            },
+            "longDescription": {
+              "fi": "Yrittää parhaansa suorittaen tehtävänsä tunnollisesti ja vastuullisesti, työskennellen aktiivisesti ja asiallisesti sekä kehittäen itseään pitkäjänteisesti"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Kunnioittava vuorovaikutus, palautteen anto ja kannustus"
+            },
+            "longDescription": {
+              "fi": "Toimii vuorovaikutustilanteissa toisia kunnioittavasti, oppii auttamaan ja avustamaan muita liikuntatunneilla, tukee yhteisöllisyyttä kannustamalla sekä antaa rakentavaa palautetta ja vertaisarviointia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "Lukio muu vapaavalintainen moduuli"
+        }
+      }
+    ],
+    "name": {
+      "en": "Sports",
+      "fi": "Liikunta"
+    },
+    "vocationalSchoolModules": [
+      {
+        "code": "LI_VOC_MODULE_AMM",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Oppilas etsii tietoa terveytensä edistämiseksi"
+            },
+            "longDescription": {
+              "fi": "Oppilas etsii monipuolista tietoa ikäluokkansa terveyseroista ja mahdollisuuksista oman terveytensä ja toimintakykynsä edistämiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Suunnitelman laatiminen oman terveyden edistämiseen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija laatii itselleen tilannekohtaisesti päivitettävän ja monipuolisen suunnitelman terveytensä ja hyvinvointinsa edistämiseksi ottaen siinä huomioon liikunnan, ravitsemuksen, palautumisen, unen, mielen hyvinvoinnin, nikotiinittomuuden ja päihteettömyyden, seksuaaliterveyden ja ihmissuhteiden merkityksen opiskelu- ja työkyvyn ylläpitämiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Edistää omaa terveyttään ja arvioida sitä"
+            },
+            "longDescription": {
+              "fi": "Opiskelija edistää terveyttään ja hyvinvointiaan aktiivisesti ja arvioi realistisesti suunnitelman toteutumista ja tavoitteiden saavuttamista hyödyntäen arvioinnissa myös muilta saamaansa palautetta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Turvallinen toiminta"
+            },
+            "longDescription": {
+              "fi": "Opiskelija toimii sovittujen turvallisuutta ja terveyttä edistävien toimintaohjeiden mukaisesti yhteistyössä muiden kanssa ja arvioi toimintatapojensa kehittämistarpeita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Ottaa huomioon ammatin kuormittavuustekijät"
+            },
+            "longDescription": {
+              "fi": "Opiskelija ottaa työssään monipuolisesti huomioon oman ammattinsa kuormittavuustekijät ja edistää työkykyään"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Ergonomian ymmärtäminen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija selvittää ergonomian vaikutukset työkykyyn erilaisissa työympäristöissä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T7",
+            "label": {
+              "fi": "Edistää hyvinvointia liikunnan avulla"
+            },
+            "longDescription": {
+              "fi": "Opiskelu- ja työkyvyn sekä hyvinvoinnin edistäminen liikunnan avulla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T8",
+            "label": {
+              "fi": "Tieto-osaamisen hyödyntäminen terveyden edistämisessä"
+            },
+            "longDescription": {
+              "fi": "Opiskelija hakee monipuolisesti tietoa liikkumisen hyödyistä ja vaatimuksista terveydelle sekä opiskelu- ja työkyvylle ja ottaa tiedot huomioon fyysistä toimintakykyä edistävässä suunnitelmassaan huomioiden myös alakohtaiset vaatimukset opiskelu- ja työkyvyn ylläpitoon"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T9",
+            "label": {
+              "fi": "Fyysisten ominaisuuksien ja ergonomiataitojen kehittäminen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija kehittää opiskelu- ja työkyvyn vaatimia fyysisiä ominaisuuksiaan ja ergonomiataitojaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T10",
+            "label": {
+              "fi": "Liikkua parhaansa yrittäen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija liikkuu parhaansa yrittäen kaikissa liikuntatilanteissa edistäen opiskelu- ja työkykyään"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T11",
+            "label": {
+              "fi": "Huolellinen toiminta"
+            },
+            "longDescription": {
+              "fi": "Opiskelija toimii huolellisesti ja ehkäisee tapaturmien syntymistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T12",
+            "label": {
+              "fi": "Ensiaputaidot"
+            },
+            "longDescription": {
+              "fi": "Opiskelija antaa ensiapua ja hakee oikea-aikaisesti lisäapua, jos tarvetta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T13",
+            "label": {
+              "fi": "Ehkäistä lisätapaturmat"
+            },
+            "longDescription": {
+              "fi": "Opiskelija estää toiminnallaan lisätapaturmien syntymistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "Ammatillinen koulutus pakollinen"
+        }
+      },
+      {
+        "code": "LI_VOC_MODULE_AMM_1",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Reilu peli, fyysisen toimintakyvyn ylläpitäminen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija seuraa, arvioi ja pitää yllä fyysistä toimintakykyään sekä osallistuu liikuntatilanteisiin aktiivisesti edistäen reilun pelin periaatteiden toteutumista"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Motoristen taitojen soveltaminen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija soveltaa monipuolisesti liikunnan harrastamiseen tarvittavia motorisia perustaitoja ja liikunnan lajitaitoja"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Oman toimintakyvyn arviointi"
+            },
+            "longDescription": {
+              "fi": "Opiskelija arvioi perustellusti kuormittumistaan ja työkykyvaatimuksia suhteessa omaan toimintakykyynsä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Oma-aloitteinen ote liikunnan harrastamiseen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija toimii aktiivisesti opiskelijaryhmän jäsenenä sekä suunnittelee ja osallistuu opiskelijoiden järjestämiin liikunta- ja muihin tapahtumiin ja tilaisuuksiin hyvinvointia ja osallisuutta edistävästi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "Ammatillinen koulutus vapaavalintainen"
+        }
+      }
+    ]
+  },
+  {
+    "code": "TE",
+    "elementarySchool": {
+      "seven_to_nine_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Terveyden monimuotoisuuden ymmärtäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään terveyden laaja-alaisuutta, terveyden edistämistä sekä elämänkulkua, kasvua ja kehitystä voimavaralähtöisesti "
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Tunne- ja vuorovaikutustaitojen kehittäminen "
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kehittämään valmiuksiaan tunne- ja vuorovaikutustaidoissa ja kykyä toimia erilaisissa ristiriita- ja kriisitilanteissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Itsetuntemuksen kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kehittämään itsetuntemustaan, omien arvojen ja asenteiden sekä kehon ja mielen viestien tunnistamista ja tunnistamaan ja säätelemään käyttäytymistään, oppimistaan ja opiskeluaan tukevia tekijöitä "
+          },
+          "type": "NOT_EVALUATED"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Terveysosaamisen eettiset näkökulmat"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta pohtimaan yksilöllisyyteen, yhteisöllisyyteen ja yhdenvertaisuuteen liittyviä kysymyksiä terveyden näkökulmasta sekä tukea oppilaan valmiuksia luoda vastuullisia ratkaisuja ihmisten välisissä vuorovaikutustilanteissa."
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Fyysiseen, psyykkiseen ja sosiaaliseen terveyteen vaikuttaminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta syventämään ymmärrystään fyysisestä, psyykkisestä ja sosiaalisesta terveydestä ja niitä vahvistavista ja vaarantavista tekijöistä ja mekanismeista sekä tukea oppilaan valmiuksia käyttää näihin liittyviä käsitteitä asianmukaisesti"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Kehittää tiedonhankintaa sairaudesta, toimia terveyttä edistävästi"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilaan kehittymistä terveyteen ja sairauteen liittyvän tiedon hankkijana ja käyttäjänä sekä edistää valmiuksia toimia tarkoituksenmukaisesti terveyteen, turvallisuuteen ja sairauksiin liittyvissä tilanteissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Terveystottumusten tunnistaminen ja arvioiminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tunnistamaan ja arvioimaan omia terveyteen ja turvallisuuteen liittyviä tottumuksiaan, valintojaan ja niiden perusteluja sekä rohkaista oppilasta pohtimaan oman terveyden kannalta merkityksellisiä voimavaroja "
+          },
+          "type": "NOT_EVALUATED"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Terveysilmiöiden tunnistaminen ja kriittinen tarkastelu"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tunnistamaan ja tarkastelemaan kriittisesti terveyteen ja sairauteen liittyviä ilmiöitä, niihin liittyviä arvoja ja normeja sekä arvioimaan tiedon luotettavuutta ja merkitystä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Ympäristön vaikutus terveyteen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään ympäristön, yhteisöjen, kulttuurin ja tieto- ja viestintäteknologian merkitystä terveydelle ja hyvinvoinnille"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Oppia ylläpitämään omaa toimintakykyä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta luomaan perustaa opiskelu-, toiminta- ja työkyvylle ja sen ylläpitämiselle sekä kuvaamaan terveyspalvelujen asianmukaista käyttöä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T11",
+          "label": {
+            "fi": "Sosiaalisen piirin vaikutus omaan terveyteen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään ja arvioimaan perheen ja omaan elämänpiiriin kuuluvien ihmisten ja yhteisöjen edustamia terveyskäsityksiä, tunnistamaan niiden merkitystä itselle sekä muodostamaan kuvaa itselle sopivista oppimisen keinoista"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T12",
+          "label": {
+            "fi": "Tukea kykyä arvioida terveysviestintää ja terveyden ymmärtämistä omassa ympäristössä"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilaan valmiuksia arvioida kriittisesti terveyteen ja sairauteen liittyvää viestintää sekä eritellä yksilön oikeuksia, vastuita ja vaikuttamiskeinoja terveyttä ja turvallisuutta koskevissa asioissa omassa oppimisympäristössä ja lähiyhteisöissä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        }
+      ]
+    },
+    "environments": [
+      {
+        "code": "TE_ENV_TER",
+        "color": "#24a3e3",
+        "name": {
+          "fi": "Terveyden edistäminen"
+        }
+      },
+      {
+        "code": "TE_ENV_SAI",
+        "color": "#1ec592",
+        "name": {
+          "fi": "Sairauksien ehkäisy"
+        }
+      },
+      {
+        "code": "TE_ENV_KAS",
+        "color": "#a224e3",
+        "name": {
+          "fi": "Kasvu ja kehitys"
+        }
+      },
+      {
+        "code": "TE_ENV_ITS",
+        "color": "#03f1e9",
+        "name": {
+          "fi": "Itsetuntemus"
+        }
+      },
+      {
+        "code": "TE_ENV_SEK",
+        "color": "#ff6af2",
+        "name": {
+          "fi": "Seksuaaliterveys"
+        }
+      },
+      {
+        "code": "TE_ENV_TUN",
+        "color": "#ffd226",
+        "name": {
+          "fi": "Tunne- ja vuorovaikutustaidot"
+        }
+      },
+      {
+        "code": "TE_ENV_TER_1",
+        "color": "#0e9b00",
+        "name": {
+          "fi": "Terveystottumukset"
+        }
+      },
+      {
+        "code": "TE_ENV_TUR",
+        "color": "#ff331b",
+        "name": {
+          "fi": "Turvallisuustaidot"
+        }
+      },
+      {
+        "code": "TE_ENV_TER_2",
+        "color": "#6c3800",
+        "name": {
+          "fi": "Terveyden vaaratekijät"
+        }
+      },
+      {
+        "code": "TE_ENV_KES",
+        "color": "#1446b5",
+        "name": {
+          "fi": "Kestävä elämäntapa"
+        }
+      },
+      {
+        "code": "TE_ENV_MIE",
+        "color": "#6df878",
+        "name": {
+          "fi": "Mielen hyvinvointi"
+        }
+      },
+      {
+        "code": "TE_ENV_MED",
+        "color": "#989898",
+        "name": {
+          "fi": "Media ja yhteiskunta"
+        }
+      }
+    ],
+    "name": {
+      "fi": "Terveystieto"
+    }
+  }
+]

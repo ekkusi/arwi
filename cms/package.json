@@ -9,7 +9,9 @@
     "start": "sanity start",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "deploy-graphql": "sanity graphql deploy"
+    "deploy-graphql": "sanity graphql deploy",
+    "export-and-convert": "npx sanity dataset export production ./export/data.tar.gz && cd export && tar -xzvf data.tar.gz && mv ./*/* ./ && ndjson-reduce < data.ndjson > data.json && find . ! -name 'data.json' -type f -exec rm -f {} + && yarn transform-export",
+    "transform-export": "ts-node ./utils/transformExport.ts"
   },
   "keywords": [
     "sanity"
@@ -25,6 +27,8 @@
   },
   "devDependencies": {
     "@types/react": "^18.0.25",
-    "@types/styled-components": "^5.1.26"
+    "@types/styled-components": "^5.1.26",
+    "ndjson-cli": "^0.3.1",
+    "ts-node": "^10.9.1"
   }
 }

@@ -89,7 +89,7 @@ const learningObjectivesField = defineField({
           },
           {
             title: "Ei arvioitava",
-            value: "BEHAVIOUR",
+            value: "NOT_EVALUATED",
           },
         ],
       },
