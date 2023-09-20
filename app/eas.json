@@ -14,7 +14,7 @@
     },
     "test": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "apk"
       },
       "env": {
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",

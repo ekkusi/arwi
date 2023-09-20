@@ -12,6 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import * as Updates from "expo-updates";
 import { graphql } from "../../gql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -105,8 +106,11 @@ function HomePageContent({
     });
   }, [notArchivedGroups]);
 
+  const runTypeMessage = Updates.isEmbeddedLaunch ? "This app is running from built-in code" : "This app is running an update";
+
   return (
     <Layout style={{ paddingHorizontal: "sm" }}>
+      <CText style={{ marginVertical: "lg" }}>{runTypeMessage}</CText>
       {sortedGroups.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
