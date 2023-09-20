@@ -1,4 +1,5 @@
 type Query {
+  getAppMetadata: AppMetadata!
   getCurrentUser: Teacher!
   getTeacher(id: ID!): Teacher!
   getTeachers: [Teacher!]!
@@ -27,6 +28,10 @@ type Mutation {
   deleteCollection(collectionId: ID!): EvaluationCollection!
   changeGroupYear(newYearCode: ClassYearCode!, groupId: ID!, transferEvaluations: Boolean): Group!
   generateStudentFeedback(studentId: ID!, classYearId: ID!): String!
+}
+
+type AppMetadata {
+  minimumAppVersion: String!
 }
 
 type AuthPayload {

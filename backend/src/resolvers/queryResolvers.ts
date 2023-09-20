@@ -1,4 +1,4 @@
-import { ADMIN_USER } from "../config";
+import { ADMIN_USER, MIN_APP_VERSION } from "../config";
 import AuthenticationError from "../errors/AuthenticationError";
 import ValidationError from "../errors/ValidationError";
 import { QueryResolvers } from "../types";
@@ -12,6 +12,11 @@ import {
 } from "../utils/auth";
 
 const resolvers: QueryResolvers<CustomContext> = {
+  getAppMetadata: () => {
+    return {
+      minimumAppVersion: MIN_APP_VERSION,
+    };
+  },
   getCurrentUser: async (_, __, { user }) => {
     if (!user) throw new AuthenticationError("Not authenticated");
     return user;

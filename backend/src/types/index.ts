@@ -30,6 +30,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: "Query";
+  getAppMetadata: AppMetadata;
   getCurrentUser: Teacher;
   getTeacher: Teacher;
   getTeachers: Array<Teacher>;
@@ -155,6 +156,11 @@ export type MutationGenerateStudentFeedbackArgs = {
   classYearId: Scalars["ID"];
 };
 
+export type AppMetadata = {
+  __typename?: "AppMetadata";
+  minimumAppVersion: Scalars["String"];
+};
+
 export type AuthPayload = {
   __typename?: "AuthPayload";
   accessToken: Scalars["String"];
@@ -176,6 +182,7 @@ export type LoginResult = {
 export enum LearningObjectiveType {
   BEHAVIOUR = "BEHAVIOUR",
   SKILLS = "SKILLS",
+  SKILLS_AND_BEHAVIOUR = "SKILLS_AND_BEHAVIOUR",
   NOT_EVALUATED = "NOT_EVALUATED",
 }
 
@@ -420,6 +427,8 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
+  AppMetadata: ResolverTypeWrapper<AppMetadata>;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
@@ -433,7 +442,6 @@ export type ResolversTypes = {
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
   Student: ResolverTypeWrapper<StudentPrisma>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
   ClassYearCode: ClassYearCode;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
@@ -456,6 +464,8 @@ export type ResolversParentTypes = {
   Mutation: {};
   String: Scalars["String"];
   Boolean: Scalars["Boolean"];
+  Int: Scalars["Int"];
+  AppMetadata: AppMetadata;
   AuthPayload: Omit<AuthPayload, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
   Teacher: UserInfoPrisma;
   LoginResult: Omit<LoginResult, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
@@ -468,7 +478,6 @@ export type ResolversParentTypes = {
   EvaluationCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
   Student: StudentPrisma;
-  Int: Scalars["Int"];
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
   UpdateGroupInput: UpdateGroupInput;
@@ -493,6 +502,7 @@ export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<Resolv
 }
 
 export type QueryResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
+  getAppMetadata?: Resolver<ResolversTypes["AppMetadata"], ParentType, ContextType>;
   getCurrentUser?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
   getTeacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType, RequireFields<QueryGetTeacherArgs, "id">>;
   getTeachers?: Resolver<Array<ResolversTypes["Teacher"]>, ParentType, ContextType>;
@@ -541,6 +551,14 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
     ContextType,
     RequireFields<MutationGenerateStudentFeedbackArgs, "studentId" | "classYearId">
   >;
+};
+
+export type AppMetadataResolvers<
+  ContextType = CustomContext,
+  ParentType extends ResolversParentTypes["AppMetadata"] = ResolversParentTypes["AppMetadata"]
+> = {
+  minimumAppVersion?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AuthPayloadResolvers<
@@ -674,6 +692,7 @@ export type Resolvers<ContextType = CustomContext> = {
   EmailAddress?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  AppMetadata?: AppMetadataResolvers<ContextType>;
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   Teacher?: TeacherResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
