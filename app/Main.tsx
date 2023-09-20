@@ -3,11 +3,12 @@ import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback, useEffect, useState } from "react";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { MenuProvider } from "react-native-popup-menu";
 import * as SplashScreen from "expo-splash-screen";
+import * as Application from "expo-application";
 import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
@@ -16,6 +17,8 @@ import ModalProvider from "./hooks-and-providers/ModalProvider";
 import HomeStack from "./app/home/_stack";
 import { STORAGE_LANG_KEY } from "./i18n";
 import PopupProvider from "./hooks-and-providers/ToastProvider";
+import { isVersionSmaller } from "./helpers/versionUtils";
+import NewUpdateAvailableModal from "./components/NewUpdateAvailableModal";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -26,7 +29,17 @@ const Main_GetCurrentUser_Query = graphql(`
   }
 `);
 
+const Main_GetAppMetadata_Query = graphql(`
+  query Main_GetAppMetadata {
+    getAppMetadata {
+      minimumAppVersion
+    }
+  }
+`);
+
 SplashScreen.preventAutoHideAsync();
+
+const CURRENT_APP_VERSION = Application.nativeApplicationVersion;
 
 export default function Main() {
   const { authState, setUser } = useAuth();
@@ -34,6 +47,9 @@ export default function Main() {
   const { ready: i18nReady, i18n } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
 
   const client = useApolloClient();
+
+  const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query);
+  const minimumAppVersion = appMetadataResult?.getAppMetadata?.minimumAppVersion || null;
 
   // Fetch token and current user and set them to global state if they exist
   const setUserInfo = useCallback(async () => {
@@ -61,12 +77,13 @@ export default function Main() {
     await SplashScreen.hideAsync();
   }, []);
 
-  if (loading || !i18nReady) return null;
+  if (loading || loadingAppMetadata || !i18nReady) return null;
 
   return (
     <SafeAreaView style={{ flex: 1 }} onLayout={onRootLayout}>
       <StatusBar backgroundColor={COLORS.green} />
       <GestureHandlerRootView style={{ flex: 1 }}>
+        <NewUpdateAvailableModal isOpen={!__DEV__ && isVersionSmaller(CURRENT_APP_VERSION, minimumAppVersion)} />
         <MenuProvider>
           <ModalProvider>
             <PopupProvider>
