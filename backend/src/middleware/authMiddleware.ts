@@ -1,5 +1,5 @@
 import { IMiddleware, IMiddlewareFunction } from "graphql-middleware";
-import queryResolvers from "resolvers/queryResolvers";
+import queryResolvers from "../resolvers/queryResolvers";
 import AuthenticationError from "../errors/AuthenticationError";
 import mutationResolvers from "../resolvers/mutationResolvers";
 import { Mutation, Query } from "../types";
