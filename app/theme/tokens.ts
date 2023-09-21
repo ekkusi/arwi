@@ -85,6 +85,7 @@ export const FONT_SIZES = {
   xl: 24,
   largeTitle: 28,
   "2xl": 28,
+  "3xl": 36,
 } as const;
 
 export const SPACING = {

@@ -131,10 +131,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
       }
       topChildren={
         <CView style={{ width: 300, height: 300 }}>
-          <CImage
-            source={require("../../assets/arwilogo-transparent-white.png")}
-            style={{ width: undefined, height: undefined, resizeMode: "contain", flex: 1 }}
-          />
+          <CImage source={require("../../assets/arwilogo-transparent-white.png")} />
         </CView>
       }
     />

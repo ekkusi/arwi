@@ -36,10 +36,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
       topChildren={
         <CView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <CView style={{ width: 300, height: 300 }}>
-            <CImage
-              source={require("../../assets/arwilogo-transparent-white.png")}
-              style={{ width: undefined, height: undefined, resizeMode: "contain", flex: 1 }}
-            />
+            <CImage source={require("../../assets/arwilogo-transparent-white.png")} />
           </CView>
           <CText style={{ color: "white", fontWeight: "200", fontSize: 16, marginTop: -60 }}>
             {t("LandingPage.betterEvaluation", "Laadukkaampaa arviointia").toLocaleUpperCase()}
