@@ -136,7 +136,9 @@ function HomePageContent({
         <CButton
           shadowed
           title={t("home-view.create-group", "Luo ryhmä")}
-          onPress={() => navigation.navigate("group-create")}
+          onPress={() => {
+            navigation.navigate("group-create");
+          }}
           leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
         />
       </Animated.View>

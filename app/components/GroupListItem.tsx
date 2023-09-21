@@ -92,10 +92,6 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             <CView style={{ width: 30, height: 30 }}>
               <CImage
                 style={{
-                  width: undefined,
-                  height: undefined,
-                  flex: 1,
-                  resizeMode: "contain",
                   tintColor: "darkgray",
                 }}
                 source={subjectToIcon(group.subject)}

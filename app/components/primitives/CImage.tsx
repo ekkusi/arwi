@@ -7,8 +7,15 @@ export type CImageProps = Omit<ImageProps, "style"> & {
   style?: CImageStyle;
 };
 
+const DEFAULT_IMAGE_STYLES: CImageStyle = {
+  width: undefined,
+  height: undefined,
+  flex: 1,
+  resizeMode: "contain",
+};
+
 export default function CImage({ style, ...rest }: CImageProps) {
-  const styles = useMemo(() => style && createImageStyles(style), [style]);
+  const styles = useMemo(() => createImageStyles({ ...DEFAULT_IMAGE_STYLES, ...style }), [style]);
 
   return <Image style={styles} {...rest} />;
 }

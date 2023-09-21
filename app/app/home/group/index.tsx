@@ -547,10 +547,6 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
               <CView style={{ width: 45, height: 45 }}>
                 <CImage
                   style={{
-                    width: undefined,
-                    height: undefined,
-                    flex: 1,
-                    resizeMode: "contain",
                     tintColor: "darkgray",
                   }}
                   source={subjectToIcon(group.subject)}

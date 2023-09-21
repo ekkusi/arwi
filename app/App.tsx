@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Logs } from "expo";
+import ErrorBoundary from "react-native-error-boundary";
 import { LogBox, Platform } from "react-native";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 import Main from "./Main";
@@ -8,6 +9,7 @@ import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 import "./i18n";
 import "react-native-url-polyfill/auto";
 import LoadingIndicator from "./components/LoadingIndicator";
+import ErrorView from "./app/ErrorView";
 
 Logs.enableExpoCliLogging();
 
@@ -17,13 +19,20 @@ Logs.enableExpoCliLogging();
 if (Platform.OS === "ios") LogBox.ignoreAllLogs();
 
 export default function App() {
+  const onError = (error: Error, componentStack: string) => {
+    console.error(error, componentStack);
+    // TODO: Add logging to Sentry or some other debug service
+  };
+
   return (
-    <AuthProvider>
-      <ApolloProvider>
-        <Suspense fallback={<LoadingIndicator />}>
-          <Main />
-        </Suspense>
-      </ApolloProvider>
-    </AuthProvider>
+    <ErrorBoundary FallbackComponent={ErrorView} onError={onError}>
+      <AuthProvider>
+        <ApolloProvider>
+          <Suspense fallback={<LoadingIndicator />}>
+            <Main />
+          </Suspense>
+        </ApolloProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
