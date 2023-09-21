@@ -20,8 +20,9 @@ model Group {
   name                  String
   subjectCode           String
   students              Student[]
-  classYears            ClassYear[]
-  currentYearCode       ClassYearCode
+  classYears            ClassYear[]            @relation(name: "GroupClassYears")
+  currentClassYear      ClassYear              @relation(name: "GroupCurrentClassYear", fields: [currentClassYearId], references: [id], onDelete: Cascade)
+  currentClassYearId    String
   teacher               Teacher                @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId             String
   updatedAt             DateTime               @updatedAt @default(now())
@@ -31,7 +32,8 @@ model Group {
 model ClassYear {
   id                    String                 @id @default(uuid())
   code                  ClassYearCode
-  group                 Group                   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  currentGroups         Group[]                @relation(name: "GroupCurrentClassYear") // For prisma to be able to resolve the relation, not needed in practice
+  group                 Group                  @relation(name: "GroupClassYears", fields: [groupId], references: [id], onDelete: Cascade)
   groupId               String
   students              Student[]
   evaluationCollections EvaluationCollection[]

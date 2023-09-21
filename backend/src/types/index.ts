@@ -148,7 +148,6 @@ export type MutationDeleteCollectionArgs = {
 export type MutationChangeGroupYearArgs = {
   newYearCode: ClassYearCode;
   groupId: Scalars["ID"];
-  transferEvaluations?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export type MutationGenerateStudentFeedbackArgs = {

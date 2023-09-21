@@ -26,7 +26,7 @@ type Mutation {
   deleteStudent(studentId: ID!): Student!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
-  changeGroupYear(newYearCode: ClassYearCode!, groupId: ID!, transferEvaluations: Boolean): Group!
+  changeGroupYear(newYearCode: ClassYearCode!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, classYearId: ID!): String!
 }
 

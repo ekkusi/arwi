@@ -77,10 +77,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     const group = await prisma.group.create({
       data: {
         ...rest,
-        currentYearCode: yearCode,
+        currentClassYearId: "",
       },
     });
-    await prisma.classYear.create({
+    const classYear = await prisma.classYear.create({
       data: {
         code: yearCode,
         groupId: group.id,
@@ -90,6 +90,14 @@ const resolvers: MutationResolvers<CustomContext> = {
             ...it,
           })),
         },
+      },
+    });
+    await prisma.group.update({
+      where: {
+        id: group.id,
+      },
+      data: {
+        currentClassYearId: classYear.id,
       },
     });
     return group;
@@ -229,7 +237,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return collection;
   },
-  changeGroupYear: async (_, { groupId, newYearCode, transferEvaluations }, { prisma, user }) => {
+  changeGroupYear: async (_, { groupId, newYearCode }, { prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
     let newYear = await prisma.classYear.findFirst({
       where: { groupId, code: newYearCode },
@@ -243,14 +251,7 @@ const resolvers: MutationResolvers<CustomContext> = {
         where: {
           classYears: {
             some: {
-              AND: [
-                {
-                  code: group.currentYearCode,
-                },
-                {
-                  groupId: group.id,
-                },
-              ],
+              id: group.currentClassYearId,
             },
           },
         },
@@ -265,29 +266,9 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       });
     }
-    // Transfer collections to new class year if transferEvaluations is passed
-    if (transferEvaluations === true) {
-      await prisma.evaluationCollection.updateMany({
-        where: {
-          classYear: {
-            AND: [
-              {
-                code: group.currentYearCode,
-              },
-              {
-                groupId: group.id,
-              },
-            ],
-          },
-        },
-        data: {
-          classYearId: newYear.id,
-        },
-      });
-    }
     const updatedGroup = await prisma.group.update({
       data: {
-        currentYearCode: newYearCode,
+        currentClassYearId: newYear.id,
       },
       where: { id: groupId },
     });
