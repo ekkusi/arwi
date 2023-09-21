@@ -8,4 +8,4 @@ export const ADMIN_USER: WithRequired<CustomContext, "user">["user"] = {
 export const FALLBACK_SECRET = "some-secret"; // ONLY USE IN DEV!
 
 // Used to enforce minimum app version (force update on frontend). Only update this when there is a breaking change in database/backend that makes the old version unusable.
-export const MIN_APP_VERSION = "1.0.7";
+export const MIN_APP_VERSION = "1.0.9";
