@@ -39,7 +39,7 @@
     "graphql-scalars": "^1.20.1",
     "jsonwebtoken": "^9.0.0",
     "openai": "^4.6.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^4.0.1",

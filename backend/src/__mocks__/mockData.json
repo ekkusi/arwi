@@ -281,10 +281,9 @@
           "skillsRating": 8,
           "behaviourRating": 9,
           "notes": "Matilla meni tosi hyvin tänään. Maila pysyi kädessä ja tekniikka oli kunnossa. Matti kannusti myös toisia mukaan pelaamaan",
-          "collectionId": 2
+          "collectionId": 1
         },
         {
-          "id": "2",
           "wasPresent": false,
           "skillsRating": null,
           "behaviourRating": null,

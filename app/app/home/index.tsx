@@ -34,10 +34,12 @@ const MainPage_GetCurrentUser_Query = graphql(`
         archived
         updatedAt
         subject {
-          label
+          label {
+            fi
+          }
           code
         }
-        currentClassYear {
+        currentModule {
           id
         }
       }
@@ -120,7 +122,7 @@ function HomePageContent({
               group={item}
               onEvaluateIconPress={() => navigation.navigate("collection-create", { groupId: item.id })}
               onListItemPress={() =>
-                navigation.navigate("group", { id: item.id, classYearId: item.currentClassYear.id, name: item.name, archived: item.archived })
+                navigation.navigate("group", { id: item.id, classYearId: item.currentModule.id, name: item.name, archived: item.archived })
               }
             />
           )}

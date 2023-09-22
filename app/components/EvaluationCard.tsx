@@ -17,13 +17,13 @@ import CButton from "./primitives/CButton";
 
 export type Evaluation = Omit<CreateEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
-    currentClassEvaluations: Pick<Evaluation, "notes">[];
+    currentModuleEvaluations: Pick<Evaluation, "notes">[];
   };
 };
 
 export type EvaluationToUpdate = UpdateEvaluationInput & {
   student: Pick<Student, "id" | "name"> & {
-    currentClassEvaluations: Pick<Evaluation, "notes">[];
+    currentModuleEvaluations: Pick<Evaluation, "notes">[];
   };
 };
 
@@ -130,7 +130,7 @@ function EvaluationCard({
   };
 
   const givenNotesCount = useMemo(() => {
-    return evaluation.student.currentClassEvaluations.filter((it) => !!it.notes).length;
+    return evaluation.student.currentModuleEvaluations.filter((it) => !!it.notes).length;
   }, [evaluation]);
 
   let currentNotes = "";

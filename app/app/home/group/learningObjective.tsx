@@ -12,11 +12,11 @@ export default function LearningObjective({ route }: NativeStackScreenProps<Home
     <Layout style={{ gap: 30, padding: "lg", backgroundColor: "white" }}>
       <CText>
         <CText style={{ fontSize: "title", fontWeight: "600" }}>{code}: </CText>
-        <CText style={{ fontSize: "title", fontWeight: "400" }}>{label}</CText>
+        <CText style={{ fontSize: "title", fontWeight: "400" }}>{label.fi}</CText>
       </CText>
       <CView style={{ gap: 8 }}>
         <CText style={{ fontSize: "lg", fontWeight: "400" }}>{t("learning-objective", "Oppimistavoite:")}</CText>
-        <CText style={{ fontSize: "md", fontWeight: "300" }}>{description}.</CText>
+        <CText style={{ fontSize: "md", fontWeight: "300" }}>{description.fi}.</CText>
       </CView>
     </Layout>
   );

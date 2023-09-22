@@ -1,5 +1,5 @@
-import { getClassYearInfo, getEnvironment, getLearningObjectives, getSubject, getSubjectCode } from "../utils/subjectUtils";
-import { ClassYearCode, Resolvers } from "../types";
+import { getEnvironment, getEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../utils/subjectUtils";
+import { EducationLevel, Resolvers } from "../types";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -11,33 +11,25 @@ const resolvers: TypeResolvers = {
           teacherId: id,
         },
       });
-
       return groups;
     },
   },
   Group: {
-    currentClassYear: async ({ currentYearCode, id }, _, { prisma }) => {
-      const classYear = await prisma.classYear.findFirstOrThrow({
+    currentModule: async ({ currentModuleId }, _, { prisma }) => {
+      const module = await prisma.module.findUniqueOrThrow({
         where: {
-          AND: [
-            {
-              groupId: id,
-            },
-            {
-              code: currentYearCode,
-            },
-          ],
+          id: currentModuleId,
         },
       });
-      return classYear;
+      return module;
     },
-    classYears: async ({ id }, _, { prisma }) => {
-      const classYears = await prisma.classYear.findMany({
+    modules: async ({ id }, _, { prisma }) => {
+      const modules = await prisma.module.findMany({
         where: {
           groupId: id,
         },
       });
-      return classYears;
+      return modules;
     },
     students: async ({ id }, _, { prisma }) => {
       const students = await prisma.student.findMany({
@@ -84,13 +76,13 @@ const resolvers: TypeResolvers = {
     },
   },
   EvaluationCollection: {
-    classYear: async ({ classYearId }, _, { prisma }) => {
-      const classYear = await prisma.classYear.findUniqueOrThrow({
+    module: async ({ moduleId }, _, { prisma }) => {
+      const module = await prisma.module.findUniqueOrThrow({
         where: {
-          id: classYearId,
+          id: moduleId,
         },
       });
-      return classYear;
+      return module;
     },
     evaluations: async ({ id }, _, { prisma }) => {
       const evaluations = await prisma.evaluation.findMany({
@@ -105,13 +97,18 @@ const resolvers: TypeResolvers = {
       if (!environment) throw new Error(`Environment not found with code: ${environmentCode}`);
       return environment;
     },
-    learningObjectives: async ({ classYearId, learningObjectiveCodes }, _, { prisma }) => {
-      const group = await prisma.group.findFirstOrThrow({
+    learningObjectives: async ({ moduleId, learningObjectiveCodes }, _, { prisma }) => {
+      const module = await prisma.module.findUniqueOrThrow({
         where: {
-          classYears: { some: { id: classYearId } },
+          id: moduleId,
         },
       });
-      const subjectObjectives = getLearningObjectives(group.subjectCode, ClassYearCode[group.currentYearCode]);
+      const group = await prisma.group.findFirstOrThrow({
+        where: {
+          modules: { some: { id: moduleId } },
+        },
+      });
+      const subjectObjectives = getLearningObjectives(group.subjectCode, module.educationLevel as EducationLevel, module.learningObjectiveGroupKey);
       return subjectObjectives.filter((objective) => learningObjectiveCodes.includes(objective.code));
     },
   },
@@ -124,7 +121,7 @@ const resolvers: TypeResolvers = {
       });
       return matchingGroup;
     },
-    currentClassEvaluations: async ({ id, groupId }, _, { prisma }) => {
+    currentModuleEvaluations: async ({ id, groupId }, _, { prisma }) => {
       const group = await prisma.group.findUniqueOrThrow({
         where: { id: groupId },
       });
@@ -137,8 +134,8 @@ const resolvers: TypeResolvers = {
             },
             {
               evaluationCollection: {
-                classYear: {
-                  code: group.currentYearCode,
+                module: {
+                  id: group.currentModuleId,
                 },
               },
             },
@@ -150,14 +147,26 @@ const resolvers: TypeResolvers = {
   },
   Subject: {
     environments: ({ code }) => {
-      const subject = getSubject(getSubjectCode(code));
-      if (!subject) throw new Error(`Subject not found with code: ${code}`);
-      return subject.environments;
+      return getEnvironments(code).map((it) => ({
+        code: it.code,
+        label: it.label,
+        color: it.color,
+      }));
     },
   },
-  ClassYear: {
-    info: async ({ code }) => {
-      return getClassYearInfo(code);
+  Module: {
+    info: async ({ educationLevel, learningObjectiveGroupKey, groupId }, _, { prisma }) => {
+      const group = await prisma.group.findUniqueOrThrow({
+        where: {
+          id: groupId,
+        },
+      });
+      const info = getModuleInfo(group.subjectCode, educationLevel as EducationLevel, learningObjectiveGroupKey);
+      if (!info)
+        throw new Error(
+          `Module info not found with subjectCode: ${group.subjectCode}, educationLevel: ${educationLevel}, learningObjectiveGroupKey: ${learningObjectiveGroupKey}`
+        );
+      return info;
     },
     group: async ({ groupId }, _, { prisma }) => {
       const group = await prisma.group.findUniqueOrThrow({
@@ -170,7 +179,7 @@ const resolvers: TypeResolvers = {
     evaluationCollections: async ({ id }, _, { prisma }) => {
       const collections = await prisma.evaluationCollection.findMany({
         where: {
-          classYearId: id,
+          moduleId: id,
         },
       });
       return collections;
@@ -178,7 +187,7 @@ const resolvers: TypeResolvers = {
     students: async ({ id }, _, { prisma }) => {
       const students = await prisma.student.findMany({
         where: {
-          classYears: { some: { id } },
+          modules: { some: { id } },
         },
       });
       return students;

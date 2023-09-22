@@ -74,13 +74,14 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     setLoading(true);
     try {
       if (!group.subject) throw new Error("Unexpected error"); // Should get caught before this
-      if (!group.class) throw new Error("Unexpected error"); // Should get caught before this
+      if (!group.module) throw new Error("Unexpected error"); // Should get caught before this
       await createGroup({
         variables: {
           input: {
             name: group.name,
-            yearCode: group.class.code,
-            subjectCode: group.subject?.code,
+            educationLevel: group.module.educationLevel,
+            learningObjectiveGroupKey: group.module.learningObjectiveGroupKey,
+            subjectCode: group.subject.code,
             students: group.students.map((it) => ({ name: it })),
             teacherId: user.id, // TODO: Add correct teacher id
           },

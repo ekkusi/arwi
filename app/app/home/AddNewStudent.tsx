@@ -7,7 +7,7 @@ import { getErrorMessage } from "../../helpers/errorUtils";
 
 const AddNewStudent_CreateStudent_Mutation = graphql(`
   mutation AddNewStudent_CreateStudent($id: ID!, $input: CreateStudentInput!) {
-    createStudent(classYearId: $id, data: $input) {
+    createStudent(moduleId: $id, data: $input) {
       id
       name
       group {
@@ -16,19 +16,24 @@ const AddNewStudent_CreateStudent_Mutation = graphql(`
         archived
         updatedAt
         subject {
-          label
+          label {
+            fi
+          }
           code
         }
-        currentClassYear {
+        currentModule {
           id
           info {
-            code
-            label
+            educationLevel
+            learningObjectiveGroupKey
+            label {
+              fi
+            }
           }
           students {
             id
             name
-            currentClassEvaluations {
+            currentModuleEvaluations {
               id
               wasPresent
             }
@@ -37,14 +42,20 @@ const AddNewStudent_CreateStudent_Mutation = graphql(`
             id
             date
             environment {
-              label
+              label {
+                fi
+              }
               code
               color
             }
             learningObjectives {
               code
-              label
-              description
+              label {
+                fi
+              }
+              description {
+                fi
+              }
               type
             }
           }

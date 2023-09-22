@@ -1,3 +1,4 @@
+import { TranslatedString } from "arwi-backend/src/types/subject";
 import { Evaluation as BaseEvaluation } from "../gql/graphql";
 import { median, mode, stdev } from "./mathUtilts";
 
@@ -30,7 +31,7 @@ type Evaluation = EvaluationSimple & {
     id: string;
     environment: {
       code: string;
-      label: string;
+      label: TranslatedString;
     };
   };
 };

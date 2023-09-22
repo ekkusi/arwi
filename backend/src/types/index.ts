@@ -6,9 +6,9 @@ import {
   Evaluation as EvaluationPrisma,
   Group as GroupPrisma,
   Student as StudentPrisma,
-  ClassYear as ClassYearPrisma,
+  Module as ModulePrisma,
 } from "@prisma/client";
-import { Subject as SubjectPrisma, Environment as EnvironmentPrisma } from "./subject";
+import { SubjectMinimal as SubjectMinimalPrisma, Environment as EnvironmentPrisma } from "./subject";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -82,7 +82,7 @@ export type Mutation = {
   deleteStudent: Student;
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
-  changeGroupYear: Group;
+  changeGroupModule: Group;
   generateStudentFeedback: Scalars["String"];
 };
 
@@ -101,12 +101,12 @@ export type MutationCreateGroupArgs = {
 
 export type MutationCreateCollectionArgs = {
   data: CreateCollectionInput;
-  classYearId: Scalars["ID"];
+  moduleId: Scalars["ID"];
 };
 
 export type MutationCreateStudentArgs = {
   data: CreateStudentInput;
-  classYearId: Scalars["ID"];
+  moduleId: Scalars["ID"];
 };
 
 export type MutationUpdateEvaluationsArgs = {
@@ -145,15 +145,14 @@ export type MutationDeleteCollectionArgs = {
   collectionId: Scalars["ID"];
 };
 
-export type MutationChangeGroupYearArgs = {
-  newYearCode: ClassYearCode;
-  groupId: Scalars["ID"];
-  transferEvaluations?: InputMaybe<Scalars["Boolean"]>;
+export type MutationChangeGroupModuleArgs = {
+  data: ChangeGroupModuleInput;
+  groupId: Scalars["String"];
 };
 
 export type MutationGenerateStudentFeedbackArgs = {
   studentId: Scalars["ID"];
-  classYearId: Scalars["ID"];
+  moduleId: Scalars["ID"];
 };
 
 export type AppMetadata = {
@@ -179,6 +178,13 @@ export type LoginResult = {
   teacher: Teacher;
 };
 
+export type TranslatedString = {
+  __typename?: "TranslatedString";
+  fi: Scalars["String"];
+  en?: Maybe<Scalars["String"]>;
+  se?: Maybe<Scalars["String"]>;
+};
+
 export enum LearningObjectiveType {
   BEHAVIOUR = "BEHAVIOUR",
   SKILLS = "SKILLS",
@@ -189,15 +195,15 @@ export enum LearningObjectiveType {
 export type LearningObjective = {
   __typename?: "LearningObjective";
   code: Scalars["ID"];
-  label: Scalars["String"];
-  description: Scalars["String"];
+  label: TranslatedString;
+  description: TranslatedString;
   type: LearningObjectiveType;
 };
 
 export type Subject = {
   __typename?: "Subject";
   code: Scalars["ID"];
-  label: Scalars["String"];
+  label: TranslatedString;
   environments: Array<Environment>;
 };
 
@@ -205,7 +211,7 @@ export type Environment = {
   __typename?: "Environment";
   code: Scalars["ID"];
   color: Scalars["String"];
-  label: Scalars["String"];
+  label: TranslatedString;
   subject: Subject;
 };
 
@@ -218,20 +224,21 @@ export type Group = {
   teacher: Teacher;
   updatedAt: Scalars["DateTime"];
   archived: Scalars["Boolean"];
-  currentClassYear: ClassYear;
-  classYears: Array<ClassYear>;
+  currentModule: Module;
+  modules: Array<Module>;
 };
 
-export type ClassYearInfo = {
-  __typename?: "ClassYearInfo";
-  code: ClassYearCode;
-  label: Scalars["String"];
+export type ModuleInfo = {
+  __typename?: "ModuleInfo";
+  educationLevel: EducationLevel;
+  learningObjectiveGroupKey: Scalars["String"];
+  label: TranslatedString;
 };
 
-export type ClassYear = {
-  __typename?: "ClassYear";
+export type Module = {
+  __typename?: "Module";
   id: Scalars["ID"];
-  info: ClassYearInfo;
+  info: ModuleInfo;
   evaluationCollections: Array<EvaluationCollection>;
   students: Array<Student>;
   group: Group;
@@ -245,7 +252,7 @@ export type EvaluationCollection = {
   environment: Environment;
   description?: Maybe<Scalars["String"]>;
   evaluations: Array<Evaluation>;
-  classYear: ClassYear;
+  module: Module;
   learningObjectives: Array<LearningObjective>;
 };
 
@@ -266,10 +273,10 @@ export type Student = {
   id: Scalars["ID"];
   name: Scalars["String"];
   group: Group;
-  currentClassEvaluations: Array<Evaluation>;
+  currentModuleEvaluations: Array<Evaluation>;
 };
 
-export enum ClassYearCode {
+export enum EducationLevel {
   PRIMARY_FIRST = "PRIMARY_FIRST",
   PRIMARY_SECOND = "PRIMARY_SECOND",
   PRIMARY_THIRD = "PRIMARY_THIRD",
@@ -279,14 +286,8 @@ export enum ClassYearCode {
   PRIMARY_SEVENTH = "PRIMARY_SEVENTH",
   PRIMARY_EIGHTH = "PRIMARY_EIGHTH",
   PRIMARY_NINTH = "PRIMARY_NINTH",
-  HIGH_SCHOOL_FIRST = "HIGH_SCHOOL_FIRST",
-  HIGH_SCHOOL_SECOND = "HIGH_SCHOOL_SECOND",
-  HIGH_SCHOOL_THIRD = "HIGH_SCHOOL_THIRD",
-  HIGH_SCHOOL_FOURTH = "HIGH_SCHOOL_FOURTH",
-  HIGH_SCHOOL_FIFTH = "HIGH_SCHOOL_FIFTH",
-  HIGH_SCHOOL_OTHER = "HIGH_SCHOOL_OTHER",
-  VOCATIONAL_OBLIGATORY = "VOCATIONAL_OBLIGATORY",
-  VOCATIONAL_VOLUNTARY = "VOCATIONAL_VOLUNTARY",
+  HIGH_SCHOOL = "HIGH_SCHOOL",
+  VOCATIONAL = "VOCATIONAL",
 }
 
 export type CreateTeacherInput = {
@@ -298,7 +299,8 @@ export type CreateGroupInput = {
   name: Scalars["String"];
   teacherId: Scalars["ID"];
   subjectCode: Scalars["ID"];
-  yearCode: ClassYearCode;
+  educationLevel: EducationLevel;
+  learningObjectiveGroupKey: Scalars["String"];
   students: Array<CreateStudentInput>;
 };
 
@@ -349,6 +351,11 @@ export type UpdateEvaluationInput = {
   behaviourRating?: InputMaybe<Scalars["Int"]>;
   notes?: InputMaybe<Scalars["String"]>;
   isStellar?: InputMaybe<Scalars["Boolean"]>;
+};
+
+export type ChangeGroupModuleInput = {
+  newEducationLevel: EducationLevel;
+  newLearningObjectiveGroupKey: Scalars["String"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -432,17 +439,18 @@ export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, "teacher"> & { teacher: ResolversTypes["Teacher"] }>;
+  TranslatedString: ResolverTypeWrapper<TranslatedString>;
   LearningObjectiveType: LearningObjectiveType;
   LearningObjective: ResolverTypeWrapper<LearningObjective>;
-  Subject: ResolverTypeWrapper<SubjectPrisma>;
+  Subject: ResolverTypeWrapper<SubjectMinimalPrisma>;
   Environment: ResolverTypeWrapper<EnvironmentPrisma>;
   Group: ResolverTypeWrapper<GroupPrisma>;
-  ClassYearInfo: ResolverTypeWrapper<ClassYearInfo>;
-  ClassYear: ResolverTypeWrapper<ClassYearPrisma>;
+  ModuleInfo: ResolverTypeWrapper<ModuleInfo>;
+  Module: ResolverTypeWrapper<ModulePrisma>;
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
   Student: ResolverTypeWrapper<StudentPrisma>;
-  ClassYearCode: ClassYearCode;
+  EducationLevel: EducationLevel;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
   UpdateGroupInput: UpdateGroupInput;
@@ -452,6 +460,7 @@ export type ResolversTypes = {
   UpdateCollectionInput: UpdateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
   UpdateEvaluationInput: UpdateEvaluationInput;
+  ChangeGroupModuleInput: ChangeGroupModuleInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -469,12 +478,13 @@ export type ResolversParentTypes = {
   AuthPayload: Omit<AuthPayload, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
   Teacher: UserInfoPrisma;
   LoginResult: Omit<LoginResult, "teacher"> & { teacher: ResolversParentTypes["Teacher"] };
+  TranslatedString: TranslatedString;
   LearningObjective: LearningObjective;
-  Subject: SubjectPrisma;
+  Subject: SubjectMinimalPrisma;
   Environment: EnvironmentPrisma;
   Group: GroupPrisma;
-  ClassYearInfo: ClassYearInfo;
-  ClassYear: ClassYearPrisma;
+  ModuleInfo: ModuleInfo;
+  Module: ModulePrisma;
   EvaluationCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
   Student: StudentPrisma;
@@ -487,6 +497,7 @@ export type ResolversParentTypes = {
   UpdateCollectionInput: UpdateCollectionInput;
   CreateEvaluationInput: CreateEvaluationInput;
   UpdateEvaluationInput: UpdateEvaluationInput;
+  ChangeGroupModuleInput: ChangeGroupModuleInput;
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
@@ -523,9 +534,9 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
     ResolversTypes["EvaluationCollection"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateCollectionArgs, "data" | "classYearId">
+    RequireFields<MutationCreateCollectionArgs, "data" | "moduleId">
   >;
-  createStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationCreateStudentArgs, "data" | "classYearId">>;
+  createStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationCreateStudentArgs, "data" | "moduleId">>;
   updateEvaluations?: Resolver<ResolversTypes["Int"], ParentType, ContextType, RequireFields<MutationUpdateEvaluationsArgs, "data" | "collectionId">>;
   updateCollection?: Resolver<
     ResolversTypes["EvaluationCollection"],
@@ -544,12 +555,12 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
     ContextType,
     RequireFields<MutationDeleteCollectionArgs, "collectionId">
   >;
-  changeGroupYear?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupYearArgs, "newYearCode" | "groupId">>;
+  changeGroupModule?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupModuleArgs, "data" | "groupId">>;
   generateStudentFeedback?: Resolver<
     ResolversTypes["String"],
     ParentType,
     ContextType,
-    RequireFields<MutationGenerateStudentFeedbackArgs, "studentId" | "classYearId">
+    RequireFields<MutationGenerateStudentFeedbackArgs, "studentId" | "moduleId">
   >;
 };
 
@@ -585,20 +596,30 @@ export type LoginResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TranslatedStringResolvers<
+  ContextType = CustomContext,
+  ParentType extends ResolversParentTypes["TranslatedString"] = ResolversParentTypes["TranslatedString"]
+> = {
+  fi?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  en?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  se?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type LearningObjectiveResolvers<
   ContextType = CustomContext,
   ParentType extends ResolversParentTypes["LearningObjective"] = ResolversParentTypes["LearningObjective"]
 > = {
   code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
   type?: Resolver<ResolversTypes["LearningObjectiveType"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SubjectResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Subject"] = ResolversParentTypes["Subject"]> = {
   code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
   environments?: Resolver<Array<ResolversTypes["Environment"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -609,7 +630,7 @@ export type EnvironmentResolvers<
 > = {
   code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   color?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
   subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -622,26 +643,24 @@ export type GroupResolvers<ContextType = CustomContext, ParentType extends Resol
   teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   archived?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  currentClassYear?: Resolver<ResolversTypes["ClassYear"], ParentType, ContextType>;
-  classYears?: Resolver<Array<ResolversTypes["ClassYear"]>, ParentType, ContextType>;
+  currentModule?: Resolver<ResolversTypes["Module"], ParentType, ContextType>;
+  modules?: Resolver<Array<ResolversTypes["Module"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ClassYearInfoResolvers<
+export type ModuleInfoResolvers<
   ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["ClassYearInfo"] = ResolversParentTypes["ClassYearInfo"]
+  ParentType extends ResolversParentTypes["ModuleInfo"] = ResolversParentTypes["ModuleInfo"]
 > = {
-  code?: Resolver<ResolversTypes["ClassYearCode"], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  educationLevel?: Resolver<ResolversTypes["EducationLevel"], ParentType, ContextType>;
+  learningObjectiveGroupKey?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ClassYearResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["ClassYear"] = ResolversParentTypes["ClassYear"]
-> = {
+export type ModuleResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Module"] = ResolversParentTypes["Module"]> = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  info?: Resolver<ResolversTypes["ClassYearInfo"], ParentType, ContextType>;
+  info?: Resolver<ResolversTypes["ModuleInfo"], ParentType, ContextType>;
   evaluationCollections?: Resolver<Array<ResolversTypes["EvaluationCollection"]>, ParentType, ContextType>;
   students?: Resolver<Array<ResolversTypes["Student"]>, ParentType, ContextType>;
   group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
@@ -658,7 +677,7 @@ export type EvaluationCollectionResolvers<
   environment?: Resolver<ResolversTypes["Environment"], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   evaluations?: Resolver<Array<ResolversTypes["Evaluation"]>, ParentType, ContextType>;
-  classYear?: Resolver<ResolversTypes["ClassYear"], ParentType, ContextType>;
+  module?: Resolver<ResolversTypes["Module"], ParentType, ContextType>;
   learningObjectives?: Resolver<Array<ResolversTypes["LearningObjective"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -682,7 +701,7 @@ export type StudentResolvers<ContextType = CustomContext, ParentType extends Res
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
-  currentClassEvaluations?: Resolver<Array<ResolversTypes["Evaluation"]>, ParentType, ContextType>;
+  currentModuleEvaluations?: Resolver<Array<ResolversTypes["Evaluation"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -696,12 +715,13 @@ export type Resolvers<ContextType = CustomContext> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   Teacher?: TeacherResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
+  TranslatedString?: TranslatedStringResolvers<ContextType>;
   LearningObjective?: LearningObjectiveResolvers<ContextType>;
   Subject?: SubjectResolvers<ContextType>;
   Environment?: EnvironmentResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
-  ClassYearInfo?: ClassYearInfoResolvers<ContextType>;
-  ClassYear?: ClassYearResolvers<ContextType>;
+  ModuleInfo?: ModuleInfoResolvers<ContextType>;
+  Module?: ModuleResolvers<ContextType>;
   EvaluationCollection?: EvaluationCollectionResolvers<ContextType>;
   Evaluation?: EvaluationResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;

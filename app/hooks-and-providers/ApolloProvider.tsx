@@ -51,7 +51,7 @@ const cache = new InMemoryCache({
     AuthPayload: {
       keyFields: ["accessToken"],
     },
-    ClassYearInfo: {
+    ModuleInfo: {
       keyFields: false,
     },
     LearningObjective: {
@@ -63,7 +63,7 @@ const cache = new InMemoryCache({
     Environment: {
       keyFields: ["code"],
     },
-    ClassYear: {
+    Module: {
       fields: {
         info: {
           merge: true,

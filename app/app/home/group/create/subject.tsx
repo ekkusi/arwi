@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { getSubjects, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { SubjectMinimal } from "arwi-backend/src/types/subject";
+import { getSubjects } from "arwi-backend/src/utils/subjectUtils";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../../../../components/primitives/CButton";
@@ -32,7 +33,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
               {subjects.map((item) => (
                 <CButton
                   key={item.code}
-                  title={item.label}
+                  title={item.label.fi}
                   variant="outline"
                   colorScheme={item.code === group.subject?.code ? "darkgray" : "lightgray"}
                   style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
@@ -76,7 +77,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
               <CButton style={{}} onPress={() => navigation.goBack()}>
                 <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
               </CButton>
-              <CButton disabled={group.subject === undefined} style={{}} onPress={() => navigation.navigate("students")}>
+              <CButton disabled={group.subject === undefined} style={{}} onPress={() => navigation.navigate("general-info")}>
                 <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
               </CButton>
             </CView>

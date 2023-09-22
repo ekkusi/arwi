@@ -1,10 +1,13 @@
 import { compare, hash } from "bcryptjs";
+import { v4 as uuidv4 } from "uuid";
+import { getEnvironment } from "../utils/subjectUtils";
 import { generateStudentSummary } from "../utils/openAI";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
 import { mapUpdateCollectionInput, mapUpdateEvaluationInput, mapUpdateGroupInput, mapUpdateStudentInput } from "../utils/mappers";
 import {
+  validateChangeGroupLevelInput,
   validateCreateCollectionInput,
   validateCreateGroupInput,
   validateCreateStudentInput,
@@ -73,35 +76,40 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   createGroup: async (_, { data }, { prisma }) => {
     await validateCreateGroupInput(data);
-    const { students: studentInputs, yearCode, ...rest } = data;
-    const group = await prisma.group.create({
+    const { students: studentInputs, educationLevel, learningObjectiveGroupKey, ...rest } = data;
+    const groupId = uuidv4();
+    const moduleId = uuidv4();
+    const groupCreate = prisma.group.create({
       data: {
         ...rest,
-        currentYearCode: yearCode,
+        id: groupId,
+        currentModuleId: moduleId,
       },
     });
-    await prisma.classYear.create({
+    const moduleCreate = prisma.module.create({
       data: {
-        code: yearCode,
-        groupId: group.id,
+        id: moduleId,
+        educationLevel,
+        learningObjectiveGroupKey,
+        groupId,
         students: {
           create: studentInputs.map((it) => ({
-            groupId: group.id,
+            groupId,
             ...it,
           })),
         },
       },
     });
+    const [group] = await prisma.$transaction([groupCreate, moduleCreate]);
     return group;
   },
-  createCollection: async (_, { data, classYearId }, { prisma }) => {
-    await validateCreateCollectionInput(data, classYearId);
+  createCollection: async (_, { data, moduleId }, { prisma }) => {
+    await validateCreateCollectionInput(data, moduleId);
     const { evaluations, ...rest } = data;
     const createdCollection = await prisma.evaluationCollection.create({
       data: {
         ...rest,
-        classYearId,
-        type: "",
+        moduleId,
         // Create evaluations if there are some in input
         evaluations: evaluations
           ? {
@@ -121,26 +129,26 @@ const resolvers: MutationResolvers<CustomContext> = {
         updatedAt: new Date(),
       },
       where: {
-        classYears: {
+        modules: {
           some: {
-            id: classYearId,
+            id: moduleId,
           },
         },
       },
     });
     return createdCollection;
   },
-  createStudent: async (_, { data, classYearId }, { prisma }) => {
-    await validateCreateStudentInput(data, classYearId);
-    const classYear = await prisma.classYear.findUniqueOrThrow({
-      where: { id: classYearId },
+  createStudent: async (_, { data, moduleId }, { prisma }) => {
+    await validateCreateStudentInput(data, moduleId);
+    const module = await prisma.module.findUniqueOrThrow({
+      where: { id: moduleId },
     });
     const createdStudent = await prisma.student.create({
       data: {
         ...data,
-        groupId: classYear.groupId,
-        classYears: {
-          connect: { id: classYearId },
+        groupId: module.groupId,
+        modules: {
+          connect: { id: moduleId },
         },
       },
     });
@@ -229,10 +237,11 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return collection;
   },
-  changeGroupYear: async (_, { groupId, newYearCode, transferEvaluations }, { prisma, user }) => {
+  changeGroupModule: async (_, { data, groupId }, { prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
-    let newYear = await prisma.classYear.findFirst({
-      where: { groupId, code: newYearCode },
+    await validateChangeGroupLevelInput(data, groupId);
+    let newYear = await prisma.module.findFirst({
+      where: { groupId, educationLevel: data.newEducationLevel, learningObjectiveGroupKey: data.newLearningObjectiveGroupKey },
     });
     const group = await prisma.group.findUniqueOrThrow({
       where: { id: groupId },
@@ -241,23 +250,17 @@ const resolvers: MutationResolvers<CustomContext> = {
       // Copy students from current year to new year
       const currentYearStudents = await prisma.student.findMany({
         where: {
-          classYears: {
+          modules: {
             some: {
-              AND: [
-                {
-                  code: group.currentYearCode,
-                },
-                {
-                  groupId: group.id,
-                },
-              ],
+              id: group.currentModuleId,
             },
           },
         },
       });
-      newYear = await prisma.classYear.create({
+      newYear = await prisma.module.create({
         data: {
-          code: newYearCode,
+          educationLevel: data.newEducationLevel,
+          learningObjectiveGroupKey: data.newLearningObjectiveGroupKey,
           groupId,
           students: {
             connect: currentYearStudents.map((it) => ({ id: it.id })),
@@ -265,35 +268,15 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       });
     }
-    // Transfer collections to new class year if transferEvaluations is passed
-    if (transferEvaluations === true) {
-      await prisma.evaluationCollection.updateMany({
-        where: {
-          classYear: {
-            AND: [
-              {
-                code: group.currentYearCode,
-              },
-              {
-                groupId: group.id,
-              },
-            ],
-          },
-        },
-        data: {
-          classYearId: newYear.id,
-        },
-      });
-    }
     const updatedGroup = await prisma.group.update({
       data: {
-        currentYearCode: newYearCode,
+        currentModuleId: newYear.id,
       },
       where: { id: groupId },
     });
     return updatedGroup;
   },
-  generateStudentFeedback: async (_, { studentId, classYearId }, { user, prisma }) => {
+  generateStudentFeedback: async (_, { studentId, moduleId }, { user, prisma }) => {
     await checkAuthenticatedByStudent(user, studentId);
     const student = await prisma.student.findUnique({
       where: { id: studentId },
@@ -303,7 +286,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       where: {
         studentId,
         evaluationCollection: {
-          classYearId,
+          moduleId,
         },
       },
       include: {
@@ -317,7 +300,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     const mappedEvaluations = evaluations.map((it) => ({
       ...it,
-      environment: it.evaluationCollection.environmentCode,
+      environmentLabel: getEnvironment(it.evaluationCollection.environmentCode)?.label.fi,
       date: it.evaluationCollection.date,
     }));
     const summary = await generateStudentSummary(mappedEvaluations);

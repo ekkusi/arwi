@@ -1,4 +1,4 @@
-import { LearningObjective, SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { LearningObjective, SubjectMinimal } from "arwi-backend/src/types/subject";
 import { ImageSourcePropType } from "react-native";
 import { LearningObjectiveType } from "../gql/graphql";
 
@@ -114,7 +114,7 @@ export const formatRatingKey = (rating: number) => {
 };
 
 export const formatObjectiveLabel = (learningObjective: LearningObjective) => {
-  return `${learningObjective.code}: ${learningObjective.label}`;
+  return `${learningObjective.code}: ${learningObjective.label.fi}`;
 };
 
 export const formatObjectiveTypeLabel = (type: LearningObjectiveType) => {

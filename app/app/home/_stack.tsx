@@ -105,7 +105,7 @@ export default function HomeStack() {
         name="collection"
         component={CollectionView}
         options={({ route, navigation }) => ({
-          title: `${route.params.date}: ${route.params.environmentLabel}`,
+          title: `${route.params.date}: ${route.params.environmentLabel.fi}`,
           headerRight: () => (route.params.archived ? undefined : <CollectionHeaderRightButton id={route.params.id} navigation={navigation} />),
         })}
       />

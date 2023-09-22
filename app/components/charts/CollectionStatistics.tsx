@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment, EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
-import { analyzeEvaluations, analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
+import { analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
 import CircledNumber from "../CircledNumber";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
-import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
+import { LineChartBaseProps } from "./LineChartBase";
 import MovingAverageLineChart, { EvaluationDataType } from "./MovingAverageLineChart";
 import StatisticsFilterMenu from "./StatisticsFilterMenu";
 
@@ -16,7 +16,9 @@ const CollectionsLineChart_Collection_Fragment = graphql(`
     id
     date
     environment {
-      label
+      label {
+        fi
+      }
       code
     }
     evaluations {

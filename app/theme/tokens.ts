@@ -1,3 +1,5 @@
+// NOTE: Logo font is Aileron thin
+
 export const COLOR_PALETTE = {
   red: {
     50: "#FFF5F5",

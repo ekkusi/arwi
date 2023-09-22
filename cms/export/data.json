@@ -919,7 +919,7 @@
           "longDescription": {
             "fi": "Ohjata oppilasta kehittämään itsetuntemustaan, omien arvojen ja asenteiden sekä kehon ja mielen viestien tunnistamista ja tunnistamaan ja säätelemään käyttäytymistään, oppimistaan ja opiskeluaan tukevia tekijöitä "
           },
-          "type": "NOT_EVALUATED"
+          "type": "BEHAVIOUR"
         },
         {
           "code": "T4",
@@ -1099,8 +1099,294 @@
         }
       }
     ],
+    "highSchoolModules": [
+      {
+        "code": "TE_HS_MODULE_TE1",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa kuvailla ihmisen voimavaroja ja analysoidan niiden merkitystä terveyteen"
+            },
+            "longDescription": {
+              "fi": "pystyy kuvailemaan ja jäsentelemään keskeisiä ihmisen voimavaroja ja terveyttä määrittäviä tekijöitä sekä analysoimaan niiden yhteyksiä ja vaikutusmekanismeja terveyteen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa selittää terveyskulttuurien ilmiöitä ja arvioida niiden terveysvaikutuksia"
+            },
+            "longDescription": {
+              "fi": "osaa selittää erilaisten terveyskulttuurien ilmiöiden muodostumista ja arvioida niiden merkitystä terveydelle sekä soveltaa keskeisiä sosiaalipsykologisia malleja ja teorioita elintapojen omaksumisen selittämisessä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Omien elintapojen vaikutusten analysointi"
+            },
+            "longDescription": {
+              "fi": " tunnistaa omiin elintapoihinsa vaikuttavia tekijöitä ja pystyy arvioimaan elintapavalintojen merkitystä omalle ja lähiympäristön terveydelle sekä antamaan perusteltuja ehdotuksia siitä, miten terveyttä edistäviä elintapoja voidaan ylläpitää ja vaarantavia ehkäistä."
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "TE1 (lukion 1.moduuli)"
+        }
+      },
+      {
+        "code": "TE_HS_MODULE_TE2",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Tietää tutkimustiedon hankkimisen periaatteet ja osaa soveltaa niitä"
+            },
+            "longDescription": {
+              "fi": "tietää tutkimustiedon hankkimisen periaatteista ja tutkimusprosessin vaiheista sekä osaa soveltaa näitä tietoja ja kuvata perustellen, miten terveyteen, terveyskäyttäytymiseen ja toimintakykyyn liittyvistä aiheista voidaan saada luotettavaa ja monipuolista tutkimustietoa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa hakea tietoa ja verrata lähteiden luotettavuutta"
+            },
+            "longDescription": {
+              "fi": "osaa hakea tietoa ja pystyy vertailemaan eri lähteiden luotettavuutta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa kuvata ja analysoida terveysviestinnän muotoja"
+            },
+            "longDescription": {
+              "fi": "osaa kuvata terveysviestinnän muotoja ja vaikutuskeinoja sekä analysoida terveysviestinnän merkitystä ihmisten terveyskäsityksille ja terveydelle"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa analysoida ympäristön vaikutuksia terveydelle"
+            },
+            "longDescription": {
+              "fi": "osaa esitellä ja analysoida fyysisen ja psykososiaalisen ympäristön yhteyksiä ja vaikutuksia terveydelle sekä arvioida omien elintapojen ja kulutustottumusten merkitystä ympäristön terveydelle ja terveellisyydelle"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa eritellä riippuvuuden muotoja ja analysoida niiden haittoja"
+            },
+            "longDescription": {
+              "fi": "osaa eritellä riippuvuuden muotoja ja niiden syntyyn vaikuttavia tekijöitä sekä analysoida riippuvuuksiin liittyviä terveys- ja muita haittoja."
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "TE2 (lukion 2. moduuli)"
+        }
+      },
+      {
+        "code": "TE_HS_MODULE_TE3",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Yhteiskunnan kehityksen vaikutus kansanterveyteen"
+            },
+            "longDescription": {
+              "fi": "osaa kuvata ja analysoida yhteiskunnallisten olosuhteiden, sosiaali- ja terveyspolitiikan ja muun yhteiskuntapolitiikan, tieteen sekä teknologian muutosta, kehitystä ja yhteyksiä väestön terveyteen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Tarttumattomien ja tartuntataitien riskitekijät, ehkäisy sekä sairauden vaikutukset"
+            },
+            "longDescription": {
+              "fi": "pystyy erittelemään keskeisten tarttumattomien ja tartuntatautien riskitekijöitä, esittämään perusteltuja ratkaisuja näiden ehkäisemiseksi sekä arvioimaan sairauksien ja tautien merkitystä yksilölle ja yhteiskunnalle sekä elintapojen vaikutuksia tarttumattomien ja tartuntatautien näkökulmasta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Sosiaali- ja terveyspalveluiden toiminta ja merkitys yhteiskunnassa"
+            },
+            "longDescription": {
+              "fi": " osaa esitellä perustellen, mihin sosiaali- tai terveyspalveluihin yksilö voi hakeutua erilaisissa tilanteissa, arvioida kriittisesti palvelujen järjestämistä ja tuottamista sekä arvioida sosiaali- ja terveyspalvelujen, itsehoidon ja omahoidon merkitystä terveydelle"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa analysoida terveyden eettisiä kysymyksiä"
+            },
+            "longDescription": {
+              "fi": "osaa analysoida terveyteen ja sairauksiin liittyviä eettisiä kysymyksiä, kuvata ja arvioida terveyteen ja terveyden eriarvoisuuteen vaikuttavia tekijöitä Suomessa ja globaalisti sekä analysoida terveyserojen kaventamiseen vaikuttavia tekijöitä."
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "TE3 (lukion 3. moduuli)"
+        }
+      }
+    ],
     "name": {
       "fi": "Terveystieto"
-    }
+    },
+    "vocationalSchoolModules": [
+      {
+        "code": "TE_VOC_MODULE_AMM",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Oppilas etsii tietoa terveytensä edistämiseksi"
+            },
+            "longDescription": {
+              "fi": "Oppilas etsii monipuolista tietoa ikäluokkansa terveyseroista ja mahdollisuuksista oman terveytensä ja toimintakykynsä edistämiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Suunnitelman laatiminen oman terveyden edistämiseen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija laatii itselleen tilannekohtaisesti päivitettävän ja monipuolisen suunnitelman terveytensä ja hyvinvointinsa edistämiseksi ottaen siinä huomioon liikunnan, ravitsemuksen, palautumisen, unen, mielen hyvinvoinnin, nikotiinittomuuden ja päihteettömyyden, seksuaaliterveyden ja ihmissuhteiden merkityksen opiskelu- ja työkyvyn ylläpitämiseksi"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Edistää omaa terveyttään ja arvioida sitä"
+            },
+            "longDescription": {
+              "fi": "Opiskelija edistää terveyttään ja hyvinvointiaan aktiivisesti ja arvioi realistisesti suunnitelman toteutumista ja tavoitteiden saavuttamista hyödyntäen arvioinnissa myös muilta saamaansa palautetta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Turvallinen toiminta"
+            },
+            "longDescription": {
+              "fi": "Opiskelija toimii sovittujen turvallisuutta ja terveyttä edistävien toimintaohjeiden mukaisesti yhteistyössä muiden kanssa ja arvioi toimintatapojensa kehittämistarpeita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Ottaa huomioon ammatin kuormittavuustekijät"
+            },
+            "longDescription": {
+              "fi": "Opiskelija ottaa työssään monipuolisesti huomioon oman ammattinsa kuormittavuustekijät ja edistää työkykyään"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Ergonomian ymmärtäminen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija selvittää ergonomian vaikutukset työkykyyn erilaisissa työympäristöissä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T7",
+            "label": {
+              "fi": "Edistää hyvinvointia liikunnan avulla"
+            },
+            "longDescription": {
+              "fi": "Opiskelu- ja työkyvyn sekä hyvinvoinnin edistäminen liikunnan avulla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T8",
+            "label": {
+              "fi": "Tieto-osaamisen hyödyntäminen terveyden edistämisessä"
+            },
+            "longDescription": {
+              "fi": "Opiskelija hakee monipuolisesti tietoa liikkumisen hyödyistä ja vaatimuksista terveydelle sekä opiskelu- ja työkyvylle ja ottaa tiedot huomioon fyysistä toimintakykyä edistävässä suunnitelmassaan huomioiden myös alakohtaiset vaatimukset opiskelu- ja työkyvyn ylläpitoon"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T9",
+            "label": {
+              "fi": "Fyysisten ominaisuuksien ja ergonomiataitojen kehittäminen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija kehittää opiskelu- ja työkyvyn vaatimia fyysisiä ominaisuuksiaan ja ergonomiataitojaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T10",
+            "label": {
+              "fi": "Liikkua parhaansa yrittäen"
+            },
+            "longDescription": {
+              "fi": "Opiskelija liikkuu parhaansa yrittäen kaikissa liikuntatilanteissa edistäen opiskelu- ja työkykyään"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T11",
+            "label": {
+              "fi": "Huolellinen toiminta"
+            },
+            "longDescription": {
+              "fi": "Opiskelija toimii huolellisesti ja ehkäisee tapaturmien syntymistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T12",
+            "label": {
+              "fi": "Ensiaputaidot"
+            },
+            "longDescription": {
+              "fi": "Opiskelija antaa ensiapua ja hakee oikea-aikaisesti lisäapua, jos tarvetta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T13",
+            "label": {
+              "fi": "Ehkäistä lisätapaturmat"
+            },
+            "longDescription": {
+              "fi": "Opiskelija estää toiminnallaan lisätapaturmien syntymistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "Ammatillinen koulutus pakollinen"
+        }
+      }
+    ]
   }
 ]
