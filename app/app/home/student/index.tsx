@@ -30,17 +30,22 @@ const StudentPage_GetStudent_Query = graphql(`
         name
         subject {
           code
-          label
+          label {
+            fi
+          }
         }
-        currentClassYear {
+        currentModule {
           id
           info {
-            code
-            label
+            educationLevel
+            learningObjectiveGroupKey
+            label {
+              fi
+            }
           }
         }
       }
-      currentClassEvaluations {
+      currentModuleEvaluations {
         id
         notes
         wasPresent
@@ -51,7 +56,9 @@ const StudentPage_GetStudent_Query = graphql(`
           id
           environment {
             code
-            label
+            label {
+              fi
+            }
           }
         }
         ...EvaluationsAccordion_Evaluation
@@ -80,13 +87,13 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     behaviourMode,
     behaviourMeanByEnvironments,
   } = useMemo(() => {
-    const evaluations = data?.getStudent.currentClassEvaluations ?? [];
+    const evaluations = data?.getStudent.currentModuleEvaluations ?? [];
     return analyzeEvaluations([...evaluations]);
   }, [data]);
 
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
-  const evaluations = student.currentClassEvaluations;
+  const evaluations = student.currentModuleEvaluations;
 
   return (
     <Layout>
@@ -96,8 +103,8 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             <CView>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{student.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.name}</CText>
-              <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.currentClassYear.info.label}</CText>
-              <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.subject.label}</CText>
+              <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.currentModule.info.label.fi}</CText>
+              <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.subject.label.fi}</CText>
               <CText>
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>{presencesAmount} </CText>
                 <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("evaluation", "arviointia", { count: presencesAmount })}</CText>
@@ -189,7 +196,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
           <EvaluationsAccordion
             allowEditing={!archived}
-            evaluations={student.currentClassEvaluations}
+            evaluations={student.currentModuleEvaluations}
             onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
           />
           {!archived && (

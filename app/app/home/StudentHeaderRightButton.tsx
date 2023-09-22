@@ -24,19 +24,24 @@ const StudentHeaderRightButton_DeleteStudent_Mutation = graphql(`
         archived
         updatedAt
         subject {
-          label
+          label {
+            fi
+          }
           code
         }
-        currentClassYear {
+        currentModule {
           id
           info {
-            code
-            label
+            educationLevel
+            learningObjectiveGroupKey
+            label {
+              fi
+            }
           }
           students {
             id
             name
-            currentClassEvaluations {
+            currentModuleEvaluations {
               id
               wasPresent
             }
@@ -45,14 +50,20 @@ const StudentHeaderRightButton_DeleteStudent_Mutation = graphql(`
             id
             date
             environment {
-              label
+              label {
+                fi
+              }
               code
               color
             }
             learningObjectives {
               code
-              label
-              description
+              label {
+                fi
+              }
+              description {
+                fi
+              }
               type
             }
           }

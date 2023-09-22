@@ -1,23 +1,29 @@
 import ValidationError from "../errors/ValidationError";
 import prisma from "../prismaClient";
 import {
-  ClassYearCode,
+  ChangeGroupModuleInput,
   CreateCollectionInput,
   CreateGroupInput,
   CreateStudentInput,
+  EducationLevel,
   LearningObjectiveType,
   UpdateCollectionInput,
   UpdateEvaluationInput,
   UpdateStudentInput,
 } from "../types";
-import { getEnvironment, getLearningObjectives, getSubject } from "./subjectUtils";
+import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject } from "./subjectUtils";
 
 export const validateCreateGroupInput = async ({ subjectCode }: CreateGroupInput) => {
   if (!getSubject(subjectCode)) throw new ValidationError(`Aihetta koodilla '${subjectCode}' ei ole olemassa.`);
 };
 
-export const validateLearningObjectives = (subjectCode: string, yearCode: ClassYearCode, learningObjectiveCodes: string[]) => {
-  const learningObjectives = getLearningObjectives(subjectCode, yearCode);
+export const validateLearningObjectives = (
+  subjectCode: string,
+  educationLevel: EducationLevel,
+  learningObjectiveGroupKey: string,
+  learningObjectiveCodes: string[]
+) => {
+  const learningObjectives = getLearningObjectives(subjectCode, educationLevel, learningObjectiveGroupKey);
   if (
     !learningObjectiveCodes.every((code) =>
       learningObjectives.some((objective) => objective.code === code && objective.type !== LearningObjectiveType.NOT_EVALUATED)
@@ -26,22 +32,29 @@ export const validateLearningObjectives = (subjectCode: string, yearCode: ClassY
     throw new ValidationError(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`);
 };
 
-export const validateCreateCollectionInput = async ({ environmentCode, learningObjectiveCodes }: CreateCollectionInput, classYearId: string) => {
+export const validateCreateCollectionInput = async ({ environmentCode, learningObjectiveCodes }: CreateCollectionInput, moduleId: string) => {
   if (!getEnvironment(environmentCode)) throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
   if (learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({
       where: {
-        currentClassYearId: classYearId,
+        currentModuleId: moduleId,
       },
       include: {
-        currentClassYear: {
+        currentModule: {
           select: {
-            code: true,
+            educationLevel: true,
+            learningObjectiveGroupKey: true,
           },
         },
       },
     });
-    validateLearningObjectives(group.subjectCode, ClassYearCode[group.currentClassYear.code], learningObjectiveCodes);
+    const { currentModule } = group;
+    validateLearningObjectives(
+      group.subjectCode,
+      currentModule.educationLevel as EducationLevel,
+      currentModule.learningObjectiveGroupKey,
+      learningObjectiveCodes
+    );
   }
 };
 
@@ -82,26 +95,33 @@ export const validateUpdateCollectionInput = async (
   if (learningObjectiveCodes && learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({
       where: {
-        currentClassYear: {
+        currentModule: {
           evaluationCollections: {
             some: { id: collectionId },
           },
         },
       },
       include: {
-        currentClassYear: {
+        currentModule: {
           select: {
-            code: true,
+            educationLevel: true,
+            learningObjectiveGroupKey: true,
           },
         },
       },
     });
-    validateLearningObjectives(group.subjectCode, ClassYearCode[group.currentClassYear.code], learningObjectiveCodes);
+    const { currentModule } = group;
+    validateLearningObjectives(
+      group.subjectCode,
+      currentModule.educationLevel as EducationLevel,
+      currentModule.learningObjectiveGroupKey,
+      learningObjectiveCodes
+    );
   }
   if (evaluations) await validateUpdateEvaluationsInput(evaluations, collectionId);
 };
 
-export const validateCreateStudentInput = async (data: CreateStudentInput, classYearId: string) => {
+export const validateCreateStudentInput = async (data: CreateStudentInput, moduleId: string) => {
   // Find if there is a student with the same name in the same group
   const matchingStudent = await prisma.student.findFirst({
     where: {
@@ -109,7 +129,7 @@ export const validateCreateStudentInput = async (data: CreateStudentInput, class
         {
           name: data.name,
         },
-        { classYears: { some: { id: classYearId } } },
+        { modules: { some: { id: moduleId } } },
       ],
     },
   });
@@ -130,4 +150,17 @@ export const validateUpdateStudentInput = async (data: UpdateStudentInput, stude
     },
   });
   if (matchingStudent) throw new ValidationError(`Ryhmässä on jo '${data.name}' niminen oppilas. Ryhmässä ei voi olla kahta samannimistä oppilasta.`);
+};
+
+export const validateChangeGroupLevelInput = async (input: ChangeGroupModuleInput, groupId: string) => {
+  const group = await prisma.group.findUniqueOrThrow({
+    where: { id: groupId },
+  });
+  const allowedLearningObjectiveGroupKeys = getLearningObjectiveGroupKeys(group.subjectCode, input.newEducationLevel);
+  if (!allowedLearningObjectiveGroupKeys.includes(input.newLearningObjectiveGroupKey))
+    throw new ValidationError(
+      `Tason vaihdon input on virheellinen. Sallitut arviointiryhmät tasolle '${
+        input.newEducationLevel
+      }' ovat: ${allowedLearningObjectiveGroupKeys.join(", ")}`
+    );
 };

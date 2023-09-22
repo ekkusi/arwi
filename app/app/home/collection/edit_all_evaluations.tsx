@@ -31,7 +31,7 @@ const CollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
         student {
           id
           name
-          currentClassEvaluations {
+          currentModuleEvaluations {
             id
             notes
           }
@@ -55,7 +55,7 @@ const CollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(`
         student {
           id
           name
-          currentClassEvaluations {
+          currentModuleEvaluations {
             id
             notes
           }

@@ -16,8 +16,8 @@ type Mutation {
   logout: Boolean!
   refreshToken: AuthPayload!
   createGroup(data: CreateGroupInput!): Group!
-  createCollection(data: CreateCollectionInput!, classYearId: ID!): EvaluationCollection!
-  createStudent(data: CreateStudentInput!, classYearId: ID!): Student!
+  createCollection(data: CreateCollectionInput!, moduleId: ID!): EvaluationCollection!
+  createStudent(data: CreateStudentInput!, moduleId: ID!): Student!
   updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
   updateCollection(data: UpdateCollectionInput!, collectionId: ID!): EvaluationCollection!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
@@ -26,8 +26,8 @@ type Mutation {
   deleteStudent(studentId: ID!): Student!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
-  changeGroupYear(newYearCode: ClassYearCode!, groupId: ID!): Group!
-  generateStudentFeedback(studentId: ID!, classYearId: ID!): String!
+  changeGroupModule(data: ChangeGroupModuleInput!, groupId: String!): Group!
+  generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
 }
 
 type AppMetadata {
@@ -49,6 +49,12 @@ type LoginResult {
   teacher: Teacher!
 }
 
+type TranslatedString {
+  fi: String!
+  en: String
+  se: String
+}
+
 enum LearningObjectiveType {
   BEHAVIOUR
   SKILLS
@@ -58,21 +64,21 @@ enum LearningObjectiveType {
 
 type LearningObjective {
   code: ID!
-  label: String!
-  description: String!
+  label: TranslatedString!
+  description: TranslatedString!
   type: LearningObjectiveType!
 }
 
 type Subject {
   code: ID!
-  label: String!
+  label: TranslatedString!
   environments: [Environment!]!
 }
 
 type Environment {
   code: ID!
   color: String!
-  label: String!
+  label: TranslatedString!
   subject: Subject!
 }
 
@@ -84,18 +90,19 @@ type Group {
   teacher: Teacher!
   updatedAt: DateTime!
   archived: Boolean!
-  currentClassYear: ClassYear!
-  classYears: [ClassYear!]!
+  currentModule: Module!
+  modules: [Module!]!
 }
 
-type ClassYearInfo {
-  code: ClassYearCode!
-  label: String!
+type ModuleInfo {
+  educationLevel: EducationLevel!
+  learningObjectiveGroupKey: String!
+  label: TranslatedString!
 }
 
-type ClassYear {
+type Module {
   id: ID!
-  info: ClassYearInfo!
+  info: ModuleInfo!
   evaluationCollections: [EvaluationCollection!]!
   students: [Student!]!
   group: Group!
@@ -108,7 +115,7 @@ type EvaluationCollection {
   environment: Environment!
   description: String
   evaluations: [Evaluation!]!
-  classYear: ClassYear!
+  module: Module!
   learningObjectives: [LearningObjective!]!
 }
 
@@ -127,10 +134,10 @@ type Student {
   id: ID!
   name: String!
   group: Group!
-  currentClassEvaluations: [Evaluation!]!
+  currentModuleEvaluations: [Evaluation!]!
 }
 
-enum ClassYearCode {
+enum EducationLevel {
   PRIMARY_FIRST
   PRIMARY_SECOND
   PRIMARY_THIRD
@@ -140,14 +147,8 @@ enum ClassYearCode {
   PRIMARY_SEVENTH
   PRIMARY_EIGHTH
   PRIMARY_NINTH
-  HIGH_SCHOOL_FIRST
-  HIGH_SCHOOL_SECOND
-  HIGH_SCHOOL_THIRD
-  HIGH_SCHOOL_FOURTH
-  HIGH_SCHOOL_FIFTH
-  HIGH_SCHOOL_OTHER
-  VOCATIONAL_OBLIGATORY
-  VOCATIONAL_VOLUNTARY
+  HIGH_SCHOOL
+  VOCATIONAL
 }
 
 input CreateTeacherInput {
@@ -159,7 +160,8 @@ input CreateGroupInput {
   name: String!
   teacherId: ID!
   subjectCode: ID!
-  yearCode: ClassYearCode!
+  educationLevel: EducationLevel!
+  learningObjectiveGroupKey: String!
   students: [CreateStudentInput!]!
 }
 
@@ -210,4 +212,9 @@ input UpdateEvaluationInput {
   behaviourRating: Int
   notes: String
   isStellar: Boolean
+}
+
+input ChangeGroupModuleInput {
+  newEducationLevel: EducationLevel!
+  newLearningObjectiveGroupKey: String!
 }

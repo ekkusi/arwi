@@ -1,7 +1,7 @@
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
-import { analyzeEvaluations, analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
+import { analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
 
 const CollectionsLineChart_Collection_Fragment = graphql(`
@@ -9,7 +9,9 @@ const CollectionsLineChart_Collection_Fragment = graphql(`
     id
     date
     environment {
-      label
+      label {
+        fi
+      }
       code
     }
     evaluations {

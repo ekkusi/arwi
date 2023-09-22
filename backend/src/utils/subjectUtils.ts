@@ -1,18 +1,6 @@
-import { ClassYearCode as PrismaClassYearCode } from "@prisma/client";
-import subjectSchema from "../subject-schema-only-sports.json";
-import { ClassYearCode, LearningObjectiveType } from "../types";
-
-export type Subject = (typeof subjectSchema.subjects)[number];
-export type SubjectMinimal = Omit<Subject, "environments" | "learning_objectives">;
-export type LearningObjective = Omit<Subject["learning_objectives"]["1-2"][number], "type"> & {
-  type: LearningObjectiveType;
-};
-
-export type LearningObjectiveMinimal = Omit<LearningObjective, "description">;
-
-export type LearningObjectiveKey = keyof Subject["learning_objectives"];
-
-export type Environment = Subject["environments"][number];
+import { Environment, LearningObjective, LearningObjectiveMinimal, PrimaryEducationLevel, Subject, SubjectMinimal } from "../types/subject";
+import subjects from "../subject-schema.json";
+import { ModuleInfo, EducationLevel, LearningObjectiveType, TranslatedString } from "../types";
 
 export const getSubjectCode = (environmentCode: string) => {
   if (environmentCode.length < 2) {
@@ -21,122 +9,143 @@ export const getSubjectCode = (environmentCode: string) => {
   return environmentCode.slice(0, 2);
 };
 
-// NOTE: Only temporal, remove when other subjects are added
-const sportsSubject = subjectSchema.subjects[0];
-
-export const getSubject = (subjectCode: string): Subject | null => {
-  const matchingSubject = subjectSchema.subjects.find((it) => it.code === subjectCode);
-  return matchingSubject || sportsSubject; // NOTE: Return null when other subjects are added back
+export const getSubject = (subjectCode: string): Subject | undefined => {
+  const matchingSubject = subjects.find((it) => it.code === subjectCode);
+  return (
+    matchingSubject && {
+      ...matchingSubject,
+      label: matchingSubject?.name,
+    }
+  );
 };
 
 export const getSubjects = (): SubjectMinimal[] => {
-  return subjectSchema.subjects.map((it) => ({
+  return subjects.map((it) => ({
     code: it.code,
-    label: it.label,
+    label: it.name,
   }));
 };
 
-export const getEnvironment = (environmentCode: string): Environment | null => {
+export const getEnvironment = (environmentCode: string): Environment | undefined => {
   const subject = getSubject(getSubjectCode(environmentCode));
-  if (!subject) return null;
+  if (!subject) return undefined;
   const environment = subject.environments.find((it) => it.code === environmentCode);
-  return environment || null;
+  return (
+    environment && {
+      ...environment,
+      label: environment.name,
+    }
+  );
 };
 
-export type ClassYearInfo = {
-  label: string;
-  code: ClassYearCode;
+export const PRIMARY_YEAR_CODE_LABELS: Record<PrimaryEducationLevel, TranslatedString> = {
+  PRIMARY_FIRST: { fi: "1. luokka" },
+  PRIMARY_SECOND: { fi: "2. luokka" },
+  PRIMARY_THIRD: { fi: "3. luokka" },
+  PRIMARY_FOURTH: { fi: "4. luokka" },
+  PRIMARY_FIFTH: { fi: "5. luokka" },
+  PRIMARY_SIXTH: { fi: "6. luokka" },
+  PRIMARY_SEVENTH: { fi: "7. luokka" },
+  PRIMARY_EIGHTH: { fi: "8. luokka" },
+  PRIMARY_NINTH: { fi: "9. luokka" },
 };
 
-export const YEAR_CODE_LABELS: Record<PrismaClassYearCode, string> = {
-  PRIMARY_FIRST: "1. luokka",
-  PRIMARY_SECOND: "2. luokka",
-  PRIMARY_THIRD: "3. luokka",
-  PRIMARY_FOURTH: "4. luokka",
-  PRIMARY_FIFTH: "5. luokka",
-  PRIMARY_SIXTH: "6. luokka",
-  PRIMARY_SEVENTH: "7. luokka",
-  PRIMARY_EIGHTH: "8. luokka",
-  PRIMARY_NINTH: "9. luokka",
-  HIGH_SCHOOL_FIRST: "LI 1 (lukio 1. moduuli)",
-  HIGH_SCHOOL_SECOND: "LI 2 (lukio 2. moduuli)",
-  HIGH_SCHOOL_THIRD: "LI 3 (lukio 3. moduuli)",
-  HIGH_SCHOOL_FOURTH: "LI 4 (lukio 4. moduuli)",
-  HIGH_SCHOOL_FIFTH: "LI 5 (lukio 5. moduuli)",
-  HIGH_SCHOOL_OTHER: "Lukio muu vapaavalintainen moduuli",
-  VOCATIONAL_OBLIGATORY: "Ammatillinen koulutus pakollinen",
-  VOCATIONAL_VOLUNTARY: "Ammatillinen koulutus valinnainen",
-};
-
-export const getClassYearInfo = (yearCode: PrismaClassYearCode): ClassYearInfo => {
+// In case of high school or vocational school the label is the name of the (dynamic) module
+// In case of primary school the labels are always static, hence we fetch them from the static object only by education level
+export const getModuleInfo = (subjectCode: string, educationLevel: EducationLevel, learningObjectiveGroupKey: string): ModuleInfo | undefined => {
+  let label: TranslatedString | undefined;
+  switch (educationLevel) {
+    case EducationLevel.HIGH_SCHOOL:
+      label = getSubject(subjectCode)?.highSchoolModules?.find((it) => it.code === learningObjectiveGroupKey)?.name;
+      break;
+    case EducationLevel.VOCATIONAL:
+      label = getSubject(subjectCode)?.vocationalSchoolModules?.find((it) => it.code === learningObjectiveGroupKey)?.name;
+      break;
+    default:
+      label = PRIMARY_YEAR_CODE_LABELS[educationLevel];
+      break;
+  }
+  if (!label) return undefined;
   return {
-    label: YEAR_CODE_LABELS[yearCode],
-    code: ClassYearCode[yearCode],
+    label,
+    educationLevel,
+    learningObjectiveGroupKey,
   };
 };
 
-export const getClassYearInfos = () => {
-  const yearInfos = Object.keys(ClassYearCode).map((it) => getClassYearInfo(it as ClassYearCode));
-  return yearInfos;
+const getAndPushModuleIfExists = (subjectCode: string, educationLevel: EducationLevel, learningObjectiveGroupKey: string, modules: ModuleInfo[]) => {
+  const module = getModuleInfo(subjectCode, educationLevel, learningObjectiveGroupKey);
+  if (module) modules.push(module);
 };
 
-export const getLearningObjectKey = (yearCode: ClassYearCode): LearningObjectiveKey => {
-  switch (yearCode) {
-    case ClassYearCode.PRIMARY_FIRST:
-    case ClassYearCode.PRIMARY_SECOND:
-      return "1-2";
-    case ClassYearCode.PRIMARY_THIRD:
-    case ClassYearCode.PRIMARY_FOURTH:
-    case ClassYearCode.PRIMARY_FIFTH:
-    case ClassYearCode.PRIMARY_SIXTH:
-      return "3-6";
-    case ClassYearCode.PRIMARY_SEVENTH:
-    case ClassYearCode.PRIMARY_EIGHTH:
-    case ClassYearCode.PRIMARY_NINTH:
-      return "7-9";
-    case ClassYearCode.HIGH_SCHOOL_FIRST:
-      return "high_school_1";
-    case ClassYearCode.HIGH_SCHOOL_SECOND:
-      return "high_school_2";
-    case ClassYearCode.HIGH_SCHOOL_THIRD:
-      return "high_school_3";
-    case ClassYearCode.HIGH_SCHOOL_FOURTH:
-      return "high_school_4";
-    case ClassYearCode.HIGH_SCHOOL_FIFTH:
-      return "high_school_5";
-    case ClassYearCode.HIGH_SCHOOL_OTHER:
-      return "high_school_other";
-    case ClassYearCode.VOCATIONAL_OBLIGATORY:
-      return "vocational_obligatory";
-    case ClassYearCode.VOCATIONAL_VOLUNTARY:
-      return "vocational_voluntary";
-    default:
-      throw new Error("Invalid class year code");
+export const getModuleInfos = (subjectCode: string): ModuleInfo[] => {
+  const subject = getSubject(subjectCode);
+  if (!subject) return [];
+  const moduleInfos: ModuleInfo[] = [];
+  if (subject.elementarySchool.one_to_two_years) {
+    [EducationLevel.PRIMARY_FIRST, EducationLevel.PRIMARY_SECOND].forEach((it) =>
+      getAndPushModuleIfExists(subjectCode, EducationLevel[it], "one_to_two_years", moduleInfos)
+    );
   }
+  if (subject.elementarySchool.three_to_six_years) {
+    [EducationLevel.PRIMARY_THIRD, EducationLevel.PRIMARY_FOURTH, EducationLevel.PRIMARY_FIFTH, EducationLevel.PRIMARY_SIXTH].forEach((it) =>
+      getAndPushModuleIfExists(subjectCode, EducationLevel[it], "three_to_six_years", moduleInfos)
+    );
+  }
+  if (subject.elementarySchool.seven_to_nine_years) {
+    [EducationLevel.PRIMARY_SEVENTH, EducationLevel.PRIMARY_EIGHTH, EducationLevel.PRIMARY_NINTH].forEach((it) =>
+      getAndPushModuleIfExists(subjectCode, EducationLevel[it], "seven_to_nine_years", moduleInfos)
+    );
+  }
+  subject.highSchoolModules?.forEach((it) => {
+    getAndPushModuleIfExists(subjectCode, EducationLevel.HIGH_SCHOOL, it.code, moduleInfos);
+  });
+  subject.vocationalSchoolModules?.forEach((it) => {
+    getAndPushModuleIfExists(subjectCode, EducationLevel.VOCATIONAL, it.code, moduleInfos);
+  });
+  return moduleInfos;
 };
 
-export const getLearningObjectives = (subjectCode: string, yearCode: ClassYearCode): LearningObjective[] => {
-  const objectives = getSubject(subjectCode)?.learning_objectives[getLearningObjectKey(yearCode)] || [];
+export const getLearningObjectives = (
+  subjectCode: string,
+  educationLevel: EducationLevel,
+  learningObjectivesGroupKey: string
+): LearningObjective[] => {
+  const subject = getSubject(subjectCode);
+  if (!subject) return [];
+
+  let objectives = [];
+  switch (educationLevel) {
+    case EducationLevel.HIGH_SCHOOL:
+      objectives = subject.highSchoolModules?.find((it) => it.code === learningObjectivesGroupKey)?.learningObjectives || [];
+      break;
+    case EducationLevel.VOCATIONAL:
+      objectives = subject.vocationalSchoolModules?.find((it) => it.code === learningObjectivesGroupKey)?.learningObjectives || [];
+      break;
+    default:
+      objectives = subject.elementarySchool[learningObjectivesGroupKey as keyof typeof subject.elementarySchool] || [];
+      break;
+  }
+  // const objectives = getSubject(subjectCode)?.learning_objectives[getLearningObjectKey(yearCode)] || [];
 
   return objectives.map((it) => ({
     ...it,
+    description: it.longDescription,
     type: it.type as LearningObjectiveType,
   }));
 };
 
-export const getEvaluableLearningObjectives = (subjectCode: string, yearCode: ClassYearCode) => {
-  const objectives = getSubject(subjectCode)?.learning_objectives[getLearningObjectKey(yearCode)] || [];
-
-  return objectives
-    .filter((it) => it.type !== "NOT_EVALUATED")
-    .map((it) => ({
-      ...it,
-      type: it.type as LearningObjectiveType,
-    }));
+export const getEvaluableLearningObjectives = (subjectCode: string, educationLevel: EducationLevel, learningObjectiveGroupKey: string) => {
+  const objectives = getLearningObjectives(subjectCode, educationLevel, learningObjectiveGroupKey);
+  return objectives.filter((it) => it.type !== "NOT_EVALUATED");
 };
 
-export const getEvaluableLearningObjectivesMinimal = (subjectCode: string, yearCode: ClassYearCode): LearningObjectiveMinimal[] => {
-  const objectives = getSubject(subjectCode)?.learning_objectives[getLearningObjectKey(yearCode)] || [];
+export const getEvaluableLearningObjectivesMinimal = (
+  subjectCode: string,
+  educationLevel: EducationLevel,
+  learningObjectiveGroupKey: string
+): LearningObjectiveMinimal[] => {
+  const objectives = getLearningObjectives(subjectCode, educationLevel, learningObjectiveGroupKey);
 
   return objectives
     .filter((it) => it.type !== "NOT_EVALUATED")
@@ -150,5 +159,21 @@ export const getEvaluableLearningObjectivesMinimal = (subjectCode: string, yearC
 export const getEnvironments = (subjectCode: string): Environment[] => {
   const subject = getSubject(subjectCode);
   if (!subject) return [];
-  return subject.environments;
+  return subject.environments.map((it) => ({
+    ...it,
+    label: it.name,
+  }));
+};
+
+export const getLearningObjectiveGroupKeys = (subjectCode: string, educationLevel: EducationLevel): string[] => {
+  const subject = getSubject(subjectCode);
+  if (!subject) return [];
+  switch (educationLevel) {
+    case EducationLevel.HIGH_SCHOOL:
+      return subject.highSchoolModules?.map((it) => it.code) || [];
+    case EducationLevel.VOCATIONAL:
+      return subject.vocationalSchoolModules?.map((it) => it.code) || [];
+    default:
+      return Object.keys(subject.elementarySchool);
+  }
 };

@@ -20,35 +20,35 @@ model Group {
   name                  String
   subjectCode           String
   students              Student[]
-  classYears            ClassYear[]            @relation(name: "GroupClassYears")
-  currentClassYear      ClassYear              @relation(name: "GroupCurrentClassYear", fields: [currentClassYearId], references: [id], onDelete: Cascade)
-  currentClassYearId    String
+  modules               Module[]               @relation(name: "GroupModules")
+  currentModule         Module                 @relation(name: "GroupCurrentModule", fields: [currentModuleId], references: [id], onDelete: Cascade)
+  currentModuleId       String
   teacher               Teacher                @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId             String
   updatedAt             DateTime               @updatedAt @default(now())
   archived              Boolean                @default(false)
 }
 
-model ClassYear {
-  id                    String                 @id @default(uuid())
-  code                  ClassYearCode
-  currentGroups         Group[]                @relation(name: "GroupCurrentClassYear") // For prisma to be able to resolve the relation, not needed in practice
-  group                 Group                  @relation(name: "GroupClassYears", fields: [groupId], references: [id], onDelete: Cascade)
-  groupId               String
-  students              Student[]
-  evaluationCollections EvaluationCollection[]
+model Module {
+  id                          String                 @id @default(uuid())
+  educationLevel              EducationLevel 
+  learningObjectiveGroupKey   String
+  currentGroups               Group[]                @relation(name: "GroupCurrentModule") // For prisma to be able to resolve the relation, not needed in practice
+  group                       Group                  @relation(name: "GroupModules", fields: [groupId], references: [id], onDelete: Cascade)
+  groupId                     String
+  students                    Student[]
+  evaluationCollections       EvaluationCollection[]
 }
 
 model EvaluationCollection {
   id                      String       @id @default(uuid())
   date                    DateTime     @default(now())
-  type                    String
   learningObjectiveCodes  String[]
   description             String?
   evaluations             Evaluation[]
   environmentCode         String
-  classYear               ClassYear        @relation(fields: [classYearId], references: [id], onDelete: Cascade)
-  classYearId             String
+  module                  Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  moduleId                String
 }
 
 model Evaluation {
@@ -69,11 +69,11 @@ model Student {
   name        String
   group       Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId     String
-  classYears  ClassYear[]  
+  modules     Module[]  
   evaluations Evaluation[]
 }
 
-enum ClassYearCode {
+enum EducationLevel {
   PRIMARY_FIRST
   PRIMARY_SECOND
   PRIMARY_THIRD
@@ -83,12 +83,6 @@ enum ClassYearCode {
   PRIMARY_SEVENTH
   PRIMARY_EIGHTH
   PRIMARY_NINTH
-  HIGH_SCHOOL_FIRST
-  HIGH_SCHOOL_SECOND
-  HIGH_SCHOOL_THIRD
-  HIGH_SCHOOL_FOURTH
-  HIGH_SCHOOL_FIFTH
-  HIGH_SCHOOL_OTHER
-  VOCATIONAL_OBLIGATORY
-  VOCATIONAL_VOLUNTARY
+  HIGH_SCHOOL
+  VOCATIONAL
 }

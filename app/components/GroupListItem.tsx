@@ -1,7 +1,6 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { Layout, SlideInLeft, SlideOutRight } from "react-native-reanimated";
 import { graphql } from "../gql";
 import { GroupListItemFragment } from "../gql/graphql";
 import { COLORS, FONT_SIZES } from "../theme";
@@ -19,7 +18,9 @@ export const GroupListItem_Fragment = graphql(`
     name
     archived
     subject {
-      label
+      label {
+        fi
+      }
       code
     }
     updatedAt

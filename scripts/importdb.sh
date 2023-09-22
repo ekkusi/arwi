@@ -37,6 +37,7 @@ if [ -n "${relativeFilePath}" ]; then absoluteFilePath="$callPath/$relativeFileP
 echo -e "Importing database from $absoluteFilePath"
 echo -e "Importing to: $databaseUrl: \n\n"
 
+psql $databaseUrl --file="drop-and-create-db.sql" --echo-all --echo-errors
 psql $databaseUrl --file=$absoluteFilePath --echo-all --echo-errors
 echo "done"
 exit 0

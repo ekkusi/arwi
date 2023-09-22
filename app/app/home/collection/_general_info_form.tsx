@@ -1,4 +1,5 @@
-import { Environment, getEnvironments, getEvaluableLearningObjectivesMinimal, LearningObjectiveMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { Environment, LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/subject";
+import { getEnvironments, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
@@ -11,12 +12,11 @@ import CButton from "../../../components/primitives/CButton";
 import CTextInput from "../../../components/primitives/CTextInput";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CView from "../../../components/primitives/CView";
-import { ClassYearCode } from "../../../gql/graphql";
 import { formatDate } from "../../../helpers/dateHelpers";
 
 type CollectionGeneralInfoFormProps = {
   subjectCode: string;
-  classYearCode: ClassYearCode;
+  moduleInfo: MinimalModuleInfo;
   defaultEnvironment?: Environment;
   defaultLearningObjectives?: LearningObjectiveMinimal[];
   defaultDescription?: string;
@@ -29,7 +29,7 @@ type CollectionGeneralInfoFormProps = {
 
 export default function CollectionGeneralInfoForm({
   subjectCode,
-  classYearCode,
+  moduleInfo,
   defaultEnvironment,
   defaultLearningObjectives,
   defaultDescription,
@@ -49,7 +49,7 @@ export default function CollectionGeneralInfoForm({
 
   const [environmentError, setEnvironmentError] = useState<string>();
 
-  const learningObjectives = getEvaluableLearningObjectivesMinimal(subjectCode, classYearCode);
+  const learningObjectives = getEvaluableLearningObjectivesMinimal(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const environments = getEnvironments(subjectCode);
 
   const handleGeneralSubmit = () => {
@@ -74,14 +74,14 @@ export default function CollectionGeneralInfoForm({
             }}
             options={environments}
             getOptionValue={(item) => item.code}
-            formatLabel={(item) => item.label}
+            formatLabel={(item) => item.label.fi}
           />
           <MultiSelectFormField
             title={t("learningObjectives", "Oppimistavoitteet")}
             defaultValue={defaultLearningObjectives || []}
             onSelect={(items) => setSelectedLearningObjectivesCode(items)}
             options={learningObjectives}
-            formatLabel={(item) => `${item.code}: ${item.label}`}
+            formatLabel={(item) => `${item.code}: ${item.label.fi}`}
             getOptionValue={(item) => item.code}
           />
           <FormField title={t("date", "Päivämäärä")}>

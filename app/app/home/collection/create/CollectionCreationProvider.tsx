@@ -8,12 +8,12 @@ const CollectionCreationProvider_GetGroup_Query = graphql(`
   query CollectionCreationProvider_GetGroup($groupId: ID!) {
     getGroup(id: $groupId) {
       id
-      currentClassYear {
+      currentModule {
         id
         students {
           id
           name
-          currentClassEvaluations {
+          currentModuleEvaluations {
             id
             notes
           }
@@ -95,7 +95,7 @@ function CollectionCreationProvider({ children, groupId }: CollectionCreationPro
   useEffect(() => {
     if (queryData?.getGroup) {
       const { getGroup } = queryData;
-      const sortedEvaluations = getGroup.currentClassYear.students
+      const sortedEvaluations = getGroup.currentModule.students
         .map((student) => ({ student, wasPresent: true }))
         .sort((a, b) => a.student.name.localeCompare(b.student.name));
 

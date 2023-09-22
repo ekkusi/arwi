@@ -1,10 +1,10 @@
-import { ClassYearInfo } from "arwi-backend/src/types";
-import { SubjectMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { ModuleInfo } from "arwi-backend/src/types";
+import { SubjectMinimal } from "arwi-backend/src/types/subject";
 import { createContext, useContext, useState } from "react";
 
 export type GroupMinimal = {
   name: string;
-  class?: ClassYearInfo;
+  module?: ModuleInfo;
   subject?: SubjectMinimal;
   students: string[];
 };

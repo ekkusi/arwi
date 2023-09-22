@@ -20,7 +20,9 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
     collection {
       date
       environment {
-        label
+        label {
+          fi
+        }
         code
         color
       }
@@ -58,7 +60,7 @@ export default function EvaluationsAccordion({
     <Accordion
       allowMultiple={allowMultiple}
       data={sortedEvaluations.map((it) => ({
-        title: titleFrom === "collection" ? `${it.collection.environment.label}` : it.student.name,
+        title: titleFrom === "collection" ? `${it.collection.environment.label.fi}` : it.student.name,
         date: formatDate(it.collection.date),
         isEvaluated:
           titleFrom === "student"

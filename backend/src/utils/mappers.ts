@@ -26,7 +26,6 @@ export const mapUpdateEvaluationInput = (data: UpdateEvaluationInput): Prisma.Ev
 export const mapUpdateCollectionInput = (data: Omit<UpdateCollectionInput, "evaluations">): Prisma.EvaluationCollectionUpdateInput => {
   return {
     ...data,
-    type: data.type || undefined,
     date: data.date ? new Date(data.date) : undefined,
     environmentCode: data.environmentCode || undefined,
     learningObjectiveCodes: data.learningObjectiveCodes || undefined,
