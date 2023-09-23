@@ -1,9 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { getClassYearInfos } from "arwi-backend/src/utils/subjectUtils";
 import { useCallback, useEffect, useRef } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { Alert, BackHandler, Keyboard, TextInput, TouchableWithoutFeedback } from "react-native";
+import { getModuleInfos } from "arwi-backend/src/utils/subjectUtils";
+import { ModuleInfo } from "arwi-backend/src/types";
 import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { nameValidator } from "../../../../helpers/textValidation";
@@ -16,11 +17,13 @@ import SelectFormField from "../../../../components/form/SelectFormField";
 import ProgressBar from "../../../../components/ProgressBar";
 import { useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
 
-export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "name", "home-stack">) {
+export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "general-info", "home-stack">) {
   const { t } = useTranslation();
 
-  const classes = getClassYearInfos();
   const { group, setGroup } = useGroupCreationContext();
+
+  if (!group.subject) throw new Error("Unexpected error, subject is undefined");
+  const modules: ModuleInfo[] = getModuleInfos(group.subject?.code);
 
   const inputRef = useRef<TextInput>(null);
 
@@ -65,21 +68,21 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
                 validate={nameValidator}
               />
               <SelectFormField
-                title={t("class-year", "Luokka-aste")}
-                placeholder={t("GroupNameSelection.selectClass", "Valitse luokka")}
-                options={classes}
+                title={t("class-year-or-module", "Luokka-aste tai moduuli")}
+                placeholder={t("select-year-or-module", "Valitse luokka-aste tai moduuli")}
+                options={modules}
                 onSelect={(item) => {
-                  setGroup({ ...group, class: item });
+                  setGroup({ ...group, module: item });
                 }}
-                getOptionValue={(item) => item.code}
-                formatLabel={(item) => item.label}
+                getOptionValue={(item) => `${item.educationLevel}-${item.learningObjectiveGroupKey}`}
+                formatLabel={(item) => item.label.fi}
               />
             </CView>
             <CView style={{ justifyContent: "flex-end" }}>
               <CView style={{ flexDirection: "row", justifyContent: "flex-end", padding: "xl" }}>
                 <CButton
-                  disabled={group.name.length === 0 || group.class === undefined}
-                  onPress={() => navigation.navigate("subject")}
+                  disabled={group.name.length === 0 || group.module === undefined}
+                  onPress={() => navigation.navigate("students")}
                   leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
                 />
               </CView>

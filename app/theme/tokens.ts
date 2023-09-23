@@ -1,3 +1,5 @@
+// NOTE: Logo font is Aileron thin
+
 export const COLOR_PALETTE = {
   red: {
     50: "#FFF5F5",
@@ -85,6 +87,7 @@ export const FONT_SIZES = {
   xl: 24,
   largeTitle: 28,
   "2xl": 28,
+  "3xl": 36,
 } as const;
 
 export const SPACING = {

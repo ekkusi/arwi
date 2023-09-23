@@ -8,7 +8,7 @@ import CText from "../../components/primitives/CText";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
 import ChangeGroupName from "./ChangeGroupName";
 import AddNewStudent from "./AddNewStudent";
-import ChangeClassYear from "./ChangeClassYear";
+import ChangeGroupModule from "./ChangeGroupModule";
 import ChangeArchiveStatus from "./ChangeArchiveStatus";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
 
@@ -87,7 +87,7 @@ export default function GroupHeaderRightButton({
                 onSelect={() => {
                   openModal({
                     title: t("change-class-year", "Vaihda vuosiluokka"),
-                    children: <ChangeClassYear groupId={id} onCancel={closeModal} onSaved={closeModal} />,
+                    children: <ChangeGroupModule groupId={id} onCancel={closeModal} onSaved={closeModal} />,
                   });
                 }}
               >

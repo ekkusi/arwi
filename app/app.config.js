@@ -2,7 +2,7 @@ module.exports = {
   name: "Arwi",
   slug: "arwi-app",
   owner: "arwi",
-  version: "1.0.6",
+  version: "1.0.9",
   orientation: "portrait",
   icon: "./assets/logo-new.png",
   userInterfaceStyle: "light",
@@ -25,7 +25,7 @@ module.exports = {
   },
   android: {
     package: "net.arwi.twa",
-    versionCode: 8, // Always needs to be incremented when creating new android release
+    versionCode: 11, // Always needs to be incremented when creating new android release
     adaptiveIcon: {
       foregroundImage: "./assets/logo-new.png",
       backgroundColor: "#FEFCFB",
@@ -35,6 +35,10 @@ module.exports = {
     favicon: "./assets/logo-new.png",
   },
   scheme: "arwi-app",
+  updates: {
+    url: "https://u.expo.dev/630de596-103e-469d-968f-bd0339f5f4c8",
+  },
+  runtimeVersion: "1.0.2",
   extra: {
     eas: {
       projectId: "630de596-103e-469d-968f-bd0339f5f4c8",

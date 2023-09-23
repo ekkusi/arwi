@@ -13,7 +13,7 @@ export default function GroupCreationBody({
   navigation,
   children,
 }: {
-  navigation: NativeStackNavigationProp<GroupCreationStackParams, "name" | "students" | "subject", "home-stack">;
+  navigation: NativeStackNavigationProp<GroupCreationStackParams, "general-info" | "students" | "subject", "home-stack">;
   children: JSX.Element;
 }) {
   const { t } = useTranslation();

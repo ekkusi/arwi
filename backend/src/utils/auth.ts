@@ -21,7 +21,7 @@ export const checkAuthenticatedByCollection = async (user: User, collectionId: s
   if (user.id === ADMIN_USER.id) return;
   const matchingGroup = await prisma.group.findFirstOrThrow({
     where: {
-      classYears: {
+      modules: {
         some: {
           evaluationCollections: {
             some: {

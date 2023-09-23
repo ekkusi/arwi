@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Environment, LearningObjectiveMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { Environment, LearningObjectiveMinimal } from "arwi-backend/src/types/subject";
 import { CollectionCreationStackParams } from "./types";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import CollectionCreationLayout from "./_layout";
@@ -14,10 +14,11 @@ const CollectionGeneralInfoView_Group_Fragment = graphql(`
     subject {
       code
     }
-    currentClassYear {
+    currentModule {
       id
       info {
-        code
+        educationLevel
+        learningObjectiveGroupKey
       }
     }
   }
@@ -28,7 +29,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
   const group = getFragmentData(CollectionGeneralInfoView_Group_Fragment, groupInfo);
 
   const subjectCode = group.subject.code;
-  const classYearCode = group.currentClassYear.info.code;
+  const moduleInfo = group.currentModule.info;
 
   const handleSubmit = (date: Date, environment: Environment, learningObjectives: LearningObjectiveMinimal[], description: string) => {
     setGeneralData({
@@ -43,7 +44,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
   return (
     <CollectionGeneralInfoForm
       subjectCode={subjectCode}
-      classYearCode={classYearCode}
+      moduleInfo={moduleInfo}
       handleSubmit={handleSubmit}
       buttonIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
     />

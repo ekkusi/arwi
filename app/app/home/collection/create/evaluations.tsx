@@ -21,19 +21,25 @@ import { CollectionCreationStackParams } from "./types";
 import CollectionCreationLayout from "./_layout";
 
 const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
-  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateCollectionInput!, $classYearId: ID!) {
-    createCollection(data: $createCollectionInput, classYearId: $classYearId) {
+  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateCollectionInput!, $moduleId: ID!) {
+    createCollection(data: $createCollectionInput, moduleId: $moduleId) {
       id
       date
       description
       learningObjectives {
         code
-        label
-        description
+        label {
+          fi
+        }
+        description {
+          fi
+        }
         type
       }
       environment {
-        label
+        label {
+          fi
+        }
         code
         color
       }
@@ -46,12 +52,12 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
         isStellar
         student {
           id
-          currentClassEvaluations {
+          currentModuleEvaluations {
             id
           }
         }
       }
-      classYear {
+      module {
         id
         evaluationCollections {
           id
@@ -116,7 +122,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     try {
       await createCollection({
         variables: {
-          classYearId: groupInfo.currentClassYear.id,
+          moduleId: groupInfo.currentModule.id,
           createCollectionInput: {
             ...generalData,
             environmentCode,

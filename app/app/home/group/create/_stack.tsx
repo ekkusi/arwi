@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
-import GroupNameSelectionView from ".";
+import GroupNameSelectionView from "./general-info";
 import { defaultHeaderStyles } from "../../../config";
 import { GroupCreationProvider } from "./GroupCreationProvider";
 import GroupStudentsSelectionView from "./students";
@@ -14,7 +14,7 @@ export default function GroupCreationStack() {
   return (
     <GroupCreationProvider>
       <Navigator
-        initialRouteName="name"
+        initialRouteName="subject"
         screenOptions={() => ({
           animationTypeForReplace: "push",
           title: t("GroupCreationStack.newGroup", "Uusi ryhmä"),
@@ -22,7 +22,7 @@ export default function GroupCreationStack() {
           ...defaultHeaderStyles,
         })}
       >
-        <Screen name="name" component={GroupNameSelectionView} />
+        <Screen name="general-info" component={GroupNameSelectionView} />
         <Screen name="subject" component={GroupSubjectSelectionView} />
         <Screen name="students" component={GroupStudentsSelectionView} />
       </Navigator>

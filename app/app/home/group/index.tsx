@@ -17,6 +17,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { LearningObjectiveType } from "arwi-backend/src/types";
 import Card from "../../../components/Card";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
 import LoadingIndicator from "../../../components/LoadingIndicator";
@@ -43,19 +44,24 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
       name
       archived
       subject {
-        label
+        label {
+          fi
+        }
         code
       }
-      currentClassYear {
+      currentModule {
         id
         info {
-          code
-          label
+          educationLevel
+          learningObjectiveGroupKey
+          label {
+            fi
+          }
         }
         students {
           id
           name
-          currentClassEvaluations {
+          currentModuleEvaluations {
             id
             wasPresent
           }
@@ -64,14 +70,20 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           id
           date
           environment {
-            label
+            label {
+              fi
+            }
             code
             color
           }
           learningObjectives {
             code
-            label
-            description
+            label {
+              fi
+            }
+            description {
+              fi
+            }
             type
           }
           ...CollectionsLineChart_EvaluationCollection
@@ -229,11 +241,11 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
   });
 
   const [searchText, setSearchText] = useState("");
-  const filteredStudents = group.currentClassYear.students.filter((student) => student.name.includes(searchText));
+  const filteredStudents = group.currentModule.students.filter((student) => student.name.includes(searchText));
 
   return (
     <CView style={{ flex: 1 }}>
-      {group.currentClassYear.students.length > 0 ? (
+      {group.currentModule.students.length > 0 ? (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ height: "100%" }}>
           <Animated.View style={[{ flex: 1 }, flatlistStyle]}>
             <Animated.FlatList
@@ -242,11 +254,11 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
               showsVerticalScrollIndicator={false}
               data={filteredStudents}
               renderItem={({ item }) => {
-                const presentClasses = item.currentClassEvaluations.reduce(
+                const presentClasses = item.currentModuleEvaluations.reduce(
                   (prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal),
                   0
                 );
-                const allClasses = group.currentClassYear.evaluationCollections.length;
+                const allClasses = group.currentModule.evaluationCollections.length;
                 return (
                   <Card style={{ marginBottom: "md" }} key={item.id}>
                     <CTouchableOpacity onPress={() => navigation.navigate("student", { id: item.id, name: item.name, archived: group.archived })}>
@@ -287,7 +299,7 @@ const StudentList = memo(function StudentList({ getGroup: group, navigation }: G
 const EvaluationList = memo(function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
-  const collections = [...group.currentClassYear.evaluationCollections].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const collections = [...group.currentModule.evaluationCollections].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const translateY = useSharedValue(0);
   const isScrolling = useSharedValue(false);
@@ -343,7 +355,7 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
                   })
                 }
               >
-                <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.environment.label}</CText>
+                <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.environment.label.fi}</CText>
                 <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                   <CView style={{ height: 12, width: 12, borderRadius: 6, backgroundColor: item.environment.color }} />
                   <CText style={{ fontSize: "sm", color: "gray" }}>{formatDate(item.date)}</CText>
@@ -370,13 +382,14 @@ const EvaluationList = memo(function EvaluationList({ getGroup: group, navigatio
 });
 
 const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
-  const objectives = getLearningObjectives(group.subject.code, group.currentClassYear.info.code);
+  const moduleInfo = group.currentModule.info;
+  const objectives = getLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const { t } = useTranslation();
 
   const learningObjectiveCounts = objectives.map((objective) => {
     return {
       ...objective,
-      count: group.currentClassYear.evaluationCollections.reduce(
+      count: group.currentModule.evaluationCollections.reduce(
         (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
         0
       ),
@@ -398,9 +411,11 @@ const ObjectiveList = memo(function ObjectiveList({ getGroup: group, navigation 
               }
             >
               <Card style={{ marginBottom: "md" }}>
-                <CText>{`${item.code}: ${item.label}`}</CText>
+                <CText>{`${item.code}: ${item.label.fi}`}</CText>
                 <CText style={{ fontSize: "sm", fontWeight: "400", color: "gray" }}>
-                  {t("group.objective-evaluation-count", "Arvioitu {{count}} kertaa", { count: item.count })}
+                  {item.type !== LearningObjectiveType.NOT_EVALUATED
+                    ? t("group.objective-evaluation-count", "Arvioitu {{count}} kertaa", { count: item.count })
+                    : t("not-evaluated", "Ei arvioitava")}
                 </CText>
               </Card>
             </CTouchableOpacity>
@@ -432,17 +447,18 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
   const { t } = useTranslation();
 
   const environments = getEnvironments(group.subject.code);
-  const objectives = getEvaluableLearningObjectives(group.subject.code, group.currentClassYear.info.code);
+  const moduleInfo = group.currentModule.info;
+  const objectives = getEvaluableLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const colorPalette = getPredefinedColors(objectives.length);
 
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(
     () =>
       environments.map((environment) => {
         return {
-          x: environment.label,
+          x: environment.label.fi,
           color: environment.color,
-          y: group.currentClassYear.evaluationCollections.reduce(
-            (val, evaluation) => (evaluation.environment.label === environment.label ? val + 1 : val),
+          y: group.currentModule.evaluationCollections.reduce(
+            (val, evaluation) => (evaluation.environment.label.fi === environment.label.fi ? val + 1 : val),
             0
           ),
         };
@@ -454,9 +470,9 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
     () =>
       objectives.map((objective, idx) => {
         return {
-          x: `${objective.code}: ${objective.label}`,
+          x: `${objective.code}: ${objective.label.fi}`,
           color: colorPalette[idx],
-          y: group.currentClassYear.evaluationCollections.reduce(
+          y: group.currentModule.evaluationCollections.reduce(
             (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
             0
           ),
@@ -510,11 +526,11 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
           <CView>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name}</CText>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.currentClassYear.info.label}</CText>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.subject.label}</CText>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.student-count", { count: group.currentClassYear.students.length })}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.currentModule.info.label.fi}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.subject.label.fi}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.student-count", { count: group.currentModule.students.length })}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>
-              {t("group.evaluation-count", { count: group.currentClassYear.evaluationCollections.length })}
+              {t("group.evaluation-count", { count: group.currentModule.evaluationCollections.length })}
             </CText>
           </CView>
           <CView style={{ gap: 10, alignItems: "center", justifyContent: "center" }}>
@@ -547,10 +563,6 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
               <CView style={{ width: 45, height: 45 }}>
                 <CImage
                   style={{
-                    width: undefined,
-                    height: undefined,
-                    flex: 1,
-                    resizeMode: "contain",
                     tintColor: "darkgray",
                   }}
                   source={subjectToIcon(group.subject)}
@@ -579,7 +591,7 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
         <CollectionStatistics
           title={t("group.evaluation-means-title", "Arvioinnit")}
           subjectCode={group.subject.code}
-          collections={group.currentClassYear.evaluationCollections}
+          collections={group.currentModule.evaluationCollections}
         />
         {objectives.length > 0 && (
           <CView style={{ gap: 10 }}>

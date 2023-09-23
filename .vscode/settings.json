@@ -4,7 +4,6 @@
     "source.fixAll": true
   },
   "editor.formatOnSave": false,
-  "eslint.packageManager": "npm",
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -13,8 +12,9 @@
     "mdx"
   ],
   "eslint.workingDirectories": [
-    "./app",
-    "./next"
+    "app",
+    "backend",
+    "cms"
   ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
