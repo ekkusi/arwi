@@ -31,10 +31,10 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
--- Name: ClassYearCode; Type: TYPE; Schema: public; Owner: -
+-- Name: EducationLevel; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE public."ClassYearCode" AS ENUM (
+CREATE TYPE public."EducationLevel" AS ENUM (
     'PRIMARY_FIRST',
     'PRIMARY_SECOND',
     'PRIMARY_THIRD',
@@ -44,31 +44,14 @@ CREATE TYPE public."ClassYearCode" AS ENUM (
     'PRIMARY_SEVENTH',
     'PRIMARY_EIGHTH',
     'PRIMARY_NINTH',
-    'HIGH_SCHOOL_FIRST',
-    'HIGH_SCHOOL_SECOND',
-    'HIGH_SCHOOL_THIRD',
-    'HIGH_SCHOOL_FOURTH',
-    'HIGH_SCHOOL_FIFTH',
-    'HIGH_SCHOOL_OTHER',
-    'VOCATIONAL_OBLIGATORY',
-    'VOCATIONAL_VOLUNTARY'
+    'HIGH_SCHOOL',
+    'VOCATIONAL'
 );
 
 
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
-
---
--- Name: ClassYear; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public."ClassYear" (
-    id text NOT NULL,
-    code public."ClassYearCode" NOT NULL,
-    "groupId" text NOT NULL
-);
-
 
 --
 -- Name: Evaluation; Type: TABLE; Schema: public; Owner: -
@@ -95,10 +78,9 @@ CREATE TABLE public."Evaluation" (
 CREATE TABLE public."EvaluationCollection" (
     id text NOT NULL,
     date timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    type text NOT NULL,
     description text,
     "environmentCode" text NOT NULL,
-    "classYearId" text NOT NULL,
+    "moduleId" text NOT NULL,
     "learningObjectiveCodes" text[]
 );
 
@@ -113,8 +95,20 @@ CREATE TABLE public."Group" (
     "teacherId" text NOT NULL,
     "updatedAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "subjectCode" text NOT NULL,
-    "currentYearCode" public."ClassYearCode" NOT NULL,
-    archived boolean DEFAULT false NOT NULL
+    archived boolean DEFAULT false NOT NULL,
+    "currentModuleId" text NOT NULL
+);
+
+
+--
+-- Name: Module; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."Module" (
+    id text NOT NULL,
+    "groupId" text NOT NULL,
+    "educationLevel" public."EducationLevel" NOT NULL,
+    "learningObjectiveGroupKey" text NOT NULL
 );
 
 
@@ -141,10 +135,10 @@ CREATE TABLE public."Teacher" (
 
 
 --
--- Name: _ClassYearToStudent; Type: TABLE; Schema: public; Owner: -
+-- Name: _ModuleToStudent; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public."_ClassYearToStudent" (
+CREATE TABLE public."_ModuleToStudent" (
     "A" text NOT NULL,
     "B" text NOT NULL
 );
@@ -164,136 +158,6 @@ CREATE TABLE public._prisma_migrations (
     started_at timestamp with time zone DEFAULT now() NOT NULL,
     applied_steps_count integer DEFAULT 0 NOT NULL
 );
-
-
---
--- Data for Name: ClassYear; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public."ClassYear" (id, code, "groupId") FROM stdin;
-2ddc3367-6ac7-4423-ac9e-0da999b30e46	PRIMARY_FIRST	293d7530-587a-4b1a-b216-585601c65f30
-d7c6bbd6-d13d-4029-a13f-a3690c520c4d	PRIMARY_FIRST	7ceb709a-05c1-408b-912c-f8196c3b8694
-4f8d34c5-bb24-4e3c-931e-91ee96a93333	PRIMARY_FIRST	176d8452-d61a-4115-9c3e-cfeb2c990daa
-22ae2af2-d890-4b1a-8359-a8a14c862cf7	PRIMARY_FIRST	a5e350b6-8d0e-40da-a480-a9146a6eb556
-0ef6cb66-7b2b-40f6-b8e9-7a37c5c80487	PRIMARY_FIRST	8c596bfe-60ff-4649-a27e-bddc4c81aa7e
-5bfd766a-6f9c-4712-8ad9-dcc6dbd72d3f	PRIMARY_FIRST	f3bf4d11-99a7-4ec9-a8a5-cc5743424a92
-bb5d74a9-972b-4141-a81b-95b2e3681c3d	PRIMARY_FIRST	1dc7d4c5-27c3-49c4-80de-9afdd54d69a1
-f586e1b6-5297-4de1-8c7f-b7d76902ffc1	PRIMARY_FIRST	2701efce-305c-4914-b604-dcea230c2689
-ac83bfa3-9f44-4aea-aac0-98e793367206	PRIMARY_FIRST	0af98668-1b27-481f-a1c1-54b3d775ee51
-e55d4173-4aa1-4e65-8574-c99710578fdc	PRIMARY_FIRST	69f26527-bdb1-4e38-b999-9f2481fd62f6
-0dbc9116-4412-40d5-8271-5e949d4f20a6	PRIMARY_FIRST	54fac98f-4253-487e-9e4e-e0ef4ae2443a
-e056e70c-9acb-4de2-a6c7-bac93ba3000e	PRIMARY_FIRST	b5e709c0-8913-42b6-82b0-04d702347380
-797914c3-3e04-4caa-8468-830bcc09659b	PRIMARY_FIRST	c3f1e3d5-7abc-44bb-bfa5-12a0fd2c6769
-d0839b30-1412-448d-8856-5041b20701ec	PRIMARY_FIRST	aff9ac1f-ab9d-4d21-a161-408240f222d6
-b8bf80db-46cf-4b75-a204-a842cc010e3e	PRIMARY_FIRST	eab532a9-07cc-4c9d-b11a-2d4ddb84996d
-3bfa598b-fbf0-4ec2-98a0-48828f0df61e	PRIMARY_FIRST	0df0a9e8-d7d4-4a24-a2ad-e5f263696a27
-ffe74adb-ab34-42bd-b305-eff26e32b6ba	PRIMARY_FIRST	54d739bd-6c9f-48df-850c-78a43ed48a61
-72d704a8-e209-4255-a595-40d96c4d42ad	PRIMARY_FIRST	8eda8460-b4f6-4ed0-b43a-253608ef0298
-564ee2b5-5c55-4667-8732-f9f45d9ecd5a	PRIMARY_FIRST	c42525f7-172d-4d1f-9bf1-96bbed39414f
-0497a2a4-6124-40dc-92d6-8fe3b708331e	PRIMARY_FIRST	1811d42e-eb46-4b97-a067-8d91a4c60bd1
-6d55867f-186d-4f87-8317-17cb8d0fd463	PRIMARY_FIRST	d2dd3387-7d32-4ab0-bafb-a04aa89621d6
-10c06372-82ec-47ed-962c-77553126f3ae	PRIMARY_FIRST	1dffd2ea-91a3-4f2f-a001-ca61df2631b8
-37c6af4b-8b10-40a5-8ae3-1b01af624dc5	PRIMARY_FIRST	9c0fff82-1597-4447-84d2-28051ef96223
-ba4535ec-16b4-4070-8a70-83cbe8b51340	PRIMARY_FIRST	1d45a2c2-1ae0-4068-adf4-d09fb4d6f31d
-7088e255-6c73-4fa3-8699-3ecf9dbe5964	PRIMARY_FIRST	e61dbeae-376b-4fac-bd5b-7441b0533ee9
-de31e354-3f10-499e-b9b8-7c17616175c8	PRIMARY_FIRST	110c9dff-5530-4184-baf5-bb6bb05bb40f
-0664b09a-09b6-4ef6-81b3-1e9dc549c446	PRIMARY_FIRST	909b50c8-56c4-4618-bb55-e1a1feb7f1a9
-439d550e-a5ef-4f51-a9fc-81fa9a0aed52	PRIMARY_FIRST	88e7273d-605d-483a-ae82-2c548472a6ec
-decdfebc-8865-4884-85e2-532e1324b324	PRIMARY_FIRST	2556b6a9-4cab-4b65-99fe-94f5cf5d9123
-4c789d28-06db-4d59-bfcd-17c846cea94c	PRIMARY_FIRST	11f9a50c-6d6d-405e-882d-dd0d828980c5
-fc783adf-450b-45d5-b189-14ab3c6f7979	PRIMARY_FIRST	23a47b66-cd2e-4a9c-ab78-d6b1a8e5643f
-89d861be-d5e9-41a3-8672-d977b0895d54	PRIMARY_FIRST	018cd027-6fa7-468f-b53a-cee9bbf557cf
-d492f954-cd06-4c86-8ce1-fff58bc72e38	PRIMARY_THIRD	909b50c8-56c4-4618-bb55-e1a1feb7f1a9
-1e492cde-5525-44dc-b82f-6a34dd7eb995	PRIMARY_FOURTH	23a47b66-cd2e-4a9c-ab78-d6b1a8e5643f
-230317b4-fb83-4092-8da4-e641aadb600b	PRIMARY_NINTH	0df0a9e8-d7d4-4a24-a2ad-e5f263696a27
-639595a0-0bb4-4c21-b41d-c1c81d2c29f3	HIGH_SCHOOL_FIRST	909b50c8-56c4-4618-bb55-e1a1feb7f1a9
-435da3c4-87f7-4597-a447-7a3e6f4b15c4	PRIMARY_FOURTH	f118eb20-2ff4-4bec-a6b7-458e97ef062d
-f86f29a9-cce9-4060-a07d-b8d899013b9f	HIGH_SCHOOL_SECOND	562cb013-14e0-4d29-ae33-5ba1813dfec6
-b83c3bfe-9b2c-417b-a955-5d725e54f94e	PRIMARY_NINTH	562cb013-14e0-4d29-ae33-5ba1813dfec6
-1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	PRIMARY_EIGHTH	41f9142b-c05f-41c7-baea-7afafeabb8c7
-ec5578dd-ad95-4279-be72-e0326b8cfd41	PRIMARY_FIRST	fde7c856-7b1b-4ca8-a624-67809c32bd65
-f4ca4a93-f8d6-49ba-bea8-8390c99005b8	PRIMARY_THIRD	c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0
-b369b11f-64ed-4278-83d7-588c59886416	PRIMARY_SECOND	57d7802e-5dd9-44d2-a652-4185942f2b97
-c8b9bfe7-5d92-434c-97f3-97eb52714267	PRIMARY_SECOND	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
-38d0ac99-a402-410a-bf49-523a30d11f83	PRIMARY_FOURTH	556d49fe-2a7d-4818-8a64-3ecc6a59009c
-512b3326-704d-4ffc-b566-618cb291d69f	PRIMARY_FOURTH	668d593b-2679-480d-9c37-6a7f5d4fb257
-efb5a121-cf07-45c5-9c50-72f7be1fb9ff	PRIMARY_THIRD	018cd027-6fa7-468f-b53a-cee9bbf557cf
-ad630fab-59d6-4f95-85f3-fe78b14da668	PRIMARY_SEVENTH	558998de-3364-412a-908a-70b27920ea42
-0edef857-3f65-4e82-aba3-02c69e0191a8	PRIMARY_SEVENTH	b03b85ef-19a9-47ab-9903-b0a2b82bb1de
-fd028225-16dd-4d8e-8c86-a81a9d9243e5	PRIMARY_NINTH	5d674efc-3549-4837-b221-44c4d622eb09
-640e87de-8063-4c00-9087-c17709e34059	PRIMARY_EIGHTH	ca4d6aa5-12b6-4f4e-830d-ba8a02f7cc5f
-b84acf3b-29a2-48a0-899c-8ea75f7920f2	PRIMARY_FIRST	9d124d20-5f11-4647-9256-b1c43740dd81
-a6a42248-8033-4254-8b5d-ba325479414d	PRIMARY_NINTH	bde28363-5c62-493c-afee-04d21e9eecde
-31169d42-b6c4-485c-8ced-f3fca6fe9ea9	PRIMARY_SEVENTH	4c36484b-3244-47a9-a5e3-235c9474383e
-999be80c-ff15-4515-ba2d-3f330319b986	PRIMARY_EIGHTH	5922e468-ecb6-481e-bfdb-c4e2386cb070
-11455bcc-2381-45d9-aeac-ad4bb321eab9	PRIMARY_FIRST	53bbc105-6e07-4841-a795-c75f806bea01
-c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	PRIMARY_SEVENTH	e768794b-c688-4dce-9445-23e8d4c3c986
-cf7246cc-5760-499a-9252-c3d1bbcc79e8	PRIMARY_SEVENTH	8eba147b-a52c-4bb7-b42c-7525324113f4
-7bfd943e-c11d-458c-a010-48c84b8a6a43	PRIMARY_FIRST	e6299525-7a48-4030-a523-cf249433d62a
-f6160571-beff-4c21-b3af-399f376429ae	PRIMARY_SEVENTH	942b9f78-b7b8-46aa-abff-18cf8da3ac9b
-61dc37a4-b86f-4563-8fca-37aad69a1f05	PRIMARY_NINTH	e5fde4bf-6630-4459-9d8e-31740b307c02
-45982a54-e42c-4e48-8b84-32689d592abd	PRIMARY_EIGHTH	36b2f528-25fa-4ce2-8d35-6d487a5078d9
-b6a7dc4a-0717-4b80-a18e-39651d41c5a4	PRIMARY_SIXTH	a0cd3827-7fc0-4b11-944f-cd459880a439
-9b7eb5b0-ddfe-4af4-94d5-53bb36f98117	PRIMARY_SIXTH	da15b065-9c67-4003-8ec0-7e1e2eee111f
-c27efea4-643a-4cdc-9c40-e58525a49720	PRIMARY_FOURTH	92ce53f7-53e2-46a0-ac39-ecdefa3dfef7
-8ffe45c2-e5a4-4702-89d4-2df665869687	PRIMARY_EIGHTH	c9fc597a-3fe4-4035-8773-b858579c2f3c
-e3aba1ba-865b-4174-b776-b5936ab840d3	PRIMARY_FIFTH	e3b855ae-8277-4c8f-b9e2-5f8b66351bcb
-bb17b295-c660-46a1-bfa1-7c299d3b0a57	PRIMARY_FIFTH	d7eb105b-f258-443d-8ed8-c69546ac564c
-598d6e30-40ac-4570-84f0-b670bdbf285b	PRIMARY_SIXTH	a03847bf-8bef-44b1-922d-1626e7837406
-3d9e5620-5258-4bb0-b561-5942790e6f0d	HIGH_SCHOOL_SECOND	bc655f0c-1e07-47b4-9e8b-0a4ba9242d05
-1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	PRIMARY_SEVENTH	a421b5e1-eb01-462e-899b-adb1b57e3b0d
-a40b3250-b715-4475-8802-b8cee2336933	HIGH_SCHOOL_FIRST	5068fa59-55a9-48cf-9bb2-38a2a7b9ae0e
-7fe00095-698d-4a5b-9fc8-0112800d0b89	PRIMARY_NINTH	9ebcb35c-02e8-4b5d-ad9c-3dae255bdab9
-36347506-9fe3-4cc1-bd70-3f56675ba66c	PRIMARY_SECOND	0c583991-c6d6-4d39-aa2e-3cb6b477fd43
-6f377d70-cfec-45c3-aabb-c41bdedaa327	VOCATIONAL_OBLIGATORY	c96447b3-d0d3-4985-878c-02536cf49e7f
-0736c55e-a30f-468d-ac92-011155f63782	PRIMARY_NINTH	d0ef07c9-3848-4ec9-9d15-57168b896cf6
-9b8adc7f-39c7-4925-847a-818b9389c18b	PRIMARY_EIGHTH	f5010fc6-0d96-433f-aa33-9eda0587072e
-eddf7eba-893e-44b5-9955-27b93b03a8ea	PRIMARY_EIGHTH	f963a69e-577f-45ee-bdf1-f3ade1a8fac4
-7c6e7596-e58a-417d-873d-71e3a97a5cf9	HIGH_SCHOOL_SECOND	b811f8b1-7d1c-447a-8cda-853f44e55fb6
-07ad7d5a-6bde-4c10-b4af-70932def7817	HIGH_SCHOOL_FIRST	4fe72bd5-8f67-4212-a715-4a0ca602e632
-fc400672-2a2e-44b1-966b-d887bb7d1f40	HIGH_SCHOOL_FIRST	fddc0331-595a-4010-bada-fb28a1214d56
-69713ee3-036c-4395-9000-83c65184921e	PRIMARY_FIFTH	9e608b2c-cf73-43cb-af7f-0c86315d9184
-a153dc01-0752-4f56-9501-8fc52ba97f0b	PRIMARY_EIGHTH	b509833f-510c-48b3-ac2f-f3a224f7689b
-f5b7f191-2b9f-4606-b7f4-69f2fab61d6d	PRIMARY_FIFTH	feb81b2f-c70c-47f8-a2c1-623dcdfe48aa
-96cb2e41-a16d-4ee5-9a1e-353c1ceaa5dc	VOCATIONAL_OBLIGATORY	d457226c-cff9-41c7-aebf-44a439e626c4
-0e33bb0f-b6ba-4005-9106-3ecef0171499	HIGH_SCHOOL_FIRST	4117be07-2cdb-4d17-a14d-f6b970f78821
-d872e1e1-07ed-4fe7-b285-f11e407754c7	PRIMARY_NINTH	bf327012-7775-405f-b937-3a7c1508eda3
-f3845ff7-d477-4acd-b451-31db79a8c7b1	PRIMARY_EIGHTH	93ecb125-ab82-4d66-99dc-ed689a177ba0
-49f0263b-9be4-44f2-be54-8f95a1942dae	PRIMARY_NINTH	ccd44372-5947-4b45-acc4-585c5f15c338
-d77b1c6d-e41d-420f-8f22-e8494af72bcf	PRIMARY_FIFTH	7e67bc6e-c273-42a2-9d1b-dbd39b25d5dd
-60ba446f-c350-4d72-8722-cde0c39c9a63	PRIMARY_FIFTH	f963a69e-577f-45ee-bdf1-f3ade1a8fac4
-04402773-b275-48b2-83f5-0758c257167b	PRIMARY_NINTH	328073c3-0870-4171-93de-3d88100d6acc
-587a6af4-afdd-4bf5-90a9-04bcadbb4807	PRIMARY_EIGHTH	872249e8-3e3c-47f4-8237-b25a13afce6f
-94673584-2806-4e30-9a43-1fd7c50320d8	PRIMARY_EIGHTH	4f76d4a5-d7bd-45b0-8041-357685155fd6
-ebeeb773-3d06-4722-b7bd-feae8c78ef4b	PRIMARY_SEVENTH	f375a966-3fef-43db-9afc-3ff484bf14c7
-d3f5eb51-9cac-441e-91ac-bad14e134b9d	HIGH_SCHOOL_FIRST	2cba9a0f-2452-495a-9fbc-0180ea49411e
-78e46daf-61ca-4997-bf43-5c5277ff6f4c	PRIMARY_FIFTH	bffeb915-f568-4167-aee3-a59ad70d0ac6
-fd2e1441-8e35-4b56-bcff-0ba580e2b583	HIGH_SCHOOL_FIRST	43ce3dc0-4659-4c6c-969e-65c92e3b24db
-d96c1f14-518f-46dd-a672-241f18ade35f	HIGH_SCHOOL_SECOND	43ce3dc0-4659-4c6c-969e-65c92e3b24db
-585c3f5d-302c-46c6-95d2-ef7e1a1ce04b	HIGH_SCHOOL_FIRST	bb364b38-c286-46d4-9bd4-fbf13531a884
-bf4c8f93-5596-4bb4-8505-2d4fcbd5cf8a	HIGH_SCHOOL_FIRST	cd74808e-451c-4d1d-93a2-47c46f8385e3
-d427be8a-0aba-47fb-8960-a447826b0343	PRIMARY_SEVENTH	a7f2d79a-709e-4edf-bb8c-cf50567f926e
-8b14c644-c872-44fa-9f1c-52f86c74bdc7	PRIMARY_SEVENTH	1eae19b4-6de5-45d6-9f05-2039e90f8df9
-7f091af6-1c43-4020-9360-e05a6563e18a	PRIMARY_EIGHTH	e8fd1190-3395-4370-af51-9d9884a145b4
-63f2c632-042f-45d8-864e-8ecf96d21f70	PRIMARY_SEVENTH	20952378-342a-4b6e-9cd2-040bcee46e69
-513dfcd2-a39c-41ae-b3a2-23dd05d315ef	HIGH_SCHOOL_FIRST	5c1dbf22-8f21-42df-a878-43f0d7446bde
-d934236a-8a21-4500-8408-d8aee2cb6b27	PRIMARY_SEVENTH	acfe9dc5-5e1e-4302-9188-b0cb623b42ad
-8497021a-61fa-49ee-ac25-5f321fc52fde	PRIMARY_EIGHTH	3e75cd57-f337-4778-acf3-7df420b17374
-f5f01d31-e035-4996-b260-dc63d21906db	PRIMARY_FOURTH	d49cfd99-fa09-4729-8fcd-1d1b66102c89
-a6290fba-9996-4d99-9ba6-d6f68cf8463b	HIGH_SCHOOL_FIRST	33ea6ccf-76a2-43e4-9f8b-3e365da6eb17
-64b534f4-7461-422c-bf3b-8d5bde2e36f7	HIGH_SCHOOL_FIRST	0fb115d6-0135-4a01-aa83-019cbdd01cc3
-c90e44ff-5e1a-4114-a2f1-aa8f139019a1	PRIMARY_NINTH	05921118-fee3-4527-ae43-518e2b92b04c
-afc9216c-d2b7-47d2-9e19-4a23a91acb9e	PRIMARY_EIGHTH	a7449b51-02e7-4f28-a799-bbc7f7f1496d
-fba7b151-8a02-40bb-9dbc-62c14c786c4d	HIGH_SCHOOL_FOURTH	ef819731-2f4e-4980-9534-bec0630fee53
-25247b17-635d-4a64-a9a4-1462133e7d50	HIGH_SCHOOL_FIRST	2fddc898-f1d1-4f7d-8406-be7c3a7e261b
-ab0c9659-e372-4474-a910-d0bc4c1f2c00	HIGH_SCHOOL_FIRST	37090b88-ddf0-45b7-a915-4bdf69067e68
-b8a5829d-197f-4b36-889a-9123183fa2e7	PRIMARY_SEVENTH	bab7de8e-b5cb-421f-bf0c-1000ed41b2e2
-7f1c5e91-43ea-4eef-ad38-3838a19a993b	HIGH_SCHOOL_SECOND	cae0ff59-33a6-45f0-b47f-a4fb06c2c793
-557f38da-cdab-464c-bc74-1a84606989b0	PRIMARY_NINTH	7b528230-a909-4f5d-a330-9e65fa9774f6
-cb932bc8-d215-4f88-9906-a5f4fa435366	PRIMARY_SEVENTH	be8dad6e-58f6-4ba1-a77f-d2ff43823856
-a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	PRIMARY_SEVENTH	28a8b373-ae39-47e1-9e98-7c0bf0cde758
-e6e68270-934e-452e-ae7e-5a08ea0f4741	VOCATIONAL_OBLIGATORY	7c8569f1-4f65-4d21-b661-0cbd1baab970
-\.
 
 
 --
@@ -2084,14 +1948,11 @@ f4e49098-5dab-4c81-98f0-2bed180fd89b	1e2db5dd-c171-460e-bf48-4bc55f04f49e	Jonkun
 331f9ad4-8ed2-46a7-8021-d90b3639266e	5323b55b-5fa9-4285-b48a-dbf0a19c3bef	\N	d08a4fbb-2ac9-4703-aa59-fc4ca3052473	t	9	9	f
 1ae62aac-4b34-4b48-a8ec-adf883b2a6c9	6743208b-a2b7-4951-9d65-602313f52be8	\N	4dde4440-0413-45ca-a645-8f0adf8d2622	t	\N	\N	f
 f46cf7e8-7eca-4f3c-af5e-17ea4e77bd2a	2a397255-ca16-43dc-b47e-a977a917f032	\N	4dde4440-0413-45ca-a645-8f0adf8d2622	t	\N	\N	f
-bb5e9630-dec5-4419-8e11-d209e764fac5	5387fbeb-b1bf-44b0-b87f-6bfba4e12996	oli aika levoton	448295e4-1d25-49ac-80fe-8d2a6a4eab5b	t	9	\N	f
-9b63fba2-d078-46db-b15b-7627718f403c	82b08073-2503-4e40-b381-9f4c0987aa37	hyvä	448295e4-1d25-49ac-80fe-8d2a6a4eab5b	t	8	\N	f
 7d337acc-1be7-4794-bda4-1ecda5cf55c0	4e00db97-fd93-416f-a349-655a240056ae	\N	4a81ce87-bccf-4fb5-af09-51e8899bbed1	t	8	9	f
 5b21b6ed-6f1f-4417-847f-080b937bf6df	f034aa91-48ff-496e-b25b-9c81eaaaa3e3	\N	032c110b-9a4c-47b8-914a-c07dc4a7f82d	t	8	7	f
 1450cddb-d555-43e9-8cea-e832ecb1b90a	75bba92f-9f9c-47c0-a89a-2add75007cf6	Matti ui hyvin ja jaksoi treenata koko harjoituksen ajan. Hän piti tauot sopivissa väleissä ja oli ystävällinen muille uimareille.	3b32ba2c-8635-438b-a1b3-015d980e0846	t	8	8	f
 b7db3a94-6d36-46e0-9925-0a780bab0f3a	4c047cf3-edbb-4aa0-b879-cd84077a8257	\N	897dbbdb-d0ed-4270-8ce4-8c34c3d21c8e	f	\N	\N	f
 f77a61ec-9029-492e-aee2-40c2b9fc383b	a520a370-e1ec-4742-bcf8-1a34a4434485	Teppo harjoitteli voimistelua ja kokeili erilaisia akrobaattisia liikkeitä. Hän ei onnistunut kaikissa liikkeissä heti, mutta oli sisukas ja yritti uudelleen kunnes onnistui.	48b97ca2-cc28-4f63-a14b-26fb8422ff2f	t	8	9	f
-16769f99-9306-4173-b196-64d7a3acbc9f	b7b0fe22-b844-4a04-a292-3f2489f62118	\N	448295e4-1d25-49ac-80fe-8d2a6a4eab5b	f	\N	\N	f
 54faefe7-7a09-450d-b3b8-28d2d3aac0a0	f4df5072-2986-4859-a7cc-6d06a6fe21ad	\N	520adbc2-e093-40f1-8a8f-5b071f9c9c3f	t	9	7	f
 d0d6d08a-f178-4f7a-9df0-c6bd5b51ebee	3cb1e21e-1338-4fac-8380-c69946fc26c6	\N	d6e498fa-92dc-4425-ba9a-6ea712d40f92	t	7	6	f
 9d588864-2a7e-416d-a023-300b133a2427	6f8a2928-32c2-4e60-9c99-b8073fcd9d35	\N	bee802eb-1d02-4fec-9e4d-003a1361685e	t	8	8	f
@@ -4532,320 +4393,319 @@ ea29764a-529f-42a2-a896-7292681e4126	728671ba-3ed4-422a-ba53-13c14a3776b1	Hyvä�
 -- Data for Name: EvaluationCollection; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."EvaluationCollection" (id, date, type, description, "environmentCode", "classYearId", "learningObjectiveCodes") FROM stdin;
-46baaad5-0f6b-4af5-b454-2895ec00965c	2023-05-05 00:00:00		Pesäpalloa (heitto-kiinniotto) / tytöt	LI_PALLO	72d704a8-e209-4255-a595-40d96c4d42ad	{T2,T8}
-7b28f9fd-4ecb-4da4-80d8-827355d10caf	2023-04-21 00:00:00		Jalkapallo ja soikkis /tytöt	LI_PALLO	72d704a8-e209-4255-a595-40d96c4d42ad	\N
-b38a9a41-599f-4d1a-86df-12346e38a933	2023-04-22 00:00:00		\N	LI_LUONTO	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T7}
-15cf1b92-14da-40cf-a53f-34d44b71a6a8	2023-04-24 00:00:00		\N	LI_PALLO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T3,T1}
-2dd473a1-eeec-4ead-8ff5-4f3a799e027f	2023-04-25 00:00:00		Lentopallo	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T3,T1}
-c00a27a4-7ce1-45c0-8696-703841932620	2023-04-26 00:00:00		\N	LI_PALLO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{}
-ecb94bbf-9d0c-4296-87ff-4b86b43c05da	2023-04-26 00:00:00		Jalkapallo	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{}
-250881ed-bf2f-46e4-bc10-f45afabad6e9	2023-04-27 00:00:00		Selviytyjät salissa (tytöt)	LI_MUU	ac83bfa3-9f44-4aea-aac0-98e793367206	{}
-d3f9b80b-0d2f-4545-adeb-9483c6e86873	2023-05-02 00:00:00		\N	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T2,T7}
-798f36d8-d78e-4297-a3ff-9955098ddb1c	2023-04-13 00:00:00		Tytöt: Aerobic ja sulkapallo	LI_PALLO	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
-2adfd36f-10bd-428b-9dfa-03225457702a	2023-04-14 00:00:00		Kuntonyrkkeily (peili, reaktiopeli)	LI_KUNTO	72d704a8-e209-4255-a595-40d96c4d42ad	\N
-462597ed-4611-43cc-8934-bb00e8fe2a6c	2023-05-03 00:00:00		\N	LI_PERUS	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T8,T3}
-d08a4fbb-2ac9-4703-aa59-fc4ca3052473	2023-05-03 00:00:00		Selviytyjät	LI_PERUS	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T3,T8}
-4a59ecd5-3ab8-4006-b897-c5daa1641016	2023-05-03 00:00:00		\N	LI_KUNTO	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T1,T10}
-14ffde4f-95ab-4cc3-8694-b92f686159f1	2023-05-10 00:00:00		Plogging	LI_PERUS	6d55867f-186d-4f87-8317-17cb8d0fd463	{}
-efe31604-e6fc-418e-ba94-4cc9b5955ef8	2023-03-17 00:00:00	Pariakrobatia	\N	LI_VOIM	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T3,T1,T8}
-3d125050-5d36-48e1-b651-e899e9461f2f	2023-05-11 00:00:00		\N	LI_LUONTO	ba4535ec-16b4-4070-8a70-83cbe8b51340	{T2,T1}
-30371d14-fe98-4817-a945-0f0c5bad3b84	2023-05-15 00:00:00		Frisbeegolf	LI_LUONTO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T4,T6}
-726ca314-dc27-480f-923d-10f9c840d1a0	2023-04-10 14:00:00		Luonnonkauniilla polulla lenkkeilyä. Polku oli mäkinen, mutta maisemat olivat upeat. Lenkin kesto oli noin 45 minuuttia.	LI_LUONTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
-48b97ca2-cc28-4f63-a14b-26fb8422ff2f	2023-03-23 10:30:00		Pallopeliä ulkokentällä. Pelasimme tennistä kavereiden kanssa. Peli oli tasainen ja lopulta päättyi 6-4.	LI_PALLO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T3,T4,T5,T6,T7}
-f9bbb84d-acab-4b52-a890-43dc7709963f	2023-04-09 09:00:00		Tanssitunti tanssikoululla. Harjoittelimme uutta koreografiaa ja se oli haastavaa, mutta myös hauskaa. Tunnin kesto oli 60 minuuttia.	LI_TANSSI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T2,T6}
-b1876b9c-23cd-46d2-aa93-b7980fbca7a2	2023-04-05 15:00:00		Perusvoimistelutreeniä voimistelusalilla. Treenasimme erilaisia liikkeitä ja hyppyjä. Treenin kesto oli 90 minuuttia.	LI_PERUS	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
-beee4734-91f2-424a-b01d-70bb610bfcbc	2023-03-30 15:30:00		Tanssitunti tanssikoululla. Tällä kertaa harjoittelimme latinalaistansseja, kuten salsaa ja cha chaa. Tunnin kesto oli 60 minuuttia.	LI_TANSSI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T4,T5,T7}
-4f42caa2-bcc4-47e8-bab9-1ef88e9382c2	2023-05-19 00:00:00		\N	LI_VOIM	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2,T1}
-4e2afd6f-5320-419c-bd50-314fcddaee44	2023-06-01 00:00:00		\N	LI_PERUS	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1}
-7da6191b-7f47-44e2-a246-68effa8168dc	2023-06-21 00:00:00		\N	LI_VESI	89d861be-d5e9-41a3-8672-d977b0895d54	{T1,T7}
-3ca2f6e3-1bcc-4ab3-ba64-1440cdaf8019	2023-07-29 00:00:00		\N	LI_VOIM	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T3}
-4a81ce87-bccf-4fb5-af09-51e8899bbed1	2023-08-21 00:00:00		Heitto ja työntö	LI_PERUS	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T3}
-032c110b-9a4c-47b8-914a-c07dc4a7f82d	2023-08-21 00:00:00		Koripallo ja beach volley	LI_PALLO	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
-bee802eb-1d02-4fec-9e4d-003a1361685e	2023-08-21 00:00:00		Kpk ja fudis	LI_PALLO	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
-ce80c783-0a4b-4c58-90ad-ba79266f522c	2023-08-23 00:00:00		Keihäs ja kuula	LI_PERUS	640e87de-8063-4c00-9087-c17709e34059	{T3}
-1577f95a-7961-4c4e-a2aa-74db477eb72b	2023-08-23 00:00:00		Koripallo ja beach volley	LI_PALLO	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
-a5be85c5-7133-4454-8af9-694ac0d8e3f2	2023-08-24 00:00:00			LI_TALVI	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T3}
-858a71a5-c43a-46fe-8f9c-52e26563fc88	2023-08-25 00:00:00		Keihäs ja kuula	LI_PERUS	fd028225-16dd-4d8e-8c86-a81a9d9243e5	{T3}
-be216fb7-97e2-45b0-aed5-40e935bf7707	2023-08-28 00:00:00		Sisällä pituus ja korkeus	LI_PERUS	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T3}
-7fb30ed7-affa-40dc-b83c-e1c024283074	2023-08-28 00:00:00		Fireball ja sulkapallo	LI_PALLO	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
-6dd0a225-308e-4284-b74f-539133806168	2023-08-29 00:00:00		Pituushyppy ja korkeushyppy	LI_PERUS	640e87de-8063-4c00-9087-c17709e34059	{T3}
-79af44c1-41f7-47d7-bfdf-30611f8c3b9a	2023-08-30 00:00:00		Kpk ja hyppyleikit sisällä	LI_PERUS	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T3}
-93edd4be-dd55-4f42-b568-a782849af230	2023-08-30 00:00:00		Sulkapallo ja fudistennis	LI_PALLO	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
-0c9c65c8-8dc0-4396-aa0c-29f07ecc1fe0	2023-08-30 00:00:00			LI_VOIM	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T4,T1}
-f3a651ac-f25e-4f56-9927-7946332213cd	2023-09-01 00:00:00		Fireball, kpk, futsal	LI_PALLO	a6a42248-8033-4254-8b5d-ba325479414d	{T4}
-1e80e956-c012-4d76-a01a-0d32007da1db	2023-04-21 00:00:00		\N	LI_MUU	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
-5ce16688-56df-465d-bfb4-04d94f86a484	2023-03-21 00:00:00	Pesäpallo		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-7488ce86-5522-45d1-bf90-c8d8604ca3ca	2023-04-01 00:00:00	Baletti	\N	LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-b54b2774-53ec-4efe-9957-926827ff6edb	2023-03-27 00:00:00	Koripallo		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-dd81081e-3ed6-4807-99e9-988af80153fc	2023-03-19 00:00:00	Sähly		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-abe03f46-f878-4284-84e4-de5857f87209	2023-04-10 00:00:00		\N	LI_VESI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-49f4d3a8-22b6-4f9f-bb7b-17d5d7b4c422	2023-04-10 00:00:00		Moimpi	LI_LUONTO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-d2ff8b16-ae97-456c-89a1-4a42be951b3c	2023-03-31 00:00:00	Baletti	\N	LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-de687f93-05ec-4f40-b524-15aefde3eeb2	2023-03-27 00:00:00	Sähly		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-bca98182-4fea-4c2b-b829-6745f99e0321	2023-03-23 00:00:00	Sähly		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-16ebda74-3df2-4ee7-82e2-87d7ece3ac1e	2023-04-10 00:00:00		\N	LI_VOIM	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-a6253c81-d539-4022-8bf3-45c7eee9cc2d	2023-04-19 00:00:00		\N	LI_VOIM	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-10c08368-0fd8-4687-8ed7-a7a4f34d7776	2023-04-10 00:00:00		Tanssi!	LI_TANSSI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-1e597269-f460-4a88-9702-2d4f420c0f00	2023-04-10 00:00:00		Moimoi	LI_LUONTO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-4112bf6a-81c2-4200-a662-ee7fa06787c4	2023-04-24 00:00:00		\N	LI_VESI	230317b4-fb83-4092-8da4-e641aadb600b	{T6,T7}
-568d601e-2dff-47f1-96a4-bd823b8aadae	2023-04-25 00:00:00		Huispaus ja reaktiopelejä	LI_PERUS	797914c3-3e04-4caa-8468-830bcc09659b	{T1,T2}
-9a7635bd-a52c-475a-b16c-35786e52a5a8	2023-04-26 00:00:00		Jalkapallo, soikkis, rekkitemppuilu, tervapata	LI_PALLO	de31e354-3f10-499e-b9b8-7c17616175c8	{}
-8e8599bd-97ff-4679-839f-4d0a618177ea	2023-04-27 00:00:00		\N	LI_VESI	decdfebc-8865-4884-85e2-532e1324b324	{T5}
-c07c8afc-8f1b-4dac-a4a8-929a0e9059e6	2023-05-02 00:00:00		Viivi, Ilari ja Taimi opettajina	LI_MUU	797914c3-3e04-4caa-8468-830bcc09659b	{}
-74f84fb9-64dc-4c1e-a880-ad98d9cf6b92	2023-05-03 00:00:00		\N	LI_TANSSI	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T8}
-2f72c229-ca83-4d7d-8620-11e6e77a5897	2023-05-03 00:00:00		\N	LI_TALVI	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T8,T10}
-1a72ed87-cce4-4240-83f7-6111c6ccf364	2023-05-04 00:00:00		\N	LI_PALLO	ac83bfa3-9f44-4aea-aac0-98e793367206	{T8,T3}
-4dde4440-0413-45ca-a645-8f0adf8d2622	2023-05-08 00:00:00		\N	LI_PALLO	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T1,T3,T8}
-8e4f3eb4-215f-44ff-bc5d-8284be416d0d	2023-05-10 00:00:00		Koripallo/ropeskipping	LI_PALLO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{}
-7c46e884-cea8-4a7b-9e12-15b555eaa4d7	2023-05-11 00:00:00		\N	LI_TANSSI	89d861be-d5e9-41a3-8672-d977b0895d54	{T1,T5}
-02b88abf-86b9-4ce1-82e8-418cefa02b40	2023-05-09 00:00:00		Oli todella haastava suunnistuskeli, älytön sumu ja sade.	LI_LUONTO	230317b4-fb83-4092-8da4-e641aadb600b	{T2,T5,T10}
-a75cd675-489c-4e09-8c33-ac8afd3063a0	2023-05-15 00:00:00		\N	LI_PERUS	0497a2a4-6124-40dc-92d6-8fe3b708331e	{}
-1bf527f9-144d-408d-8340-9aa5d93ec871	2023-05-17 00:00:00		Pesäpallo	LI_PALLO	6d55867f-186d-4f87-8317-17cb8d0fd463	{T4,T1}
-87721bf9-2237-4429-9e23-587ae97d05c1	2023-04-11 00:00:00		Sählyn pelailua sisällä salissa. Ensin harjoiteltiin pallon käsittelyä ja sitten pelattiin peliä. Peli oli 3 vs 3 ja pelattiin 2 x 10 minuuttia	LI_PALLO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T6,T8}
-3b32ba2c-8635-438b-a1b3-015d980e0846	2023-04-04 19:00:00		Uintitreeniä uimahallissa.	LI_VESI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
-d54b8c42-67e5-49a5-85f3-f163230de4a7	2023-04-06 18:00:00		Luontojooga ulkona puistossa. Jooga oli rentouttavaa ja samalla nautimme raikkaasta ulkoilmasta. Joogan kesto oli 60 minuuttia.	LI_LUONTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
-f5a560c0-2dc6-4f39-8158-9c222339bb04	2023-03-25 16:30:00		Uintitreeniä avovesialtaassa. Uinti oli hieman haastavaa, sillä vesi oli vielä melko kylmää, mutta keli oli kaunis ja aurinkoinen.	LI_VESI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T4,T8}
-a8c5e1fb-bb1a-4811-9b48-6faa29f4f619	2023-03-29 09:30:00		Kuntoilua puistossa. Teimme erilaisia lihaskunto- ja venyttelyliikkeitä puiston penkeillä ja portailla.	LI_KUNTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T2,T4,T7,T8}
-ca0b4bb1-c094-42a5-b45f-2a1c02c4fe65	2023-05-23 00:00:00		\N	LI_VESI	decdfebc-8865-4884-85e2-532e1324b324	{T2,T4}
-e21cd4c8-20e1-40ac-9a7e-cafc322dac96	2023-06-10 00:00:00		\N	LI_KUNTO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T4,T7}
-566dc2b8-667a-428f-bf64-2947669dae99	2023-07-08 00:00:00		\N	LI_TALVI	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2}
-64295e4a-7641-439d-8a7f-8e967149dde6	2023-07-29 00:00:00		\N	LI_VOIM	89d861be-d5e9-41a3-8672-d977b0895d54	{}
-520adbc2-e093-40f1-8a8f-5b071f9c9c3f	2023-08-22 00:00:00		Keihäs ja kuula	LI_PERUS	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T3}
-d6e498fa-92dc-4425-ba9a-6ea712d40f92	2023-08-22 00:00:00		Keihäs ja kuula	LI_PERUS	f6160571-beff-4c21-b3af-399f376429ae	{T3}
-31deeadb-5e29-4f3b-93b7-ee2d17f51631	2023-08-23 00:00:00		Keihäs ja kuula	LI_PERUS	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T3}
-ce15d4d7-9363-4b93-97af-afd713c97a0e	2023-08-24 00:00:00		Keihäs ja kuula	LI_PERUS	45982a54-e42c-4e48-8b84-32689d592abd	{T3}
-b7990e52-4204-4f2a-8e1f-aa9212420eba	2023-08-25 00:00:00		Keihäs ja kuula	LI_PERUS	a6a42248-8033-4254-8b5d-ba325479414d	{T3}
-523a6273-c7bd-4d67-8b9b-48b16e66d4e5	2023-08-25 00:00:00		Kpk ja koris/fudis	LI_PALLO	640e87de-8063-4c00-9087-c17709e34059	{T4}
-e8502f11-5dcd-4889-bc35-0728a210d64b	2023-08-28 00:00:00		Kpk ja koripallo	LI_PALLO	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
-9264da22-1da2-43d0-99ab-564dee2d8326	2023-08-29 00:00:00		Korkeushyppy ja pituushyppy	LI_PERUS	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T3}
-7609e570-5d24-4cc0-9daf-efce6e08a02a	2023-08-29 00:00:00		Pituus- ja korkeushyppy	LI_PERUS	f6160571-beff-4c21-b3af-399f376429ae	{T3}
-516e883e-2f2d-4cc6-be32-7ae7c52d31a5	2023-05-08 00:00:00		Tennistä ulkona	LI_PALLO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T1}
-117ab460-e5a7-4e15-a674-aed050c43bf5	2023-04-18 00:00:00		Sählypeliä.	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
-eae42717-f8ef-4cc4-bdbe-a7599e7bd261	2023-04-19 00:00:00		Koris (vanne, keppi -rinki)	LI_PALLO	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
-4cd87a2c-19d7-4c7c-ae7e-da90e70cd8fe	2023-05-09 00:00:00		Tennis	LI_PALLO	797914c3-3e04-4caa-8468-830bcc09659b	{T3,T1}
-efb25bc7-cd6d-4714-a6a9-14aaa5e31923	2023-04-19 00:00:00		Purkkis ja puuhippa	LI_LUONTO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-d92db901-9823-4102-b351-5d20f3c69b1f	2023-04-19 00:00:00		\N	LI_VOIM	f586e1b6-5297-4de1-8c7f-b7d76902ffc1	\N
-94a4cc72-3f10-44c0-821c-382909222c00	2023-04-20 00:00:00		Kuntosali/jaffapallo -tytöt	LI_KUNTO	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
-fab75884-b991-40c8-a22f-b9366be377ca	2023-04-20 00:00:00		Soikkis, jaffa	LI_PALLO	797914c3-3e04-4caa-8468-830bcc09659b	\N
-43d83271-76a1-453b-b117-72d4a3741fa6	2023-03-05 00:00:00	Sähly		LI_TALVI	ffe74adb-ab34-42bd-b305-eff26e32b6ba	\N
-024a5d62-d90f-4f73-b293-3286175ca586	2023-03-05 00:00:00	Koripallo		LI_TALVI	ffe74adb-ab34-42bd-b305-eff26e32b6ba	\N
-4aba8224-f510-48f7-912e-048ec687325f	2023-05-10 00:00:00		Jalkapallosovelluksia & soikkis	LI_PALLO	de31e354-3f10-499e-b9b8-7c17616175c8	{}
-5653b8aa-7777-4a3d-a704-73a5dbaf52ff	2023-05-11 00:00:00		\N	LI_VESI	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T4,T8}
-c3a67d69-4acc-4673-984e-1905a7b3833d	2023-03-11 00:00:00	Baletti		LI_TALVI	564ee2b5-5c55-4667-8732-f9f45d9ecd5a	\N
-556446ed-89a7-43e4-b9b5-00abe95eceba	2023-03-11 00:00:00	Baletti		LI_TALVI	564ee2b5-5c55-4667-8732-f9f45d9ecd5a	\N
-6f022179-e8e8-427f-b8fa-fb290acc84f4	2023-03-06 00:00:00	Kuviokellunta		LI_TALVI	564ee2b5-5c55-4667-8732-f9f45d9ecd5a	\N
-cbfca445-6768-4260-a592-d182c295da43	2023-05-12 00:00:00		\N	LI_VOIM	89d861be-d5e9-41a3-8672-d977b0895d54	{T4,T5}
-d0c10212-08a6-44f8-ad34-cc0edb65b78f	2023-03-16 00:00:00	Sisäpalloilu		LI_TALVI	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
-2859c556-656e-4367-a4b3-eeb0efa6bd86	2023-03-16 00:00:00	Sisäpalloilu		LI_TALVI	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
-a9f2c498-9fa5-4af6-897d-fdb395002668	2023-03-17 00:00:00	Sähly		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-02c4cd17-9f85-4047-9db1-4b13bc0da999	2023-05-16 00:00:00		Heittäminen, soikkis	LI_PERUS	797914c3-3e04-4caa-8468-830bcc09659b	{T2,T7}
-fb2ac5a0-bd74-48ee-982a-f9f0a8fe8c75	2023-03-19 00:00:00	Koripallo		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-77b749a1-1322-4918-a8a3-75e5907d24c8	2023-03-14 00:00:00	Baletti		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-63411c6e-87fc-4c5c-bb5a-737114a53c2a	2023-05-17 00:00:00		Frisbeegolf	LI_LUONTO	de31e354-3f10-499e-b9b8-7c17616175c8	{}
-39716719-b0c7-4f70-87eb-221191db0e11	2023-03-20 00:00:00	Koripallo		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-bcaee1c8-84d7-442a-8080-f8cd3b64d5c9	2023-03-20 00:00:00	Uinti/pojat		LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-d9f552e0-8d39-43a7-9274-dfb573e5dc72	2023-03-20 00:00:00	Sähly		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-7301039b-e03e-4faf-a594-45c33f925021	2023-04-02 10:00:00		Retkeilyä metsässä. Kävelimme noin 10 kilometrin lenkin metsäpolkuja pitkin ja ihastelimme kaunista luontoa.	LI_LUONTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
-9e17426f-5a97-4d62-bca8-25a9312e1367	2023-04-01 16:00:00		Vesijumppaa uimahallissa. Tunnin aikana treenasimme erilaisia liikkeitä vedessä, jotka oli suunniteltu erityisesti kunnon kohottamiseen.	LI_VESI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T2,T3,T4,T5,T6,T7}
-dda6bf2e-e54b-4d84-b5f4-991ebe0e3c89	2023-03-22 00:00:00	Sähly		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-1966f8dd-9773-4d94-a99b-f078a09f06f9	2023-03-22 00:00:00	Baletti		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-61dae344-c6b1-465d-890c-d542dcd25a4b	2023-03-22 00:00:00	Sähly		LI_TALVI	89d861be-d5e9-41a3-8672-d977b0895d54	\N
-0b6aeb65-5d32-46cb-9c00-bb7579506258	2023-03-22 00:00:00	Koripallo		LI_TALVI	10c06372-82ec-47ed-962c-77553126f3ae	\N
-79820907-8332-42aa-9f52-a85b12399a81	2023-03-22 00:00:00	Norsupalloa/koris/lenis		LI_TALVI	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
-f4a7e9cf-9517-4298-8105-bd53e48e58cf	2023-03-22 00:00:00	Norsupallo/lentopallo/koris		LI_TALVI	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
-4029717a-ba95-4c26-abfe-453df2616d81	2023-03-22 00:00:00	Ryhmäytymispelejä/käsijalista		LI_TALVI	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
-a5fa9792-b348-44fd-8ee8-e57e10c8955c	2023-03-22 00:00:00	Ryhmäytymisharjoitteita/käsijalista		LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-0eaa72d6-b26f-4e88-83f6-ea5067da86fa	2023-03-22 00:00:00	Kuntosali ja alkulämppä liikkasalissa (osa tytöistä uimassa)		LI_TALVI	de31e354-3f10-499e-b9b8-7c17616175c8	\N
-598aa503-e92b-44e2-9eda-b8dd22dff167	2023-03-23 00:00:00	Baletti		LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-51983e05-c043-4a3e-8998-9f4c032cdf86	2023-03-23 00:00:00	Akrobatia/kehonhuolto		LI_TALVI	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
-b1b09203-60c2-421a-a59c-9dbc126eb44a	2023-03-08 00:00:00	Hiihto		LI_TALVI	1e492cde-5525-44dc-b82f-6a34dd7eb995	\N
-fd4d4437-ad2e-42f8-bff9-7ce1b0bb819d	2023-03-12 00:00:00	Hiihto		LI_TALVI	1e492cde-5525-44dc-b82f-6a34dd7eb995	\N
-8c1fb18f-3e3f-4dd5-915e-91232a2d6845	2023-03-22 00:00:00	Välinevoimistelu	\N	LI_VOIM	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T4,T7}
-cc062cb4-8bad-4b3c-89fe-f5196d97b7a3	2023-03-16 00:00:00	Tasapaino ja kamppailu	\N	LI_KUNTO	1e492cde-5525-44dc-b82f-6a34dd7eb995	{}
-333de8c8-9cd3-4827-ab4b-3e3c169b8ecd	2023-04-05 00:00:00	Pesäpallo	\N	LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-0f675408-4e6d-4d94-b2be-4b1861874f24	2023-05-08 00:00:00		Eljas & Timi demo	LI_PALLO	797914c3-3e04-4caa-8468-830bcc09659b	{}
-4c015819-9b68-4634-83d1-ee1114c9be59	2023-05-09 00:00:00		\N	LI_VOIM	230317b4-fb83-4092-8da4-e641aadb600b	{T4,T10}
-6c860b01-a2bf-49dd-a838-e6dd8094c760	2023-05-11 00:00:00		Tenni/futis	LI_PALLO	ac83bfa3-9f44-4aea-aac0-98e793367206	{}
-3010d047-8156-4014-89a2-b25dd01d0e9c	2023-05-11 00:00:00		\N	LI_PALLO	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2}
-d9b24ed1-04ba-4bbf-96f6-cc0db42ae882	2023-03-27 00:00:00	Polttopallo/patjaralli/koris		LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-81b4100e-2f09-4436-87ef-a1f1de0f77ab	2023-05-12 00:00:00		\N	LI_VESI	0497a2a4-6124-40dc-92d6-8fe3b708331e	{T3,T1}
-8bb3dae0-3796-4f58-a3f0-be09fae5ab11	2023-05-16 00:00:00		Frisbeegolf	LI_LUONTO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T4,T6}
-ca38d48b-f9f3-4528-a4cb-dd823869ce72	2023-04-13 00:00:00		Kehonhallinta	LI_VOIM	797914c3-3e04-4caa-8468-830bcc09659b	\N
-937afab0-904e-4b0d-9c33-bf69db8b4e78	2023-04-17 00:00:00		Salibandy	LI_PALLO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-1ffb9b24-9a6c-4397-8870-e33932c269d7	2023-05-17 00:00:00		Ultimate & leikit	LI_PERUS	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{}
-66d2d829-a0e3-4d31-accc-ec37f5bc90c1	2023-04-18 00:00:00		Maalipallo & lentopallo.	LI_PALLO	797914c3-3e04-4caa-8468-830bcc09659b	\N
-1b994224-f869-4001-9336-6c5d07fe8e39	2023-03-27 00:00:00	Hankipelit/sali/puntti		LI_TALVI	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
-f204db7e-8c50-4205-8253-2c4295f4cc23	2023-03-28 00:00:00	Sähly		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-9ccac28e-da82-42b1-b5d1-d632e88c9009	2023-03-28 00:00:00	Sali/palloilu		LI_TALVI	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
-e3c72671-2c10-4d64-95e1-107809ee55f2	2023-03-29 00:00:00	Koripallo		LI_TALVI	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
-53ede09d-132a-4e8b-9ceb-c2247582a256	2023-05-17 00:00:00		Ultimate & leikit	LI_PERUS	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{}
-c04c12d5-e621-4254-9751-63ebe4dcd439	2023-03-24 19:00:00		Kuntosali treeniä. Treenasimme erityisesti ylävartalon lihaksia ja käytimme painoja ja kuntopyöriä.	LI_KUNTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T5,T7,T8}
-37cc680b-7525-48d5-8e86-2a2d35081c8b	2023-04-19 00:00:00		Purkkis	LI_LUONTO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
-f4860d37-f4ca-4ba4-8970-6bb133f22cd3	2023-03-29 00:00:00	Sähly		LI_TALVI	89d861be-d5e9-41a3-8672-d977b0895d54	\N
-c0076c27-405b-4dcc-a944-323b279d0986	2023-04-07 11:00:00		Pallopeliä hiekkakentällä. Pelasimme beach volleyn sijaan beach tennistä, joka oli hieman erilaista ja haastavaa. Peliaika oli 2 x 15 minuuttia.	LI_PALLO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T4,T8}
-fb37655d-6494-4657-9055-5e6a24b61e2a	2023-03-29 00:00:00	Talviliikunta		LI_TALVI	decdfebc-8865-4884-85e2-532e1324b324	\N
-556550db-3be0-49ed-b3b3-f4f0dfcf8ba2	2023-04-19 00:00:00		Salibandy (pojat) kuntosali (tytöt)	LI_PALLO	de31e354-3f10-499e-b9b8-7c17616175c8	\N
-cad9f7d4-a5c1-4ff2-9b94-edcb84b13a47	2023-03-30 00:00:00	Pehmopesis, sähly/lenis		LI_TALVI	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
-7a90bdaa-e683-4a3d-8d4f-78c56fab3e13	2023-03-30 00:00:00	Pehmopesis / koris /Jaffa		LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-e9ca0e55-45fd-4c1a-b588-c07ae30bfaea	2023-03-30 00:00:00	Pehmopesis/sulis/sähly		LI_TALVI	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
-c222d9c2-e979-47cd-b545-1803e2849a9e	2023-03-30 00:00:00	Uinti pojat		LI_TALVI	de31e354-3f10-499e-b9b8-7c17616175c8	\N
-897dbbdb-d0ed-4270-8ce4-8c34c3d21c8e	2023-04-03 13:30:00		Pallopeliä koulun pihalla. Pelasimme jalkapalloa kavereiden kanssa. Peli oli tasainen ja lopulta päättyi 2-2.	LI_PALLO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T5,T7,T8}
-1852c993-c666-42e9-8862-e2b9bd8f8a8d	2023-03-31 11:00:00		Peruskestävyystreeniä juoksuradalla. Juoksimme noin 5 kilometrin lenkin, joka sisälsi myös muutamia mäkiä.	LI_PERUS	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T3,T5,T7,T8}
-0928afc3-d50e-4222-9adc-71d1c8dc4593	2023-03-27 17:00:00		Luontojoogaa rannalla. Joogasimme rannalla auringonlaskun aikaan ja tunnelma oli upea. Joogan kesto oli 60 minuuttia.	LI_LUONTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{}
-321aacd4-f6e1-40f9-b5ab-ed36d65f0323	2023-03-30 00:00:00	Uinti pojat		LI_TALVI	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
-448295e4-1d25-49ac-80fe-8d2a6a4eab5b	2023-06-01 00:00:00		huihai	BI_KASVI	b369b11f-64ed-4278-83d7-588c59886416	{T1}
-f68f104b-19b9-4dc8-8564-9b27d16cac5d	2023-04-01 00:00:00	Baletti	\N	LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-8bba79e9-bfce-472d-8985-8d06407b4558	2023-04-03 00:00:00	Uinti pojat	Topias ja Eelis tyttöjen kanssa	LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-b29e68a9-5dc8-436d-9d1c-e2dd279b8128	2023-04-04 00:00:00	Reaktiohippa+leikit, Keilapallo	\N	LI_TALVI	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
-f92aeb42-9586-4da3-8818-eed3150f288b	2023-04-05 00:00:00	Ulkona soikkista/fudista	\N	LI_TALVI	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
-0fc921ea-f723-4134-8f6d-6fdae9d7be79	2023-04-05 00:00:00	Ulkopelit (futis, ryhmäytyminen)	\N	LI_TALVI	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
-0c53145f-5fd0-441d-b345-a189164a3301	2023-04-05 00:00:00	Ulkoliikunta (fudis, kirkkis)	\N	LI_TALVI	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-48198bbc-377e-4f03-bf33-307f2edeb01d	2023-04-05 00:00:00	Ulkofudis ja -ultimate sekä sali (pojat)	\N	LI_TALVI	de31e354-3f10-499e-b9b8-7c17616175c8	\N
-c06cfc5e-69ab-4094-9271-424e0b4da95a	2023-03-31 00:00:00	Talviliikunta	\N	LI_TALVI	decdfebc-8865-4884-85e2-532e1324b324	{T7,T8}
-788ded55-48ae-4d16-8db3-ff89f8b3b16d	2023-03-27 00:00:00	Välinevoimistelu	\N	LI_VOIM	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T4,T1,T9}
-b2141604-d8a2-4f1f-afe5-c6ea3875d0cd	2023-03-29 00:00:00	Lentopallo	\N	LI_PALLO	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T4,T2,T9}
-7b64a526-c49e-409e-9df0-af1f507313b5	2023-03-31 00:00:00	Palloilu	\N	LI_PALLO	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T2,T8}
-c1740f10-c2df-470a-a4b0-547fb0ce7ae4	2023-04-06 00:00:00	Uinti (tytöt)	\N	LI_TALVI	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
-b1c2442f-23fc-4571-9701-2c795143537d	2023-04-07 00:00:00	Koripallo	\N	LI_TALVI	89d861be-d5e9-41a3-8672-d977b0895d54	\N
-264c294a-1b7a-403a-8d88-eada1ec58baf	2023-05-09 00:00:00		\N	LI_PERUS	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T1,T5}
-0b5da7a7-bedb-41aa-afe0-1195abd1b1e7	2023-05-10 00:00:00		Tennis	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T1,T2}
-71a91b99-d2d2-4328-8d09-b34be35f4bc4	2023-05-11 00:00:00		\N	LI_LUONTO	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T5,T8}
-4d3fddca-2214-40dd-aa09-3f4031174783	2023-05-12 00:00:00		\N	LI_PALLO	72d704a8-e209-4255-a595-40d96c4d42ad	{T1,T3}
-f3a6d9a9-1c87-4706-9cd3-47eb2c994fb4	2023-04-10 00:00:00		\N	LI_VOIM	89d861be-d5e9-41a3-8672-d977b0895d54	\N
-619a1d3f-2b7d-4283-9a93-16c2562b6cea	2023-04-11 00:00:00		Palloilua korttipakalla. Alussa ryhmäytymistä.	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
-1eda1df4-9725-42f3-9b25-555230def13e	2023-04-12 00:00:00		Sulkapallo	LI_PALLO	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
-3b5e4736-250b-4785-b51e-1d40b0c2d7fc	2023-04-12 00:00:00		Olkahippa, käsihippa, otakiinnijaffa, sähly, keikapallo	LI_PALLO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
-a9f2c321-49f2-48ec-955f-ea21a6d78053	2023-04-12 00:00:00		Olka- ja käsihippa. Jaffapallo	LI_PALLO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
-893df305-ade6-4f72-89c2-6c8bc016c25e	2023-04-12 00:00:00		Uinti (pojat)	LI_VESI	de31e354-3f10-499e-b9b8-7c17616175c8	\N
-6ac64022-5671-4409-80a3-99a1dd020cfa	2023-04-10 00:00:00		\N	LI_VOIM	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-d555f364-a43b-4cd7-b441-36eba1399393	2023-04-02 00:00:00	Deporte X	Nos hicimos weones y volvimos	LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-e5229c63-bab4-43aa-b959-523054e27f69	2023-03-30 00:00:00	Sähly		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-6d4d0b46-d8e4-434c-b242-675b378da3fb	2023-04-10 00:00:00		\N	LI_VOIM	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-6216742f-6ee1-4b07-bb6c-8ce031ede1dd	2023-03-23 00:00:00	Koripallo		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-2a49b22f-e902-43cc-9785-493949f36824	2023-05-16 00:00:00		Ultimate & mölkky	LI_PERUS	797914c3-3e04-4caa-8468-830bcc09659b	{}
-7a43853a-3729-48b6-83ff-bd9f21a4a9c9	2023-03-23 00:00:00	Pesäpallo		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-abb65c1c-fb0f-44e8-84c8-c542fe24ef96	2023-04-08 16:30:00		Kuntosali treeniä. Treenasimme erityisesti keskivartalon lihaksia ja käytimme myös kuntopyöriä. Treenin kesto oli noin 90 minuuttia.	LI_KUNTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T5,T8}
-3740b2c7-10fd-434a-b025-354507eb0597	2023-03-31 00:00:00	Koripallo	\N	LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-f4ed3757-8623-42a2-a683-4d550a9b6f65	2023-03-27 00:00:00	Sähly		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-ffcf41a8-c5c9-406d-8062-a9f9f40bf827	2023-03-22 13:00:00		Retkeilyä kansallispuistossa. Kävelimme noin 15 kilometrin lenkin ja ihastelimme upeita maisemia.	LI_LUONTO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T5,T8}
-78187248-1c3a-4f9d-80c5-a7d1a3ccafb8	2023-03-26 12:00:00		Voimistelutreeniä salilla. Treenasimme erilaisia hyppyjä ja liikkeitä, jotka vaativat hyvää tasapainoa.	LI_VOIM	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T4,T6,T7}
-8dbcba3f-35e0-4e19-83a3-e480a5ad4c39	2023-03-28 14:00:00		Pallopeliä salissa. Pelasimme sählyä ja ottelu oli tiukka. Peli päättyi lopulta 4-3.	LI_PALLO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T4,T5,T8}
-0e16a08a-76d4-4cc9-9f50-1903a928125c	2023-03-30 00:00:00	Koripallo		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-2cae7ff5-26ca-4423-99c3-f46f8f454ea0	2023-05-19 00:00:00		\N	LI_VOIM	0dbc9116-4412-40d5-8271-5e949d4f20a6	{T4}
-a25e0294-c261-4524-bdce-1038cfe49910	2023-04-19 00:00:00		\N	LI_PALLO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-a5bc849c-03ec-40d3-9abd-4b68b93bcc7b	2023-04-10 00:00:00		\N	LI_LUONTO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-20e39e40-87d9-4273-aaee-44fe27eb45a9	2023-04-10 00:00:00		\N	LI_VOIM	230317b4-fb83-4092-8da4-e641aadb600b	\N
-5f8abc0c-3d0b-4a19-baf5-810c7144f275	2023-04-12 00:00:00		\N	LI_LUONTO	230317b4-fb83-4092-8da4-e641aadb600b	\N
-539a7959-1d07-42ef-8fc4-a7d7dd4da344	2023-05-19 00:00:00		\N	LI_LUONTO	f586e1b6-5297-4de1-8c7f-b7d76902ffc1	{T3,T5}
-d83204d9-d54e-4d7d-80c3-c28d96b0e0ef	2023-05-03 00:00:00		\N	LI_VESI	230317b4-fb83-4092-8da4-e641aadb600b	{T6,T7}
-f60cf3aa-428c-42ac-984e-6f4e8ebdef25	2023-03-29 00:00:00	Sähly		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-c854e589-492b-4b38-97fe-1c8717aa68ac	2023-03-23 00:00:00	Sähly		LI_TALVI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-10ba2787-61e0-4785-8dee-4a8a99414520	2023-04-10 00:00:00		Jojo	LI_LUONTO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-e24d79d5-8e15-46b5-951d-f811b7670023	2023-04-10 00:00:00		\N	LI_VOIM	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
-00dcbe25-4f69-4724-b33b-9d857f012479	2023-04-22 00:00:00		\N	LI_VOIM	0497a2a4-6124-40dc-92d6-8fe3b708331e	{T7,T2}
-1edc3524-678e-4c03-9a19-001c89aa9f58	2023-04-24 00:00:00		Musiikkiliikuntaa / lenis	LI_TANSSI	797914c3-3e04-4caa-8468-830bcc09659b	{T1}
-68af71a8-0626-451c-a0ba-597e762fd9dd	2023-04-26 00:00:00		Ryhmän keksimiä pelejä ja leikkejä:)	LI_PERUS	6d55867f-186d-4f87-8317-17cb8d0fd463	{T3,T8}
-80f640f0-d041-41f1-9817-6c18f415a068	2023-04-27 00:00:00		\N	LI_PALLO	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T8,T4,T9}
-5ed7980d-fc19-430b-a7f1-985d0ac1eaac	2023-04-29 00:00:00		\N	LI_PALLO	0497a2a4-6124-40dc-92d6-8fe3b708331e	{T3}
-eb6afa70-0356-4ff7-8f48-b8ce7abc8ae1	2023-05-02 00:00:00		\N	LI_VOIM	d492f954-cd06-4c86-8ce1-fff58bc72e38	{T2,T4}
-6e21af79-6985-460d-852a-9efda75bcd5f	2023-05-01 00:00:00		\N	LI_KUNTO	d492f954-cd06-4c86-8ce1-fff58bc72e38	{T5,T4}
-d473d712-cbe8-4568-bf44-e606e8ddee0d	2023-05-03 00:00:00		\N	LI_VOIM	230317b4-fb83-4092-8da4-e641aadb600b	{T4,T10}
-f47cb6c8-1735-4a98-a7b8-88f9af04e6e5	2023-09-04 00:00:00		Juoksu ja aitajuoksu	LI_PERUS	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T3}
-dceb37c4-11e9-4a50-bf78-6efb1af605f4	2023-09-04 00:00:00		Movet	LI_KUNTO	45982a54-e42c-4e48-8b84-32689d592abd	{T5}
-689dd5bb-4c12-4aed-a6bd-5ab3e9bda2ec	2023-09-04 00:00:00		Tennis ja koris/fudis/lentis	LI_PALLO	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
-9a404a41-2b08-4367-85ac-3a5450fbaadc	2023-09-05 00:00:00		Juoksuleikit, kestävyysjuoksu ja aitajuoksu	LI_PERUS	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T3}
-2ec02719-3e89-4c09-ae72-492da1ea8eec	2023-09-05 00:00:00		Move-tesit	LI_KUNTO	640e87de-8063-4c00-9087-c17709e34059	{T5}
-442e2cf3-3583-4bb1-9848-691cba355568	2023-09-05 00:00:00		Juoksuleikit, kestävyys ja aitajuoksu	LI_PERUS	f6160571-beff-4c21-b3af-399f376429ae	{T3}
-fb90b138-5af6-4566-895f-c9cfd96c7833	2023-09-06 00:00:00		Juoksuleikit, kestävyysjuoksu, aitajuoksu	LI_PERUS	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T3}
-0cf4bcfb-197b-4c26-b667-09af78a35d2a	2023-09-06 00:00:00		Tennis ja pesäpallo	LI_PALLO	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
-c25cbba8-88d5-4757-87a0-2f2bbc77c5c4	2023-09-06 00:00:00			LI_PALLO	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T1,T4}
-d4d650de-1b77-4d27-867e-32246c10aa72	2023-09-07 00:00:00		Move-mittaukset	LI_KUNTO	45982a54-e42c-4e48-8b84-32689d592abd	{T5}
-86c90257-a257-48c0-94b1-57dadfca0a6e	2023-09-08 00:00:00		Juoksuleikit, kestävyysjuoksu, aitajuoksu	LI_PERUS	a6a42248-8033-4254-8b5d-ba325479414d	{T3}
-be68b171-5a7e-4fae-9219-149771d8af9a	2023-09-08 00:00:00			LI_VESI	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T6}
-683da996-f2cf-4d1a-abf2-9f84d7c36541	2023-09-08 00:00:00			LI_PALLO	230317b4-fb83-4092-8da4-e641aadb600b	{T1,T4}
-f304a4cb-5765-44f0-abe9-662cf64c4732	2023-09-08 00:00:00		Juoksuleikit, kestävyysjuoksu, aitajuoksu	LI_PERUS	fd028225-16dd-4d8e-8c86-a81a9d9243e5	{T3}
-fb583211-e331-41f4-a30d-2eb95e904950	2023-09-11 00:00:00		Lenkki, liikkuvuus, ulkokuntosali	LI_KUNTO	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T5}
-2f6a5924-807e-47a5-96c4-0f4d7d42ed18	2023-09-11 00:00:00		Lippupallo	LI_PALLO	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
-c9c54bfb-7c50-4775-88cd-a79b941ebd09	2023-09-12 00:00:00		Lenkki, liikkuvuus ja ulkokuntosali	LI_KUNTO	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T5}
-2bcf4c09-33ba-4738-a859-976b4e4e65b1	2023-09-12 00:00:00		Move-mittaukset ja fireball	LI_KUNTO	640e87de-8063-4c00-9087-c17709e34059	{T5}
-edf92d9b-7d05-4843-8ed1-ee29ba8d16c6	2023-09-12 00:00:00		Lenkki, liikkuvuus ja ulkokuntosali	LI_KUNTO	f6160571-beff-4c21-b3af-399f376429ae	{T5}
-848c9d35-2b6f-4314-ac47-a586d8261405	2023-09-12 00:00:00			LI_TANSSI	c27efea4-643a-4cdc-9c40-e58525a49720	{T1,T5}
-c5e7d13a-39ea-43a2-9490-1f8e8473e66f	2023-09-13 00:00:00			LI_LUONTO	89d861be-d5e9-41a3-8672-d977b0895d54	{T5,T4}
-fe36ee80-78be-42a3-bbf0-3677b51326b1	2023-09-13 00:00:00			LI_VOIM	e3aba1ba-865b-4174-b776-b5936ab840d3	{T5,T4}
-319b9693-947d-454c-bec8-429501c9ceb3	2023-09-13 00:00:00			LI_VESI	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T5,T8}
-7ed4fdd0-0d57-4bcf-97a4-646f0fcc2790	2023-09-13 00:00:00			LI_TALVI	8ffe45c2-e5a4-4702-89d4-2df665869687	{T2,T1}
-eded69bb-0030-4d76-915c-ff9b56f0bf37	2023-09-13 00:00:00		Norsupallo, amerikkalaisen heittäminen, ultimate amerikkalaisella\n	LI_PALLO	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T4}
-8d478ae5-8238-4ee2-9731-b04edb5026c6	2023-09-13 00:00:00			LI_PERUS	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T5,T3}
-3b1e4ba1-e6b4-4a0b-8963-6622d754c465	2023-09-13 00:00:00		Jenkkifutiksen heitto, ultimate ja soikkispeli	LI_PALLO	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
-1bc699a0-733c-4e83-ba1b-b6175076e18d	2023-09-13 00:00:00			LI_PALLO	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T5,T4}
-7a7c9ff7-05cd-45f8-94ef-d35c694786ef	2023-09-13 00:00:00			LI_VESI	89d861be-d5e9-41a3-8672-d977b0895d54	{T4,T3}
-cd607d5e-69e1-42cf-a1a6-ee16359bf6df	2023-09-13 00:00:00			LI_TALVI	6f377d70-cfec-45c3-aabb-c41bdedaa327	{}
-0dc45b77-63e5-45af-a850-9618308a47e7	2023-09-13 00:00:00			LI_LUONTO	0736c55e-a30f-468d-ac92-011155f63782	{T10}
-44b021a4-4a91-448d-b422-02edb42a1a3e	2023-09-13 00:00:00		Sulkapallo	LI_PALLO	fc400672-2a2e-44b1-966b-d887bb7d1f40	{}
-e4c3d476-62fa-4353-8fe6-3cf0b6ceaf74	2023-09-13 00:00:00		Tier	LI_LUONTO	94673584-2806-4e30-9a43-1fd7c50320d8	{T8,T1}
-20fd7772-564d-49d2-8894-d349e53dee28	2023-09-13 00:00:00		Käsipallo + kiekonheiton alkeet	LI_PERUS	d872e1e1-07ed-4fe7-b285-f11e407754c7	{T4,T9,T1}
-d4d9d93d-8632-4c20-870e-2fe1bd957194	2023-09-13 00:00:00			LI_PALLO	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T4,T1}
-17e86dd3-05d1-486d-b4ea-341799da4e3f	2023-09-14 00:00:00			LI_PALLO	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T5,T2}
-4aa43e58-24a2-49ac-b69e-ea8e540203e8	2023-09-15 00:00:00		Viuhkasuunnistus (Cluedo) Harjulla. Tavoitteena kartan suuntaaminen, karttamerkkien tunnistaminen, mittakaavan hahmottaminen ja yhteistyö parin kanssa. 	LI_LUONTO	63f2c632-042f-45d8-864e-8ecf96d21f70	{T2,T9}
-b258d162-fb69-49c5-a342-5646aedc2187	2023-09-12 00:00:00		Jalkapallo eka tunti	LI_PALLO	d427be8a-0aba-47fb-8960-a447826b0343	{T1,T4,T2,T9,T10}
-cfab6204-6948-45e6-b556-86192d073cfb	2023-09-14 00:00:00			LI_PERUS	36347506-9fe3-4cc1-bd70-3f56675ba66c	{T1,T3,T6}
-9faf68b0-a85b-4c09-abb0-d4c9e0e19e79	2023-09-14 00:00:00		Terveystiedon ravintotunti	LI_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
-1b127087-3655-4766-bfc5-601ca4e3731c	2023-09-14 00:00:00		Move-mittaukset	LI_KUNTO	45982a54-e42c-4e48-8b84-32689d592abd	{T5}
-85a149ec-da1c-4b44-874b-1208bf8be03a	2023-09-14 00:00:00			LI_PALLO	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T4,T2,T8,T9}
-73b52af5-0332-4511-b57e-89b4806d2a51	2023-09-14 00:00:00		Heittäminen, kiinniottaminen, lyöminen	LI_PALLO	f5b7f191-2b9f-4606-b7f4-69f2fab61d6d	{T4,T8}
-a0c15016-a50b-44ce-81b5-56016d56e8a1	2023-09-14 00:00:00			LI_PALLO	a153dc01-0752-4f56-9501-8fc52ba97f0b	{T3,T4,T8,T10}
-0aaa8915-25de-4565-a886-585dd8f5bd3a	2023-09-14 00:00:00		Sisäpalloilu, futsal	LI_PALLO	c90e44ff-5e1a-4114-a2f1-aa8f139019a1	{T4,T9}
-bd77100d-766d-4ce4-8e59-6718b3f4061a	2023-09-15 00:00:00		Kävely, liikkuvuus, ulkokuntosali, lentopallo	LI_KUNTO	a6a42248-8033-4254-8b5d-ba325479414d	{T5}
-3736eb77-801f-4566-8f11-57b2263b201a	2023-09-15 00:00:00		Kävely, lentopallo, ulkokuntosali	LI_KUNTO	fd028225-16dd-4d8e-8c86-a81a9d9243e5	{T5}
-a6ef21b8-7092-4dce-947f-057904ea6d6b	2023-09-11 00:00:00			LI_LUONTO	587a6af4-afdd-4bf5-90a9-04bcadbb4807	{T8,T2}
-3973c4f0-84bb-4b53-bef0-2571ba7e86d6	2023-09-15 00:00:00		Terveystiedon liikuntatunti	LI_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
-4b1b54c2-ea63-4061-b45c-e18b9e85c500	2023-09-15 00:00:00		Lippupallo	LI_PALLO	640e87de-8063-4c00-9087-c17709e34059	{T4}
-7cbb3790-0e71-4f81-88b4-e9f627ab5e54	2023-09-12 00:00:00		Retki Laajavuoressa ryhmäytymispainotuksella	LI_LUONTO	d3f5eb51-9cac-441e-91ac-bad14e134b9d	{T3,T2}
-b14f2c21-613d-49dd-93f1-8bdac3f71800	2023-09-13 00:00:00		Luontopolku: kävely ja tehtäväkortin täyttö	LI_LUONTO	49f0263b-9be4-44f2-be54-8f95a1942dae	{T7,T10}
-d4ce0148-93de-44e8-b1d5-e9811d587b22	2023-09-18 00:00:00		Jalkapallo	LI_PALLO	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T4}
-d26f95e1-1044-41ca-bdca-65ff84e3d2f7	2023-09-18 00:00:00		Jalkapallo	LI_PALLO	afc9216c-d2b7-47d2-9e19-4a23a91acb9e	{T2,T4,T8,T9}
-8aaf28aa-d86d-4a6a-9ceb-4555dd85f0de	2023-09-18 00:00:00		MOVE	LI_PERUS	78e46daf-61ca-4997-bf43-5c5277ff6f4c	{T3,T5,T1}
-8ca4a48e-1327-499c-9339-7c5baa16a37c	2023-09-18 00:00:00			LI_PALLO	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T4,T8}
-ce5460c6-544b-4634-b754-3ce689169bf4	2023-09-18 00:00:00		Jalkapallo tai vapaavalintainen pallottelupeli	LI_PALLO	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
-66631530-c290-4818-9e13-6e30295be221	2023-09-18 00:00:00		Lentopallo	LI_PALLO	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
-ed123bb0-e8ee-4ff7-ad66-c67cec1fd68d	2023-09-18 00:00:00		Jalkapallo 1	LI_PALLO	f5b7f191-2b9f-4606-b7f4-69f2fab61d6d	{T2,T4,T8}
-cb7ef5fb-7fba-42fb-9e12-c02111fa299a	2023-09-19 00:00:00		Karttaretki ja suunnistaminen Laajavuoressa. 	LI_LUONTO	63f2c632-042f-45d8-864e-8ecf96d21f70	{T2,T9}
-59a61f01-3392-40f2-9cd5-1b0e7477d7da	2023-09-19 00:00:00		Jalkapallo	LI_PALLO	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T4}
-29f5e195-1b34-4a4e-96ee-dd5a8501ac02	2023-09-18 00:00:00			LI_LUONTO	587a6af4-afdd-4bf5-90a9-04bcadbb4807	{T3,T2,T8}
-709ab1eb-9938-4b58-b66d-901fec3722d4	2023-09-19 00:00:00		Jalkapallo	LI_PALLO	640e87de-8063-4c00-9087-c17709e34059	{T4}
-12d7d533-088d-4341-9d59-0b0a4e56c598	2023-09-19 00:00:00			LI_KUNTO	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T1}
-c3a84e36-8941-4755-9583-2ad7f96b057d	2023-09-19 00:00:00			LI_VESI	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T2}
-e6e1c397-5c85-47b3-8d0f-4fb289cfbf2a	2023-09-19 00:00:00			LI_VOIM	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T3}
-e2211e9b-a6a5-4a95-8ab0-408816504c00	2023-09-20 00:00:00			LI_PALLO	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T4}
-b8b01e7b-09a4-445f-b565-967b6695c88d	2023-09-20 00:00:00			LI_TANSSI	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T1}
-8bb76299-24a2-4f01-a8dc-a46a657a3807	2023-09-21 00:00:00			LI_PERUS	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T2}
-9405e66e-3ea7-4392-a17b-3e48b80f185b	2023-09-19 00:00:00		Jalkapallo	LI_PALLO	f6160571-beff-4c21-b3af-399f376429ae	{T4}
-456688bf-755a-451a-9e6e-5f9953081828	2023-09-19 00:00:00			LI_LUONTO	ab0c9659-e372-4474-a910-d0bc4c1f2c00	{}
-6498d0d4-9dbd-42fb-a714-ba4578a667e3	2023-09-19 00:00:00		Retkeilytunti, jossa suunnistamista ja suunnan ottaminen.	LI_LUONTO	64b534f4-7461-422c-bf3b-8d5bde2e36f7	{T1,T2}
-c017cf7a-b82a-488a-8668-1cc403f4d21f	2023-09-19 00:00:00			LI_PALLO	7f091af6-1c43-4020-9360-e05a6563e18a	{T4,T1}
-8b70ad42-002f-4eb7-906e-d8b4a1788a84	2023-09-19 00:00:00			LI_MUU	557f38da-cdab-464c-bc74-1a84606989b0	{T4}
-6089537e-4c22-4539-9140-34533f9e773a	2023-09-19 00:00:00			LI_PALLO	557f38da-cdab-464c-bc74-1a84606989b0	{T2}
-afddc74f-1b4a-4ee3-8125-98a36d95a054	2023-09-19 00:00:00			LI_VESI	557f38da-cdab-464c-bc74-1a84606989b0	{T5}
-9cbdf93e-f63d-4e92-bb8e-10746c8528a3	2023-09-19 00:00:00			LI_VESI	557f38da-cdab-464c-bc74-1a84606989b0	{T5}
-b19df1dc-a960-40a4-a396-dff138f35ae5	2023-09-19 00:00:00			LI_VESI	557f38da-cdab-464c-bc74-1a84606989b0	{T6}
-4e55ae4a-c793-429f-9733-601f42aec61f	2023-09-20 00:00:00		Jalkapallo	LI_PALLO	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T4}
-1ab87639-2f4d-4b6c-8775-61b5acb7cac4	2023-09-20 00:00:00		Lentopallo	LI_PALLO	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
-5bd1d074-e871-4edf-be9f-3a2bba8da09d	2023-09-20 00:00:00		Korkeushyppy	LI_PERUS	d872e1e1-07ed-4fe7-b285-f11e407754c7	{T1,T3,T8}
-1c0b2554-b5ea-4217-86c1-a1f042164d25	2023-09-19 00:00:00			LI_VESI	a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	{T1,T3,T9}
-77231370-6d4d-4f7e-a001-79df2df19b65	2023-09-20 00:00:00		Keihäänheitto, moukari, pikakävely ja viestijuoksu	LI_PERUS	49f0263b-9be4-44f2-be54-8f95a1942dae	{T1,T3,T4,T9}
-7230c38b-1f0d-4ddc-a4ee-a68d7ea91797	2023-09-15 00:00:00		Karttaretki ja cluedo	LI_LUONTO	a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	{T2,T9}
-7cf31acb-2599-4965-89ba-15b7b144d280	2023-09-21 00:00:00		Jalkapallo + (koripallo)	LI_PALLO	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
-9b410321-54a1-497a-b6f0-fd0e8fbaed97	2023-09-18 00:00:00		Suunnistus pareittain	LI_LUONTO	9b8adc7f-39c7-4925-847a-818b9389c18b	{T1,T9}
-94985e38-244b-4a8b-a470-dcfab2fa235d	2023-09-21 00:00:00		Nopeutta ja räjähtävyyttä sekä futsal	LI_PALLO	a153dc01-0752-4f56-9501-8fc52ba97f0b	{T2,T4,T5,T9,T8,T10}
-c5840731-db8f-4262-b80f-9b0c2a219611	2023-09-21 00:00:00		Unitunti terveystiedossa	LI_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
-c081b5bc-d20a-40e2-bdd6-658b41056a10	2023-09-21 00:00:00			LI_LUONTO	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T1,T10}
-1d1bd83f-0c69-46dd-b45f-a692962711eb	2023-09-21 00:00:00		Jalid 2	LI_PALLO	f5b7f191-2b9f-4606-b7f4-69f2fab61d6d	{T4,T9,T2}
-271a8b8d-b14e-4cba-a3dd-ae87b268ce07	2023-09-22 00:00:00			LI_PALLO	63f2c632-042f-45d8-864e-8ecf96d21f70	{T2,T8}
-39f0e0d3-8334-4267-9042-23242ea737f6	2023-09-22 00:00:00			LI_PERUS	36347506-9fe3-4cc1-bd70-3f56675ba66c	{T3,T8}
-a9aefc29-0242-4c70-9adb-904ff0f68315	2023-09-22 00:00:00			LI_PERUS	78e46daf-61ca-4997-bf43-5c5277ff6f4c	{T5,T10}
-afa44e7b-e5b1-403c-a062-f5479921c45c	2023-09-22 00:00:00		Jalkapallo	LI_PALLO	a6a42248-8033-4254-8b5d-ba325479414d	{T4}
-9e446627-c627-4cc9-9a9c-869be21adc35	2023-09-22 00:00:00		Painonhallinnan terveystiedon tunti	LI_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
+COPY public."EvaluationCollection" (id, date, description, "environmentCode", "moduleId", "learningObjectiveCodes") FROM stdin;
+7b28f9fd-4ecb-4da4-80d8-827355d10caf	2023-04-21 00:00:00	Jalkapallo ja soikkis /tytöt	LI_ENV_PAL	72d704a8-e209-4255-a595-40d96c4d42ad	\N
+1e80e956-c012-4d76-a01a-0d32007da1db	2023-04-21 00:00:00	\N	LI_ENV_MUU	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
+c1740f10-c2df-470a-a4b0-547fb0ce7ae4	2023-04-06 00:00:00	\N	LI_ENV_TAL	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
+b1c2442f-23fc-4571-9701-2c795143537d	2023-04-07 00:00:00	\N	LI_ENV_TAL	89d861be-d5e9-41a3-8672-d977b0895d54	\N
+264c294a-1b7a-403a-8d88-eada1ec58baf	2023-05-09 00:00:00	\N	LI_ENV_PER	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T1,T5}
+f47cb6c8-1735-4a98-a7b8-88f9af04e6e5	2023-09-04 00:00:00	Juoksu ja aitajuoksu	LI_ENV_PER	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T3}
+46baaad5-0f6b-4af5-b454-2895ec00965c	2023-05-05 00:00:00	Pesäpalloa (heitto-kiinniotto) / tytöt	LI_ENV_PAL	72d704a8-e209-4255-a595-40d96c4d42ad	{T2,T8}
+b38a9a41-599f-4d1a-86df-12346e38a933	2023-04-22 00:00:00	\N	LI_ENV_LUO	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T7}
+15cf1b92-14da-40cf-a53f-34d44b71a6a8	2023-04-24 00:00:00	\N	LI_ENV_PAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T3,T1}
+2dd473a1-eeec-4ead-8ff5-4f3a799e027f	2023-04-25 00:00:00	Lentopallo	LI_ENV_PAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T3,T1}
+c00a27a4-7ce1-45c0-8696-703841932620	2023-04-26 00:00:00	\N	LI_ENV_PAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{}
+ecb94bbf-9d0c-4296-87ff-4b86b43c05da	2023-04-26 00:00:00	Jalkapallo	LI_ENV_PAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{}
+250881ed-bf2f-46e4-bc10-f45afabad6e9	2023-04-27 00:00:00	Selviytyjät salissa (tytöt)	LI_ENV_MUU	ac83bfa3-9f44-4aea-aac0-98e793367206	{}
+d3f9b80b-0d2f-4545-adeb-9483c6e86873	2023-05-02 00:00:00	\N	LI_ENV_PAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T2,T7}
+798f36d8-d78e-4297-a3ff-9955098ddb1c	2023-04-13 00:00:00	Tytöt: Aerobic ja sulkapallo	LI_ENV_PAL	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
+2adfd36f-10bd-428b-9dfa-03225457702a	2023-04-14 00:00:00	Kuntonyrkkeily (peili, reaktiopeli)	LI_ENV_KUN	72d704a8-e209-4255-a595-40d96c4d42ad	\N
+462597ed-4611-43cc-8934-bb00e8fe2a6c	2023-05-03 00:00:00	\N	LI_ENV_PER	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T8,T3}
+d08a4fbb-2ac9-4703-aa59-fc4ca3052473	2023-05-03 00:00:00	Selviytyjät	LI_ENV_PER	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T3,T8}
+4a59ecd5-3ab8-4006-b897-c5daa1641016	2023-05-03 00:00:00	\N	LI_ENV_KUN	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T1,T10}
+14ffde4f-95ab-4cc3-8694-b92f686159f1	2023-05-10 00:00:00	Plogging	LI_ENV_PER	6d55867f-186d-4f87-8317-17cb8d0fd463	{}
+efe31604-e6fc-418e-ba94-4cc9b5955ef8	2023-03-17 00:00:00	\N	LI_ENV_VOI	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T3,T1,T8}
+3d125050-5d36-48e1-b651-e899e9461f2f	2023-05-11 00:00:00	\N	LI_ENV_LUO	ba4535ec-16b4-4070-8a70-83cbe8b51340	{T2,T1}
+30371d14-fe98-4817-a945-0f0c5bad3b84	2023-05-15 00:00:00	Frisbeegolf	LI_ENV_LUO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T4,T6}
+726ca314-dc27-480f-923d-10f9c840d1a0	2023-04-10 14:00:00	Luonnonkauniilla polulla lenkkeilyä. Polku oli mäkinen, mutta maisemat olivat upeat. Lenkin kesto oli noin 45 minuuttia.	LI_ENV_LUO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
+48b97ca2-cc28-4f63-a14b-26fb8422ff2f	2023-03-23 10:30:00	Pallopeliä ulkokentällä. Pelasimme tennistä kavereiden kanssa. Peli oli tasainen ja lopulta päättyi 6-4.	LI_ENV_PAL	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T3,T4,T5,T6,T7}
+f9bbb84d-acab-4b52-a890-43dc7709963f	2023-04-09 09:00:00	Tanssitunti tanssikoululla. Harjoittelimme uutta koreografiaa ja se oli haastavaa, mutta myös hauskaa. Tunnin kesto oli 60 minuuttia.	LI_ENV_TAN	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T2,T6}
+b1876b9c-23cd-46d2-aa93-b7980fbca7a2	2023-04-05 15:00:00	Perusvoimistelutreeniä voimistelusalilla. Treenasimme erilaisia liikkeitä ja hyppyjä. Treenin kesto oli 90 minuuttia.	LI_ENV_PER	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
+beee4734-91f2-424a-b01d-70bb610bfcbc	2023-03-30 15:30:00	Tanssitunti tanssikoululla. Tällä kertaa harjoittelimme latinalaistansseja, kuten salsaa ja cha chaa. Tunnin kesto oli 60 minuuttia.	LI_ENV_TAN	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T4,T5,T7}
+4f42caa2-bcc4-47e8-bab9-1ef88e9382c2	2023-05-19 00:00:00	\N	LI_ENV_VOI	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2,T1}
+4e2afd6f-5320-419c-bd50-314fcddaee44	2023-06-01 00:00:00	\N	LI_ENV_PER	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1}
+7da6191b-7f47-44e2-a246-68effa8168dc	2023-06-21 00:00:00	\N	LI_ENV_VES	89d861be-d5e9-41a3-8672-d977b0895d54	{T1,T7}
+3ca2f6e3-1bcc-4ab3-ba64-1440cdaf8019	2023-07-29 00:00:00	\N	LI_ENV_VOI	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T3}
+4a81ce87-bccf-4fb5-af09-51e8899bbed1	2023-08-21 00:00:00	Heitto ja työntö	LI_ENV_PER	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T3}
+032c110b-9a4c-47b8-914a-c07dc4a7f82d	2023-08-21 00:00:00	Koripallo ja beach volley	LI_ENV_PAL	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
+bee802eb-1d02-4fec-9e4d-003a1361685e	2023-08-21 00:00:00	Kpk ja fudis	LI_ENV_PAL	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
+ce80c783-0a4b-4c58-90ad-ba79266f522c	2023-08-23 00:00:00	Keihäs ja kuula	LI_ENV_PER	640e87de-8063-4c00-9087-c17709e34059	{T3}
+1577f95a-7961-4c4e-a2aa-74db477eb72b	2023-08-23 00:00:00	Koripallo ja beach volley	LI_ENV_PAL	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
+a5be85c5-7133-4454-8af9-694ac0d8e3f2	2023-08-24 00:00:00		LI_ENV_TAL	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T3}
+858a71a5-c43a-46fe-8f9c-52e26563fc88	2023-08-25 00:00:00	Keihäs ja kuula	LI_ENV_PER	fd028225-16dd-4d8e-8c86-a81a9d9243e5	{T3}
+be216fb7-97e2-45b0-aed5-40e935bf7707	2023-08-28 00:00:00	Sisällä pituus ja korkeus	LI_ENV_PER	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T3}
+7fb30ed7-affa-40dc-b83c-e1c024283074	2023-08-28 00:00:00	Fireball ja sulkapallo	LI_ENV_PAL	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
+6dd0a225-308e-4284-b74f-539133806168	2023-08-29 00:00:00	Pituushyppy ja korkeushyppy	LI_ENV_PER	640e87de-8063-4c00-9087-c17709e34059	{T3}
+79af44c1-41f7-47d7-bfdf-30611f8c3b9a	2023-08-30 00:00:00	Kpk ja hyppyleikit sisällä	LI_ENV_PER	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T3}
+93edd4be-dd55-4f42-b568-a782849af230	2023-08-30 00:00:00	Sulkapallo ja fudistennis	LI_ENV_PAL	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
+f4ed3757-8623-42a2-a683-4d550a9b6f65	2023-03-27 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+0c9c65c8-8dc0-4396-aa0c-29f07ecc1fe0	2023-08-30 00:00:00		LI_ENV_VOI	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T4,T1}
+f3a651ac-f25e-4f56-9927-7946332213cd	2023-09-01 00:00:00	Fireball, kpk, futsal	LI_ENV_PAL	a6a42248-8033-4254-8b5d-ba325479414d	{T4}
+5ce16688-56df-465d-bfb4-04d94f86a484	2023-03-21 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+7488ce86-5522-45d1-bf90-c8d8604ca3ca	2023-04-01 00:00:00	\N	LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+b54b2774-53ec-4efe-9957-926827ff6edb	2023-03-27 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+dd81081e-3ed6-4807-99e9-988af80153fc	2023-03-19 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+abe03f46-f878-4284-84e4-de5857f87209	2023-04-10 00:00:00	\N	LI_ENV_VES	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+49f4d3a8-22b6-4f9f-bb7b-17d5d7b4c422	2023-04-10 00:00:00	Moimpi	LI_ENV_LUO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+d2ff8b16-ae97-456c-89a1-4a42be951b3c	2023-03-31 00:00:00	\N	LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+de687f93-05ec-4f40-b524-15aefde3eeb2	2023-03-27 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+bca98182-4fea-4c2b-b829-6745f99e0321	2023-03-23 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+16ebda74-3df2-4ee7-82e2-87d7ece3ac1e	2023-04-10 00:00:00	\N	LI_ENV_VOI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+a6253c81-d539-4022-8bf3-45c7eee9cc2d	2023-04-19 00:00:00	\N	LI_ENV_VOI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+10c08368-0fd8-4687-8ed7-a7a4f34d7776	2023-04-10 00:00:00	Tanssi!	LI_ENV_TAN	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+1e597269-f460-4a88-9702-2d4f420c0f00	2023-04-10 00:00:00	Moimoi	LI_ENV_LUO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+4112bf6a-81c2-4200-a662-ee7fa06787c4	2023-04-24 00:00:00	\N	LI_ENV_VES	230317b4-fb83-4092-8da4-e641aadb600b	{T6,T7}
+568d601e-2dff-47f1-96a4-bd823b8aadae	2023-04-25 00:00:00	Huispaus ja reaktiopelejä	LI_ENV_PER	797914c3-3e04-4caa-8468-830bcc09659b	{T1,T2}
+9a7635bd-a52c-475a-b16c-35786e52a5a8	2023-04-26 00:00:00	Jalkapallo, soikkis, rekkitemppuilu, tervapata	LI_ENV_PAL	de31e354-3f10-499e-b9b8-7c17616175c8	{}
+8e8599bd-97ff-4679-839f-4d0a618177ea	2023-04-27 00:00:00	\N	LI_ENV_VES	decdfebc-8865-4884-85e2-532e1324b324	{T5}
+c07c8afc-8f1b-4dac-a4a8-929a0e9059e6	2023-05-02 00:00:00	Viivi, Ilari ja Taimi opettajina	LI_ENV_MUU	797914c3-3e04-4caa-8468-830bcc09659b	{}
+74f84fb9-64dc-4c1e-a880-ad98d9cf6b92	2023-05-03 00:00:00	\N	LI_ENV_TAN	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T8}
+2f72c229-ca83-4d7d-8620-11e6e77a5897	2023-05-03 00:00:00	\N	LI_ENV_TAL	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T8,T10}
+1a72ed87-cce4-4240-83f7-6111c6ccf364	2023-05-04 00:00:00	\N	LI_ENV_PAL	ac83bfa3-9f44-4aea-aac0-98e793367206	{T8,T3}
+4dde4440-0413-45ca-a645-8f0adf8d2622	2023-05-08 00:00:00	\N	LI_ENV_PAL	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T1,T3,T8}
+8e4f3eb4-215f-44ff-bc5d-8284be416d0d	2023-05-10 00:00:00	Koripallo/ropeskipping	LI_ENV_PAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{}
+7c46e884-cea8-4a7b-9e12-15b555eaa4d7	2023-05-11 00:00:00	\N	LI_ENV_TAN	89d861be-d5e9-41a3-8672-d977b0895d54	{T1,T5}
+02b88abf-86b9-4ce1-82e8-418cefa02b40	2023-05-09 00:00:00	Oli todella haastava suunnistuskeli, älytön sumu ja sade.	LI_ENV_LUO	230317b4-fb83-4092-8da4-e641aadb600b	{T2,T5,T10}
+a75cd675-489c-4e09-8c33-ac8afd3063a0	2023-05-15 00:00:00	\N	LI_ENV_PER	0497a2a4-6124-40dc-92d6-8fe3b708331e	{}
+1bf527f9-144d-408d-8340-9aa5d93ec871	2023-05-17 00:00:00	Pesäpallo	LI_ENV_PAL	6d55867f-186d-4f87-8317-17cb8d0fd463	{T4,T1}
+87721bf9-2237-4429-9e23-587ae97d05c1	2023-04-11 00:00:00	Sählyn pelailua sisällä salissa. Ensin harjoiteltiin pallon käsittelyä ja sitten pelattiin peliä. Peli oli 3 vs 3 ja pelattiin 2 x 10 minuuttia	LI_ENV_PAL	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T6,T8}
+3b32ba2c-8635-438b-a1b3-015d980e0846	2023-04-04 19:00:00	Uintitreeniä uimahallissa.	LI_ENV_VES	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
+d54b8c42-67e5-49a5-85f3-f163230de4a7	2023-04-06 18:00:00	Luontojooga ulkona puistossa. Jooga oli rentouttavaa ja samalla nautimme raikkaasta ulkoilmasta. Joogan kesto oli 60 minuuttia.	LI_ENV_LUO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
+f5a560c0-2dc6-4f39-8158-9c222339bb04	2023-03-25 16:30:00	Uintitreeniä avovesialtaassa. Uinti oli hieman haastavaa, sillä vesi oli vielä melko kylmää, mutta keli oli kaunis ja aurinkoinen.	LI_ENV_VES	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T4,T8}
+a8c5e1fb-bb1a-4811-9b48-6faa29f4f619	2023-03-29 09:30:00	Kuntoilua puistossa. Teimme erilaisia lihaskunto- ja venyttelyliikkeitä puiston penkeillä ja portailla.	LI_ENV_KUN	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T2,T4,T7,T8}
+ca0b4bb1-c094-42a5-b45f-2a1c02c4fe65	2023-05-23 00:00:00	\N	LI_ENV_VES	decdfebc-8865-4884-85e2-532e1324b324	{T2,T4}
+e21cd4c8-20e1-40ac-9a7e-cafc322dac96	2023-06-10 00:00:00	\N	LI_ENV_KUN	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T4,T7}
+566dc2b8-667a-428f-bf64-2947669dae99	2023-07-08 00:00:00	\N	LI_ENV_TAL	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2}
+64295e4a-7641-439d-8a7f-8e967149dde6	2023-07-29 00:00:00	\N	LI_ENV_VOI	89d861be-d5e9-41a3-8672-d977b0895d54	{}
+520adbc2-e093-40f1-8a8f-5b071f9c9c3f	2023-08-22 00:00:00	Keihäs ja kuula	LI_ENV_PER	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T3}
+d6e498fa-92dc-4425-ba9a-6ea712d40f92	2023-08-22 00:00:00	Keihäs ja kuula	LI_ENV_PER	f6160571-beff-4c21-b3af-399f376429ae	{T3}
+31deeadb-5e29-4f3b-93b7-ee2d17f51631	2023-08-23 00:00:00	Keihäs ja kuula	LI_ENV_PER	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T3}
+ce15d4d7-9363-4b93-97af-afd713c97a0e	2023-08-24 00:00:00	Keihäs ja kuula	LI_ENV_PER	45982a54-e42c-4e48-8b84-32689d592abd	{T3}
+b7990e52-4204-4f2a-8e1f-aa9212420eba	2023-08-25 00:00:00	Keihäs ja kuula	LI_ENV_PER	a6a42248-8033-4254-8b5d-ba325479414d	{T3}
+523a6273-c7bd-4d67-8b9b-48b16e66d4e5	2023-08-25 00:00:00	Kpk ja koris/fudis	LI_ENV_PAL	640e87de-8063-4c00-9087-c17709e34059	{T4}
+e8502f11-5dcd-4889-bc35-0728a210d64b	2023-08-28 00:00:00	Kpk ja koripallo	LI_ENV_PAL	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
+9264da22-1da2-43d0-99ab-564dee2d8326	2023-08-29 00:00:00	Korkeushyppy ja pituushyppy	LI_ENV_PER	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T3}
+7609e570-5d24-4cc0-9daf-efce6e08a02a	2023-08-29 00:00:00	Pituus- ja korkeushyppy	LI_ENV_PER	f6160571-beff-4c21-b3af-399f376429ae	{T3}
+516e883e-2f2d-4cc6-be32-7ae7c52d31a5	2023-05-08 00:00:00	Tennistä ulkona	LI_ENV_PAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T1}
+117ab460-e5a7-4e15-a674-aed050c43bf5	2023-04-18 00:00:00	Sählypeliä.	LI_ENV_PAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
+eae42717-f8ef-4cc4-bdbe-a7599e7bd261	2023-04-19 00:00:00	Koris (vanne, keppi -rinki)	LI_ENV_PAL	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
+4cd87a2c-19d7-4c7c-ae7e-da90e70cd8fe	2023-05-09 00:00:00	Tennis	LI_ENV_PAL	797914c3-3e04-4caa-8468-830bcc09659b	{T3,T1}
+efb25bc7-cd6d-4714-a6a9-14aaa5e31923	2023-04-19 00:00:00	Purkkis ja puuhippa	LI_ENV_LUO	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+d92db901-9823-4102-b351-5d20f3c69b1f	2023-04-19 00:00:00	\N	LI_ENV_VOI	f586e1b6-5297-4de1-8c7f-b7d76902ffc1	\N
+94a4cc72-3f10-44c0-821c-382909222c00	2023-04-20 00:00:00	Kuntosali/jaffapallo -tytöt	LI_ENV_KUN	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
+fab75884-b991-40c8-a22f-b9366be377ca	2023-04-20 00:00:00	Soikkis, jaffa	LI_ENV_PAL	797914c3-3e04-4caa-8468-830bcc09659b	\N
+43d83271-76a1-453b-b117-72d4a3741fa6	2023-03-05 00:00:00		LI_ENV_TAL	ffe74adb-ab34-42bd-b305-eff26e32b6ba	\N
+024a5d62-d90f-4f73-b293-3286175ca586	2023-03-05 00:00:00		LI_ENV_TAL	ffe74adb-ab34-42bd-b305-eff26e32b6ba	\N
+4aba8224-f510-48f7-912e-048ec687325f	2023-05-10 00:00:00	Jalkapallosovelluksia & soikkis	LI_ENV_PAL	de31e354-3f10-499e-b9b8-7c17616175c8	{}
+5653b8aa-7777-4a3d-a704-73a5dbaf52ff	2023-05-11 00:00:00	\N	LI_ENV_VES	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T4,T8}
+c3a67d69-4acc-4673-984e-1905a7b3833d	2023-03-11 00:00:00		LI_ENV_TAL	564ee2b5-5c55-4667-8732-f9f45d9ecd5a	\N
+556446ed-89a7-43e4-b9b5-00abe95eceba	2023-03-11 00:00:00		LI_ENV_TAL	564ee2b5-5c55-4667-8732-f9f45d9ecd5a	\N
+6f022179-e8e8-427f-b8fa-fb290acc84f4	2023-03-06 00:00:00		LI_ENV_TAL	564ee2b5-5c55-4667-8732-f9f45d9ecd5a	\N
+cbfca445-6768-4260-a592-d182c295da43	2023-05-12 00:00:00	\N	LI_ENV_VOI	89d861be-d5e9-41a3-8672-d977b0895d54	{T4,T5}
+d0c10212-08a6-44f8-ad34-cc0edb65b78f	2023-03-16 00:00:00		LI_ENV_TAL	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
+2859c556-656e-4367-a4b3-eeb0efa6bd86	2023-03-16 00:00:00		LI_ENV_TAL	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
+a9f2c498-9fa5-4af6-897d-fdb395002668	2023-03-17 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+02c4cd17-9f85-4047-9db1-4b13bc0da999	2023-05-16 00:00:00	Heittäminen, soikkis	LI_ENV_PER	797914c3-3e04-4caa-8468-830bcc09659b	{T2,T7}
+fb2ac5a0-bd74-48ee-982a-f9f0a8fe8c75	2023-03-19 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+77b749a1-1322-4918-a8a3-75e5907d24c8	2023-03-14 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+63411c6e-87fc-4c5c-bb5a-737114a53c2a	2023-05-17 00:00:00	Frisbeegolf	LI_ENV_LUO	de31e354-3f10-499e-b9b8-7c17616175c8	{}
+39716719-b0c7-4f70-87eb-221191db0e11	2023-03-20 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+bcaee1c8-84d7-442a-8080-f8cd3b64d5c9	2023-03-20 00:00:00		LI_ENV_TAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+d9f552e0-8d39-43a7-9274-dfb573e5dc72	2023-03-20 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+7301039b-e03e-4faf-a594-45c33f925021	2023-04-02 10:00:00	Retkeilyä metsässä. Kävelimme noin 10 kilometrin lenkin metsäpolkuja pitkin ja ihastelimme kaunista luontoa.	LI_ENV_LUO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T4,T5,T6,T7,T8}
+9e17426f-5a97-4d62-bca8-25a9312e1367	2023-04-01 16:00:00	Vesijumppaa uimahallissa. Tunnin aikana treenasimme erilaisia liikkeitä vedessä, jotka oli suunniteltu erityisesti kunnon kohottamiseen.	LI_ENV_VES	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T2,T3,T4,T5,T6,T7}
+dda6bf2e-e54b-4d84-b5f4-991ebe0e3c89	2023-03-22 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+1966f8dd-9773-4d94-a99b-f078a09f06f9	2023-03-22 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+61dae344-c6b1-465d-890c-d542dcd25a4b	2023-03-22 00:00:00		LI_ENV_TAL	89d861be-d5e9-41a3-8672-d977b0895d54	\N
+0b6aeb65-5d32-46cb-9c00-bb7579506258	2023-03-22 00:00:00		LI_ENV_TAL	10c06372-82ec-47ed-962c-77553126f3ae	\N
+79820907-8332-42aa-9f52-a85b12399a81	2023-03-22 00:00:00		LI_ENV_TAL	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
+f4a7e9cf-9517-4298-8105-bd53e48e58cf	2023-03-22 00:00:00		LI_ENV_TAL	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
+4029717a-ba95-4c26-abfe-453df2616d81	2023-03-22 00:00:00		LI_ENV_TAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
+a5fa9792-b348-44fd-8ee8-e57e10c8955c	2023-03-22 00:00:00		LI_ENV_TAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+0eaa72d6-b26f-4e88-83f6-ea5067da86fa	2023-03-22 00:00:00		LI_ENV_TAL	de31e354-3f10-499e-b9b8-7c17616175c8	\N
+598aa503-e92b-44e2-9eda-b8dd22dff167	2023-03-23 00:00:00		LI_ENV_TAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+51983e05-c043-4a3e-8998-9f4c032cdf86	2023-03-23 00:00:00		LI_ENV_TAL	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
+b1b09203-60c2-421a-a59c-9dbc126eb44a	2023-03-08 00:00:00		LI_ENV_TAL	1e492cde-5525-44dc-b82f-6a34dd7eb995	\N
+fd4d4437-ad2e-42f8-bff9-7ce1b0bb819d	2023-03-12 00:00:00		LI_ENV_TAL	1e492cde-5525-44dc-b82f-6a34dd7eb995	\N
+8c1fb18f-3e3f-4dd5-915e-91232a2d6845	2023-03-22 00:00:00	\N	LI_ENV_VOI	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T4,T7}
+cc062cb4-8bad-4b3c-89fe-f5196d97b7a3	2023-03-16 00:00:00	\N	LI_ENV_KUN	1e492cde-5525-44dc-b82f-6a34dd7eb995	{}
+333de8c8-9cd3-4827-ab4b-3e3c169b8ecd	2023-04-05 00:00:00	\N	LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+0f675408-4e6d-4d94-b2be-4b1861874f24	2023-05-08 00:00:00	Eljas & Timi demo	LI_ENV_PAL	797914c3-3e04-4caa-8468-830bcc09659b	{}
+4c015819-9b68-4634-83d1-ee1114c9be59	2023-05-09 00:00:00	\N	LI_ENV_VOI	230317b4-fb83-4092-8da4-e641aadb600b	{T4,T10}
+6c860b01-a2bf-49dd-a838-e6dd8094c760	2023-05-11 00:00:00	Tenni/futis	LI_ENV_PAL	ac83bfa3-9f44-4aea-aac0-98e793367206	{}
+3010d047-8156-4014-89a2-b25dd01d0e9c	2023-05-11 00:00:00	\N	LI_ENV_PAL	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T2}
+d9b24ed1-04ba-4bbf-96f6-cc0db42ae882	2023-03-27 00:00:00		LI_ENV_TAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+81b4100e-2f09-4436-87ef-a1f1de0f77ab	2023-05-12 00:00:00	\N	LI_ENV_VES	0497a2a4-6124-40dc-92d6-8fe3b708331e	{T3,T1}
+8bb3dae0-3796-4f58-a3f0-be09fae5ab11	2023-05-16 00:00:00	Frisbeegolf	LI_ENV_LUO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T4,T6}
+ca38d48b-f9f3-4528-a4cb-dd823869ce72	2023-04-13 00:00:00	Kehonhallinta	LI_ENV_VOI	797914c3-3e04-4caa-8468-830bcc09659b	\N
+937afab0-904e-4b0d-9c33-bf69db8b4e78	2023-04-17 00:00:00	Salibandy	LI_ENV_PAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+1ffb9b24-9a6c-4397-8870-e33932c269d7	2023-05-17 00:00:00	Ultimate & leikit	LI_ENV_PER	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{}
+66d2d829-a0e3-4d31-accc-ec37f5bc90c1	2023-04-18 00:00:00	Maalipallo & lentopallo.	LI_ENV_PAL	797914c3-3e04-4caa-8468-830bcc09659b	\N
+1b994224-f869-4001-9336-6c5d07fe8e39	2023-03-27 00:00:00		LI_ENV_TAL	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
+f204db7e-8c50-4205-8253-2c4295f4cc23	2023-03-28 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+9ccac28e-da82-42b1-b5d1-d632e88c9009	2023-03-28 00:00:00		LI_ENV_TAL	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
+e3c72671-2c10-4d64-95e1-107809ee55f2	2023-03-29 00:00:00		LI_ENV_TAL	ba4535ec-16b4-4070-8a70-83cbe8b51340	\N
+53ede09d-132a-4e8b-9ceb-c2247582a256	2023-05-17 00:00:00	Ultimate & leikit	LI_ENV_PER	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{}
+c04c12d5-e621-4254-9751-63ebe4dcd439	2023-03-24 19:00:00	Kuntosali treeniä. Treenasimme erityisesti ylävartalon lihaksia ja käytimme painoja ja kuntopyöriä.	LI_ENV_KUN	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T5,T7,T8}
+37cc680b-7525-48d5-8e86-2a2d35081c8b	2023-04-19 00:00:00	Purkkis	LI_ENV_LUO	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
+f4860d37-f4ca-4ba4-8970-6bb133f22cd3	2023-03-29 00:00:00		LI_ENV_TAL	89d861be-d5e9-41a3-8672-d977b0895d54	\N
+c0076c27-405b-4dcc-a944-323b279d0986	2023-04-07 11:00:00	Pallopeliä hiekkakentällä. Pelasimme beach volleyn sijaan beach tennistä, joka oli hieman erilaista ja haastavaa. Peliaika oli 2 x 15 minuuttia.	LI_ENV_PAL	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T4,T8}
+fb37655d-6494-4657-9055-5e6a24b61e2a	2023-03-29 00:00:00		LI_ENV_TAL	decdfebc-8865-4884-85e2-532e1324b324	\N
+556550db-3be0-49ed-b3b3-f4f0dfcf8ba2	2023-04-19 00:00:00	Salibandy (pojat) kuntosali (tytöt)	LI_ENV_PAL	de31e354-3f10-499e-b9b8-7c17616175c8	\N
+cad9f7d4-a5c1-4ff2-9b94-edcb84b13a47	2023-03-30 00:00:00		LI_ENV_TAL	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
+7a90bdaa-e683-4a3d-8d4f-78c56fab3e13	2023-03-30 00:00:00		LI_ENV_TAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+e9ca0e55-45fd-4c1a-b588-c07ae30bfaea	2023-03-30 00:00:00		LI_ENV_TAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
+c222d9c2-e979-47cd-b545-1803e2849a9e	2023-03-30 00:00:00		LI_ENV_TAL	de31e354-3f10-499e-b9b8-7c17616175c8	\N
+897dbbdb-d0ed-4270-8ce4-8c34c3d21c8e	2023-04-03 13:30:00	Pallopeliä koulun pihalla. Pelasimme jalkapalloa kavereiden kanssa. Peli oli tasainen ja lopulta päättyi 2-2.	LI_ENV_PAL	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T3,T5,T7,T8}
+1852c993-c666-42e9-8862-e2b9bd8f8a8d	2023-03-31 11:00:00	Peruskestävyystreeniä juoksuradalla. Juoksimme noin 5 kilometrin lenkin, joka sisälsi myös muutamia mäkiä.	LI_ENV_PER	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T3,T5,T7,T8}
+0928afc3-d50e-4222-9adc-71d1c8dc4593	2023-03-27 17:00:00	Luontojoogaa rannalla. Joogasimme rannalla auringonlaskun aikaan ja tunnelma oli upea. Joogan kesto oli 60 minuuttia.	LI_ENV_LUO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{}
+321aacd4-f6e1-40f9-b5ab-ed36d65f0323	2023-03-30 00:00:00		LI_ENV_TAL	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
+f68f104b-19b9-4dc8-8564-9b27d16cac5d	2023-04-01 00:00:00	\N	LI_ENV_TAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+8bba79e9-bfce-472d-8985-8d06407b4558	2023-04-03 00:00:00	Topias ja Eelis tyttöjen kanssa	LI_ENV_TAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+b29e68a9-5dc8-436d-9d1c-e2dd279b8128	2023-04-04 00:00:00	\N	LI_ENV_TAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
+f92aeb42-9586-4da3-8818-eed3150f288b	2023-04-05 00:00:00	\N	LI_ENV_TAL	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
+0fc921ea-f723-4134-8f6d-6fdae9d7be79	2023-04-05 00:00:00	\N	LI_ENV_TAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
+0c53145f-5fd0-441d-b345-a189164a3301	2023-04-05 00:00:00	\N	LI_ENV_TAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+48198bbc-377e-4f03-bf33-307f2edeb01d	2023-04-05 00:00:00	\N	LI_ENV_TAL	de31e354-3f10-499e-b9b8-7c17616175c8	\N
+c06cfc5e-69ab-4094-9271-424e0b4da95a	2023-03-31 00:00:00	\N	LI_ENV_TAL	decdfebc-8865-4884-85e2-532e1324b324	{T7,T8}
+788ded55-48ae-4d16-8db3-ff89f8b3b16d	2023-03-27 00:00:00	\N	LI_ENV_VOI	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T4,T1,T9}
+b2141604-d8a2-4f1f-afe5-c6ea3875d0cd	2023-03-29 00:00:00	\N	LI_ENV_PAL	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T4,T2,T9}
+7b64a526-c49e-409e-9df0-af1f507313b5	2023-03-31 00:00:00	\N	LI_ENV_PAL	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T2,T8}
+0b5da7a7-bedb-41aa-afe0-1195abd1b1e7	2023-05-10 00:00:00	Tennis	LI_ENV_PAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	{T1,T2}
+71a91b99-d2d2-4328-8d09-b34be35f4bc4	2023-05-11 00:00:00	\N	LI_ENV_LUO	1e492cde-5525-44dc-b82f-6a34dd7eb995	{T5,T8}
+4d3fddca-2214-40dd-aa09-3f4031174783	2023-05-12 00:00:00	\N	LI_ENV_PAL	72d704a8-e209-4255-a595-40d96c4d42ad	{T1,T3}
+f3a6d9a9-1c87-4706-9cd3-47eb2c994fb4	2023-04-10 00:00:00	\N	LI_ENV_VOI	89d861be-d5e9-41a3-8672-d977b0895d54	\N
+619a1d3f-2b7d-4283-9a93-16c2562b6cea	2023-04-11 00:00:00	Palloilua korttipakalla. Alussa ryhmäytymistä.	LI_ENV_PAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
+1eda1df4-9725-42f3-9b25-555230def13e	2023-04-12 00:00:00	Sulkapallo	LI_ENV_PAL	6d55867f-186d-4f87-8317-17cb8d0fd463	\N
+3b5e4736-250b-4785-b51e-1d40b0c2d7fc	2023-04-12 00:00:00	Olkahippa, käsihippa, otakiinnijaffa, sähly, keikapallo	LI_ENV_PAL	37c6af4b-8b10-40a5-8ae3-1b01af624dc5	\N
+a9f2c321-49f2-48ec-955f-ea21a6d78053	2023-04-12 00:00:00	Olka- ja käsihippa. Jaffapallo	LI_ENV_PAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	\N
+893df305-ade6-4f72-89c2-6c8bc016c25e	2023-04-12 00:00:00	Uinti (pojat)	LI_ENV_VES	de31e354-3f10-499e-b9b8-7c17616175c8	\N
+6ac64022-5671-4409-80a3-99a1dd020cfa	2023-04-10 00:00:00	\N	LI_ENV_VOI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+d555f364-a43b-4cd7-b441-36eba1399393	2023-04-02 00:00:00	Nos hicimos weones y volvimos	LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+e5229c63-bab4-43aa-b959-523054e27f69	2023-03-30 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+6d4d0b46-d8e4-434c-b242-675b378da3fb	2023-04-10 00:00:00	\N	LI_ENV_VOI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+6216742f-6ee1-4b07-bb6c-8ce031ede1dd	2023-03-23 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+2a49b22f-e902-43cc-9785-493949f36824	2023-05-16 00:00:00	Ultimate & mölkky	LI_ENV_PER	797914c3-3e04-4caa-8468-830bcc09659b	{}
+7a43853a-3729-48b6-83ff-bd9f21a4a9c9	2023-03-23 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+abb65c1c-fb0f-44e8-84c8-c542fe24ef96	2023-04-08 16:30:00	Kuntosali treeniä. Treenasimme erityisesti keskivartalon lihaksia ja käytimme myös kuntopyöriä. Treenin kesto oli noin 90 minuuttia.	LI_ENV_KUN	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T3,T5,T8}
+3740b2c7-10fd-434a-b025-354507eb0597	2023-03-31 00:00:00	\N	LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+ffcf41a8-c5c9-406d-8062-a9f9f40bf827	2023-03-22 13:00:00	Retkeilyä kansallispuistossa. Kävelimme noin 15 kilometrin lenkin ja ihastelimme upeita maisemia.	LI_ENV_LUO	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T5,T8}
+78187248-1c3a-4f9d-80c5-a7d1a3ccafb8	2023-03-26 12:00:00	Voimistelutreeniä salilla. Treenasimme erilaisia hyppyjä ja liikkeitä, jotka vaativat hyvää tasapainoa.	LI_ENV_VOI	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T2,T4,T6,T7}
+8dbcba3f-35e0-4e19-83a3-e480a5ad4c39	2023-03-28 14:00:00	Pallopeliä salissa. Pelasimme sählyä ja ottelu oli tiukka. Peli päättyi lopulta 4-3.	LI_ENV_PAL	ec5578dd-ad95-4279-be72-e0326b8cfd41	{T1,T4,T5,T8}
+0e16a08a-76d4-4cc9-9f50-1903a928125c	2023-03-30 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+2cae7ff5-26ca-4423-99c3-f46f8f454ea0	2023-05-19 00:00:00	\N	LI_ENV_VOI	0dbc9116-4412-40d5-8271-5e949d4f20a6	{T4}
+a25e0294-c261-4524-bdce-1038cfe49910	2023-04-19 00:00:00	\N	LI_ENV_PAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+a5bc849c-03ec-40d3-9abd-4b68b93bcc7b	2023-04-10 00:00:00	\N	LI_ENV_LUO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+20e39e40-87d9-4273-aaee-44fe27eb45a9	2023-04-10 00:00:00	\N	LI_ENV_VOI	230317b4-fb83-4092-8da4-e641aadb600b	\N
+5f8abc0c-3d0b-4a19-baf5-810c7144f275	2023-04-12 00:00:00	\N	LI_ENV_LUO	230317b4-fb83-4092-8da4-e641aadb600b	\N
+539a7959-1d07-42ef-8fc4-a7d7dd4da344	2023-05-19 00:00:00	\N	LI_ENV_LUO	f586e1b6-5297-4de1-8c7f-b7d76902ffc1	{T3,T5}
+d83204d9-d54e-4d7d-80c3-c28d96b0e0ef	2023-05-03 00:00:00	\N	LI_ENV_VES	230317b4-fb83-4092-8da4-e641aadb600b	{T6,T7}
+f60cf3aa-428c-42ac-984e-6f4e8ebdef25	2023-03-29 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+c854e589-492b-4b38-97fe-1c8717aa68ac	2023-03-23 00:00:00		LI_ENV_TAL	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+10ba2787-61e0-4785-8dee-4a8a99414520	2023-04-10 00:00:00	Jojo	LI_ENV_LUO	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+e24d79d5-8e15-46b5-951d-f811b7670023	2023-04-10 00:00:00	\N	LI_ENV_VOI	d492f954-cd06-4c86-8ce1-fff58bc72e38	\N
+00dcbe25-4f69-4724-b33b-9d857f012479	2023-04-22 00:00:00	\N	LI_ENV_VOI	0497a2a4-6124-40dc-92d6-8fe3b708331e	{T7,T2}
+1edc3524-678e-4c03-9a19-001c89aa9f58	2023-04-24 00:00:00	Musiikkiliikuntaa / lenis	LI_ENV_TAN	797914c3-3e04-4caa-8468-830bcc09659b	{T1}
+68af71a8-0626-451c-a0ba-597e762fd9dd	2023-04-26 00:00:00	Ryhmän keksimiä pelejä ja leikkejä:)	LI_ENV_PER	6d55867f-186d-4f87-8317-17cb8d0fd463	{T3,T8}
+80f640f0-d041-41f1-9817-6c18f415a068	2023-04-27 00:00:00	\N	LI_ENV_PAL	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T8,T4,T9}
+5ed7980d-fc19-430b-a7f1-985d0ac1eaac	2023-04-29 00:00:00	\N	LI_ENV_PAL	0497a2a4-6124-40dc-92d6-8fe3b708331e	{T3}
+eb6afa70-0356-4ff7-8f48-b8ce7abc8ae1	2023-05-02 00:00:00	\N	LI_ENV_VOI	d492f954-cd06-4c86-8ce1-fff58bc72e38	{T2,T4}
+6e21af79-6985-460d-852a-9efda75bcd5f	2023-05-01 00:00:00	\N	LI_ENV_KUN	d492f954-cd06-4c86-8ce1-fff58bc72e38	{T5,T4}
+d473d712-cbe8-4568-bf44-e606e8ddee0d	2023-05-03 00:00:00	\N	LI_ENV_VOI	230317b4-fb83-4092-8da4-e641aadb600b	{T4,T10}
+dceb37c4-11e9-4a50-bf78-6efb1af605f4	2023-09-04 00:00:00	Movet	LI_ENV_KUN	45982a54-e42c-4e48-8b84-32689d592abd	{T5}
+689dd5bb-4c12-4aed-a6bd-5ab3e9bda2ec	2023-09-04 00:00:00	Tennis ja koris/fudis/lentis	LI_ENV_PAL	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
+9a404a41-2b08-4367-85ac-3a5450fbaadc	2023-09-05 00:00:00	Juoksuleikit, kestävyysjuoksu ja aitajuoksu	LI_ENV_PER	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T3}
+2ec02719-3e89-4c09-ae72-492da1ea8eec	2023-09-05 00:00:00	Move-tesit	LI_ENV_KUN	640e87de-8063-4c00-9087-c17709e34059	{T5}
+442e2cf3-3583-4bb1-9848-691cba355568	2023-09-05 00:00:00	Juoksuleikit, kestävyys ja aitajuoksu	LI_ENV_PER	f6160571-beff-4c21-b3af-399f376429ae	{T3}
+fb90b138-5af6-4566-895f-c9cfd96c7833	2023-09-06 00:00:00	Juoksuleikit, kestävyysjuoksu, aitajuoksu	LI_ENV_PER	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T3}
+0cf4bcfb-197b-4c26-b667-09af78a35d2a	2023-09-06 00:00:00	Tennis ja pesäpallo	LI_ENV_PAL	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
+c25cbba8-88d5-4757-87a0-2f2bbc77c5c4	2023-09-06 00:00:00		LI_ENV_PAL	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T1,T4}
+d4d650de-1b77-4d27-867e-32246c10aa72	2023-09-07 00:00:00	Move-mittaukset	LI_ENV_KUN	45982a54-e42c-4e48-8b84-32689d592abd	{T5}
+86c90257-a257-48c0-94b1-57dadfca0a6e	2023-09-08 00:00:00	Juoksuleikit, kestävyysjuoksu, aitajuoksu	LI_ENV_PER	a6a42248-8033-4254-8b5d-ba325479414d	{T3}
+be68b171-5a7e-4fae-9219-149771d8af9a	2023-09-08 00:00:00		LI_ENV_VES	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T6}
+683da996-f2cf-4d1a-abf2-9f84d7c36541	2023-09-08 00:00:00		LI_ENV_PAL	230317b4-fb83-4092-8da4-e641aadb600b	{T1,T4}
+f304a4cb-5765-44f0-abe9-662cf64c4732	2023-09-08 00:00:00	Juoksuleikit, kestävyysjuoksu, aitajuoksu	LI_ENV_PER	fd028225-16dd-4d8e-8c86-a81a9d9243e5	{T3}
+fb583211-e331-41f4-a30d-2eb95e904950	2023-09-11 00:00:00	Lenkki, liikkuvuus, ulkokuntosali	LI_ENV_KUN	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T5}
+2f6a5924-807e-47a5-96c4-0f4d7d42ed18	2023-09-11 00:00:00	Lippupallo	LI_ENV_PAL	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
+c9c54bfb-7c50-4775-88cd-a79b941ebd09	2023-09-12 00:00:00	Lenkki, liikkuvuus ja ulkokuntosali	LI_ENV_KUN	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T5}
+2bcf4c09-33ba-4738-a859-976b4e4e65b1	2023-09-12 00:00:00	Move-mittaukset ja fireball	LI_ENV_KUN	640e87de-8063-4c00-9087-c17709e34059	{T5}
+edf92d9b-7d05-4843-8ed1-ee29ba8d16c6	2023-09-12 00:00:00	Lenkki, liikkuvuus ja ulkokuntosali	LI_ENV_KUN	f6160571-beff-4c21-b3af-399f376429ae	{T5}
+848c9d35-2b6f-4314-ac47-a586d8261405	2023-09-12 00:00:00		LI_ENV_TAN	c27efea4-643a-4cdc-9c40-e58525a49720	{T1,T5}
+c5e7d13a-39ea-43a2-9490-1f8e8473e66f	2023-09-13 00:00:00		LI_ENV_LUO	89d861be-d5e9-41a3-8672-d977b0895d54	{T5,T4}
+fe36ee80-78be-42a3-bbf0-3677b51326b1	2023-09-13 00:00:00		LI_ENV_VOI	e3aba1ba-865b-4174-b776-b5936ab840d3	{T5,T4}
+319b9693-947d-454c-bec8-429501c9ceb3	2023-09-13 00:00:00		LI_ENV_VES	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T5,T8}
+7ed4fdd0-0d57-4bcf-97a4-646f0fcc2790	2023-09-13 00:00:00		LI_ENV_TAL	8ffe45c2-e5a4-4702-89d4-2df665869687	{T2,T1}
+9405e66e-3ea7-4392-a17b-3e48b80f185b	2023-09-19 00:00:00	Jalkapallo	LI_ENV_PAL	f6160571-beff-4c21-b3af-399f376429ae	{T4}
+eded69bb-0030-4d76-915c-ff9b56f0bf37	2023-09-13 00:00:00	Norsupallo, amerikkalaisen heittäminen, ultimate amerikkalaisella\n	LI_ENV_PAL	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T4}
+8d478ae5-8238-4ee2-9731-b04edb5026c6	2023-09-13 00:00:00		LI_ENV_PER	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T5,T3}
+3b1e4ba1-e6b4-4a0b-8963-6622d754c465	2023-09-13 00:00:00	Jenkkifutiksen heitto, ultimate ja soikkispeli	LI_ENV_PAL	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
+1bc699a0-733c-4e83-ba1b-b6175076e18d	2023-09-13 00:00:00		LI_ENV_PAL	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T5,T4}
+7a7c9ff7-05cd-45f8-94ef-d35c694786ef	2023-09-13 00:00:00		LI_ENV_VES	89d861be-d5e9-41a3-8672-d977b0895d54	{T4,T3}
+cd607d5e-69e1-42cf-a1a6-ee16359bf6df	2023-09-13 00:00:00		LI_ENV_TAL	6f377d70-cfec-45c3-aabb-c41bdedaa327	{}
+0dc45b77-63e5-45af-a850-9618308a47e7	2023-09-13 00:00:00		LI_ENV_LUO	0736c55e-a30f-468d-ac92-011155f63782	{T10}
+44b021a4-4a91-448d-b422-02edb42a1a3e	2023-09-13 00:00:00	Sulkapallo	LI_ENV_PAL	fc400672-2a2e-44b1-966b-d887bb7d1f40	{}
+e4c3d476-62fa-4353-8fe6-3cf0b6ceaf74	2023-09-13 00:00:00	Tier	LI_ENV_LUO	94673584-2806-4e30-9a43-1fd7c50320d8	{T8,T1}
+20fd7772-564d-49d2-8894-d349e53dee28	2023-09-13 00:00:00	Käsipallo + kiekonheiton alkeet	LI_ENV_PER	d872e1e1-07ed-4fe7-b285-f11e407754c7	{T4,T9,T1}
+d4d9d93d-8632-4c20-870e-2fe1bd957194	2023-09-13 00:00:00		LI_ENV_PAL	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T4,T1}
+17e86dd3-05d1-486d-b4ea-341799da4e3f	2023-09-14 00:00:00		LI_ENV_PAL	b83c3bfe-9b2c-417b-a955-5d725e54f94e	{T5,T2}
+4aa43e58-24a2-49ac-b69e-ea8e540203e8	2023-09-15 00:00:00	Viuhkasuunnistus (Cluedo) Harjulla. Tavoitteena kartan suuntaaminen, karttamerkkien tunnistaminen, mittakaavan hahmottaminen ja yhteistyö parin kanssa. 	LI_ENV_LUO	63f2c632-042f-45d8-864e-8ecf96d21f70	{T2,T9}
+b258d162-fb69-49c5-a342-5646aedc2187	2023-09-12 00:00:00	Jalkapallo eka tunti	LI_ENV_PAL	d427be8a-0aba-47fb-8960-a447826b0343	{T1,T4,T2,T9,T10}
+cfab6204-6948-45e6-b556-86192d073cfb	2023-09-14 00:00:00		LI_ENV_PER	36347506-9fe3-4cc1-bd70-3f56675ba66c	{T1,T3,T6}
+9faf68b0-a85b-4c09-abb0-d4c9e0e19e79	2023-09-14 00:00:00	Terveystiedon ravintotunti	LI_ENV_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
+1b127087-3655-4766-bfc5-601ca4e3731c	2023-09-14 00:00:00	Move-mittaukset	LI_ENV_KUN	45982a54-e42c-4e48-8b84-32689d592abd	{T5}
+85a149ec-da1c-4b44-874b-1208bf8be03a	2023-09-14 00:00:00		LI_ENV_PAL	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T4,T2,T8,T9}
+73b52af5-0332-4511-b57e-89b4806d2a51	2023-09-14 00:00:00	Heittäminen, kiinniottaminen, lyöminen	LI_ENV_PAL	f5b7f191-2b9f-4606-b7f4-69f2fab61d6d	{T4,T8}
+a0c15016-a50b-44ce-81b5-56016d56e8a1	2023-09-14 00:00:00		LI_ENV_PAL	a153dc01-0752-4f56-9501-8fc52ba97f0b	{T3,T4,T8,T10}
+0aaa8915-25de-4565-a886-585dd8f5bd3a	2023-09-14 00:00:00	Sisäpalloilu, futsal	LI_ENV_PAL	c90e44ff-5e1a-4114-a2f1-aa8f139019a1	{T4,T9}
+bd77100d-766d-4ce4-8e59-6718b3f4061a	2023-09-15 00:00:00	Kävely, liikkuvuus, ulkokuntosali, lentopallo	LI_ENV_KUN	a6a42248-8033-4254-8b5d-ba325479414d	{T5}
+3736eb77-801f-4566-8f11-57b2263b201a	2023-09-15 00:00:00	Kävely, lentopallo, ulkokuntosali	LI_ENV_KUN	fd028225-16dd-4d8e-8c86-a81a9d9243e5	{T5}
+a6ef21b8-7092-4dce-947f-057904ea6d6b	2023-09-11 00:00:00		LI_ENV_LUO	587a6af4-afdd-4bf5-90a9-04bcadbb4807	{T8,T2}
+3973c4f0-84bb-4b53-bef0-2571ba7e86d6	2023-09-15 00:00:00	Terveystiedon liikuntatunti	LI_ENV_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
+4b1b54c2-ea63-4061-b45c-e18b9e85c500	2023-09-15 00:00:00	Lippupallo	LI_ENV_PAL	640e87de-8063-4c00-9087-c17709e34059	{T4}
+7cbb3790-0e71-4f81-88b4-e9f627ab5e54	2023-09-12 00:00:00	Retki Laajavuoressa ryhmäytymispainotuksella	LI_ENV_LUO	d3f5eb51-9cac-441e-91ac-bad14e134b9d	{T3,T2}
+b14f2c21-613d-49dd-93f1-8bdac3f71800	2023-09-13 00:00:00	Luontopolku: kävely ja tehtäväkortin täyttö	LI_ENV_LUO	49f0263b-9be4-44f2-be54-8f95a1942dae	{T7,T10}
+d4ce0148-93de-44e8-b1d5-e9811d587b22	2023-09-18 00:00:00	Jalkapallo	LI_ENV_PAL	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T4}
+d26f95e1-1044-41ca-bdca-65ff84e3d2f7	2023-09-18 00:00:00	Jalkapallo	LI_ENV_PAL	afc9216c-d2b7-47d2-9e19-4a23a91acb9e	{T2,T4,T8,T9}
+8aaf28aa-d86d-4a6a-9ceb-4555dd85f0de	2023-09-18 00:00:00	MOVE	LI_ENV_PER	78e46daf-61ca-4997-bf43-5c5277ff6f4c	{T3,T5,T1}
+8ca4a48e-1327-499c-9339-7c5baa16a37c	2023-09-18 00:00:00		LI_ENV_PAL	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T4,T8}
+ce5460c6-544b-4634-b754-3ce689169bf4	2023-09-18 00:00:00	Jalkapallo tai vapaavalintainen pallottelupeli	LI_ENV_PAL	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
+66631530-c290-4818-9e13-6e30295be221	2023-09-18 00:00:00	Lentopallo	LI_ENV_PAL	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
+ed123bb0-e8ee-4ff7-ad66-c67cec1fd68d	2023-09-18 00:00:00	Jalkapallo 1	LI_ENV_PAL	f5b7f191-2b9f-4606-b7f4-69f2fab61d6d	{T2,T4,T8}
+cb7ef5fb-7fba-42fb-9e12-c02111fa299a	2023-09-19 00:00:00	Karttaretki ja suunnistaminen Laajavuoressa. 	LI_ENV_LUO	63f2c632-042f-45d8-864e-8ecf96d21f70	{T2,T9}
+59a61f01-3392-40f2-9cd5-1b0e7477d7da	2023-09-19 00:00:00	Jalkapallo	LI_ENV_PAL	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T4}
+29f5e195-1b34-4a4e-96ee-dd5a8501ac02	2023-09-18 00:00:00		LI_ENV_LUO	587a6af4-afdd-4bf5-90a9-04bcadbb4807	{T3,T2,T8}
+709ab1eb-9938-4b58-b66d-901fec3722d4	2023-09-19 00:00:00	Jalkapallo	LI_ENV_PAL	640e87de-8063-4c00-9087-c17709e34059	{T4}
+12d7d533-088d-4341-9d59-0b0a4e56c598	2023-09-19 00:00:00		LI_ENV_KUN	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T1}
+c3a84e36-8941-4755-9583-2ad7f96b057d	2023-09-19 00:00:00		LI_ENV_VES	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T2}
+e6e1c397-5c85-47b3-8d0f-4fb289cfbf2a	2023-09-19 00:00:00		LI_ENV_VOI	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T3}
+e2211e9b-a6a5-4a95-8ab0-408816504c00	2023-09-20 00:00:00		LI_ENV_PAL	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T4}
+b8b01e7b-09a4-445f-b565-967b6695c88d	2023-09-20 00:00:00		LI_ENV_TAN	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T1}
+8bb76299-24a2-4f01-a8dc-a46a657a3807	2023-09-21 00:00:00		LI_ENV_PER	7f1c5e91-43ea-4eef-ad38-3838a19a993b	{T2}
+456688bf-755a-451a-9e6e-5f9953081828	2023-09-19 00:00:00		LI_ENV_LUO	ab0c9659-e372-4474-a910-d0bc4c1f2c00	{}
+6498d0d4-9dbd-42fb-a714-ba4578a667e3	2023-09-19 00:00:00	Retkeilytunti, jossa suunnistamista ja suunnan ottaminen.	LI_ENV_LUO	64b534f4-7461-422c-bf3b-8d5bde2e36f7	{T1,T2}
+c017cf7a-b82a-488a-8668-1cc403f4d21f	2023-09-19 00:00:00		LI_ENV_PAL	7f091af6-1c43-4020-9360-e05a6563e18a	{T4,T1}
+8b70ad42-002f-4eb7-906e-d8b4a1788a84	2023-09-19 00:00:00		LI_ENV_MUU	557f38da-cdab-464c-bc74-1a84606989b0	{T4}
+6089537e-4c22-4539-9140-34533f9e773a	2023-09-19 00:00:00		LI_ENV_PAL	557f38da-cdab-464c-bc74-1a84606989b0	{T2}
+afddc74f-1b4a-4ee3-8125-98a36d95a054	2023-09-19 00:00:00		LI_ENV_VES	557f38da-cdab-464c-bc74-1a84606989b0	{T5}
+9cbdf93e-f63d-4e92-bb8e-10746c8528a3	2023-09-19 00:00:00		LI_ENV_VES	557f38da-cdab-464c-bc74-1a84606989b0	{T5}
+b19df1dc-a960-40a4-a396-dff138f35ae5	2023-09-19 00:00:00		LI_ENV_VES	557f38da-cdab-464c-bc74-1a84606989b0	{T6}
+4e55ae4a-c793-429f-9733-601f42aec61f	2023-09-20 00:00:00	Jalkapallo	LI_ENV_PAL	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T4}
+1ab87639-2f4d-4b6c-8775-61b5acb7cac4	2023-09-20 00:00:00	Lentopallo	LI_ENV_PAL	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
+5bd1d074-e871-4edf-be9f-3a2bba8da09d	2023-09-20 00:00:00	Korkeushyppy	LI_ENV_PER	d872e1e1-07ed-4fe7-b285-f11e407754c7	{T1,T3,T8}
+1c0b2554-b5ea-4217-86c1-a1f042164d25	2023-09-19 00:00:00		LI_ENV_VES	a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	{T1,T3,T9}
+77231370-6d4d-4f7e-a001-79df2df19b65	2023-09-20 00:00:00	Keihäänheitto, moukari, pikakävely ja viestijuoksu	LI_ENV_PER	49f0263b-9be4-44f2-be54-8f95a1942dae	{T1,T3,T4,T9}
+7230c38b-1f0d-4ddc-a4ee-a68d7ea91797	2023-09-15 00:00:00	Karttaretki ja cluedo	LI_ENV_LUO	a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	{T2,T9}
+7cf31acb-2599-4965-89ba-15b7b144d280	2023-09-21 00:00:00	Jalkapallo + (koripallo)	LI_ENV_PAL	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
+9b410321-54a1-497a-b6f0-fd0e8fbaed97	2023-09-18 00:00:00	Suunnistus pareittain	LI_ENV_LUO	9b8adc7f-39c7-4925-847a-818b9389c18b	{T1,T9}
+94985e38-244b-4a8b-a470-dcfab2fa235d	2023-09-21 00:00:00	Nopeutta ja räjähtävyyttä sekä futsal	LI_ENV_PAL	a153dc01-0752-4f56-9501-8fc52ba97f0b	{T2,T4,T5,T9,T8,T10}
+c5840731-db8f-4262-b80f-9b0c2a219611	2023-09-21 00:00:00	Unitunti terveystiedossa	LI_ENV_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
+c081b5bc-d20a-40e2-bdd6-658b41056a10	2023-09-21 00:00:00		LI_ENV_LUO	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T1,T10}
+1d1bd83f-0c69-46dd-b45f-a692962711eb	2023-09-21 00:00:00	Jalid 2	LI_ENV_PAL	f5b7f191-2b9f-4606-b7f4-69f2fab61d6d	{T4,T9,T2}
+271a8b8d-b14e-4cba-a3dd-ae87b268ce07	2023-09-22 00:00:00		LI_ENV_PAL	63f2c632-042f-45d8-864e-8ecf96d21f70	{T2,T8}
+39f0e0d3-8334-4267-9042-23242ea737f6	2023-09-22 00:00:00		LI_ENV_PER	36347506-9fe3-4cc1-bd70-3f56675ba66c	{T3,T8}
+a9aefc29-0242-4c70-9adb-904ff0f68315	2023-09-22 00:00:00		LI_ENV_PER	78e46daf-61ca-4997-bf43-5c5277ff6f4c	{T5,T10}
+afa44e7b-e5b1-403c-a062-f5479921c45c	2023-09-22 00:00:00	Jalkapallo	LI_ENV_PAL	a6a42248-8033-4254-8b5d-ba325479414d	{T4}
+9e446627-c627-4cc9-9a9c-869be21adc35	2023-09-22 00:00:00	Painonhallinnan terveystiedon tunti	LI_ENV_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
 \.
 
 
@@ -4853,121 +4713,255 @@ afa44e7b-e5b1-403c-a062-f5479921c45c	2023-09-22 00:00:00		Jalkapallo	LI_PALLO	a6
 -- Data for Name: Group; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."Group" (id, name, "teacherId", "updatedAt", "subjectCode", "currentYearCode", archived) FROM stdin;
-293d7530-587a-4b1a-b216-585601c65f30	Uusi luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-7ceb709a-05c1-408b-912c-f8196c3b8694	Toinen luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-176d8452-d61a-4115-9c3e-cfeb2c990daa	Kolmas luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-a5e350b6-8d0e-40da-a480-a9146a6eb556	Neljäs luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-8c596bfe-60ff-4649-a27e-bddc4c81aa7e	Uusi luokka	5b637712-3af1-46a2-aeb0-a4a016b134bc	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-f3bf4d11-99a7-4ec9-a8a5-cc5743424a92	Toinen luokka	5b637712-3af1-46a2-aeb0-a4a016b134bc	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-1dc7d4c5-27c3-49c4-80de-9afdd54d69a1	Testi luokka	5b637712-3af1-46a2-aeb0-a4a016b134bc	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-2701efce-305c-4914-b604-dcea230c2689	Herran huone	483e736f-00a6-46d1-a1c3-3099eb626012	2023-04-19 16:57:12.014	LI	PRIMARY_FIRST	f
-0af98668-1b27-481f-a1c1-54b3d775ee51	Li 8a/8b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-20 11:15:51.865	LI	PRIMARY_FIRST	f
-69f26527-bdb1-4e38-b999-9f2481fd62f6	Testi luokka	5b637712-3af1-46a2-aeb0-a4a016b134bc	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-54fac98f-4253-487e-9e4e-e0ef4ae2443a	Testi luokka	8548a9c5-dfdb-48e6-936d-f221845157b4	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-c3f1e3d5-7abc-44bb-bfa5-12a0fd2c6769	LI03	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-20 13:04:36.448	LI	PRIMARY_FIRST	f
-aff9ac1f-ab9d-4d21-a161-408240f222d6	7B	1112c6f9-bfbf-4207-83cd-910ffe0582f2	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-eab532a9-07cc-4c9d-b11a-2d4ddb84996d	9A	1112c6f9-bfbf-4207-83cd-910ffe0582f2	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-54d739bd-6c9f-48df-850c-78a43ed48a61	13b	1112c6f9-bfbf-4207-83cd-910ffe0582f2	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-8eda8460-b4f6-4ed0-b43a-253608ef0298	Valinnainen LI 8a/8b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-14 08:48:29.463	LI	PRIMARY_FIRST	f
-c42525f7-172d-4d1f-9bf1-96bbed39414f	Nooran ryhmä	96549af2-ad08-4066-b742-cb1048b3876d	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-1811d42e-eb46-4b97-a067-8d91a4c60bd1	LI01	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-d2dd3387-7d32-4ab0-bafb-a04aa89621d6	VLI 9a/9b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-19 07:07:11.778	LI	PRIMARY_FIRST	f
-1dffd2ea-91a3-4f2f-a001-ca61df2631b8	Eka ryhmä	185a9cc2-8497-493f-94da-65abda04a320	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-9c0fff82-1597-4447-84d2-28051ef96223	LI 7b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-19 14:28:01.278	LI	PRIMARY_FIRST	f
-1d45a2c2-1ae0-4068-adf4-d09fb4d6f31d	6B	483e736f-00a6-46d1-a1c3-3099eb626012	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-e61dbeae-376b-4fac-bd5b-7441b0533ee9	LI 7a/a	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-19 14:32:33.021	LI	PRIMARY_FIRST	f
-110c9dff-5530-4184-baf5-bb6bb05bb40f	LI 9a/9b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-19 14:38:27.521	LI	PRIMARY_FIRST	f
-88e7273d-605d-483a-ae82-2c548472a6ec	Tapitus	483e736f-00a6-46d1-a1c3-3099eb626012	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-2556b6a9-4cab-4b65-99fe-94f5cf5d9123	A	45f62aaf-431d-478a-96b2-629928472f0f	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-11f9a50c-6d6d-405e-882d-dd0d828980c5	B	45f62aaf-431d-478a-96b2-629928472f0f	2023-03-30 18:34:09.249	LI	PRIMARY_FIRST	f
-fde7c856-7b1b-4ca8-a624-67809c32bd65	Testiryhmä	e31f2fbf-4637-46e9-94c2-93f00a138edf	2023-05-19 11:44:05.791	LI	PRIMARY_FIRST	f
-c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0	Jsjskdjsj	8548a9c5-dfdb-48e6-936d-f221845157b4	2023-05-19 13:25:26.995	LI	PRIMARY_THIRD	f
-57d7802e-5dd9-44d2-a652-4185942f2b97	testiryhmä	6bcb2e61-7d1e-4697-9e41-93a8f62a3cd6	2023-06-01 10:17:04.501	BI	PRIMARY_SECOND	f
-723f1c8d-8a79-4484-b31b-d2e4f7f50efd	toinen ryhmä	6bcb2e61-7d1e-4697-9e41-93a8f62a3cd6	2023-06-01 10:20:17.176	LI	PRIMARY_SECOND	f
-23a47b66-cd2e-4a9c-ab78-d6b1a8e5643f	4AC	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-04-22 12:40:09.521	LI	PRIMARY_FOURTH	f
-556d49fe-2a7d-4818-8a64-3ecc6a59009c	Name	483e736f-00a6-46d1-a1c3-3099eb626012	2023-06-21 12:56:04.927	LI	PRIMARY_FOURTH	f
-909b50c8-56c4-4618-bb55-e1a1feb7f1a9	Kettujen kerho	483e736f-00a6-46d1-a1c3-3099eb626012	2023-04-22 12:43:54.406	LI	PRIMARY_THIRD	f
-f118eb20-2ff4-4bec-a6b7-458e97ef062d	Nelkut	94f0b047-8048-49a1-8578-889686e3127a	2023-05-03 19:49:12.607	LI	PRIMARY_FOURTH	f
-668d593b-2679-480d-9c37-6a7f5d4fb257	Name	483e736f-00a6-46d1-a1c3-3099eb626012	2023-06-21 12:56:07.627	LI	PRIMARY_FOURTH	f
-b5e709c0-8913-42b6-82b0-04d702347380	test@email.com	8548a9c5-dfdb-48e6-936d-f221845157b4	2023-08-23 08:17:27.322	LI	PRIMARY_FIRST	f
-0df0a9e8-d7d4-4a24-a2ad-e5f263696a27	Testi iso ryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-08 10:31:55.772	LI	PRIMARY_NINTH	f
-e6299525-7a48-4030-a523-cf249433d62a	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:23:59.295	LI	PRIMARY_FIRST	t
-9d124d20-5f11-4647-9256-b1c43740dd81	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:24:03.326	LI	PRIMARY_FIRST	t
-558998de-3364-412a-908a-70b27920ea42	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 07:33:44.762	LI	PRIMARY_SEVENTH	t
-b03b85ef-19a9-47ab-9903-b0a2b82bb1de	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 07:33:16.858	LI	PRIMARY_SEVENTH	t
-53bbc105-6e07-4841-a795-c75f806bea01	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:23:55.193	LI	PRIMARY_FIRST	t
-c9fc597a-3fe4-4035-8773-b858579c2f3c	8G	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-13 09:36:40.319	LI	PRIMARY_EIGHTH	f
-a0cd3827-7fc0-4b11-944f-cd459880a439	Jhg	483e736f-00a6-46d1-a1c3-3099eb626012	2023-08-24 14:12:48.362	LI	PRIMARY_SIXTH	f
-562cb013-14e0-4d29-ae33-5ba1813dfec6	Testi pieni ryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-13 12:35:10.655	LI	PRIMARY_NINTH	f
-da15b065-9c67-4003-8ec0-7e1e2eee111f	6b	b174d04e-39ef-4356-a65b-cb73d9543176	2023-09-12 16:52:20.048	LI	PRIMARY_SIXTH	f
-41f9142b-c05f-41c7-baea-7afafeabb8c7	8a	dc1c8071-ac93-4952-8c66-85fb342f98ea	2023-09-13 10:33:34.823	LI	PRIMARY_EIGHTH	f
-92ce53f7-53e2-46a0-ac39-ecdefa3dfef7	4d	b174d04e-39ef-4356-a65b-cb73d9543176	2023-09-12 19:57:58.249	LI	PRIMARY_FOURTH	f
-5d674efc-3549-4837-b221-44c4d622eb09	9B	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-15 11:13:24.58	LI	PRIMARY_NINTH	f
-942b9f78-b7b8-46aa-abff-18cf8da3ac9b	7A	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-19 11:25:52.653	LI	PRIMARY_SEVENTH	f
-4c36484b-3244-47a9-a5e3-235c9474383e	7D	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-18 07:19:50.431	LI	PRIMARY_SEVENTH	f
-5922e468-ecb6-481e-bfdb-c4e2386cb070	8. Valinnainen	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-18 13:33:18.343	LI	PRIMARY_EIGHTH	f
-e768794b-c688-4dce-9445-23e8d4c3c986	7B	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-19 07:12:37.07	LI	PRIMARY_SEVENTH	f
-ca4d6aa5-12b6-4f4e-830d-ba8a02f7cc5f	8D	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-19 09:10:21.618	LI	PRIMARY_EIGHTH	f
-8eba147b-a52c-4bb7-b42c-7525324113f4	7C	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-20 07:04:28.287	LI	PRIMARY_SEVENTH	f
-e5fde4bf-6630-4459-9d8e-31740b307c02	9. Valinnainen	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-20 08:55:11.592	LI	PRIMARY_NINTH	f
-36b2f528-25fa-4ce2-8d35-6d487a5078d9	8C	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-21 08:56:12.316	LI	PRIMARY_EIGHTH	f
-d7eb105b-f258-443d-8ed8-c69546ac564c	Kdkdkdk	483e736f-00a6-46d1-a1c3-3099eb626012	2023-09-13 09:08:07.458	LI	PRIMARY_FIFTH	f
-e3b855ae-8277-4c8f-b9e2-5f8b66351bcb	Hhuh	dc1c8071-ac93-4952-8c66-85fb342f98ea	2023-09-13 09:15:52.203	LI	PRIMARY_FIFTH	f
-018cd027-6fa7-468f-b53a-cee9bbf557cf	9A	483e736f-00a6-46d1-a1c3-3099eb626012	2023-09-13 10:34:35.338	LI	PRIMARY_FIRST	f
-a03847bf-8bef-44b1-922d-1626e7837406	Hhh	dc1c8071-ac93-4952-8c66-85fb342f98ea	2023-09-13 10:34:47.375	LI	PRIMARY_SIXTH	f
-bc655f0c-1e07-47b4-9e8b-0a4ba9242d05	Lilu5	a9ffce62-5103-4e4a-9882-a1ac8b76cdb7	2023-09-13 11:52:36.473	LI	HIGH_SCHOOL_SECOND	f
-9ebcb35c-02e8-4b5d-ad9c-3dae255bdab9	9bde	bd173322-259a-474e-af00-551b843abd26	2023-09-13 12:00:59.888	LI	PRIMARY_NINTH	f
-b811f8b1-7d1c-447a-8cda-853f44e55fb6	L2 Lyseo harkkaryhmä	3a1486a1-98dd-44cc-8f8d-15f0e1635cf9	2023-09-13 12:01:57.792	LI	HIGH_SCHOOL_SECOND	f
-4fe72bd5-8f67-4212-a715-4a0ca602e632	LI1	3386ad42-5f46-49ab-ab12-fa11bb8723a5	2023-09-13 12:02:09.205	LI	HIGH_SCHOOL_FIRST	f
-c96447b3-d0d3-4985-878c-02536cf49e7f	Tahko guys	9f926abb-96f8-4ccd-baf0-f52eead78eb3	2023-09-13 12:02:50.172	LI	VOCATIONAL_OBLIGATORY	f
-9e608b2c-cf73-43cb-af7f-0c86315d9184	5AB	ace2434a-877e-41a1-a272-50af1c2a8960	2023-09-13 12:02:54.896	LI	PRIMARY_FIFTH	f
-d457226c-cff9-41c7-aebf-44a439e626c4	Ammttiopisto	8619ef13-7ce0-4b24-ad34-25a0c50502fa	2023-09-13 12:04:02.301	LI	VOCATIONAL_OBLIGATORY	f
-4117be07-2cdb-4d17-a14d-f6b970f78821	Lukio LI 1 a	03125a3a-ced3-4bba-ad60-b8f0bef67281	2023-09-13 12:04:02.364	LI	HIGH_SCHOOL_FIRST	f
-d0ef07c9-3848-4ec9-9d15-57168b896cf6	9ek	5e82d30b-73e1-4eb3-91a5-3e8e6a1e1e76	2023-09-13 12:04:54.032	LI	PRIMARY_NINTH	f
-fddc0331-595a-4010-bada-fb28a1214d56	Gradia Lukio	bd419cf9-79a0-46a1-aec9-a72403acc960	2023-09-13 12:05:06.08	LI	HIGH_SCHOOL_FIRST	f
-f963a69e-577f-45ee-bdf1-f3ade1a8fac4	Norssi 5 AB	b0cb2c48-123c-4c21-ad7b-d6f1a432f1e5	2023-09-13 12:06:18.507	LI	PRIMARY_FIFTH	f
-328073c3-0870-4171-93de-3d88100d6acc	9a	bd419cf9-79a0-46a1-aec9-a72403acc960	2023-09-13 12:06:59.7	LI	PRIMARY_NINTH	f
-93ecb125-ab82-4d66-99dc-ed689a177ba0	8BCE	51f117fe-e000-4e3d-ac13-7cfd1d5409c6	2023-09-13 12:07:39.087	LI	PRIMARY_EIGHTH	t
-4f76d4a5-d7bd-45b0-8041-357685155fd6	8ADF	ca58c632-42f0-4423-9c35-338eda50c9b3	2023-09-13 12:10:34.839	LI	PRIMARY_EIGHTH	f
-f375a966-3fef-43db-9afc-3ff484bf14c7	7	ca58c632-42f0-4423-9c35-338eda50c9b3	2023-09-13 12:14:28.869	LI	PRIMARY_SEVENTH	f
-05921118-fee3-4527-ae43-518e2b92b04c	Test	246b2c10-e69f-4efe-bb88-b85b157a53a5	2023-09-14 13:22:53.407	LI	PRIMARY_NINTH	f
-5068fa59-55a9-48cf-9bb2-38a2a7b9ae0e	Testi	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-13 14:59:26.497	LI	HIGH_SCHOOL_FIRST	t
-1eae19b4-6de5-45d6-9f05-2039e90f8df9	7 luokan harkka	905f4503-4974-4298-804f-41a23d29c106	2023-09-13 16:24:28.952	LI	PRIMARY_SEVENTH	f
-a7f2d79a-709e-4edf-bb8c-cf50567f926e	7 harkka	905f4503-4974-4298-804f-41a23d29c106	2023-09-13 19:38:13.124	LI	PRIMARY_SEVENTH	f
-5c1dbf22-8f21-42df-a878-43f0d7446bde	Li1	68456b93-bed5-463f-b298-7b7d69c21980	2023-09-14 04:20:22.726	LI	HIGH_SCHOOL_FIRST	f
-d49cfd99-fa09-4729-8fcd-1d1b66102c89	4A	51b0ee01-f526-4d88-bcf6-fe9f4f5f4bca	2023-09-14 07:49:38.768	LI	PRIMARY_FOURTH	f
-bb364b38-c286-46d4-9bd4-fbf13531a884	23B Terveystieto	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-14 08:31:24.042	LI	HIGH_SCHOOL_FIRST	t
-cd74808e-451c-4d1d-93a2-47c46f8385e3	23B Liikunta	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-14 08:31:45.262	LI	HIGH_SCHOOL_FIRST	t
-43ce3dc0-4659-4c6c-969e-65c92e3b24db	Lukio 1	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-14 12:30:47.023	LI	HIGH_SCHOOL_SECOND	t
-ef819731-2f4e-4980-9534-bec0630fee53	Kekeke	483e736f-00a6-46d1-a1c3-3099eb626012	2023-09-14 18:56:14.398	LI	HIGH_SCHOOL_FOURTH	f
-2cba9a0f-2452-495a-9fbc-0180ea49411e	Päättö syksy	9d7305e7-6591-446f-a593-7265e800d65a	2023-09-16 07:07:02.935	LI	HIGH_SCHOOL_FIRST	f
-a421b5e1-eb01-462e-899b-adb1b57e3b0d	Päättö syksy, 7ABE	49fdcd3d-aa2f-4c86-baec-e6c0c35665cd	2023-09-21 13:00:51.941	LI	PRIMARY_SEVENTH	f
-0c583991-c6d6-4d39-aa2e-3cb6b477fd43	2C	b2f96969-d008-4fb4-9367-d1f463b33bf0	2023-09-22 08:21:44.879	LI	PRIMARY_SECOND	f
-f5010fc6-0d96-433f-aa33-9eda0587072e	Päättöharkka 2023	75c9c331-7658-4978-9fab-aedb00a430e9	2023-09-18 06:15:58.397	LI	PRIMARY_EIGHTH	f
-feb81b2f-c70c-47f8-a2c1-623dcdfe48aa	Päättöharkka liikka syksy	64ae9e69-39e8-43f4-9a3c-628b4c9332ea	2023-09-21 15:54:44.298	LI	PRIMARY_FIFTH	f
-acfe9dc5-5e1e-4302-9188-b0cb623b42ad	Päättö	f0b32130-0241-4b16-ab61-e6683cddbab3	2023-09-16 08:12:25.114	LI	PRIMARY_SEVENTH	f
-bab7de8e-b5cb-421f-bf0c-1000ed41b2e2	Riikan harkkaryhmä	f83308e6-fca1-45b1-bfb8-9e05caa42dbc	2023-09-19 08:57:01.703	LI	PRIMARY_SEVENTH	f
-bf327012-7775-405f-b937-3a7c1508eda3	Norssi 9bde	d7ea5704-9071-41af-b5ec-4311fc5088f3	2023-09-20 09:14:28.211	LI	PRIMARY_NINTH	f
-3e75cd57-f337-4778-acf3-7df420b17374	8lk. Liikka, syksy (PH)	898d7e61-abc9-4d1e-9bc5-3bc3a3b5727d	2023-09-16 07:02:53.375	LI	PRIMARY_EIGHTH	f
-2fddc898-f1d1-4f7d-8406-be7c3a7e261b	Päättöharkka terveystieto	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-16 08:42:51.555	LI	HIGH_SCHOOL_FIRST	t
-872249e8-3e3c-47f4-8237-b25a13afce6f	Päättöharkka syksy	51f117fe-e000-4e3d-ac13-7cfd1d5409c6	2023-09-19 08:10:17.02	LI	PRIMARY_EIGHTH	f
-7e67bc6e-c273-42a2-9d1b-dbd39b25d5dd	Päättöharkka liikka syksy	9b9baaa3-ebc6-4b4a-a014-7e588e84a8f8	2023-09-16 15:00:26.728	LI	PRIMARY_FIFTH	f
-a7449b51-02e7-4f28-a799-bbc7f7f1496d	8lk	cc2e0dfe-3d7a-46bb-bde6-84a627f135f8	2023-09-18 07:49:03.777	LI	PRIMARY_EIGHTH	f
-bde28363-5c62-493c-afee-04d21e9eecde	9A	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-22 09:52:53.144	LI	PRIMARY_NINTH	f
-20952378-342a-4b6e-9cd2-040bcee46e69	Liikuntaharkka	5ca4b120-4155-459f-acea-cbadbaf95437	2023-09-22 06:28:28.803	LI	PRIMARY_SEVENTH	f
-37090b88-ddf0-45b7-a915-4bdf69067e68	Li1	68456b93-bed5-463f-b298-7b7d69c21980	2023-09-19 12:29:50.746	LI	HIGH_SCHOOL_FIRST	f
-cae0ff59-33a6-45f0-b47f-a4fb06c2c793	Bugiryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-19 11:22:03.698	LI	HIGH_SCHOOL_SECOND	f
-0fb115d6-0135-4a01-aa83-019cbdd01cc3	23B Liikunta	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-19 12:49:51.108	LI	HIGH_SCHOOL_FIRST	f
-e8fd1190-3395-4370-af51-9d9884a145b4	8ab	9f62e202-600f-4452-be5e-de1c0350a622	2023-09-19 12:57:23.539	LI	PRIMARY_EIGHTH	f
-7b528230-a909-4f5d-a330-9e65fa9774f6	LPES1009	0d276a14-5a8b-4e16-a364-e1441baa96f2	2023-09-19 19:29:34.331	LI	PRIMARY_NINTH	f
-ccd44372-5947-4b45-acc4-585c5f15c338	OPEA515, liikunta	9ec8ee79-0762-4208-a893-e44b5061b468	2023-09-20 08:31:13.481	LI	PRIMARY_NINTH	f
-be8dad6e-58f6-4ba1-a77f-d2ff43823856	Harkkaryhmä N	755c60e1-a067-4985-9bd9-7bb29f63fac0	2023-09-20 11:48:00.091	LI	PRIMARY_SEVENTH	f
-b509833f-510c-48b3-ac2f-f3a224f7689b	LPV3	a7935ade-dce6-4954-9616-d96d0534bd59	2023-09-21 12:21:25.166	LI	PRIMARY_EIGHTH	f
-28a8b373-ae39-47e1-9e98-7c0bf0cde758	7CDF	9eb688f1-ffe9-44a8-b4b8-e83f1ec6fc3b	2023-09-21 07:34:46.469	LI	PRIMARY_SEVENTH	f
-7c8569f1-4f65-4d21-b661-0cbd1baab970	Ammattiopisto uusi	8619ef13-7ce0-4b24-ad34-25a0c50502fa	2023-09-22 11:52:18.002	LI	VOCATIONAL_OBLIGATORY	f
-bffeb915-f568-4167-aee3-a59ad70d0ac6	5D	b2f96969-d008-4fb4-9367-d1f463b33bf0	2023-09-22 08:23:56.877	LI	PRIMARY_FIFTH	f
-33ea6ccf-76a2-43e4-9f8b-3e365da6eb17	23B Terveystieto	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-22 10:09:03.231	LI	HIGH_SCHOOL_FIRST	f
+COPY public."Group" (id, name, "teacherId", "updatedAt", "subjectCode", archived, "currentModuleId") FROM stdin;
+bb4892ea-62a4-4a10-bdfd-7e79ee870e19	TE1 lukio	483e736f-00a6-46d1-a1c3-3099eb626012	2023-09-23 10:24:25.91	TE	f	4e61a120-9a75-4d1a-beb3-66e8a5e7df55
+73dd8eef-069c-44d4-bd5b-cfa25b30ea21	Joulu	8548a9c5-dfdb-48e6-936d-f221845157b4	2023-09-23 10:24:28.212	TE	f	71fa53ac-9d4a-4846-a41e-ec8ef1dcfe0e
+293d7530-587a-4b1a-b216-585601c65f30	Uusi luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	f	2ddc3367-6ac7-4423-ac9e-0da999b30e46
+a3d216ad-203d-4f85-b292-354991ca219f	Päättö	f0b32130-0241-4b16-ab61-e6683cddbab3	2023-09-23 12:49:02.171	TE	f	55543e9e-9778-413b-a9bd-1792847d5f1b
+7ceb709a-05c1-408b-912c-f8196c3b8694	Toinen luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	f	d7c6bbd6-d13d-4029-a13f-a3690c520c4d
+176d8452-d61a-4115-9c3e-cfeb2c990daa	Kolmas luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	f	4f8d34c5-bb24-4e3c-931e-91ee96a93333
+a5e350b6-8d0e-40da-a480-a9146a6eb556	Neljäs luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	f	22ae2af2-d890-4b1a-8359-a8a14c862cf7
+8c596bfe-60ff-4649-a27e-bddc4c81aa7e	Uusi luokka	5b637712-3af1-46a2-aeb0-a4a016b134bc	2023-03-30 18:34:09.249	LI	f	0ef6cb66-7b2b-40f6-b8e9-7a37c5c80487
+f3bf4d11-99a7-4ec9-a8a5-cc5743424a92	Toinen luokka	5b637712-3af1-46a2-aeb0-a4a016b134bc	2023-03-30 18:34:09.249	LI	f	5bfd766a-6f9c-4712-8ad9-dcc6dbd72d3f
+1dc7d4c5-27c3-49c4-80de-9afdd54d69a1	Testi luokka	5b637712-3af1-46a2-aeb0-a4a016b134bc	2023-03-30 18:34:09.249	LI	f	bb5d74a9-972b-4141-a81b-95b2e3681c3d
+2701efce-305c-4914-b604-dcea230c2689	Herran huone	483e736f-00a6-46d1-a1c3-3099eb626012	2023-04-19 16:57:12.014	LI	f	f586e1b6-5297-4de1-8c7f-b7d76902ffc1
+0af98668-1b27-481f-a1c1-54b3d775ee51	Li 8a/8b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-20 11:15:51.865	LI	f	ac83bfa3-9f44-4aea-aac0-98e793367206
+69f26527-bdb1-4e38-b999-9f2481fd62f6	Testi luokka	5b637712-3af1-46a2-aeb0-a4a016b134bc	2023-03-30 18:34:09.249	LI	f	e55d4173-4aa1-4e65-8574-c99710578fdc
+54fac98f-4253-487e-9e4e-e0ef4ae2443a	Testi luokka	8548a9c5-dfdb-48e6-936d-f221845157b4	2023-03-30 18:34:09.249	LI	f	0dbc9116-4412-40d5-8271-5e949d4f20a6
+b5e709c0-8913-42b6-82b0-04d702347380	test@email.com	8548a9c5-dfdb-48e6-936d-f221845157b4	2023-08-23 08:17:27.322	LI	f	e056e70c-9acb-4de2-a6c7-bac93ba3000e
+c3f1e3d5-7abc-44bb-bfa5-12a0fd2c6769	LI03	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-20 13:04:36.448	LI	f	797914c3-3e04-4caa-8468-830bcc09659b
+aff9ac1f-ab9d-4d21-a161-408240f222d6	7B	1112c6f9-bfbf-4207-83cd-910ffe0582f2	2023-03-30 18:34:09.249	LI	f	d0839b30-1412-448d-8856-5041b20701ec
+eab532a9-07cc-4c9d-b11a-2d4ddb84996d	9A	1112c6f9-bfbf-4207-83cd-910ffe0582f2	2023-03-30 18:34:09.249	LI	f	b8bf80db-46cf-4b75-a204-a842cc010e3e
+54d739bd-6c9f-48df-850c-78a43ed48a61	13b	1112c6f9-bfbf-4207-83cd-910ffe0582f2	2023-03-30 18:34:09.249	LI	f	ffe74adb-ab34-42bd-b305-eff26e32b6ba
+8eda8460-b4f6-4ed0-b43a-253608ef0298	Valinnainen LI 8a/8b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-14 08:48:29.463	LI	f	72d704a8-e209-4255-a595-40d96c4d42ad
+c42525f7-172d-4d1f-9bf1-96bbed39414f	Nooran ryhmä	96549af2-ad08-4066-b742-cb1048b3876d	2023-03-30 18:34:09.249	LI	f	564ee2b5-5c55-4667-8732-f9f45d9ecd5a
+1811d42e-eb46-4b97-a067-8d91a4c60bd1	LI01	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-03-30 18:34:09.249	LI	f	0497a2a4-6124-40dc-92d6-8fe3b708331e
+d2dd3387-7d32-4ab0-bafb-a04aa89621d6	VLI 9a/9b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-19 07:07:11.778	LI	f	6d55867f-186d-4f87-8317-17cb8d0fd463
+1dffd2ea-91a3-4f2f-a001-ca61df2631b8	Eka ryhmä	185a9cc2-8497-493f-94da-65abda04a320	2023-03-30 18:34:09.249	LI	f	10c06372-82ec-47ed-962c-77553126f3ae
+9c0fff82-1597-4447-84d2-28051ef96223	LI 7b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-19 14:28:01.278	LI	f	37c6af4b-8b10-40a5-8ae3-1b01af624dc5
+1d45a2c2-1ae0-4068-adf4-d09fb4d6f31d	6B	483e736f-00a6-46d1-a1c3-3099eb626012	2023-03-30 18:34:09.249	LI	f	ba4535ec-16b4-4070-8a70-83cbe8b51340
+e61dbeae-376b-4fac-bd5b-7441b0533ee9	LI 7a/a	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-19 14:32:33.021	LI	f	7088e255-6c73-4fa3-8699-3ecf9dbe5964
+110c9dff-5530-4184-baf5-bb6bb05bb40f	LI 9a/9b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-04-19 14:38:27.521	LI	f	de31e354-3f10-499e-b9b8-7c17616175c8
+88e7273d-605d-483a-ae82-2c548472a6ec	Tapitus	483e736f-00a6-46d1-a1c3-3099eb626012	2023-03-30 18:34:09.249	LI	f	439d550e-a5ef-4f51-a9fc-81fa9a0aed52
+2556b6a9-4cab-4b65-99fe-94f5cf5d9123	A	45f62aaf-431d-478a-96b2-629928472f0f	2023-03-30 18:34:09.249	LI	f	decdfebc-8865-4884-85e2-532e1324b324
+11f9a50c-6d6d-405e-882d-dd0d828980c5	B	45f62aaf-431d-478a-96b2-629928472f0f	2023-03-30 18:34:09.249	LI	f	4c789d28-06db-4d59-bfcd-17c846cea94c
+018cd027-6fa7-468f-b53a-cee9bbf557cf	9A	483e736f-00a6-46d1-a1c3-3099eb626012	2023-09-13 10:34:35.338	LI	f	89d861be-d5e9-41a3-8672-d977b0895d54
+909b50c8-56c4-4618-bb55-e1a1feb7f1a9	Kettujen kerho	483e736f-00a6-46d1-a1c3-3099eb626012	2023-04-22 12:43:54.406	LI	f	d492f954-cd06-4c86-8ce1-fff58bc72e38
+23a47b66-cd2e-4a9c-ab78-d6b1a8e5643f	4AC	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-04-22 12:40:09.521	LI	f	1e492cde-5525-44dc-b82f-6a34dd7eb995
+0df0a9e8-d7d4-4a24-a2ad-e5f263696a27	Testi iso ryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-08 10:31:55.772	LI	f	230317b4-fb83-4092-8da4-e641aadb600b
+f118eb20-2ff4-4bec-a6b7-458e97ef062d	Nelkut	94f0b047-8048-49a1-8578-889686e3127a	2023-05-03 19:49:12.607	LI	f	435da3c4-87f7-4597-a447-7a3e6f4b15c4
+562cb013-14e0-4d29-ae33-5ba1813dfec6	Testi pieni ryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-13 12:35:10.655	LI	f	b83c3bfe-9b2c-417b-a955-5d725e54f94e
+41f9142b-c05f-41c7-baea-7afafeabb8c7	8a	dc1c8071-ac93-4952-8c66-85fb342f98ea	2023-09-13 10:33:34.823	LI	f	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600
+fde7c856-7b1b-4ca8-a624-67809c32bd65	Testiryhmä	e31f2fbf-4637-46e9-94c2-93f00a138edf	2023-05-19 11:44:05.791	LI	f	ec5578dd-ad95-4279-be72-e0326b8cfd41
+c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0	Jsjskdjsj	8548a9c5-dfdb-48e6-936d-f221845157b4	2023-05-19 13:25:26.995	LI	f	f4ca4a93-f8d6-49ba-bea8-8390c99005b8
+723f1c8d-8a79-4484-b31b-d2e4f7f50efd	toinen ryhmä	6bcb2e61-7d1e-4697-9e41-93a8f62a3cd6	2023-06-01 10:20:17.176	LI	f	c8b9bfe7-5d92-434c-97f3-97eb52714267
+556d49fe-2a7d-4818-8a64-3ecc6a59009c	Name	483e736f-00a6-46d1-a1c3-3099eb626012	2023-06-21 12:56:04.927	LI	f	38d0ac99-a402-410a-bf49-523a30d11f83
+668d593b-2679-480d-9c37-6a7f5d4fb257	Name	483e736f-00a6-46d1-a1c3-3099eb626012	2023-06-21 12:56:07.627	LI	f	512b3326-704d-4ffc-b566-618cb291d69f
+558998de-3364-412a-908a-70b27920ea42	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 07:33:44.762	LI	t	ad630fab-59d6-4f95-85f3-fe78b14da668
+b03b85ef-19a9-47ab-9903-b0a2b82bb1de	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 07:33:16.858	LI	t	0edef857-3f65-4e82-aba3-02c69e0191a8
+5d674efc-3549-4837-b221-44c4d622eb09	9B	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-15 11:13:24.58	LI	f	fd028225-16dd-4d8e-8c86-a81a9d9243e5
+ca4d6aa5-12b6-4f4e-830d-ba8a02f7cc5f	8D	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-19 09:10:21.618	LI	f	640e87de-8063-4c00-9087-c17709e34059
+9d124d20-5f11-4647-9256-b1c43740dd81	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:24:03.326	LI	t	b84acf3b-29a2-48a0-899c-8ea75f7920f2
+bde28363-5c62-493c-afee-04d21e9eecde	9A	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-22 09:52:53.144	LI	f	a6a42248-8033-4254-8b5d-ba325479414d
+4c36484b-3244-47a9-a5e3-235c9474383e	7D	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-18 07:19:50.431	LI	f	31169d42-b6c4-485c-8ced-f3fca6fe9ea9
+5922e468-ecb6-481e-bfdb-c4e2386cb070	8. Valinnainen	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-18 13:33:18.343	LI	f	999be80c-ff15-4515-ba2d-3f330319b986
+53bbc105-6e07-4841-a795-c75f806bea01	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:23:55.193	LI	t	11455bcc-2381-45d9-aeac-ad4bb321eab9
+e768794b-c688-4dce-9445-23e8d4c3c986	7B	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-19 07:12:37.07	LI	f	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e
+8eba147b-a52c-4bb7-b42c-7525324113f4	7C	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-20 07:04:28.287	LI	f	cf7246cc-5760-499a-9252-c3d1bbcc79e8
+e6299525-7a48-4030-a523-cf249433d62a	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:23:59.295	LI	t	7bfd943e-c11d-458c-a010-48c84b8a6a43
+942b9f78-b7b8-46aa-abff-18cf8da3ac9b	7A	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-19 11:25:52.653	LI	f	f6160571-beff-4c21-b3af-399f376429ae
+e5fde4bf-6630-4459-9d8e-31740b307c02	9. Valinnainen	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-20 08:55:11.592	LI	f	61dc37a4-b86f-4563-8fca-37aad69a1f05
+36b2f528-25fa-4ce2-8d35-6d487a5078d9	8C	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-21 08:56:12.316	LI	f	45982a54-e42c-4e48-8b84-32689d592abd
+a0cd3827-7fc0-4b11-944f-cd459880a439	Jhg	483e736f-00a6-46d1-a1c3-3099eb626012	2023-08-24 14:12:48.362	LI	f	b6a7dc4a-0717-4b80-a18e-39651d41c5a4
+da15b065-9c67-4003-8ec0-7e1e2eee111f	6b	b174d04e-39ef-4356-a65b-cb73d9543176	2023-09-12 16:52:20.048	LI	f	9b7eb5b0-ddfe-4af4-94d5-53bb36f98117
+92ce53f7-53e2-46a0-ac39-ecdefa3dfef7	4d	b174d04e-39ef-4356-a65b-cb73d9543176	2023-09-12 19:57:58.249	LI	f	c27efea4-643a-4cdc-9c40-e58525a49720
+c9fc597a-3fe4-4035-8773-b858579c2f3c	8G	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-13 09:36:40.319	LI	f	8ffe45c2-e5a4-4702-89d4-2df665869687
+e3b855ae-8277-4c8f-b9e2-5f8b66351bcb	Hhuh	dc1c8071-ac93-4952-8c66-85fb342f98ea	2023-09-13 09:15:52.203	LI	f	e3aba1ba-865b-4174-b776-b5936ab840d3
+d7eb105b-f258-443d-8ed8-c69546ac564c	Kdkdkdk	483e736f-00a6-46d1-a1c3-3099eb626012	2023-09-13 09:08:07.458	LI	f	bb17b295-c660-46a1-bfa1-7c299d3b0a57
+a03847bf-8bef-44b1-922d-1626e7837406	Hhh	dc1c8071-ac93-4952-8c66-85fb342f98ea	2023-09-13 10:34:47.375	LI	f	598d6e30-40ac-4570-84f0-b670bdbf285b
+bc655f0c-1e07-47b4-9e8b-0a4ba9242d05	Lilu5	a9ffce62-5103-4e4a-9882-a1ac8b76cdb7	2023-09-13 11:52:36.473	LI	f	3d9e5620-5258-4bb0-b561-5942790e6f0d
+a421b5e1-eb01-462e-899b-adb1b57e3b0d	Päättö syksy, 7ABE	49fdcd3d-aa2f-4c86-baec-e6c0c35665cd	2023-09-21 13:00:51.941	LI	f	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90
+5068fa59-55a9-48cf-9bb2-38a2a7b9ae0e	Testi	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-13 14:59:26.497	LI	t	a40b3250-b715-4475-8802-b8cee2336933
+9ebcb35c-02e8-4b5d-ad9c-3dae255bdab9	9bde	bd173322-259a-474e-af00-551b843abd26	2023-09-13 12:00:59.888	LI	f	7fe00095-698d-4a5b-9fc8-0112800d0b89
+0c583991-c6d6-4d39-aa2e-3cb6b477fd43	2C	b2f96969-d008-4fb4-9367-d1f463b33bf0	2023-09-22 08:21:44.879	LI	f	36347506-9fe3-4cc1-bd70-3f56675ba66c
+c96447b3-d0d3-4985-878c-02536cf49e7f	Tahko guys	9f926abb-96f8-4ccd-baf0-f52eead78eb3	2023-09-13 12:02:50.172	LI	f	6f377d70-cfec-45c3-aabb-c41bdedaa327
+d0ef07c9-3848-4ec9-9d15-57168b896cf6	9ek	5e82d30b-73e1-4eb3-91a5-3e8e6a1e1e76	2023-09-13 12:04:54.032	LI	f	0736c55e-a30f-468d-ac92-011155f63782
+f5010fc6-0d96-433f-aa33-9eda0587072e	Päättöharkka 2023	75c9c331-7658-4978-9fab-aedb00a430e9	2023-09-18 06:15:58.397	LI	f	9b8adc7f-39c7-4925-847a-818b9389c18b
+b811f8b1-7d1c-447a-8cda-853f44e55fb6	L2 Lyseo harkkaryhmä	3a1486a1-98dd-44cc-8f8d-15f0e1635cf9	2023-09-13 12:01:57.792	LI	f	7c6e7596-e58a-417d-873d-71e3a97a5cf9
+4fe72bd5-8f67-4212-a715-4a0ca602e632	LI1	3386ad42-5f46-49ab-ab12-fa11bb8723a5	2023-09-13 12:02:09.205	LI	f	07ad7d5a-6bde-4c10-b4af-70932def7817
+fddc0331-595a-4010-bada-fb28a1214d56	Gradia Lukio	bd419cf9-79a0-46a1-aec9-a72403acc960	2023-09-13 12:05:06.08	LI	f	fc400672-2a2e-44b1-966b-d887bb7d1f40
+9e608b2c-cf73-43cb-af7f-0c86315d9184	5AB	ace2434a-877e-41a1-a272-50af1c2a8960	2023-09-13 12:02:54.896	LI	f	69713ee3-036c-4395-9000-83c65184921e
+b509833f-510c-48b3-ac2f-f3a224f7689b	LPV3	a7935ade-dce6-4954-9616-d96d0534bd59	2023-09-21 12:21:25.166	LI	f	a153dc01-0752-4f56-9501-8fc52ba97f0b
+feb81b2f-c70c-47f8-a2c1-623dcdfe48aa	Päättöharkka liikka syksy	64ae9e69-39e8-43f4-9a3c-628b4c9332ea	2023-09-21 15:54:44.298	LI	f	f5b7f191-2b9f-4606-b7f4-69f2fab61d6d
+d457226c-cff9-41c7-aebf-44a439e626c4	Ammttiopisto	8619ef13-7ce0-4b24-ad34-25a0c50502fa	2023-09-13 12:04:02.301	LI	f	96cb2e41-a16d-4ee5-9a1e-353c1ceaa5dc
+4117be07-2cdb-4d17-a14d-f6b970f78821	Lukio LI 1 a	03125a3a-ced3-4bba-ad60-b8f0bef67281	2023-09-13 12:04:02.364	LI	f	0e33bb0f-b6ba-4005-9106-3ecef0171499
+bf327012-7775-405f-b937-3a7c1508eda3	Norssi 9bde	d7ea5704-9071-41af-b5ec-4311fc5088f3	2023-09-20 09:14:28.211	LI	f	d872e1e1-07ed-4fe7-b285-f11e407754c7
+93ecb125-ab82-4d66-99dc-ed689a177ba0	8BCE	51f117fe-e000-4e3d-ac13-7cfd1d5409c6	2023-09-13 12:07:39.087	LI	t	f3845ff7-d477-4acd-b451-31db79a8c7b1
+ccd44372-5947-4b45-acc4-585c5f15c338	OPEA515, liikunta	9ec8ee79-0762-4208-a893-e44b5061b468	2023-09-20 08:31:13.481	LI	f	49f0263b-9be4-44f2-be54-8f95a1942dae
+7e67bc6e-c273-42a2-9d1b-dbd39b25d5dd	Päättöharkka liikka syksy	9b9baaa3-ebc6-4b4a-a014-7e588e84a8f8	2023-09-16 15:00:26.728	LI	f	d77b1c6d-e41d-420f-8f22-e8494af72bcf
+f963a69e-577f-45ee-bdf1-f3ade1a8fac4	Norssi 5 AB	b0cb2c48-123c-4c21-ad7b-d6f1a432f1e5	2023-09-13 12:06:18.507	LI	f	60ba446f-c350-4d72-8722-cde0c39c9a63
+328073c3-0870-4171-93de-3d88100d6acc	9a	bd419cf9-79a0-46a1-aec9-a72403acc960	2023-09-13 12:06:59.7	LI	f	04402773-b275-48b2-83f5-0758c257167b
+872249e8-3e3c-47f4-8237-b25a13afce6f	Päättöharkka syksy	51f117fe-e000-4e3d-ac13-7cfd1d5409c6	2023-09-19 08:10:17.02	LI	f	587a6af4-afdd-4bf5-90a9-04bcadbb4807
+4f76d4a5-d7bd-45b0-8041-357685155fd6	8ADF	ca58c632-42f0-4423-9c35-338eda50c9b3	2023-09-13 12:10:34.839	LI	f	94673584-2806-4e30-9a43-1fd7c50320d8
+f375a966-3fef-43db-9afc-3ff484bf14c7	7	ca58c632-42f0-4423-9c35-338eda50c9b3	2023-09-13 12:14:28.869	LI	f	ebeeb773-3d06-4722-b7bd-feae8c78ef4b
+2cba9a0f-2452-495a-9fbc-0180ea49411e	Päättö syksy	9d7305e7-6591-446f-a593-7265e800d65a	2023-09-16 07:07:02.935	LI	f	d3f5eb51-9cac-441e-91ac-bad14e134b9d
+bffeb915-f568-4167-aee3-a59ad70d0ac6	5D	b2f96969-d008-4fb4-9367-d1f463b33bf0	2023-09-22 08:23:56.877	LI	f	78e46daf-61ca-4997-bf43-5c5277ff6f4c
+43ce3dc0-4659-4c6c-969e-65c92e3b24db	Lukio 1	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-14 12:30:47.023	LI	t	d96c1f14-518f-46dd-a672-241f18ade35f
+bb364b38-c286-46d4-9bd4-fbf13531a884	23B Terveystieto	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-14 08:31:24.042	LI	t	585c3f5d-302c-46c6-95d2-ef7e1a1ce04b
+cd74808e-451c-4d1d-93a2-47c46f8385e3	23B Liikunta	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-14 08:31:45.262	LI	t	bf4c8f93-5596-4bb4-8505-2d4fcbd5cf8a
+a7f2d79a-709e-4edf-bb8c-cf50567f926e	7 harkka	905f4503-4974-4298-804f-41a23d29c106	2023-09-13 19:38:13.124	LI	f	d427be8a-0aba-47fb-8960-a447826b0343
+1eae19b4-6de5-45d6-9f05-2039e90f8df9	7 luokan harkka	905f4503-4974-4298-804f-41a23d29c106	2023-09-13 16:24:28.952	LI	f	8b14c644-c872-44fa-9f1c-52f86c74bdc7
+e8fd1190-3395-4370-af51-9d9884a145b4	8ab	9f62e202-600f-4452-be5e-de1c0350a622	2023-09-19 12:57:23.539	LI	f	7f091af6-1c43-4020-9360-e05a6563e18a
+20952378-342a-4b6e-9cd2-040bcee46e69	Liikuntaharkka	5ca4b120-4155-459f-acea-cbadbaf95437	2023-09-22 06:28:28.803	LI	f	63f2c632-042f-45d8-864e-8ecf96d21f70
+5c1dbf22-8f21-42df-a878-43f0d7446bde	Li1	68456b93-bed5-463f-b298-7b7d69c21980	2023-09-14 04:20:22.726	LI	f	513dfcd2-a39c-41ae-b3a2-23dd05d315ef
+acfe9dc5-5e1e-4302-9188-b0cb623b42ad	Päättö	f0b32130-0241-4b16-ab61-e6683cddbab3	2023-09-16 08:12:25.114	LI	f	d934236a-8a21-4500-8408-d8aee2cb6b27
+3e75cd57-f337-4778-acf3-7df420b17374	8lk. Liikka, syksy (PH)	898d7e61-abc9-4d1e-9bc5-3bc3a3b5727d	2023-09-16 07:02:53.375	LI	f	8497021a-61fa-49ee-ac25-5f321fc52fde
+d49cfd99-fa09-4729-8fcd-1d1b66102c89	4A	51b0ee01-f526-4d88-bcf6-fe9f4f5f4bca	2023-09-14 07:49:38.768	LI	f	f5f01d31-e035-4996-b260-dc63d21906db
+33ea6ccf-76a2-43e4-9f8b-3e365da6eb17	23B Terveystieto	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-22 10:09:03.231	LI	f	a6290fba-9996-4d99-9ba6-d6f68cf8463b
+0fb115d6-0135-4a01-aa83-019cbdd01cc3	23B Liikunta	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-19 12:49:51.108	LI	f	64b534f4-7461-422c-bf3b-8d5bde2e36f7
+05921118-fee3-4527-ae43-518e2b92b04c	Test	246b2c10-e69f-4efe-bb88-b85b157a53a5	2023-09-14 13:22:53.407	LI	f	c90e44ff-5e1a-4114-a2f1-aa8f139019a1
+a7449b51-02e7-4f28-a799-bbc7f7f1496d	8lk	cc2e0dfe-3d7a-46bb-bde6-84a627f135f8	2023-09-18 07:49:03.777	LI	f	afc9216c-d2b7-47d2-9e19-4a23a91acb9e
+ef819731-2f4e-4980-9534-bec0630fee53	Kekeke	483e736f-00a6-46d1-a1c3-3099eb626012	2023-09-14 18:56:14.398	LI	f	fba7b151-8a02-40bb-9dbc-62c14c786c4d
+2fddc898-f1d1-4f7d-8406-be7c3a7e261b	Päättöharkka terveystieto	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-16 08:42:51.555	LI	t	25247b17-635d-4a64-a9a4-1462133e7d50
+37090b88-ddf0-45b7-a915-4bdf69067e68	Li1	68456b93-bed5-463f-b298-7b7d69c21980	2023-09-19 12:29:50.746	LI	f	ab0c9659-e372-4474-a910-d0bc4c1f2c00
+bab7de8e-b5cb-421f-bf0c-1000ed41b2e2	Riikan harkkaryhmä	f83308e6-fca1-45b1-bfb8-9e05caa42dbc	2023-09-19 08:57:01.703	LI	f	b8a5829d-197f-4b36-889a-9123183fa2e7
+cae0ff59-33a6-45f0-b47f-a4fb06c2c793	Bugiryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-19 11:22:03.698	LI	f	7f1c5e91-43ea-4eef-ad38-3838a19a993b
+7b528230-a909-4f5d-a330-9e65fa9774f6	LPES1009	0d276a14-5a8b-4e16-a364-e1441baa96f2	2023-09-19 19:29:34.331	LI	f	557f38da-cdab-464c-bc74-1a84606989b0
+be8dad6e-58f6-4ba1-a77f-d2ff43823856	Harkkaryhmä N	755c60e1-a067-4985-9bd9-7bb29f63fac0	2023-09-20 11:48:00.091	LI	f	cb932bc8-d215-4f88-9906-a5f4fa435366
+28a8b373-ae39-47e1-9e98-7c0bf0cde758	7CDF	9eb688f1-ffe9-44a8-b4b8-e83f1ec6fc3b	2023-09-21 07:34:46.469	LI	f	a5fe4430-339a-4c7b-b50a-5ec649f2a4f6
+7c8569f1-4f65-4d21-b661-0cbd1baab970	Ammattiopisto uusi	8619ef13-7ce0-4b24-ad34-25a0c50502fa	2023-09-22 11:52:18.002	LI	f	e6e68270-934e-452e-ae7e-5a08ea0f4741
+\.
+
+
+--
+-- Data for Name: Module; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."Module" (id, "groupId", "educationLevel", "learningObjectiveGroupKey") FROM stdin;
+4e61a120-9a75-4d1a-beb3-66e8a5e7df55	bb4892ea-62a4-4a10-bdfd-7e79ee870e19	HIGH_SCHOOL	TE_HS_MODULE_TE1
+71fa53ac-9d4a-4846-a41e-ec8ef1dcfe0e	73dd8eef-069c-44d4-bd5b-cfa25b30ea21	PRIMARY_EIGHTH	seven_to_nine_years
+55543e9e-9778-413b-a9bd-1792847d5f1b	a3d216ad-203d-4f85-b292-354991ca219f	PRIMARY_EIGHTH	seven_to_nine_years
+2ddc3367-6ac7-4423-ac9e-0da999b30e46	293d7530-587a-4b1a-b216-585601c65f30	PRIMARY_FIRST	one_to_two_years
+d7c6bbd6-d13d-4029-a13f-a3690c520c4d	7ceb709a-05c1-408b-912c-f8196c3b8694	PRIMARY_FIRST	one_to_two_years
+4f8d34c5-bb24-4e3c-931e-91ee96a93333	176d8452-d61a-4115-9c3e-cfeb2c990daa	PRIMARY_FIRST	one_to_two_years
+22ae2af2-d890-4b1a-8359-a8a14c862cf7	a5e350b6-8d0e-40da-a480-a9146a6eb556	PRIMARY_FIRST	one_to_two_years
+0ef6cb66-7b2b-40f6-b8e9-7a37c5c80487	8c596bfe-60ff-4649-a27e-bddc4c81aa7e	PRIMARY_FIRST	one_to_two_years
+5bfd766a-6f9c-4712-8ad9-dcc6dbd72d3f	f3bf4d11-99a7-4ec9-a8a5-cc5743424a92	PRIMARY_FIRST	one_to_two_years
+bb5d74a9-972b-4141-a81b-95b2e3681c3d	1dc7d4c5-27c3-49c4-80de-9afdd54d69a1	PRIMARY_FIRST	one_to_two_years
+f586e1b6-5297-4de1-8c7f-b7d76902ffc1	2701efce-305c-4914-b604-dcea230c2689	PRIMARY_FIRST	one_to_two_years
+ac83bfa3-9f44-4aea-aac0-98e793367206	0af98668-1b27-481f-a1c1-54b3d775ee51	PRIMARY_FIRST	one_to_two_years
+e55d4173-4aa1-4e65-8574-c99710578fdc	69f26527-bdb1-4e38-b999-9f2481fd62f6	PRIMARY_FIRST	one_to_two_years
+0dbc9116-4412-40d5-8271-5e949d4f20a6	54fac98f-4253-487e-9e4e-e0ef4ae2443a	PRIMARY_FIRST	one_to_two_years
+e056e70c-9acb-4de2-a6c7-bac93ba3000e	b5e709c0-8913-42b6-82b0-04d702347380	PRIMARY_FIRST	one_to_two_years
+797914c3-3e04-4caa-8468-830bcc09659b	c3f1e3d5-7abc-44bb-bfa5-12a0fd2c6769	PRIMARY_FIRST	one_to_two_years
+d0839b30-1412-448d-8856-5041b20701ec	aff9ac1f-ab9d-4d21-a161-408240f222d6	PRIMARY_FIRST	one_to_two_years
+b8bf80db-46cf-4b75-a204-a842cc010e3e	eab532a9-07cc-4c9d-b11a-2d4ddb84996d	PRIMARY_FIRST	one_to_two_years
+3bfa598b-fbf0-4ec2-98a0-48828f0df61e	0df0a9e8-d7d4-4a24-a2ad-e5f263696a27	PRIMARY_FIRST	one_to_two_years
+ffe74adb-ab34-42bd-b305-eff26e32b6ba	54d739bd-6c9f-48df-850c-78a43ed48a61	PRIMARY_FIRST	one_to_two_years
+72d704a8-e209-4255-a595-40d96c4d42ad	8eda8460-b4f6-4ed0-b43a-253608ef0298	PRIMARY_FIRST	one_to_two_years
+564ee2b5-5c55-4667-8732-f9f45d9ecd5a	c42525f7-172d-4d1f-9bf1-96bbed39414f	PRIMARY_FIRST	one_to_two_years
+0497a2a4-6124-40dc-92d6-8fe3b708331e	1811d42e-eb46-4b97-a067-8d91a4c60bd1	PRIMARY_FIRST	one_to_two_years
+6d55867f-186d-4f87-8317-17cb8d0fd463	d2dd3387-7d32-4ab0-bafb-a04aa89621d6	PRIMARY_FIRST	one_to_two_years
+10c06372-82ec-47ed-962c-77553126f3ae	1dffd2ea-91a3-4f2f-a001-ca61df2631b8	PRIMARY_FIRST	one_to_two_years
+37c6af4b-8b10-40a5-8ae3-1b01af624dc5	9c0fff82-1597-4447-84d2-28051ef96223	PRIMARY_FIRST	one_to_two_years
+ba4535ec-16b4-4070-8a70-83cbe8b51340	1d45a2c2-1ae0-4068-adf4-d09fb4d6f31d	PRIMARY_FIRST	one_to_two_years
+7088e255-6c73-4fa3-8699-3ecf9dbe5964	e61dbeae-376b-4fac-bd5b-7441b0533ee9	PRIMARY_FIRST	one_to_two_years
+de31e354-3f10-499e-b9b8-7c17616175c8	110c9dff-5530-4184-baf5-bb6bb05bb40f	PRIMARY_FIRST	one_to_two_years
+0664b09a-09b6-4ef6-81b3-1e9dc549c446	909b50c8-56c4-4618-bb55-e1a1feb7f1a9	PRIMARY_FIRST	one_to_two_years
+439d550e-a5ef-4f51-a9fc-81fa9a0aed52	88e7273d-605d-483a-ae82-2c548472a6ec	PRIMARY_FIRST	one_to_two_years
+decdfebc-8865-4884-85e2-532e1324b324	2556b6a9-4cab-4b65-99fe-94f5cf5d9123	PRIMARY_FIRST	one_to_two_years
+4c789d28-06db-4d59-bfcd-17c846cea94c	11f9a50c-6d6d-405e-882d-dd0d828980c5	PRIMARY_FIRST	one_to_two_years
+fc783adf-450b-45d5-b189-14ab3c6f7979	23a47b66-cd2e-4a9c-ab78-d6b1a8e5643f	PRIMARY_FIRST	one_to_two_years
+89d861be-d5e9-41a3-8672-d977b0895d54	018cd027-6fa7-468f-b53a-cee9bbf557cf	PRIMARY_FIRST	one_to_two_years
+d492f954-cd06-4c86-8ce1-fff58bc72e38	909b50c8-56c4-4618-bb55-e1a1feb7f1a9	PRIMARY_THIRD	three_to_six_years
+1e492cde-5525-44dc-b82f-6a34dd7eb995	23a47b66-cd2e-4a9c-ab78-d6b1a8e5643f	PRIMARY_FOURTH	three_to_six_years
+230317b4-fb83-4092-8da4-e641aadb600b	0df0a9e8-d7d4-4a24-a2ad-e5f263696a27	PRIMARY_NINTH	seven_to_nine_years
+639595a0-0bb4-4c21-b41d-c1c81d2c29f3	909b50c8-56c4-4618-bb55-e1a1feb7f1a9	HIGH_SCHOOL	LI_HS_MODULE_LI1
+435da3c4-87f7-4597-a447-7a3e6f4b15c4	f118eb20-2ff4-4bec-a6b7-458e97ef062d	PRIMARY_FOURTH	three_to_six_years
+f86f29a9-cce9-4060-a07d-b8d899013b9f	562cb013-14e0-4d29-ae33-5ba1813dfec6	HIGH_SCHOOL	LI_HS_MODULE_LI2
+b83c3bfe-9b2c-417b-a955-5d725e54f94e	562cb013-14e0-4d29-ae33-5ba1813dfec6	PRIMARY_NINTH	seven_to_nine_years
+1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	41f9142b-c05f-41c7-baea-7afafeabb8c7	PRIMARY_EIGHTH	seven_to_nine_years
+ec5578dd-ad95-4279-be72-e0326b8cfd41	fde7c856-7b1b-4ca8-a624-67809c32bd65	PRIMARY_FIRST	one_to_two_years
+f4ca4a93-f8d6-49ba-bea8-8390c99005b8	c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0	PRIMARY_THIRD	three_to_six_years
+c8b9bfe7-5d92-434c-97f3-97eb52714267	723f1c8d-8a79-4484-b31b-d2e4f7f50efd	PRIMARY_SECOND	one_to_two_years
+38d0ac99-a402-410a-bf49-523a30d11f83	556d49fe-2a7d-4818-8a64-3ecc6a59009c	PRIMARY_FOURTH	three_to_six_years
+512b3326-704d-4ffc-b566-618cb291d69f	668d593b-2679-480d-9c37-6a7f5d4fb257	PRIMARY_FOURTH	three_to_six_years
+efb5a121-cf07-45c5-9c50-72f7be1fb9ff	018cd027-6fa7-468f-b53a-cee9bbf557cf	PRIMARY_THIRD	three_to_six_years
+ad630fab-59d6-4f95-85f3-fe78b14da668	558998de-3364-412a-908a-70b27920ea42	PRIMARY_SEVENTH	seven_to_nine_years
+0edef857-3f65-4e82-aba3-02c69e0191a8	b03b85ef-19a9-47ab-9903-b0a2b82bb1de	PRIMARY_SEVENTH	seven_to_nine_years
+fd028225-16dd-4d8e-8c86-a81a9d9243e5	5d674efc-3549-4837-b221-44c4d622eb09	PRIMARY_NINTH	seven_to_nine_years
+640e87de-8063-4c00-9087-c17709e34059	ca4d6aa5-12b6-4f4e-830d-ba8a02f7cc5f	PRIMARY_EIGHTH	seven_to_nine_years
+b84acf3b-29a2-48a0-899c-8ea75f7920f2	9d124d20-5f11-4647-9256-b1c43740dd81	PRIMARY_FIRST	one_to_two_years
+a6a42248-8033-4254-8b5d-ba325479414d	bde28363-5c62-493c-afee-04d21e9eecde	PRIMARY_NINTH	seven_to_nine_years
+31169d42-b6c4-485c-8ced-f3fca6fe9ea9	4c36484b-3244-47a9-a5e3-235c9474383e	PRIMARY_SEVENTH	seven_to_nine_years
+999be80c-ff15-4515-ba2d-3f330319b986	5922e468-ecb6-481e-bfdb-c4e2386cb070	PRIMARY_EIGHTH	seven_to_nine_years
+11455bcc-2381-45d9-aeac-ad4bb321eab9	53bbc105-6e07-4841-a795-c75f806bea01	PRIMARY_FIRST	one_to_two_years
+c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	e768794b-c688-4dce-9445-23e8d4c3c986	PRIMARY_SEVENTH	seven_to_nine_years
+cf7246cc-5760-499a-9252-c3d1bbcc79e8	8eba147b-a52c-4bb7-b42c-7525324113f4	PRIMARY_SEVENTH	seven_to_nine_years
+7bfd943e-c11d-458c-a010-48c84b8a6a43	e6299525-7a48-4030-a523-cf249433d62a	PRIMARY_FIRST	one_to_two_years
+f6160571-beff-4c21-b3af-399f376429ae	942b9f78-b7b8-46aa-abff-18cf8da3ac9b	PRIMARY_SEVENTH	seven_to_nine_years
+61dc37a4-b86f-4563-8fca-37aad69a1f05	e5fde4bf-6630-4459-9d8e-31740b307c02	PRIMARY_NINTH	seven_to_nine_years
+45982a54-e42c-4e48-8b84-32689d592abd	36b2f528-25fa-4ce2-8d35-6d487a5078d9	PRIMARY_EIGHTH	seven_to_nine_years
+b6a7dc4a-0717-4b80-a18e-39651d41c5a4	a0cd3827-7fc0-4b11-944f-cd459880a439	PRIMARY_SIXTH	three_to_six_years
+9b7eb5b0-ddfe-4af4-94d5-53bb36f98117	da15b065-9c67-4003-8ec0-7e1e2eee111f	PRIMARY_SIXTH	three_to_six_years
+c27efea4-643a-4cdc-9c40-e58525a49720	92ce53f7-53e2-46a0-ac39-ecdefa3dfef7	PRIMARY_FOURTH	three_to_six_years
+8ffe45c2-e5a4-4702-89d4-2df665869687	c9fc597a-3fe4-4035-8773-b858579c2f3c	PRIMARY_EIGHTH	seven_to_nine_years
+e3aba1ba-865b-4174-b776-b5936ab840d3	e3b855ae-8277-4c8f-b9e2-5f8b66351bcb	PRIMARY_FIFTH	three_to_six_years
+bb17b295-c660-46a1-bfa1-7c299d3b0a57	d7eb105b-f258-443d-8ed8-c69546ac564c	PRIMARY_FIFTH	three_to_six_years
+598d6e30-40ac-4570-84f0-b670bdbf285b	a03847bf-8bef-44b1-922d-1626e7837406	PRIMARY_SIXTH	three_to_six_years
+3d9e5620-5258-4bb0-b561-5942790e6f0d	bc655f0c-1e07-47b4-9e8b-0a4ba9242d05	HIGH_SCHOOL	LI_HS_MODULE_LI2
+1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	a421b5e1-eb01-462e-899b-adb1b57e3b0d	PRIMARY_SEVENTH	seven_to_nine_years
+a40b3250-b715-4475-8802-b8cee2336933	5068fa59-55a9-48cf-9bb2-38a2a7b9ae0e	HIGH_SCHOOL	LI_HS_MODULE_LI1
+7fe00095-698d-4a5b-9fc8-0112800d0b89	9ebcb35c-02e8-4b5d-ad9c-3dae255bdab9	PRIMARY_NINTH	seven_to_nine_years
+36347506-9fe3-4cc1-bd70-3f56675ba66c	0c583991-c6d6-4d39-aa2e-3cb6b477fd43	PRIMARY_SECOND	one_to_two_years
+6f377d70-cfec-45c3-aabb-c41bdedaa327	c96447b3-d0d3-4985-878c-02536cf49e7f	VOCATIONAL	LI_VOC_MODULE_AMM_1
+0736c55e-a30f-468d-ac92-011155f63782	d0ef07c9-3848-4ec9-9d15-57168b896cf6	PRIMARY_NINTH	seven_to_nine_years
+9b8adc7f-39c7-4925-847a-818b9389c18b	f5010fc6-0d96-433f-aa33-9eda0587072e	PRIMARY_EIGHTH	seven_to_nine_years
+eddf7eba-893e-44b5-9955-27b93b03a8ea	f963a69e-577f-45ee-bdf1-f3ade1a8fac4	PRIMARY_EIGHTH	seven_to_nine_years
+7c6e7596-e58a-417d-873d-71e3a97a5cf9	b811f8b1-7d1c-447a-8cda-853f44e55fb6	HIGH_SCHOOL	LI_HS_MODULE_LI2
+07ad7d5a-6bde-4c10-b4af-70932def7817	4fe72bd5-8f67-4212-a715-4a0ca602e632	HIGH_SCHOOL	LI_HS_MODULE_LI1
+fc400672-2a2e-44b1-966b-d887bb7d1f40	fddc0331-595a-4010-bada-fb28a1214d56	HIGH_SCHOOL	LI_HS_MODULE_LI1
+69713ee3-036c-4395-9000-83c65184921e	9e608b2c-cf73-43cb-af7f-0c86315d9184	PRIMARY_FIFTH	three_to_six_years
+a153dc01-0752-4f56-9501-8fc52ba97f0b	b509833f-510c-48b3-ac2f-f3a224f7689b	PRIMARY_EIGHTH	seven_to_nine_years
+f5b7f191-2b9f-4606-b7f4-69f2fab61d6d	feb81b2f-c70c-47f8-a2c1-623dcdfe48aa	PRIMARY_FIFTH	three_to_six_years
+96cb2e41-a16d-4ee5-9a1e-353c1ceaa5dc	d457226c-cff9-41c7-aebf-44a439e626c4	VOCATIONAL	LI_VOC_MODULE_AMM_1
+0e33bb0f-b6ba-4005-9106-3ecef0171499	4117be07-2cdb-4d17-a14d-f6b970f78821	HIGH_SCHOOL	LI_HS_MODULE_LI1
+d872e1e1-07ed-4fe7-b285-f11e407754c7	bf327012-7775-405f-b937-3a7c1508eda3	PRIMARY_NINTH	seven_to_nine_years
+f3845ff7-d477-4acd-b451-31db79a8c7b1	93ecb125-ab82-4d66-99dc-ed689a177ba0	PRIMARY_EIGHTH	seven_to_nine_years
+49f0263b-9be4-44f2-be54-8f95a1942dae	ccd44372-5947-4b45-acc4-585c5f15c338	PRIMARY_NINTH	seven_to_nine_years
+d77b1c6d-e41d-420f-8f22-e8494af72bcf	7e67bc6e-c273-42a2-9d1b-dbd39b25d5dd	PRIMARY_FIFTH	three_to_six_years
+60ba446f-c350-4d72-8722-cde0c39c9a63	f963a69e-577f-45ee-bdf1-f3ade1a8fac4	PRIMARY_FIFTH	three_to_six_years
+04402773-b275-48b2-83f5-0758c257167b	328073c3-0870-4171-93de-3d88100d6acc	PRIMARY_NINTH	seven_to_nine_years
+587a6af4-afdd-4bf5-90a9-04bcadbb4807	872249e8-3e3c-47f4-8237-b25a13afce6f	PRIMARY_EIGHTH	seven_to_nine_years
+94673584-2806-4e30-9a43-1fd7c50320d8	4f76d4a5-d7bd-45b0-8041-357685155fd6	PRIMARY_EIGHTH	seven_to_nine_years
+ebeeb773-3d06-4722-b7bd-feae8c78ef4b	f375a966-3fef-43db-9afc-3ff484bf14c7	PRIMARY_SEVENTH	seven_to_nine_years
+d3f5eb51-9cac-441e-91ac-bad14e134b9d	2cba9a0f-2452-495a-9fbc-0180ea49411e	HIGH_SCHOOL	LI_HS_MODULE_LI1
+78e46daf-61ca-4997-bf43-5c5277ff6f4c	bffeb915-f568-4167-aee3-a59ad70d0ac6	PRIMARY_FIFTH	three_to_six_years
+fd2e1441-8e35-4b56-bcff-0ba580e2b583	43ce3dc0-4659-4c6c-969e-65c92e3b24db	HIGH_SCHOOL	LI_HS_MODULE_LI1
+d96c1f14-518f-46dd-a672-241f18ade35f	43ce3dc0-4659-4c6c-969e-65c92e3b24db	HIGH_SCHOOL	LI_HS_MODULE_LI2
+585c3f5d-302c-46c6-95d2-ef7e1a1ce04b	bb364b38-c286-46d4-9bd4-fbf13531a884	HIGH_SCHOOL	LI_HS_MODULE_LI1
+bf4c8f93-5596-4bb4-8505-2d4fcbd5cf8a	cd74808e-451c-4d1d-93a2-47c46f8385e3	HIGH_SCHOOL	LI_HS_MODULE_LI1
+d427be8a-0aba-47fb-8960-a447826b0343	a7f2d79a-709e-4edf-bb8c-cf50567f926e	PRIMARY_SEVENTH	seven_to_nine_years
+8b14c644-c872-44fa-9f1c-52f86c74bdc7	1eae19b4-6de5-45d6-9f05-2039e90f8df9	PRIMARY_SEVENTH	seven_to_nine_years
+7f091af6-1c43-4020-9360-e05a6563e18a	e8fd1190-3395-4370-af51-9d9884a145b4	PRIMARY_EIGHTH	seven_to_nine_years
+63f2c632-042f-45d8-864e-8ecf96d21f70	20952378-342a-4b6e-9cd2-040bcee46e69	PRIMARY_SEVENTH	seven_to_nine_years
+513dfcd2-a39c-41ae-b3a2-23dd05d315ef	5c1dbf22-8f21-42df-a878-43f0d7446bde	HIGH_SCHOOL	LI_HS_MODULE_LI1
+d934236a-8a21-4500-8408-d8aee2cb6b27	acfe9dc5-5e1e-4302-9188-b0cb623b42ad	PRIMARY_SEVENTH	seven_to_nine_years
+8497021a-61fa-49ee-ac25-5f321fc52fde	3e75cd57-f337-4778-acf3-7df420b17374	PRIMARY_EIGHTH	seven_to_nine_years
+f5f01d31-e035-4996-b260-dc63d21906db	d49cfd99-fa09-4729-8fcd-1d1b66102c89	PRIMARY_FOURTH	three_to_six_years
+a6290fba-9996-4d99-9ba6-d6f68cf8463b	33ea6ccf-76a2-43e4-9f8b-3e365da6eb17	HIGH_SCHOOL	LI_HS_MODULE_LI1
+64b534f4-7461-422c-bf3b-8d5bde2e36f7	0fb115d6-0135-4a01-aa83-019cbdd01cc3	HIGH_SCHOOL	LI_HS_MODULE_LI1
+c90e44ff-5e1a-4114-a2f1-aa8f139019a1	05921118-fee3-4527-ae43-518e2b92b04c	PRIMARY_NINTH	seven_to_nine_years
+afc9216c-d2b7-47d2-9e19-4a23a91acb9e	a7449b51-02e7-4f28-a799-bbc7f7f1496d	PRIMARY_EIGHTH	seven_to_nine_years
+fba7b151-8a02-40bb-9dbc-62c14c786c4d	ef819731-2f4e-4980-9534-bec0630fee53	HIGH_SCHOOL	LI_HS_MODULE_LI4
+25247b17-635d-4a64-a9a4-1462133e7d50	2fddc898-f1d1-4f7d-8406-be7c3a7e261b	HIGH_SCHOOL	LI_HS_MODULE_LI1
+ab0c9659-e372-4474-a910-d0bc4c1f2c00	37090b88-ddf0-45b7-a915-4bdf69067e68	HIGH_SCHOOL	LI_HS_MODULE_LI1
+b8a5829d-197f-4b36-889a-9123183fa2e7	bab7de8e-b5cb-421f-bf0c-1000ed41b2e2	PRIMARY_SEVENTH	seven_to_nine_years
+7f1c5e91-43ea-4eef-ad38-3838a19a993b	cae0ff59-33a6-45f0-b47f-a4fb06c2c793	HIGH_SCHOOL	LI_HS_MODULE_LI2
+557f38da-cdab-464c-bc74-1a84606989b0	7b528230-a909-4f5d-a330-9e65fa9774f6	PRIMARY_NINTH	seven_to_nine_years
+cb932bc8-d215-4f88-9906-a5f4fa435366	be8dad6e-58f6-4ba1-a77f-d2ff43823856	PRIMARY_SEVENTH	seven_to_nine_years
+a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	28a8b373-ae39-47e1-9e98-7c0bf0cde758	PRIMARY_SEVENTH	seven_to_nine_years
+e6e68270-934e-452e-ae7e-5a08ea0f4741	7c8569f1-4f65-4d21-b661-0cbd1baab970	VOCATIONAL	LI_VOC_MODULE_AMM_1
 \.
 
 
@@ -5231,9 +5225,6 @@ e459564c-d6aa-4fec-8790-508218a41435	Mika	41f9142b-c05f-41c7-baea-7afafeabb8c7
 a520a370-e1ec-4742-bcf8-1a34a4434485	Teppo Tavallinen	fde7c856-7b1b-4ca8-a624-67809c32bd65
 4c047cf3-edbb-4aa0-b879-cd84077a8257	Liisa Lahtinen	fde7c856-7b1b-4ca8-a624-67809c32bd65
 75bba92f-9f9c-47c0-a89a-2add75007cf6	Matti Meikäläinen	fde7c856-7b1b-4ca8-a624-67809c32bd65
-82b08073-2503-4e40-b381-9f4c0987aa37	foobar	57d7802e-5dd9-44d2-a652-4185942f2b97
-5387fbeb-b1bf-44b0-b87f-6bfba4e12996	bar	57d7802e-5dd9-44d2-a652-4185942f2b97
-b7b0fe22-b844-4a04-a292-3f2489f62118	foo	57d7802e-5dd9-44d2-a652-4185942f2b97
 c25bff45-7223-4c61-b116-5b2d8b077a7a	testi2	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
 52911273-2826-4629-b539-5cee29431c55	testi1	723f1c8d-8a79-4484-b31b-d2e4f7f50efd
 d836e806-1927-4cab-b779-167cd873ce79	Kalle Kehveli	fde7c856-7b1b-4ca8-a624-67809c32bd65
@@ -6023,6 +6014,9 @@ ed230491-5890-4a9e-8b17-6a2a3cbad777	Iida Lohvansuu	28a8b373-ae39-47e1-9e98-7c0b
 39ac4d32-2036-442f-8695-aae88c2db9ef	Linnea Ocampo	28a8b373-ae39-47e1-9e98-7c0bf0cde758
 ca960e53-de3f-4f7c-8b81-a41f2227d3cc	Mila Pasanen	28a8b373-ae39-47e1-9e98-7c0bf0cde758
 04d67d24-9fe6-40ff-b132-b6b6cedf8e1d	Pihla Valkonen	28a8b373-ae39-47e1-9e98-7c0bf0cde758
+16589503-bd89-4e8e-ac88-3966da98d7e1	Kalevi	bb4892ea-62a4-4a10-bdfd-7e79ee870e19
+ca44495b-3a43-4751-b50e-e152b2dc01d2	Petteri	bb4892ea-62a4-4a10-bdfd-7e79ee870e19
+6207a3f5-d11a-402c-920d-cfabd7aef9cc	Matti	73dd8eef-069c-44d4-bd5b-cfa25b30ea21
 \.
 
 
@@ -6101,10 +6095,10 @@ a167806d-0a03-40af-a1a1-2309d3d333b5	sini.m.lehtoranta@student.jyu.fi	$2a$12$knx
 
 
 --
--- Data for Name: _ClassYearToStudent; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: _ModuleToStudent; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."_ClassYearToStudent" ("A", "B") FROM stdin;
+COPY public."_ModuleToStudent" ("A", "B") FROM stdin;
 ac83bfa3-9f44-4aea-aac0-98e793367206	81f9f274-c50a-4b30-b0f5-15c1479b942c
 ac83bfa3-9f44-4aea-aac0-98e793367206	213addc7-6d5d-4a39-95bf-ded6afa510a6
 ac83bfa3-9f44-4aea-aac0-98e793367206	dc43f223-8b76-457a-b035-8b186320bdea
@@ -6409,9 +6403,6 @@ b83c3bfe-9b2c-417b-a955-5d725e54f94e	f198a966-c599-4457-ab33-bc075adefadf
 ec5578dd-ad95-4279-be72-e0326b8cfd41	a520a370-e1ec-4742-bcf8-1a34a4434485
 ec5578dd-ad95-4279-be72-e0326b8cfd41	75bba92f-9f9c-47c0-a89a-2add75007cf6
 ec5578dd-ad95-4279-be72-e0326b8cfd41	4c047cf3-edbb-4aa0-b879-cd84077a8257
-b369b11f-64ed-4278-83d7-588c59886416	82b08073-2503-4e40-b381-9f4c0987aa37
-b369b11f-64ed-4278-83d7-588c59886416	5387fbeb-b1bf-44b0-b87f-6bfba4e12996
-b369b11f-64ed-4278-83d7-588c59886416	b7b0fe22-b844-4a04-a292-3f2489f62118
 c8b9bfe7-5d92-434c-97f3-97eb52714267	c25bff45-7223-4c61-b116-5b2d8b077a7a
 c8b9bfe7-5d92-434c-97f3-97eb52714267	52911273-2826-4629-b539-5cee29431c55
 ec5578dd-ad95-4279-be72-e0326b8cfd41	d836e806-1927-4cab-b779-167cd873ce79
@@ -7204,6 +7195,9 @@ a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	96fc6bef-116e-450b-bca4-c5ca3744c8b1
 a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	39ac4d32-2036-442f-8695-aae88c2db9ef
 a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	ca960e53-de3f-4f7c-8b81-a41f2227d3cc
 a5fe4430-339a-4c7b-b50a-5ec649f2a4f6	04d67d24-9fe6-40ff-b132-b6b6cedf8e1d
+4e61a120-9a75-4d1a-beb3-66e8a5e7df55	16589503-bd89-4e8e-ac88-3966da98d7e1
+4e61a120-9a75-4d1a-beb3-66e8a5e7df55	ca44495b-3a43-4751-b50e-e152b2dc01d2
+71fa53ac-9d4a-4846-a41e-ec8ef1dcfe0e	6207a3f5-d11a-402c-920d-cfabd7aef9cc
 \.
 
 
@@ -7226,24 +7220,23 @@ c61e3acd-3f4a-48b5-9eb1-9a2b6bca853b	8bbbb46544a7fc9e118d5a89e7904b9bbf0ab687544
 83882fa7-3f5f-4b33-a65e-87e2a4d0827a	9c6a796341388e90bd33795338158836c5daaddf87c4b37d9b571b857befecf8	2023-04-20 16:40:15.886072+00	20230420091646_fix_eight_class_code	\N	\N	2023-04-20 16:40:15.366789+00	1
 0bfeabcf-e113-4dd4-9ee0-3a40e113e4aa	bcfcf4daff679c29e232ad994388150180ef0bc13cb5a92057e13358a0a84ab2	2023-03-07 21:19:36.995822+00	20230307152132_rename_class_to_group	\N	\N	2023-03-07 21:19:36.459982+00	1
 8d3a81c2-130e-4984-b7cb-639e631236e0	e4c5a98596ef886aaa9f8240ee974ca9668d312151eddfd24cc5efa1b572f3b4	2023-03-12 15:43:10.552896+00	20230312151119_cascade_student_delete_to_evaluationt	\N	\N	2023-03-12 15:43:10.027519+00	1
+ebda870a-8a77-4646-a636-bf6ee42e7906	bfa64cd5b71eab429503469e8379c53fd9f6b25be114877ec087d0f5bde82eb4	2023-09-23 10:17:14.977364+00	20230919112238_remove_current_class_code	\N	\N	2023-09-23 10:17:14.741757+00	1
 02c45c2f-4693-4319-8422-fde7cf4ff559	e98b093364209042095842e5a7af79c98a7370a55fdbc99e364f1c87e017f678	2023-03-30 18:34:09.520671+00	20230330144633_add_updated_at_to_group	\N	\N	2023-03-30 18:34:08.988331+00	1
 03ef5bc3-5cc8-4c37-95a3-25ee756c6820	07ac29988ecc2be12ee40c61aa0baeadcf8ca7ccb16c3ff0287da7c1abb795d8	2023-04-20 16:40:16.593511+00	20230420101930_remove_group_collection_relation	\N	\N	2023-04-20 16:40:16.087592+00	1
 caad31ba-cd1d-4fde-bc63-f4b0a782593d	ac52be372ee64c1433dd367b4a69d2950c982b8443386f140e938cc9dab46f77	2023-04-09 11:55:01.888795+00	20230409081404_add_subject_and_environment_fields	\N	\N	2023-04-09 11:55:01.391664+00	1
 837b7d7a-58f7-437f-9c28-1aa157edaf27	6435ed345fe6ed5fabfe828d42083e5375ed570fdde861115d69fba4c2b1ce70	2023-04-09 11:55:02.576199+00	20230409081844_	\N	\N	2023-04-09 11:55:02.084009+00	1
 fb085804-1183-4d0e-934c-a69d79399a5e	1e1a2d27c8976ca8460364775753729052b7bfd6279ee25030a23458485b35a3	2023-04-22 12:23:52.35229+00	20230422075622_add_learning_objectives	\N	\N	2023-04-22 12:23:51.827547+00	1
 627cdbac-e941-4d66-9a07-2fdb66ba0f7b	bf42af5126eec814dae41af5fcfae095f3c3e200f7cb59cd20f148657fed43a5	2023-05-02 11:49:00.682245+00	20230428104824_add_is_stellar_field	\N	\N	2023-05-02 11:49:00.509007+00	1
+f78c151e-f159-4d9e-8f4d-9dc99d51c53e	cb06b55f6a28e20c62d1f8624d9e1d554cffcdeda3029348dd20e97ba0e06455	2023-09-23 10:17:16.521754+00	20230922154446_remove_unused_type_from_collection	\N	\N	2023-09-23 10:17:16.215215+00	1
+145ead93-7455-4b25-a4ff-347fb8590126	191b05b046257f3a0c897abc7bfe62655c71d431fac3acf49786103645bc62fd	2023-09-23 10:17:15.291315+00	20230921171005_year_code_refactor	\N	\N	2023-09-23 10:17:14.992931+00	1
 471e4ee5-2f27-4915-9067-15f623cd7925	562dd89e9b5f87d8136e42da2d3bd9c88835d978fb9ceb12dc2850077e66f525	2023-08-22 16:25:02.487183+00	20230729120240_add_failed_and_passable_to_rating	\N	\N	2023-08-22 16:25:02.182201+00	1
+857cfa21-a0c2-4ef6-8a30-008a63391bf9	6385fe0b01b3d08588e90379ba4088c5c9249284c4f44b570abdad69a39dbeba	2023-09-23 10:17:15.749629+00	20230922145617_rename_class_year_to_module	\N	\N	2023-09-23 10:17:15.311811+00	1
 0ce73e9a-34ca-4a43-a2cb-23e22df7de57	8d7a41e5392215de7be93b31c88a59d46dd0c55a187dbff8f40b4190993de164	2023-08-22 16:25:02.929782+00	20230810063517_add_archived_field_to_group	\N	\N	2023-08-22 16:25:02.614717+00	1
+b43b1eb3-cbcd-4e8c-8e15-d2e0ede2b3fe	d0434e00b8ee66b149ca8c712733fc6a8b38579e806ec6901a14f22e91a12223	2023-09-23 10:17:16.20351+00	20230922153114_add_deferrable_constraint	\N	\N	2023-09-23 10:17:15.786653+00	1
 6c823fa7-81df-4dd4-a1fe-4ba8f0b56df5	5bc483c89be5183d99b9b26f51470bda259302acad901b4c93416422620f4969	2023-09-14 18:55:52.921647+00	20230914120114_add_high_school_and_vocational_class_years	\N	\N	2023-09-14 18:55:52.879713+00	1
+69f793b8-4959-4829-82b2-7f7d853227d6	f424db7cee7dc8a1ac3602c593886685313abed61fac5e5a7f608db91aedc273	2023-09-23 10:17:14.726203+00	20230918155006_new_current_class_year	\N	\N	2023-09-23 10:17:14.505784+00	1
+8f2b110e-b00d-471b-9e8d-4a34c8f136da	808d2d3ff5bf62cb2466fdb5e7a2d8cdda6f62ec36a03c50c0e7c94c09ad6531	2023-09-23 10:17:16.771173+00	20230922172852_rename_environment_codes	\N	\N	2023-09-23 10:17:16.556957+00	1
 \.
-
-
---
--- Name: ClassYear ClassYear_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public."ClassYear"
-    ADD CONSTRAINT "ClassYear_pkey" PRIMARY KEY (id);
 
 
 --
@@ -7268,6 +7261,14 @@ ALTER TABLE ONLY public."Evaluation"
 
 ALTER TABLE ONLY public."Group"
     ADD CONSTRAINT "Group_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: Module Module_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Module"
+    ADD CONSTRAINT "Module_pkey" PRIMARY KEY (id);
 
 
 --
@@ -7302,33 +7303,25 @@ CREATE UNIQUE INDEX "Teacher_email_key" ON public."Teacher" USING btree (email);
 
 
 --
--- Name: _ClassYearToStudent_AB_unique; Type: INDEX; Schema: public; Owner: -
+-- Name: _ModuleToStudent_AB_unique; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX "_ClassYearToStudent_AB_unique" ON public."_ClassYearToStudent" USING btree ("A", "B");
-
-
---
--- Name: _ClassYearToStudent_B_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX "_ClassYearToStudent_B_index" ON public."_ClassYearToStudent" USING btree ("B");
+CREATE UNIQUE INDEX "_ModuleToStudent_AB_unique" ON public."_ModuleToStudent" USING btree ("A", "B");
 
 
 --
--- Name: ClassYear ClassYear_groupId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: _ModuleToStudent_B_index; Type: INDEX; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public."ClassYear"
-    ADD CONSTRAINT "ClassYear_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES public."Group"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+CREATE INDEX "_ModuleToStudent_B_index" ON public."_ModuleToStudent" USING btree ("B");
 
 
 --
--- Name: EvaluationCollection EvaluationCollection_classYearId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: EvaluationCollection EvaluationCollection_moduleId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."EvaluationCollection"
-    ADD CONSTRAINT "EvaluationCollection_classYearId_fkey" FOREIGN KEY ("classYearId") REFERENCES public."ClassYear"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT "EvaluationCollection_moduleId_fkey" FOREIGN KEY ("moduleId") REFERENCES public."Module"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7348,11 +7341,27 @@ ALTER TABLE ONLY public."Evaluation"
 
 
 --
+-- Name: Group Group_currentModuleId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Group"
+    ADD CONSTRAINT "Group_currentModuleId_fkey" FOREIGN KEY ("currentModuleId") REFERENCES public."Module"(id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: Group Group_teacherId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."Group"
     ADD CONSTRAINT "Group_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES public."Teacher"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: Module Module_groupId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Module"
+    ADD CONSTRAINT "Module_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES public."Group"(id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -7364,19 +7373,19 @@ ALTER TABLE ONLY public."Student"
 
 
 --
--- Name: _ClassYearToStudent _ClassYearToStudent_A_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: _ModuleToStudent _ModuleToStudent_A_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public."_ClassYearToStudent"
-    ADD CONSTRAINT "_ClassYearToStudent_A_fkey" FOREIGN KEY ("A") REFERENCES public."ClassYear"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public."_ModuleToStudent"
+    ADD CONSTRAINT "_ModuleToStudent_A_fkey" FOREIGN KEY ("A") REFERENCES public."Module"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- Name: _ClassYearToStudent _ClassYearToStudent_B_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: _ModuleToStudent _ModuleToStudent_B_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public."_ClassYearToStudent"
-    ADD CONSTRAINT "_ClassYearToStudent_B_fkey" FOREIGN KEY ("B") REFERENCES public."Student"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public."_ModuleToStudent"
+    ADD CONSTRAINT "_ModuleToStudent_B_fkey" FOREIGN KEY ("B") REFERENCES public."Student"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
