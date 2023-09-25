@@ -1,3 +1,5 @@
+import { TranslatedString } from "arwi-backend/src/types";
+
 export type HomeStackParams = {
   index: undefined;
   group: {
@@ -19,12 +21,12 @@ export type HomeStackParams = {
   collection: {
     id: string;
     date: string;
-    environmentLabel: string;
+    environmentLabel: TranslatedString;
     archived: boolean;
   };
   "collection-edit": {
     collectionId: string;
-    onSaved?: (newEnvironmentLabel: string, newDate: string) => void;
+    onSaved?: (newEnvironmentLabel: TranslatedString, newDate: string) => void;
   };
   "collection-create": {
     groupId: string;
@@ -38,8 +40,8 @@ export type HomeStackParams = {
   profile: undefined;
   "learning-objective": {
     code: string;
-    label: string;
-    description: string;
+    label: TranslatedString;
+    description: TranslatedString;
     type: string;
   };
   "edit-all-evaluations": {

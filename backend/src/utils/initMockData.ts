@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { ClassYearCode, PrismaClient } from "@prisma/client";
+import { EducationLevel, PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 import mockData from "../__mocks__/mockData.json";
 
@@ -21,53 +21,32 @@ const initMockData = async () => {
       passwordHash: hashedPassword,
     },
   });
-  const testGroup = await prisma.group.create({
+  const groupId = "test-group-id";
+  const moduleId = "test-module-id";
+  const testGroup = prisma.group.create({
     data: {
+      id: groupId,
       name: "1A",
       subjectCode: "LI",
       teacherId: testTeacher.id,
-      currentYearCode: ClassYearCode.PRIMARY_FIRST,
+      currentModuleId: moduleId,
     },
   });
-  await prisma.group.create({
+  const classYear = prisma.module.create({
     data: {
-      name: "Lukio 1.",
-      subjectCode: "PY",
-      teacherId: testTeacher.id,
-      currentYearCode: ClassYearCode.HIGH_SCHOOL_FIRST,
-      classYears: {
-        create: {
-          code: ClassYearCode.HIGH_SCHOOL_FIRST,
-        },
-      },
+      id: moduleId,
+      educationLevel: EducationLevel.PRIMARY_FIRST,
+      learningObjectiveGroupKey: "one_to_two_years",
+      groupId,
     },
   });
-  await prisma.group.create({
-    data: {
-      name: "8B",
-      subjectCode: "BI",
-      teacherId: testTeacher.id,
-      currentYearCode: ClassYearCode.PRIMARY_EIGHTH,
-      classYears: {
-        create: {
-          code: ClassYearCode.PRIMARY_EIGHTH,
-        },
-      },
-    },
-  });
-  const classYear = await prisma.classYear.create({
-    data: {
-      code: ClassYearCode.PRIMARY_FIRST,
-      groupId: testGroup.id,
-    },
-  });
+  await prisma.$transaction([testGroup, classYear]);
   const collectionPromises = mockData.collections.map(({ id: _, learningObjectives, ...rest }) =>
     prisma.evaluationCollection.create({
       data: {
         ...rest,
         learningObjectiveCodes: learningObjectives,
-        type: "",
-        classYearId: classYear.id,
+        moduleId,
       },
     })
   );
@@ -77,8 +56,8 @@ const initMockData = async () => {
       .create({
         data: {
           ...rest,
-          groupId: testGroup.id,
-          classYears: { connect: { id: classYear.id } },
+          groupId,
+          modules: { connect: { id: moduleId } },
         },
       })
       .then((student) =>

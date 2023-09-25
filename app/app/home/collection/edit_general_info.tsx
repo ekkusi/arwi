@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "@apollo/client";
-import { Environment, LearningObjectiveMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { Environment, LearningObjectiveMinimal } from "arwi-backend/src/types/subject";
 import { HomeStackParams } from "../types";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { graphql } from "../../../gql";
@@ -18,14 +18,17 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
       date
       description
       environment {
-        label
+        label {
+          fi
+        }
         code
         color
       }
-      classYear {
+      module {
         id
         info {
-          code
+          educationLevel
+          learningObjectiveGroupKey
         }
         group {
           id
@@ -36,7 +39,9 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
       }
       learningObjectives {
         code
-        label
+        label {
+          fi
+        }
         type
       }
     }
@@ -50,13 +55,16 @@ const EditGeneralDetails_UpdateCollection_Mutation = graphql(`
       date
       description
       environment {
-        label
+        label {
+          fi
+        }
         code
       }
-      classYear {
+      module {
         id
         info {
-          code
+          educationLevel
+          learningObjectiveGroupKey
         }
         group {
           id
@@ -67,8 +75,12 @@ const EditGeneralDetails_UpdateCollection_Mutation = graphql(`
       }
       learningObjectives {
         code
-        label
-        description
+        label {
+          fi
+        }
+        description {
+          fi
+        }
         type
       }
     }
@@ -117,15 +129,13 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
   if (loading || !data) return <LoadingIndicator />;
 
   const collection = data.getCollection;
-  const subjectCode = collection.classYear.group.subject.code;
-  const classYearCode = collection.classYear.info.code;
 
   return (
     <Layout keyboardVerticalOffset={100}>
       <CollectionGeneralInfoForm
         handleSubmit={handleSubmit}
-        subjectCode={subjectCode}
-        classYearCode={classYearCode}
+        subjectCode={collection.module.group.subject.code}
+        moduleInfo={collection.module.info}
         buttonTitle={t("save", "Tallenna")}
         buttonLoading={submitting}
         defaultDate={new Date(collection.date)}

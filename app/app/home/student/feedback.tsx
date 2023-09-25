@@ -24,11 +24,11 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
       group {
         id
         archived
-        currentClassYear {
+        currentModule {
           id
         }
       }
-      currentClassEvaluations {
+      currentModuleEvaluations {
         id
         notes
         wasPresent
@@ -40,7 +40,9 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
           date
           environment {
             code
-            label
+            label {
+              fi
+            }
           }
         }
       }
@@ -49,8 +51,8 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
 `);
 
 const StudentFeedbackView_GenerateFeedback_Mutation = graphql(`
-  mutation StudentFeedbackView_GenerateFeedback($studentId: ID!, $classYearId: ID!) {
-    generateStudentFeedback(studentId: $studentId, classYearId: $classYearId)
+  mutation StudentFeedbackView_GenerateFeedback($studentId: ID!, $moduleId: ID!) {
+    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
   }
 `);
 
@@ -70,14 +72,14 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
   const [generateFeedback, { loading: isGeneratingSummary }] = useMutation(StudentFeedbackView_GenerateFeedback_Mutation);
 
   const { skillsAverage, behaviourAverage } = useMemo(() => {
-    const evaluations = data?.getStudent.currentClassEvaluations ?? [];
+    const evaluations = data?.getStudent.currentModuleEvaluations ?? [];
     return analyzeEvaluations([...evaluations]);
   }, [data]);
 
   const generateSummary = async () => {
     try {
-      const classYearId = data?.getStudent.group.currentClassYear.id;
-      if (!classYearId) throw new Error("Unexpected error, classYearId not found"); // Should never happen, is for TS
+      const moduleId = data?.getStudent.group.currentModule.id;
+      if (!moduleId) throw new Error("Unexpected error, moduleId not found"); // Should never happen, is for TS
 
       setIsCopied(false);
       setError(undefined);
@@ -86,7 +88,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       const result = await generateFeedback({
         variables: {
           studentId: id,
-          classYearId,
+          moduleId,
         },
       });
 

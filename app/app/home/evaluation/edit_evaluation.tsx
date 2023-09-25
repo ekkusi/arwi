@@ -25,7 +25,7 @@ const EvaluationEditView_GetEvaluation_Query = graphql(`
       student {
         id
         name
-        currentClassEvaluations {
+        currentModuleEvaluations {
           id
           notes
         }

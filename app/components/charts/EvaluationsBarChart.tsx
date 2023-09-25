@@ -21,7 +21,9 @@ const EvaluationsBarChart_Evaluation_Fragment = graphql(`
     wasPresent
     collection {
       environment {
-        label
+        label {
+          fi
+        }
         code
         color
       }
@@ -60,7 +62,7 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
     if (!tempData[envCode]) {
       tempData[envCode] = {
         color: evaluation.collection.environment.color,
-        label: evaluation.collection.environment.label,
+        label: evaluation.collection.environment.label.fi,
         skills: {
           value: 0,
           count: 0,

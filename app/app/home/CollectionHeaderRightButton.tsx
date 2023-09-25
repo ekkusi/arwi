@@ -16,7 +16,7 @@ const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
   mutation CollectionHeaderRightButton_DeleteCollection($id: ID!) {
     deleteCollection(collectionId: $id) {
       id
-      classYear {
+      module {
         id
         evaluationCollections {
           id

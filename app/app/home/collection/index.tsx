@@ -20,11 +20,13 @@ const CollectionPage_GetCollection_Query = graphql(`
       date
       description
       environment {
-        label
+        label {
+          fi
+        }
         code
         color
       }
-      classYear {
+      module {
         group {
           name
           id
@@ -32,7 +34,9 @@ const CollectionPage_GetCollection_Query = graphql(`
       }
       learningObjectives {
         code
-        label
+        label {
+          fi
+        }
       }
       evaluations {
         id
@@ -61,9 +65,9 @@ export default function CollectionView({ route: { params }, navigation }: Native
         showsVerticalScrollIndicator={false}
       >
         <CView>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{collection.environment.label}</CText>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{collection.environment.label.fi}</CText>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>{formatDate(collection.date)}</CText>
-          <CText style={{ fontSize: "md", fontWeight: "300" }}>{collection.classYear.group.name}</CText>
+          <CText style={{ fontSize: "md", fontWeight: "300" }}>{collection.module.group.name}</CText>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>
             {t("evaluation-count", "{{count}} arviointia", { count: collection.evaluations.length })}
           </CText>
@@ -72,7 +76,7 @@ export default function CollectionView({ route: { params }, navigation }: Native
             return (
               <CText key={obj.code}>
                 <CText style={{ fontSize: "sm", fontWeight: "500" }}>{obj.code}: </CText>
-                <CText style={{ fontSize: "sm", fontWeight: "300" }}>{obj.label}</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "300" }}>{obj.label.fi}</CText>
               </CText>
             );
           })}

@@ -20,7 +20,9 @@ const EvaluationsBarChart_Evaluation_Fragment = graphql(`
     wasPresent
     collection {
       environment {
-        label
+        label {
+          fi
+        }
         code
         color
       }
@@ -52,11 +54,11 @@ const mapDataToTempData = (evaluations: EvaluationsBarChart_EvaluationFragment[]
   evaluations.forEach((evaluation) => {
     if (evaluation.behaviourRating) {
       const behaviourNumber = evaluation.behaviourRating;
-      tempData[behaviourNumber][evaluation.collection.environment.label].behaviourCount += 1;
+      tempData[behaviourNumber][evaluation.collection.environment.label.fi].behaviourCount += 1;
     }
     if (evaluation.skillsRating) {
       const skillNumber = evaluation.skillsRating;
-      tempData[skillNumber][evaluation.collection.environment.label].skillCount += 1;
+      tempData[skillNumber][evaluation.collection.environment.label.fi].skillCount += 1;
     }
   });
   return tempData;
@@ -102,7 +104,7 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const environments = getEnvironments(subjectCode);
-  const environmentLabels = environments.map((env) => env.label);
+  const environmentLabels = environments.map((env) => env.label.fi);
 
   const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
@@ -130,12 +132,12 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
               {environments.map((item) => (
                 <CButton
                   key={item.code}
-                  title={item.label}
+                  title={item.label.fi}
                   variant="outline"
-                  colorScheme={item.label === environmentFilter ? "darkgray" : "lightgray"}
+                  colorScheme={item.label.fi === environmentFilter ? "darkgray" : "lightgray"}
                   style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
-                  onPress={() => setEnvironmentFilter(item.label)}
-                  textStyle={{ fontSize: "xs", fontWeight: "400", color: item.label === environmentFilter ? "darkgray" : "gray" }}
+                  onPress={() => setEnvironmentFilter(item.label.fi)}
+                  textStyle={{ fontSize: "xs", fontWeight: "400", color: item.label.fi === environmentFilter ? "darkgray" : "gray" }}
                   leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: item.color }} />}
                 />
               ))}
