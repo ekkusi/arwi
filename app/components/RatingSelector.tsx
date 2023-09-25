@@ -15,6 +15,8 @@ type RatingSelecterProps = Omit<CViewProps, "onChange"> & {
 };
 
 const RATING_VALUES = [4, 5, 6, 7, 8, 9, 10];
+const buttonHeight = 53;
+const activeButtonHeight = 60;
 
 export default function RatingSelecter({ onChange, disabled = false, initialRating, ...rest }: RatingSelecterProps) {
   const [selectedRating, setSelectedRating] = useState<number | null>(initialRating || null);
@@ -37,18 +39,9 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
   };
 
   return (
-    <CView {...rest} style={{ width: "100%", flexDirection: "row", justifyContent: "center", height: 70, ...rest.style }}>
-      <ScrollView
-        onScroll={onScroll}
-        horizontal
-        contentContainerStyle={{ paddingHorizontal: 53 * 3 }}
-        decelerationRate={0}
-        style={{ width: "100%", height: "100%" }}
-        showsHorizontalScrollIndicator={false}
-        snapToOffsets={[53 + 53 / 2, 106 + 53 / 2, 159 + 53 / 2, 212 + 53 / 2, 265 + 53 / 2, 318 + 53 / 2, 371 + 53 / 2]}
-        snapToAlignment="center"
-      >
-        <CView {...rest} style={{ width: "100%", flexDirection: "row", justifyContent: "center", ...rest.style }}>
+    <CView {...rest} style={{ width: "100%", flexDirection: "row", height: 70, ...rest.style }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexDirection: "row" }} contentOffset={{ x: 999, y: 0 }}>
+        <CView style={{ flexDirection: "row", gap: 2 }}>
           {RATING_VALUES.map((rating, i) => {
             let isSelected = true;
             if (disabled) {
@@ -62,27 +55,23 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
                 <CView
                   style={{
                     alignItems: "center",
-                    backgroundColor: isSelected ? getColorForGrade(rating) : "white",
-                    borderRadius: 0,
-                    borderWidth: 1,
-                    borderColor: "black",
+                    backgroundColor: "white",
+                    height: buttonHeight,
+                    width: buttonHeight,
+                    borderRadius: buttonHeight / 2,
+                    borderWidth: 2,
+                    borderColor: isSelected ? "black" : "lightgray",
                     padding: "sm",
-                    borderLeftWidth: 1,
-                    borderRightWidth: i === RATING_VALUES.length - 1 ? 1 : 0,
-                    borderBottomLeftRadius: i === 0 ? 5 : 0,
-                    borderTopLeftRadius: i === 0 ? 5 : 0,
-                    borderBottomRightRadius: i === RATING_VALUES.length - 1 ? 5 : 0,
-                    borderTopRightRadius: i === RATING_VALUES.length - 1 ? 5 : 0,
                   }}
                 >
                   <CText
                     style={{
                       borderWidth: 0,
                       borderColor: "white",
-                      color: isSelected ? getTextColorForGrade(rating) : "black",
-                      fontWeight: isSelected ? getFontWeightForGrade(rating) : "normal",
+                      color: isSelected ? "black" : "gray",
                       borderRadius: 100,
                       padding: "sm",
+                      fontWeight: "500",
                       width: 35,
                       height: 35,
                       alignItems: "center",

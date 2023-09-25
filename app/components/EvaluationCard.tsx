@@ -139,13 +139,13 @@ function EvaluationCard({
   }
 
   return (
-    <CView style={{ width: "100%", alignItems: "center", paddingTop: "2xl", height }}>
-      <CText style={{ fontSize: "xl", textAlign: "center", fontWeight: "300" }}>{evaluation.student.name}</CText>
+    <CView style={{ width: "100%", paddingTop: "2xl", height }}>
+      <CText style={{ fontSize: "title", fontWeight: "500" }}>{evaluation.student.name}</CText>
       {/* TODO: Add isStellar star-button */}
       {hasParticipationToggle && (
-        <CView style={{ alignItems: "center", width: "100%" }}>
-          <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "50%" }}>
-            <CText style={{ textAlign: "center", color: evaluation.wasPresent ? "green" : "red" }}>
+        <CView style={{ width: "100%" }}>
+          <CView style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+            <CText style={{ fontWeight: "500", color: evaluation.wasPresent ? "green" : "red" }}>
               {evaluation.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
             </CText>
             <Switch
@@ -163,7 +163,7 @@ function EvaluationCard({
       )}
       <CView style={{ width: "100%", marginTop: "2xl", zIndex: 10 }}>
         <CView style={{ marginBottom: "xl" }}>
-          <CText style={{ marginBottom: "md" }}>{t("skills", "Taidot")}:</CText>
+          <CText style={{ marginBottom: "md", fontWeight: "500", fontSize: "sm" }}>{t("skills", "Taidot")}</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
             initialRating={evaluation.skillsRating}
@@ -171,14 +171,14 @@ function EvaluationCard({
           />
         </CView>
         <CView style={{ marginBottom: "xl" }}>
-          <CText style={{ marginBottom: "md" }}>{t("behaviour", "Työskentely")}:</CText>
+          <CText style={{ marginBottom: "md", fontWeight: "500", fontSize: "sm" }}>{t("behaviour", "Työskentely")}</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
             initialRating={evaluation.behaviourRating}
             onChange={(rating) => onChanged("behaviourRating", rating)}
           />
         </CView>
-        <CText style={{ marginBottom: "md" }}>
+        <CText style={{ marginBottom: "md", fontWeight: "300" }}>
           {t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}
         </CText>
         <CView style={{ width: "100%", height: 150 }}>
