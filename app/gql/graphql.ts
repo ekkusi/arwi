@@ -163,6 +163,8 @@ export type Teacher = {
   id: Scalars["ID"];
   email: Scalars["EmailAddress"];
   groups: Array<Group>;
+  languagePreference: Scalars["String"];
+  consentsAnalytics: Scalars["Boolean"];
 };
 
 export type LoginResult = {
@@ -285,6 +287,8 @@ export enum EducationLevel {
 export type CreateTeacherInput = {
   email: Scalars["EmailAddress"];
   password: Scalars["String"];
+  languagePreference: Scalars["String"];
+  consentsAnalytics: Scalars["Boolean"];
 };
 
 export type CreateGroupInput = {
@@ -352,7 +356,10 @@ export type ChangeGroupModuleInput = {
 
 export type Main_GetCurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
-export type Main_GetCurrentUserQuery = { __typename?: "Query"; getCurrentUser: { __typename?: "Teacher"; email: string; id: string } };
+export type Main_GetCurrentUserQuery = {
+  __typename?: "Query";
+  getCurrentUser: { __typename?: "Teacher"; email: string; languagePreference: string; consentsAnalytics: boolean; id: string };
+};
 
 export type Main_GetAppMetadataQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -383,6 +390,26 @@ export type GroupListItemFragment = {
   subject: { __typename?: "Subject"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
 } & { " $fragmentName"?: "GroupListItemFragment" };
 
+export type ArchivePage_GetCurrentUserQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ArchivePage_GetCurrentUserQuery = {
+  __typename?: "Query";
+  getCurrentUser: {
+    __typename?: "Teacher";
+    email: string;
+    id: string;
+    groups: Array<{
+      __typename?: "Group";
+      id: string;
+      name: string;
+      archived: boolean;
+      updatedAt: any;
+      subject: { __typename?: "Subject"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
+      currentModule: { __typename?: "Module"; id: string };
+    }>;
+  };
+};
+
 export type LoginPage_LoginMutationVariables = Exact<{
   email: Scalars["String"];
   password: Scalars["String"];
@@ -401,6 +428,49 @@ export type RegisterPage_RegisterMutation = {
   __typename?: "Mutation";
   register: { __typename?: "AuthPayload"; accessToken: string; teacher: { __typename?: "Teacher"; email: string; id: string } };
 };
+
+export type ProfileView_LogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type ProfileView_LogoutMutation = { __typename?: "Mutation"; logout: boolean };
+
+export type CollectionsLineChart_EvaluationCollectionFragment = {
+  __typename?: "EvaluationCollection";
+  id: string;
+  date: string;
+  environment: { __typename?: "Environment"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
+  evaluations: Array<{
+    __typename?: "Evaluation";
+    skillsRating?: number | null;
+    behaviourRating?: number | null;
+    wasPresent: boolean;
+    isStellar: boolean;
+  }>;
+} & { " $fragmentName"?: "CollectionsLineChart_EvaluationCollectionFragment" };
+
+export type EvaluationsBarChart_EvaluationFragment = {
+  __typename?: "Evaluation";
+  id: string;
+  skillsRating?: number | null;
+  behaviourRating?: number | null;
+  wasPresent: boolean;
+  collection: {
+    __typename?: "EvaluationCollection";
+    environment: { __typename?: "Environment"; code: string; color: string; label: { __typename?: "TranslatedString"; fi: string } };
+  };
+} & { " $fragmentName"?: "EvaluationsBarChart_EvaluationFragment" };
+
+export type EvaluationsLineChart_EvaluationFragment = {
+  __typename?: "Evaluation";
+  id: string;
+  skillsRating?: number | null;
+  behaviourRating?: number | null;
+  wasPresent: boolean;
+  collection: {
+    __typename?: "EvaluationCollection";
+    date: string;
+    environment: { __typename?: "Environment"; code: string; color: string; label: { __typename?: "TranslatedString"; fi: string } };
+  };
+} & { " $fragmentName"?: "EvaluationsLineChart_EvaluationFragment" };
 
 export type AddNewStudent_CreateStudentMutationVariables = Exact<{
   id: Scalars["ID"];
@@ -451,6 +521,16 @@ export type AddNewStudent_CreateStudentMutation = {
       };
     };
   };
+};
+
+export type ChangeArchiveStatus_UpdateGroupMutationVariables = Exact<{
+  id: Scalars["ID"];
+  input: UpdateGroupInput;
+}>;
+
+export type ChangeArchiveStatus_UpdateGroupMutation = {
+  __typename?: "Mutation";
+  updateGroup: { __typename?: "Group"; id: string; archived: boolean };
 };
 
 export type ChangeModule_GetGroupQueryVariables = Exact<{
@@ -520,41 +600,6 @@ export type ChangeModule_ChangeModuleMutation = {
   };
 };
 
-export type ChangeGroupName_UpdateGroupMutationVariables = Exact<{
-  id: Scalars["ID"];
-  input: UpdateGroupInput;
-}>;
-
-export type ChangeGroupName_UpdateGroupMutation = { __typename?: "Mutation"; updateGroup: { __typename?: "Group"; id: string; name: string } };
-
-export type ChangeStudentName_UpdateStudentMutationVariables = Exact<{
-  id: Scalars["ID"];
-  input: UpdateStudentInput;
-}>;
-
-export type ChangeStudentName_UpdateStudentMutation = {
-  __typename?: "Mutation";
-  updateStudent: { __typename?: "Student"; id: string; name: string };
-};
-
-export type CollectionHeaderRightButton_DeleteCollectionMutationVariables = Exact<{
-  id: Scalars["ID"];
-}>;
-
-export type CollectionHeaderRightButton_DeleteCollectionMutation = {
-  __typename?: "Mutation";
-  deleteCollection: {
-    __typename?: "EvaluationCollection";
-    id: string;
-    module: {
-      __typename?: "Module";
-      id: string;
-      evaluationCollections: Array<{ __typename?: "EvaluationCollection"; id: string }>;
-      group: { __typename?: "Group"; id: string; name: string };
-    };
-  };
-};
-
 export type StudentHeaderRightButton_DeleteStudentMutationVariables = Exact<{
   id: Scalars["ID"];
 }>;
@@ -605,6 +650,41 @@ export type StudentHeaderRightButton_DeleteStudentMutation = {
   };
 };
 
+export type ChangeStudentName_UpdateStudentMutationVariables = Exact<{
+  id: Scalars["ID"];
+  input: UpdateStudentInput;
+}>;
+
+export type ChangeStudentName_UpdateStudentMutation = {
+  __typename?: "Mutation";
+  updateStudent: { __typename?: "Student"; id: string; name: string };
+};
+
+export type ChangeGroupName_UpdateGroupMutationVariables = Exact<{
+  id: Scalars["ID"];
+  input: UpdateGroupInput;
+}>;
+
+export type ChangeGroupName_UpdateGroupMutation = { __typename?: "Mutation"; updateGroup: { __typename?: "Group"; id: string; name: string } };
+
+export type CollectionHeaderRightButton_DeleteCollectionMutationVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type CollectionHeaderRightButton_DeleteCollectionMutation = {
+  __typename?: "Mutation";
+  deleteCollection: {
+    __typename?: "EvaluationCollection";
+    id: string;
+    module: {
+      __typename?: "Module";
+      id: string;
+      evaluationCollections: Array<{ __typename?: "EvaluationCollection"; id: string }>;
+      group: { __typename?: "Group"; id: string; name: string };
+    };
+  };
+};
+
 export type MainPage_GetCurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MainPage_GetCurrentUserQuery = {
@@ -625,68 +705,45 @@ export type MainPage_GetCurrentUserQuery = {
   };
 };
 
-export type ArchivePage_GetCurrentUserQueryVariables = Exact<{ [key: string]: never }>;
+export type EvaluationEditView_GetEvaluationQueryVariables = Exact<{
+  evaluationId: Scalars["ID"];
+}>;
 
-export type ArchivePage_GetCurrentUserQuery = {
+export type EvaluationEditView_GetEvaluationQuery = {
   __typename?: "Query";
-  getCurrentUser: {
-    __typename?: "Teacher";
-    email: string;
+  getEvaluation: {
+    __typename?: "Evaluation";
     id: string;
-    groups: Array<{
-      __typename?: "Group";
+    wasPresent: boolean;
+    skillsRating?: number | null;
+    behaviourRating?: number | null;
+    notes?: string | null;
+    isStellar: boolean;
+    student: {
+      __typename?: "Student";
       id: string;
       name: string;
-      archived: boolean;
-      updatedAt: any;
-      subject: { __typename?: "Subject"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
-      currentModule: { __typename?: "Module"; id: string };
-    }>;
+      currentModuleEvaluations: Array<{ __typename?: "Evaluation"; id: string; notes?: string | null }>;
+    };
   };
 };
 
-export type ProfileView_LogoutMutationVariables = Exact<{ [key: string]: never }>;
+export type EvaluationEditView_UpdateEvaluationMutationVariables = Exact<{
+  updateEvaluationInput: UpdateEvaluationInput;
+}>;
 
-export type ProfileView_LogoutMutation = { __typename?: "Mutation"; logout: boolean };
-
-export type CollectionsLineChart_EvaluationCollectionFragment = {
-  __typename?: "EvaluationCollection";
-  id: string;
-  date: string;
-  environment: { __typename?: "Environment"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
-  evaluations: Array<{
+export type EvaluationEditView_UpdateEvaluationMutation = {
+  __typename?: "Mutation";
+  updateEvaluation: {
     __typename?: "Evaluation";
+    id: string;
+    wasPresent: boolean;
     skillsRating?: number | null;
     behaviourRating?: number | null;
-    wasPresent: boolean;
+    notes?: string | null;
     isStellar: boolean;
-  }>;
-} & { " $fragmentName"?: "CollectionsLineChart_EvaluationCollectionFragment" };
-
-export type EvaluationsBarChart_EvaluationFragment = {
-  __typename?: "Evaluation";
-  id: string;
-  skillsRating?: number | null;
-  behaviourRating?: number | null;
-  wasPresent: boolean;
-  collection: {
-    __typename?: "EvaluationCollection";
-    environment: { __typename?: "Environment"; code: string; color: string; label: { __typename?: "TranslatedString"; fi: string } };
   };
-} & { " $fragmentName"?: "EvaluationsBarChart_EvaluationFragment" };
-
-export type EvaluationsLineChart_EvaluationFragment = {
-  __typename?: "Evaluation";
-  id: string;
-  skillsRating?: number | null;
-  behaviourRating?: number | null;
-  wasPresent: boolean;
-  collection: {
-    __typename?: "EvaluationCollection";
-    date: string;
-    environment: { __typename?: "Environment"; code: string; color: string; label: { __typename?: "TranslatedString"; fi: string } };
-  };
-} & { " $fragmentName"?: "EvaluationsLineChart_EvaluationFragment" };
+};
 
 export type CollectionEditAllEvaluationsView_GetCollectionQueryVariables = Exact<{
   collectionId: Scalars["ID"];
@@ -740,28 +797,6 @@ export type CollectionEvaluationsView_UpdateCollectionMutation = {
         currentModuleEvaluations: Array<{ __typename?: "Evaluation"; id: string; notes?: string | null }>;
       };
     }>;
-  };
-};
-
-export type CollectionPage_GetCollectionQueryVariables = Exact<{
-  collectionId: Scalars["ID"];
-}>;
-
-export type CollectionPage_GetCollectionQuery = {
-  __typename?: "Query";
-  getCollection: {
-    __typename?: "EvaluationCollection";
-    id: string;
-    date: string;
-    description?: string | null;
-    environment: { __typename?: "Environment"; code: string; color: string; label: { __typename?: "TranslatedString"; fi: string } };
-    module: { __typename?: "Module"; group: { __typename?: "Group"; name: string; id: string } };
-    learningObjectives: Array<{ __typename?: "LearningObjective"; code: string; label: { __typename?: "TranslatedString"; fi: string } }>;
-    evaluations: Array<
-      { __typename?: "Evaluation"; id: string } & {
-        " $fragmentRefs"?: { EvaluationsAccordion_EvaluationFragment: EvaluationsAccordion_EvaluationFragment };
-      }
-    >;
   };
 };
 
@@ -821,80 +856,73 @@ export type EditGeneralDetails_UpdateCollectionMutation = {
   };
 };
 
-export type EvaluationEditView_GetEvaluationQueryVariables = Exact<{
-  evaluationId: Scalars["ID"];
+export type CollectionPage_GetCollectionQueryVariables = Exact<{
+  collectionId: Scalars["ID"];
 }>;
 
-export type EvaluationEditView_GetEvaluationQuery = {
+export type CollectionPage_GetCollectionQuery = {
   __typename?: "Query";
-  getEvaluation: {
-    __typename?: "Evaluation";
+  getCollection: {
+    __typename?: "EvaluationCollection";
     id: string;
-    wasPresent: boolean;
-    skillsRating?: number | null;
-    behaviourRating?: number | null;
-    notes?: string | null;
-    isStellar: boolean;
-    student: {
-      __typename?: "Student";
+    date: string;
+    description?: string | null;
+    environment: { __typename?: "Environment"; code: string; color: string; label: { __typename?: "TranslatedString"; fi: string } };
+    module: { __typename?: "Module"; group: { __typename?: "Group"; name: string; id: string } };
+    learningObjectives: Array<{ __typename?: "LearningObjective"; code: string; label: { __typename?: "TranslatedString"; fi: string } }>;
+    evaluations: Array<
+      { __typename?: "Evaluation"; id: string } & {
+        " $fragmentRefs"?: { EvaluationsAccordion_EvaluationFragment: EvaluationsAccordion_EvaluationFragment };
+      }
+    >;
+  };
+};
+
+export type GroupOverviewPage_GetGroupQueryVariables = Exact<{
+  groupId: Scalars["ID"];
+}>;
+
+export type GroupOverviewPage_GetGroupQuery = {
+  __typename?: "Query";
+  getGroup: {
+    __typename?: "Group";
+    id: string;
+    name: string;
+    archived: boolean;
+    subject: { __typename?: "Subject"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
+    currentModule: {
+      __typename?: "Module";
       id: string;
-      name: string;
-      currentModuleEvaluations: Array<{ __typename?: "Evaluation"; id: string; notes?: string | null }>;
+      info: {
+        __typename?: "ModuleInfo";
+        educationLevel: EducationLevel;
+        learningObjectiveGroupKey: string;
+        label: { __typename?: "TranslatedString"; fi: string };
+      };
+      students: Array<{
+        __typename?: "Student";
+        id: string;
+        name: string;
+        currentModuleEvaluations: Array<{ __typename?: "Evaluation"; id: string; wasPresent: boolean }>;
+      }>;
+      evaluationCollections: Array<
+        {
+          __typename?: "EvaluationCollection";
+          id: string;
+          date: string;
+          environment: { __typename?: "Environment"; code: string; color: string; label: { __typename?: "TranslatedString"; fi: string } };
+          learningObjectives: Array<{
+            __typename?: "LearningObjective";
+            code: string;
+            type: LearningObjectiveType;
+            label: { __typename?: "TranslatedString"; fi: string };
+            description: { __typename?: "TranslatedString"; fi: string };
+          }>;
+        } & { " $fragmentRefs"?: { CollectionsLineChart_EvaluationCollectionFragment: CollectionsLineChart_EvaluationCollectionFragment } }
+      >;
     };
   };
 };
-
-export type EvaluationEditView_UpdateEvaluationMutationVariables = Exact<{
-  updateEvaluationInput: UpdateEvaluationInput;
-}>;
-
-export type EvaluationEditView_UpdateEvaluationMutation = {
-  __typename?: "Mutation";
-  updateEvaluation: {
-    __typename?: "Evaluation";
-    id: string;
-    wasPresent: boolean;
-    skillsRating?: number | null;
-    behaviourRating?: number | null;
-    notes?: string | null;
-    isStellar: boolean;
-  };
-};
-
-export type StudentFeedbackView_GetStudentQueryVariables = Exact<{
-  id: Scalars["ID"];
-}>;
-
-export type StudentFeedbackView_GetStudentQuery = {
-  __typename?: "Query";
-  getStudent: {
-    __typename?: "Student";
-    id: string;
-    group: { __typename?: "Group"; id: string; archived: boolean; currentModule: { __typename?: "Module"; id: string } };
-    currentModuleEvaluations: Array<{
-      __typename?: "Evaluation";
-      id: string;
-      notes?: string | null;
-      wasPresent: boolean;
-      behaviourRating?: number | null;
-      skillsRating?: number | null;
-      isStellar: boolean;
-      collection: {
-        __typename?: "EvaluationCollection";
-        id: string;
-        date: string;
-        environment: { __typename?: "Environment"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
-      };
-    }>;
-  };
-};
-
-export type StudentFeedbackView_GenerateFeedbackMutationVariables = Exact<{
-  studentId: Scalars["ID"];
-  moduleId: Scalars["ID"];
-}>;
-
-export type StudentFeedbackView_GenerateFeedbackMutation = { __typename?: "Mutation"; generateStudentFeedback: string };
 
 export type StudentPage_GetStudentQueryVariables = Exact<{
   studentId: Scalars["ID"];
@@ -947,57 +975,40 @@ export type StudentPage_GetStudentQuery = {
   };
 };
 
-export type GroupOverviewPage_GetGroupQueryVariables = Exact<{
-  groupId: Scalars["ID"];
+export type StudentFeedbackView_GetStudentQueryVariables = Exact<{
+  id: Scalars["ID"];
 }>;
 
-export type GroupOverviewPage_GetGroupQuery = {
+export type StudentFeedbackView_GetStudentQuery = {
   __typename?: "Query";
-  getGroup: {
-    __typename?: "Group";
+  getStudent: {
+    __typename?: "Student";
     id: string;
-    name: string;
-    archived: boolean;
-    subject: { __typename?: "Subject"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
-    currentModule: {
-      __typename?: "Module";
+    group: { __typename?: "Group"; id: string; archived: boolean; currentModule: { __typename?: "Module"; id: string } };
+    currentModuleEvaluations: Array<{
+      __typename?: "Evaluation";
       id: string;
-      info: {
-        __typename?: "ModuleInfo";
-        educationLevel: EducationLevel;
-        learningObjectiveGroupKey: string;
-        label: { __typename?: "TranslatedString"; fi: string };
-      };
-      students: Array<{
-        __typename?: "Student";
+      notes?: string | null;
+      wasPresent: boolean;
+      behaviourRating?: number | null;
+      skillsRating?: number | null;
+      isStellar: boolean;
+      collection: {
+        __typename?: "EvaluationCollection";
         id: string;
-        name: string;
-        currentModuleEvaluations: Array<{ __typename?: "Evaluation"; id: string; wasPresent: boolean }>;
-      }>;
-      evaluationCollections: Array<
-        {
-          __typename?: "EvaluationCollection";
-          id: string;
-          date: string;
-          environment: { __typename?: "Environment"; code: string; color: string; label: { __typename?: "TranslatedString"; fi: string } };
-          learningObjectives: Array<{
-            __typename?: "LearningObjective";
-            code: string;
-            type: LearningObjectiveType;
-            label: { __typename?: "TranslatedString"; fi: string };
-            description: { __typename?: "TranslatedString"; fi: string };
-          }>;
-        } & { " $fragmentRefs"?: { CollectionsLineChart_EvaluationCollectionFragment: CollectionsLineChart_EvaluationCollectionFragment } }
-      >;
-    };
+        date: string;
+        environment: { __typename?: "Environment"; code: string; label: { __typename?: "TranslatedString"; fi: string } };
+      };
+    }>;
   };
 };
 
-export type CreateGroupPage_CreateGroupMutationVariables = Exact<{
-  input: CreateGroupInput;
+export type StudentFeedbackView_GenerateFeedbackMutationVariables = Exact<{
+  studentId: Scalars["ID"];
+  moduleId: Scalars["ID"];
 }>;
 
-export type CreateGroupPage_CreateGroupMutation = { __typename?: "Mutation"; createGroup: { __typename?: "Group"; id: string; name: string } };
+export type StudentFeedbackView_GenerateFeedbackMutation = { __typename?: "Mutation"; generateStudentFeedback: string };
 
 export type CollectionCreationProvider_GetGroupQueryVariables = Exact<{
   groupId: Scalars["ID"];
@@ -1075,15 +1086,11 @@ export type CollectionParticipationsView_GroupFragment = {
   students: Array<{ __typename?: "Student"; id: string; name: string }>;
 } & { " $fragmentName"?: "CollectionParticipationsView_GroupFragment" };
 
-export type ChangeArchiveStatus_UpdateGroupMutationVariables = Exact<{
-  id: Scalars["ID"];
-  input: UpdateGroupInput;
+export type CreateGroupPage_CreateGroupMutationVariables = Exact<{
+  input: CreateGroupInput;
 }>;
 
-export type ChangeArchiveStatus_UpdateGroupMutation = {
-  __typename?: "Mutation";
-  updateGroup: { __typename?: "Group"; id: string; archived: boolean };
-};
+export type CreateGroupPage_CreateGroupMutation = { __typename?: "Mutation"; createGroup: { __typename?: "Group"; id: string; name: string } };
 
 export const EvaluationsAccordion_EvaluationFragmentDoc = {
   kind: "Document",
@@ -1389,6 +1396,8 @@ export const Main_GetCurrentUserDocument = {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "email" } },
+                { kind: "Field", name: { kind: "Name", value: "languagePreference" } },
+                { kind: "Field", name: { kind: "Name", value: "consentsAnalytics" } },
                 { kind: "Field", name: { kind: "Name", value: "id" } },
               ],
             },
@@ -1418,6 +1427,65 @@ export const Main_GetAppMetadataDocument = {
     },
   ],
 } as unknown as DocumentNode<Main_GetAppMetadataQuery, Main_GetAppMetadataQueryVariables>;
+export const ArchivePage_GetCurrentUserDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ArchivePage_GetCurrentUser" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getCurrentUser" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "groups" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      { kind: "Field", name: { kind: "Name", value: "archived" } },
+                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "subject" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "label" },
+                              selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                            },
+                            { kind: "Field", name: { kind: "Name", value: "code" } },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currentModule" },
+                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }] },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ArchivePage_GetCurrentUserQuery, ArchivePage_GetCurrentUserQueryVariables>;
 export const LoginPage_LoginDocument = {
   kind: "Document",
   definitions: [
@@ -1516,6 +1584,17 @@ export const RegisterPage_RegisterDocument = {
     },
   ],
 } as unknown as DocumentNode<RegisterPage_RegisterMutation, RegisterPage_RegisterMutationVariables>;
+export const ProfileView_LogoutDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ProfileView_Logout" },
+      selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "logout" } }] },
+    },
+  ],
+} as unknown as DocumentNode<ProfileView_LogoutMutation, ProfileView_LogoutMutationVariables>;
 export const AddNewStudent_CreateStudentDocument = {
   kind: "Document",
   definitions: [
@@ -1691,6 +1770,48 @@ export const AddNewStudent_CreateStudentDocument = {
     },
   ],
 } as unknown as DocumentNode<AddNewStudent_CreateStudentMutation, AddNewStudent_CreateStudentMutationVariables>;
+export const ChangeArchiveStatus_UpdateGroupDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ChangeArchiveStatus_UpdateGroup" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UpdateGroupInput" } } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateGroup" },
+            arguments: [
+              { kind: "Argument", name: { kind: "Name", value: "groupId" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } },
+              { kind: "Argument", name: { kind: "Name", value: "data" }, value: { kind: "Variable", name: { kind: "Name", value: "input" } } },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "archived" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ChangeArchiveStatus_UpdateGroupMutation, ChangeArchiveStatus_UpdateGroupMutationVariables>;
 export const ChangeModule_GetGroupDocument = {
   kind: "Document",
   definitions: [
@@ -1933,151 +2054,6 @@ export const ChangeModule_ChangeModuleDocument = {
     },
   ],
 } as unknown as DocumentNode<ChangeModule_ChangeModuleMutation, ChangeModule_ChangeModuleMutationVariables>;
-export const ChangeGroupName_UpdateGroupDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "ChangeGroupName_UpdateGroup" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UpdateGroupInput" } } },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "updateGroup" },
-            arguments: [
-              { kind: "Argument", name: { kind: "Name", value: "groupId" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } },
-              { kind: "Argument", name: { kind: "Name", value: "data" }, value: { kind: "Variable", name: { kind: "Name", value: "input" } } },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ChangeGroupName_UpdateGroupMutation, ChangeGroupName_UpdateGroupMutationVariables>;
-export const ChangeStudentName_UpdateStudentDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "ChangeStudentName_UpdateStudent" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UpdateStudentInput" } } },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "updateStudent" },
-            arguments: [
-              { kind: "Argument", name: { kind: "Name", value: "studentId" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } },
-              { kind: "Argument", name: { kind: "Name", value: "data" }, value: { kind: "Variable", name: { kind: "Name", value: "input" } } },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ChangeStudentName_UpdateStudentMutation, ChangeStudentName_UpdateStudentMutationVariables>;
-export const CollectionHeaderRightButton_DeleteCollectionDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "CollectionHeaderRightButton_DeleteCollection" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "deleteCollection" },
-            arguments: [
-              { kind: "Argument", name: { kind: "Name", value: "collectionId" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "module" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "evaluationCollections" },
-                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }] },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "group" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<CollectionHeaderRightButton_DeleteCollectionMutation, CollectionHeaderRightButton_DeleteCollectionMutationVariables>;
 export const StudentHeaderRightButton_DeleteStudentDocument = {
   kind: "Document",
   definitions: [
@@ -2247,6 +2223,151 @@ export const StudentHeaderRightButton_DeleteStudentDocument = {
     },
   ],
 } as unknown as DocumentNode<StudentHeaderRightButton_DeleteStudentMutation, StudentHeaderRightButton_DeleteStudentMutationVariables>;
+export const ChangeStudentName_UpdateStudentDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ChangeStudentName_UpdateStudent" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UpdateStudentInput" } } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateStudent" },
+            arguments: [
+              { kind: "Argument", name: { kind: "Name", value: "studentId" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } },
+              { kind: "Argument", name: { kind: "Name", value: "data" }, value: { kind: "Variable", name: { kind: "Name", value: "input" } } },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ChangeStudentName_UpdateStudentMutation, ChangeStudentName_UpdateStudentMutationVariables>;
+export const ChangeGroupName_UpdateGroupDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ChangeGroupName_UpdateGroup" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UpdateGroupInput" } } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateGroup" },
+            arguments: [
+              { kind: "Argument", name: { kind: "Name", value: "groupId" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } },
+              { kind: "Argument", name: { kind: "Name", value: "data" }, value: { kind: "Variable", name: { kind: "Name", value: "input" } } },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ChangeGroupName_UpdateGroupMutation, ChangeGroupName_UpdateGroupMutationVariables>;
+export const CollectionHeaderRightButton_DeleteCollectionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CollectionHeaderRightButton_DeleteCollection" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "deleteCollection" },
+            arguments: [
+              { kind: "Argument", name: { kind: "Name", value: "collectionId" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "module" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "evaluationCollections" },
+                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }] },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "group" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            { kind: "Field", name: { kind: "Name", value: "id" } },
+                            { kind: "Field", name: { kind: "Name", value: "name" } },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CollectionHeaderRightButton_DeleteCollectionMutation, CollectionHeaderRightButton_DeleteCollectionMutationVariables>;
 export const MainPage_GetCurrentUserDocument = {
   kind: "Document",
   definitions: [
@@ -2306,53 +2427,56 @@ export const MainPage_GetCurrentUserDocument = {
     },
   ],
 } as unknown as DocumentNode<MainPage_GetCurrentUserQuery, MainPage_GetCurrentUserQueryVariables>;
-export const ArchivePage_GetCurrentUserDocument = {
+export const EvaluationEditView_GetEvaluationDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "ArchivePage_GetCurrentUser" },
+      name: { kind: "Name", value: "EvaluationEditView_GetEvaluation" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "evaluationId" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "getCurrentUser" },
+            name: { kind: "Name", value: "getEvaluation" },
+            arguments: [
+              { kind: "Argument", name: { kind: "Name", value: "id" }, value: { kind: "Variable", name: { kind: "Name", value: "evaluationId" } } },
+            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "email" } },
                 { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+                { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
+                { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
+                { kind: "Field", name: { kind: "Name", value: "notes" } },
+                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "groups" },
+                  name: { kind: "Name", value: "student" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
-                      { kind: "Field", name: { kind: "Name", value: "archived" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "subject" },
+                        name: { kind: "Name", value: "currentModuleEvaluations" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "label" },
-                              selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
-                            },
-                            { kind: "Field", name: { kind: "Name", value: "code" } },
+                            { kind: "Field", name: { kind: "Name", value: "id" } },
+                            { kind: "Field", name: { kind: "Name", value: "notes" } },
                           ],
                         },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "currentModule" },
-                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }] },
                       },
                     ],
                   },
@@ -2364,18 +2488,51 @@ export const ArchivePage_GetCurrentUserDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<ArchivePage_GetCurrentUserQuery, ArchivePage_GetCurrentUserQueryVariables>;
-export const ProfileView_LogoutDocument = {
+} as unknown as DocumentNode<EvaluationEditView_GetEvaluationQuery, EvaluationEditView_GetEvaluationQueryVariables>;
+export const EvaluationEditView_UpdateEvaluationDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "ProfileView_Logout" },
-      selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "logout" } }] },
+      name: { kind: "Name", value: "EvaluationEditView_UpdateEvaluation" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "updateEvaluationInput" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UpdateEvaluationInput" } } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateEvaluation" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "data" },
+                value: { kind: "Variable", name: { kind: "Name", value: "updateEvaluationInput" } },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+                { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
+                { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
+                { kind: "Field", name: { kind: "Name", value: "notes" } },
+                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
+              ],
+            },
+          },
+        ],
+      },
     },
   ],
-} as unknown as DocumentNode<ProfileView_LogoutMutation, ProfileView_LogoutMutationVariables>;
+} as unknown as DocumentNode<EvaluationEditView_UpdateEvaluationMutation, EvaluationEditView_UpdateEvaluationMutationVariables>;
 export const CollectionEditAllEvaluationsView_GetCollectionDocument = {
   kind: "Document",
   definitions: [
@@ -2534,152 +2691,6 @@ export const CollectionEvaluationsView_UpdateCollectionDocument = {
     },
   ],
 } as unknown as DocumentNode<CollectionEvaluationsView_UpdateCollectionMutation, CollectionEvaluationsView_UpdateCollectionMutationVariables>;
-export const CollectionPage_GetCollectionDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "CollectionPage_GetCollection" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "collectionId" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "getCollection" },
-            arguments: [
-              { kind: "Argument", name: { kind: "Name", value: "id" }, value: { kind: "Variable", name: { kind: "Name", value: "collectionId" } } },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "date" } },
-                { kind: "Field", name: { kind: "Name", value: "description" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "environment" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "label" },
-                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
-                      },
-                      { kind: "Field", name: { kind: "Name", value: "code" } },
-                      { kind: "Field", name: { kind: "Name", value: "color" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "module" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "group" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "learningObjectives" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "code" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "label" },
-                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "evaluations" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "FragmentSpread", name: { kind: "Name", value: "EvaluationsAccordion_Evaluation" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "EvaluationsAccordion_Evaluation" },
-      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Evaluation" } },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "notes" } },
-          { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
-          { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
-          { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
-          { kind: "Field", name: { kind: "Name", value: "isStellar" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "collection" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "date" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "environment" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "label" },
-                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
-                      },
-                      { kind: "Field", name: { kind: "Name", value: "code" } },
-                      { kind: "Field", name: { kind: "Name", value: "color" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "student" },
-            selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "name" } }] },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<CollectionPage_GetCollectionQuery, CollectionPage_GetCollectionQueryVariables>;
 export const EditGeneralDetails_GetCollectionDocument = {
   kind: "Document",
   definitions: [
@@ -2900,17 +2911,17 @@ export const EditGeneralDetails_UpdateCollectionDocument = {
     },
   ],
 } as unknown as DocumentNode<EditGeneralDetails_UpdateCollectionMutation, EditGeneralDetails_UpdateCollectionMutationVariables>;
-export const EvaluationEditView_GetEvaluationDocument = {
+export const CollectionPage_GetCollectionDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "EvaluationEditView_GetEvaluation" },
+      name: { kind: "Name", value: "CollectionPage_GetCollection" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "evaluationId" } },
+          variable: { kind: "Variable", name: { kind: "Name", value: "collectionId" } },
           type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
         },
       ],
@@ -2919,104 +2930,144 @@ export const EvaluationEditView_GetEvaluationDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "getEvaluation" },
+            name: { kind: "Name", value: "getCollection" },
             arguments: [
-              { kind: "Argument", name: { kind: "Name", value: "id" }, value: { kind: "Variable", name: { kind: "Name", value: "evaluationId" } } },
+              { kind: "Argument", name: { kind: "Name", value: "id" }, value: { kind: "Variable", name: { kind: "Name", value: "collectionId" } } },
             ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
-                { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
-                { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
-                { kind: "Field", name: { kind: "Name", value: "notes" } },
-                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
+                { kind: "Field", name: { kind: "Name", value: "date" } },
+                { kind: "Field", name: { kind: "Name", value: "description" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "student" },
+                  name: { kind: "Name", value: "environment" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "currentModuleEvaluations" },
+                        name: { kind: "Name", value: "label" },
+                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                      { kind: "Field", name: { kind: "Name", value: "color" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "module" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "group" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
+                            { kind: "Field", name: { kind: "Name", value: "name" } },
                             { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "notes" } },
                           ],
                         },
                       },
                     ],
                   },
                 },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "learningObjectives" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "label" },
+                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "evaluations" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "FragmentSpread", name: { kind: "Name", value: "EvaluationsAccordion_Evaluation" } },
+                    ],
+                  },
+                },
               ],
             },
           },
         ],
       },
     },
-  ],
-} as unknown as DocumentNode<EvaluationEditView_GetEvaluationQuery, EvaluationEditView_GetEvaluationQueryVariables>;
-export const EvaluationEditView_UpdateEvaluationDocument = {
-  kind: "Document",
-  definitions: [
     {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "EvaluationEditView_UpdateEvaluation" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "updateEvaluationInput" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UpdateEvaluationInput" } } },
-        },
-      ],
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "EvaluationsAccordion_Evaluation" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Evaluation" } },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "notes" } },
+          { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
+          { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
+          { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+          { kind: "Field", name: { kind: "Name", value: "isStellar" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "updateEvaluation" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "data" },
-                value: { kind: "Variable", name: { kind: "Name", value: "updateEvaluationInput" } },
-              },
-            ],
+            name: { kind: "Name", value: "collection" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
-                { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
-                { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
-                { kind: "Field", name: { kind: "Name", value: "notes" } },
-                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
+                { kind: "Field", name: { kind: "Name", value: "date" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "environment" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "label" },
+                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                      { kind: "Field", name: { kind: "Name", value: "color" } },
+                    ],
+                  },
+                },
               ],
             },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "student" },
+            selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "name" } }] },
           },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<EvaluationEditView_UpdateEvaluationMutation, EvaluationEditView_UpdateEvaluationMutationVariables>;
-export const StudentFeedbackView_GetStudentDocument = {
+} as unknown as DocumentNode<CollectionPage_GetCollectionQuery, CollectionPage_GetCollectionQueryVariables>;
+export const GroupOverviewPage_GetGroupDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "StudentFeedbackView_GetStudent" },
+      name: { kind: "Name", value: "GroupOverviewPage_GetGroup" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          variable: { kind: "Variable", name: { kind: "Name", value: "groupId" } },
           type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
         },
       ],
@@ -3025,43 +3076,79 @@ export const StudentFeedbackView_GetStudentDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "getStudent" },
-            arguments: [{ kind: "Argument", name: { kind: "Name", value: "id" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } }],
+            name: { kind: "Name", value: "getGroup" },
+            arguments: [
+              { kind: "Argument", name: { kind: "Name", value: "id" }, value: { kind: "Variable", name: { kind: "Name", value: "groupId" } } },
+            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "archived" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "group" },
+                  name: { kind: "Name", value: "subject" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "archived" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "currentModule" },
-                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }] },
+                        name: { kind: "Name", value: "label" },
+                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
                       },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
                     ],
                   },
                 },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "currentModuleEvaluations" },
+                  name: { kind: "Name", value: "currentModule" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "notes" } },
-                      { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
-                      { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
-                      { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
-                      { kind: "Field", name: { kind: "Name", value: "isStellar" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "collection" },
+                        name: { kind: "Name", value: "info" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            { kind: "Field", name: { kind: "Name", value: "educationLevel" } },
+                            { kind: "Field", name: { kind: "Name", value: "learningObjectiveGroupKey" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "label" },
+                              selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "students" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            { kind: "Field", name: { kind: "Name", value: "id" } },
+                            { kind: "Field", name: { kind: "Name", value: "name" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "currentModuleEvaluations" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  { kind: "Field", name: { kind: "Name", value: "id" } },
+                                  { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "evaluationCollections" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
@@ -3073,15 +3160,38 @@ export const StudentFeedbackView_GetStudentDocument = {
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "label" },
+                                    selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                                  },
+                                  { kind: "Field", name: { kind: "Name", value: "code" } },
+                                  { kind: "Field", name: { kind: "Name", value: "color" } },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "learningObjectives" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
                                   { kind: "Field", name: { kind: "Name", value: "code" } },
                                   {
                                     kind: "Field",
                                     name: { kind: "Name", value: "label" },
                                     selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
                                   },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "description" },
+                                    selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                                  },
+                                  { kind: "Field", name: { kind: "Name", value: "type" } },
                                 ],
                               },
                             },
+                            { kind: "FragmentSpread", name: { kind: "Name", value: "CollectionsLineChart_EvaluationCollection" } },
                           ],
                         },
                       },
@@ -3094,47 +3204,48 @@ export const StudentFeedbackView_GetStudentDocument = {
         ],
       },
     },
-  ],
-} as unknown as DocumentNode<StudentFeedbackView_GetStudentQuery, StudentFeedbackView_GetStudentQueryVariables>;
-export const StudentFeedbackView_GenerateFeedbackDocument = {
-  kind: "Document",
-  definitions: [
     {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "StudentFeedbackView_GenerateFeedback" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "studentId" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "moduleId" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
-        },
-      ],
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "CollectionsLineChart_EvaluationCollection" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "EvaluationCollection" } },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "date" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "generateStudentFeedback" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "studentId" },
-                value: { kind: "Variable", name: { kind: "Name", value: "studentId" } },
-              },
-              { kind: "Argument", name: { kind: "Name", value: "moduleId" }, value: { kind: "Variable", name: { kind: "Name", value: "moduleId" } } },
-            ],
+            name: { kind: "Name", value: "environment" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "label" },
+                  selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                },
+                { kind: "Field", name: { kind: "Name", value: "code" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "evaluations" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
+                { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
+                { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
+              ],
+            },
           },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<StudentFeedbackView_GenerateFeedbackMutation, StudentFeedbackView_GenerateFeedbackMutationVariables>;
+} as unknown as DocumentNode<GroupOverviewPage_GetGroupQuery, GroupOverviewPage_GetGroupQueryVariables>;
 export const StudentPage_GetStudentDocument = {
   kind: "Document",
   definitions: [
@@ -3392,17 +3503,17 @@ export const StudentPage_GetStudentDocument = {
     },
   ],
 } as unknown as DocumentNode<StudentPage_GetStudentQuery, StudentPage_GetStudentQueryVariables>;
-export const GroupOverviewPage_GetGroupDocument = {
+export const StudentFeedbackView_GetStudentDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "GroupOverviewPage_GetGroup" },
+      name: { kind: "Name", value: "StudentFeedbackView_GetStudent" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "groupId" } },
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
           type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
         },
       ],
@@ -3411,79 +3522,43 @@ export const GroupOverviewPage_GetGroupDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "getGroup" },
-            arguments: [
-              { kind: "Argument", name: { kind: "Name", value: "id" }, value: { kind: "Variable", name: { kind: "Name", value: "groupId" } } },
-            ],
+            name: { kind: "Name", value: "getStudent" },
+            arguments: [{ kind: "Argument", name: { kind: "Name", value: "id" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } }],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-                { kind: "Field", name: { kind: "Name", value: "archived" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "subject" },
+                  name: { kind: "Name", value: "group" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "archived" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "label" },
-                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
+                        name: { kind: "Name", value: "currentModule" },
+                        selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }] },
                       },
-                      { kind: "Field", name: { kind: "Name", value: "code" } },
                     ],
                   },
                 },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "currentModule" },
+                  name: { kind: "Name", value: "currentModuleEvaluations" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "notes" } },
+                      { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
+                      { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
+                      { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
+                      { kind: "Field", name: { kind: "Name", value: "isStellar" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "info" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            { kind: "Field", name: { kind: "Name", value: "educationLevel" } },
-                            { kind: "Field", name: { kind: "Name", value: "learningObjectiveGroupKey" } },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "label" },
-                              selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "students" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "currentModuleEvaluations" },
-                              selectionSet: {
-                                kind: "SelectionSet",
-                                selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "evaluationCollections" },
+                        name: { kind: "Name", value: "collection" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
@@ -3495,38 +3570,15 @@ export const GroupOverviewPage_GetGroupDocument = {
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  {
-                                    kind: "Field",
-                                    name: { kind: "Name", value: "label" },
-                                    selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
-                                  },
-                                  { kind: "Field", name: { kind: "Name", value: "code" } },
-                                  { kind: "Field", name: { kind: "Name", value: "color" } },
-                                ],
-                              },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "learningObjectives" },
-                              selectionSet: {
-                                kind: "SelectionSet",
-                                selections: [
                                   { kind: "Field", name: { kind: "Name", value: "code" } },
                                   {
                                     kind: "Field",
                                     name: { kind: "Name", value: "label" },
                                     selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
                                   },
-                                  {
-                                    kind: "Field",
-                                    name: { kind: "Name", value: "description" },
-                                    selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
-                                  },
-                                  { kind: "Field", name: { kind: "Name", value: "type" } },
                                 ],
                               },
                             },
-                            { kind: "FragmentSpread", name: { kind: "Name", value: "CollectionsLineChart_EvaluationCollection" } },
                           ],
                         },
                       },
@@ -3539,60 +3591,25 @@ export const GroupOverviewPage_GetGroupDocument = {
         ],
       },
     },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "CollectionsLineChart_EvaluationCollection" },
-      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "EvaluationCollection" } },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "date" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "environment" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "label" },
-                  selectionSet: { kind: "SelectionSet", selections: [{ kind: "Field", name: { kind: "Name", value: "fi" } }] },
-                },
-                { kind: "Field", name: { kind: "Name", value: "code" } },
-              ],
-            },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "evaluations" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "skillsRating" } },
-                { kind: "Field", name: { kind: "Name", value: "behaviourRating" } },
-                { kind: "Field", name: { kind: "Name", value: "wasPresent" } },
-                { kind: "Field", name: { kind: "Name", value: "isStellar" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
   ],
-} as unknown as DocumentNode<GroupOverviewPage_GetGroupQuery, GroupOverviewPage_GetGroupQueryVariables>;
-export const CreateGroupPage_CreateGroupDocument = {
+} as unknown as DocumentNode<StudentFeedbackView_GetStudentQuery, StudentFeedbackView_GetStudentQueryVariables>;
+export const StudentFeedbackView_GenerateFeedbackDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "CreateGroupPage_CreateGroup" },
+      name: { kind: "Name", value: "StudentFeedbackView_GenerateFeedback" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "CreateGroupInput" } } },
+          variable: { kind: "Variable", name: { kind: "Name", value: "studentId" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "moduleId" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
         },
       ],
       selectionSet: {
@@ -3600,23 +3617,21 @@ export const CreateGroupPage_CreateGroupDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "createGroup" },
+            name: { kind: "Name", value: "generateStudentFeedback" },
             arguments: [
-              { kind: "Argument", name: { kind: "Name", value: "data" }, value: { kind: "Variable", name: { kind: "Name", value: "input" } } },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "studentId" },
+                value: { kind: "Variable", name: { kind: "Name", value: "studentId" } },
+              },
+              { kind: "Argument", name: { kind: "Name", value: "moduleId" }, value: { kind: "Variable", name: { kind: "Name", value: "moduleId" } } },
             ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "name" } },
-              ],
-            },
           },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<CreateGroupPage_CreateGroupMutation, CreateGroupPage_CreateGroupMutationVariables>;
+} as unknown as DocumentNode<StudentFeedbackView_GenerateFeedbackMutation, StudentFeedbackView_GenerateFeedbackMutationVariables>;
 export const CollectionCreationProvider_GetGroupDocument = {
   kind: "Document",
   definitions: [
@@ -3861,23 +3876,18 @@ export const CollectionEvaluationsView_CreateCollectionDocument = {
     },
   ],
 } as unknown as DocumentNode<CollectionEvaluationsView_CreateCollectionMutation, CollectionEvaluationsView_CreateCollectionMutationVariables>;
-export const ChangeArchiveStatus_UpdateGroupDocument = {
+export const CreateGroupPage_CreateGroupDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "ChangeArchiveStatus_UpdateGroup" },
+      name: { kind: "Name", value: "CreateGroupPage_CreateGroup" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
-        },
-        {
-          kind: "VariableDefinition",
           variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
-          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "UpdateGroupInput" } } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "CreateGroupInput" } } },
         },
       ],
       selectionSet: {
@@ -3885,16 +3895,15 @@ export const ChangeArchiveStatus_UpdateGroupDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "updateGroup" },
+            name: { kind: "Name", value: "createGroup" },
             arguments: [
-              { kind: "Argument", name: { kind: "Name", value: "groupId" }, value: { kind: "Variable", name: { kind: "Name", value: "id" } } },
               { kind: "Argument", name: { kind: "Name", value: "data" }, value: { kind: "Variable", name: { kind: "Name", value: "input" } } },
             ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "archived" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
               ],
             },
           },
@@ -3902,4 +3911,4 @@ export const ChangeArchiveStatus_UpdateGroupDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<ChangeArchiveStatus_UpdateGroupMutation, ChangeArchiveStatus_UpdateGroupMutationVariables>;
+} as unknown as DocumentNode<CreateGroupPage_CreateGroupMutation, CreateGroupPage_CreateGroupMutationVariables>;

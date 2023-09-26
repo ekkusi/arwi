@@ -5,6 +5,7 @@ import {
   CreateCollectionInput,
   CreateGroupInput,
   CreateStudentInput,
+  CreateTeacherInput,
   EducationLevel,
   LearningObjectiveType,
   UpdateCollectionInput,
@@ -12,6 +13,16 @@ import {
   UpdateStudentInput,
 } from "../types";
 import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject } from "./subjectUtils";
+
+const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
+
+export const validateRegisterInput = async ({ email, languagePreference }: CreateTeacherInput) => {
+  const matchingTeacher = await prisma.teacher.findFirst({
+    where: { email },
+  });
+  if (matchingTeacher) throw new ValidationError(`Sähköposti '${email}' on jo käytössä`);
+  if (!VALID_LANGUAGE_CODES.includes(languagePreference)) throw new ValidationError(`Kielikoodi '${languagePreference}' ei ole sallittu`);
+};
 
 export const validateCreateGroupInput = async ({ subjectCode }: CreateGroupInput) => {
   if (!getSubject(subjectCode)) throw new ValidationError(`Aihetta koodilla '${subjectCode}' ei ole olemassa.`);

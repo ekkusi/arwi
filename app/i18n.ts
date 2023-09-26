@@ -14,6 +14,8 @@ export const languages = [
   { value: "es_US", name: "Espanja" },
 ];
 
+export const isValidLanguage = (lang: string): boolean => languages.findIndex((l) => l.value === lang) >= 0;
+
 const deviceLanguage =
   Platform.OS === "ios"
     ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13

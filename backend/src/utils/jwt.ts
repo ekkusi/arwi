@@ -11,6 +11,8 @@ export const REFRESH_TOKEN_KEY = "ref-token";
 const mapUser = (user: UserInfo): UserInfo => ({
   id: user.id,
   email: user.email,
+  languagePreference: user.languagePreference,
+  consentsAnalytics: user.consentsAnalytics,
 });
 
 export const checkIfIsUser = (user: any): user is UserInfo => {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1045394719676",
+    "project_id": "arwi-43110",
+    "storage_bucket": "arwi-43110.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045394719676:android:c435d8aafb6b50876be1b9",
+        "android_client_info": {
+          "package_name": "net.arwi.twa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe__2MwItK1WeOZgdEcG03PiEuRv7wdXE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
