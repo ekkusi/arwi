@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { hexToRgbA } from "../helpers/color";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { COLORS } from "../theme";
-import { getColorForGrade, getFontWeightForGrade, getTextColorForGrade } from "../helpers/dataMappers";
 import CPressable from "./primitives/CPressable";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
@@ -17,6 +16,44 @@ type RatingSelecterProps = Omit<CViewProps, "onChange"> & {
 const RATING_VALUES = [4, 5, 6, 7, 8, 9, 10];
 const buttonHeight = 53;
 
+function RatingButton({ rating, onRatingClick, isSelected }: { rating: number; onRatingClick: (rating: number) => void; isSelected: boolean }) {
+  return (
+    <CPressable onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
+      <Animated.View
+        style={[
+          {
+            alignItems: "center",
+            backgroundColor: "white",
+            height: buttonHeight,
+            width: buttonHeight,
+            borderRadius: buttonHeight / 2,
+            borderWidth: 2,
+            borderColor: isSelected ? COLORS.black : COLORS.lightgray,
+            justifyContent: "center",
+            transform: [{ scale: isSelected ? 1.05 : 1 }],
+          },
+        ]}
+      >
+        <CText
+          style={{
+            borderWidth: 0,
+            borderColor: "white",
+            color: isSelected ? "black" : "gray",
+            borderRadius: 100,
+            padding: "sm",
+            fontWeight: "500",
+            width: 35,
+            height: 35,
+            textAlign: "center",
+            textAlignVertical: "center",
+          }}
+        >
+          {rating}
+        </CText>
+      </Animated.View>
+    </CPressable>
+  );
+}
 export default function RatingSelecter({ onChange, disabled = false, initialRating, ...rest }: RatingSelecterProps) {
   const [selectedRating, setSelectedRating] = useState<number | null>(initialRating || null);
 
@@ -51,41 +88,7 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
               isSelected = selectedRating === rating;
             }
 
-            return (
-              <CPressable key={rating} onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
-                <CView
-                  style={{
-                    alignItems: "center",
-                    backgroundColor: "white",
-                    height: buttonHeight,
-                    width: buttonHeight,
-                    borderRadius: buttonHeight / 2,
-                    borderWidth: 2,
-                    borderColor: isSelected ? "black" : "lightgray",
-                    padding: "sm",
-                    transform: [{ scale: isSelected ? 1.1 : 1 }],
-                    justifyContent: "center",
-                  }}
-                >
-                  <CText
-                    style={{
-                      borderWidth: 0,
-                      borderColor: "white",
-                      color: isSelected ? "black" : "gray",
-                      borderRadius: 100,
-                      padding: "sm",
-                      fontWeight: "500",
-                      width: 35,
-                      height: 35,
-                      textAlign: "center",
-                      textAlignVertical: "center",
-                    }}
-                  >
-                    {rating}
-                  </CText>
-                </CView>
-              </CPressable>
-            );
+            return <RatingButton key={rating} rating={rating} isSelected={isSelected} onRatingClick={onRatingClick} />;
           })}
         </CView>
       </ScrollView>

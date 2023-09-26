@@ -112,6 +112,7 @@ function EvaluationCard({
           setNotes(newNotes);
           onChanged("notes", newNotes);
         }
+        setRecording(false);
       };
       Voice.start("fi-FI")
         .then(() => setRecording(true))
