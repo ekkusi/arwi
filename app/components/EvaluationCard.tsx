@@ -1,8 +1,8 @@
 import { Student } from "arwi-backend/src/types";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { createRef, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "react-i18next";
-import { Alert, Platform, Switch } from "react-native";
+import { Alert, Dimensions, Platform, Switch, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Voice from "@react-native-voice/voice";
@@ -14,6 +14,10 @@ import { COLORS } from "../theme";
 import CTextInput from "./primitives/CTextInput";
 import RatingSelector from "./RatingSelector";
 import CButton from "./primitives/CButton";
+import { formatDate } from "../helpers/dateHelpers";
+import CTouchableOpacity from "./primitives/CTouchableOpacity";
+import { useModal } from "../hooks-and-providers/ModalProvider";
+import CustomTextInputView from "../app/home/CustomTextInputView";
 
 export type Evaluation = Omit<CreateEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
@@ -42,6 +46,9 @@ type CreateEvaluationCardProps = Omit<EvaluationCardProps, "hasParticipationTogg
 type EvaluationCardProps = {
   hasParticipationToggle?: boolean;
   evaluation: Evaluation | EvaluationToUpdate;
+  date?: string;
+  environment?: string;
+  envColor?: string;
   onChanged: (key: EvaluationPropKeys, value: any) => void;
   height?: "auto" | number;
   hasArrowDown?: boolean;
@@ -53,12 +60,16 @@ type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPre
 function EvaluationCard({
   onChanged,
   evaluation,
+  date,
+  environment,
+  envColor,
   hasArrowDown,
   onArrowDownPress,
   hasParticipationToggle = true,
   height = "auto",
 }: EvaluationCardProps) {
   const [notes, setNotes] = useState(() => evaluation.notes || "");
+  const [textInputPresent, setTextInputPresent] = useState(false);
 
   const debouncedOnChanged = useMemo(() => debounce(onChanged, 300), [onChanged]);
 
@@ -97,8 +108,9 @@ function EvaluationCard({
       Voice.onSpeechResults = (event) => {
         if (event.value) {
           setCurrentRecordingAsText("");
-          setNotes(`${notes} ${event.value[0]}`);
-          onChanged("notes", `${notes} ${event.value[0]}`);
+          const newNotes = notes.length === 0 ? `${event.value[0]}` : `${notes} ${event.value[0]}`;
+          setNotes(newNotes);
+          onChanged("notes", newNotes);
         }
       };
       Voice.start("fi-FI")
@@ -117,7 +129,7 @@ function EvaluationCard({
         console.error(error);
       }
     };
-  }, [t, notes]);
+  }, [notes]);
 
   const stopRecording = async () => {
     try {
@@ -133,14 +145,42 @@ function EvaluationCard({
     return evaluation.student.currentModuleEvaluations.filter((it) => !!it.notes).length;
   }, [evaluation]);
 
-  let currentNotes = "";
+  let currentNotes = notes.length === 0 ? "" : `${notes} `;
   if (evaluation.wasPresent) {
-    currentNotes = recording ? `${notes} ${currentRecordingAsText}` : notes;
+    currentNotes = recording ? `${currentNotes}${currentRecordingAsText}` : notes;
   }
 
+  const { openModal, closeModal } = useModal();
+
+  const openTextInputModal = () => {
+    openModal({
+      placement: "bottom",
+      innerViewStyles: { flex: 1, maxHeight: "100%", paddingTop: "2xl" },
+      children: (
+        <CustomTextInputView
+          initialText={notes}
+          onSave={(text) => {
+            setNotes(text);
+            onChanged("notes", text);
+            closeModal();
+          }}
+        />
+      ),
+    });
+  };
+
   return (
-    <CView style={{ width: "100%", paddingTop: "2xl", height }}>
-      <CText style={{ fontSize: "title", fontWeight: "500" }}>{evaluation.student.name}</CText>
+    <CView style={{ width: "100%", height, paddingTop: hasParticipationToggle ? 0 : "xl", gap: 6 }}>
+      <CView style={{ gap: 3 }}>
+        <CText style={{ fontSize: "title", fontWeight: "500" }}>{evaluation.student.name}</CText>
+        {date && <CText style={{ fontSize: "sm", fontWeight: "300" }}>{formatDate(date)}</CText>}
+        {envColor && environment && (
+          <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+            <CView style={{ height: 12, width: 12, borderRadius: 6, backgroundColor: envColor }} />
+            <CText style={{ fontSize: "sm", fontWeight: "300" }}>{environment}</CText>
+          </CView>
+        )}
+      </CView>
       {/* TODO: Add isStellar star-button */}
       {hasParticipationToggle && (
         <CView style={{ width: "100%" }}>
@@ -161,24 +201,24 @@ function EvaluationCard({
           </CView>
         </CView>
       )}
-      <CView style={{ width: "100%", marginTop: "2xl", zIndex: 10 }}>
-        <CView style={{ marginBottom: "xl" }}>
-          <CText style={{ marginBottom: "md", fontWeight: "500", fontSize: "sm" }}>{t("skills", "Taidot")}</CText>
+      <CView style={{ width: "100%", paddingTop: hasParticipationToggle ? 0 : "xl", zIndex: 10 }}>
+        <CView style={{ paddingBottom: "sm" }}>
+          <CText style={{ fontWeight: "500", fontSize: "sm" }}>{t("skills", "Taidot")}</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
             initialRating={evaluation.skillsRating}
             onChange={(rating) => onChanged("skillsRating", rating)}
           />
         </CView>
-        <CView style={{ marginBottom: "xl" }}>
-          <CText style={{ marginBottom: "md", fontWeight: "500", fontSize: "sm" }}>{t("behaviour", "Työskentely")}</CText>
+        <CView style={{ paddingBottom: "sm" }}>
+          <CText style={{ fontWeight: "500", fontSize: "sm" }}>{t("behaviour", "Työskentely")}</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
             initialRating={evaluation.behaviourRating}
             onChange={(rating) => onChanged("behaviourRating", rating)}
           />
         </CView>
-        <CText style={{ marginBottom: "md", fontWeight: "300" }}>
+        <CText style={{ paddingBottom: "md", fontWeight: "300" }}>
           {t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}
         </CText>
         <CView style={{ width: "100%", height: 150 }}>
@@ -187,9 +227,14 @@ function EvaluationCard({
             as="textarea"
             editable={!recording}
             value={currentNotes}
-            onChange={(e) => changeNotes(e.nativeEvent.text)}
             placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
             multiline
+          />
+
+          <CTouchableOpacity
+            disabled={recording}
+            style={{ position: "absolute", width: "100%", height: "100%" }}
+            onPress={() => openTextInputModal()}
           />
           {microphoneAvailable && (
             <CView style={{ position: "absolute", bottom: 3, right: 3, width: 40, height: 40 }}>

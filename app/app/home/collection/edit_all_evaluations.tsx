@@ -21,6 +21,14 @@ const CollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
   query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {
     getCollection(id: $collectionId) {
       id
+      date
+      environment {
+        code
+        label {
+          fi
+        }
+        color
+      }
       evaluations {
         id
         wasPresent
@@ -72,13 +80,21 @@ export type EvaluationDataToUpdate = Omit<EvaluationToUpdate, "student"> & {
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
 // NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
-const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - 50;
+const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT;
 
 function CollectionEditAllEvaluationsContent({
   navigation,
   route,
   defaultEvaluations,
-}: NativeStackScreenProps<HomeStackParams, "edit-all-evaluations"> & { defaultEvaluations: EvaluationDataToUpdate[] }) {
+  date,
+  environmentLabel,
+  envColor,
+}: NativeStackScreenProps<HomeStackParams, "edit-all-evaluations"> & {
+  defaultEvaluations: EvaluationDataToUpdate[];
+  date: string;
+  environmentLabel: string;
+  envColor: string;
+}) {
   const [submitting, setSubmitting] = useState(false);
   const [evaluations, setEvaluations] = useState<EvaluationDataToUpdate[]>(defaultEvaluations);
   const scrollRef = useRef<FlatList<EvaluationDataToUpdate> | null>(null);
@@ -159,6 +175,9 @@ function CollectionEditAllEvaluationsContent({
           <UpdateEvaluationCard
             key={item.student.id}
             evaluation={item}
+            date={date}
+            environment={environmentLabel}
+            envColor={envColor}
             onChanged={onEvaluationChanged}
             height={CARD_HEIGHT}
             hasArrowDown={index < evaluations.length - 1}
@@ -207,5 +226,13 @@ export default function CollectionEditAllEvaluationsView(props: NativeStackScree
 
   if (loading || !data) return <LoadingIndicator />;
 
-  return <CollectionEditAllEvaluationsContent defaultEvaluations={data.getCollection.evaluations} {...props} />;
+  return (
+    <CollectionEditAllEvaluationsContent
+      defaultEvaluations={data.getCollection.evaluations}
+      envColor={data.getCollection.environment.color}
+      environmentLabel={data.getCollection.environment.label.fi}
+      date={data.getCollection.date}
+      {...props}
+    />
+  );
 }

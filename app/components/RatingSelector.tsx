@@ -16,13 +16,9 @@ type RatingSelecterProps = Omit<CViewProps, "onChange"> & {
 
 const RATING_VALUES = [4, 5, 6, 7, 8, 9, 10];
 const buttonHeight = 53;
-const activeButtonHeight = 60;
-const gap = 4;
 
 export default function RatingSelecter({ onChange, disabled = false, initialRating, ...rest }: RatingSelecterProps) {
   const [selectedRating, setSelectedRating] = useState<number | null>(initialRating || null);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(5);
 
   const onRatingClick = (rating: number) => {
     if (disabled) {
@@ -37,38 +33,16 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
     onChange(rating);
   };
 
-  const totalWidth = RATING_VALUES.length * buttonHeight + (RATING_VALUES.length - 1) * gap;
-  const offsetSnaps = [...Array(RATING_VALUES.length).keys()].map((val) => (val - 1) * buttonHeight + gap * (val - 1));
-
-  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-    let activeIdx = 0;
-    for (let i = 0; i < RATING_VALUES.length; i += 1) {
-      if (offsetX >= offsetSnaps[i] + buttonHeight / 2 + gap / 2) {
-        activeIdx = i;
-      }
-      setActiveIndex(activeIdx);
-    }
-  };
-
   return (
-    <CView
-      {...rest}
-      onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
-      style={{ width: "100%", flexDirection: "row", height: 70, ...rest.style }}
-    >
+    <CView {...rest} style={{ width: "100%", flexDirection: "row", height: 70, ...rest.style }}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{ flexDirection: "row" }}
-        snapToOffsets={offsetSnaps}
-        contentOffset={{ x: offsetSnaps[4], y: 0 }}
-        scrollEventThrottle={16}
-        contentContainerStyle={{ paddingHorizontal: containerWidth / 2 - buttonHeight / 2 }}
-        onScroll={onScroll}
-        decelerationRate="fast"
+        contentOffset={{ x: 999, y: 0 }}
+        contentContainerStyle={{ paddingHorizontal: 10 }}
       >
-        <CView style={{ flexDirection: "row", gap }}>
+        <CView style={{ flexDirection: "row", gap: 4 }}>
           {RATING_VALUES.map((rating, i) => {
             let isSelected = true;
             if (disabled) {
@@ -87,25 +61,24 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
                     width: buttonHeight,
                     borderRadius: buttonHeight / 2,
                     borderWidth: 2,
-                    borderColor: "lightgray",
+                    borderColor: isSelected ? "black" : "lightgray",
                     padding: "sm",
-                    transform: [{ scale: i === activeIndex ? 1.1 : 1 }],
+                    transform: [{ scale: isSelected ? 1.1 : 1 }],
+                    justifyContent: "center",
                   }}
                 >
                   <CText
                     style={{
                       borderWidth: 0,
                       borderColor: "white",
-                      color: i === activeIndex ? "black" : "gray",
+                      color: isSelected ? "black" : "gray",
                       borderRadius: 100,
                       padding: "sm",
                       fontWeight: "500",
                       width: 35,
                       height: 35,
-                      alignItems: "center",
                       textAlign: "center",
                       textAlignVertical: "center",
-                      justifyContent: "center",
                     }}
                   >
                     {rating}
@@ -116,18 +89,6 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
           })}
         </CView>
       </ScrollView>
-      <CView style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0, justifyContent: "center", alignItems: "center" }}>
-        <CView
-          style={{
-            height: buttonHeight,
-            aspectRatio: 1,
-            borderColor: "darkgray",
-            borderWidth: 2,
-            borderRadius: buttonHeight / 2,
-            transform: [{ scale: 1.1 }],
-          }}
-        />
-      </CView>
     </CView>
   );
 }

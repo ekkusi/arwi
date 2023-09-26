@@ -6,6 +6,7 @@ import { Dimensions, FlatList, KeyboardEventListener, NativeScrollEvent, NativeS
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Constants from "expo-constants";
+import { getEnvironment } from "arwi-backend/src/utils/subjectUtils";
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
@@ -74,7 +75,7 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
 // NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
-const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - 50;
+const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT;
 
 function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "evaluations">) {
   const { t } = useTranslation();
@@ -160,6 +161,8 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const scrollToCard = useCallback(() => {
     scrollRef.current?.scrollToOffset({ animated: true, offset: scrollOffset + CARD_HEIGHT });
   }, [scrollOffset]);
+
+  const environment = getEnvironment(generalData.environmentCode || "");
 
   return (
     <CView style={{ flex: 1, backgroundColor: "white" }}>
