@@ -237,6 +237,14 @@ function EvaluationCard({
             style={{ position: "absolute", width: "100%", height: "100%" }}
             onPress={() => openTextInputModal()}
           />
+          <CView style={{ position: "absolute", left: 5, bottom: 5 }}>
+            <CButton
+              title={t("ai-fix", "AI Korjaus")}
+              size="small"
+              variant="outline"
+              onPress={() => Alert.alert("Ei vielä toiminnassa, malta hetki!")}
+            />
+          </CView>
           {microphoneAvailable && (
             <CView style={{ position: "absolute", bottom: 3, right: 3, width: 40, height: 40 }}>
               {recording && (
