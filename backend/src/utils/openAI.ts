@@ -40,7 +40,8 @@ export async function generateStudentSummary(evaluations: EvaluationData[]) {
 }
 
 export async function fixTextGrammatics(text: string) {
-  const startMessage = "Korjaa seuraavan tekstin kielioppivirheet ja palauta pelkkä korjattu teksti: ";
+  const startMessage =
+    "Seuraava teksti on saatu äänittämällä puhetta. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi ja palauta pelkkä korjattu teksti: ";
   const prompt = startMessage + text;
 
   try {
