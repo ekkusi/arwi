@@ -1,7 +1,7 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { getEnvironment } from "../utils/subjectUtils";
-import { generateStudentSummary } from "../utils/openAI";
+import { fixTextGrammatics, generateStudentSummary } from "../utils/openAI";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../types";
 import { CustomContext } from "../types/contextTypes";
@@ -304,6 +304,11 @@ const resolvers: MutationResolvers<CustomContext> = {
       date: it.evaluationCollection.date,
     }));
     const summary = await generateStudentSummary(mappedEvaluations);
+    return summary;
+  },
+  fixTextGrammatics: async (_, { studentId, text }, { user, prisma }) => {
+    await checkAuthenticatedByStudent(user, studentId);
+    const summary = await fixTextGrammatics(text);
     return summary;
   },
 };

@@ -7,6 +7,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Voice from "@react-native-voice/voice";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import { useMutation } from "@apollo/client";
 import { CreateEvaluationInput, UpdateEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
@@ -18,6 +19,7 @@ import { formatDate } from "../helpers/dateHelpers";
 import CTouchableOpacity from "./primitives/CTouchableOpacity";
 import { useModal } from "../hooks-and-providers/ModalProvider";
 import CustomTextInputView from "../app/home/CustomTextInputView";
+import { graphql } from "../gql";
 
 export type Evaluation = Omit<CreateEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
@@ -55,6 +57,12 @@ type EvaluationCardProps = {
   onArrowDownPress?: () => void;
 };
 
+const EvaluationCard_FixTextGrammatics_Mutation = graphql(`
+  mutation EvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
+    fixTextGrammatics(studentId: $studentId, text: $text)
+  }
+`);
+
 type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
 
 function EvaluationCard({
@@ -69,7 +77,9 @@ function EvaluationCard({
   height = "auto",
 }: EvaluationCardProps) {
   const [notes, setNotes] = useState(() => evaluation.notes || "");
-  const [textInputPresent, setTextInputPresent] = useState(false);
+  const [previousNotes, setPreviousNotes] = useState<string | undefined>(undefined);
+
+  const [fixTextGrammatics, { loading: isFixingText }] = useMutation(EvaluationCard_FixTextGrammatics_Mutation);
 
   const debouncedOnChanged = useMemo(() => debounce(onChanged, 300), [onChanged]);
 
@@ -170,6 +180,36 @@ function EvaluationCard({
     });
   };
 
+  const fixText = async () => {
+    try {
+      const studentId = evaluation.student.id;
+
+      const result = await fixTextGrammatics({
+        variables: {
+          studentId,
+          text: notes,
+        },
+      });
+
+      if (!result.data?.fixTextGrammatics) throw new Error("Text rephrasing failed");
+      setPreviousNotes(notes);
+      const resultText = result.data?.fixTextGrammatics;
+      setNotes(resultText);
+      onChanged("notes", resultText);
+    } catch (e) {
+      console.error(e);
+      Alert.alert(t("text-fix-error", "Tekstin korjaamisessa tapahtui virhe."));
+    }
+  };
+
+  const rollbackTextFix = () => {
+    if (previousNotes) {
+      setNotes(previousNotes);
+      onChanged("notes", previousNotes);
+      setPreviousNotes(undefined);
+    }
+  };
+
   return (
     <CView style={{ width: "100%", height, paddingTop: hasParticipationToggle ? 0 : "xl", gap: 6 }}>
       <CView style={{ gap: 3 }}>
@@ -239,10 +279,17 @@ function EvaluationCard({
           />
           <CView style={{ position: "absolute", left: 5, bottom: 5 }}>
             <CButton
-              title={t("ai-fix", "AI Korjaus")}
+              title={previousNotes ? t("rollback", "Peru korjaus") : t("ai-fix", "AI Korjaus")}
+              loading={isFixingText}
               size="small"
               variant="outline"
-              onPress={() => Alert.alert("Ei vielä toiminnassa, malta hetki!")}
+              onPress={() => {
+                if (!previousNotes) {
+                  fixText();
+                } else {
+                  rollbackTextFix();
+                }
+              }}
             />
           </CView>
           {microphoneAvailable && (
