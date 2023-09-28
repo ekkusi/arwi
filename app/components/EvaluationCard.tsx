@@ -20,6 +20,7 @@ import CTouchableOpacity from "./primitives/CTouchableOpacity";
 import { useModal } from "../hooks-and-providers/ModalProvider";
 import CustomTextInputView from "../app/home/CustomTextInputView";
 import { graphql } from "../gql";
+import { useToast } from "../hooks-and-providers/ToastProvider";
 
 export type Evaluation = Omit<CreateEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
@@ -65,6 +66,8 @@ const EvaluationCard_FixTextGrammatics_Mutation = graphql(`
 
 type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
 
+const TEXT_MIN_LENGTH_FOR_AI_FIX = 20;
+
 function EvaluationCard({
   onChanged,
   evaluation,
@@ -78,15 +81,19 @@ function EvaluationCard({
 }: EvaluationCardProps) {
   const [notes, setNotes] = useState(() => evaluation.notes || "");
   const [previousNotes, setPreviousNotes] = useState<string | undefined>(undefined);
+  const [newSpeechObtained, setnewSpeechObtained] = useState(false);
 
   const [fixTextGrammatics, { loading: isFixingText }] = useMutation(EvaluationCard_FixTextGrammatics_Mutation);
 
-  const debouncedOnChanged = useMemo(() => debounce(onChanged, 300), [onChanged]);
-
-  const changeNotes = (value: string) => {
+  const changeNotes = (value: string, resetPreviousNotes: boolean = false) => {
     setNotes(value);
-
-    debouncedOnChanged("notes", value);
+    onChanged("notes", value);
+    if (value.length === 0) {
+      setnewSpeechObtained(false);
+    }
+    if (resetPreviousNotes) {
+      setPreviousNotes(undefined);
+    }
   };
 
   const microphoneOpenScale = useSharedValue(1);
@@ -102,7 +109,7 @@ function EvaluationCard({
   const [recording, setRecording] = useState(false);
   const [microphoneAvailable, setMicrophoneAvailable] = useState(true);
 
-  const startRecording = () => {
+  const startRecording = async () => {
     microphoneOpenScale.value = 1;
     const microphoneOpenAnimation = withRepeat(withTiming(0.8, { duration: 700, easing: Easing.ease }), -1, true, () => {});
     microphoneOpenScale.value = microphoneOpenAnimation;
@@ -119,14 +126,18 @@ function EvaluationCard({
         if (event.value) {
           setCurrentRecordingAsText("");
           const newNotes = notes.length === 0 ? `${event.value[0]}` : `${notes} ${event.value[0]}`;
-          setNotes(newNotes);
-          onChanged("notes", newNotes);
+          changeNotes(newNotes, true);
+          setnewSpeechObtained(true);
         }
         setRecording(false);
       };
-      Voice.start("fi-FI")
-        .then(() => setRecording(true))
-        .catch((err) => Alert.alert(t("recording-error", "Tapahtui virhe"), err));
+      try {
+        const process = Voice.start("fi-FI");
+        await process;
+        setRecording(true);
+      } catch (err) {
+        Alert.alert(t("recording-error", "Tapahtui virhe"), err);
+      }
     } catch (err) {
       Alert.alert(t("recording-error", "Tapahtui virhe."), err);
     }
@@ -162,6 +173,7 @@ function EvaluationCard({
   }
 
   const { openModal, closeModal } = useModal();
+  const { openToast } = useToast();
 
   const openTextInputModal = () => {
     openModal({
@@ -171,8 +183,7 @@ function EvaluationCard({
         <CustomTextInputView
           initialText={notes}
           onSave={(text) => {
-            setNotes(text);
-            onChanged("notes", text);
+            changeNotes(text, true);
             closeModal();
           }}
         />
@@ -184,18 +195,21 @@ function EvaluationCard({
     try {
       const studentId = evaluation.student.id;
 
-      const result = await fixTextGrammatics({
+      const process = fixTextGrammatics({
         variables: {
           studentId,
           text: notes,
         },
       });
+      const result = await process;
 
       if (!result.data?.fixTextGrammatics) throw new Error("Text rephrasing failed");
       setPreviousNotes(notes);
       const resultText = result.data?.fixTextGrammatics;
       setNotes(resultText);
       onChanged("notes", resultText);
+      setnewSpeechObtained(false);
+      openToast(t("ai-fix-completed", "Oppilaan {{studentName}} arvioinnin korjaus suoritettu.", { studentName: evaluation.student.name }));
     } catch (e) {
       console.error(e);
       Alert.alert(t("text-fix-error", "Tekstin korjaamisessa tapahtui virhe."));
@@ -204,11 +218,11 @@ function EvaluationCard({
 
   const rollbackTextFix = () => {
     if (previousNotes) {
-      setNotes(previousNotes);
-      onChanged("notes", previousNotes);
-      setPreviousNotes(undefined);
+      changeNotes(previousNotes, true);
     }
   };
+
+  const textFixAvailable = notes.length >= TEXT_MIN_LENGTH_FOR_AI_FIX && newSpeechObtained;
 
   return (
     <CView style={{ width: "100%", height, paddingTop: hasParticipationToggle ? 0 : "xl", gap: 6 }}>
@@ -273,25 +287,27 @@ function EvaluationCard({
           />
 
           <CTouchableOpacity
-            disabled={recording}
+            disabled={recording || isFixingText}
             style={{ position: "absolute", width: "100%", height: "100%" }}
             onPress={() => openTextInputModal()}
           />
-          <CView style={{ position: "absolute", left: 5, bottom: 5 }}>
-            <CButton
-              title={previousNotes ? t("rollback", "Peru korjaus") : t("ai-fix", "AI Korjaus")}
-              loading={isFixingText}
-              size="small"
-              variant="outline"
-              onPress={() => {
-                if (!previousNotes) {
-                  fixText();
-                } else {
-                  rollbackTextFix();
-                }
-              }}
-            />
-          </CView>
+          {(textFixAvailable || previousNotes) && (
+            <CView style={{ position: "absolute", left: 5, bottom: 5 }}>
+              <CButton
+                title={previousNotes ? t("rollback", "Peru korjaus") : t("ai-fix", "AI Korjaus")}
+                loading={isFixingText}
+                size="small"
+                variant="outline"
+                onPress={() => {
+                  if (!previousNotes) {
+                    fixText();
+                  } else {
+                    rollbackTextFix();
+                  }
+                }}
+              />
+            </CView>
+          )}
           {microphoneAvailable && (
             <CView style={{ position: "absolute", bottom: 3, right: 3, width: 40, height: 40 }}>
               {recording && (

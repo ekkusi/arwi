@@ -40,15 +40,17 @@ export async function generateStudentSummary(evaluations: EvaluationData[]) {
 }
 
 export async function fixTextGrammatics(text: string) {
-  const startMessage =
-    "Seuraava teksti on saatu äänittämällä puhetta. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi ja palauta pelkkä korjattu teksti: ";
+  const startMessage = `Seuraava teksti on saatu äänittämällä puhetta. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi siten, että korjattu teksti on maksimissaan ${
+    text.length + 30
+  } kirjainta pitkä. Palauta pelkkä korjattu teksti: \n\n`;
   const prompt = startMessage + text;
 
   try {
-    const completion = await openAIClient.chat.completions.create({
+    const process = openAIClient.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
     });
+    const completion = await process;
 
     if (completion.choices[0]?.message?.content) {
       return completion.choices[0].message.content;
