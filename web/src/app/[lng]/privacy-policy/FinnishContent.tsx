@@ -4,7 +4,9 @@ import Link from "@/components/primitives/Link";
 export default function PrivacyPolicyContentFi() {
   return (
     <>
-      <Text as="h1">Tietosuojaseloste</Text>
+      <Text as="h1" fontSize={{ base: "4xl", md: "6xl" }}>
+        Tietosuojaseloste
+      </Text>
       <Text>
         <Link href="https://finlex.fi/fi/laki/ajantasa/2018/20181050" noTranslate target="_blank">
           Henkilötietolaki
