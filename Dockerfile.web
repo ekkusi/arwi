@@ -22,7 +22,11 @@ COPY web .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn build
+RUN --mount=type=secret,id=GRIDLY_VIEW_ID  \
+    --mount=type=secret,id=GRIDLY_API_KEY \
+    NEXT_PUBLIC_GRIDLY_API_KEY=$(cat /run/secrets/GRIDLY_API_KEY) \
+    NEXT_PUBLIC_GRIDLY_VIEW_ID=$(cat /run/secrets/GRIDLY_VIEW_ID) \
+    yarn build
 
 # Production image, copy all the files and run next
 FROM base AS runner

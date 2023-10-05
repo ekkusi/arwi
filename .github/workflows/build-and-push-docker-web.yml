@@ -31,3 +31,6 @@ jobs:
           push: true
           tags: ekkusi/arwi-web:latest
           platforms: linux/amd64
+          secrets: |
+            "GRIDLY_API_KEY=${{ secrets.GRIDLY_API_KEY }}"
+            "GRIDLY_VIEW_ID=${{ secrets.GRIDLY_WEB_VIEW_ID }}"
