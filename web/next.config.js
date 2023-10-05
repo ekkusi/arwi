@@ -1,6 +1,7 @@
 const routes = require("./src/routes.json");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   rewrites: async () => [
     {
       source: "/",
