@@ -15,7 +15,7 @@ export default async function PrivacyPolicyPage({ params }: LocalizedPage) {
   }
 
   return (
-    <PageWrapper py="5" maxWidth="1000px" mx="auto">
+    <PageWrapper py="5" maxWidth={{ base: "100%", md: "1000px" }} mx="auto">
       <PrivacyPolicyContent />
     </PageWrapper>
   );
