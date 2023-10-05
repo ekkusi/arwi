@@ -15,7 +15,7 @@ export default async function TermsAndConditionsPage({ params }: LocalizedPage) 
   }
 
   return (
-    <PageWrapper py="5" maxWidth={{ base: "100%", md: "1000px" }} mx="auto">
+    <PageWrapper py="5" maxWidth={{ base: "100%", md: "750px", xl: "1000px" }} mx="auto">
       <TermsAndConditionsContent />
     </PageWrapper>
   );
