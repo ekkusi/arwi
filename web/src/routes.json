@@ -1,6 +1,10 @@
 {
   "fi": {
+    "/terms-and-conditions": "/kayttoehdot",
+    "/privacy-policy": "/tietosuojaseloste"
   },
   "se": {
+    "/terms-and-conditions": "/anvandarvillkoren",
+    "/privacy-policy": "/integritetspolicy"
   }
 }

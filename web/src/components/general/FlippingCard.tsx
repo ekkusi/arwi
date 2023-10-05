@@ -1,6 +1,6 @@
 import { Box, BoxProps, FlexProps } from "@chakra-ui/react";
 import React from "react";
-import Card from "../server/primitives/Card";
+import Card from "../primitives/Card";
 
 type FlippingCardProps = WithRequired<Omit<BoxProps, "children">, "width" | "height"> & {
   front: JSX.Element;

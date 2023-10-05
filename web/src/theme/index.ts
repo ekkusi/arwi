@@ -66,7 +66,8 @@ const colors = {
   "light-text": themeOverrides.gray["700"],
   "secondary-bg": themeOverrides.blue["100"],
   // "secondary-bg": baseTheme.colors.yellow["100"],
-  "primary-bg": baseTheme.colors[DEFAULT_COLOR_SCHEME]["100"],
+  "primary-bg": themeOverrides[DEFAULT_COLOR_SCHEME]["100"],
+  primary: themeOverrides[DEFAULT_COLOR_SCHEME]["500"],
 
   // TODO: Should probably configure other reds as well, this only changes red.500 (which is used in errors)
   red: {
@@ -79,10 +80,9 @@ const theme = extendTheme(
   {
     // TODO: Configure fonts by using @next/font to optimize performance
     fonts: {
-      heading: `Raleway, sans-serif`,
-      body: `'Open Sans', sans-serif`,
+      body: `var(--font-aileron)`,
       special: `Glegoo, sans-serif`,
-      brand: `var(--font-aileron-thin)`,
+      brand: `var(--font-aileron)`,
       // body: "Raleway",
     },
     fontSizes: {
@@ -109,31 +109,35 @@ const theme = extendTheme(
           width: "100%",
           height: "100%",
           overflowX: "hidden",
-          color: "black",
+          color: "light-text",
+          lineHeight: 1.2,
           bg: colors["light-gray"],
+          fontWeight: "light",
         },
         body: {
-          fontSize: { base: "md", md: "lg" },
-        },
-        "h1, h2, h3": {
-          fontFamily: theme.fonts.heading,
+          fontSize: { base: "lg", md: "xl" },
         },
         h1: {
-          fontSize: { base: "2xl", md: "3xl" },
-          textAlign: "center",
+          fontSize: { base: "5xl", md: "6xl" },
+          fontWeight: "thin",
           mb: 5,
         },
         h2: {
-          fontSize: { base: "xl", md: "2xl" },
-          mb: 2,
+          fontSize: { base: "3xl", md: "4xl" },
+          fontWeight: "thin",
+          mb: 4,
+          mt: 6,
         },
         h3: {
-          fontSize: { base: "lg", md: "xl" },
-          mb: 2,
+          fontSize: { base: "xl", md: "2xl" },
+          mb: 3,
+          mt: 4,
         },
         a: {
           color: `${DEFAULT_COLOR_SCHEME}.500`,
-          fontWeight: "semibold",
+        },
+        "p, ol, ul": {
+          mb: 3,
         },
         img: {
           marginLeft: "auto",

@@ -1,5 +1,5 @@
 import { BoxProps, Spinner, SpinnerProps, Text, TextProps } from "@chakra-ui/react";
-import CenteredContainer from "@/components/server/primitives/CenteredContainer";
+import CenteredContainer from "@/components/primitives/CenteredContainer";
 
 type LoadingIndicatorProps = BoxProps & {
   textProps?: TextProps;
@@ -8,7 +8,7 @@ type LoadingIndicatorProps = BoxProps & {
 
 export default function LoadingIndicator({ textProps, spinnerProps, ...rest }: LoadingIndicatorProps) {
   return (
-    <CenteredContainer display="flex" alignItems="center" justifyContent="center" color="green" {...rest}>
+    <CenteredContainer display="flex" alignItems="center" justifyContent="center" color="primary" {...rest}>
       <Text mr="2" {...textProps}>
         Loading
       </Text>

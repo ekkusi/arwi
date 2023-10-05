@@ -2,7 +2,12 @@ import { ComponentSingleStyleConfig, defineStyleConfig } from "@chakra-ui/react"
 
 const Link: ComponentSingleStyleConfig = defineStyleConfig({
   baseStyle: {
-    fontWeight: "semibold",
+    fontWeight: "normal",
+    textDecoration: "none",
+    color: "primary",
+    _hover: {
+      textDecoration: "none",
+    },
   },
 });
 

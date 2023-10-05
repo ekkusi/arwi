@@ -1,6 +1,6 @@
 import { Button, useDisclosure } from "@chakra-ui/react";
 import React, { useState } from "react";
-import ModalTemplate, { ModalTemplateProps } from "./ModalTemplate";
+import ModalTemplate, { ModalTemplateProps } from "../primitives/ModalTemplate";
 
 export type ConfirmationModalProps = Omit<ModalTemplateProps, "openButton"> & {
   onAccept: () => Promise<void> | void;

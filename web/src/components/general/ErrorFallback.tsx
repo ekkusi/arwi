@@ -1,5 +1,5 @@
 import { Text } from "@chakra-ui/react";
-import PageWrapper from "../server/PageWrapper";
+import PageWrapper from "./PageWrapper";
 
 export default function ErrorFallback() {
   // const update = () => {
