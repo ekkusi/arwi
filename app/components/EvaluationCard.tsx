@@ -1,18 +1,14 @@
 import { Student } from "arwi-backend/src/types";
-import { createRef, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import debounce from "lodash.debounce";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, Dimensions, Platform, Switch, TextInput } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Alert, Platform, Switch } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import Voice from "@react-native-voice/voice";
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { useMutation } from "@apollo/client";
 import { CreateEvaluationInput, UpdateEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 import { COLORS } from "../theme";
-import CTextInput from "./primitives/CTextInput";
 import RatingSelector from "./RatingSelector";
 import CButton from "./primitives/CButton";
 import { formatDate } from "../helpers/dateHelpers";
@@ -21,6 +17,7 @@ import { useModal } from "../hooks-and-providers/ModalProvider";
 import CustomTextInputView from "../app/home/CustomTextInputView";
 import { graphql } from "../gql";
 import { useToast } from "../hooks-and-providers/ToastProvider";
+import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";
 
 export type Evaluation = Omit<CreateEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
@@ -85,6 +82,8 @@ function EvaluationCard({
 
   const [fixTextGrammatics, { loading: isFixingText }] = useMutation(EvaluationCard_FixTextGrammatics_Mutation);
 
+  const speechRef = useRef<SpeechToTextInputHandle>(null);
+
   const changeNotes = useCallback(
     (value: string, resetPreviousNotes: boolean = false) => {
       setNotes(value);
@@ -99,82 +98,11 @@ function EvaluationCard({
     [onChanged]
   );
 
-  const microphoneOpenScale = useSharedValue(1);
-  const microphoneAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: microphoneOpenScale.value }],
-    };
-  });
-
   const { t } = useTranslation();
-
-  const [currentRecordingAsText, setCurrentRecordingAsText] = useState("");
-  const [recording, setRecording] = useState(false);
-  const [microphoneAvailable, setMicrophoneAvailable] = useState(true);
-
-  const startRecording = async () => {
-    microphoneOpenScale.value = 1;
-    const microphoneOpenAnimation = withRepeat(withTiming(0.8, { duration: 700, easing: Easing.ease }), -1, true, () => {});
-    microphoneOpenScale.value = microphoneOpenAnimation;
-
-    try {
-      const process = Voice.start("fi-FI");
-      await process;
-      setRecording(true);
-    } catch (err) {
-      Alert.alert(t("recording-error", "Tapahtui virhe"), err);
-    }
-  };
-
-  useEffect(() => {
-    Voice.isAvailable().then(() => {
-      Voice.onSpeechError = (_) => {
-        setRecording(false);
-      };
-      Voice.onSpeechPartialResults = (event) => {
-        if (event.value) {
-          setCurrentRecordingAsText(event.value[0]);
-        }
-      };
-      Voice.onSpeechResults = (event) => {
-        if (event.value) {
-          setCurrentRecordingAsText("");
-          const newNotes = notes.length === 0 ? `${event.value[0]}` : `${notes} ${event.value[0]}`;
-          changeNotes(newNotes, true);
-          setnewSpeechObtained(true);
-        }
-        setRecording(false);
-      };
-    });
-    return () => {
-      try {
-        Voice.destroy().then(() => {
-          Voice.removeAllListeners();
-        });
-      } catch (error) {
-        Alert.alert(t("recording-error", "Tapahtui virhe."), error);
-      }
-    };
-  }, [notes, t, changeNotes]);
-
-  const stopRecording = async () => {
-    try {
-      await Voice.stop();
-      microphoneOpenScale.value = 1;
-      setRecording(false);
-    } catch (error) {
-      Alert.alert(t("recording-error", "Tapahtui virhe."));
-    }
-  };
 
   const givenNotesCount = useMemo(() => {
     return evaluation.student.currentModuleEvaluations.filter((it) => !!it.notes).length;
   }, [evaluation]);
-
-  let currentNotes = notes.length === 0 ? "" : `${notes} `;
-  if (evaluation.wasPresent) {
-    currentNotes = recording ? `${currentNotes}${currentRecordingAsText}` : notes;
-  }
 
   const { openModal, closeModal } = useModal();
   const { openToast } = useToast();
@@ -282,21 +210,21 @@ function EvaluationCard({
           {t("update-evaluation-notes-given-count", "Sanallinen palaute (annettu {{count}} kertaa)", { count: givenNotesCount })}
         </CText>
         <CView style={{ width: "100%", height: 150 }}>
-          <CTextInput
-            style={{ width: "100%", height: "100%" }}
-            as="textarea"
-            editable={!recording}
-            value={currentNotes}
+          <SpeechToTextInput
+            ref={speechRef}
+            initialText={notes}
             placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
-            multiline
+            onChange={(newText, _) => {
+              changeNotes(newText);
+            }}
           />
 
           <CTouchableOpacity
-            disabled={recording || isFixingText}
+            disabled={speechRef.current?.recording || isFixingText}
             style={{ position: "absolute", width: "100%", height: "100%" }}
             onPress={() => openTextInputModal()}
           />
-          {(textFixAvailable || previousNotes) && (
+          {/* {(textFixAvailable || previousNotes) && (
             <CView style={{ position: "absolute", left: 5, bottom: 5 }}>
               <CButton
                 title={previousNotes ? t("rollback", "Peru korjaus") : t("ai-fix", "AI Korjaus")}
@@ -312,31 +240,7 @@ function EvaluationCard({
                 }}
               />
             </CView>
-          )}
-          {microphoneAvailable && (
-            <CView style={{ position: "absolute", bottom: 3, right: 3, width: 40, height: 40 }}>
-              {recording && (
-                <Animated.View
-                  style={[
-                    { position: "absolute", width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.primary },
-                    microphoneAnimatedStyle,
-                  ]}
-                />
-              )}
-              <TouchableOpacity
-                onPress={() => (recording ? stopRecording() : startRecording())}
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 20,
-                  width: 40,
-                  height: 40,
-                }}
-              >
-                <MaterialCommunityIcon name="microphone" size={25} color={recording ? COLORS.white : COLORS.secondary} />
-              </TouchableOpacity>
-            </CView>
-          )}
+          )} */}
         </CView>
         {!evaluation.wasPresent && (
           <Animated.View style={{ position: "absolute", height: "100%", width: "100%", backgroundColor: "rgba(255,255,255,0.5)" }} />
