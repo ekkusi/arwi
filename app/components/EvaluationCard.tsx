@@ -127,27 +127,29 @@ function EvaluationCard({
   };
 
   useEffect(() => {
+    Voice.isAvailable().then(() => {
+      Voice.onSpeechError = (_) => {
+        setRecording(false);
+      };
+      Voice.onSpeechPartialResults = (event) => {
+        if (event.value) {
+          setCurrentRecordingAsText(event.value[0]);
+        }
+      };
+      Voice.onSpeechResults = (event) => {
+        if (event.value) {
+          setCurrentRecordingAsText("");
+          const newNotes = notes.length === 0 ? `${event.value[0]}` : `${notes} ${event.value[0]}`;
+          changeNotes(newNotes, true);
+          setnewSpeechObtained(true);
+        }
+        setRecording(false);
+      };
+    });
     return () => {
       try {
         Voice.destroy().then(() => {
           Voice.removeAllListeners();
-          Voice.onSpeechError = (_) => {
-            setRecording(false);
-          };
-          Voice.onSpeechPartialResults = (event) => {
-            if (event.value) {
-              setCurrentRecordingAsText(event.value[0]);
-            }
-          };
-          Voice.onSpeechResults = (event) => {
-            if (event.value) {
-              setCurrentRecordingAsText("");
-              const newNotes = notes.length === 0 ? `${event.value[0]}` : `${notes} ${event.value[0]}`;
-              changeNotes(newNotes, true);
-              setnewSpeechObtained(true);
-            }
-            setRecording(false);
-          };
         });
       } catch (error) {
         Alert.alert(t("recording-error", "Tapahtui virhe."), error);

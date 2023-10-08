@@ -33,24 +33,6 @@ export default function CustomTextInputView({ initialText, onSave }: CustomTextI
     };
   });
 
-  Voice.onSpeechError = (_) => {
-    setRecording(false);
-  };
-  Voice.onSpeechPartialResults = (event) => {
-    if (event.value) {
-      setCurrentRecordingAsText(event.value[0]);
-    }
-  };
-  Voice.onSpeechResults = (event) => {
-    if (event.value) {
-      setCurrentRecordingAsText("");
-      const newText = text.length === 0 ? `${event.value[0]}` : `${text} ${event.value[0]}`;
-      setText(newText);
-      setSpeechObtained(true);
-    }
-    setRecording(false);
-  };
-
   const startRecording = () => {
     microphoneOpenScale.value = 1;
     const microphoneOpenAnimation = withRepeat(withTiming(0.8, { duration: 700, easing: Easing.ease }), -1, true, () => {});
@@ -67,30 +49,32 @@ export default function CustomTextInputView({ initialText, onSave }: CustomTextI
   };
 
   useEffect(() => {
+    Voice.isAvailable().then(() => {
+      Voice.onSpeechError = (_) => {
+        setRecording(false);
+      };
+      Voice.onSpeechPartialResults = (event) => {
+        if (event.value) {
+          setCurrentRecordingAsText(event.value[0]);
+        }
+      };
+      Voice.onSpeechResults = (event) => {
+        if (event.value) {
+          setCurrentRecordingAsText("");
+          const newText = text.length === 0 ? `${event.value[0]}` : `${text} ${event.value[0]}`;
+          setText(newText);
+          setSpeechObtained(true);
+        }
+        setRecording(false);
+      };
+    });
     return () => {
       try {
         Voice.destroy().then(() => {
           Voice.removeAllListeners();
-          Voice.onSpeechError = (_) => {
-            setRecording(false);
-          };
-          Voice.onSpeechPartialResults = (event) => {
-            if (event.value) {
-              setCurrentRecordingAsText(event.value[0]);
-            }
-          };
-          Voice.onSpeechResults = (event) => {
-            if (event.value) {
-              setCurrentRecordingAsText("");
-              const newText = text.length === 0 ? `${event.value[0]}` : `${text} ${event.value[0]}`;
-              setText(newText);
-              setSpeechObtained(true);
-            }
-            setRecording(false);
-          };
         });
       } catch (error) {
-        console.error(error);
+        Alert.alert("MOi");
       }
     };
   }, [text]);
