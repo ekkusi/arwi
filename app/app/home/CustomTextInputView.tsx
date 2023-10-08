@@ -12,12 +12,13 @@ import { COLORS } from "../../theme";
 
 type CustomTextInputViewProps = {
   initialText: string;
-  onSave: (text: string) => void;
+  onSave: (text: string, speechObtained: boolean) => void;
 };
 
 export default function CustomTextInputView({ initialText, onSave }: CustomTextInputViewProps) {
   const [text, setText] = useState(() => initialText);
 
+  const [speechObtained, setSpeechObtained] = useState(false);
   const [currentRecordingAsText, setCurrentRecordingAsText] = useState("");
   const [recording, setRecording] = useState(false);
 
@@ -32,27 +33,29 @@ export default function CustomTextInputView({ initialText, onSave }: CustomTextI
     };
   });
 
+  Voice.onSpeechError = (_) => {
+    setRecording(false);
+  };
+  Voice.onSpeechPartialResults = (event) => {
+    if (event.value) {
+      setCurrentRecordingAsText(event.value[0]);
+    }
+  };
+  Voice.onSpeechResults = (event) => {
+    if (event.value) {
+      setCurrentRecordingAsText("");
+      const newText = text.length === 0 ? `${event.value[0]}` : `${text} ${event.value[0]}`;
+      setText(newText);
+      setSpeechObtained(true);
+    }
+    setRecording(false);
+  };
+
   const startRecording = () => {
     microphoneOpenScale.value = 1;
     const microphoneOpenAnimation = withRepeat(withTiming(0.8, { duration: 700, easing: Easing.ease }), -1, true, () => {});
     microphoneOpenScale.value = microphoneOpenAnimation;
     try {
-      Voice.onSpeechError = (_) => {
-        setRecording(false);
-      };
-      Voice.onSpeechPartialResults = (event) => {
-        if (event.value) {
-          setCurrentRecordingAsText(event.value[0]);
-        }
-      };
-      Voice.onSpeechResults = (event) => {
-        if (event.value) {
-          setCurrentRecordingAsText("");
-          const newText = text.length === 0 ? `${event.value[0]}` : `${text} ${event.value[0]}`;
-          setText(newText);
-        }
-        setRecording(false);
-      };
       Voice.start("fi-FI")
         .then(() => {
           setRecording(true);
@@ -66,7 +69,26 @@ export default function CustomTextInputView({ initialText, onSave }: CustomTextI
   useEffect(() => {
     return () => {
       try {
-        Voice.destroy().then(Voice.removeAllListeners);
+        Voice.destroy().then(() => {
+          Voice.removeAllListeners();
+          Voice.onSpeechError = (_) => {
+            setRecording(false);
+          };
+          Voice.onSpeechPartialResults = (event) => {
+            if (event.value) {
+              setCurrentRecordingAsText(event.value[0]);
+            }
+          };
+          Voice.onSpeechResults = (event) => {
+            if (event.value) {
+              setCurrentRecordingAsText("");
+              const newText = text.length === 0 ? `${event.value[0]}` : `${text} ${event.value[0]}`;
+              setText(newText);
+              setSpeechObtained(true);
+            }
+            setRecording(false);
+          };
+        });
       } catch (error) {
         console.error(error);
       }
@@ -131,7 +153,7 @@ export default function CustomTextInputView({ initialText, onSave }: CustomTextI
         <CButton
           title={t("save", "Tallenna")}
           onPress={() => {
-            onSave(text);
+            onSave(text, speechObtained);
           }}
         />
       </CView>

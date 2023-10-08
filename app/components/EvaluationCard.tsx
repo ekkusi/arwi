@@ -85,16 +85,19 @@ function EvaluationCard({
 
   const [fixTextGrammatics, { loading: isFixingText }] = useMutation(EvaluationCard_FixTextGrammatics_Mutation);
 
-  const changeNotes = (value: string, resetPreviousNotes: boolean = false) => {
-    setNotes(value);
-    onChanged("notes", value);
-    if (value.length === 0) {
-      setnewSpeechObtained(false);
-    }
-    if (resetPreviousNotes) {
-      setPreviousNotes(undefined);
-    }
-  };
+  const changeNotes = useCallback(
+    (value: string, resetPreviousNotes: boolean = false) => {
+      setNotes(value);
+      onChanged("notes", value);
+      if (value.length === 0) {
+        setnewSpeechObtained(false);
+      }
+      if (resetPreviousNotes) {
+        setPreviousNotes(undefined);
+      }
+    },
+    [onChanged]
+  );
 
   const microphoneOpenScale = useSharedValue(1);
   const microphoneAnimatedStyle = useAnimatedStyle(() => {
@@ -113,45 +116,44 @@ function EvaluationCard({
     microphoneOpenScale.value = 1;
     const microphoneOpenAnimation = withRepeat(withTiming(0.8, { duration: 700, easing: Easing.ease }), -1, true, () => {});
     microphoneOpenScale.value = microphoneOpenAnimation;
+
     try {
-      Voice.onSpeechError = (_) => {
-        setRecording(false);
-      };
-      Voice.onSpeechPartialResults = (event) => {
-        if (event.value) {
-          setCurrentRecordingAsText(event.value[0]);
-        }
-      };
-      Voice.onSpeechResults = (event) => {
-        if (event.value) {
-          setCurrentRecordingAsText("");
-          const newNotes = notes.length === 0 ? `${event.value[0]}` : `${notes} ${event.value[0]}`;
-          changeNotes(newNotes, true);
-          setnewSpeechObtained(true);
-        }
-        setRecording(false);
-      };
-      try {
-        const process = Voice.start("fi-FI");
-        await process;
-        setRecording(true);
-      } catch (err) {
-        Alert.alert(t("recording-error", "Tapahtui virhe"), err);
-      }
+      const process = Voice.start("fi-FI");
+      await process;
+      setRecording(true);
     } catch (err) {
-      Alert.alert(t("recording-error", "Tapahtui virhe."), err);
+      Alert.alert(t("recording-error", "Tapahtui virhe"), err);
     }
   };
 
   useEffect(() => {
     return () => {
       try {
-        Voice.destroy().then(Voice.removeAllListeners);
+        Voice.destroy().then(() => {
+          Voice.removeAllListeners();
+          Voice.onSpeechError = (_) => {
+            setRecording(false);
+          };
+          Voice.onSpeechPartialResults = (event) => {
+            if (event.value) {
+              setCurrentRecordingAsText(event.value[0]);
+            }
+          };
+          Voice.onSpeechResults = (event) => {
+            if (event.value) {
+              setCurrentRecordingAsText("");
+              const newNotes = notes.length === 0 ? `${event.value[0]}` : `${notes} ${event.value[0]}`;
+              changeNotes(newNotes, true);
+              setnewSpeechObtained(true);
+            }
+            setRecording(false);
+          };
+        });
       } catch (error) {
-        console.error(error);
+        Alert.alert(t("recording-error", "Tapahtui virhe."), error);
       }
     };
-  }, [notes]);
+  }, [notes, t, changeNotes]);
 
   const stopRecording = async () => {
     try {
@@ -182,9 +184,10 @@ function EvaluationCard({
       children: (
         <CustomTextInputView
           initialText={notes}
-          onSave={(text) => {
+          onSave={(text, speechObtained) => {
             changeNotes(text, true);
             closeModal();
+            if (speechObtained) setnewSpeechObtained(true);
           }}
         />
       ),
