@@ -13,6 +13,8 @@ model Teacher {
   email                 String  @unique
   passwordHash          String
   groups                Group[]
+  languagePreference    String  @default("fi_FI")
+  consentsAnalytics     Boolean @default(true)
 }
 
 model Group {

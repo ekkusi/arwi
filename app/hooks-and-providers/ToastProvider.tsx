@@ -107,7 +107,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
               left: "md",
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: type === "success" ? "light-green" : "error",
+              backgroundColor: type === "success" ? "green" : "error",
               padding: "lg",
               borderRadius: 10,
               ...placementStyles,

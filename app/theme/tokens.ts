@@ -53,6 +53,7 @@ export const COLOR_PALETTE = {
 
 export const COLORS = {
   white: "#FEFCFB",
+  "off-white": "#F3F4F6",
   // green: "#008775",
   orange: "#C05621",
   red: "#C53030",
@@ -65,6 +66,7 @@ export const COLORS = {
   secondary: "#35352A",
   lightgray: "#D8D8D8",
   "extra-light-gray": "#ECECEC",
+
   gray: "#919191",
   // darkgray: "#17232c",
   black: "#000000",

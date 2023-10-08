@@ -171,6 +171,8 @@ export type Teacher = {
   id: Scalars["ID"];
   email: Scalars["EmailAddress"];
   groups: Array<Group>;
+  languagePreference: Scalars["String"];
+  consentsAnalytics: Scalars["Boolean"];
 };
 
 export type LoginResult = {
@@ -293,6 +295,8 @@ export enum EducationLevel {
 export type CreateTeacherInput = {
   email: Scalars["EmailAddress"];
   password: Scalars["String"];
+  languagePreference: Scalars["String"];
+  consentsAnalytics: Scalars["Boolean"];
 };
 
 export type CreateGroupInput = {
@@ -585,6 +589,8 @@ export type TeacherResolvers<ContextType = CustomContext, ParentType extends Res
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   email?: Resolver<ResolversTypes["EmailAddress"], ParentType, ContextType>;
   groups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
+  languagePreference?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  consentsAnalytics?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

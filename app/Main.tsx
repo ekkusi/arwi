@@ -15,7 +15,7 @@ import AuthStack from "./app/auth/_stack";
 import { graphql } from "./gql";
 import ModalProvider from "./hooks-and-providers/ModalProvider";
 import HomeStack from "./app/home/_stack";
-import { STORAGE_LANG_KEY } from "./i18n";
+import { isValidLanguage, STORAGE_LANG_KEY } from "./i18n";
 import PopupProvider from "./hooks-and-providers/ToastProvider";
 import { isVersionSmaller } from "./helpers/versionUtils";
 import NewUpdateAvailableModal from "./components/NewUpdateAvailableModal";
@@ -24,6 +24,8 @@ const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
     getCurrentUser {
       email
+      languagePreference
+      consentsAnalytics
       id
     }
   }
@@ -58,9 +60,15 @@ export default function Main() {
     if (data && token) {
       await setUser(token, data.getCurrentUser);
     }
+    // NOTE: If separate separate consent asking is implemented, uncomment this
+    // Enable crashlytics and analytics only if user has given consent
+    // if (data.getCurrentUser.consentsAnalytics) {
+    //   await crashlytics().setCrashlyticsCollectionEnabled(true);
+    //   await firebase.analytics().setAnalyticsCollectionEnabled(true);
+    // }
     // Fetch lang from storage and set it to i18n
-    const storedLang = await SecureStore.getItemAsync(STORAGE_LANG_KEY);
-    if (storedLang) i18n.changeLanguage(storedLang);
+    const { languagePreference } = data.getCurrentUser;
+    if (i18n.language !== languagePreference && isValidLanguage(languagePreference)) i18n.changeLanguage(languagePreference);
   }, [client, i18n, setUser]);
 
   useEffect(() => {

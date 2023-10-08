@@ -1,0 +1,38 @@
+{
+  "name": "arwi-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "roots": "next-roots"
+  },
+  "dependencies": {
+    "@chakra-ui/next-js": "^2.1.5",
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "accept-language": "^3.0.18",
+    "chakra-react-select": "^4.7.2",
+    "formik": "^2.4.5",
+    "framer-motion": "^10.16.4",
+    "i18next": "^23.5.1",
+    "i18next-browser-languagedetector": "^7.1.0",
+    "i18next-gridly-backend": "^1.0.6",
+    "next": "^13.5.3",
+    "react": "^18.2.0",
+    "react-cookie": "^6.1.1",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^13.2.2",
+    "react-icons": "^4.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.7.0",
+    "@types/react": "^18.2.22",
+    "@types/react-dom": "^18.2.7",
+    "eslint-config-next": "^13.5.3",
+    "typescript": "^5.2.2"
+  }
+}

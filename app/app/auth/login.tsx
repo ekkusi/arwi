@@ -3,7 +3,6 @@ import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { KeyboardAvoidingView } from "react-native";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -17,7 +16,6 @@ import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
 import { COLORS } from "../../theme";
-import CKeyboardAvoidingView from "../../components/primitives/CKeyboardAvoidingView";
 
 const initialValues = {
   email: "",
@@ -31,6 +29,8 @@ const LoginPage_Login_Mutation = graphql(`
       teacher {
         email
         id
+        languagePreference
+        consentsAnalytics
       }
     }
   }
