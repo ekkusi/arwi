@@ -47,53 +47,51 @@ const createCodeStrings = (entities: CodeEntity[], codeStart: string) => {
 };
 
 export const createAsyncSubjectPublishAction = (originalAction: DocumentActionComponent, context: DocumentActionsContext) => {
-  const client = context.getClient({ apiVersion: "2023-09-16" });
   const AsyncPublishAction: DocumentActionComponent = (props) => {
     const originalResult = originalAction(props);
     const { patch } = useDocumentOperation(props.id, props.type);
-    const { id } = props;
     return {
       ...originalResult,
       label: originalResult?.label || "Publish",
       onHandle: async () => {
-        const result = await client.fetch(fetchSubjectQuery, { id });
-        // console.log(JSON.stringify(result, null, 2));
-        // const result = JSON.parse(json);
-        if (!result || !Array.isArray(result) || result.length <= 0) throw new Error("No result found");
-        const doc = result[0];
-        const { draft } = props;
+        try {
+          const { draft } = props;
 
-        const subjectCode = draft?.code || doc.code;
-        const environments: CodeEntity[] = (draft?.environments as CodeEntity[]) || [];
-        const highSchoolModules: CodeEntity[] = (draft?.highSchoolModules as CodeEntity[]) || [];
-        const vocationalModules: CodeEntity[] = (draft?.vocationalSchoolModules as CodeEntity[]) || [];
+          const subjectCode = draft?.code;
+          const environments: CodeEntity[] = (draft?.environments as CodeEntity[]) || [];
+          const highSchoolModules: CodeEntity[] = (draft?.highSchoolModules as CodeEntity[]) || [];
+          const vocationalModules: CodeEntity[] = (draft?.vocationalSchoolModules as CodeEntity[]) || [];
 
-        if (!subjectCode) throw new Error("No code found");
+          if (!subjectCode) throw new Error("No code found");
 
-        createCodeStrings(environments, `${subjectCode}_ENV`);
-        createCodeStrings(highSchoolModules, `${subjectCode}_HS_MODULE`);
-        createCodeStrings(vocationalModules, `${subjectCode}_VOC_MODULE`);
+          createCodeStrings(environments, `${subjectCode}_ENV`);
+          createCodeStrings(highSchoolModules, `${subjectCode}_HS_MODULE`);
+          createCodeStrings(vocationalModules, `${subjectCode}_VOC_MODULE`);
 
-        const environmentPatches = environments.map(async (environment, index) => {
-          const key = `environments[${index}].code`;
-          await patch.execute([{ setIfMissing: { [key]: environment.code } }]);
-        });
+          const environmentPatches = environments.map(async (environment, index) => {
+            const key = `environments[${index}].code`;
+            await patch.execute([{ setIfMissing: { [key]: environment.code } }]);
+          });
 
-        const highSchoolPatches = highSchoolModules.map(async (module, index) => {
-          const key = `highSchoolModules[${index}].code`;
-          await patch.execute([{ setIfMissing: { [key]: module.code } }]);
-        });
+          const highSchoolPatches = highSchoolModules.map(async (module, index) => {
+            const key = `highSchoolModules[${index}].code`;
+            await patch.execute([{ setIfMissing: { [key]: module.code } }]);
+          });
 
-        const vocationalPatches = vocationalModules.map(async (module, index) => {
-          const key = `vocationalSchoolModules[${index}].code`;
-          await patch.execute([{ setIfMissing: { [key]: module.code } }]);
-        });
+          const vocationalPatches = vocationalModules.map(async (module, index) => {
+            const key = `vocationalSchoolModules[${index}].code`;
+            await patch.execute([{ setIfMissing: { [key]: module.code } }]);
+          });
 
-        await Promise.all([...environmentPatches, ...highSchoolPatches, ...vocationalPatches]);
+          await Promise.all([...environmentPatches, ...highSchoolPatches, ...vocationalPatches]);
 
-        // await client.patch("publish-counter").setIfMissing({ counter: 0 }).inc({ counter: 1 }).commit();
-        // await client.fetch("*[_id == 'publish-counter'][0]{counter}").then((res) => console.log(res));
-        originalResult?.onHandle?.();
+          // await client.patch("publish-counter").setIfMissing({ counter: 0 }).inc({ counter: 1 }).commit();
+          // await client.fetch("*[_id == 'publish-counter'][0]{counter}").then((res) => console.log(res));
+          originalResult?.onHandle?.();
+        } catch (error) {
+          console.log(error);
+          alert("Voi möhkä, jotakin meni pieleen. Laittasitko Ekulle viestiä, kiitos:)");
+        }
       },
     };
   };
