@@ -3547,6 +3547,10 @@ a652c09b-f219-4e53-bc8e-68179dd96454	3ed89fa7-2a7a-46bd-b109-800b5a38a5d8	 tsemp
 20af0ea7-8966-42a3-8f12-f96339408f01	fcba63ba-50b7-4104-9488-23ec79551844	Työskentelit hyvin ryhmän sähläyksestä huolimatta.	aeea7f9c-cb09-4464-8f7a-ae431f79d989	t	9	9	f
 01a48426-ef16-4f7e-a9c5-5767c815a551	f0bdea44-7d36-4cc2-81ee-dd87e3ed2de2	\N	aeea7f9c-cb09-4464-8f7a-ae431f79d989	t	7	6	f
 c1819838-6b65-4388-a866-7b995d79faa1	a8df8354-0125-404f-a1d8-5584462a5b82	\N	7a757acd-22ab-4cfd-b959-28df76bf0cd6	t	9	10	f
+bd6348d0-c4ce-4d06-8ae7-90bf9266c76e	e14ce7f2-2695-48b6-9f1c-b539d34db079	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	f	\N	\N	f
+20a652bf-cb4e-4451-afbd-88e254047a31	9bc7c029-1716-47c7-9122-ed869c3e1015	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+04fd6139-69c0-4cf1-85e2-0506cdc85beb	04a8f732-2f64-4e15-b5df-ee017dec6175	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+c112f63e-7df3-4f7d-be90-12646bb61161	125cc11e-face-470c-a7f7-906146b2a9f9	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
 333dfd0f-7f84-4306-bcbc-57c7258f5aa6	bc8d055a-f914-4b59-906c-f78b145b2aa3	\N	67bc0845-b04a-4787-be77-7a1ace4ebf8c	f	\N	\N	f
 b335edc8-026a-4b37-8ae8-d7e25d808099	88352b90-69f8-48f3-bc89-640cff5ae4b1	\N	67bc0845-b04a-4787-be77-7a1ace4ebf8c	t	9	8	f
 f25a1465-cbf4-48fc-aac5-9c05fc3d010e	754b7f19-e695-429d-bed1-46aab0b80e1c	\N	67bc0845-b04a-4787-be77-7a1ace4ebf8c	t	9	8	f
@@ -3928,6 +3932,9 @@ f27959e3-84f6-4f38-8ec5-6e89c58ad5f6	71f99d4c-e3e1-4c88-af9f-2641131f3422	\N	169
 db5eb1fb-8799-4ee1-935e-f7ec65630fee	c08c69f9-ef26-4f6a-95ee-455d176dfa61	\N	7a757acd-22ab-4cfd-b959-28df76bf0cd6	t	9	8	f
 1bea4690-94ba-419e-bdc8-257fa72fb1dc	3b6d04be-cd10-4e54-b5aa-28a67e8e2186	\N	7a757acd-22ab-4cfd-b959-28df76bf0cd6	t	9	10	f
 778cfd6b-f028-4386-9d56-e18ae982d3b3	ec51a182-bf8d-436e-8704-b2d5cd897604	\N	7a757acd-22ab-4cfd-b959-28df76bf0cd6	f	\N	\N	f
+6171c060-39d9-4132-8849-bf07bd3eaf7e	ad57009d-5992-4256-bd8f-d9f84d2048f7	Hienosti mukana koreografiassa, vaikka tanssi ei välttämättä vahvin osaamisalue!	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+6409629b-8bc9-42cb-a642-e324e6552050	c261c216-59c0-4ee7-8492-5f4ec3b41472	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+439a2bc0-91b5-4a8d-8ca9-1031c760dd13	f9edfe55-559b-45ac-a1e3-c8630a9fdd07	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	f	\N	\N	f
 1dcb38a7-b970-412f-8f4d-e4c0b19a274f	d0c101ca-4d6b-43c2-beb1-a4680f44dd5a	\N	59a61f01-3392-40f2-9cd5-1b0e7477d7da	t	9	10	f
 11d8cedc-a4c6-4c91-bcb6-f8789ad67c8f	db6b1a3f-e485-4b8f-8a25-0a8e518a2026	\N	59a61f01-3392-40f2-9cd5-1b0e7477d7da	t	8	10	f
 a7d0ee4e-7be6-455d-b02b-46781548447f	7e447ce6-5569-47f0-9000-20ae93a68bd3	\N	59a61f01-3392-40f2-9cd5-1b0e7477d7da	t	9	9	f
@@ -4283,6 +4290,31 @@ bafceb55-7055-49ef-9af5-d000ff86322f	fe5ede8f-8290-4b69-b575-75aeaab46f2f	\N	29b
 124d6eae-b295-402c-a2fe-c8f62d99433c	50d7ab1f-3cf2-4e10-9286-36df63a6e81b	\N	29bceede-a9ed-4f38-b945-af6a568799d1	f	\N	\N	f
 b21e1fde-c480-4eb4-bcda-8ffbc89aa52b	7756327f-59aa-40f9-aa95-88889e4ea759	\N	29bceede-a9ed-4f38-b945-af6a568799d1	t	9	9	f
 07bc34d9-4f45-4ff7-8b7d-c6e3e5ec1f77	c5a69235-e2da-483a-b4d4-898fe3bd4c75	\N	29bceede-a9ed-4f38-b945-af6a568799d1	t	9	9	f
+a5ff68d0-5427-49f3-bb6e-400def5d1c01	70f7d948-5ed8-4e7c-9d8b-fa5a59c07bcb	Aktiivinen heittäytyminen tanssitunnilla	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	10	10	f
+620f0a32-730f-4a97-95a2-3a6b0ef66aa5	90876ceb-a561-4cd9-a574-160177ac0393	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	f	\N	\N	f
+28e74049-380c-4760-a93d-6dbd66673af7	8c33c0b4-feaf-4a0c-85d4-73692a7342cf	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+268ba923-99eb-48f2-98f2-0cb02f824914	7f4dd268-b542-4251-ab71-eced924dc791	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+34d44d38-7044-44c8-b994-9578e0cc632f	aec45342-4e40-4fe5-ae8a-bbc540d5f37f	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+ba06456b-ad5b-4b2c-93e8-686c82aa7d41	c69b1bae-f764-4d10-a90f-e1774686f31a	Aktiivisuus ja heittäytyminen tanssitunnilla	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	10	10	f
+6a51ee08-3634-44b3-8030-e52e35b1a945	223a77ad-fc3c-4fe5-9ba0-fb26c8acfd30	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+2e441a2e-4b46-49a1-8645-7451e891ad2a	fa66a9b0-f68e-4d21-bde2-e5440bd9e31c	Tanssi ei vahvuusalue, mutta hyvin mukana tunnilla	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+3470cbc0-3e83-4255-bcb4-3516b141d04a	367a36fd-227b-459c-ab29-9d63b591b8ec	Heittäydyit koko tunnin ajan ja olit aktiivinen koreografian suunnittelussa	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	10	10	f
+821d878e-7194-420a-b11a-d968f01ddc0b	f74d8ece-7999-41b6-9244-c5af75e60633	\N	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	8	8	f
+f95a2bf5-cb47-49a1-ba30-0b597a531cee	75faa4db-dfe1-4868-8d17-5bf5efd0155b	Aktiivinen työskentely ja heittäytyminen tanssitunnilla\n	48cacea1-2663-4bef-86ab-d57351c3fbd5	t	9	9	f
+e859a854-ddbf-4c6b-a5d4-6d8b1a50c491	7ebec83f-f17b-4770-a9af-ea290f26e168	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	8	8	f
+f4e91f10-a583-4270-baaf-871e596dd5d2	40a52df7-f50b-4105-b4d2-00e0b391156b	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	8	8	f
+1c677999-e96e-4f6b-bc26-c9f5972fe714	6edb9c7d-338c-42b3-8bed-95c037398e1d	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	9	9	f
+0a1e5790-2778-48f4-8dff-a9afd0016b3e	0de6a87e-13a1-4713-988d-655e950c9fea	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	7	7	f
+058d955d-f31e-4b8e-9f6b-88c09904f711	76d7ba34-af4d-41e0-934a-63461dc3aeac	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	9	9	f
+690820c8-0668-44e6-8eca-27524e4c95f6	92214907-4fe9-442f-9f35-c7b59f78e08a	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	f	\N	\N	f
+70e4fd66-cf6b-4fda-bf6b-c76168338eb5	9c95ce1a-b395-4179-9558-10abb9105fd0	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	10	10	f
+8996dd02-b063-4b82-b4e8-17025777047d	e2500f5c-1aea-4ffe-9f18-9b86022fce62	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	9	10	f
+9ad479d3-a01a-4472-8f08-0621cb01807c	33ce32f8-0ac8-47f6-a2a9-f5aa880442f4	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	10	9	f
+f40a9e2e-d016-44da-9af8-db3fb98703e0	e3e017a1-6c30-4320-8ccf-3b2b276e8128	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	f	\N	\N	f
+3e06ddbf-c7cb-487b-90be-dd3efdd7fac2	3cb1e21e-1338-4fac-8380-c69946fc26c6	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	8	7	f
+770eb0f4-c87b-43c9-aeac-e71655ff7d82	e1ceb28e-8139-41aa-bf55-3ef379c568ab	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	8	8	f
+1f60916a-e7ad-43c1-99ed-60205fbddc27	72a94026-88ad-4cbb-b1e4-e6aa917db696	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	f	\N	\N	f
+5338058d-0032-4c16-847f-f3bd13ff3072	5de52dab-1765-4acf-8020-053b68336487	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	8	8	f
 cdcad20d-aa61-4dff-9f62-2f892ce3fb21	780d5083-e9a9-45c0-8024-6c35ac297f65	\N	7230c38b-1f0d-4ddc-a4ee-a68d7ea91797	t	\N	\N	f
 c39f7ebb-64e7-458b-bd9d-6b28d081a015	c427f520-ceb4-4b3c-87dd-5cca000ceb07	Aktiivinen osallistuminen	7230c38b-1f0d-4ddc-a4ee-a68d7ea91797	t	\N	\N	f
 dfcd81ac-0c50-4a34-bf50-92364050cd8d	ed230491-5890-4a9e-8b17-6a2a3cbad777	\N	7230c38b-1f0d-4ddc-a4ee-a68d7ea91797	t	\N	\N	f
@@ -4593,6 +4625,16 @@ f63283c4-637d-44e8-a55a-205e6c95d117	1d2ceb4b-b78a-4354-bdf1-7c8656589b14	\N	47f
 b73edd63-4333-4176-8b76-eff5d5a4c91b	6357d960-1d75-4da9-b533-bfa1d9df1c02	\N	47f2bec1-e257-4068-af58-e3f73f5bf3c4	f	\N	\N	f
 4fc0c3a1-5f6f-4c26-be6e-ff4833085ea7	4efc8d8e-e557-4574-bf80-f80a259fbc50	\N	cd7b7953-26df-4c61-9e37-75ccdcb588e4	t	9	5	f
 800772f4-edf9-46af-956a-dee79e4dbd69	e1b8b6a5-0e57-4743-b586-d83afe78189d	\N	cd7b7953-26df-4c61-9e37-75ccdcb588e4	t	7	7	f
+961c3c1f-537d-4c45-a5dd-452bd90ce173	d9ac630a-298d-422c-8d37-72fc3991857d	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	f	\N	\N	f
+ee40cf5d-fd32-46d5-abe3-4e4aebac0e82	1f12b19a-138f-4000-a576-c5dab30ec9e9	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	9	f
+90baccb5-e6a4-4ba7-8417-7210988ed337	c732359d-e9bd-44c3-aa2e-bd92bfb911c2	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	8	9	f
+5820894d-b0ce-474c-8de6-c57ca48a97c8	7c8f19ba-b172-40e7-8e9b-da74d07eb54a	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	10	10	f
+e6e7f4a0-566e-4544-9463-885f7fd6aced	f031aca9-7acb-43fa-9884-72547dac5709	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	10	10	f
+a98bb738-9e80-4ce8-bb34-c474492a5299	2113c63e-c4a7-4e49-90a6-626646c3d949	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	9	f
+76943a62-6682-4a4a-b68e-a4ca86659db4	3eb15f99-938b-40e3-b16f-bce35248b3b8	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	8	9	f
+ec583ead-0e1c-4845-8ebe-ff1a791b8c3a	e0357050-7b2a-4b32-87cf-af5747b17208	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	9	f
+9d714ae0-d27b-4e92-9772-301126a04e1b	a09eec89-d6b8-4a66-b95d-356d800aaa8f	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	8	9	f
+f3b59d93-86eb-4289-90c4-49260ec25cb2	d202ea60-e678-49fd-8ecc-581cad6b508c	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	10	10	f
 8ae9ef1d-0f60-4429-a058-f32099bec6ff	6224e1e2-a4eb-4e84-973c-4a0f81ad5321	\N	912bc154-6259-43bb-9950-9dcad160e71b	t	\N	\N	f
 b65a112c-3780-499a-9a3f-f230803bbcee	86a5eb2d-cb3e-45dc-978c-618bc9d876d1	\N	912bc154-6259-43bb-9950-9dcad160e71b	t	\N	\N	f
 2512291f-5f16-4a16-b894-bdc06b7f543f	3ede6c29-5cbd-45e5-b35a-75d5064ba7d0	\N	912bc154-6259-43bb-9950-9dcad160e71b	t	\N	\N	f
@@ -5040,6 +5082,11 @@ fe173452-7777-41ce-8bad-ca32983cb1c0	6e24ea61-532f-452b-865d-b67df86c48c4	\N	ed5
 73db6de5-7f47-454d-b7b1-0520cdaa393b	3b6d04be-cd10-4e54-b5aa-28a67e8e2186	\N	ed57c826-d68a-4951-b366-0d0fc581491e	t	8	8	f
 5cb9c852-5f8e-40ce-8db6-bbb238f61f79	ec51a182-bf8d-436e-8704-b2d5cd897604	\N	ed57c826-d68a-4951-b366-0d0fc581491e	t	8	10	f
 63341525-62db-493a-8819-ec32ffcd9c32	a8df8354-0125-404f-a1d8-5584462a5b82	\N	ed57c826-d68a-4951-b366-0d0fc581491e	t	9	8	f
+5e65fe26-189e-467c-9631-9163b904d5da	d4e6aa85-cd60-4901-bd59-413ee93a3314	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	10	f
+5346addd-cf48-460b-a75c-91810d5f8655	7a3453eb-b303-4944-9bfa-f7bfdde76864	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	9	f
+f581af57-91c4-4230-ba12-163553cd3989	13e7ba68-1fc6-4e4f-947a-0370f5aff61a	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	9	f
+3ff614c7-3e36-4363-8f0a-6d5a917075a1	0fe083de-7bae-4fc1-815e-b4ead74b6a69	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	9	f
+5191d0c5-3ee9-4e24-b218-6b81c07fef32	9b2269f7-aba5-42f6-afab-ccfa7bc42585	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	10	9	f
 cc69184e-d39d-4583-9763-393cc601de32	7d6ebc04-0079-49e4-bc33-1c0ac2b4fb89	\N	e536c868-40e9-4bc5-82fb-92093d7dd1a2	t	\N	\N	f
 700302e2-4a6a-4ee2-b4f5-d322bc755715	03d40a1c-184d-4fc0-8211-d765f2b731ee	\N	e536c868-40e9-4bc5-82fb-92093d7dd1a2	t	\N	\N	f
 21aaa70f-005a-4637-a4e8-85827330793b	76a63a01-26fd-482e-8480-bcb5c993b891	\N	849861d4-7000-40c0-a312-06542dc70a9a	t	\N	\N	f
@@ -5050,6 +5097,9 @@ f53486e6-87d0-4441-a553-151a00ca61cc	7307935a-04d1-47b4-8db4-656939df1ab4	\N	e53
 66695a05-a5ee-4cd1-883a-0f0118744dca	6fa8d609-c9e9-4a88-aaec-3a98bf0110f3	Tunnollinen ja osallistuu aktiivisesti	e235d334-40fe-4899-8bf5-82859bbb40d5	t	\N	\N	f
 d0809cbc-67bb-42c6-af1f-d5040b5c8b38	e4abff4d-b7d1-488e-8e22-e3e6c218b693	\N	e235d334-40fe-4899-8bf5-82859bbb40d5	t	\N	\N	f
 23a26240-82ee-42e5-920f-1a0396c4dadb	9a52fdb4-972e-490c-a8a8-6ca4f6bea0fb	\N	e235d334-40fe-4899-8bf5-82859bbb40d5	t	\N	\N	f
+ef7f631c-1750-4cda-9a56-02bd95d3d30f	23d41b74-018e-45f5-966c-c729188c1ca3	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	10	f
+40a9fa25-bf9c-4384-b747-7f9c28af30d7	c0a2a247-d6f0-4e43-bfd7-79d01e4eb16c	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	8	f
+8113e5e6-8d7e-4dfb-9495-f5efaee53cc0	848b881e-e506-4273-b778-61cd669267d2	\N	001fc994-57df-46e2-89af-d98f7a0be9a2	t	9	9	f
 dd04f172-0020-4854-bf3f-c670ebd8e35c	841b231a-6161-4c74-a1a9-3226dbce4ba2	Sulkapallon aloitussyöttö sujui hienosti ja itsenäinen työskentely onnistui aktiivisesti! 	849861d4-7000-40c0-a312-06542dc70a9a	t	\N	\N	f
 b70da207-4370-40b5-b645-66ee9318912c	2c2e2c34-e16a-47df-bbea-0b56741dfeb9	\N	849861d4-7000-40c0-a312-06542dc70a9a	t	\N	\N	f
 635c411f-1b06-433d-a192-85e9052d4695	0dcd3b90-6ad4-4127-8bd7-abf019c6dba2	\N	849861d4-7000-40c0-a312-06542dc70a9a	t	\N	\N	f
@@ -5057,6 +5107,10 @@ b70da207-4370-40b5-b645-66ee9318912c	2c2e2c34-e16a-47df-bbea-0b56741dfeb9	\N	849
 77b07831-5a32-4e01-b98b-c3eea1fbaf43	daa90cfa-fbd2-4f2d-b1b9-defda50f2a85	\N	849861d4-7000-40c0-a312-06542dc70a9a	t	\N	\N	f
 ebf4607e-2aeb-4177-9494-9849d219d5e9	85b176c8-ba3b-4eb0-8e5a-49f25aeb8973	\N	849861d4-7000-40c0-a312-06542dc70a9a	t	\N	\N	f
 0a84a3cd-1bf9-4e97-8a8a-7a19bc69988d	6622f6f8-f125-4028-923e-71b3d81ba051	\N	849861d4-7000-40c0-a312-06542dc70a9a	t	\N	\N	f
+3707829b-4a6a-4768-b042-dcf105703a62	268e1a31-5cba-4861-8aae-7d38fb140f13	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	9	9	f
+2f8e0712-6574-4d0a-baec-b899dd7dd9ef	0b357c38-9cda-428a-8a3b-0254143564df	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	9	9	f
+3cc16788-5703-4dde-9bac-2b69ca339d5a	01ab146e-d9da-4562-a7dc-f3d151d4992b	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	f	\N	\N	f
+6261d8e1-b2be-4c74-8750-10a8d32d0850	9fc6c35d-b42d-4594-a960-5836531c7282	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	9	10	f
 975b7dab-f1dc-4d4e-ae79-8b72d9c44bbf	76a63a01-26fd-482e-8480-bcb5c993b891	\N	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 3ac8c769-cde6-4922-99b6-ee90a02af644	fca50e1d-4f85-4c30-84bf-2f754a7e045d	Toimit upeasti parin kanssa, vaikka et ehkä päässyt työskentelemään tutuimman kaverin kanssa, mahtavaa! Lisäksi aloitussyöttö sujui sinulta jo mallikkaasti.	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 a012e0a4-25f5-4101-972a-c08be96e6b39	576a4db0-a7f6-468c-a618-ddd15b218b88	\N	849861d4-7000-40c0-a312-06542dc70a9a	t	\N	\N	f
@@ -5103,6 +5157,7 @@ c7e3ff32-22bf-4c63-b347-bf5355aef8b5	241042e2-7fa6-413a-a501-ab6c28dd86e7	\N	846
 5add9a6b-7417-44ef-b86d-fed4ac509c85	f18a8f1a-a17a-49da-8cc1-3603b4c21dc8	\N	846a1994-129b-4034-8903-0518353c0f88	t	7	7	f
 0f22a820-0255-497e-b46f-f7765969f0bb	8cb49f42-d3d0-4a6a-9ac1-9569aed4991f	\N	846a1994-129b-4034-8903-0518353c0f88	t	10	10	f
 00fc6d40-a65c-4269-bc15-c58cadf11ac6	8a429230-9011-476a-9f6f-15494ecf57f2	\N	846a1994-129b-4034-8903-0518353c0f88	t	7	7	f
+c45d6cc0-3dcc-4a49-9e53-02e7795074ab	d0c101ca-4d6b-43c2-beb1-a4680f44dd5a	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	9	10	f
 f44a2ab0-5f95-47cc-b72e-b224f4b14218	728abce8-c393-4ffb-b283-c67466dfd1c6	\N	2c80706c-3f82-4fff-9575-48262f7ddf20	t	\N	\N	f
 121f2692-439c-4ef2-ad4f-ed29c3795a55	30a5fec4-d7d7-47f7-81ae-2a7f2f4b1ec1	\N	2c80706c-3f82-4fff-9575-48262f7ddf20	t	\N	\N	f
 c8eb83bb-91be-4239-8de2-0c3792de2199	67ef625f-12b5-4326-ae6b-02acfcd891ed	\N	2c80706c-3f82-4fff-9575-48262f7ddf20	t	\N	\N	f
@@ -5275,6 +5330,10 @@ c63c86f8-f87c-494a-9440-9abaf414f81c	9656186f-f8e3-44af-8e16-91a29a0a7f71	Et juu
 0e556e28-a281-4cbf-aedb-815401f56165	1ba5fd40-36c2-4556-a599-adc90ab2e195	Et juurikaan osallistunut toimintaan.	3c210eaa-588a-414c-a24d-85a1740a59da	t	6	6	f
 60e751b4-c01f-4fad-815d-74c49c3b3e54	e29e93f8-0e0b-4a76-9115-eb340bef352d	Osallistuit aktiivisesti toimintaan ja ohjasit upeasti pariasi, jolla on vähemmän kokemusta!	3c210eaa-588a-414c-a24d-85a1740a59da	t	9	9	f
 31a5cbab-8834-4646-8e09-dab81d9a890a	004d8208-6757-4ba8-acfb-a566e2e5198b	\N	3c210eaa-588a-414c-a24d-85a1740a59da	f	\N	\N	f
+9f82f6da-d42a-4b5f-9163-95d524e1d6d4	db6b1a3f-e485-4b8f-8a25-0a8e518a2026	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	8	8	f
+5db97279-e175-495f-8a47-f68025d00442	7e447ce6-5569-47f0-9000-20ae93a68bd3	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	8	9	f
+42a72725-5ec6-4b2a-8266-3346caa38f87	95db6c22-a14c-4f47-b6c3-5ddffdbd933f	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	9	9	f
+474dbcde-4202-4898-ace6-27261992f7f2	0025a5a3-6947-4d23-b100-bcd5a58c6e09	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	7	6	f
 055e5492-d0c5-416e-a19e-534c09a4affb	7a503578-c9a0-453c-9401-4a2a8600dcb8	Rohkeaa osallistumista telinevoikassa ja rekeillä. Pidän tavastasi tarkkailla: et ryntää suin päin tekemään, vaan alussa seuraat tilannetta ja sitten ryhdyt toimimaan(:	281d6844-3eb1-425c-a27d-f6fce1b46a13	t	\N	\N	f
 48e31698-43fc-4514-9e18-c0b6cef38def	ca960e53-de3f-4f7c-8b81-a41f2227d3cc	Ketterää menoa ja rohkeaa osallistumista telinevoikkatunnilla (ja akro?). Vaikutat hyvin lempeältä ja ystävälliseltä tyypiltä, aina ilo kohdata sut(:	281d6844-3eb1-425c-a27d-f6fce1b46a13	t	\N	\N	f
 97041fa6-0e4a-409d-8a9d-4c7a1fbb513d	3886e91f-c457-40cf-a19c-b7a91c16bc9b	Ketterää ja rohkeaa toimintaa telinevoikkatunnilla(:	281d6844-3eb1-425c-a27d-f6fce1b46a13	t	\N	\N	f
@@ -5298,6 +5357,21 @@ cf942293-b6ba-4570-8938-b1b50df729a9	6622f6f8-f125-4028-923e-71b3d81ba051	\N	e53
 c1105616-5ba9-4596-946f-cd76de7db4f1	841b231a-6161-4c74-a1a9-3226dbce4ba2	\N	e536c868-40e9-4bc5-82fb-92093d7dd1a2	t	\N	\N	f
 c574e836-3bd9-45ca-b7bb-c8600929557c	2c2e2c34-e16a-47df-bbea-0b56741dfeb9	\N	e536c868-40e9-4bc5-82fb-92093d7dd1a2	t	\N	\N	f
 c3790e67-3717-4833-993c-23b232cdad83	fd5841ee-a527-43f1-9ce3-f8c6e07f1aa6	\N	e536c868-40e9-4bc5-82fb-92093d7dd1a2	t	\N	\N	f
+fbc1870f-525a-4d4c-a306-46ec324afb48	971b8500-6c50-4f89-ab1e-f5219ccdef93	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	10	9	f
+2b997cc7-8fc7-4840-a6b6-e21f9d016fa9	a3be9480-89da-4490-aad6-4507acd56e6c	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	9	8	f
+fa2ecf6e-a96d-4e32-b1df-2a44783961ce	c695adc1-a07a-4ebf-b99f-9714e4ab4bf7	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	f	\N	\N	f
+17b08a9c-9ed1-4793-a1a4-15cf2ea6121d	2abacf8c-b973-4678-9504-e30861fdcba5	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	8	8	f
+83334772-4a9f-424b-81be-a7bad1bece10	bdbdbd45-458b-41df-ba2f-ab5e4406bb26	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	8	8	f
+a77838d3-c8b7-4d11-9efc-b4e5a15b0b19	e0562708-15b5-478a-8f5a-1863c55a6f38	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	8	9	f
+3eab04df-078c-43f0-9603-d830d4dbc227	8730fbfe-4cab-41db-8b7d-a750e3448184	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	8	8	f
+5e7e6cc3-688f-4281-9e98-8f28675a0201	52c3b46f-5204-40ad-9150-17b0a7077eed	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	7	8	f
+5796aab8-9e9b-464f-9245-c225af7d5aac	0d894576-e308-4a66-a809-d8530eb5753e	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	9	10	f
+a70e725d-ed02-47a0-be0b-40944d3ba982	e111c54d-9b2e-406b-aab4-e61fe921dbe2	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	9	9	f
+655d6f57-2445-4a54-a41a-749fabbc2643	7ac64248-1e14-4e88-ab15-a9a552d3811c	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	9	9	f
+22af8c69-f164-4163-9277-04e5d86c5324	f4df5072-2986-4859-a7cc-6d06a6fe21ad	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	10	9	f
+b698058b-ed27-4976-afc7-88a8c50f7137	3cd7167d-e20f-4291-9e18-5241b854e116	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	8	8	f
+839238b6-efbd-4cc8-a767-e11b6e576f38	1e7d2903-2e91-4fca-b77f-211821ad0b07	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	8	9	f
+20765cb6-ecd2-4af2-adcb-d656d0c48310	5e4779f0-fad2-4f94-b350-e56b4c5f5471	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	10	9	f
 cb042565-bb61-4139-a52c-4f962a06a14c	3c238e43-601b-4633-bed4-99b1070db4da	\N	e536c868-40e9-4bc5-82fb-92093d7dd1a2	t	\N	\N	f
 8592a540-18ab-4290-8fad-1603d07d23c6	8166a152-fa65-4afb-8398-fbff180dd783	\N	e536c868-40e9-4bc5-82fb-92093d7dd1a2	t	\N	\N	f
 34762b9f-3eb1-4353-8615-a193f3ee7738	d5663de4-2ca0-4714-b244-54e221ad0181	\N	e536c868-40e9-4bc5-82fb-92093d7dd1a2	t	\N	\N	f
@@ -5310,17 +5384,29 @@ b197a83b-9199-43d8-b11a-c74546ffc3de	4ecdd0ae-668b-41ab-9c71-aa50d9c0ef15	Rohkea
 9f03d4d6-24ff-43a2-8159-1418e6fceee7	c427f520-ceb4-4b3c-87dd-5cca000ceb07	Ketterää ja aktiivista osallistumista telinevoikkatunnilla(: rekeillä vaikutit hieman varautuneelta aiempien sattumuksien vuoksi, mutta rohkenit hienosti koittaa itselle turvallisen oloisia juttuja. 	281d6844-3eb1-425c-a27d-f6fce1b46a13	t	\N	\N	f
 e7413a35-ce79-442b-864d-69661f4fb6c6	ed230491-5890-4a9e-8b17-6a2a3cbad777	Aktiivista ja rohkeaa osallistumista telinevoikka ja akrotunnilla!(: tykkäät ottaa ohjia käsiisi ja oot hyvä organisoimaan toimintaa esim. ryhmän kesken.	281d6844-3eb1-425c-a27d-f6fce1b46a13	t	\N	\N	f
 2ae19c95-7b5c-400f-9d34-7da800afdf7a	b90adb32-bb88-4274-83e2-a50d5da29589	Rohkeaa ja ketterää osallistumista telinevoikkatunnilla, temppuilu on selkeästi sun juttu(:	281d6844-3eb1-425c-a27d-f6fce1b46a13	t	\N	\N	f
+cc8a530b-7a02-43cf-bc23-9ecd9af41584	77793959-dc53-44d1-8cd5-ddbe3c4b25a4	\N	85204769-35dd-43cc-87c0-d7df6d2dcca2	t	10	9	f
 2e56814d-feef-4502-a141-67494e20efca	a469eda5-134c-41e0-8ff6-6d914f3496ee	Hienoa aktiivisuutta tunnilla! Lisäksi onnistuit hyvin sulkapallon aloitussyötössä; jalat olivat oikeaoppisesti 	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 05952e78-9b34-4a0c-bd7f-1ac1cb1ff008	fd0770a7-57eb-4fae-9c3c-00a6f53a546c	Hienoa työskentelyä parin kanssa tunnilla! Aloitussyöttösi sujui melko hyvin. Jalkojen asennossa vielä harjoittelemista. Pallo osumia tuli mukavasti!	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 5c3cd355-dacc-4fec-ac73-67eaac608729	7d6ebc04-0079-49e4-bc33-1c0ac2b4fb89	\N	ef4a655f-5510-49c7-a488-c489b28291f0	f	\N	\N	f
 3aaeb3ee-1055-460d-925b-375893d9f797	03d40a1c-184d-4fc0-8211-d765f2b731ee	Hienoa työskentelyä tunnilla! Jaksat harjoitella sinnikkäästi. Kysyt myös rohkeasti apua, jos jokin on epäselvää.	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 70c4e1d0-2b43-4bfc-a645-545c4b7d7033	c68d9ccb-793d-45f7-846e-2f2ce2e38bef	\N	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 31048d57-817e-4753-8add-49898dacc0b0	576a4db0-a7f6-468c-a618-ddd15b218b88	Hienoa aktiivisuutta tunnilla. Olit myös avulias ja tartuit tuumasta toimeen, kun tarvittiin apuja esim. verkkojen pois ottamisessa. Aloitussyötössä vielä haasteita.	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
+2f569fc8-4074-4156-8c1b-febad65e7ec2	27cf24c0-2562-41e2-b341-82abab049a1e	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	10	9	f
 7a1fe5d6-ed70-4737-876d-cec4bff2a4e1	7307935a-04d1-47b4-8db4-656939df1ab4	Hienoa aktiivisuutta tunnilla ja olit valmis auttamaan pyydettäessä (verkkojen laittaminen). Aloitussyöttö sujui hienosti ja muistit ydinkohdat. Kolmikossa työskentelyssä pyri jatkossa huomioimaan kaikki, vaikka kolmas henkilö ei olisi kaikista tutuin.	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 989ffdd6-d0e6-4379-a9dc-afd60f3fd498	a52cb130-d267-4ae0-871d-b771c31ba828	Hienoa työskentelyä tunnilla ja on mukava huomata, että pystyt toimimaan kaikkien kanssa. Aloitussyötöt sujuivat hienosti ja osut muutenkin palloon todella hyvin esimerkiksi pelitilanteissa. Kuuntelet myös hyvin ohjeita ja kysyt, jos jokin on epäselvää.	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 152c5ccd-0812-41cf-90e1-d9bf132e7694	85b176c8-ba3b-4eb0-8e5a-49f25aeb8973	Aloitussyöttö sujui todella hyvin! Muistit sen ydinkohdat ja niitä toteuttamalla lyönnit menivät upeasti verkon yli.	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 63c7cb1e-2421-42a6-8d01-bc087e30d311	daa90cfa-fbd2-4f2d-b1b9-defda50f2a85	Upeaa aktiivisuutta tunnilla! Aloitussyöttö sujui hyvin, mutta olit muutenkin taidokas pelitilanteissa osumalla hyvin palloon!	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
 4ed1c184-93ef-413b-b71d-4ac554554660	0dcd3b90-6ad4-4127-8bd7-abf019c6dba2	Onnistuit hienosti sulkapallon aloitussyötössä: jalat olivat oikeassa asennossa ja maila lähti takaa lyömään. 	ef4a655f-5510-49c7-a488-c489b28291f0	t	\N	\N	f
+4a73111c-2654-4dc4-bcf6-ac395e2395a8	382a71c0-af7d-465a-a739-0ebca2e1e639	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	7	8	f
+9a786361-a96d-41d3-a6c4-d9c8ff3adafa	327f0893-dc5b-482c-acfa-a5bb977a04ab	Teki kuntotusta tunnilla	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	\N	\N	f
+63e89b55-684d-4124-a3bc-a6f449c2a1e8	74e0dc95-58e5-4dae-9c8f-ad74d0473a68	Teki kuntoutusta tunnilla	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	\N	\N	f
+0ed5f319-5534-4828-b825-463a2dc0dfd5	04c10328-decc-426f-be4c-728256cc89f6	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	9	10	f
+e0ce32dd-4a7e-4f53-a736-29e3b3272aa9	fae7c131-a61b-4df9-84c1-c58881921a9d	Keskitythän ohjeiden kuunteluun kavereiden kanssa säätämisen sijaan	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	7	7	f
+cf08ba44-2a03-4202-a7e1-02b1a6e74876	51e2aa93-2eb0-422b-a954-efab9144e01a	Keskitythän ohjeiden kuunteluun kavereiden kanssa säätämisen sijaan	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	7	7	f
+9c0288db-7b39-4b5a-9cde-8946e77dc94a	9a1c0221-90b2-4321-89ed-96eda8b2be6a	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	9	10	f
+734a571f-5af6-4132-bc0d-4393700978fb	2408aec3-5b57-43df-a51f-6b9431428d21	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	5	4	f
+34c1dcf4-c05d-4d48-9104-d63dad657a39	7e8bfa8b-017c-4203-8860-aee243347646	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	9	9	f
+e0af3bee-5097-451c-b37a-9adbd48fadd5	18ccbf25-0831-40e9-9145-602b9d17ed2c	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	f	\N	\N	f
 d2c7ceec-7c64-4e61-b006-1e75a718c1b7	03397f36-f253-476a-a333-556ae179dbda	\N	f2bec45d-f659-4cdd-8381-6f7869c1e4c6	t	9	9	f
 75480f9a-9524-4e07-8185-4b93ee9f620e	e0c8876f-57f1-43dc-9950-3851d82380fe	\N	f2bec45d-f659-4cdd-8381-6f7869c1e4c6	t	9	9	f
 e139aaf1-4ad0-4488-a5f7-424443c8f083	4e00db97-fd93-416f-a349-655a240056ae	\N	f2bec45d-f659-4cdd-8381-6f7869c1e4c6	t	8	8	f
@@ -5561,6 +5647,154 @@ c28c4649-9efe-41b2-b5ef-2a47c94bfaa1	f6426a3c-cd1f-49e8-bc42-f207b325f724	\N	046
 16f2d4b0-fb07-48cb-bd47-603b9043f07a	514ae707-0937-49f9-8d76-8324e0fe3bbd	\N	046b0e3a-90f8-44f3-ac3b-29b5e8ec6dc2	t	9	9	f
 fe87b067-af0e-4dcc-ac88-d15e6b3c1486	9a9bf145-4c54-40ec-a135-36f5917cd7cc	\N	83ab0d70-f780-4a4d-b7bc-93159dbe012d	t	8	9	f
 f75be65c-2c85-4887-9dd7-d7063de4a882	d5bc915d-5bcd-4260-a475-99f9eddac2aa	\N	83ab0d70-f780-4a4d-b7bc-93159dbe012d	t	8	9	f
+0fa93735-a720-49f2-bbb5-3be83f3e6990	93d20091-9e48-4cde-9c2c-cef0e067a381	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	6	9	f
+0b596b4a-4498-46b3-90cb-5ca41d2e66fc	865c70aa-9e6b-4eaf-9040-61c8a6de06be	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	7	9	f
+d37991e5-bb04-4eaa-825d-447ab7ec1746	42280ab1-3c9d-4470-9672-ef424fb77366	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	8	9	f
+d9ebf73b-f69c-401d-9a69-c881d3d25b7a	e67675bb-7a23-4fac-92f7-e02029d90472	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	7	9	f
+d36808ac-c049-400c-b3d9-c3da4d504bad	8e9cd92a-32ee-4a8e-8e80-a2d189d7d863	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	f	\N	\N	f
+d6a6d5d2-4f61-423b-bd2e-6139df079763	a3990909-1f8f-4443-b833-3646b041b637	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	7	8	f
+7ba93e40-fd9a-4b06-803b-b7e22dedbe17	5cb626b1-013a-4d8f-afc9-133b3e2b14f5	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	7	9	f
+8ea7d73c-725a-4c05-a6d0-f1da9ec6fac2	e56af295-37e6-457e-83c7-0c8b517019f0	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	f	\N	\N	f
+acdde162-c46b-4a58-b3d3-7751721a5631	b4cc2377-85c6-49b7-ada5-f305dbaac73d	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	f	\N	\N	f
+c99a8afc-afe2-42bd-96a9-e150d324a7dc	b9e7ddc7-a21f-407e-b93c-3e2f208c8af3	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	f	\N	\N	f
+c032fb06-9733-40b8-bf9d-d398c4175c70	531a6f18-bf05-45d8-bd08-9dc3ac6de051	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	f	\N	\N	f
+2f44552c-c26f-4426-938b-ba6cec363843	5ebb8d5a-e429-4728-8cdc-3e4ac6cd8eeb	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	f	\N	\N	f
+42e72f07-9cf3-4dcb-9139-5a3c0ce1c5d5	7ce42632-90b9-487b-a365-6ceed5756afa	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	7	9	f
+28475852-593d-460a-bcca-c7d0ea000275	00b7bcd5-141b-4b84-8b34-86344b6fdcb5	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	8	9	f
+9086d006-e8ba-4baf-89a0-79cbc02a5d13	71a2c8db-820d-4f08-bb90-8b8e3001ffac	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	7	9	f
+1f0e65ca-435a-4e9e-ba2a-25ab6f005ba4	d2248f52-c906-4bc9-b194-d1c8ca41a8bc	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	7	8	f
+ea956d3e-7a7e-4ef5-82f0-cfb53f4701f8	a6875d5a-aa68-4b8d-b9c4-cd9da87a1b46	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	8	10	f
+ac685ec3-fec8-4f17-8792-b388b1be21dd	11e571aa-bf91-48fd-8ad3-2d2fe354bea4	\N	cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	t	8	10	f
+ab3be53f-4d37-4bb7-b854-69d1122ee191	307d197f-ff26-4df2-808a-53bd60407b2a	Keskitythän ohjeiden kuunteluun kavereiden kanssa säätämisen sijaan	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	8	7	f
+3a1c7b03-4d0e-4673-b931-2ecb0641f894	0036bb62-5801-4282-bb15-e83fd56b814b	Hyvää tekemistä kuntopiirissä tänään	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	9	9	f
+eefac3f4-a8a2-4826-b15d-2ea7961d43f8	b99e91ab-5482-4d43-8d3d-66fced671a62	Hyvää tekemistä kuntopiirissä tänään	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	10	10	f
+17d577e7-2c7e-44fe-b04c-495c549a6304	7a24b6b2-6ab6-491a-9cbe-dbebbe0438aa	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	6	8	f
+5c7dae5a-167f-402c-bca7-3190414a64c1	626a3179-8f65-4d72-85a2-864a2d27f2b1	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	9	9	f
+62d2e277-7963-46d4-ab4d-ba5b824114e1	626ae0fc-2414-479b-877b-b5f886574910	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	7	9	f
+91409940-5f07-4744-b508-c1faff0bc7cb	8ae4a627-229b-49eb-8a86-35ee6ac0e71d	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	7	8	f
+34a599f1-1901-4a86-a4b1-881ba9a447be	6a1dc2f8-f64d-4126-bf94-bd86e5a2c7c7	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	5	4	f
+c23ea39e-4cdd-4145-b28f-c5812e8deabf	dc7afe5c-c9b6-48d8-a1a4-e4d5dc5eefbc	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	7	6	f
+1d0ba7e0-57c3-4698-ab29-cd584897b1f4	388f0b8e-91ab-4a09-8224-7dd5e2f13df9	Kuntoutuksessa	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	\N	\N	f
+1b13b4d2-d5d3-4708-8fec-035ceb4e1ed4	7ac75cd2-6f92-4e1d-8366-8480ad847179	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	10	10	f
+cf87b313-683a-480e-9959-0dfc251c9cc8	fcba63ba-50b7-4104-9488-23ec79551844	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	10	10	f
+a67a645d-f5a1-44ac-a866-fd61dd52a133	f0bdea44-7d36-4cc2-81ee-dd87e3ed2de2	\N	c611bd5d-2edc-41e2-9379-e1d3924f6685	t	7	5	f
+065e4d58-3d5e-4f75-b051-c4c6aa9c7432	189e5ac6-f54b-4b10-ae14-ff92e63c3e5f	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	8	8	f
+0e3d2685-142a-476c-98a9-1541d39508d9	39e44baf-d5a4-4a7b-85ba-8d9ef3dd9567	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	f	\N	\N	f
+c88d53e6-586b-47c3-bcfe-352d768c5be5	20ecb99e-8262-4a44-944f-00642e085fab	\N	d45fc42d-a80a-45b6-8e5a-71866d88dac4	t	6	6	f
+b22ee6b9-ccf4-4896-8131-b0fbf2270002	28426aca-f675-46f7-bafc-dc5f7eb649c5	\N	8d64c700-37d1-4c4f-8b2e-287705e68ebd	t	7	8	f
+d382d321-2e38-44c0-90a4-49af329affe2	ea8d74ac-e372-4fb8-8dd7-f3591a09cd4a	\N	8d64c700-37d1-4c4f-8b2e-287705e68ebd	t	8	8	f
+6cccdc95-e26d-44d8-ac7c-65fb3a0ce7bf	251b27c1-5684-424b-b17b-7257a311bd33	\N	8d64c700-37d1-4c4f-8b2e-287705e68ebd	t	10	8	f
+a6c7c38f-e248-48c7-8dfb-6eb43bfff885	f6705543-53b3-419c-9a54-c23cd0c8525b	\N	8d64c700-37d1-4c4f-8b2e-287705e68ebd	t	8	9	f
+e2726f45-2fc3-40c1-ae12-d23ad145b461	9c66fa7f-c08f-4905-9c54-5da739156493	\N	8d64c700-37d1-4c4f-8b2e-287705e68ebd	t	10	9	f
+a740b261-c7e8-4e58-b260-36c686d1dc42	04629d10-42df-4873-bb8e-a38230d93b8a	\N	8d64c700-37d1-4c4f-8b2e-287705e68ebd	t	10	9	f
+1129b1e1-9a4c-45b5-8fb9-c999eb6aefac	b8a8e21b-2e09-4855-a354-0c48800913c9	\N	8d64c700-37d1-4c4f-8b2e-287705e68ebd	f	\N	\N	f
+e0201699-927e-4af5-b473-3927f402282a	debf613e-df66-40c3-8442-28616b88348c	Olet taitava sulkapalloilija.	f3249996-813f-45bd-a9c0-f49b689221cf	t	9	9	f
+8710d1d3-3e8d-40ff-b995-a0a8485613e4	008c8f08-64e4-4630-9c15-af1cea5c3fab	Esimerkillistä aktiivisuutta tunnilla ja autoit sulkapalloverkkojen kanssa tunnin alussa sekä lopussa!	f3249996-813f-45bd-a9c0-f49b689221cf	t	8	9	f
+5d9ed6ea-60f5-4254-aa80-1b74bec2fc8a	2fc8562e-4631-4dd3-97d4-190d738cb99d	Olet taitava sulkapalloilija!	f3249996-813f-45bd-a9c0-f49b689221cf	t	9	8	f
+6ca62ee5-f1da-470b-9343-ff2f647ed25a	81d64ff1-9358-4659-a3fe-226f747f8ece	Olet taitava sulkapalloilija ja esimerkillistä aktiivisuutta liikuntatunnilla!	f3249996-813f-45bd-a9c0-f49b689221cf	t	9	9	f
+690e42d4-5d36-4f3b-bd95-bb6e62324c66	7af978cf-babc-4d20-88ff-d3c747f80fd1	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+df627a0e-9eec-4bb6-a31e-9e716f033aad	a8d5fb77-f1a2-45e9-a559-ce5cb2452068	Esimerkillistä aktiivisuutta sulkapallossa!	f3249996-813f-45bd-a9c0-f49b689221cf	t	9	9	f
+a13d6c6d-14ce-4e9e-9f7b-5b6fc43ec005	e929feb7-b855-4efa-8ccb-cedd3b53af15	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+14bfeb69-b4f9-4478-a477-585b72396df1	1f3787ca-7473-4754-b05c-84c5cc2f72f5	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+79912e8f-4a2c-4150-8d24-4f3cb79c7695	77a6b55c-efb9-45ba-a666-ed3333151e26	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+ca569ac4-2c01-44ab-804f-d99d4718b1a7	7c970f2d-6109-4af1-a749-956afcc0569f	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+900d9b95-c363-45fa-9703-a50a8dd5ca1d	b05d24d5-c111-4bb1-b5f3-ebc40349a56f	Esimerkillistä aktiivisuutta liikuntatunnilla!	f3249996-813f-45bd-a9c0-f49b689221cf	t	9	9	f
+ac255316-96f2-464f-a94c-3790e1fb31c7	a5d5e48b-a03e-44e2-bd0e-b8d575b02929	Vaikka sulkapallo ei ole lempi lajisi, osallistuit silti esimerkillisesti tunnille!	f3249996-813f-45bd-a9c0-f49b689221cf	t	9	8	f
+938f258e-f091-43ff-836b-57c310e7084a	aa0e09ee-8de5-4805-8316-d8343877d158	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+9b74f749-26af-4e98-943e-d134ec31a7f3	e0371aaa-9fc2-4c1e-9769-000ea91139fe	Esimerkillistä aktiivisuutta liikuntatunnilla!	f3249996-813f-45bd-a9c0-f49b689221cf	t	8	9	f
+715ed7d7-5a92-4e88-91e7-b5aeda0ba59d	c1a7ae3e-7c6b-4bcc-95f2-e5584dddab97	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+ae18355a-bc76-4443-8ad0-a9241eda9663	1d2ceb4b-b78a-4354-bdf1-7c8656589b14	Esimerkillistä aktiivisuutta liikuntatunnilla!	f3249996-813f-45bd-a9c0-f49b689221cf	t	8	9	f
+a129737b-d244-454e-abad-cde8fe86de3b	5ab5e1c7-3719-41bd-bae8-35e54a1ff3cb	Esimerkillistä aktiivisuutta liikuntatunnilla!	f3249996-813f-45bd-a9c0-f49b689221cf	t	7	9	f
+4e1a82cb-4c32-4db9-b668-e7f6b8b1229b	b163fc5b-a1ef-4844-89a4-579affbd8cb7	Esimerkillistä aktiivisuutta liikuntatunnilla!	f3249996-813f-45bd-a9c0-f49b689221cf	t	8	9	f
+afc3e127-db9f-47a0-a61b-02cba02731d7	02c442e5-fbc3-4a4d-bd95-4814bfa7ac37	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+ce5df6a7-c26f-42e1-b4fc-54b9325276d1	6357d960-1d75-4da9-b533-bfa1d9df1c02	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+52238333-9f04-45d3-8d0a-38929b21eb3c	9656186f-f8e3-44af-8e16-91a29a0a7f71	\N	f3249996-813f-45bd-a9c0-f49b689221cf	f	\N	\N	f
+befffaa6-3e94-481b-ae4a-ba40125e821e	1ba5fd40-36c2-4556-a599-adc90ab2e195	Esimerkillistä aktiivisuutta liikuntatunnilla! 	f3249996-813f-45bd-a9c0-f49b689221cf	t	9	9	f
+cfd8f01a-b269-4902-90ee-21e3a258a2be	e29e93f8-0e0b-4a76-9115-eb340bef352d	Esimerkillistä aktiivisuutta liikuntatunnilla!	f3249996-813f-45bd-a9c0-f49b689221cf	t	8	9	f
+b41ce7df-c370-4871-92ac-eb257cc69e23	004d8208-6757-4ba8-acfb-a566e2e5198b	Vaikka sulkapallo ei ole lempilajisi, olit silti upeasti aktiivinen tunnilla. hoidit esimerkillisesti neuvottelut koripallon peluusta koko luokan puolesta.	f3249996-813f-45bd-a9c0-f49b689221cf	t	9	9	f
+3b3f3e46-67d8-44f3-afa1-da04c3520943	63f1e71b-4f89-4eac-8ca2-001fbfe06a4c	Hyvää aktiivisuutta	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+53c2f9fc-765b-4e4b-8c56-4884661e0961	22844cde-daa0-4aac-b628-1c9e58ab26eb	Hyvää aktiivisuutta ja heittäytymistä toisen ryhmäläisen pariksi	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	9	9	f
+310e5c39-9ca9-4e8d-9596-86667a413fc4	f31a7a44-e65a-4807-8ca5-4aa34b336e0a	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+bbd345bd-26ee-4f68-aae1-221c1cf50f80	145b4c83-91ae-47ca-9e91-cc1a66a36639	Hyvää aktiivisuutta	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+a81b3fc8-74e9-4601-8a9d-5e772394c750	02620da9-86ee-4f54-bae8-3f087f88ceec	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+1a39063a-e92b-44e1-9b25-09a85ebddff9	29805757-53a0-4fe1-94bf-28cf5e2d448f	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+4c6e8afe-c4ac-4ec9-ab81-2294031da9d1	4e10eb1c-a213-4b0e-b022-dace3423963e	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+19ef9dd9-e62f-4095-9cdf-d1621a440e8b	7d1a6caf-5fe3-4317-a185-e797b6b000ae	Hyvää aktiivisuutta	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+e58efe42-fd18-4a89-b3c2-8a29034897d7	c34f70d1-6ac5-4722-b7cf-dcfbc09b4415	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+728297c2-c063-4742-a3ba-307daa5e3ec9	20fa312d-e016-4aec-a3be-89f42881eb58	Hyvää aktiivisuutta	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+a373e9a4-3a8e-423a-971c-d632ad61508a	2ea40892-153d-4bad-a2de-37645aca5b2d	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+e1df3492-bfbc-403b-b978-adf0b4840778	45fe8201-a27f-4c03-92e7-d62b5ce3454c	Hyvää aktiivisuutta	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+38fe9d2c-3f24-4921-b160-264bc150ce0a	11c9cf53-3e9f-4504-88e6-1ead23482a53	Hyvää aktiivisuutta ja hienoja suorituksia	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	9	9	f
+78f889b4-7cc7-4b4c-8ae4-f88b78fde42d	ab4784ce-750a-4259-9fca-69c81bbf0abc	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+58a38686-0100-4bd8-b8ba-bdcc5fd09171	84b26025-b675-45dd-931f-bfb4332ecf33	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+2f76d72c-cfbc-492b-a1b2-8bca9404c10b	898f72a6-27a6-47d8-a9b7-923cca5bbe94	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+aefe2fa2-f118-47b0-b244-d23694156b33	762c8ec6-699d-4967-899d-1d46176510c0	Hyvää aktiivisuutta	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+c0da9125-8be1-4040-8310-aebaf9c79731	1be88ea1-d5e3-4b18-8525-d421bb9e9de5	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+fb453efe-c0f4-4611-adb5-f57393011be4	977d1a2d-63e4-410b-9e70-46520cb83755	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+6de05b3e-68a3-453b-a821-355c3ed61049	9ec67e5f-3f95-443c-9874-37113ea1f5f1	Hyvää aktiivisuutta ja ryhmässä suorittamista	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+cbf64200-8839-49ba-b364-573615581d33	86f0304c-b40f-471b-8c74-f9ff5e74f46e	Hyvää aktiivisuutta ja hienoa suorittamista ryhmässä	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+a2321d82-1d68-460f-863f-1de21f428044	8da4a480-ed95-48fe-b93e-0db9b288d483	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+246d38f2-41aa-48b0-afd3-f6052cc0f70e	0ca5ab00-50d4-4034-b2e0-4a13cae1a60f	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+0dfc380f-ad80-4e46-ad16-74e406a47d86	0ae9c885-6d57-4ae8-ba13-6fb54ccc54b0	Hyvää aktiivisuutta	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+1a4c8746-e819-46c4-ab1a-ab79d4a1dd3d	5030a567-6de6-49c7-b691-31b46561047d	\N	ea9f064b-33e4-454a-b14d-354bda5b8b09	f	\N	\N	f
+c3c93a70-28c0-4f4c-9f68-1eb1c540687a	82597408-2c30-4632-b221-10345686604f	Hyvää aktiivisuutta	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+345890a4-47bd-4d62-8d03-97eeaa4b9232	9be010a9-864e-40c8-8ca3-88229719d44b	Hyvää aktiivisuutta\n	ea9f064b-33e4-454a-b14d-354bda5b8b09	t	8	8	f
+3aeeb5ca-17f0-465d-ab7f-36cb3c558602	6ffb3e2a-2229-40e2-b575-cd686bad06e6	Aktiivinen, tsemppaava ja reipas työskentely tunnilla. Kuntosaliosuudessa olisit voinut vielä yrittää enemmän.	4f012254-df83-4653-86bb-717626e042ba	t	7	9	f
+f49fc139-755e-4270-ae98-7dfab1a51903	c73e46e3-f07d-4f63-8287-4bd64777e4eb	Kuntosalityöskentely sinulle tuttua. Tunnistit liikkeitä ja osasit näyttää kaverille. 	4f012254-df83-4653-86bb-717626e042ba	t	9	8	f
+2599946c-4288-43c1-80fd-a73f73df7c8e	156c691f-acee-423a-aa54-c43fc7ef362d	Tunnilla keskittyminen herpaantui muutaman kerran. Kiinnitä tähän jatkossa huomiota. Kuntosalilla otit vastuuta omasta toiminnasta	4f012254-df83-4653-86bb-717626e042ba	t	7	7	f
+61a1484a-05a0-407c-b4f1-ffd3b9c7efb3	47b2d98d-8065-4802-bbb8-007af120033c	Aktiivinen ja osallistuva tuntityöskentely. 	4f012254-df83-4653-86bb-717626e042ba	t	8	8	f
+d8df851c-1c76-4595-9d4c-2808a71885a9	9dca9f7d-9c60-41cc-a840-fbb4ff1d32ed	Voisit jatkossa vielä enemmän tsempata itseäsi liikkumaan ja ponnistelemaan, vaikka ei aina tuntuisi kivalta. 	4f012254-df83-4653-86bb-717626e042ba	t	7	7	f
+fff3b30a-f8a9-42f2-8d92-e6d232b6ccf2	2b3c66e1-6ae2-4bb8-bb5f-9367b1c60a13	\N	4f012254-df83-4653-86bb-717626e042ba	t	7	8	f
+51ede97f-0b4e-4ff5-b5db-f1167097aede	ce6a330a-8983-4648-883f-2a37ad323d82	Rohkeasti otit vastuuta omasta ja parin oppimisesta. Olit aktiivinen tunnilla. Hallitset kuntosalityöskentelyn perusasioita.	4f012254-df83-4653-86bb-717626e042ba	t	9	9	f
+74de296e-2150-4a90-be72-447ff4a1b45e	4aed6796-0bf5-4ca9-808c-b9f602ead89b	\N	4f012254-df83-4653-86bb-717626e042ba	t	6	7	f
+c631871f-553a-4b51-9d57-f2b0d487e554	a00436ee-4ac5-4921-9e7f-93c2bb90958e	Aktiivista toimintaa. Kysyit, jos et tiennyt. Parivoimailussa autoit kaveria ja kannustit tekemään annettua tehtävää.	4f012254-df83-4653-86bb-717626e042ba	t	9	9	f
+6193ad6a-698a-461a-bff8-b3bf8708f50c	6b46a923-1a15-411c-a067-b89d0a0d0361	\N	4f012254-df83-4653-86bb-717626e042ba	t	7	8	f
+13bb218b-71c0-46de-a513-1ced4ee4e820	7516a6b1-34d1-493f-8446-d4b92224a81a	Innokas ja yritteliäs. Yrtit parhaasi ja uskalsit kokeilla eri liikkeitä. 	4f012254-df83-4653-86bb-717626e042ba	t	7	8	f
+52794405-78bc-41de-bd08-2b0dce5f6915	853e59ab-93ec-43c2-a614-479ff74fc968	\N	4f012254-df83-4653-86bb-717626e042ba	f	\N	\N	f
+71178074-8b88-4bcb-ace7-142e580ac169	f1735521-da56-4045-a8d2-6cab449c03e3	\N	4f012254-df83-4653-86bb-717626e042ba	t	8	8	f
+9fed321b-f867-4d84-9825-18675c4562fa	8cf84965-ed78-46ec-a5a5-5cb9319e1eb2	Lähdit rohkeasti kokeilemaan eri liikkeitä ja autoit ja tsemppasit kaveria parivoimailussa. 	4f012254-df83-4653-86bb-717626e042ba	t	7	8	f
+93d6e5bc-44f0-4830-8b2d-b31bec22a287	a1953c8f-d3de-49f5-a5f2-290fefb0744e	Työskentelet annettujen ohjeiden mukaan ja otat vastuuta. 	4f012254-df83-4653-86bb-717626e042ba	t	7	8	f
+b41b4be1-b853-4495-9987-d0368a796029	2e1d4a5a-e1be-4563-855c-13d40eedaf99	\N	4f012254-df83-4653-86bb-717626e042ba	t	7	7	f
+ca961099-f8dd-47df-afa5-739369eac388	9f630151-9990-4987-a1e5-5a8b280051bc	Aktiivista ja oma-aloitteista toimintaa. Autoit ja tsemppasit kaveria. Luot hyvää yhteishenkeä. Hallitset kuntosalityöskentelyn perusasioita.	4f012254-df83-4653-86bb-717626e042ba	t	9	9	f
+af48111c-ccfe-4202-aada-53b2cfd368b3	48b10a29-5087-44ca-86fe-bea7baefe809	Muista jatkossa kuunnella kun annetaan ohjeita ja antaa rauha muiden työskennellä. 	4f012254-df83-4653-86bb-717626e042ba	t	7	8	f
+c390b3d9-b577-4104-af5d-3103610fd733	a181ddb0-2f17-4388-a07d-87d17f259689	Innokkaasti lähdit testaamaan hihalyöntiä ja pyrit kehittämään sormi- ja hihalyöntejäsi.\n	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	8	f
+f564c884-74dd-4fcc-b9b0-3952c25f2d67	49b2b205-cc01-4b94-8c14-6980bb111374	Toimit annettujen ohjeiden mukaisesti ja annoit työrauhan muille.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	8	f
+8e5ac29b-47d1-46a1-b357-0101c6d59c28	066a591a-9fa2-453f-ade9-a56650a4e080	Pyrit tekemään harjoitteita annettujen ohjeiden mukaan, vaikka välillä olikin hankaluuksia lyödä palloa oikeaan suuntaan.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	8	f
+f4c00b6e-cccf-4694-98b7-f77d03b88604	77b7e880-0bac-4927-afc2-df545c422a43	Lähdit innokkaasti oppimaan uutta ja kehityit sormi- ja hihalyönnissä tunnin aikana.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	8	8	f
+376d5087-35e1-4586-a72e-c4fb30510379	f53e1599-223f-40cc-95a4-6842b4a9acf6	Olit hyvin mukana tunnilla. 	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	8	f
+bca67024-649f-4910-9278-522833328ff1	490af405-d330-4b15-b679-fb158b4df1ae	Lähdit mukaan tekemään harjoitteita, mutta välillä keskittymisesi meni muihin asioihin. 	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	7	f
+1bee3a9a-721a-4890-8714-b92a049f88a1	1f2b3659-ac4e-4f6a-85c7-c8afaa9d45f4	Olit innokkaasti pelaamassa ja tekemässä harjoitteita. Välillä keskittymisesi meni muihin asioihin.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	8	7	f
+34f601c2-d77c-4ed6-a459-f3cf1ca5b083	6ddc65a2-5e1e-41ff-83ad-b9e5e69402e8	Olit aktiivisesti mukana tunnilla ja pyrit kehittymään harjoitteissa.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	8	9	f
+954e72ea-a586-4a3d-ac0a-aecec8c03dac	147817db-2fbf-4577-aca0-bab7491527e4	Teit harjoitteita hyvin annettujen ohjeiden mukaisesti.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	8	8	f
+7b1e468d-b26e-42ae-ac2b-54890a959dec	480492b3-cd51-4608-b543-94072dbcd7b1	Et pystynyt osallistumaan tunnilla tehtäviin harjoitteisiin, paitsi tekniikka osioon, heittäen parillesi palloa. Se oli mukavasti tehty. 	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	\N	\N	f
+d442371f-a6c5-4f3f-a483-87045fd09530	ce218015-5ac5-4340-b539-5c2ff5a7946d	Lähdet usein mukaan harjoitteisiin ja peleihin hyvin, mutta keskittymisesi ei aina kestä itse asiassa. 	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	7	f
+2a04b812-f3f9-4664-957a-16c658f602a4	5a10ee32-7c7b-450c-9138-4d824a9f8c4c	Yritit parhaasi tunnilla ja annoit toisille työrauhan.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	9	f
+7beed267-7f02-42b6-8447-6e877f798732	305d1ed2-cf15-47b9-83d0-8f4f8de22cbd	Yritit parhaasi ja annoit muille työrauhan.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	9	f
+adc2cd89-1248-44c9-9286-c2840958aba3	9c4d99ad-a744-4074-9273-2d507c45bbd6	Lähdet hyvin mukaan harjoitteisiin ja joustat tarpeen mukaan. Keskittymisesi menee kuitenkin välillä muihin asioihin kuin tunnilla oleviin harjoitteisiin.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	7	f
+16efbf62-81ec-41a8-8e96-f1b6de9151dd	e1964d89-cbf8-4ff9-bb1b-468b85006df7	Teet harjoitteita parhaasi yrittäen ja annat muille työrauhan.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	8	9	f
+44a276be-db8b-473f-8993-ddc13131af91	d3251c9a-a5b1-4922-8670-c40aa276c205	Olit mahtavasti mukana tunnilla ja annoit muille työrauhan.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	9	f
+06f3c556-70f9-4d0f-8b5f-2ed0bd55a043	07d36b1e-6b6a-4e5c-96cf-ca2cf563aaef	Annoit toisille työrauhan ja olit mahtavasti mukana eri peleissä ja harjoitteissa. Kehityit tunnin aikana sormi- ja hihalyönneissä.	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	8	9	f
+7b1a5acf-9fd1-423d-8132-09b8e39b9cdb	dd4be785-65a3-4bca-b2db-701ceb4eddd6	Yritit tunnilla parhaasi ja annoit kaikille työrauhan. 	afab245c-51d5-44cd-a9d0-a7d9ff262af8	t	7	9	f
+75718d81-2410-4c47-a8da-816009a7059e	728abce8-c393-4ffb-b283-c67466dfd1c6	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+9333a77f-aee9-4cac-9659-0dfdab183276	30a5fec4-d7d7-47f7-81ae-2a7f2f4b1ec1	Kiitos kun autoit tunnin jälkeen viemään tavarat	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+75731e09-d9fd-4726-b570-0eb6140e40ae	67ef625f-12b5-4326-ae6b-02acfcd891ed	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+aa97cc6e-922d-4930-aec1-95e382f8cb4f	9d94da92-5562-4930-973e-d2c80837aa01	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+e68568b1-8b7e-485f-8b11-39ea52236d34	1e650119-e00b-44f1-8732-7c463d1ab769	Kiva ku jeesasit mailojen kans lopussa	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+384d2efa-36e1-4939-885d-56765dfdcf08	35ac5ef3-28c9-4308-955c-13fefa08de50	Ihanaa innostuneisuutta!	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+9f071554-4948-4ea9-b4d5-70b271881233	7186aae8-6f2c-4fbc-af13-3f2ad9c7046f	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+d01e5eae-c207-4b81-afbe-932677726ccc	238b360b-0552-483a-938b-cb40a18c570f	Vau, pallottelu sujui tosi hyvin	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+b839d8d4-9c88-40e8-acb2-39a1e1a63848	05d4d15d-addf-45bd-b622-6753df433e30	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+b2df5d30-be68-4b13-8164-825619ab1833	593a9f60-c295-4e64-8b7a-452e3a0946e8	Löit pallon mun kädestä... ööö	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+84563c92-532d-45ac-a9c6-8f2ed0731e01	a5c5eec2-f211-411f-bbb3-2dcf8cd757fd	Vau mikä pallottelu putki!!	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+2a68f54b-af3d-4178-8698-0d647e278551	602a3f7d-bb08-47c9-b4b5-ef9ba13850b0	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+80ad7d16-7407-4faf-9238-fbda26fc807b	3a686f7c-168f-494c-835e-15595aca916c	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	f	\N	\N	f
+64bac0b3-ba19-43f7-8abc-7ca37f26fb40	22e22234-6bab-4748-accd-a7b18b51d6af	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+fde903aa-ebac-4578-8260-cc00d137005f	8d9ca97c-a948-4cdb-a22c-b136067fca02	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+77ece56f-3330-4e41-9027-99ddad41d50a	11010ab7-44de-419a-a1c7-4be10eb8829e	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+b155a188-3cba-40fc-8dd5-d32710b2fa65	9b024fa4-61ab-4d76-ae39-b3adff2a572d	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+a375bacf-17b8-4798-b0fe-2fbae6638fdc	3a4d367d-bd69-41c2-a2d6-109a654039dd	\N	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+525858ba-8cbc-40ad-9b61-bf9650a18d5b	cb77d2b4-9186-4942-9804-2061e367d204	Pingis guru	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
+987ab733-71e1-4acd-be6f-f93aaa895164	6f06493b-9029-4bb3-b106-66c1bf4860d7	Vau mitä pomputtelua!\n	2663ba20-8899-426b-b9b9-ce5a095d7015	t	\N	\N	f
 \.
 
 
@@ -5577,6 +5811,7 @@ COPY public."EvaluationCollection" (id, date, description, "environmentCode", "m
 c3465a26-c5ee-4e37-8012-dfe43abe7726	2023-10-05 00:00:00	Salibandy ja sulkapallo	LI_ENV_PAL	64b534f4-7461-422c-bf3b-8d5bde2e36f7	{TI1,T2}
 47f2bec1-e257-4068-af58-e3f73f5bf3c4	2023-10-06 00:00:00	Koripallo (pallottoman pelaajan liikkuminen)	LI_ENV_PAL	3b3f9788-8ed0-4bbd-b715-5df35b02193e	{T7,T4,T10}
 29bceede-a9ed-4f38-b945-af6a568799d1	2023-10-09 00:00:00	Pesäpallo, koripallo, ulkokuntosali	LI_ENV_PAL	999be80c-ff15-4515-ba2d-3f330319b986	{T4}
+d45fc42d-a80a-45b6-8e5a-71866d88dac4	2023-10-10 00:00:00	Jalkapallo, koripallo tai lentopallo	LI_ENV_PAL	f6160571-beff-4c21-b3af-399f376429ae	{T4}
 7b28f9fd-4ecb-4da4-80d8-827355d10caf	2023-04-21 00:00:00	Jalkapallo ja soikkis /tytöt	LI_ENV_PAL	72d704a8-e209-4255-a595-40d96c4d42ad	\N
 f7becac8-71af-4f60-bffb-5ea99eb25eea	2023-09-25 00:00:00	Suunnistus yksin	LI_ENV_LUO	9b8adc7f-39c7-4925-847a-818b9389c18b	{T2,T10}
 c58e68dc-fe7e-46c2-9e8e-c03bbe7b90e9	2023-09-27 00:00:00	Suunnistus 	LI_ENV_LUO	66c6ddef-9d17-4df8-a1d1-fafc576105a3	{T8,T9,T1}
@@ -5586,6 +5821,7 @@ c58e68dc-fe7e-46c2-9e8e-c03bbe7b90e9	2023-09-27 00:00:00	Suunnistus 	LI_ENV_LUO	
 046b0e3a-90f8-44f3-ac3b-29b5e8ec6dc2	2023-10-05 00:00:00		LI_ENV_LUO	36347506-9fe3-4cc1-bd70-3f56675ba66c	{TI1,TI4,TI8}
 0f9a0100-2334-4c0a-9cf2-961bdd036dde	2023-10-06 00:00:00	Terveystiedon seksuaalisuus tunti	LI_ENV_MUU	a6290fba-9996-4d99-9ba6-d6f68cf8463b	{}
 cd7b7953-26df-4c61-9e37-75ccdcb588e4	2023-10-09 00:00:00		LI_ENV_PAL	85e56ab3-5b5c-419f-a409-f67f6dd32b31	{T1}
+8d64c700-37d1-4c4f-8b2e-287705e68ebd	2023-10-10 00:00:00		LI_ENV_VOI	797914c3-3e04-4caa-8468-830bcc09659b	{TI4}
 1e80e956-c012-4d76-a01a-0d32007da1db	2023-04-21 00:00:00	\N	LI_ENV_MUU	0497a2a4-6124-40dc-92d6-8fe3b708331e	\N
 912bc154-6259-43bb-9950-9dcad160e71b	2023-09-25 00:00:00	Suunnistus	LI_ENV_LUO	8497021a-61fa-49ee-ac25-5f321fc52fde	{T2}
 d52c7b5d-1f33-44b1-9699-85a0ba6698f9	2023-09-25 00:00:00		LI_ENV_LUO	587a6af4-afdd-4bf5-90a9-04bcadbb4807	{T2,T3}
@@ -5595,6 +5831,7 @@ a546eab7-5c3c-4942-b10e-dc3411295ab1	2023-10-03 00:00:00	Tennis	LI_ENV_PAL	640e8
 6a23c38b-5dff-43f6-adbe-d7ef7f4400a8	2023-10-05 00:00:00	Tennis	LI_ENV_PAL	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
 7c6ef1ff-0f07-4861-adf9-f0c9fa7492cf	2023-10-06 00:00:00	Tunnin aiheena lentopallo	LI_ENV_PAL	db4703cb-47ee-4f3e-9a4d-e4df3749bb12	{T3,T4,T7,T10,T11}
 e235d334-40fe-4899-8bf5-82859bbb40d5	2023-10-09 00:00:00	Futsal 	LI_ENV_PAL	5906bdc9-caab-4956-aff3-e31f268723ed	{T4,T1}
+1c0e429a-9319-47cd-859a-92a1eebc046a	2023-10-10 00:00:00		TE_ENV_ITS	fcf277f6-fe6e-4f8a-8312-30e04708dcc4	{T1}
 0867635c-3f1e-4762-b012-befd7aee1f0c	2023-09-25 00:00:00	Soikkis	LI_ENV_PAL	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T4}
 6a6952de-ce1e-4a9d-bea5-a28d7d0f88d1	2023-09-26 00:00:00	Ultimate	LI_ENV_PAL	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T4}
 cbc7296f-bd48-41e7-b24c-5ecbfb7f67f5	2023-09-27 00:00:00		LI_ENV_PAL	7f091af6-1c43-4020-9360-e05a6563e18a	{T2,T4,T9,T8}
@@ -5602,6 +5839,8 @@ a09becaa-0d1e-43cb-924b-f5013a7067d8	2023-09-28 00:00:00		LI_ENV_PAL	36347506-9f
 fc381d34-0c9b-4cdb-90d0-9f28650cb3c4	2023-10-06 00:00:00	Koripallo	LI_ENV_PAL	e6e68270-934e-452e-ae7e-5a08ea0f4741	{T1}
 aeea7f9c-cb09-4464-8f7a-ae431f79d989	2023-10-05 00:00:00		LI_ENV_PAL	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T4,T2,T8,T9}
 e536c868-40e9-4bc5-82fb-92093d7dd1a2	2023-10-09 00:00:00	Katutanssia. Oppia liikkeitä, bounce, ilmaista itseään rohkeasti ja toisen ilmaisun kunnioitus 	LI_ENV_TAN	63f2c632-042f-45d8-864e-8ecf96d21f70	{T3,T10}
+85204769-35dd-43cc-87c0-d7df6d2dcca2	2023-10-10 00:00:00	Jalkapallo	LI_ENV_PAL	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e	{T4}
+f3249996-813f-45bd-a9c0-f49b689221cf	2023-10-10 00:00:00	Sulkapallo ja koripallo	LI_ENV_PAL	3b3f9788-8ed0-4bbd-b715-5df35b02193e	{T7,T10}
 05401a8a-dcd6-4ded-994f-66dedf8fa9ea	2023-09-25 00:00:00		LI_ENV_PAL	ed7b64c2-5b04-4cd9-87df-2b820a39bdd9	{T2}
 36ce3ec4-7f75-454c-80e7-eef9e6931ed2	2023-09-27 00:00:00	Viuhkasuunnistus	LI_ENV_LUO	49f0263b-9be4-44f2-be54-8f95a1942dae	{T2,T10}
 1f052690-f396-406e-bd48-468a4f52b25b	2023-09-25 00:00:00	Jefu / soikkis	LI_ENV_PAL	afc9216c-d2b7-47d2-9e19-4a23a91acb9e	{T4,T8,T9}
@@ -5609,6 +5848,8 @@ e0abfd5d-a67a-44b2-ab54-f912473ecccd	2023-09-29 00:00:00	Ultimate	LI_ENV_PAL	a6a
 91f31784-d022-4c83-9e6c-8fd7df598ade	2023-10-04 00:00:00	Amerikkalaisen heitto ja kiinniotto	LI_ENV_PAL	f6160571-beff-4c21-b3af-399f376429ae	{T4}
 67bc0845-b04a-4787-be77-7a1ace4ebf8c	2023-10-05 00:00:00	Pistetyöskentely+koripallo+itsenäinen työskentely	LI_ENV_PAL	a153dc01-0752-4f56-9501-8fc52ba97f0b	{T1,T2,T5,T9,T8,T10}
 846a1994-129b-4034-8903-0518353c0f88	2023-10-09 00:00:00	Leikit, jalkapallo, koripallo	LI_ENV_PAL	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T4}
+cd98d9ec-b6e7-4022-a544-ad1c06b6cc3f	2023-10-10 00:00:00	Sulkapallo	LI_ENV_PAL	943b0f80-0b0c-4c71-ab18-1b3a44d2a027	{}
+ea9f064b-33e4-454a-b14d-354bda5b8b09	2023-10-10 00:00:00	Uinti	LI_ENV_VES	64b534f4-7461-422c-bf3b-8d5bde2e36f7	{TI1,T3}
 c1740f10-c2df-470a-a4b0-547fb0ce7ae4	2023-04-06 00:00:00	\N	LI_ENV_TAL	ac83bfa3-9f44-4aea-aac0-98e793367206	\N
 b1c2442f-23fc-4571-9701-2c795143537d	2023-04-07 00:00:00	\N	LI_ENV_TAL	89d861be-d5e9-41a3-8672-d977b0895d54	\N
 264c294a-1b7a-403a-8d88-eada1ec58baf	2023-05-09 00:00:00	\N	LI_ENV_PER	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T1,T5}
@@ -5619,6 +5860,8 @@ ab5a35ca-953c-46dc-a5d2-3cfc3943a162	2023-09-19 00:00:00	Vesijumppa ja vesipelas
 c4b8a883-508c-4796-b624-c218393dbb39	2023-10-04 00:00:00	Kpk frisbeellä, mustekkala, topsipuikkosähly	LI_ENV_PAL	cf7246cc-5760-499a-9252-c3d1bbcc79e8	{T4}
 07522801-8369-421f-a5b6-aae0ef5fa679	2023-10-06 00:00:00		LI_ENV_LUO	36347506-9fe3-4cc1-bd70-3f56675ba66c	{TI4,TI8,TI2}
 3c210eaa-588a-414c-a24d-85a1740a59da	2023-10-09 00:00:00	Kuntosaliharjoittelu 	LI_ENV_KUN	3b3f9788-8ed0-4bbd-b715-5df35b02193e	{T4,T5,T9}
+48cacea1-2663-4bef-86ab-d57351c3fbd5	2023-10-10 00:00:00	Ilmaisu ja street tanssi	LI_ENV_TAN	d3f5eb51-9cac-441e-91ac-bad14e134b9d	{T3,TI1}
+afab245c-51d5-44cd-a9d0-a7d9ff262af8	2023-10-10 00:00:00		LI_ENV_PAL	cb932bc8-d215-4f88-9906-a5f4fa435366	{T4,T1,T8,T9}
 f47cb6c8-1735-4a98-a7b8-88f9af04e6e5	2023-09-04 00:00:00	Juoksu ja aitajuoksu	LI_ENV_PER	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T3}
 54ccbb1e-5718-4527-aa5d-47ad89b0db1d	2023-09-25 00:00:00		LI_ENV_VES	89d861be-d5e9-41a3-8672-d977b0895d54	{}
 0e3b97fd-a177-4753-baf8-9ca8240fed90	2023-09-26 00:00:00	Ultimate	LI_ENV_PAL	640e87de-8063-4c00-9087-c17709e34059	{T4}
@@ -5627,10 +5870,13 @@ d26f95e1-1044-41ca-bdca-65ff84e3d2f7	2023-09-18 00:00:00	Jalkapallo	LI_ENV_PAL	a
 d6d41df5-953f-49b8-9d32-79bf4521721b	2023-10-04 00:00:00	Pingis	LI_ENV_PAL	61dc37a4-b86f-4563-8fca-37aad69a1f05	{T4}
 169aa2ba-8a0e-45c2-8a80-96171381978f	2023-10-06 00:00:00	Amerikkalainen jalkapallo	LI_ENV_PAL	a6a42248-8033-4254-8b5d-ba325479414d	{T4}
 83ab0d70-f780-4a4d-b7bc-93159dbe012d	2023-10-09 00:00:00		LI_ENV_LUO	78e46daf-61ca-4997-bf43-5c5277ff6f4c	{TI10,TI8}
+001fc994-57df-46e2-89af-d98f7a0be9a2	2023-10-10 00:00:00	Jalkapallo	LI_ENV_PAL	640e87de-8063-4c00-9087-c17709e34059	{T4}
+4f012254-df83-4653-86bb-717626e042ba	2023-10-10 00:00:00		LI_ENV_MUU	7f091af6-1c43-4020-9360-e05a6563e18a	{T1,T5,T8}
 fca0be09-d964-4511-8188-1b6c88e24aa3	2023-09-25 00:00:00		LI_ENV_LUO	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T10,T1}
 16dc0612-5b68-4c4b-9764-242c51ff0492	2023-09-26 00:00:00	Ultimate	LI_ENV_PAL	f6160571-beff-4c21-b3af-399f376429ae	{T4}
 ed57c826-d68a-4951-b366-0d0fc581491e	2023-09-28 00:00:00	Ultimate	LI_ENV_PAL	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
 c02cf0c7-385c-4f6f-987a-22147fa36740	2023-09-29 00:00:00	Jungle race	LI_ENV_LUO	640e87de-8063-4c00-9087-c17709e34059	{T2}
+2663ba20-8899-426b-b9b9-ce5a095d7015	2023-10-10 00:00:00		LI_ENV_PAL	ed7b64c2-5b04-4cd9-87df-2b820a39bdd9	{T4}
 46baaad5-0f6b-4af5-b454-2895ec00965c	2023-05-05 00:00:00	Pesäpalloa (heitto-kiinniotto) / tytöt	LI_ENV_PAL	72d704a8-e209-4255-a595-40d96c4d42ad	{T2,T8}
 b38a9a41-599f-4d1a-86df-12346e38a933	2023-04-22 00:00:00	\N	LI_ENV_LUO	230317b4-fb83-4092-8da4-e641aadb600b	{T3,T7}
 15cf1b92-14da-40cf-a53f-34d44b71a6a8	2023-04-24 00:00:00	\N	LI_ENV_PAL	7088e255-6c73-4fa3-8699-3ecf9dbe5964	{T3,T1}
@@ -5943,6 +6189,7 @@ f2bec45d-f659-4cdd-8381-6f7869c1e4c6	2023-10-02 00:00:00	Ultimate	LI_ENV_PAL	311
 a31aece0-638b-4239-9a6f-96962b6f2f3d	2023-10-04 00:00:00	Koripallo	LI_ENV_PAL	db4703cb-47ee-4f3e-9a4d-e4df3749bb12	{T7,T10,T11,T4}
 c9874b4c-284e-405b-a31f-ae4e8dfa2570	2023-10-05 00:00:00	Seksuaalisuuden monimuotoisuus	TE_ENV_SEK	b169d6ec-fc62-487f-be66-83ee606b7ab7	{T2,T4,T10,T1}
 7a757acd-22ab-4cfd-b959-28df76bf0cd6	2023-10-09 00:00:00	Jalkapallo ja sulkapallo	LI_ENV_PAL	45982a54-e42c-4e48-8b84-32689d592abd	{T4}
+c611bd5d-2edc-41e2-9379-e1d3924f6685	2023-10-10 00:00:00		LI_ENV_VOI	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90	{T3,T7,T9}
 \.
 
 
@@ -5959,6 +6206,7 @@ dea2def9-0d43-4d1e-8e0a-a3e354afe1c6	Pt ryhmä 2	93c44754-5f19-4cb7-bc15-f65db94
 7c20f2c3-7b69-4e58-8a6b-4f353bae1a51	7F	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-10-04 11:51:16.945	TE	f	0efb2811-8806-4f83-ab62-8f2892e3b3b9
 3a652683-7975-4c50-9159-cc545bd9ef1d	Gradia valinnainen liikkaryhmä	9f926abb-96f8-4ccd-baf0-f52eead78eb3	2023-10-09 06:47:52.871	LI	f	b8a5563d-9803-4929-821d-e302324baa4e
 a868fc29-4830-40e7-a6ff-71d1207c85cb	Harkka	63c55811-2d14-43db-826b-6aae789cb4f1	2023-10-09 18:19:04.756	LI	f	5906bdc9-caab-4956-aff3-e31f268723ed
+496c9735-ebe2-49f9-91a2-823ef2f78dd5	Te2	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-10-10 13:25:26.563	TE	f	fcf277f6-fe6e-4f8a-8312-30e04708dcc4
 293d7530-587a-4b1a-b216-585601c65f30	Uusi luokka	a44319a9-1556-4e03-b825-48b8648a4699	2023-03-30 18:34:09.249	LI	f	2ddc3367-6ac7-4423-ac9e-0da999b30e46
 a3d216ad-203d-4f85-b292-354991ca219f	Päättö	f0b32130-0241-4b16-ab61-e6683cddbab3	2023-09-23 12:49:02.171	TE	f	55543e9e-9778-413b-a9bd-1792847d5f1b
 ea281c48-65a2-4af1-9b61-91dedf66a505	8adf	93c44754-5f19-4cb7-bc15-f65db94360b0	2023-09-25 13:59:17.886	LI	f	66c6ddef-9d17-4df8-a1d1-fafc576105a3
@@ -6008,10 +6256,10 @@ c65eb9ef-7f0b-48ec-8e07-29b20f9cfeb0	Jsjskdjsj	8548a9c5-dfdb-48e6-936d-f22184515
 b03b85ef-19a9-47ab-9903-b0a2b82bb1de	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 07:33:16.858	LI	t	0edef857-3f65-4e82-aba3-02c69e0191a8
 9d124d20-5f11-4647-9256-b1c43740dd81	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:24:03.326	LI	t	b84acf3b-29a2-48a0-899c-8ea75f7920f2
 53bbc105-6e07-4841-a795-c75f806bea01	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:23:55.193	LI	t	11455bcc-2381-45d9-aeac-ad4bb321eab9
-c3f1e3d5-7abc-44bb-bfa5-12a0fd2c6769	LI03	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-09-24 15:45:32.52	LI	f	797914c3-3e04-4caa-8468-830bcc09659b
-ca4d6aa5-12b6-4f4e-830d-ba8a02f7cc5f	8D	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-03 09:19:42.014	LI	f	640e87de-8063-4c00-9087-c17709e34059
+c3f1e3d5-7abc-44bb-bfa5-12a0fd2c6769	LI03	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2023-10-10 13:24:31.366	LI	f	797914c3-3e04-4caa-8468-830bcc09659b
 bde28363-5c62-493c-afee-04d21e9eecde	9A	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-06 10:30:30.796	LI	f	a6a42248-8033-4254-8b5d-ba325479414d
 018cd027-6fa7-468f-b53a-cee9bbf557cf	9A	483e736f-00a6-46d1-a1c3-3099eb626012	2023-09-25 08:47:23.377	LI	f	89d861be-d5e9-41a3-8672-d977b0895d54
+ca4d6aa5-12b6-4f4e-830d-ba8a02f7cc5f	8D	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-10 09:16:01.941	LI	f	640e87de-8063-4c00-9087-c17709e34059
 4c36484b-3244-47a9-a5e3-235c9474383e	7D	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-09 07:02:17.092	LI	f	31169d42-b6c4-485c-8ced-f3fca6fe9ea9
 5d674efc-3549-4837-b221-44c4d622eb09	9B	df4df12f-c686-4f62-a276-e42e8162c218	2023-09-29 11:43:20.731	LI	f	fd028225-16dd-4d8e-8c86-a81a9d9243e5
 e6299525-7a48-4030-a523-cf249433d62a	Testi	df4df12f-c686-4f62-a276-e42e8162c218	2023-08-20 18:23:59.295	LI	t	7bfd943e-c11d-458c-a010-48c84b8a6a43
@@ -6042,6 +6290,7 @@ cd74808e-451c-4d1d-93a2-47c46f8385e3	23B Liikunta	eb3000c7-1f5c-4d51-84d3-92a321
 a7f2d79a-709e-4edf-bb8c-cf50567f926e	7 harkka	905f4503-4974-4298-804f-41a23d29c106	2023-09-13 19:38:13.124	LI	f	d427be8a-0aba-47fb-8960-a447826b0343
 1eae19b4-6de5-45d6-9f05-2039e90f8df9	7 luokan harkka	905f4503-4974-4298-804f-41a23d29c106	2023-09-13 16:24:28.952	LI	f	8b14c644-c872-44fa-9f1c-52f86c74bdc7
 5c1dbf22-8f21-42df-a878-43f0d7446bde	Li1	68456b93-bed5-463f-b298-7b7d69c21980	2023-09-14 04:20:22.726	LI	f	513dfcd2-a39c-41ae-b3a2-23dd05d315ef
+e768794b-c688-4dce-9445-23e8d4c3c986	7B	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-10 07:09:01.057	LI	f	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e
 c96447b3-d0d3-4985-878c-02536cf49e7f	Tahko guys	9f926abb-96f8-4ccd-baf0-f52eead78eb3	2023-10-09 06:42:18.493	LI	t	6f377d70-cfec-45c3-aabb-c41bdedaa327
 4fe72bd5-8f67-4212-a715-4a0ca602e632	Liikka syksy	3386ad42-5f46-49ab-ab12-fa11bb8723a5	2023-10-03 17:22:27.933	LI	f	07ad7d5a-6bde-4c10-b4af-70932def7817
 feb81b2f-c70c-47f8-a2c1-623dcdfe48aa	Päättöharkka liikka syksy	64ae9e69-39e8-43f4-9a3c-628b4c9332ea	2023-09-28 11:22:26.403	LI	f	f5b7f191-2b9f-4606-b7f4-69f2fab61d6d
@@ -6051,12 +6300,11 @@ b509833f-510c-48b3-ac2f-f3a224f7689b	LPV3	a7935ade-dce6-4954-9616-d96d0534bd59	2
 e5fde4bf-6630-4459-9d8e-31740b307c02	9. Valinnainen	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-04 08:48:01.592	LI	f	61dc37a4-b86f-4563-8fca-37aad69a1f05
 20952378-342a-4b6e-9cd2-040bcee46e69	Liikuntaharkka	5ca4b120-4155-459f-acea-cbadbaf95437	2023-10-08 17:26:16.31	LI	f	63f2c632-042f-45d8-864e-8ecf96d21f70
 bf327012-7775-405f-b937-3a7c1508eda3	Norssi 9bde	d7ea5704-9071-41af-b5ec-4311fc5088f3	2023-09-27 09:30:37.779	LI	f	d872e1e1-07ed-4fe7-b285-f11e407754c7
-e8fd1190-3395-4370-af51-9d9884a145b4	8ab	9f62e202-600f-4452-be5e-de1c0350a622	2023-09-27 10:22:38.982	LI	f	7f091af6-1c43-4020-9360-e05a6563e18a
 ccd44372-5947-4b45-acc4-585c5f15c338	OPEA515, liikunta	9ec8ee79-0762-4208-a893-e44b5061b468	2023-09-27 11:10:29.398	LI	f	49f0263b-9be4-44f2-be54-8f95a1942dae
-2cba9a0f-2452-495a-9fbc-0180ea49411e	Päättö syksy	9d7305e7-6591-446f-a593-7265e800d65a	2023-09-27 13:04:41.381	LI	f	d3f5eb51-9cac-441e-91ac-bad14e134b9d
-a421b5e1-eb01-462e-899b-adb1b57e3b0d	Päättö syksy, 7ABE	49fdcd3d-aa2f-4c86-baec-e6c0c35665cd	2023-10-05 10:28:52.515	LI	f	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90
-e768794b-c688-4dce-9445-23e8d4c3c986	7B	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-03 07:00:33.36	LI	f	c9e8ca9f-fd68-4505-b112-1cc21aeb8b7e
-942b9f78-b7b8-46aa-abff-18cf8da3ac9b	7A	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-04 06:50:35.077	LI	f	f6160571-beff-4c21-b3af-399f376429ae
+a421b5e1-eb01-462e-899b-adb1b57e3b0d	Päättö syksy, 7ABE	49fdcd3d-aa2f-4c86-baec-e6c0c35665cd	2023-10-10 10:41:25.851	LI	f	1a1e15fb-3b13-4ac2-90e0-8f4d19dafd90
+942b9f78-b7b8-46aa-abff-18cf8da3ac9b	7A	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-10 11:27:54.962	LI	f	f6160571-beff-4c21-b3af-399f376429ae
+2cba9a0f-2452-495a-9fbc-0180ea49411e	Päättö syksy	9d7305e7-6591-446f-a593-7265e800d65a	2023-10-10 07:55:21.062	LI	f	d3f5eb51-9cac-441e-91ac-bad14e134b9d
+e8fd1190-3395-4370-af51-9d9884a145b4	8ab	9f62e202-600f-4452-be5e-de1c0350a622	2023-10-10 16:48:41.402	LI	f	7f091af6-1c43-4020-9360-e05a6563e18a
 0c583991-c6d6-4d39-aa2e-3cb6b477fd43	2C	b2f96969-d008-4fb4-9367-d1f463b33bf0	2023-10-06 08:25:06.164	LI	f	36347506-9fe3-4cc1-bd70-3f56675ba66c
 bffeb915-f568-4167-aee3-a59ad70d0ac6	5D	b2f96969-d008-4fb4-9367-d1f463b33bf0	2023-10-09 11:11:41.286	LI	f	78e46daf-61ca-4997-bf43-5c5277ff6f4c
 36b2f528-25fa-4ce2-8d35-6d487a5078d9	8C	df4df12f-c686-4f62-a276-e42e8162c218	2023-10-09 12:44:14.669	LI	f	45982a54-e42c-4e48-8b84-32689d592abd
@@ -6069,19 +6317,20 @@ ef819731-2f4e-4980-9534-bec0630fee53	Kekeke	483e736f-00a6-46d1-a1c3-3099eb626012
 bab7de8e-b5cb-421f-bf0c-1000ed41b2e2	Riikan harkkaryhmä	f83308e6-fca1-45b1-bfb8-9e05caa42dbc	2023-09-19 08:57:01.703	LI	f	b8a5829d-197f-4b36-889a-9123183fa2e7
 cae0ff59-33a6-45f0-b47f-a4fb06c2c793	Bugiryhmä	4f38a727-897b-40d0-a974-cf8a7d2efda1	2023-09-19 11:22:03.698	LI	f	7f1c5e91-43ea-4eef-ad38-3838a19a993b
 7b528230-a909-4f5d-a330-9e65fa9774f6	LPES1009	0d276a14-5a8b-4e16-a364-e1441baa96f2	2023-09-19 19:29:34.331	LI	f	557f38da-cdab-464c-bc74-1a84606989b0
-be8dad6e-58f6-4ba1-a77f-d2ff43823856	Harkkaryhmä N	755c60e1-a067-4985-9bd9-7bb29f63fac0	2023-09-20 11:48:00.091	LI	f	cb932bc8-d215-4f88-9906-a5f4fa435366
 a4d62266-b5ba-49e0-82a1-94291fc4d043	T	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-09-24 10:59:35.982	TE	t	db938885-4941-4bc9-bfed-fdd4d595c36f
 3e75cd57-f337-4778-acf3-7df420b17374	8lk. Liikka, syksy (PH)	898d7e61-abc9-4d1e-9bc5-3bc3a3b5727d	2023-09-25 06:23:16.253	LI	f	8497021a-61fa-49ee-ac25-5f321fc52fde
 a7449b51-02e7-4f28-a799-bbc7f7f1496d	8lk	cc2e0dfe-3d7a-46bb-bde6-84a627f135f8	2023-09-25 07:40:05.104	LI	f	afc9216c-d2b7-47d2-9e19-4a23a91acb9e
 c7b3f714-e4f2-4011-b934-0f64e2a2a51b	Pt ryhmä 1	93c44754-5f19-4cb7-bc15-f65db94360b0	2023-09-25 14:00:58.078	LI	f	4ad446ed-169e-42d1-9214-73692c2023b6
-0a99ae66-1e09-40f9-9bff-62106f38c774	7lk	f83308e6-fca1-45b1-bfb8-9e05caa42dbc	2023-09-28 11:01:44.344	LI	f	ed7b64c2-5b04-4cd9-87df-2b820a39bdd9
 28a8b373-ae39-47e1-9e98-7c0bf0cde758	7CDF	9eb688f1-ffe9-44a8-b4b8-e83f1ec6fc3b	2023-09-29 09:31:58.884	LI	f	a5fe4430-339a-4c7b-b50a-5ec649f2a4f6
 2efbd50b-262b-49e3-b13d-b73a8eca7c4c	Perusharkka	246b2c10-e69f-4efe-bb88-b85b157a53a5	2023-09-29 10:58:29.715	LI	f	b437a136-3ee7-4978-b76e-c5a1cfa2ae9d
 7c8569f1-4f65-4d21-b661-0cbd1baab970	Ammattiopisto uusi	8619ef13-7ce0-4b24-ad34-25a0c50502fa	2023-10-04 05:03:48.276	LI	f	e6e68270-934e-452e-ae7e-5a08ea0f4741
-0fb115d6-0135-4a01-aa83-019cbdd01cc3	23B Liikunta	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-10-05 07:35:40.789	LI	f	64b534f4-7461-422c-bf3b-8d5bde2e36f7
 c997db45-8276-44cb-9be2-5e512109c02f	Terkan harkka 8.lk	51f117fe-e000-4e3d-ac13-7cfd1d5409c6	2023-10-06 11:31:42.771	TE	f	b169d6ec-fc62-487f-be66-83ee606b7ab7
 33ea6ccf-76a2-43e4-9f8b-3e365da6eb17	23B Terveystieto	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-10-06 15:07:23.999	LI	f	a6290fba-9996-4d99-9ba6-d6f68cf8463b
-e25fa867-54d6-4bf2-8cc9-d1cb5e20de21	Gradia AK	8619ef13-7ce0-4b24-ad34-25a0c50502fa	2023-10-09 07:42:17.107	LI	f	3b3f9788-8ed0-4bbd-b715-5df35b02193e
+a72a70d6-de70-4425-ab30-bd58a3521bb5	PO22A	0c6c4bed-7226-4172-ad01-80ee0988bdf4	2023-10-10 07:54:46.527	LI	f	943b0f80-0b0c-4c71-ab18-1b3a44d2a027
+e25fa867-54d6-4bf2-8cc9-d1cb5e20de21	Gradia AK	8619ef13-7ce0-4b24-ad34-25a0c50502fa	2023-10-10 13:54:48.537	LI	f	3b3f9788-8ed0-4bbd-b715-5df35b02193e
+0fb115d6-0135-4a01-aa83-019cbdd01cc3	23B Liikunta	eb3000c7-1f5c-4d51-84d3-92a321fee7e3	2023-10-10 14:40:48.154	LI	f	64b534f4-7461-422c-bf3b-8d5bde2e36f7
+be8dad6e-58f6-4ba1-a77f-d2ff43823856	Harkkaryhmä N	755c60e1-a067-4985-9bd9-7bb29f63fac0	2023-10-10 16:35:57.806	LI	f	cb932bc8-d215-4f88-9906-a5f4fa435366
+0a99ae66-1e09-40f9-9bff-62106f38c774	7lk	f83308e6-fca1-45b1-bfb8-9e05caa42dbc	2023-10-10 18:38:49.399	LI	f	ed7b64c2-5b04-4cd9-87df-2b820a39bdd9
 \.
 
 
@@ -6097,6 +6346,7 @@ ed7b64c2-5b04-4cd9-87df-2b820a39bdd9	0a99ae66-1e09-40f9-9bff-62106f38c774	PRIMAR
 b437a136-3ee7-4978-b76e-c5a1cfa2ae9d	2efbd50b-262b-49e3-b13d-b73a8eca7c4c	VOCATIONAL	LI_VOC_MODULE_AMM_1
 0efb2811-8806-4f83-ab62-8f2892e3b3b9	7c20f2c3-7b69-4e58-8a6b-4f353bae1a51	PRIMARY_SEVENTH	seven_to_nine_years
 b8a5563d-9803-4929-821d-e302324baa4e	3a652683-7975-4c50-9159-cc545bd9ef1d	VOCATIONAL	LI_VOC_MODULE_AMM_1
+fcf277f6-fe6e-4f8a-8312-30e04708dcc4	496c9735-ebe2-49f9-91a2-823ef2f78dd5	HIGH_SCHOOL	TE_HS_MODULE_TE1
 55543e9e-9778-413b-a9bd-1792847d5f1b	a3d216ad-203d-4f85-b292-354991ca219f	PRIMARY_EIGHTH	seven_to_nine_years
 4ad446ed-169e-42d1-9214-73692c2023b6	c7b3f714-e4f2-4011-b934-0f64e2a2a51b	HIGH_SCHOOL	LI_HS_MODULE_LUK
 5906bdc9-caab-4956-aff3-e31f268723ed	a868fc29-4830-40e7-a6ff-71d1207c85cb	VOCATIONAL	LI_VOC_MODULE_AMM_1
@@ -6229,6 +6479,7 @@ bf3ec92b-01d7-4035-bcc6-b4b1f1b102d1	dea2def9-0d43-4d1e-8e0a-a3e354afe1c6	HIGH_S
 e910d635-7afd-4962-8667-4236148265d2	94d69c76-5888-4997-85d7-53814017438c	HIGH_SCHOOL	TE_HS_MODULE_TE1
 3b3f9788-8ed0-4bbd-b715-5df35b02193e	e25fa867-54d6-4bf2-8cc9-d1cb5e20de21	VOCATIONAL	LI_VOC_MODULE_AMM
 b169d6ec-fc62-487f-be66-83ee606b7ab7	c997db45-8276-44cb-9be2-5e512109c02f	PRIMARY_EIGHTH	seven_to_nine_years
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	a72a70d6-de70-4425-ab30-bd58a3521bb5	PRIMARY_NINTH	seven_to_nine_years
 \.
 
 
@@ -7502,6 +7753,25 @@ e1b8b6a5-0e57-4743-b586-d83afe78189d	Seppo	aedbf1b8-094c-42f5-ab79-52bc3752a8da
 4efc8d8e-e557-4574-bf80-f80a259fbc50	Sami	aedbf1b8-094c-42f5-ab79-52bc3752a8da
 4168a5d3-70ab-4421-83bd-19d49bac064a	Jona	aedbf1b8-094c-42f5-ab79-52bc3752a8da
 e90986e7-44d5-479c-bf90-dcd155d2c034	Jesse	a868fc29-4830-40e7-a6ff-71d1207c85cb
+531a6f18-bf05-45d8-bd08-9dc3ac6de051	Najah	a72a70d6-de70-4425-ab30-bd58a3521bb5
+e67675bb-7a23-4fac-92f7-e02029d90472	Fadhela	a72a70d6-de70-4425-ab30-bd58a3521bb5
+b4cc2377-85c6-49b7-ada5-f305dbaac73d	Musab	a72a70d6-de70-4425-ab30-bd58a3521bb5
+d2248f52-c906-4bc9-b194-d1c8ca41a8bc	Yana	a72a70d6-de70-4425-ab30-bd58a3521bb5
+e56af295-37e6-457e-83c7-0c8b517019f0	Katunga	a72a70d6-de70-4425-ab30-bd58a3521bb5
+865c70aa-9e6b-4eaf-9040-61c8a6de06be	Anastasiia	a72a70d6-de70-4425-ab30-bd58a3521bb5
+b9e7ddc7-a21f-407e-b93c-3e2f208c8af3	Nabi	a72a70d6-de70-4425-ab30-bd58a3521bb5
+5ebb8d5a-e429-4728-8cdc-3e4ac6cd8eeb	Noor	a72a70d6-de70-4425-ab30-bd58a3521bb5
+8e9cd92a-32ee-4a8e-8e80-a2d189d7d863	Hadil	a72a70d6-de70-4425-ab30-bd58a3521bb5
+a3990909-1f8f-4443-b833-3646b041b637	Hanady	a72a70d6-de70-4425-ab30-bd58a3521bb5
+a6875d5a-aa68-4b8d-b9c4-cd9da87a1b46	Monisa	a72a70d6-de70-4425-ab30-bd58a3521bb5
+71a2c8db-820d-4f08-bb90-8b8e3001ffac	Tuyizere	a72a70d6-de70-4425-ab30-bd58a3521bb5
+42280ab1-3c9d-4470-9672-ef424fb77366	Ekaterina	a72a70d6-de70-4425-ab30-bd58a3521bb5
+93d20091-9e48-4cde-9c2c-cef0e067a381	Abdulkadir	a72a70d6-de70-4425-ab30-bd58a3521bb5
+5cb626b1-013a-4d8f-afc9-133b3e2b14f5	Kamil	a72a70d6-de70-4425-ab30-bd58a3521bb5
+11e571aa-bf91-48fd-8ad3-2d2fe354bea4	Sofiia	a72a70d6-de70-4425-ab30-bd58a3521bb5
+7ce42632-90b9-487b-a365-6ceed5756afa	Rosi	a72a70d6-de70-4425-ab30-bd58a3521bb5
+00b7bcd5-141b-4b84-8b34-86344b6fdcb5	Thai	a72a70d6-de70-4425-ab30-bd58a3521bb5
+a8d5fb77-f1a2-45e9-a559-ce5cb2452068	Heikki	e25fa867-54d6-4bf2-8cc9-d1cb5e20de21
 \.
 
 
@@ -8437,6 +8707,20 @@ b8a5563d-9803-4929-821d-e302324baa4e	0c4bbf6b-3b4d-4e41-bd46-c6d2ba252ba2
 b8a5563d-9803-4929-821d-e302324baa4e	46e19580-4311-46ef-89c1-e6593ab0ccf1
 b8a5563d-9803-4929-821d-e302324baa4e	aae0f2da-6fd1-4ee1-bd2a-db666334d337
 b8a5563d-9803-4929-821d-e302324baa4e	56d51792-d855-49fb-ab80-8863a59a02dd
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	531a6f18-bf05-45d8-bd08-9dc3ac6de051
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	e67675bb-7a23-4fac-92f7-e02029d90472
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	b4cc2377-85c6-49b7-ada5-f305dbaac73d
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	d2248f52-c906-4bc9-b194-d1c8ca41a8bc
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	e56af295-37e6-457e-83c7-0c8b517019f0
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	865c70aa-9e6b-4eaf-9040-61c8a6de06be
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	b9e7ddc7-a21f-407e-b93c-3e2f208c8af3
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	5ebb8d5a-e429-4728-8cdc-3e4ac6cd8eeb
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	8e9cd92a-32ee-4a8e-8e80-a2d189d7d863
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	a3990909-1f8f-4443-b833-3646b041b637
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	a6875d5a-aa68-4b8d-b9c4-cd9da87a1b46
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	71a2c8db-820d-4f08-bb90-8b8e3001ffac
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	42280ab1-3c9d-4470-9672-ef424fb77366
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	93d20091-9e48-4cde-9c2c-cef0e067a381
 36347506-9fe3-4cc1-bd70-3f56675ba66c	a74ada74-8ad9-478a-b938-aad81dc5ad50
 36347506-9fe3-4cc1-bd70-3f56675ba66c	40fadd6a-1868-40e0-9611-8afd90260c2d
 36347506-9fe3-4cc1-bd70-3f56675ba66c	43eb8192-493d-4e62-a08d-0c91f3dd9a40
@@ -8691,6 +8975,10 @@ b169d6ec-fc62-487f-be66-83ee606b7ab7	8208afd6-f273-475b-bb12-99cfbd3bcd3a
 b169d6ec-fc62-487f-be66-83ee606b7ab7	e12ede41-f903-4203-b622-18e86b6dad87
 b169d6ec-fc62-487f-be66-83ee606b7ab7	d304739e-167d-44bd-be8e-7e543a1a5cf7
 3b3f9788-8ed0-4bbd-b715-5df35b02193e	e29e93f8-0e0b-4a76-9115-eb340bef352d
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	5cb626b1-013a-4d8f-afc9-133b3e2b14f5
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	11e571aa-bf91-48fd-8ad3-2d2fe354bea4
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	7ce42632-90b9-487b-a365-6ceed5756afa
+943b0f80-0b0c-4c71-ab18-1b3a44d2a027	00b7bcd5-141b-4b84-8b34-86344b6fdcb5
 0e33bb0f-b6ba-4005-9106-3ecef0171499	d01fbc62-fdcf-4305-b5bc-1004d6bba3e9
 0e33bb0f-b6ba-4005-9106-3ecef0171499	848d50e7-fa9e-467f-8579-d1614e65d65f
 c90e44ff-5e1a-4114-a2f1-aa8f139019a1	a0fc5e29-0b7c-45d5-9055-0902012b8c89
@@ -8754,6 +9042,7 @@ b437a136-3ee7-4978-b76e-c5a1cfa2ae9d	ce84af02-a69d-4218-a520-0f1620ad5d11
 5906bdc9-caab-4956-aff3-e31f268723ed	2b9102b8-ca52-40ff-be00-e2f78c841a3d
 5906bdc9-caab-4956-aff3-e31f268723ed	63cbd4e6-caf1-45af-b496-fd19b72f528c
 3b3f9788-8ed0-4bbd-b715-5df35b02193e	aa0e09ee-8de5-4805-8316-d8343877d158
+3b3f9788-8ed0-4bbd-b715-5df35b02193e	a8d5fb77-f1a2-45e9-a559-ce5cb2452068
 0e33bb0f-b6ba-4005-9106-3ecef0171499	ce6f4446-e91c-4dd5-918e-528add94e695
 0e33bb0f-b6ba-4005-9106-3ecef0171499	94f4c442-5eef-4bdd-9780-0f11f70827dc
 afc9216c-d2b7-47d2-9e19-4a23a91acb9e	45699ead-d72a-4af7-a7d2-b19918e3e728
