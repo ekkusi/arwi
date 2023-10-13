@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useMatomo } from "matomo-tracker-react-native";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -37,6 +38,7 @@ const LoginPage_Login_Mutation = graphql(`
 `);
 
 export default function LoginPage({ navigation }: NativeStackScreenProps<AuthStackParams, "login">) {
+  const { trackAppStart, trackAction } = useMatomo();
   const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
@@ -62,7 +64,17 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
     try {
       const { data } = await login({ variables: { email: values.email, password: values.password } });
       if (!data) throw new Error("Unexpected error");
-      setUser(data.login.accessToken, data.login.teacher);
+      await setUser(data.login.accessToken, data.login.teacher);
+      const userInfo = {
+        uid: data.login.teacher.email,
+      };
+      trackAction({
+        name: "Login",
+        userInfo,
+      });
+      trackAppStart({
+        userInfo,
+      });
     } catch (error) {
       const msg = getErrorMessage(error);
       setGeneralError(msg);

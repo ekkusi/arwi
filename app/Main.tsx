@@ -1,14 +1,15 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useApolloClient, useQuery } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { MenuProvider } from "react-native-popup-menu";
 import * as SplashScreen from "expo-splash-screen";
 import * as Application from "expo-application";
+import { useMatomo } from "matomo-tracker-react-native";
 import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
@@ -44,11 +45,14 @@ SplashScreen.preventAutoHideAsync();
 const CURRENT_APP_VERSION = Application.nativeApplicationVersion;
 
 export default function Main() {
+  const { trackAppStart, trackScreenView } = useMatomo();
   const { authState, setUser } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const { ready: i18nReady, i18n } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
 
   const client = useApolloClient();
+  const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
+  const routeNameRef = useRef<string | null>(null);
 
   const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query);
   const minimumAppVersion = appMetadataResult?.getAppMetadata?.minimumAppVersion || null;
@@ -60,6 +64,12 @@ export default function Main() {
     if (data && token) {
       await setUser(token, data.getCurrentUser);
     }
+
+    trackAppStart({
+      userInfo: {
+        uid: data.getCurrentUser.email,
+      },
+    });
     // NOTE: If separate separate consent asking is implemented, uncomment this
     // Enable crashlytics and analytics only if user has given consent
     // if (data.getCurrentUser.consentsAnalytics) {
@@ -69,7 +79,7 @@ export default function Main() {
     // Fetch lang from storage and set it to i18n
     const { languagePreference } = data.getCurrentUser;
     if (i18n.language !== languagePreference && isValidLanguage(languagePreference)) i18n.changeLanguage(languagePreference);
-  }, [client, i18n, setUser]);
+  }, [client, i18n, setUser, trackAppStart]);
 
   useEffect(() => {
     setUserInfo()
@@ -85,6 +95,23 @@ export default function Main() {
     await SplashScreen.hideAsync();
   }, []);
 
+  const onNavigationStateChange = async () => {
+    const previousRouteName = routeNameRef.current;
+    const currentRouteName = navigationRef.current?.getCurrentRoute()?.name;
+
+    const currentUser = authState.user;
+
+    if (currentRouteName && currentUser && previousRouteName !== currentRouteName) {
+      trackScreenView({
+        name: currentRouteName,
+        userInfo: {
+          uid: currentUser.email,
+        },
+      });
+    }
+    routeNameRef.current = currentRouteName || null;
+  };
+
   if (loading || loadingAppMetadata || !i18nReady) return null;
 
   return (
@@ -95,7 +122,9 @@ export default function Main() {
         <MenuProvider>
           <ModalProvider>
             <PopupProvider>
-              <NavigationContainer>{authState.authenticated ? <HomeStack /> : <AuthStack />}</NavigationContainer>
+              <NavigationContainer ref={navigationRef} onStateChange={onNavigationStateChange}>
+                {authState.authenticated ? <HomeStack /> : <AuthStack />}
+              </NavigationContainer>
             </PopupProvider>
           </ModalProvider>
         </MenuProvider>

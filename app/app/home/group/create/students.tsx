@@ -51,7 +51,7 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
     </TouchableOpacity>
   </CView>
 );
-export default function GroupStudentsSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "students">) {
+export default function GroupStudentsSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "group-create-students">) {
   const { t } = useTranslation();
   const [newStudent, setNewStudent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -89,7 +89,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
         refetchQueries: ["MainPage_GetCurrentUser"],
       });
 
-      navigation.getParent()?.navigate("index");
+      navigation.getParent()?.navigate("home");
     } catch (error) {
       const msg = getErrorMessage(error);
       console.error(msg);

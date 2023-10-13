@@ -20,7 +20,7 @@ export default function CollectionCreationStack({ route, navigation }: NativeSta
   return (
     <CollectionCreationProvider groupId={route.params.groupId}>
       <Navigator
-        initialRouteName="index"
+        initialRouteName="collection-create-general-info"
         screenOptions={() => ({
           ...defaultHeaderStyles,
           animation: "slide_from_right",
@@ -36,7 +36,7 @@ export default function CollectionCreationStack({ route, navigation }: NativeSta
                     onPress: () => null,
                     style: "cancel",
                   },
-                  { text: t("yes", "Kyllä"), onPress: () => navigation.navigate("index") },
+                  { text: t("yes", "Kyllä"), onPress: () => navigation.navigate("home") },
                 ]);
               }}
               leftIcon={<MaterialCommunityIcon name="close" size={30} color={COLORS.white} />}
@@ -44,9 +44,9 @@ export default function CollectionCreationStack({ route, navigation }: NativeSta
           ),
         })}
       >
-        <Screen name="index" component={CollectionGeneralInfoView} />
-        <Screen name="participations" component={CollectionParticipationsView} />
-        <Screen name="evaluations" component={CollectionEvaluationsView} />
+        <Screen name="collection-create-general-info" component={CollectionGeneralInfoView} />
+        <Screen name="collection-create-participations" component={CollectionParticipationsView} />
+        <Screen name="collection-create-evaluations" component={CollectionEvaluationsView} />
       </Navigator>
     </CollectionCreationProvider>
   );

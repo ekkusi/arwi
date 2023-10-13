@@ -56,22 +56,18 @@ export default function PrivacyPolicyContentFi() {
       <Text>Rekisterin sisältämiä tietoja kerätään seuraavista lähteistä:</Text>
       <UnorderedList>
         <ListItem>Rekisteröidyltä itseltään</ListItem>
-        <ListItem>Firebase-laadunvarmistuspalvelusta</ListItem>
+        <ListItem>Sovelluksen käyttö</ListItem>
       </UnorderedList>
       <Text as="h2">7. Henkilötietojen luovuttaminen</Text>
-      <Text>Pseudonymisoituja henkilön yksilöiviä tietoja luovutetaan seuraaviin tarkoituksiin:</Text>
-      <UnorderedList>
-        <ListItem>
-          Firebase-laadunvarmistuspalveluun sovelluksen laadun varmistamiseen, sovelluksen käytön tilastolliseen seuraamiseen ja virhetilanteiden
-          selvittämiseen sekä korjaamiseen
-        </ListItem>
-      </UnorderedList>
-      <Text>Henkilön yksilöiviä tietoja luovutetaan arwi-sovelluksen ja sen henkilöstön ulkopuolelle vain lain pakottamissa tilanteissa.</Text>
+      <Text>
+        Sekä henkilön yksilöivät tiedot että pseudonymisoitu tieto sovelluksen käytöstä pysyvät säilössä vain Arwin Suomessa sijaitsevilla palvemilla,
+        johon pääsy on vain Arwin henkilöstöllä. Ainut poikkeus milloin henkilötietoja voidaan luovuttaa henkilöstön ulkopuolelle ovat lain pakottamat
+        tilanteet.
+      </Text>
       <Text as="h2">8. Tietojen siirto EU:n tai ETA:n ulkopuolelle</Text>
       <Text>
-        Tietoja saatetaan siirtää EU:n tai Euroopan talousalueen ulkopuolelle Firebase-laadunvarmistuspalvelussa. Tämä huolellisesti valittu
-        hyvämaineinen palveluntarjoaja on sitoutunut osallistumaan kaikkiin kulloinkin tarvittaviin EU:n ja Yhdysvaltojen välisiin sopimuksiin ja
-        järjestelyihin (kuten Privacy Shield).
+        Tietoja ei siirretä tavanomaisesti missään tilanteissa EU:n tai ETA:n ulkopuolelle. Ainut poikkeus tähän on edellisen kappaleen tapaisesti
+        lain pakottamat tilanteet.
       </Text>
       <Text as="h2">9. Henkilötietojen säilytysaika</Text>
       <Text>
@@ -83,9 +79,8 @@ export default function PrivacyPolicyContentFi() {
       <Text as="h2">10. Rekisterin suojauksen periaatteet</Text>
       <Text>Manuaalista aineistoa ei ole.</Text>
       <Text>
-        Sähköinen aineisto säilytetään Suomessa sijaitsevalla, rekisterinpitäjän hallinnoimalla palvelimella lukuun ottamatta selosteessa mainittujen
-        ulkopuolisten palveluiden sisäisiä tietokantoja. Pääsy rekisterin tietosisältöön on rajoitettu salausavaimin tai vahvan salasanan perusteella
-        vain arwi-sovelluksen tuottamiseen osallistuville henkilöille.
+        Sähköinen aineisto säilytetään Suomessa sijaitsevalla, rekisterinpitäjän hallinnoimalla palvelimella. Pääsy rekisterin tietosisältöön on
+        rajoitettu salausavaimin tai vahvan salasanan perusteella vain arwi-sovelluksen tuottamiseen osallistuville henkilöille.
       </Text>
       <Text as="h2">11. Automaattinen päätöksenteko</Text>
       <Text>Henkilötietoja ei käytetä profilointiin tai muuhun automaattiseen päätöksentekoon.</Text>

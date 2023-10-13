@@ -76,7 +76,7 @@ const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
 // NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
 const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - 50;
 
-function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "evaluations">) {
+function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-evaluations">) {
   const { t } = useTranslation();
   const { openToast } = useToast();
   const [createCollection] = useMutation(CollectionEvaluationsView_CreateCollection_Mutation);
@@ -138,7 +138,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
           },
         },
       });
-      navigation.getParent()?.navigate("index");
+      navigation.getParent()?.navigate("home");
       openToast(t("collection-created-succesfully", "Arviointi luotu onnistuneesti!"));
     } catch (e) {
       const msg = getErrorMessage(e);
@@ -212,7 +212,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   );
 }
 
-export default function CollectionEvaluationsView(props: NativeStackScreenProps<CollectionCreationStackParams, "evaluations">) {
+export default function CollectionEvaluationsView(props: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-evaluations">) {
   return (
     <CollectionCreationLayout style={{ padding: 0 }}>
       <CollectionEvaluationsContent {...props} />

@@ -109,7 +109,7 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
           },
         },
       });
-      navigation.getParent()?.navigate("index");
+      navigation.getParent()?.navigate("home");
     } catch (e) {
       const msg = getErrorMessage(e);
       console.error(msg);

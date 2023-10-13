@@ -21,7 +21,7 @@ const CollectionParticipationsView_Group_Fragment = graphql(`
   }
 `);
 
-function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "participations">) {
+function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-participations">) {
   const { evaluations, setEvaluations } = useCollectionCreationContext();
   const { t } = useTranslation();
 
@@ -53,7 +53,7 @@ function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<
         <CButton onPress={() => navigation.goBack()}>
           <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
         </CButton>
-        <CButton onPress={() => navigation.navigate("evaluations")}>
+        <CButton onPress={() => navigation.navigate("collection-create-evaluations")}>
           <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
         </CButton>
       </CView>
@@ -61,7 +61,9 @@ function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<
   );
 }
 
-export default function CollectionParticipationsView(props: NativeStackScreenProps<CollectionCreationStackParams, "participations">) {
+export default function CollectionParticipationsView(
+  props: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-participations">
+) {
   return (
     <CollectionCreationLayout>
       <CollectionParticipationsContent {...props} />

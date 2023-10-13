@@ -17,7 +17,9 @@ import SelectFormField from "../../../../components/form/SelectFormField";
 import ProgressBar from "../../../../components/ProgressBar";
 import { useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
 
-export default function GroupNameSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "general-info", "home-stack">) {
+export default function GroupNameSelectionView({
+  navigation,
+}: NativeStackScreenProps<GroupCreationStackParams, "group-create-general-info", "home-stack">) {
   const { t } = useTranslation();
 
   const { group, setGroup } = useGroupCreationContext();
@@ -41,7 +43,7 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
           onPress: () => null,
           style: "cancel",
         },
-        { text: t("Dialog.yes", "Kyllä"), onPress: () => navigation.getParent("home-stack")?.navigate("index") },
+        { text: t("Dialog.yes", "Kyllä"), onPress: () => navigation.getParent("home-stack")?.navigate("home") },
       ]);
       return true;
     };
@@ -79,10 +81,13 @@ export default function GroupNameSelectionView({ navigation }: NativeStackScreen
               />
             </CView>
             <CView style={{ justifyContent: "flex-end" }}>
-              <CView style={{ flexDirection: "row", justifyContent: "flex-end", padding: "xl" }}>
+              <CView style={{ flexDirection: "row", justifyContent: "space-between", padding: "xl" }}>
+                <CButton style={{}} onPress={() => navigation.goBack()}>
+                  <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
+                </CButton>
                 <CButton
                   disabled={group.name.length === 0 || group.module === undefined}
-                  onPress={() => navigation.navigate("students")}
+                  onPress={() => navigation.navigate("group-create-students")}
                   leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
                 />
               </CView>

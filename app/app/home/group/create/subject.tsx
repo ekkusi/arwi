@@ -14,7 +14,7 @@ import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 import GroupCreationBody from "./_body";
 
-export default function GroupSubjectSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "subject">) {
+export default function GroupSubjectSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "group-create-subject">) {
   const { t } = useTranslation();
   const { group, setGroup } = useGroupCreationContext();
 
@@ -69,15 +69,12 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
                 flex: 1,
                 width: "100%",
                 flexDirection: "row",
-                justifyContent: "space-between",
+                justifyContent: "flex-end",
                 alignItems: "flex-end",
                 padding: "xl",
               }}
             >
-              <CButton style={{}} onPress={() => navigation.goBack()}>
-                <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-              </CButton>
-              <CButton disabled={group.subject === undefined} style={{}} onPress={() => navigation.navigate("general-info")}>
+              <CButton disabled={group.subject === undefined} style={{}} onPress={() => navigation.navigate("group-create-general-info")}>
                 <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
               </CButton>
             </CView>
