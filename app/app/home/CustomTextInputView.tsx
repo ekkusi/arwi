@@ -7,9 +7,11 @@ import SpeechToTextInput from "../../components/form/SpeechToTextInput";
 type CustomTextInputViewProps = {
   initialText: string;
   onSave: (text: string, speechObtained: boolean) => void;
+  onClose: () => void;
+  isActive: boolean;
 };
 
-export default function CustomTextInputView({ initialText, onSave }: CustomTextInputViewProps) {
+export default function CustomTextInputView({ initialText, onSave, onClose, isActive }: CustomTextInputViewProps) {
   const [text, setText] = useState(() => initialText);
   const [speechObtained, setSpeechObtained] = useState(false);
   const { t } = useTranslation();
@@ -25,7 +27,9 @@ export default function CustomTextInputView({ initialText, onSave }: CustomTextI
         placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
         initialText={initialText}
         onChange={onChange}
+        onClose={onClose}
         focusOnMount
+        isActive
         microphoneStyle={{
           bottom: 20,
           right: 20,

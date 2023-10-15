@@ -17,14 +17,31 @@ type SpeechToTextInputProps = Omit<CTextInputProps, "onChange"> & {
   containerStyle?: CViewStyle;
   microphoneStyle?: CViewStyle;
   focusOnMount?: boolean;
+  onClose?: () => void;
+  isActive: boolean;
 };
 
 export type SpeechToTextInputHandle = {
   recording: boolean;
+  refreshVoiceListeners: () => Promise<void>;
+  removeVoiceListeners: () => Promise<void>;
 };
 
 export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
-  ({ initialText = "", onChange: _onChange, inputRef: _inputRef, focusOnMount = false, containerStyle, microphoneStyle, ...rest }, ref) => {
+  (
+    {
+      initialText = "",
+      isActive,
+      onChange: _onChange,
+      inputRef: _inputRef,
+      focusOnMount = false,
+      containerStyle,
+      microphoneStyle,
+      onClose: _onClose,
+      ...rest
+    },
+    ref
+  ) => {
     const [text, setText] = useState(() => {
       return initialText;
     });
@@ -44,8 +61,57 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
       };
     });
 
+    const onClose = useCallback(() => {
+      _onClose?.();
+      // NOTE: See the note of onChange.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const refreshVoiceListeners = useCallback(async () => {
+      if (!isActive) return;
+      Voice.isAvailable().then(() => {
+        Voice.onSpeechError = () => {
+          setRecording(false);
+        };
+        Voice.onSpeechStart = () => {
+          setSpeechObtained(true);
+        };
+        Voice.onSpeechEnd = () => {
+          setRecording(false);
+          // On Android the onSpeechResults is actually run after onSpeechEnd so we have to empty the currentRecordingAsText there instead.
+          if (Platform.OS === "ios") {
+            setCurrentRecordingAsText("");
+          }
+        };
+        Voice.onSpeechPartialResults = (event) => {
+          handleSpeechResults(event);
+        };
+        // On iOS the onSpeechResults runs exactly the same oneSpeechPartialResults, so it doesn't need to be registered.
+        if (Platform.OS !== "ios") {
+          Voice.onSpeechResults = (event) => {
+            handleSpeechResults(event);
+            setCurrentRecordingAsText("");
+          };
+        }
+      });
+    }, [isActive]);
+
+    const removeVoiceListeners = useCallback(async () => {
+      if (!isActive) return;
+      try {
+        Voice.destroy().then(() => {
+          Voice.removeAllListeners();
+          onClose();
+        });
+      } catch (error) {
+        Alert.alert("Error");
+      }
+    }, [onClose, isActive]);
+
     useImperativeHandle(ref, () => ({
       recording,
+      refreshVoiceListeners,
+      removeVoiceListeners,
     }));
 
     const onChange = useCallback((newText: string, newSpeechObtained: boolean) => {
@@ -86,41 +152,11 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
     }, [initialText]);
 
     useEffect(() => {
-      Voice.isAvailable().then(() => {
-        Voice.onSpeechError = () => {
-          setRecording(false);
-        };
-        Voice.onSpeechStart = () => {
-          setSpeechObtained(true);
-        };
-        Voice.onSpeechEnd = () => {
-          setRecording(false);
-          // On Android the onSpeechResults is actually run after onSpeechEnd so we have to empty the currentRecordingAsText there instead.
-          if (Platform.OS === "ios") {
-            setCurrentRecordingAsText("");
-          }
-        };
-        Voice.onSpeechPartialResults = (event) => {
-          handleSpeechResults(event);
-        };
-        // On iOS the onSpeechResults runs exactly the same oneSpeechPartialResults, so it doesn't need to be registered.
-        if (Platform.OS !== "ios") {
-          Voice.onSpeechResults = (event) => {
-            handleSpeechResults(event);
-            setCurrentRecordingAsText("");
-          };
-        }
-      });
+      refreshVoiceListeners();
       return () => {
-        try {
-          Voice.destroy().then(() => {
-            Voice.removeAllListeners();
-          });
-        } catch (error) {
-          Alert.alert("MOi");
-        }
+        removeVoiceListeners();
       };
-    }, []);
+    }, [refreshVoiceListeners, removeVoiceListeners]);
 
     // Run onChange when text changes
     useEffect(() => {
@@ -185,6 +221,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
                 borderRadius: 20,
                 width: 40,
                 height: 40,
+                zIndex: 999,
               }}
             >
               <MaterialCommunityIcon name="microphone" size={25} color={recording ? COLORS.white : COLORS.secondary} />

@@ -176,6 +176,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
             height={CARD_HEIGHT}
             hasArrowDown={index < presentEvaluations.length - 1}
             onArrowDownPress={scrollToCard}
+            isActive={Math.round(scrollOffset / CARD_HEIGHT) === index}
           />
         )}
         onScroll={onScroll}
