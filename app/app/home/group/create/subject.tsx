@@ -78,7 +78,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
                 <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
               </CButton>
             </CView>
-            <ProgressBar color={COLORS.primary} progress={2 / 3} />
+            <ProgressBar color={COLORS.primary} progress={1 / 3} />
           </CView>
         </CView>
       </CView>

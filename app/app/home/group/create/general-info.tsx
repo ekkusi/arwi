@@ -91,7 +91,7 @@ export default function GroupNameSelectionView({
                   leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
                 />
               </CView>
-              <ProgressBar color={COLORS.primary} progress={1 / 3} />
+              <ProgressBar color={COLORS.primary} progress={2 / 3} />
             </CView>
           </CView>
         </TouchableWithoutFeedback>

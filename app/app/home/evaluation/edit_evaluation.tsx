@@ -22,6 +22,17 @@ const EvaluationEditView_GetEvaluation_Query = graphql(`
       behaviourRating
       notes
       isStellar
+      collection {
+        id
+        date
+        environment {
+          code
+          label {
+            fi
+          }
+          color
+        }
+      }
       student {
         id
         name
@@ -50,9 +61,15 @@ const EvaluationEditView_UpdateEvaluation_Mutation = graphql(`
 function EvaluationEditViewContent({
   navigation,
   initialEvaluation,
+  date,
+  environmentLabel,
+  envColor,
 }: {
   navigation: NativeStackNavigationProp<HomeStackParams, "edit-evaluation">;
   initialEvaluation: EvaluationDataToUpdate;
+  date: string;
+  environmentLabel: string;
+  envColor: string;
 }) {
   const [evaluation, setEvaluation] = useState<EvaluationDataToUpdate>(initialEvaluation);
   const [submitting, setSubmitting] = useState(false);
@@ -86,7 +103,13 @@ function EvaluationEditViewContent({
 
   return (
     <CView style={{ backgroundColor: "white", alignItems: "center", gap: 30 }}>
-      <UpdateEvaluationCard evaluation={evaluation} onChanged={(newEvaluation) => setEvaluation(newEvaluation)} />
+      <UpdateEvaluationCard
+        evaluation={evaluation}
+        date={date}
+        environment={environmentLabel}
+        envColor={envColor}
+        onChanged={(newEvaluation) => setEvaluation(newEvaluation)}
+      />
       <CButton title={t("save", "Tallenna")} onPress={handleSubmit} loading={submitting} />
     </CView>
   );
@@ -100,7 +123,13 @@ export default function EvaluationEditView({ navigation, route }: NativeStackScr
 
   return (
     <Layout style={{ paddingHorizontal: 10, paddingTop: 20, backgroundColor: "white" }}>
-      <EvaluationEditViewContent initialEvaluation={data.getEvaluation} navigation={navigation} />
+      <EvaluationEditViewContent
+        initialEvaluation={data.getEvaluation}
+        date={data.getEvaluation.collection.date}
+        environmentLabel={data.getEvaluation.collection.environment.label.fi}
+        envColor={data.getEvaluation.collection.environment.color}
+        navigation={navigation}
+      />
     </Layout>
   );
 }

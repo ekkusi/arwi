@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { getColorForGrade, getFontWeightForGrade, getTextColorForGrade } from "../helpers/dataMappers";
+import { useEffect, useState } from "react";
+import { Alert, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { COLORS } from "../theme";
 import CPressable from "./primitives/CPressable";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
@@ -11,7 +14,46 @@ type RatingSelecterProps = Omit<CViewProps, "onChange"> & {
 };
 
 const RATING_VALUES = [4, 5, 6, 7, 8, 9, 10];
+const buttonHeight = 53;
 
+function RatingButton({ rating, onRatingClick, isSelected }: { rating: number; onRatingClick: (rating: number) => void; isSelected: boolean }) {
+  return (
+    <CPressable onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
+      <Animated.View
+        style={[
+          {
+            alignItems: "center",
+            backgroundColor: "white",
+            height: buttonHeight,
+            width: buttonHeight,
+            borderRadius: buttonHeight / 2,
+            borderWidth: 2,
+            borderColor: isSelected ? COLORS.black : COLORS.lightgray,
+            justifyContent: "center",
+            transform: [{ scale: isSelected ? 1.05 : 1 }],
+          },
+        ]}
+      >
+        <CText
+          style={{
+            borderWidth: 0,
+            borderColor: "white",
+            color: isSelected ? "black" : "gray",
+            borderRadius: 100,
+            padding: "sm",
+            fontWeight: "500",
+            width: 35,
+            height: 35,
+            textAlign: "center",
+            textAlignVertical: "center",
+          }}
+        >
+          {rating}
+        </CText>
+      </Animated.View>
+    </CPressable>
+  );
+}
 export default function RatingSelecter({ onChange, disabled = false, initialRating, ...rest }: RatingSelecterProps) {
   const [selectedRating, setSelectedRating] = useState<number | null>(initialRating || null);
 
@@ -29,55 +71,27 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
   };
 
   return (
-    <CView {...rest} style={{ width: "100%", flexDirection: "row", justifyContent: "center", ...rest.style }}>
-      {RATING_VALUES.map((rating, i) => {
-        let isSelected = true;
-        if (disabled) {
-          isSelected = false;
-        } else {
-          isSelected = selectedRating === rating;
-        }
+    <CView {...rest} style={{ width: "100%", flexDirection: "row", height: 70, ...rest.style }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ flexDirection: "row" }}
+        contentOffset={{ x: 999, y: 0 }}
+        contentContainerStyle={{ paddingHorizontal: 10 }}
+      >
+        <CView style={{ flexDirection: "row", gap: 4 }}>
+          {RATING_VALUES.map((rating, i) => {
+            let isSelected = true;
+            if (disabled) {
+              isSelected = false;
+            } else {
+              isSelected = selectedRating === rating;
+            }
 
-        return (
-          <CPressable key={rating} onPress={() => onRatingClick(rating)} style={{ flex: 1, justifyContent: "center" }}>
-            <CView
-              style={{
-                alignItems: "center",
-                backgroundColor: isSelected ? getColorForGrade(rating) : "white",
-                borderRadius: 0,
-                borderWidth: 1,
-                borderColor: "black",
-                padding: "sm",
-                borderLeftWidth: 1,
-                borderRightWidth: i === RATING_VALUES.length - 1 ? 1 : 0,
-                borderBottomLeftRadius: i === 0 ? 5 : 0,
-                borderTopLeftRadius: i === 0 ? 5 : 0,
-                borderBottomRightRadius: i === RATING_VALUES.length - 1 ? 5 : 0,
-                borderTopRightRadius: i === RATING_VALUES.length - 1 ? 5 : 0,
-              }}
-            >
-              <CText
-                style={{
-                  borderWidth: 0,
-                  borderColor: "white",
-                  color: isSelected ? getTextColorForGrade(rating) : "black",
-                  fontWeight: isSelected ? getFontWeightForGrade(rating) : "normal",
-                  borderRadius: 100,
-                  padding: "sm",
-                  width: 35,
-                  height: 35,
-                  alignItems: "center",
-                  textAlign: "center",
-                  textAlignVertical: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {rating}
-              </CText>
-            </CView>
-          </CPressable>
-        );
-      })}
+            return <RatingButton key={rating} rating={rating} isSelected={isSelected} onRatingClick={onRatingClick} />;
+          })}
+        </CView>
+      </ScrollView>
     </CView>
   );
 }
