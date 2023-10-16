@@ -24,6 +24,7 @@ export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   placement?: "top" | "bottom" | "center";
   outerViewStyles?: CViewStyle;
   innerViewStyles?: CViewStyle;
+  headerStyles?: CViewStyle;
   title?: string | JSX.Element;
   closeButton?: boolean | JSX.Element;
   closeOnBackgroundPress?: boolean;
@@ -51,6 +52,7 @@ const innerViewStyle: CViewStyle = {
   paddingTop: "md",
   paddingBottom: "lg",
   backgroundColor: "white",
+  overflow: "hidden",
 };
 
 export default function CModal({
@@ -65,6 +67,7 @@ export default function CModal({
   closeOnBackgroundPress = true,
   outerViewStyles: _outerViewStyles,
   innerViewStyles: _innerViewStyles,
+  headerStyles,
   animationDuration = 300,
   isOpen,
   onClose,
@@ -169,6 +172,7 @@ export default function CModal({
               justifyContent: title ? "space-between" : "flex-end",
               alignItems: "center",
               marginBottom: title ? "md" : 0,
+              ...headerStyles,
             }}
           >
             {typeof title === "string" ? <CText style={{ flex: 1, color: "darkgray", fontWeight: "bold" }}>{title}</CText> : title}
@@ -184,7 +188,7 @@ export default function CModal({
         {children}
       </>
     );
-  }, [children, closeButton, onClose, title]);
+  }, [children, closeButton, headerStyles, onClose, title]);
 
   const views = useMemo(() => {
     return animated ? (

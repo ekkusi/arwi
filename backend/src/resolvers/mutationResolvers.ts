@@ -11,6 +11,7 @@ import {
   validateCreateCollectionInput,
   validateCreateGroupInput,
   validateCreateStudentInput,
+  validateRegisterInput,
   validateUpdateCollectionInput,
   validateUpdateEvaluationsInput,
   validateUpdateStudentInput,
@@ -28,16 +29,13 @@ const BRCRYPT_SALT_ROUNDS = 12;
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { prisma, res }) => {
-    const { password, email } = data;
-    const matchingTeacher = await prisma.teacher.findFirst({
-      where: { email },
-    });
-    if (matchingTeacher) throw new ValidationError(`Sähköposti '${email}' on jo käytössä`);
+    const { password, ...rest } = data;
+    await validateRegisterInput(data);
     const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
     const teacher = await prisma.teacher.create({
       data: {
-        email,
         passwordHash,
+        ...rest,
       },
     });
     const token = createRefreshAndAccessTokens(teacher, res);

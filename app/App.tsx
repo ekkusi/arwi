@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Logs } from "expo";
 import ErrorBoundary from "react-native-error-boundary";
+import crashlytics from "@react-native-firebase/crashlytics";
 import { LogBox, Platform } from "react-native";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 import Main from "./Main";
@@ -21,7 +22,8 @@ if (Platform.OS === "ios") LogBox.ignoreAllLogs();
 export default function App() {
   const onError = (error: Error, componentStack: string) => {
     console.error(error, componentStack);
-    // TODO: Add logging to Sentry or some other debug service
+    crashlytics().log(`Error occurred, component stack: ${componentStack}`);
+    crashlytics().recordError(error);
   };
 
   return (

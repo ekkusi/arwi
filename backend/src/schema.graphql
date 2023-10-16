@@ -44,6 +44,8 @@ type Teacher {
   id: ID!
   email: EmailAddress!
   groups: [Group!]!
+  languagePreference: String!
+  consentsAnalytics: Boolean!
 }
 
 type LoginResult {
@@ -155,6 +157,8 @@ enum EducationLevel {
 input CreateTeacherInput {
   email: EmailAddress!
   password: String!
+  languagePreference: String!
+  consentsAnalytics: Boolean!
 }
 
 input CreateGroupInput {
