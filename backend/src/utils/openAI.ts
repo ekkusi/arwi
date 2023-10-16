@@ -1,4 +1,5 @@
 import { Evaluation } from "types";
+import { UserInfo } from "types/contextTypes";
 import openAIClient from "../openAIClient";
 import { formatDate } from "./date";
 
@@ -25,6 +26,31 @@ export async function generateStudentSummary(evaluations: EvaluationData[]) {
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
     });
+
+    if (completion.choices[0]?.message?.content) {
+      return completion.choices[0].message.content;
+    }
+    throw new Error(`Error with generateSumamry: no message found from result`);
+  } catch (error: any) {
+    // console.log();
+
+    console.error("error", error?.response?.data || error);
+    throw new Error(`Unknown error: ${error?.response?.data?.error}` || "");
+  }
+}
+
+export async function fixTextGrammatics(text: string) {
+  const startMessage = `Seuraava teksti on saatu äänittämällä puhetta. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi siten, että korjattu teksti on maksimissaan ${
+    text.length + 30
+  } kirjainta pitkä. Palauta pelkkä korjattu teksti: \n\n`;
+  const prompt = startMessage + text;
+
+  try {
+    const process = openAIClient.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+    });
+    const completion = await process;
 
     if (completion.choices[0]?.message?.content) {
       return completion.choices[0].message.content;

@@ -155,6 +155,11 @@ export type MutationGenerateStudentFeedbackArgs = {
   moduleId: Scalars["ID"];
 };
 
+export type MutationFixTextGrammaticsArgs = {
+  studentId: Scalars["ID"];
+  text: Scalars["String"];
+};
+
 export type AppMetadata = {
   __typename?: "AppMetadata";
   minimumAppVersion: Scalars["String"];
@@ -566,6 +571,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
     ContextType,
     RequireFields<MutationGenerateStudentFeedbackArgs, "studentId" | "moduleId">
   >;
+  fixTextGrammatics?: Resolver<ResolversTypes["String"], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, "studentId" | "text">>;
 };
 
 export type AppMetadataResolvers<
