@@ -235,7 +235,7 @@ function EvaluationCard({
           />
 
           {(textFixAvailable || previousNotes) && (
-            <CView style={{ position: "absolute", left: 5, bottom: 5, zIndex: 999 }}>
+            <CView style={{ position: "absolute", left: 5, bottom: 8, zIndex: 1 }}>
               <CButton
                 title={previousNotes ? t("rollback", "Peru korjaus") : t("ai-fix", "AI Korjaus")}
                 loading={isFixingText}

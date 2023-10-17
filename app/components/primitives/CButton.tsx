@@ -50,7 +50,7 @@ export default function CButton({
           backgroundColor: "white",
           borderWidth: 2,
           borderColor: colorScheme,
-          height: size === "large" ? 48 : 36,
+          minHeight: size === "large" ? 48 : 36,
           borderRadius: size === "large" ? 24 : 18,
         };
       case "empty":
@@ -59,13 +59,13 @@ export default function CButton({
           borderWidth: 0,
           paddingHorizontal: 0,
           paddingVertical: 0,
-          height: size === "large" ? 48 : 36,
+          minHeight: size === "large" ? 48 : 36,
           borderRadius: size === "large" ? 24 : 18,
         };
       default:
         return {
           backgroundColor: colorScheme,
-          height: size === "large" ? 48 : 36,
+          minHeight: size === "large" ? 48 : 36,
           borderRadius: size === "large" ? 24 : 18,
         };
     }
@@ -160,7 +160,7 @@ const styles = createStyles({
     opacity: 0.7,
   },
   container: {
-    height: 48,
+    minHeight: 48,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 24,

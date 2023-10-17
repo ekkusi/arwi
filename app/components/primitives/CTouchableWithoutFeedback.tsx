@@ -10,12 +10,14 @@ type CTouchableWithoutFeedbackProps = Omit<TouchableWithoutFeedbackProps, "style
 };
 
 // Component to wrap TouchableWithoutFeedback andCView together as they TouchableWithoutFeedback has to always have a View as a direct child.
-export default function CTouchableWithoutFeedback({ style, outerStyles, children, ...rest }: CTouchableWithoutFeedbackProps) {
+export default function CTouchableWithoutFeedback({ style, outerStyles, children, onPress, ...rest }: CTouchableWithoutFeedbackProps) {
   const styles = useMemo(() => outerStyles && createViewStyles(outerStyles), [outerStyles]);
 
   return (
-    <TouchableWithoutFeedback style={styles} {...rest}>
-      <CView style={style}>{children}</CView>
+    <TouchableWithoutFeedback style={styles} onPress={onPress} {...rest}>
+      <CView style={style} pointerEvents={onPress ? "box-only" : "auto"}>
+        {children}
+      </CView>
     </TouchableWithoutFeedback>
   );
 }

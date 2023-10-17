@@ -1,7 +1,7 @@
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Voice, { SpeechResultsEvent } from "@react-native-voice/voice";
-import { createRef, forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
+import { createRef, forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Alert, Platform, TextInput } from "react-native";
 import { useTranslation } from "react-i18next";
 import CTextInput, { CTextInputProps } from "../primitives/CTextInput";
@@ -28,6 +28,8 @@ export type SpeechToTextInputHandle = {
   refreshVoiceListeners: () => Promise<void>;
   removeVoiceListeners: () => Promise<void>;
 };
+
+const CLOSE_SPEECH_TIMEOUT_MS = 2000;
 
 export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
   (
@@ -57,6 +59,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
     const { t } = useTranslation();
 
     const inputRef = _inputRef || createRef<TextInput>();
+    const closeTimeout = useRef<NodeJS.Timeout | null>(null);
 
     const microphoneOpenScale = useSharedValue(1);
     const microphoneAnimatedStyle = useAnimatedStyle(() => {
@@ -70,6 +73,26 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
       // NOTE: See the note of onChange.
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const handleSpeechResults = (event: SpeechResultsEvent) => {
+      if (event.value) {
+        const newPartialValue = event.value[0];
+        setCurrentRecordingAsText((oldCurrentRecording) => {
+          // If the partial is the first record meaning oldCurrentRecord is empty, we just add the partial to the text.
+          // Otherwise we remove the matching partial and add the new one.
+          if (oldCurrentRecording.length === 0) {
+            setText((oldText) => {
+              return oldText.length > 0 ? `${oldText.trim()} ${newPartialValue}` : newPartialValue;
+            });
+          } else {
+            setText((oldText) => {
+              return `${oldText.substring(0, oldText.lastIndexOf(oldCurrentRecording))}${newPartialValue}`;
+            });
+          }
+          return newPartialValue;
+        });
+      }
+    };
 
     const refreshVoiceListeners = useCallback(async () => {
       if (!isActive) return;
@@ -126,23 +149,37 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleSpeechResults = (event: SpeechResultsEvent) => {
-      if (event.value) {
-        const newPartialValue = event.value[0];
-        setCurrentRecordingAsText((oldCurrentRecording) => {
-          // If the partial is the first record meaning oldCurrentRecord is empty, we just add the partial to the text.
-          // Otherwise we remove the matching partial and add the new one.
-          if (oldCurrentRecording.length === 0) {
-            setText((oldText) => {
-              return oldText.length > 0 ? `${oldText.trim()} ${newPartialValue}` : newPartialValue;
-            });
-          } else {
-            setText((oldText) => {
-              return `${oldText.substring(0, oldText.lastIndexOf(oldCurrentRecording))}${newPartialValue}`;
-            });
-          }
-          return newPartialValue;
-        });
+    const stopRecording = useCallback(async () => {
+      try {
+        await Voice.stop();
+        microphoneOpenScale.value = 1;
+        setRecording(false);
+      } catch (error) {
+        Alert.alert(t("recording-error", "Tapahtui virhe."));
+      }
+    }, [microphoneOpenScale, t]);
+
+    const setCloseTimeout = useCallback(() => {
+      if (Platform.OS === "android") return; // Android has it's own default stop functionality for Voice.
+      if (closeTimeout.current) clearTimeout(closeTimeout.current);
+      closeTimeout.current = setTimeout(() => {
+        stopRecording();
+      }, CLOSE_SPEECH_TIMEOUT_MS);
+    }, [stopRecording]);
+
+    const startRecording = () => {
+      microphoneOpenScale.value = 1;
+      const microphoneOpenAnimation = withRepeat(withTiming(0.8, { duration: 700, easing: Easing.ease }), -1, true, () => {});
+      microphoneOpenScale.value = microphoneOpenAnimation;
+      try {
+        Voice.start("fi-FI")
+          .then(() => {
+            setRecording(true);
+            setCloseTimeout();
+          })
+          .catch((err) => Alert.alert(t("recording-error", "Tapahtui virhe"), err));
+      } catch (err) {
+        Alert.alert(t("recording-error", "Tapahtui virhe."), err);
       }
     };
 
@@ -168,33 +205,14 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
     }, [onChange, speechObtained, text]);
 
     useEffect(() => {
+      if (recording) {
+        setCloseTimeout();
+      }
+    }, [recording, setCloseTimeout, text]);
+
+    useEffect(() => {
       if (focusOnMount) setTimeout(() => inputRef.current?.focus(), 100);
     }, [focusOnMount, inputRef]);
-
-    const startRecording = () => {
-      microphoneOpenScale.value = 1;
-      const microphoneOpenAnimation = withRepeat(withTiming(0.8, { duration: 700, easing: Easing.ease }), -1, true, () => {});
-      microphoneOpenScale.value = microphoneOpenAnimation;
-      try {
-        Voice.start("fi-FI")
-          .then(() => {
-            setRecording(true);
-          })
-          .catch((err) => Alert.alert(t("recording-error", "Tapahtui virhe"), err));
-      } catch (err) {
-        Alert.alert(t("recording-error", "Tapahtui virhe."), err);
-      }
-    };
-
-    const stopRecording = async () => {
-      try {
-        await Voice.stop();
-        microphoneOpenScale.value = 1;
-        setRecording(false);
-      } catch (error) {
-        Alert.alert(t("recording-error", "Tapahtui virhe."));
-      }
-    };
 
     return (
       <CView style={{ flex: 1, width: "100%", ...containerStyle }}>
@@ -206,7 +224,6 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
             editable={!recording}
             value={text}
             isDisabled={isDisabled}
-            pointerEvents={onPress ? "none" : "auto"}
             onChange={(e) => {
               setText(e.nativeEvent.text);
             }}
