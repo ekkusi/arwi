@@ -2,11 +2,10 @@ import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { Dimensions, FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent, Platform } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Constants from "expo-constants";
-import { getEnvironment } from "arwi-backend/src/utils/subjectUtils";
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
@@ -74,8 +73,9 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
 
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
+const EXTRA_DEVICE_PADDING = Platform.OS === "ios" ? 43 : 49;
 // NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
-const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT;
+const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - EXTRA_DEVICE_PADDING;
 
 function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-evaluations">) {
   const { t } = useTranslation();
@@ -162,8 +162,6 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     scrollRef.current?.scrollToOffset({ animated: true, offset: scrollOffset + CARD_HEIGHT });
   }, [scrollOffset]);
 
-  const environment = getEnvironment(generalData.environmentCode || "");
-
   return (
     <CView style={{ flex: 1, backgroundColor: "white" }}>
       <CFlatList
@@ -186,7 +184,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         snapToAlignment="center"
         directionalLockEnabled
         disableIntervalMomentum
-        style={{ flex: 1, padding: "lg" }}
+        style={{ flex: 1, paddingHorizontal: "lg" }}
       />
       <Animated.View
         style={[{ justifyContent: "flex-end", position: "absolute", bottom: 0, left: 0, right: 0, width: "100%" }, buttonsAnimatedStyle]}
@@ -194,7 +192,8 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         <CView
           style={{
             width: "100%",
-            padding: "lg",
+            paddingHorizontal: Platform.OS === "ios" ? "xl" : "lg",
+            paddingBottom: Platform.OS === "ios" ? "xl" : "lg",
             backgroundColor: "transparent",
             flexDirection: "row",
             justifyContent: "space-between",

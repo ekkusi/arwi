@@ -5,6 +5,7 @@ import { Alert, Platform, Switch } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Animated from "react-native-reanimated";
 import { useMutation } from "@apollo/client";
+import { TextInput } from "react-native-gesture-handler";
 import { CreateEvaluationInput, UpdateEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
@@ -12,7 +13,6 @@ import { COLORS } from "../theme";
 import RatingSelector from "./RatingSelector";
 import CButton from "./primitives/CButton";
 import { formatDate } from "../helpers/dateHelpers";
-import CTouchableOpacity from "./primitives/CTouchableOpacity";
 import { useModal } from "../hooks-and-providers/ModalProvider";
 import CustomTextInputView from "../app/home/CustomTextInputView";
 import { graphql } from "../gql";
@@ -86,6 +86,7 @@ function EvaluationCard({
   const [fixTextGrammatics, { loading: isFixingText }] = useMutation(EvaluationCard_FixTextGrammatics_Mutation);
 
   const speechRef = useRef<SpeechToTextInputHandle>(null);
+  const inputRef = useRef<TextInput>(null);
 
   const changeNotes = useCallback(
     (value: string, resetPreviousNotes: boolean = false) => {
@@ -167,7 +168,7 @@ function EvaluationCard({
   const textFixAvailable = notes.length >= TEXT_MIN_LENGTH_FOR_AI_FIX && newSpeechObtained;
 
   return (
-    <CView style={{ width: "100%", height, paddingTop: hasParticipationToggle ? 0 : "xl", gap: 6 }}>
+    <CView style={{ width: "100%", height, paddingTop: "xl", gap: 6 }}>
       <CView style={{ gap: 3 }}>
         <CText style={{ fontSize: "title", fontWeight: "500" }}>{evaluation.student.name}</CText>
         {date && <CText style={{ fontSize: "sm", fontWeight: "300" }}>{formatDate(date)}</CText>}
@@ -221,20 +222,18 @@ function EvaluationCard({
         <CView style={{ width: "100%", height: 150 }}>
           <SpeechToTextInput
             ref={speechRef}
+            inputRef={inputRef}
             initialText={notes}
             isActive={isActive}
+            isDisabled={isFixingText}
             placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
+            onPress={() => openTextInputModal()}
             onChange={(newText, speechObtained) => {
               changeNotes(newText);
               if (speechObtained) setnewSpeechObtained(true);
             }}
           />
 
-          <CTouchableOpacity
-            disabled={speechRef.current?.recording || isFixingText}
-            style={{ position: "absolute", width: "100%", height: "100%", zIndex: 888 }}
-            onPress={() => openTextInputModal()}
-          />
           {(textFixAvailable || previousNotes) && (
             <CView style={{ position: "absolute", left: 5, bottom: 5, zIndex: 999 }}>
               <CButton
@@ -261,7 +260,7 @@ function EvaluationCard({
         <CView
           style={{
             position: "absolute",
-            bottom: 70,
+            bottom: Platform.OS === "ios" ? 65 : 60,
             alignItems: "center",
             width: "100%",
           }}

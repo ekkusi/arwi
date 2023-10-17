@@ -9,6 +9,7 @@ import CView from "../primitives/CView";
 import CTouchableOpacity from "../primitives/CTouchableOpacity";
 import { COLORS } from "../../theme";
 import { CViewStyle } from "../../theme/types";
+import CTouchableWithoutFeedback from "../primitives/CTouchableWithoutFeedback";
 
 type SpeechToTextInputProps = Omit<CTextInputProps, "onChange"> & {
   initialText?: string;
@@ -18,6 +19,7 @@ type SpeechToTextInputProps = Omit<CTextInputProps, "onChange"> & {
   microphoneStyle?: CViewStyle;
   focusOnMount?: boolean;
   onClose?: () => void;
+  onPress?: () => void;
   isActive: boolean;
 };
 
@@ -38,6 +40,8 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
       containerStyle,
       microphoneStyle,
       onClose: _onClose,
+      onPress,
+      isDisabled,
       ...rest
     },
     ref
@@ -194,18 +198,22 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
 
     return (
       <CView style={{ flex: 1, width: "100%", ...containerStyle }}>
-        <CTextInput
-          ref={inputRef}
-          style={{ flex: 1, width: "100%", ...rest?.style }}
-          as="textarea"
-          editable={!recording}
-          value={text}
-          onChange={(e) => {
-            setText(e.nativeEvent.text);
-          }}
-          multiline
-          {...rest}
-        />
+        <CTouchableWithoutFeedback style={{ flex: 1, width: "100%" }} onPress={onPress} disabled={isDisabled}>
+          <CTextInput
+            ref={inputRef}
+            style={{ flex: 1, width: "100%", ...rest?.style }}
+            as="textarea"
+            editable={!recording}
+            value={text}
+            isDisabled={isDisabled}
+            pointerEvents={onPress ? "none" : "auto"}
+            onChange={(e) => {
+              setText(e.nativeEvent.text);
+            }}
+            multiline
+            {...rest}
+          />
+        </CTouchableWithoutFeedback>
         <CView style={{ position: "absolute", bottom: 5, right: 5, ...microphoneStyle }}>
           <CView style={{ width: 40, height: 40 }}>
             {recording && (
@@ -214,6 +222,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
               />
             )}
             <CTouchableOpacity
+              disabled={isDisabled}
               onPress={() => (recording ? stopRecording() : startRecording())}
               style={{
                 justifyContent: "center",
