@@ -1,4 +1,3 @@
-import Module from "module";
 import { EducationLevel, LearningObjectiveType, ModuleInfo } from "types";
 import subjects from "../subject-schema.json";
 
@@ -26,5 +25,7 @@ export type LearningObjectiveMinimal = Omit<LearningObjective, "description">;
 export type Environment = Omit<Subject["environments"][number], "name"> & {
   label: TranslatedString;
 };
+
+export type MinimalEnvironment = Pick<Environment, "code" | "label">;
 
 export type PrimaryEducationLevel = Exclude<EducationLevel, EducationLevel.HIGH_SCHOOL | EducationLevel.VOCATIONAL>;

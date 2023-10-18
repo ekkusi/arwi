@@ -10,8 +10,8 @@ export default function ErrorView() {
   const { t } = useTranslation();
   const checkUpdatesString =
     Platform.OS === "ios"
-      ? t("check-if-is-updated-ios", "Tarkistaa, onko sovellus päivitetty viimeisimpään versioon App Storessa")
-      : t("check-if-is-updated-android", "Tarkistaa, onko sovellus päivitetty viimeisimpään versioon Play-kaupassa");
+      ? t("check-if-is-updated-ios", "Tarkista, että sovellus päivitetty viimeisimpään versioon App Storessa")
+      : t("check-if-is-updated-android", "Tarkista, että sovellus päivitetty viimeisimpään versioon Play-kaupassa");
   return (
     <CView style={{ paddingHorizontal: "lg", paddingVertical: "2xl", flex: 1 }}>
       <CText style={{ fontSize: "3xl", textAlign: "center", marginBottom: "3xl", marginTop: Platform.OS === "ios" ? "4xl" : "3xl" }}>
@@ -25,6 +25,10 @@ export default function ErrorView() {
         :
       </CText>
       <CView style={{ marginVertical: "lg" }}>
+        <CText style={{}}>{`\u2022 ${t(
+          "check-internet-connection",
+          "Tarkista, että internetyhteytesi toimii varmasti ja käynnistä applikaatio uudelleen."
+        )} `}</CText>
         <CText style={{}}>{`\u2022 ${checkUpdatesString} `}</CText>
         <CText style={{}}>{`\u2022 ${t(
           "close-and-open-app",

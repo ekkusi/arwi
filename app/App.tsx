@@ -1,8 +1,9 @@
 import { Suspense, useEffect } from "react";
 import { Logs } from "expo";
-import ErrorBoundary from "react-native-error-boundary";
+// import ErrorBoundary from "react-native-error-boundary";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
 import { LogBox, Platform } from "react-native";
+import ErrorBoundary from "react-native-error-boundary";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
@@ -23,6 +24,7 @@ function AppContent() {
   const { trackAppStart } = useMatomo();
   const onError = (error: Error, componentStack: string) => {
     console.error(error, componentStack);
+    // TODO: Log error to error reporting service
   };
 
   useEffect(() => {
