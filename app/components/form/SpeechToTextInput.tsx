@@ -29,7 +29,7 @@ export type SpeechToTextInputHandle = {
   removeVoiceListeners: () => Promise<void>;
 };
 
-const CLOSE_SPEECH_TIMEOUT_MS = 2000;
+const CLOSE_SPEECH_TIMEOUT_MS = 3000;
 
 export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
   (
@@ -51,9 +51,11 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
     const [text, setText] = useState(() => {
       return initialText;
     });
+    const [_, setBeforeRecordingText] = useState(() => {
+      return initialText;
+    });
 
     const [speechObtained, setSpeechObtained] = useState(false);
-    const [_, setCurrentRecordingAsText] = useState("");
     const [recording, setRecording] = useState(false);
 
     const { t } = useTranslation();
@@ -74,24 +76,27 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleSpeechResults = (event: SpeechResultsEvent) => {
+    const handleSpeechResults = (event: SpeechResultsEvent, updateBeforeRecordingText = false) => {
       if (event.value) {
         const newPartialValue = event.value[0];
-        setCurrentRecordingAsText((oldCurrentRecording) => {
-          // If the partial is the first record meaning oldCurrentRecord is empty, we just add the partial to the text.
-          // Otherwise we remove the matching partial and add the new one.
-          if (oldCurrentRecording.length === 0) {
-            setText((oldText) => {
-              return oldText.length > 0 ? `${oldText.trim()} ${newPartialValue}` : newPartialValue;
-            });
-          } else {
-            setText((oldText) => {
-              return `${oldText.substring(0, oldText.lastIndexOf(oldCurrentRecording))}${newPartialValue}`;
-            });
-          }
-          return newPartialValue;
+
+        setBeforeRecordingText((oldBeforeRecordingText) => {
+          const newValue = oldBeforeRecordingText.length > 0 ? `${oldBeforeRecordingText.trim()} ${newPartialValue}` : newPartialValue;
+
+          setText(newValue);
+
+          // Only update beforeRecordingText as well if it is explicitly wanted
+          return updateBeforeRecordingText ? newValue : oldBeforeRecordingText;
         });
       }
+    };
+
+    // Update through setText function so that no dependencies are needed (state not accessible in voice listeners)
+    const updateBeforeRecordingText = () => {
+      setText((currentText) => {
+        setBeforeRecordingText(currentText);
+        return currentText;
+      });
     };
 
     const refreshVoiceListeners = useCallback(async () => {
@@ -107,7 +112,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
           setRecording(false);
           // On Android the onSpeechResults is actually run after onSpeechEnd so we have to empty the currentRecordingAsText there instead.
           if (Platform.OS === "ios") {
-            setCurrentRecordingAsText("");
+            updateBeforeRecordingText();
           }
         };
         Voice.onSpeechPartialResults = (event) => {
@@ -116,8 +121,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
         // On iOS the onSpeechResults runs exactly the same oneSpeechPartialResults, so it doesn't need to be registered.
         if (Platform.OS !== "ios") {
           Voice.onSpeechResults = (event) => {
-            handleSpeechResults(event);
-            setCurrentRecordingAsText("");
+            handleSpeechResults(event, true);
           };
         }
       });
@@ -187,6 +191,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
     useEffect(() => {
       if (initialText === text) return;
       setText(initialText);
+      setBeforeRecordingText(initialText);
 
       // Only run this when initialText prop changes
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -204,6 +209,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
       onChange?.(text, speechObtained);
     }, [onChange, speechObtained, text]);
 
+    // Reset speech closing timeout when recording is made
     useEffect(() => {
       if (recording) {
         setCloseTimeout();
@@ -225,7 +231,11 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
             value={text}
             isDisabled={isDisabled}
             onChange={(e) => {
-              setText(e.nativeEvent.text);
+              const newValue = e.nativeEvent.text;
+              if (newValue !== text) {
+                setText(newValue);
+                setBeforeRecordingText(newValue);
+              }
             }}
             multiline
             {...rest}
