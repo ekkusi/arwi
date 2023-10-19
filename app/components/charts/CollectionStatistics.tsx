@@ -50,7 +50,7 @@ const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[
       date: formatDate(it.date),
       skills: skillsAverage > 0 ? Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100 : null,
       behaviour: behaviourAverage > 0 ? Math.round((currentBehaviourSum / notNullBehaviourCount) * 100) / 100 : null,
-      environment: it.environment.label,
+      environment: it.environment,
     });
   });
   return data;
@@ -71,7 +71,7 @@ export default function CollectionStatistics({ title, subjectCode, collections: 
   const sortedCollections = useMemo(() => [...collections].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()), [collections]);
   const evaluationData = useMemo(() => mapData(sortedCollections), [sortedCollections]);
 
-  const filteredData = filter ? evaluationData.filter((coll) => coll.environment === filter) : evaluationData;
+  const filteredData = filter ? evaluationData.filter((coll) => coll.environment.code === filter) : evaluationData;
 
   const evaluationsWithSkills = useMemo(() => filteredData.filter((obj) => obj.skills !== undefined), [filteredData]);
   const skillsMean = useMemo(

@@ -22,7 +22,6 @@ module.exports = {
     infoPlist: {
       NSPhotoLibraryUsageDescription: "$(PRODUCT_NAME) does not require access to the photo library.",
     },
-    googleServicesFile: "./GoogleService-Info.plist",
   },
   android: {
     package: "net.arwi.twa",
@@ -31,7 +30,6 @@ module.exports = {
       foregroundImage: "./assets/logo-new.png",
       backgroundColor: "#FEFCFB",
     },
-    googleServicesFile: "./google-services.json",
   },
   web: {
     favicon: "./assets/logo-new.png",
@@ -52,16 +50,6 @@ module.exports = {
       {
         microphonePermission: "CUSTOM: Allow $(PRODUCT_NAME) to access the microphone",
         speechRecognitionPermission: "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech",
-      },
-    ],
-    "@react-native-firebase/app",
-    "@react-native-firebase/crashlytics",
-    [
-      "expo-build-properties",
-      {
-        ios: {
-          useFrameworks: "static",
-        },
       },
     ],
   ],

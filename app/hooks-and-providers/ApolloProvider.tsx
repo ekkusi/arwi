@@ -4,6 +4,8 @@ import { onError } from "@apollo/client/link/error";
 import * as SecureStore from "expo-secure-store";
 import { useMemo } from "react";
 import { ACCESS_TOKEN_KEY, useAuth } from "./AuthProvider";
+import { getErrorMessage, getGraphqlErrorMessage } from "../helpers/errorUtils";
+import { useThrowCatchableError } from "./error";
 
 const BACKEND_API_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;
 if (!BACKEND_API_URL) throw new Error("Backend API URL not defined, define EXPO_PUBLIC_BACKEND_API_URL in .env");
@@ -75,6 +77,7 @@ const cache = new InMemoryCache({
 
 export default function ApolloProvider({ children }: { children: React.ReactNode }) {
   const { logout } = useAuth();
+  const throwCatchableError = useThrowCatchableError();
 
   // This and client (AND logout in AuthProvider) needs to be memoized to prevent infinite render loops.
   const errorLink = useMemo(
@@ -109,21 +112,21 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
                 break;
             }
           }
+          throwCatchableError(new Error(`[GraphQL Error]: ${getGraphqlErrorMessage(graphQLErrors)}`));
         }
 
         if (networkError) {
-          console.warn(`[Network error]: ${networkError}`);
+          throwCatchableError(new Error(`[Network error]: ${getErrorMessage(networkError)}`));
         }
-        return forward(operation);
       }),
-    [logout]
+    [logout, throwCatchableError]
   );
 
   const client = useMemo(
     () =>
       new ApolloClient({
         uri: GRAPHQL_API_URL,
-        link: ApolloLink.from([errorLink, authLink, httpLink]),
+        link: ApolloLink.from([authLink, errorLink, httpLink]),
         cache,
       }),
     [errorLink]

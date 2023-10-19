@@ -110,6 +110,41 @@ const learningObjectivesField = defineField({
   },
 });
 
+const formatEnvironmentsField = (title: string, name: string, groupKey?: string) => ({
+  title,
+  name,
+  type: "array",
+  group: groupKey,
+  options: {
+    sortable: false,
+  },
+  description:
+    "HUOM! Ympäristöjen poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Ympäristöjen poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Ympäristöjen lisääminen on kuitenkin mahdollista riskittömästi.",
+  of: [
+    {
+      title: "Ympäristö",
+      name: "environment",
+      type: "object",
+      ...requiredOptions,
+      fields: [
+        formatTranslationField("Nimi", "name"),
+        codeField,
+        {
+          title: "Väri",
+          name: "color",
+          type: "color",
+          ...requiredOptions,
+        },
+      ],
+      preview: {
+        select: {
+          title: "name.fi",
+        },
+      },
+    },
+  ],
+});
+
 const learningObjectiveCautionMessage =
   "HUOM! Oppimistavoitteiden poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Oppimistavoitteiden poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Oppimistavoitteiden lisääminen on kuitenkin mahdollista riskittömästi.";
 
@@ -148,42 +183,9 @@ export const schemaTypes = [
         validation: (rule) => rule.required(),
         readOnly: ({ currentUser }) => !currentUser?.roles?.find((it) => it.name === "administrator"),
       },
+      formatEnvironmentsField("Ympäristöt (kaikki vuosiluokat ja moduulit)", "environments", "environments"),
       {
-        title: "Ympäristöt",
-        name: "environments",
-        type: "array",
-        group: "environments",
-        options: {
-          sortable: false,
-        },
-        description:
-          "HUOM! Ympäristöjen poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Ympäristöjen poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Ympäristöjen lisääminen on kuitenkin mahdollista riskittömästi.",
-        of: [
-          {
-            title: "Ympäristö",
-            name: "environment",
-            type: "object",
-            ...requiredOptions,
-            fields: [
-              formatTranslationField("Nimi", "name"),
-              codeField,
-              {
-                title: "Väri",
-                name: "color",
-                type: "color",
-                ...requiredOptions,
-              },
-            ],
-            preview: {
-              select: {
-                title: "name.fi",
-              },
-            },
-          },
-        ],
-      },
-      {
-        title: "Peruskoulun oppimistavoitteet",
+        title: "Peruskoulun oppimistavoitteet ja ympäristöt",
         name: "elementarySchool",
         type: "object",
         group: "elementarySchool",
@@ -198,6 +200,7 @@ export const schemaTypes = [
             },
             of: [learningObjectivesField],
           },
+          formatEnvironmentsField("Ympäristöt (1-2 vuosiluokat)", "environments_1_to_2"),
           {
             title: "3-6 vuosiluokat",
             name: "three_to_six_years",
@@ -207,6 +210,7 @@ export const schemaTypes = [
             },
             of: [learningObjectivesField],
           },
+          formatEnvironmentsField("Ympäristöt (3-6 vuosiluokat)", "environments_3_to_6"),
           {
             title: "7-9 vuosiluokat",
             name: "seven_to_nine_years",
@@ -216,6 +220,7 @@ export const schemaTypes = [
             },
             of: [learningObjectivesField],
           },
+          formatEnvironmentsField("Ympäristöt (7-9 vuosiluokat)", "environments_7_to_9"),
         ],
       },
       {
@@ -245,6 +250,7 @@ export const schemaTypes = [
                   sortable: false,
                 },
               },
+              formatEnvironmentsField("Ympäristöt", "environments"),
             ],
             preview: {
               select: {
@@ -281,6 +287,7 @@ export const schemaTypes = [
                   sortable: false,
                 },
               },
+              formatEnvironmentsField("Ympäristöt", "environments"),
             ],
             preview: {
               select: {

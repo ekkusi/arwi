@@ -5,6 +5,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { ScrollView } from "react-native-gesture-handler";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMutation, useQuery } from "@apollo/client";
+import { useMatomo } from "matomo-tracker-react-native";
 import Layout from "../../../components/Layout";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
@@ -15,7 +16,7 @@ import GradeSuggestionView from "../../../components/GradeSuggestionView";
 import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import { graphql } from "../../../gql";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import { ACCESS_TOKEN_KEY } from "../../../hooks-and-providers/AuthProvider";
+import { useAuthenticatedUser } from "../../../hooks-and-providers/AuthProvider";
 
 const StudentFeedbackView_GetStudent_Query = graphql(`
   query StudentFeedbackView_GetStudent($id: ID!) {
@@ -59,6 +60,8 @@ const StudentFeedbackView_GenerateFeedback_Mutation = graphql(`
 export default function StudentFeedbackView({ route }: NativeStackScreenProps<HomeStackParams, "student-feedback">) {
   const { t } = useTranslation();
   const { id, name } = route.params;
+  const { trackAction } = useMatomo();
+  const user = useAuthenticatedUser();
 
   const [summary, setSummary] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
@@ -92,7 +95,16 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
         },
       });
 
+      trackAction({
+        name: "Generate student feedback",
+        userInfo: {
+          uid: user.email,
+        },
+      });
+
       if (!result.data?.generateStudentFeedback) throw new Error("Summary generation failed");
+      console.log(result.data.generateStudentFeedback);
+
       setSummary(result.data?.generateStudentFeedback);
     } catch (e) {
       console.error(e);

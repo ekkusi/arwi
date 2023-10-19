@@ -1,8 +1,8 @@
-import { EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
+import { MinimalEnvironment } from "arwi-backend/src/types/subject";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
 
 export type EvaluationDataType = DataType & {
-  environment: EvaluationsLineChart_EvaluationFragment["collection"]["environment"]["label"] | string;
+  environment: MinimalEnvironment;
 };
 
 const movingAverage = (data: EvaluationDataType[], bandWidth: number) => {
@@ -28,8 +28,8 @@ const movingAverage = (data: EvaluationDataType[], bandWidth: number) => {
     movingAverageData.push({
       date: data[i].date,
       environment: data[i].environment,
-      skills: currSumSkills / notNullSkillsCount,
-      behaviour: currSumBehaviour / notNullBehaviourCount,
+      skills: notNullSkillsCount && currSumSkills / notNullSkillsCount,
+      behaviour: notNullBehaviourCount && currSumBehaviour / notNullBehaviourCount,
     });
   }
   return movingAverageData;
@@ -41,5 +41,6 @@ type MovingAverageLineChartProps = Omit<LineChartBaseProps, "data"> & {
 
 export default function MovingAverageLineChart({ data, ...rest }: MovingAverageLineChartProps) {
   const movingAverageData = movingAverage(data, 2);
+
   return <LineChartBase data={movingAverageData} {...rest} />;
 }

@@ -301,12 +301,12 @@ const resolvers: MutationResolvers<CustomContext> = {
       environmentLabel: getEnvironment(it.evaluationCollection.environmentCode)?.label.fi,
       date: it.evaluationCollection.date,
     }));
-    const summary = await generateStudentSummary(mappedEvaluations);
+    const summary = await generateStudentSummary(mappedEvaluations, user!.email); // Safe cast after authenticated check
     return summary;
   },
-  fixTextGrammatics: async (_, { studentId, text }, { user, prisma }) => {
+  fixTextGrammatics: async (_, { studentId, text }, { user }) => {
     await checkAuthenticatedByStudent(user, studentId);
-    const summary = await fixTextGrammatics(text);
+    const summary = await fixTextGrammatics(text, user!.email); // Safe cast after authenticated check
     return summary;
   },
 };

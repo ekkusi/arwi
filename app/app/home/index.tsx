@@ -52,7 +52,7 @@ function HomePageContent({
   navigation,
 }: {
   data: MainPage_GetCurrentUserQuery;
-  navigation: NativeStackNavigationProp<HomeStackParams, "index">;
+  navigation: NativeStackNavigationProp<HomeStackParams, "home">;
 }) {
   const { t } = useTranslation();
   const firstRender = useRef(true);
@@ -147,7 +147,7 @@ function HomePageContent({
     </Layout>
   );
 }
-export default function HomePage({ navigation }: NativeStackScreenProps<HomeStackParams, "index">) {
+export default function HomePage({ navigation }: NativeStackScreenProps<HomeStackParams, "home">) {
   const { data, loading } = useQuery(MainPage_GetCurrentUser_Query);
 
   if (loading || !data) return <LoadingIndicator />;

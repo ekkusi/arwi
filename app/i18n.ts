@@ -11,7 +11,6 @@ export const languages = [
   { value: "fi_FI", name: "Suomi" },
   { value: "en_US", name: "Englanti" },
   { value: "sv_FI", name: "Ruotsi" },
-  { value: "es_US", name: "Espanja" },
 ];
 
 export const isValidLanguage = (lang: string): boolean => languages.findIndex((l) => l.value === lang) >= 0;

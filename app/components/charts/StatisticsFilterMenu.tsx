@@ -46,13 +46,13 @@ export default function StatisticsFilterMenu({
               key={item.code}
               title={item.label.fi}
               variant="outline"
-              colorScheme={item.label.fi === filter ? "darkgray" : "lightgray"}
+              colorScheme={item.code === filter ? "darkgray" : "lightgray"}
               style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
               onPress={() => {
                 setIsFiltersOpen(false);
-                setFilter(item.label.fi);
+                setFilter(item.code);
               }}
-              textStyle={{ fontSize: "xs", fontWeight: "400", color: item.code === subjectCode ? "darkgray" : "gray" }}
+              textStyle={{ fontSize: "xs", fontWeight: "400", color: item.code === filter ? "darkgray" : "gray" }}
               leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: item.color }} />}
             />
           ))}

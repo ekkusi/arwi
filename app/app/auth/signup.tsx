@@ -4,6 +4,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import WebView from "react-native-webview";
+import { useMatomo } from "matomo-tracker-react-native";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
@@ -19,6 +20,7 @@ import TextFormField from "../../components/form/TextFormField";
 import { COLORS } from "../../theme";
 import CModal from "../../components/CModal";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
 const initialValues = {
   email: "",
@@ -43,6 +45,7 @@ const PRIVACY_POLICY_URL = "https://arwi.fi/tietosuojaseloste";
 const TERMS_AND_CONDITIONS_URL = "https://arwi.fi/kayttoehdot";
 
 export default function SignupPage({ navigation }: NativeStackScreenProps<AuthStackParams, "signup">) {
+  const { trackAppStart, trackEvent } = useMatomo();
   const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
@@ -74,6 +77,17 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
       const accessToken = data?.register?.accessToken;
       if (!accessToken) throw new Error("Unexpected error"); // Should get caught before this
       setUser(accessToken, data.register.teacher);
+      const userInfo = {
+        uid: data.register.teacher.email,
+      };
+      trackEvent({
+        category: MATOMO_EVENT_CATEGORIES.AUTH,
+        action: "Register",
+        userInfo,
+      });
+      trackAppStart({
+        userInfo,
+      });
     } catch (error) {
       const msg = getErrorMessage(error);
       setGeneralError(msg);

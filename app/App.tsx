@@ -1,8 +1,9 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Logs } from "expo";
-import ErrorBoundary from "react-native-error-boundary";
-import crashlytics from "@react-native-firebase/crashlytics";
+// import ErrorBoundary from "react-native-error-boundary";
+import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
 import { LogBox, Platform } from "react-native";
+import ErrorBoundary from "react-native-error-boundary";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
@@ -19,12 +20,16 @@ Logs.enableExpoCliLogging();
 // Keep an eye on terminal logs for other relevant warnings.
 if (Platform.OS === "ios") LogBox.ignoreAllLogs();
 
-export default function App() {
+function AppContent() {
+  const { trackAppStart } = useMatomo();
   const onError = (error: Error, componentStack: string) => {
     console.error(error, componentStack);
-    crashlytics().log(`Error occurred, component stack: ${componentStack}`);
-    crashlytics().recordError(error);
+    // TODO: Log error to error reporting service
   };
+
+  useEffect(() => {
+    trackAppStart({});
+  }, [trackAppStart]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorView} onError={onError}>
@@ -36,5 +41,25 @@ export default function App() {
         </ApolloProvider>
       </AuthProvider>
     </ErrorBoundary>
+  );
+}
+
+const SITE_ID = process.env.EXPO_PUBLIC_MATOMO_SITE_ID ? Number(process.env.EXPO_PUBLIC_MATOMO_SITE_ID) : 1;
+const MATOMO_BASE_URL = process.env.EXPO_PUBLIC_MATOMO_BASE_URL;
+
+if (!MATOMO_BASE_URL)
+  throw new Error("Missing Matomo base url env variable, define EXPO_PUBLIC_MATOMO_BASE_URL in .env (or root .env.production in production)");
+
+const instance = new MatomoTracker({
+  urlBase: MATOMO_BASE_URL,
+  siteId: SITE_ID,
+  disabled: __DEV__,
+});
+
+export default function App() {
+  return (
+    <MatomoProvider instance={instance}>
+      <AppContent />
+    </MatomoProvider>
   );
 }

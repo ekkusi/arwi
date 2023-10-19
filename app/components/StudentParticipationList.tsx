@@ -38,7 +38,6 @@ export default function StudentParticipationList<T extends StudentParticipation>
   return (
     <CFlatList
       style={{ flex: 1 }}
-      contentContainerStyle={{ paddingBottom: 100 }}
       data={participations}
       renderItem={({ item }) => (
         <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: "xs" }}>

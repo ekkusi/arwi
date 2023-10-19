@@ -1,9 +1,10 @@
 import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import * as SecureStore from "expo-secure-store";
+import { useMatomo } from "matomo-tracker-react-native";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "../../gql";
-import { useAuth } from "../../hooks-and-providers/AuthProvider";
+import { useAuth, useAuthenticatedUser } from "../../hooks-and-providers/AuthProvider";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
 import { languages, STORAGE_LANG_KEY } from "../../i18n";
@@ -16,6 +17,8 @@ const ProfileView_Logout_Mutation = graphql(`
 
 export default function ProfileView() {
   const { logout } = useAuth();
+  const user = useAuthenticatedUser();
+  const { trackAction } = useMatomo();
   const [logoutMutation, { loading, client }] = useMutation(ProfileView_Logout_Mutation);
 
   const { t, i18n } = useTranslation();
@@ -23,6 +26,12 @@ export default function ProfileView() {
   const handleLogout = async () => {
     await logoutMutation();
     await client.clearStore();
+    trackAction({
+      name: "Logout",
+      userInfo: {
+        uid: user.email,
+      },
+    });
     logout();
   };
 
