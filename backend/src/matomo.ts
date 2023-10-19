@@ -28,10 +28,13 @@ export class MatomoTracker {
 
   private trackerUrl: string;
 
-  constructor(siteId: number, baseUrl: string) {
+  private disabledInDev: boolean;
+
+  constructor(siteId: number, baseUrl: string, disabledInDev = true) {
     const normalizedUrlBase = baseUrl[baseUrl.length - 1] !== "/" ? `${baseUrl}/` : baseUrl;
     this.siteId = siteId;
     this.trackerUrl = `${normalizedUrlBase}matomo.php`;
+    this.disabledInDev = disabledInDev;
   }
 
   trackEventFullInfo(category: string, action: string, name?: string, value?: number, params: TrackParams = {}) {
@@ -77,7 +80,8 @@ export class MatomoTracker {
    *
    * @param {(Object)} options URL to track or options (must contain URL as well)
    */
-  track(params: TrackParams): Promise<Response> {
+  track(params: TrackParams): Promise<Response> | null {
+    if (process.env.NODE_ENV === "development" && this.disabledInDev) return null;
     const { lang, userInfo, custom, ...data } = params;
 
     const { custom: customUserInfo, ...restUserInfo } = userInfo || {};

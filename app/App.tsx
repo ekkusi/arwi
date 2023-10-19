@@ -53,6 +53,7 @@ if (!MATOMO_BASE_URL)
 const instance = new MatomoTracker({
   urlBase: MATOMO_BASE_URL,
   siteId: SITE_ID,
+  disabled: __DEV__,
 });
 
 export default function App() {
