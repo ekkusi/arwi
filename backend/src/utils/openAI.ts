@@ -1,5 +1,5 @@
 import { Evaluation } from "types";
-import { UserInfo } from "types/contextTypes";
+import matomo from "../matomo";
 import openAIClient from "../openAIClient";
 import { formatDate } from "./date";
 
@@ -8,8 +8,12 @@ export type EvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviou
   environmentLabel: string | undefined;
 };
 
-export async function generateStudentSummary(evaluations: EvaluationData[]) {
+const CHARACTERS_PER_TOKEN = 2.5;
+const OPEN_AI_EVENT_CATEGORY = "OpenAI";
+
+export async function generateStudentSummary(evaluations: EvaluationData[], userEmail: string) {
   const startMessage = `Olen kyseisen oppilaan liikunnanopettaja, ja minun tulee antaa hänelle yleinen palaute, kehitysehdotus ja huomio vahvuusalueesta hänen suoritustensa perusteella. Päivämäärät, ympäristöt, taitojen ja työskentelyn arvosanat sekä opettajan huomiot on annettu listana. Arvosanat on annettu asteikoilla 6-10, joista 6 on heikoin ja 10 paras. Minun tulee tehdä vertailua työskentelyn ja taitojen välillä sekä eri ympäristöjen kesken, mikäli arvosanoissa on selkeitä eroavaisuuksia. Jos oppilaan taidot tai työskentely on jossain ympäristössä 7 tai alle, minun pitää antaa siitä ympäristöstä selkeästi kehitettävää palautetta. Jos taidot tai työskentely taas on jossain ympäristössä 9 tai enemmän, minun pitää kehua oppilasta kyseisestä ympäristöstä. Pyydän sinua kirjoittamaan noin 50 sanaisen palautteen oppilaalle sinuttelevassa muodossa ja hampurilaismallin mukaisesti:\n\n Tässä on lista oppilaan suorituksista:\n\n`;
+  // const notes: string[] = [];
   const notes = evaluations.map((it) => {
     let note = "";
     if (it.environmentLabel) note += `${formatDate(it.date)} - ${it.environmentLabel}\n`;
@@ -20,6 +24,19 @@ export async function generateStudentSummary(evaluations: EvaluationData[]) {
   });
   // const endMessage = `\n\nKirjoita oppilaalle noin ${length} sanan pituinen palaute näiden muistiinpanojen pohjalta`;
   const prompt = startMessage + notes.join("\n\n");
+  const tokenCount = prompt.length / CHARACTERS_PER_TOKEN;
+
+  matomo.trackEventWithValue(OPEN_AI_EVENT_CATEGORY, "Generate student feedback", tokenCount, {
+    userInfo: {
+      uid: userEmail,
+      custom: {
+        test: "Test custom user field",
+      },
+    },
+    custom: {
+      token_count: prompt.length / CHARACTERS_PER_TOKEN,
+    },
+  });
 
   try {
     const completion = await openAIClient.chat.completions.create({
@@ -39,11 +56,18 @@ export async function generateStudentSummary(evaluations: EvaluationData[]) {
   }
 }
 
-export async function fixTextGrammatics(text: string) {
+export async function fixTextGrammatics(text: string, userEmail: string) {
   const startMessage = `Seuraava teksti on saatu äänittämällä puhetta. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi siten, että korjattu teksti on maksimissaan ${
     text.length + 30
   } kirjainta pitkä. Palauta pelkkä korjattu teksti: \n\n`;
   const prompt = startMessage + text;
+  const tokenCount = prompt.length / CHARACTERS_PER_TOKEN;
+
+  matomo.trackEventWithValue(OPEN_AI_EVENT_CATEGORY, "Fix text grammatics", tokenCount, {
+    userInfo: {
+      uid: userEmail,
+    },
+  });
 
   try {
     const process = openAIClient.chat.completions.create({
@@ -57,8 +81,6 @@ export async function fixTextGrammatics(text: string) {
     }
     throw new Error(`Error with generateSumamry: no message found from result`);
   } catch (error: any) {
-    // console.log();
-
     console.error("error", error?.response?.data || error);
     throw new Error(`Unknown error: ${error?.response?.data?.error}` || "");
   }

@@ -20,6 +20,7 @@ import TextFormField from "../../components/form/TextFormField";
 import { COLORS } from "../../theme";
 import CModal from "../../components/CModal";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
 const initialValues = {
   email: "",
@@ -44,7 +45,7 @@ const PRIVACY_POLICY_URL = "https://arwi.fi/tietosuojaseloste";
 const TERMS_AND_CONDITIONS_URL = "https://arwi.fi/kayttoehdot";
 
 export default function SignupPage({ navigation }: NativeStackScreenProps<AuthStackParams, "signup">) {
-  const { trackAppStart, trackAction } = useMatomo();
+  const { trackAppStart, trackEvent } = useMatomo();
   const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
@@ -79,8 +80,9 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
       const userInfo = {
         uid: data.register.teacher.email,
       };
-      trackAction({
-        name: "Register",
+      trackEvent({
+        category: MATOMO_EVENT_CATEGORIES.AUTH,
+        action: "Register",
         userInfo,
       });
       trackAppStart({

@@ -103,6 +103,8 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       });
 
       if (!result.data?.generateStudentFeedback) throw new Error("Summary generation failed");
+      console.log(result.data.generateStudentFeedback);
+
       setSummary(result.data?.generateStudentFeedback);
     } catch (e) {
       console.error(e);

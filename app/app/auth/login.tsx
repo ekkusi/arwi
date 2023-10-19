@@ -17,6 +17,7 @@ import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
 import { COLORS } from "../../theme";
+import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
 const initialValues = {
   email: "",
@@ -38,7 +39,7 @@ const LoginPage_Login_Mutation = graphql(`
 `);
 
 export default function LoginPage({ navigation }: NativeStackScreenProps<AuthStackParams, "login">) {
-  const { trackAppStart, trackAction } = useMatomo();
+  const { trackAppStart, trackEvent } = useMatomo();
   const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
@@ -68,8 +69,9 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
       const userInfo = {
         uid: data.login.teacher.email,
       };
-      trackAction({
-        name: "Login",
+      trackEvent({
+        category: MATOMO_EVENT_CATEGORIES.AUTH,
+        action: "Login",
         userInfo,
       });
       trackAppStart({

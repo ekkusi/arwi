@@ -44,9 +44,15 @@ function AppContent() {
   );
 }
 
+const SITE_ID = process.env.EXPO_PUBLIC_MATOMO_SITE_ID ? Number(process.env.EXPO_PUBLIC_MATOMO_SITE_ID) : 1;
+const MATOMO_BASE_URL = process.env.EXPO_PUBLIC_MATOMO_BASE_URL;
+
+if (!MATOMO_BASE_URL)
+  throw new Error("Missing Matomo base url env variable, define EXPO_PUBLIC_MATOMO_BASE_URL in .env (or root .env.production in production)");
+
 const instance = new MatomoTracker({
-  urlBase: "http://77.83.247.14:9000",
-  siteId: 1,
+  urlBase: MATOMO_BASE_URL,
+  siteId: SITE_ID,
 });
 
 export default function App() {
