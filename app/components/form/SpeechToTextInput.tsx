@@ -190,6 +190,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
     // Overwrite text when initialText changes
     useEffect(() => {
       if (initialText === text) return;
+
       setText(initialText);
       setBeforeRecordingText(initialText);
 
@@ -232,7 +233,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
             isDisabled={isDisabled}
             onChange={(e) => {
               const newValue = e.nativeEvent.text;
-              if (newValue !== text) {
+              if (!recording) {
                 setText(newValue);
                 setBeforeRecordingText(newValue);
               }
