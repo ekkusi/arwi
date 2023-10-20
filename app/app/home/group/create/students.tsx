@@ -113,7 +113,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
   return (
     <GroupCreationBody navigation={navigation}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
-        <CTouchableWithoutFeedback style={{ height: "100%" }} onPress={Keyboard.dismiss}>
+        <CTouchableWithoutFeedback preventChildEvents={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
           <CView style={{ flex: 8, padding: 15, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
             <CView style={{ flex: 1, gap: 20, width: "100%" }}>
               <CView style={{ flex: 6, gap: 10 }}>

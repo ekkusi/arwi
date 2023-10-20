@@ -94,6 +94,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
   const evaluations = student.currentModuleEvaluations;
+  const moduleInfo = student.group.currentModule.info;
 
   return (
     <Layout>
@@ -120,8 +121,8 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("statistics", "Tilastot")}</CText>
             <EvaluationsBarChart evaluations={evaluations} />
           </CView>
-          <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} />
-          <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} />
+          <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
+          <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} moduleInfo={student.group.currentModule.info} />
           <CView style={{ gap: 10 }}>
             <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10 }}>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("characteristics", "Tunnusluvut")}</CText>

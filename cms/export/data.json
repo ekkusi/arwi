@@ -6,50 +6,50 @@
         {
           "code": "T1",
           "label": {
-            "fi": "innostaa oppilasta käsityöhön ja käsin tekemiseen"
+            "fi": "Innostaa oppilasta käsityöhön ja käsin tekemiseen"
           },
           "longDescription": {
-            "fi": "rohkaista oppilasta kiinnostumaan ja innostumaan käsin tekemisestä sekä herättää uteliaisuutta keksivään ja kokeilevaan käsityöhön"
+            "fi": "Rohkaista oppilasta kiinnostumaan ja innostumaan käsin tekemisestä sekä herättää uteliaisuutta keksivään ja kokeilevaan käsityöhön"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T2",
           "label": {
-            "fi": "ohjata oppilas käsityöprosessiin sekä esittämään ideoitaan"
+            "fi": "Ohjata oppilas käsityöprosessiin sekä esittämään ideoitaan"
           },
           "longDescription": {
-            "fi": "ohjata oppilas kokonaiseen käsityöprosessiin ja esittämään omia ideoitaan kuvallisesti sekä kertomaan käsityön tekemisestä ja valmiista tuotteesta"
+            "fi": "Ohjata oppilas kokonaiseen käsityöprosessiin ja esittämään omia ideoitaan kuvallisesti sekä kertomaan käsityön tekemisestä ja valmiista tuotteesta"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T3",
           "label": {
-            "fi": "ohjata oppilasta suunnittelemaan ja valmistamaan tuotteita"
+            "fi": "Ohjata oppilasta suunnittelemaan ja valmistamaan tuotteita"
           },
           "longDescription": {
-            "fi": " ohjata oppilasta suunnittelemaan ja valmistamaan käsityötuotteita tai teoksia luottaen omiin esteettisiin ja teknisiin ratkaisuihinsa"
+            "fi": "Ohjata oppilasta suunnittelemaan ja valmistamaan käsityötuotteita tai teoksia luottaen omiin esteettisiin ja teknisiin ratkaisuihinsa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T4",
           "label": {
-            "fi": "opastaa materiaalien hallintaan ja turvallisuuteen"
+            "fi": "Opastaa materiaalien hallintaan ja turvallisuuteen"
           },
           "longDescription": {
-            "fi": "opastaa oppilasta tutustumaan moniin erilaisiin materiaaleihin ja niiden työstämiseen sekä ohjata toimimaan vastuuntuntoisesti ja turvallisesti "
+            "fi": "Opastaa oppilasta tutustumaan moniin erilaisiin materiaaleihin ja niiden työstämiseen sekä ohjata toimimaan vastuuntuntoisesti ja turvallisesti"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T5",
           "label": {
-            "fi": "tukea itsetuntoa onnistumisten ja oivaltamisen kautta"
+            "fi": "Tukea itsetuntoa onnistumisten ja oivaltamisen kautta"
           },
           "longDescription": {
-            "fi": " tukea oppilaan itsetunnon kehittymistä käsityössä onnistumisen, oivaltamisen ja keksimisen kokemusten kautta "
+            "fi": "Tukea oppilaan itsetunnon kehittymistä käsityössä onnistumisen, oivaltamisen ja keksimisen kokemusten kautta"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
@@ -58,50 +58,50 @@
         {
           "code": "T1",
           "label": {
-            "fi": "ohjata oppilasta suunnitteluun, ideointiin ja kokeiluun"
+            "fi": "Ohjata oppilasta suunnitteluun, ideointiin ja kokeiluun"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta suunnittelemaan työskentelyään sekä ideoimaan, tutkimaan ja kokeilemaan yritteliäästi"
+            "fi": "Ohjata oppilasta suunnittelemaan työskentelyään sekä ideoimaan, tutkimaan ja kokeilemaan yritteliäästi"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T2",
           "label": {
-            "fi": "ohjata tavoitteelliseen oppimiseen ja kokonaisvaltaiseen prosessin hallintaan"
+            "fi": "Ohjata tavoitteelliseen oppimiseen ja kokonaisvaltaiseen prosessin hallintaan"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta asettamaan käsityöhön omia oppimisen ja työskentelyn tavoitteita sekä toteuttamaan niiden perusteella kokonainen käsityöprosessi ja arvioimaan oppimistaan"
+            "fi": "Ohjata oppilasta asettamaan käsityöhön omia oppimisen ja työskentelyn tavoitteita sekä toteuttamaan niiden perusteella kokonainen käsityöprosessi ja arvioimaan oppimistaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T3",
           "label": {
-            "fi": "opastaa monipuolisten työvälineiden ja innovaatioiden käyttöön"
+            "fi": "Opastaa monipuolisten työvälineiden ja innovaatioiden käyttöön"
           },
           "longDescription": {
-            "fi": "opastaa oppilasta tutustumaan ja käyttämään monipuolisesti erilaisia työvälineitä, materiaaleja ja tarkoituksenmukaisia työtapoja sekä kehittämään innovaatioita"
+            "fi": "Opastaa oppilasta tutustumaan ja käyttämään monipuolisesti erilaisia työvälineitä, materiaaleja ja tarkoituksenmukaisia työtapoja sekä kehittämään innovaatioita"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T4",
           "label": {
-            "fi": "vahvistaa ilmaisukykyä ja käsityön käsitteiden hallintaa"
+            "fi": "Vahvistaa ilmaisukykyä ja käsityön käsitteiden hallintaa"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta käyttämään sujuvasti käsityön käsitteitä, merkkejä ja symboleja sekä vahvistamaan visuaalista, materiaalista ja teknologista ilmaisuaan "
+            "fi": "Ohjata oppilasta käyttämään sujuvasti käsityön käsitteitä, merkkejä ja symboleja sekä vahvistamaan visuaalista, materiaalista ja teknologista ilmaisuaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T5",
           "label": {
-            "fi": "ohjata turvalliseen työskentelyyn ja riskien hallintaan"
+            "fi": "Ohjata turvalliseen työskentelyyn ja riskien hallintaan"
           },
           "longDescription": {
-            "fi": " ohjata oppilasta havainnoimaan, ennakoimaan ja reagoimaan työtilanteisiin liittyviin riskitekijöihin ja toimimaan turvallisesti käsityöprosessissa"
+            "fi": "Ohjata oppilasta havainnoimaan, ennakoimaan ja reagoimaan työtilanteisiin liittyviin riskitekijöihin ja toimimaan turvallisesti käsityöprosessissa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -111,27 +111,27 @@
             "fi": "Hyödyntää tieto- ja viestintäteknologiaa suunnittelussa ja dokumentoinnissa"
           },
           "longDescription": {
-            "fi": " ohjata oppilasta käyttämään tieto- ja viestintäteknologian mahdollisuuksia käsityön suunnittelussa, valmistuksessa ja dokumentoinnissa, sekä yhteisöllisen tiedon tuottamisessa ja jakamisessa"
+            "fi": "Ohjata oppilasta käyttämään tieto- ja viestintäteknologian mahdollisuuksia käsityön suunnittelussa, valmistuksessa ja dokumentoinnissa, sekä yhteisöllisen tiedon tuottamisessa ja jakamisessa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T7",
           "label": {
-            "fi": "ohjata tuntemaan käsityön merkitystä elämässä"
+            "fi": "Ohjata tuntemaan käsityön merkitystä elämässä"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta tuntemaan käsityön, kädentaitojen ja teknologisen kehityksen merkitys omassa elämässään, yhteiskunnassa, yrittäjyydessä ja muussa työelämässä"
+            "fi": "Ohjata oppilasta tuntemaan käsityön, kädentaitojen ja teknologisen kehityksen merkitys omassa elämässään, yhteiskunnassa, yrittäjyydessä ja muussa työelämässä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T8",
           "label": {
-            "fi": "edistää kestävää ja taloudellista ajattelua "
+            "fi": "Edistää kestävää ja taloudellista ajattelua"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta taloudelliseen ajatteluun ja kehittämään käsityöprosessiin liittyviä valintoja, jotka edistävät kestävää elämäntapaa"
+            "fi": "Ohjata oppilasta taloudelliseen ajatteluun ja kehittämään käsityöprosessiin liittyviä valintoja, jotka edistävät kestävää elämäntapaa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
@@ -140,84 +140,87 @@
         {
           "code": "T1 ",
           "label": {
-            "fi": "vahvistaa kiinnostusta käsin tekemiseen ja innovointiin"
+            "fi": "Vahvistaa kiinnostusta käsin tekemiseen ja innovointiin"
           },
           "longDescription": {
-            "fi": "vahvistaa oppilaan kiinnostusta käsin tekemiseen sekä innostaa keksivään, kokeilevaan ja paikallisuutta hyödyntävään käsityöhön"
+            "fi": "Vahvistaa oppilaan kiinnostusta käsin tekemiseen sekä innostaa keksivään, kokeilevaan ja paikallisuutta hyödyntävään käsityöhön"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T2",
           "label": {
-            "fi": "ohjata kokonaisen käsityöprosessin hallintaan ja dokumentointiin"
+            "fi": "Ohjata kokonaisen käsityöprosessin hallintaan ja dokumentointiin"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta hahmottamaan ja hallitsemaan kokonainen käsityöprosessi ja sen dokumentointi"
+            "fi": "Ohjata oppilasta hahmottamaan ja hallitsemaan kokonainen käsityöprosessi ja sen dokumentointi"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T3",
           "label": {
-            "fi": "opastaa suunnitteluun ja valmistukseen"
+            "fi": "Opastaa suunnitteluun ja valmistukseen"
           },
           "longDescription": {
-            "fi": " opastaa oppilasta suunnittelemaan ja valmistamaan yksin tai yhdessä käsityötuote tai -teos luottaen omiin esteettisiin ja teknisiin ratkaisuihin"
+            "fi": "Opastaa oppilasta suunnittelemaan ja valmistamaan yksin tai yhdessä käsityötuote tai -teos luottaen omiin esteettisiin ja teknisiin ratkaisuihin"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T4",
           "label": {
-            "fi": "ohjata käsitteistön ja materiaalien tuntemukseen"
+            "fi": "Ohjata käsitteistön ja materiaalien tuntemukseen"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta tunnistamaan käsitteistöä sekä tuntemaan monia erilaisia materiaaleja ja työstämään niitä tarkoituksenmukaisesti"
+            "fi": "Ohjata oppilasta tunnistamaan käsitteistöä sekä tuntemaan monia erilaisia materiaaleja ja työstämään niitä tarkoituksenmukaisesti"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T5",
           "label": {
-            "fi": "kannustaa pitkäjänteisyyteen ja vastuullisuuteen"
+            "fi": "Kannustaa pitkäjänteisyyteen ja vastuullisuuteen"
           },
           "longDescription": {
-            "fi": "kannustaa oppilasta toimimaan pitkäjänteisesti ja vastuuntuntoisesti, huolehtimaan turvallisesta työskentelystä sekä valitsemaan ja käyttämään työhön sopivaa välineistöä"
+            "fi": "Kannustaa oppilasta toimimaan pitkäjänteisesti ja vastuuntuntoisesti, huolehtimaan turvallisesta työskentelystä sekä valitsemaan ja käyttämään työhön sopivaa välineistöä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T6",
           "label": {
-            "fi": "ohjata teknologian käyttöön käsityössä"
+            "fi": "Ohjata teknologian käyttöön käsityössä"
           },
           "longDescription": {
-            "fi": "opastaa oppilasta käyttämään tieto– ja viestintäteknologiaa käsityön suunnittelussa, valmistamisessa ja käsityöprosessin dokumentoinnissa"
+            "fi": "Opastaa oppilasta käyttämään tieto– ja viestintäteknologiaa käsityön suunnittelussa, valmistamisessa ja käsityöprosessin dokumentoinnissa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T7",
           "label": {
-            "fi": "ohjata arvostavaan ja vuorovaikutteiseen käsityön prosessin arviointiin"
+            "fi": "Ohjata arvostavaan ja vuorovaikutteiseen käsityön prosessin arviointiin"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta arvioimaan, arvostamaan ja tarkastelemaan vuorovaikutteisesti omaa ja muiden kokonaisen käsityön prosessia "
+            "fi": "Ohjata oppilasta arvioimaan, arvostamaan ja tarkastelemaan vuorovaikutteisesti omaa ja muiden kokonaisen käsityön prosessia"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T8",
           "label": {
-            "fi": "herättää kulutustapojen kriittiseen arviointiin"
+            "fi": "Herättää kulutustapojen kriittiseen arviointiin"
           },
           "longDescription": {
-            "fi": "herättää oppilas arvioimaan kulutus- ja tuotantotapoja kriittisesti"
+            "fi": "Herättää oppilas arvioimaan kulutus- ja tuotantotapoja kriittisesti"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
-      ]
+      ],
+      "environments_1_to_2": [],
+      "environments_3_to_6": [],
+      "environments_7_to_9": []
     },
     "environments": [
       {
@@ -664,7 +667,10 @@
           },
           "type": "NOT_EVALUATED"
         }
-      ]
+      ],
+      "environments_1_to_2": [],
+      "environments_3_to_6": [],
+      "environments_7_to_9": []
     },
     "environments": [
       {
@@ -768,7 +774,8 @@
         ],
         "name": {
           "fi": "LI1 (lukion 1. moduuli)"
-        }
+        },
+        "environments": []
       },
       {
         "code": "LI_HS_MODULE_LI2",
@@ -816,7 +823,8 @@
         ],
         "name": {
           "fi": "LI2 (lukion 2. moduuli)"
-        }
+        },
+        "environments": []
       },
       {
         "code": "LI_HS_MODULE_LI3",
@@ -864,7 +872,8 @@
         ],
         "name": {
           "fi": "LI3 (lukion 3. moduuli)"
-        }
+        },
+        "environments": []
       },
       {
         "code": "LI_HS_MODULE_LI4",
@@ -902,7 +911,8 @@
         ],
         "name": {
           "fi": "LI4 (liikunta 4. moduuli)"
-        }
+        },
+        "environments": []
       },
       {
         "code": "LI_HS_MODULE_LI5",
@@ -940,7 +950,8 @@
         ],
         "name": {
           "fi": "LI5 (liikunta 5. moduuli)"
-        }
+        },
+        "environments": []
       },
       {
         "code": "LI_HS_MODULE_LUK",
@@ -1008,7 +1019,8 @@
         ],
         "name": {
           "fi": "Lukio muu vapaavalintainen moduuli"
-        }
+        },
+        "environments": []
       }
     ],
     "name": {
@@ -1152,7 +1164,8 @@
         ],
         "name": {
           "fi": "Ammatillinen koulutus pakollinen"
-        }
+        },
+        "environments": []
       },
       {
         "code": "LI_VOC_MODULE_AMM_1",
@@ -1200,7 +1213,8 @@
         ],
         "name": {
           "fi": "Ammatillinen koulutus vapaavalintainen"
-        }
+        },
+        "environments": []
       }
     ]
   },
@@ -1208,7 +1222,9 @@
     "code": "MU",
     "name": {
       "fi": "Musiikki"
-    }
+    },
+    "environments": [],
+    "elementarySchool": {}
   },
   {
     "code": "TE",
@@ -1220,14 +1236,14 @@
             "fi": "Terveyden monimuotoisuuden ymmärtäminen"
           },
           "longDescription": {
-            "fi": "Ohjata oppilasta ymmärtämään terveyden laaja-alaisuutta, terveyden edistämistä sekä elämänkulkua, kasvua ja kehitystä voimavaralähtöisesti "
+            "fi": "Ohjata oppilasta ymmärtämään terveyden laaja-alaisuutta, terveyden edistämistä sekä elämänkulkua, kasvua ja kehitystä voimavaralähtöisesti"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T2",
           "label": {
-            "fi": "Tunne- ja vuorovaikutustaitojen kehittäminen "
+            "fi": "Tunne- ja vuorovaikutustaitojen kehittäminen"
           },
           "longDescription": {
             "fi": "Ohjata oppilasta kehittämään valmiuksiaan tunne- ja vuorovaikutustaidoissa ja kykyä toimia erilaisissa ristiriita- ja kriisitilanteissa"
@@ -1240,7 +1256,7 @@
             "fi": "Itsetuntemuksen kehittäminen"
           },
           "longDescription": {
-            "fi": "Ohjata oppilasta kehittämään itsetuntemustaan, omien arvojen ja asenteiden sekä kehon ja mielen viestien tunnistamista ja tunnistamaan ja säätelemään käyttäytymistään, oppimistaan ja opiskeluaan tukevia tekijöitä "
+            "fi": "Ohjata oppilasta kehittämään itsetuntemustaan, omien arvojen ja asenteiden sekä kehon ja mielen viestien tunnistamista ja tunnistamaan ja säätelemään käyttäytymistään, oppimistaan ja opiskeluaan tukevia tekijöitä"
           },
           "type": "BEHAVIOUR"
         },
@@ -1280,7 +1296,7 @@
             "fi": "Terveystottumusten tunnistaminen ja arvioiminen"
           },
           "longDescription": {
-            "fi": "Ohjata oppilasta tunnistamaan ja arvioimaan omia terveyteen ja turvallisuuteen liittyviä tottumuksiaan, valintojaan ja niiden perusteluja sekä rohkaista oppilasta pohtimaan oman terveyden kannalta merkityksellisiä voimavaroja "
+            "fi": "Ohjata oppilasta tunnistamaan ja arvioimaan omia terveyteen ja turvallisuuteen liittyviä tottumuksiaan, valintojaan ja niiden perusteluja sekä rohkaista oppilasta pohtimaan oman terveyden kannalta merkityksellisiä voimavaroja"
           },
           "type": "NOT_EVALUATED"
         },
@@ -1334,7 +1350,10 @@
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
-      ]
+      ],
+      "environments_1_to_2": [],
+      "environments_3_to_6": [],
+      "environments_7_to_9": []
     },
     "environments": [
       {
@@ -1432,7 +1451,7 @@
               "fi": "Osaa kuvailla ihmisen voimavaroja ja analysoidan niiden merkitystä terveyteen"
             },
             "longDescription": {
-              "fi": "pystyy kuvailemaan ja jäsentelemään keskeisiä ihmisen voimavaroja ja terveyttä määrittäviä tekijöitä sekä analysoimaan niiden yhteyksiä ja vaikutusmekanismeja terveyteen"
+              "fi": "Pystyy kuvailemaan ja jäsentelemään keskeisiä ihmisen voimavaroja ja terveyttä määrittäviä tekijöitä sekä analysoimaan niiden yhteyksiä ja vaikutusmekanismeja terveyteen"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1442,7 +1461,7 @@
               "fi": "Osaa selittää terveyskulttuurien ilmiöitä ja arvioida niiden terveysvaikutuksia"
             },
             "longDescription": {
-              "fi": "osaa selittää erilaisten terveyskulttuurien ilmiöiden muodostumista ja arvioida niiden merkitystä terveydelle sekä soveltaa keskeisiä sosiaalipsykologisia malleja ja teorioita elintapojen omaksumisen selittämisessä"
+              "fi": "Osaa selittää erilaisten terveyskulttuurien ilmiöiden muodostumista ja arvioida niiden merkitystä terveydelle sekä soveltaa keskeisiä sosiaalipsykologisia malleja ja teorioita elintapojen omaksumisen selittämisessä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1452,14 +1471,15 @@
               "fi": "Omien elintapojen vaikutusten analysointi"
             },
             "longDescription": {
-              "fi": " tunnistaa omiin elintapoihinsa vaikuttavia tekijöitä ja pystyy arvioimaan elintapavalintojen merkitystä omalle ja lähiympäristön terveydelle sekä antamaan perusteltuja ehdotuksia siitä, miten terveyttä edistäviä elintapoja voidaan ylläpitää ja vaarantavia ehkäistä."
+              "fi": "Tunnistaa omiin elintapoihinsa vaikuttavia tekijöitä ja pystyy arvioimaan elintapavalintojen merkitystä omalle ja lähiympäristön terveydelle sekä antamaan perusteltuja ehdotuksia siitä, miten terveyttä edistäviä elintapoja voidaan ylläpitää ja vaarantavia ehkäistä."
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           }
         ],
         "name": {
           "fi": "TE1 (lukion 1.moduuli)"
-        }
+        },
+        "environments": []
       },
       {
         "code": "TE_HS_MODULE_TE2",
@@ -1470,7 +1490,7 @@
               "fi": "Tietää tutkimustiedon hankkimisen periaatteet ja osaa soveltaa niitä"
             },
             "longDescription": {
-              "fi": "tietää tutkimustiedon hankkimisen periaatteista ja tutkimusprosessin vaiheista sekä osaa soveltaa näitä tietoja ja kuvata perustellen, miten terveyteen, terveyskäyttäytymiseen ja toimintakykyyn liittyvistä aiheista voidaan saada luotettavaa ja monipuolista tutkimustietoa"
+              "fi": "Tietää tutkimustiedon hankkimisen periaatteista ja tutkimusprosessin vaiheista sekä osaa soveltaa näitä tietoja ja kuvata perustellen, miten terveyteen, terveyskäyttäytymiseen ja toimintakykyyn liittyvistä aiheista voidaan saada luotettavaa ja monipuolista tutkimustietoa"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1480,7 +1500,7 @@
               "fi": "Osaa hakea tietoa ja verrata lähteiden luotettavuutta"
             },
             "longDescription": {
-              "fi": "osaa hakea tietoa ja pystyy vertailemaan eri lähteiden luotettavuutta"
+              "fi": "Osaa hakea tietoa ja pystyy vertailemaan eri lähteiden luotettavuutta"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1490,7 +1510,7 @@
               "fi": "Osaa kuvata ja analysoida terveysviestinnän muotoja"
             },
             "longDescription": {
-              "fi": "osaa kuvata terveysviestinnän muotoja ja vaikutuskeinoja sekä analysoida terveysviestinnän merkitystä ihmisten terveyskäsityksille ja terveydelle"
+              "fi": "Osaa kuvata terveysviestinnän muotoja ja vaikutuskeinoja sekä analysoida terveysviestinnän merkitystä ihmisten terveyskäsityksille ja terveydelle"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1500,7 +1520,7 @@
               "fi": "Osaa analysoida ympäristön vaikutuksia terveydelle"
             },
             "longDescription": {
-              "fi": "osaa esitellä ja analysoida fyysisen ja psykososiaalisen ympäristön yhteyksiä ja vaikutuksia terveydelle sekä arvioida omien elintapojen ja kulutustottumusten merkitystä ympäristön terveydelle ja terveellisyydelle"
+              "fi": "Osaa esitellä ja analysoida fyysisen ja psykososiaalisen ympäristön yhteyksiä ja vaikutuksia terveydelle sekä arvioida omien elintapojen ja kulutustottumusten merkitystä ympäristön terveydelle ja terveellisyydelle"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1510,14 +1530,15 @@
               "fi": "Osaa eritellä riippuvuuden muotoja ja analysoida niiden haittoja"
             },
             "longDescription": {
-              "fi": "osaa eritellä riippuvuuden muotoja ja niiden syntyyn vaikuttavia tekijöitä sekä analysoida riippuvuuksiin liittyviä terveys- ja muita haittoja."
+              "fi": "Osaa eritellä riippuvuuden muotoja ja niiden syntyyn vaikuttavia tekijöitä sekä analysoida riippuvuuksiin liittyviä terveys- ja muita haittoja."
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           }
         ],
         "name": {
           "fi": "TE2 (lukion 2. moduuli)"
-        }
+        },
+        "environments": []
       },
       {
         "code": "TE_HS_MODULE_TE3",
@@ -1528,7 +1549,7 @@
               "fi": "Yhteiskunnan kehityksen vaikutus kansanterveyteen"
             },
             "longDescription": {
-              "fi": "osaa kuvata ja analysoida yhteiskunnallisten olosuhteiden, sosiaali- ja terveyspolitiikan ja muun yhteiskuntapolitiikan, tieteen sekä teknologian muutosta, kehitystä ja yhteyksiä väestön terveyteen"
+              "fi": "Osaa kuvata ja analysoida yhteiskunnallisten olosuhteiden, sosiaali- ja terveyspolitiikan ja muun yhteiskuntapolitiikan, tieteen sekä teknologian muutosta, kehitystä ja yhteyksiä väestön terveyteen"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1538,7 +1559,7 @@
               "fi": "Tarttumattomien ja tartuntataitien riskitekijät, ehkäisy sekä sairauden vaikutukset"
             },
             "longDescription": {
-              "fi": "pystyy erittelemään keskeisten tarttumattomien ja tartuntatautien riskitekijöitä, esittämään perusteltuja ratkaisuja näiden ehkäisemiseksi sekä arvioimaan sairauksien ja tautien merkitystä yksilölle ja yhteiskunnalle sekä elintapojen vaikutuksia tarttumattomien ja tartuntatautien näkökulmasta"
+              "fi": "Pystyy erittelemään keskeisten tarttumattomien ja tartuntatautien riskitekijöitä, esittämään perusteltuja ratkaisuja näiden ehkäisemiseksi sekä arvioimaan sairauksien ja tautien merkitystä yksilölle ja yhteiskunnalle sekä elintapojen vaikutuksia tarttumattomien ja tartuntatautien näkökulmasta"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1548,7 +1569,7 @@
               "fi": "Sosiaali- ja terveyspalveluiden toiminta ja merkitys yhteiskunnassa"
             },
             "longDescription": {
-              "fi": " osaa esitellä perustellen, mihin sosiaali- tai terveyspalveluihin yksilö voi hakeutua erilaisissa tilanteissa, arvioida kriittisesti palvelujen järjestämistä ja tuottamista sekä arvioida sosiaali- ja terveyspalvelujen, itsehoidon ja omahoidon merkitystä terveydelle"
+              "fi": "Osaa esitellä perustellen, mihin sosiaali- tai terveyspalveluihin yksilö voi hakeutua erilaisissa tilanteissa, arvioida kriittisesti palvelujen järjestämistä ja tuottamista sekä arvioida sosiaali- ja terveyspalvelujen, itsehoidon ja omahoidon merkitystä terveydelle"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -1558,14 +1579,15 @@
               "fi": "Osaa analysoida terveyden eettisiä kysymyksiä"
             },
             "longDescription": {
-              "fi": "osaa analysoida terveyteen ja sairauksiin liittyviä eettisiä kysymyksiä, kuvata ja arvioida terveyteen ja terveyden eriarvoisuuteen vaikuttavia tekijöitä Suomessa ja globaalisti sekä analysoida terveyserojen kaventamiseen vaikuttavia tekijöitä."
+              "fi": "Osaa analysoida terveyteen ja sairauksiin liittyviä eettisiä kysymyksiä, kuvata ja arvioida terveyteen ja terveyden eriarvoisuuteen vaikuttavia tekijöitä Suomessa ja globaalisti sekä analysoida terveyserojen kaventamiseen vaikuttavia tekijöitä."
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           }
         ],
         "name": {
           "fi": "TE3 (lukion 3. moduuli)"
-        }
+        },
+        "environments": []
       }
     ],
     "name": {
@@ -1708,7 +1730,8 @@
         ],
         "name": {
           "fi": "Ammatillinen koulutus pakollinen"
-        }
+        },
+        "environments": []
       }
     ]
   },
@@ -1719,20 +1742,20 @@
         {
           "code": "T1",
           "label": {
-            "fi": "Ohjata suunnittelemaan, organisoimaan ja arvioimaan toimintaa "
+            "fi": "Ohjata suunnittelemaan, organisoimaan ja arvioimaan toimintaa"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta suunnittelemaan, organisoimaan ja arvioimaan työtä ja toimintaa"
+            "fi": "Ohjata oppilasta suunnittelemaan, organisoimaan ja arvioimaan työtä ja toimintaa"
           },
           "type": "SKILLS"
         },
         {
           "code": "T2",
           "label": {
-            "fi": "ohjata oppilasta harjoittamaan kädentaitoja sekä luovuuteen ja estetiikkaan"
+            "fi": "Ohjata oppilasta harjoittamaan kädentaitoja sekä luovuuteen ja estetiikkaan"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta harjoittelemaan kotitalouden hallinnassa tarvittavia kädentaitoja sekä kannustaa luovuuteen ja estetiikan huomioimiseen"
+            "fi": "Ohjata oppilasta harjoittelemaan kotitalouden hallinnassa tarvittavia kädentaitoja sekä kannustaa luovuuteen ja estetiikan huomioimiseen"
           },
           "type": "SKILLS"
         },
@@ -1742,17 +1765,17 @@
             "fi": "Ohjata hyvinvointia ja kestävää kulutusta edistäviin päätöksiin"
           },
           "longDescription": {
-            "fi": " ohjata ja rohkaista oppilasta valitsemaan ja käyttämään hyvinvointia edistävästi ja kestävän kulutuksen mukaisesti materiaaleja, työvälineitä, laitteita sekä tieto- ja viestintäteknologiaa"
+            "fi": "Ohjata ja rohkaista oppilasta valitsemaan ja käyttämään hyvinvointia edistävästi ja kestävän kulutuksen mukaisesti materiaaleja, työvälineitä, laitteita sekä tieto- ja viestintäteknologiaa"
           },
           "type": "SKILLS"
         },
         {
           "code": "T4",
           "label": {
-            "fi": "ohjata ajankäytön suunnitteluun ja järjestyksen ylläpitoon"
+            "fi": "Ohjata ajankäytön suunnitteluun ja järjestyksen ylläpitoon"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta suunnittelemaan ajankäyttöään ja työn etenemistä sekä ylläpitämään järjestystä oppimistehtävien aikana"
+            "fi": "Ohjata oppilasta suunnittelemaan ajankäyttöään ja työn etenemistä sekä ylläpitämään järjestystä oppimistehtävien aikana"
           },
           "type": "SKILLS"
         },
@@ -1762,7 +1785,7 @@
             "fi": "Ohjata hygienisyyteen, turvallisuuteen sekä voimavarojen huomiointiin"
           },
           "longDescription": {
-            "fi": "ohjata ja motivoida oppilasta toimimaan hygieenisesti, turvallisesti ja ergonomisesti sekä ohjata kiinnittämään oppilaan huomiota käytettävissä oleviin voimavaroihin"
+            "fi": "Ohjata ja motivoida oppilasta toimimaan hygieenisesti, turvallisesti ja ergonomisesti sekä ohjata kiinnittämään oppilaan huomiota käytettävissä oleviin voimavaroihin"
           },
           "type": "SKILLS"
         },
@@ -1772,7 +1795,7 @@
             "fi": "Ohjata kuunteluun ja rakentavaan keskusteluun"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta harjoittelemaan kuuntelua sekä rakentavaa keskustelua ja argumentointia oppimistehtävien suunnittelussa ja toteuttamisessa"
+            "fi": "Ohjata oppilasta harjoittelemaan kuuntelua sekä rakentavaa keskustelua ja argumentointia oppimistehtävien suunnittelussa ja toteuttamisessa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -1782,7 +1805,7 @@
             "fi": "Aktivoida tunnistamaan arjen rakentumista, kulttuuria ja perinteitä"
           },
           "longDescription": {
-            "fi": "aktivoida oppilasta tunnistamaan arjen rakentumista ja kulttuurisesti monimuotoisia toimintaympäristöjä sekä kotitalouksien perinteitä"
+            "fi": "Aktivoida oppilasta tunnistamaan arjen rakentumista ja kulttuurisesti monimuotoisia toimintaympäristöjä sekä kotitalouksien perinteitä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -1792,7 +1815,7 @@
             "fi": "Ohjata työskentelyyn yksin ja ryhmässä"
           },
           "longDescription": {
-            "fi": " ohjata oppilasta työskentelemään yksin ja ryhmässä sekä sopimaan työtehtävien jakamisesta ja ajankäytöstä"
+            "fi": "Ohjata oppilasta työskentelemään yksin ja ryhmässä sekä sopimaan työtehtävien jakamisesta ja ajankäytöstä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -1802,17 +1825,17 @@
             "fi": "Kannustaa hyviin tapoihin vuorovaikutustilanteissa"
           },
           "longDescription": {
-            "fi": "kannustaa oppilasta toimimaan hyvien tapojen mukaisesti vuorovaikutustilanteissa sekä pohtimaan oman käytöksen merkitystä ryhmän ja yhteisön toiminnassa"
+            "fi": "Kannustaa oppilasta toimimaan hyvien tapojen mukaisesti vuorovaikutustilanteissa sekä pohtimaan oman käytöksen merkitystä ryhmän ja yhteisön toiminnassa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T10",
           "label": {
-            "fi": "kannustaa tiedonhakuun ja -arviointiin"
+            "fi": "Kannustaa tiedonhakuun ja -arviointiin"
           },
           "longDescription": {
-            "fi": "kannustaa oppilasta hankkimaan ja arvioimaan kotitalouteen liittyvää tietoa sekä ohjata käyttämään luotettavaa tietoa valintojen perustana"
+            "fi": "Kannustaa oppilasta hankkimaan ja arvioimaan kotitalouteen liittyvää tietoa sekä ohjata käyttämään luotettavaa tietoa valintojen perustana"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -1822,7 +1845,7 @@
             "fi": "Harjaannuttaa tulkitsemaan ja lukemaan toimintaohjeita ja symboleita"
           },
           "longDescription": {
-            "fi": "harjaannuttaa oppilasta lukemaan, tulkitsemaan ja arvioimaan toimintaohjeita sekä merkkejä ja symboleja, jotka käsittelevät kotitaloutta ja lähiympäristöä"
+            "fi": "Harjaannuttaa oppilasta lukemaan, tulkitsemaan ja arvioimaan toimintaohjeita sekä merkkejä ja symboleja, jotka käsittelevät kotitaloutta ja lähiympäristöä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -1832,7 +1855,7 @@
             "fi": "Ohjata ongelmanratkaisuun ja luovuuteen"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta ongelmanratkaisuun ja luovuuteen erilaisissa tilanteissa ja ympäristöissä"
+            "fi": "Ohjata oppilasta ongelmanratkaisuun ja luovuuteen erilaisissa tilanteissa ja ympäristöissä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -1842,11 +1865,14 @@
             "fi": "Ohjata kestävään elämäntapaan ja ympäristötietoisuuteen"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta kestävään elämäntapaan kiinnittämällä oppilaan huomiota ympäristö- ja kustannustietoisuuteen osana arjen valintoja"
+            "fi": "Ohjata oppilasta kestävään elämäntapaan kiinnittämällä oppilaan huomiota ympäristö- ja kustannustietoisuuteen osana arjen valintoja"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
-      ]
+      ],
+      "environments_1_to_2": [],
+      "environments_3_to_6": [],
+      "environments_7_to_9": []
     },
     "environments": [
       {
@@ -1954,77 +1980,77 @@
             "fi": "Kannustaa ympäristön moniaistiseen havainnointiin kuvia tekemällä"
           },
           "longDescription": {
-            "fi": "kannustaa oppilasta havainnoimaan taidetta, ympäristöä ja muuta visuaalista kulttuuria moniaistisesti ja kuvia tekemällä"
+            "fi": "Kannustaa oppilasta havainnoimaan taidetta, ympäristöä ja muuta visuaalista kulttuuria moniaistisesti ja kuvia tekemällä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T2",
           "label": {
-            "fi": " rohkaista oppilasta keskustelemaan havainnoistaan ja ajatuksistaan"
+            "fi": "Rohkaista oppilasta keskustelemaan havainnoistaan ja ajatuksistaan"
           },
           "longDescription": {
-            "fi": " rohkaista oppilasta keskustelemaan havainnoistaan ja ajatuksistaan"
+            "fi": "Rohkaista oppilasta keskustelemaan havainnoistaan ja ajatuksistaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T3",
           "label": {
-            "fi": "innostaa ilmaisuun erilaisten kuvallisten tuottamisten tapojen avulla"
+            "fi": "Innostaa ilmaisuun erilaisten kuvallisten tuottamisten tapojen avulla"
           },
           "longDescription": {
-            "fi": "innostaa oppilasta ilmaisemaan havaintojaan ja ajatuksiaan erilaisten kuvallisten tuottamisen tapojen avulla"
+            "fi": "Innostaa oppilasta ilmaisemaan havaintojaan ja ajatuksiaan erilaisten kuvallisten tuottamisen tapojen avulla"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T4",
           "label": {
-            "fi": "Innostaa erilaisten materiaalien ja tekniikoiden kokeiluun "
+            "fi": "Innostaa erilaisten materiaalien ja tekniikoiden kokeiluun"
           },
           "longDescription": {
-            "fi": " innostaa oppilasta kokeilemaan erilaisia materiaaleja ja tekniikoita sekä harjoittelemaan kuvallisia ilmaisutapoja"
+            "fi": "Innostaa oppilasta kokeilemaan erilaisia materiaaleja ja tekniikoita sekä harjoittelemaan kuvallisia ilmaisutapoja"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T5",
           "label": {
-            "fi": "kannustaa pitkäjänteisyyteen yksin ja ryhmässä tehden"
+            "fi": "Kannustaa pitkäjänteisyyteen yksin ja ryhmässä tehden"
           },
           "longDescription": {
-            "fi": "kannustaa oppilasta pitkäjänteiseen kuvalliseen työskentelyyn yksin ja yhdessä muiden kanssa"
+            "fi": "Kannustaa oppilasta pitkäjänteiseen kuvalliseen työskentelyyn yksin ja yhdessä muiden kanssa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T6",
           "label": {
-            "fi": "kannustaa kuvallisen vaikuttamisen keinojen tarkasteluun"
+            "fi": "Kannustaa kuvallisen vaikuttamisen keinojen tarkasteluun"
           },
           "longDescription": {
-            "fi": " kannustaa oppilasta tarkastelemaan kuvallisen vaikuttamisen keinoja omissa ja muiden kuvissa"
+            "fi": "Kannustaa oppilasta tarkastelemaan kuvallisen vaikuttamisen keinoja omissa ja muiden kuvissa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T7",
           "label": {
-            "fi": "ohjata kuvataiteen käsitteistön käyttöön sekä kuvatyyppien tarkasteluun"
+            "fi": "Ohjata kuvataiteen käsitteistön käyttöön sekä kuvatyyppien tarkasteluun"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta käyttämään kuvataiteen käsitteistöä sekä tarkastelemaan erilaisia kuvatyyppejä"
+            "fi": "Ohjata oppilasta käyttämään kuvataiteen käsitteistöä sekä tarkastelemaan erilaisia kuvatyyppejä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T8",
           "label": {
-            "fi": "kannustaa tunnistamaan taiteen tuotteita lähiympäristössä"
+            "fi": "Kannustaa tunnistamaan taiteen tuotteita lähiympäristössä"
           },
           "longDescription": {
-            "fi": "kannustaa oppilasta tunnistamaan erilaisia taiteen ja muun visuaalisen kulttuurin tuotteita lähiympäristössään"
+            "fi": "Kannustaa oppilasta tunnistamaan erilaisia taiteen ja muun visuaalisen kulttuurin tuotteita lähiympäristössään"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2034,27 +2060,27 @@
             "fi": "Innostaa tekemään kuvia omasta ympäristöstä eri näkökulmin"
           },
           "longDescription": {
-            "fi": "innostaa oppilasta tekemään kuvia oman elinympäristön, eri aikojen ja eri kulttuurien tarkastelun pohjalta "
+            "fi": "Innostaa oppilasta tekemään kuvia oman elinympäristön, eri aikojen ja eri kulttuurien tarkastelun pohjalta"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T10",
           "label": {
-            "fi": "ohjata tunnistamaan taiteessa ja ympäristössä ilmeneviä arvoja"
+            "fi": "Ohjata tunnistamaan taiteessa ja ympäristössä ilmeneviä arvoja"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta tunnistamaan taiteessa, ympäristössä ja muussa visuaalisessa kulttuurissa ilmeneviä arvoja"
+            "fi": "Ohjata oppilasta tunnistamaan taiteessa, ympäristössä ja muussa visuaalisessa kulttuurissa ilmeneviä arvoja"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T11",
           "label": {
-            "fi": "kannustaa huomioimaan ilmaisussaan kulttuurinen moninaisuus ja kestävä kehitys"
+            "fi": "Kannustaa huomioimaan ilmaisussaan kulttuurinen moninaisuus ja kestävä kehitys"
           },
           "longDescription": {
-            "fi": " kannustaa oppilasta ottamaan kuvailmaisussaan huomioon kulttuurinen moninaisuus ja kestävä kehitys"
+            "fi": "Kannustaa oppilasta ottamaan kuvailmaisussaan huomioon kulttuurinen moninaisuus ja kestävä kehitys"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
@@ -2066,7 +2092,7 @@
             "fi": "Kannustaa moniaistiseen taidehavainnointiin monipuolisin kuvallisin välinein"
           },
           "longDescription": {
-            "fi": " kannustaa oppilasta havainnoimaan, taidetta, ympäristöä ja muuta visuaalista kulttuuria moniaistisesti ja käyttämään monipuolisesti kuvallisen tuottamisen menetelmiä"
+            "fi": "Kannustaa oppilasta havainnoimaan, taidetta, ympäristöä ja muuta visuaalista kulttuuria moniaistisesti ja käyttämään monipuolisesti kuvallisen tuottamisen menetelmiä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2076,7 +2102,7 @@
             "fi": "Rohkaista keskusteluun havainnoista sekä harjoittelemaan perustelua"
           },
           "longDescription": {
-            "fi": " rohkaista oppilasta keskustelemaan omista ja muiden havainnoista ja ajatuksista sekä perustelemaan näkemyksiään "
+            "fi": "Rohkaista oppilasta keskustelemaan omista ja muiden havainnoista ja ajatuksista sekä perustelemaan näkemyksiään"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2086,7 +2112,7 @@
             "fi": "Kannustaa monimuotoiseen visuaaliseen ilmaisuun havaintojen pohjalta"
           },
           "longDescription": {
-            "fi": " innostaa oppilasta ilmaisemaan havaintojaan ja ajatuksiaan kuvallisesti erilaisia välineitä ja tiedon tuottamisen tapoja käyttäen eri ympäristöissä"
+            "fi": "Innostaa oppilasta ilmaisemaan havaintojaan ja ajatuksiaan kuvallisesti erilaisia välineitä ja tiedon tuottamisen tapoja käyttäen eri ympäristöissä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2096,7 +2122,7 @@
             "fi": "Ohjata monipuoliseen kuvalliseen ilmaisuun ja syventämään taitoja"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta soveltamaan erilaisia materiaaleja, tekniikoita ja ilmaisun keinoja sekä syventämään kuvallisen tuottamisen taitojaan"
+            "fi": "Ohjata oppilasta soveltamaan erilaisia materiaaleja, tekniikoita ja ilmaisun keinoja sekä syventämään kuvallisen tuottamisen taitojaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2106,7 +2132,7 @@
             "fi": "Ohjata tutkivaan lähestymistapaan itsenäisesti ja yhteistyössä"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta tutkivaan lähestymistapaan itsenäisessä ja yhteistoiminnallisessa kuvallisessa työskentelyssä"
+            "fi": "Ohjata oppilasta tutkivaan lähestymistapaan itsenäisessä ja yhteistoiminnallisessa kuvallisessa työskentelyssä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2116,7 +2142,7 @@
             "fi": "Rohkaista mielipiteiden ilmaisuun ja kuvallisen viestinnän soveltamiseen"
           },
           "longDescription": {
-            "fi": "rohkaista oppilasta ilmaisemaan mielipiteitään sekä soveltamaan kuvallisen viestinnän ja vaikuttamisen keinoja omissa kuvissaan"
+            "fi": "Rohkaista oppilasta ilmaisemaan mielipiteitään sekä soveltamaan kuvallisen viestinnän ja vaikuttamisen keinoja omissa kuvissaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2126,7 +2152,7 @@
             "fi": "Ohjata monipuoliseen kuvatulkintaan"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta soveltamaan kuvallisia, sanallisia ja muita kuvatulkinnan menetelmiä"
+            "fi": "Ohjata oppilasta soveltamaan kuvallisia, sanallisia ja muita kuvatulkinnan menetelmiä"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2136,7 +2162,7 @@
             "fi": "Ohjata visuaalisen kulttuurin merkityksen tarkasteluun"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta tarkastelemaan taiteen ja muun visuaalisen kulttuurin merkitystä yksilölle, yhteisölle ja yhteiskunnalle historian ja kulttuurin näkökulmista"
+            "fi": "Ohjata oppilasta tarkastelemaan taiteen ja muun visuaalisen kulttuurin merkitystä yksilölle, yhteisölle ja yhteiskunnalle historian ja kulttuurin näkökulmista"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2146,7 +2172,7 @@
             "fi": "Innostaa monipuoliseen kuvalliseen ilmaisuun eri kulttuurien tavoin"
           },
           "longDescription": {
-            "fi": " innostaa oppilasta soveltamaan eri aikojen ja kulttuurien kuvailmaisun tapoja kuvallisessa tuottamisessaan"
+            "fi": "Innostaa oppilasta soveltamaan eri aikojen ja kulttuurien kuvailmaisun tapoja kuvallisessa tuottamisessaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2156,7 +2182,7 @@
             "fi": "Ohjata ottamaan kantaa taiteessa ja ympäristössä ilmeneviin arvoihin"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta ottamaan kantaa taiteessa, ympäristössä ja muussa visuaalisessa kulttuurissa ilmeneviin arvoihin"
+            "fi": "Ohjata oppilasta ottamaan kantaa taiteessa, ympäristössä ja muussa visuaalisessa kulttuurissa ilmeneviin arvoihin"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2166,7 +2192,7 @@
             "fi": "Kulttuurin ja kestävyyden huomioiminen kuvailmaisussa"
           },
           "longDescription": {
-            "fi": " kannustaa oppilasta ottamaan kuvailmaisussaan huomioon kulttuurinen moninaisuus ja kestävä kehitys sekä vaikuttamaan kuvien avulla"
+            "fi": "Kannustaa oppilasta ottamaan kuvailmaisussaan huomioon kulttuurinen moninaisuus ja kestävä kehitys sekä vaikuttamaan kuvien avulla"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
@@ -2178,7 +2204,7 @@
             "fi": "Kannustaa moniaistiseen taidehavainnointiin kuvallisilla välineillä"
           },
           "longDescription": {
-            "fi": "kannustaa oppilasta havainnoimaan taidetta, ympäristöä ja muuta visuaalista kulttuuria moniaistisesti ja erilaisia kuvallisia välineitä hyödyntäen "
+            "fi": "Kannustaa oppilasta havainnoimaan taidetta, ympäristöä ja muuta visuaalista kulttuuria moniaistisesti ja erilaisia kuvallisia välineitä hyödyntäen"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2188,17 +2214,17 @@
             "fi": "Rohkaista keskusteluun havainnoista sekä perusteluun"
           },
           "longDescription": {
-            "fi": " rohkaista oppilasta keskustelemaan havainnoistaan ja ajatuksistaan sekä harjoittelemaan näkemystensä perustelemista"
+            "fi": "Rohkaista oppilasta keskustelemaan havainnoistaan ja ajatuksistaan sekä harjoittelemaan näkemystensä perustelemista"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
         {
           "code": "T3",
           "label": {
-            "fi": "innostaa ilmaisemaan havaintoja kuvallisesti ja monipuolisesti"
+            "fi": "Innostaa ilmaisemaan havaintoja kuvallisesti ja monipuolisesti"
           },
           "longDescription": {
-            "fi": " innostaa oppilasta ilmaisemaan havaintojaan ja ajatuksiaan kuvallisesti ja muita tiedon tuottamisen tapoja käyttäen"
+            "fi": "Innostaa oppilasta ilmaisemaan havaintojaan ja ajatuksiaan kuvallisesti ja muita tiedon tuottamisen tapoja käyttäen"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2208,7 +2234,7 @@
             "fi": "Ohjata monipuoliseen kuvalliseen ilmaisuun ja taitojen harjoitteluun"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta käyttämään monipuolisesti erilaisia materiaaleja, tekniikoita ja ilmaisun keinoja sekä harjaannuttamaan kuvan tekemisen taitojaan"
+            "fi": "Ohjata oppilasta käyttämään monipuolisesti erilaisia materiaaleja, tekniikoita ja ilmaisun keinoja sekä harjaannuttamaan kuvan tekemisen taitojaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2218,7 +2244,7 @@
             "fi": "Ohjata taitojen kehittämiseen yksin ja yhteistyössä"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta tavoitteelliseen kuvallisten taitojen kehittämiseen yksin ja yhteistyössä muiden kanssa"
+            "fi": "Ohjata oppilasta tavoitteelliseen kuvallisten taitojen kehittämiseen yksin ja yhteistyössä muiden kanssa"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2228,7 +2254,7 @@
             "fi": "Ohjata tutustumaan kuvallisen viestinnän tapoihin ja vaikuttamisen keinoihin"
           },
           "longDescription": {
-            "fi": " ohjata oppilasta tutustumaan erilaisiin kuvallisen viestinnän tapoihin ja käyttämään kuvallisen vaikuttamisen keinoja omissa kuvissaan"
+            "fi": "Ohjata oppilasta tutustumaan erilaisiin kuvallisen viestinnän tapoihin ja käyttämään kuvallisen vaikuttamisen keinoja omissa kuvissaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2238,7 +2264,7 @@
             "fi": "Ohjata kuvien tarkasteluun eri näkökulmista (fiktio-todellisuus)"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta tarkastelemaan kuvia eri lähtökohdista ja eri yhteyksissä sekä pohtimaan todellisuuden ja fiktion suhdetta"
+            "fi": "Ohjata oppilasta tarkastelemaan kuvia eri lähtökohdista ja eri yhteyksissä sekä pohtimaan todellisuuden ja fiktion suhdetta"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2248,7 +2274,7 @@
             "fi": "Ohjata tarkastelemaan taidetta eri näkökulmista (historiallis-kulttuurinen)"
           },
           "longDescription": {
-            "fi": " ohjata oppilasta tarkastelemaan taidetta ja muuta visuaalista kulttuuria teoksen, tekijän ja katsojan näkökulmista sekä pohtimaan historiallisten ja kulttuuristen tekijöiden vaikutusta kuviin"
+            "fi": "Ohjata oppilasta tarkastelemaan taidetta ja muuta visuaalista kulttuuria teoksen, tekijän ja katsojan näkökulmista sekä pohtimaan historiallisten ja kulttuuristen tekijöiden vaikutusta kuviin"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2258,7 +2284,7 @@
             "fi": "Innostaa kokeilemaan eri kulttuurien kuvailmaisua omiin kuviin"
           },
           "longDescription": {
-            "fi": " innostaa oppilasta kokeilemaan eri aikojen ja kulttuurien kuvailmaisun tapoja omissa kuvissaan"
+            "fi": "Innostaa oppilasta kokeilemaan eri aikojen ja kulttuurien kuvailmaisun tapoja omissa kuvissaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2268,7 +2294,7 @@
             "fi": "Ohjata keskustelemaan taidearvoista ja visuaalisen kulttuurin merkityksestä"
           },
           "longDescription": {
-            "fi": "ohjata oppilasta keskustelemaan taiteessa, ympäristössä ja muussa visuaalisessa kulttuurissa ilmenevistä arvoista"
+            "fi": "Ohjata oppilasta keskustelemaan taiteessa, ympäristössä ja muussa visuaalisessa kulttuurissa ilmenevistä arvoista"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         },
@@ -2278,7 +2304,7 @@
             "fi": "Kannustaa kulttuuriseen moninaisuuteen ja kestävään kehitykseen kuvailmaisussa"
           },
           "longDescription": {
-            "fi": "kannustaa oppilasta ottamaan huomioon kulttuurinen moninaisuus ja kestävä kehitys kuvailmaisun sisältöjä ja toimintatapoja valitessaan"
+            "fi": "Kannustaa oppilasta ottamaan huomioon kulttuurinen moninaisuus ja kestävä kehitys kuvailmaisun sisältöjä ja toimintatapoja valitessaan"
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
@@ -2292,70 +2318,70 @@
             "code": "KU_HS_MODULE_KU1_ENV_OPI",
             "color": "#ebebec",
             "name": {
-              "fi": "opiskelijoiden omat kuvat sekä kuvakulttuurit"
+              "fi": "Opiskelijoiden omat kuvat sekä kuvakulttuurit"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_OMI",
             "color": "#b6cfdc",
             "name": {
-              "fi": "omien kuvien käyttäminen kuvailmaisun lähtökohtana"
+              "fi": "Omien kuvien käyttäminen kuvailmaisun lähtökohtana"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_OMI_1",
             "color": "#a5ddf9",
             "name": {
-              "fi": "omien kuvien tarkasteleminen suhteessa taiteen kuviin"
+              "fi": "Omien kuvien tarkasteleminen suhteessa taiteen kuviin"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_OMI_2",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien käyttäminen tutkivassa ja ilmiökeskeisessä työskentelyssä"
+              "fi": "Omien kuvien käyttäminen tutkivassa ja ilmiökeskeisessä työskentelyssä"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_KUV",
             "color": "#24a3e3",
             "name": {
-              "fi": "kuvan tuottamisen, muokkaamisen ja esittämisen keinoja taiteessa"
+              "fi": "Kuvan tuottamisen, muokkaamisen ja esittämisen keinoja taiteessa"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_KUV_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "kuvataiteen käsitteistöön ja kuvastoihin tutustuminen"
+              "fi": "Kuvataiteen käsitteistöön ja kuvastoihin tutustuminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_TUT",
             "color": "#24a3e3",
             "name": {
-              "fi": "tutustuminen erilaisiin näkemyksiin taiteen tehtävistä "
+              "fi": "Tutustuminen erilaisiin näkemyksiin taiteen tehtävistä"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_ERI",
             "color": "#24a3e3",
             "name": {
-              "fi": "erilaisten kuvatulkinnan keinojen käyttäminen"
+              "fi": "Erilaisten kuvatulkinnan keinojen käyttäminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_KUL",
             "color": "#24a3e3",
             "name": {
-              "fi": "kulttuurien ajankohtaisten ilmiöiden tutkiminen kuvailmaisussa"
+              "fi": "Kulttuurien ajankohtaisten ilmiöiden tutkiminen kuvailmaisussa"
             }
           },
           {
             "code": "KU_HS_MODULE_KU1_ENV_VAI",
             "color": "#24a3e3",
             "name": {
-              "fi": "vaikuttaminen ja osallistuminen visuaalisen kulttuurin keinoin"
+              "fi": "Vaikuttaminen ja osallistuminen visuaalisen kulttuurin keinoin"
             }
           }
         ],
@@ -2366,17 +2392,17 @@
               "fi": "Havannoi kuvia sekä jakaa ajatteluaan kuvallisesti ja muilla tavoin"
             },
             "longDescription": {
-              "fi": "havainnoi itselle ja muille merkityksellisiä kuvia sekä jakaa ajatteluaan kuvallisesti ja muita tiedon tuottamisen tapoja käyttäen"
+              "fi": "Havainnoi itselle ja muille merkityksellisiä kuvia sekä jakaa ajatteluaan kuvallisesti ja muita tiedon tuottamisen tapoja käyttäen"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T2",
             "label": {
-              "fi": "käyttää monipuolisia kuvailmaisun välineitä ja materiaaleja itsenäisesti ja ryhmässä"
+              "fi": "Käyttää monipuolisia kuvailmaisun välineitä ja materiaaleja itsenäisesti ja ryhmässä"
             },
             "longDescription": {
-              "fi": "käyttää erilaisia kuvailmaisun välineitä, materiaaleja, teknologioita ja lähestymistapoja itsenäisesti sekä ryhmän jäsenenä"
+              "fi": "Käyttää erilaisia kuvailmaisun välineitä, materiaaleja, teknologioita ja lähestymistapoja itsenäisesti sekä ryhmän jäsenenä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -2386,57 +2412,57 @@
               "fi": "Käyttää visuaalista viesintää osallistumisessa ja vaikuttamisessa"
             },
             "longDescription": {
-              "fi": "soveltaa visuaalisen viestinnän ja teknologian keinoja näkemysten esittämisessä sekä osallistumisessa ja vaikuttamisessa"
+              "fi": "Soveltaa visuaalisen viestinnän ja teknologian keinoja näkemysten esittämisessä sekä osallistumisessa ja vaikuttamisessa"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T4",
             "label": {
-              "fi": "tutkii ja tulkitsee taidetta yksilön ja yhteiskunnan näkökulmista"
+              "fi": "Tutkii ja tulkitsee taidetta yksilön ja yhteiskunnan näkökulmista"
             },
             "longDescription": {
-              "fi": "tutkii ja tulkitsee taidetta yksilön, yhteisön ja yhteiskunnan näkökulmista"
+              "fi": "Tutkii ja tulkitsee taidetta yksilön, yhteisön ja yhteiskunnan näkökulmista"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T5",
             "label": {
-              "fi": "tutkii ja tulkitsee eri aikojen ja kulttuurien visuaalista kulttuuria"
+              "fi": "Tutkii ja tulkitsee eri aikojen ja kulttuurien visuaalista kulttuuria"
             },
             "longDescription": {
-              "fi": "tutkii ja tulkitsee eri aikojen, kulttuurien ja yhteisöjen visuaalista kulttuuria"
+              "fi": "Tutkii ja tulkitsee eri aikojen, kulttuurien ja yhteisöjen visuaalista kulttuuria"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T6",
             "label": {
-              "fi": "tutkii ja tulkitsee kuvataiteen ja kulttuurin ajankohtaisia ilmiöitä"
+              "fi": "Tutkii ja tulkitsee kuvataiteen ja kulttuurin ajankohtaisia ilmiöitä"
             },
             "longDescription": {
-              "fi": "tutkii ja tulkitsee kuvataiteen ja muun visuaalisen kulttuurin ajankohtaisia ilmiöitä"
+              "fi": "Tutkii ja tulkitsee kuvataiteen ja muun visuaalisen kulttuurin ajankohtaisia ilmiöitä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T7",
             "label": {
-              "fi": "ymmärtää kuvakulttuurien merkityksen elämässään ja yhteiskunnassa"
+              "fi": "Ymmärtää kuvakulttuurien merkityksen elämässään ja yhteiskunnassa"
             },
             "longDescription": {
-              "fi": "ymmärtää kuvakulttuurien merkityksen omassa elämässään, yhteiskunnassa ja globaalissa maailmassa"
+              "fi": "Ymmärtää kuvakulttuurien merkityksen omassa elämässään, yhteiskunnassa ja globaalissa maailmassa"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T8",
             "label": {
-              "fi": "ymmärtää kuvataiteen merkityksen kulttuurisen moninaisuuden ilmentäjänä ja kestävän tulevaisuuden kannalta"
+              "fi": "Ymmärtää kuvataiteen merkityksen kulttuurisen moninaisuuden ilmentäjänä ja kestävän tulevaisuuden kannalta"
             },
             "longDescription": {
-              "fi": "ymmärtää visuaalisen kulttuurin merkityksen kulttuurisen moninaisuuden ilmentäjänä, kulttuuriperinnön uudistamisessa ja kestävän tulevaisuuden kannalta"
+              "fi": "Ymmärtää visuaalisen kulttuurin merkityksen kulttuurisen moninaisuuden ilmentäjänä, kulttuuriperinnön uudistamisessa ja kestävän tulevaisuuden kannalta"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           }
@@ -2452,70 +2478,70 @@
             "code": "KU_HS_MODULE_KU2_ENV_OPI",
             "color": "#24a3e3",
             "name": {
-              "fi": "opiskelijoiden omat kuvat sekä kuvakulttuurit"
+              "fi": "Opiskelijoiden omat kuvat sekä kuvakulttuurit"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_OMI",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien käyttäminen kuvailmaisun lähtökohtana"
+              "fi": "Omien kuvien käyttäminen kuvailmaisun lähtökohtana"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_OMI_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien tarkasteleminen suhteessa taiteen kuviin"
+              "fi": "Omien kuvien tarkasteleminen suhteessa taiteen kuviin"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_OMI_2",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien käyttäminen tutkivassa ja ilmiökeskeisessä työskentelyssä"
+              "fi": "Omien kuvien käyttäminen tutkivassa ja ilmiökeskeisessä työskentelyssä"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_KUV",
             "color": "#24a3e3",
             "name": {
-              "fi": "kuvan tuottamisen, muokkaamisen ja esittämisen keinoja taiteessa"
+              "fi": "Kuvan tuottamisen, muokkaamisen ja esittämisen keinoja taiteessa"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_ARK",
             "color": "#24a3e3",
             "name": {
-              "fi": "arkkitehtuurin, muotoilun ja median käsitteistöön ja kuvastoihin tutustuminen"
+              "fi": "Arkkitehtuurin, muotoilun ja median käsitteistöön ja kuvastoihin tutustuminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_TEO",
             "color": "#24a3e3",
             "name": {
-              "fi": "Teosten liittäminen erilaisiin näkemyksiin taiteen tehtävistä "
+              "fi": "Teosten liittäminen erilaisiin näkemyksiin taiteen tehtävistä"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_KUV_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "kuvallisten, sanallisten ja muiden kuvatulkinnan keinojen käyttäminen"
+              "fi": "Kuvallisten, sanallisten ja muiden kuvatulkinnan keinojen käyttäminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_YMP",
             "color": "#24a3e3",
             "name": {
-              "fi": "ympäristön ajankohtaisten ilmiöiden tutkiminen kuvailmaisussa"
+              "fi": "Ympäristön ajankohtaisten ilmiöiden tutkiminen kuvailmaisussa"
             }
           },
           {
             "code": "KU_HS_MODULE_KU2_ENV_VAI",
             "color": "#24a3e3",
             "name": {
-              "fi": "vaikuttaminen ja osallistuminen kuvataiteen keinoin"
+              "fi": "Vaikuttaminen ja osallistuminen kuvataiteen keinoin"
             }
           }
         ],
@@ -2526,77 +2552,77 @@
               "fi": "Havannoi kuvia, teoksia, tuotteita, palveluita sekä digitaalisia ja rakennettuja ympäristöjä"
             },
             "longDescription": {
-              "fi": "havainnoi itselle ja muille merkityksellisiä teoksia, tuotteita ja palveluita sekä digitaalisia, rakennettuja ja luonnon ympäristöjä"
+              "fi": "Havainnoi itselle ja muille merkityksellisiä teoksia, tuotteita ja palveluita sekä digitaalisia, rakennettuja ja luonnon ympäristöjä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T2",
             "label": {
-              "fi": "perustele havaintoja ja ajattelua kuvallisesti ja tiedon tuottamisen avulla"
+              "fi": "Perustele havaintoja ja ajattelua kuvallisesti ja tiedon tuottamisen avulla"
             },
             "longDescription": {
-              "fi": "perustelee ympäristöihin, tuotteisiin ja palveluihin liittyviä havaintojaan ja ajatteluaan kuvallisesti ja muita tiedon tuottamisen tapoja käyttäen"
+              "fi": "Perustelee ympäristöihin, tuotteisiin ja palveluihin liittyviä havaintojaan ja ajatteluaan kuvallisesti ja muita tiedon tuottamisen tapoja käyttäen"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T3",
             "label": {
-              "fi": "tarkastelee ympäristön kuvia suhteessa omaan ilmaisuun ja kulttuuriperintöön "
+              "fi": "Tarkastelee ympäristön kuvia suhteessa omaan ilmaisuun ja kulttuuriperintöön"
             },
             "longDescription": {
-              "fi": "tarkastelee ympäristön kuvien yhteyksiä omiin kuviinsa, taiteeseen ja kulttuuriperintöön"
+              "fi": "Tarkastelee ympäristön kuvien yhteyksiä omiin kuviinsa, taiteeseen ja kulttuuriperintöön"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T4",
             "label": {
-              "fi": "hyödyntää itsenäisesti ja ryhmässä muotoilun ja arkkitehtuurin tekniikoita"
+              "fi": "Hyödyntää itsenäisesti ja ryhmässä muotoilun ja arkkitehtuurin tekniikoita"
             },
             "longDescription": {
-              "fi": "soveltaa arkkitehtuurin, muotoilun ja tuotteistamisen prosesseja, teknologioita ja toimintatapoja kuvailmaisussaan itsenäisesti ja ryhmän jäsenenä"
+              "fi": "Soveltaa arkkitehtuurin, muotoilun ja tuotteistamisen prosesseja, teknologioita ja toimintatapoja kuvailmaisussaan itsenäisesti ja ryhmän jäsenenä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T5",
             "label": {
-              "fi": "tutkii ja tulkitsee ympäristöä ja tuotteita kestävyyden kannalta"
+              "fi": "Tutkii ja tulkitsee ympäristöä ja tuotteita kestävyyden kannalta"
             },
             "longDescription": {
-              "fi": "tutkii ja tulkitsee rakennettua ympäristöä, tuotteita ja palveluja yhteiskuntakehityksen, oikeuksien ja kestävän tulevaisuuden näkökulmista"
+              "fi": "Tutkii ja tulkitsee rakennettua ympäristöä, tuotteita ja palveluja yhteiskuntakehityksen, oikeuksien ja kestävän tulevaisuuden näkökulmista"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T6",
             "label": {
-              "fi": "kehittää osaamistaan ympäristön kuvien tekijänä, tulkitsijana, arvottajana ja toimijana"
+              "fi": "Kehittää osaamistaan ympäristön kuvien tekijänä, tulkitsijana, arvottajana ja toimijana"
             },
             "longDescription": {
-              "fi": "kehittää osaamistaan ympäristön kuvien tekijänä, tulkitsijana, arvottajana ja toimijana"
+              "fi": "Kehittää osaamistaan ympäristön kuvien tekijänä, tulkitsijana, arvottajana ja toimijana"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T7",
             "label": {
-              "fi": "ymmärtää kuvallisen merkityksen kestävässä suunnittelussa ja viestinnässä"
+              "fi": "Ymmärtää kuvallisen merkityksen kestävässä suunnittelussa ja viestinnässä"
             },
             "longDescription": {
-              "fi": "ymmärtää visuaalisuuden merkityksiä tuotteiden, palveluiden ja arkkitehtuurin kestävässä suunnittelussa, viestinnässä ja käyttämisessä"
+              "fi": "Ymmärtää visuaalisuuden merkityksiä tuotteiden, palveluiden ja arkkitehtuurin kestävässä suunnittelussa, viestinnässä ja käyttämisessä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T8",
             "label": {
-              "fi": "ymmärtää kuvilla vaikuttamisen mahdollisuuksia kestävällä ja eettisellä tavalla"
+              "fi": "Ymmärtää kuvilla vaikuttamisen mahdollisuuksia kestävällä ja eettisellä tavalla"
             },
             "longDescription": {
-              "fi": "ymmärtää kuvilla vaikuttamisen ja osallistumisen mahdollisuuksia omassa elämässään esteettisesti, eettisesti ja ekologisesti kestävän tulevaisuuden kannalta"
+              "fi": "Ymmärtää kuvilla vaikuttamisen ja osallistumisen mahdollisuuksia omassa elämässään esteettisesti, eettisesti ja ekologisesti kestävän tulevaisuuden kannalta"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           }
@@ -2612,70 +2638,70 @@
             "code": "KU_HS_MODULE_KU3_ENV_OPI",
             "color": "#24a3e3",
             "name": {
-              "fi": "opiskelijoille merkitykselliset kuvat sekä mediakulttuurit"
+              "fi": "Opiskelijoille merkitykselliset kuvat sekä mediakulttuurit"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_OMI",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien käyttäminen kuvailmaisun lähtökohtana"
+              "fi": "Omien kuvien käyttäminen kuvailmaisun lähtökohtana"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_OMI_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien tarkasteleminen suhteessa median kuviin"
+              "fi": "Omien kuvien tarkasteleminen suhteessa median kuviin"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_OMI_2",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien käyttäminen tutkivassa ja ilmiökeskeisessä työskentelyssä"
+              "fi": "Omien kuvien käyttäminen tutkivassa ja ilmiökeskeisessä työskentelyssä"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_KUV",
             "color": "#24a3e3",
             "name": {
-              "fi": "kuvan tuottaminen, muokkaaminen ja esittäminen digitaalisesti ja muilla keinoilla"
+              "fi": "Kuvan tuottaminen, muokkaaminen ja esittäminen digitaalisesti ja muilla keinoilla"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_MED",
             "color": "#24a3e3",
             "name": {
-              "fi": "median, viestinnän ja taiteen käsitteistöön ja kuvastoihin perehtyminen"
+              "fi": "Median, viestinnän ja taiteen käsitteistöön ja kuvastoihin perehtyminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_MED_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "mediaesitysten liittäminen erilaisiin näkemyksiin taiteen tehtävistä"
+              "fi": "Mediaesitysten liittäminen erilaisiin näkemyksiin taiteen tehtävistä"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_KUV_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "kuvallisten, sanallisten ja muiden kuvatulkinnan keinojen soveltaminen"
+              "fi": "Kuvallisten, sanallisten ja muiden kuvatulkinnan keinojen soveltaminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_MER",
             "color": "#24a3e3",
             "name": {
-              "fi": "merkityksellisten kulttuuristen ja globaalien ilmiöiden tutkiminen"
+              "fi": "Merkityksellisten kulttuuristen ja globaalien ilmiöiden tutkiminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU3_ENV_TOI",
             "color": "#24a3e3",
             "name": {
-              "fi": "toimijuus mediassa ja muussa visuaalisessa kulttuurissa"
+              "fi": "Toimijuus mediassa ja muussa visuaalisessa kulttuurissa"
             }
           }
         ],
@@ -2683,70 +2709,70 @@
           {
             "code": "T1",
             "label": {
-              "fi": "syventää suhdettaan digitaaliseen kuvaan, taiteeseen ja teknologiaan"
+              "fi": "Syventää suhdettaan digitaaliseen kuvaan, taiteeseen ja teknologiaan"
             },
             "longDescription": {
-              "fi": "syventää omakohtaista suhdettaan digitaaliseen kuvaan, mediaan, taiteeseen ja teknologiaan ajattelun ja ilmaisun taitojaan kehittämällä"
+              "fi": "Syventää omakohtaista suhdettaan digitaaliseen kuvaan, mediaan, taiteeseen ja teknologiaan ajattelun ja ilmaisun taitojaan kehittämällä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T2",
             "label": {
-              "fi": "laajentaa tuntemustaan audiovisuaaliseen kulttuuriin erilaisin ilmaisu- ja tuotantotavoin"
+              "fi": "Laajentaa tuntemustaan audiovisuaaliseen kulttuuriin erilaisin ilmaisu- ja tuotantotavoin"
             },
             "longDescription": {
-              "fi": "laajentaa median, taiteen, teknologian ja audiovisuaalisen kulttuurin tuntemustaan perehtymällä erilaisiin ilmaisu-, tuotanto- ja esitystapoihin"
+              "fi": "Laajentaa median, taiteen, teknologian ja audiovisuaalisen kulttuurin tuntemustaan perehtymällä erilaisiin ilmaisu-, tuotanto- ja esitystapoihin"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T3",
             "label": {
-              "fi": "tutkii mediakulttuuria tuottaessaan ja tulkitessaan teoksia"
+              "fi": "Tutkii mediakulttuuria tuottaessaan ja tulkitessaan teoksia"
             },
             "longDescription": {
-              "fi": "tutkii mediakulttuuria tuottaessaan ja tulkitessaan teoksia, tuotteita ja palveluja"
+              "fi": "Tutkii mediakulttuuria tuottaessaan ja tulkitessaan teoksia, tuotteita ja palveluja"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T4",
             "label": {
-              "fi": "hyödyntää mediateknologian keinoja itsenäisesti sekä osana ryhmää"
+              "fi": "Hyödyntää mediateknologian keinoja itsenäisesti sekä osana ryhmää"
             },
             "longDescription": {
-              "fi": "hyödyntää mediateknologian keinoja, työtapoja ja prosesseja suunnittelussa, vuorovaikutuksessa ja osallistumisessa itsenäisesti sekä osana ryhmää"
+              "fi": "Hyödyntää mediateknologian keinoja, työtapoja ja prosesseja suunnittelussa, vuorovaikutuksessa ja osallistumisessa itsenäisesti sekä osana ryhmää"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T5",
             "label": {
-              "fi": "tulkitsee visuaalisen kulttuurin tuotteita ja niiden intertekstuaalisuutta"
+              "fi": "Tulkitsee visuaalisen kulttuurin tuotteita ja niiden intertekstuaalisuutta"
             },
             "longDescription": {
-              "fi": "tulkitsee tiedon tuottamisen tapoja yhdisteleviä visuaalisen kulttuurin tuotteita ja niihin sisältyviä intertekstuaalisia suhteita"
+              "fi": "Tulkitsee tiedon tuottamisen tapoja yhdisteleviä visuaalisen kulttuurin tuotteita ja niihin sisältyviä intertekstuaalisia suhteita"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T6",
             "label": {
-              "fi": "tulkitsee mediaesityksiä moninäkökulmaisesti"
+              "fi": "Tulkitsee mediaesityksiä moninäkökulmaisesti"
             },
             "longDescription": {
-              "fi": "tulkitsee mediaesityksiä ja taidetta teoksen, tekijän, yleisön ja yhteiskunnan näkökulmista"
+              "fi": "Tulkitsee mediaesityksiä ja taidetta teoksen, tekijän, yleisön ja yhteiskunnan näkökulmista"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T7",
             "label": {
-              "fi": "osallistuu visuaalisen kulttuurin arvokeskusteluun omilla kuvillaan"
+              "fi": "Osallistuu visuaalisen kulttuurin arvokeskusteluun omilla kuvillaan"
             },
             "longDescription": {
-              "fi": "ottaa kuvillaan kantaa mediassa, kuvataiteessa ja muussa visuaalisessa kulttuurissa ilmeneviin arvoihin"
+              "fi": "Ottaa kuvillaan kantaa mediassa, kuvataiteessa ja muussa visuaalisessa kulttuurissa ilmeneviin arvoihin"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -2756,7 +2782,7 @@
               "fi": "Tutkii taiteen kuvia identiteetin, kulttuuriperinnön ja kestävän tulevaisuuden näkökulmista"
             },
             "longDescription": {
-              "fi": "tutkii median ja taiteen kuvia identiteettien rakentamisen, kulttuuriperinnön välittämisen ja uudistamisen sekä kestävän tulevaisuuden näkökulmista"
+              "fi": "Tutkii median ja taiteen kuvia identiteettien rakentamisen, kulttuuriperinnön välittämisen ja uudistamisen sekä kestävän tulevaisuuden näkökulmista"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           }
@@ -2772,77 +2798,77 @@
             "code": "KU_HS_MODULE_KU4_ENV_MER",
             "color": "#24a3e3",
             "name": {
-              "fi": "merkitykselliset kuvat ja taiteen maailmat, joihin he osallistuvat omaehtoisesti"
+              "fi": "Merkitykselliset kuvat ja taiteen maailmat, joihin he osallistuvat omaehtoisesti"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_OMI",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien käyttäminen kuvailmaisun lähtökohtana"
+              "fi": "Omien kuvien käyttäminen kuvailmaisun lähtökohtana"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_OMI_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien tarkasteleminen suhteessa taiteen kuviin"
+              "fi": "Omien kuvien tarkasteleminen suhteessa taiteen kuviin"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_OMI_2",
             "color": "#24a3e3",
             "name": {
-              "fi": "omien kuvien käyttäminen tutkivassa ja ilmiökeskeisessä työskentelyssä"
+              "fi": "Omien kuvien käyttäminen tutkivassa ja ilmiökeskeisessä työskentelyssä"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_KUV",
             "color": "#24a3e3",
             "name": {
-              "fi": "kuvan tekemisen, muokkaamisen ja esittämisen perinteiset ja uudet keinot"
+              "fi": "Kuvan tekemisen, muokkaamisen ja esittämisen perinteiset ja uudet keinot"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_TAI",
             "color": "#24a3e3",
             "name": {
-              "fi": "taiteen käsitteistöön ja kuvastoihin perehtyminen"
+              "fi": "Taiteen käsitteistöön ja kuvastoihin perehtyminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_ERI",
             "color": "#24a3e3",
             "name": {
-              "fi": "eri aikoina ja eri kulttuureissa tuotettu taide tutkimuksen kohteena"
+              "fi": "Eri aikoina ja eri kulttuureissa tuotettu taide tutkimuksen kohteena"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_TEO",
             "color": "#24a3e3",
             "name": {
-              "fi": "teosten liittäminen erilaisiin näkemyksiin taiteen tehtävistä"
+              "fi": "Teosten liittäminen erilaisiin näkemyksiin taiteen tehtävistä"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_KUV_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "kuvallisten, sanallisten ja muiden kuvatulkinnan keinojen soveltaminen"
+              "fi": "Kuvallisten, sanallisten ja muiden kuvatulkinnan keinojen soveltaminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_MER_1",
             "color": "#24a3e3",
             "name": {
-              "fi": "merkityksellisten kulttuuristen ja globaalien ilmiöiden tutkiminen"
+              "fi": "Merkityksellisten kulttuuristen ja globaalien ilmiöiden tutkiminen"
             }
           },
           {
             "code": "KU_HS_MODULE_KU4_ENV_TOI",
             "color": "#24a3e3",
             "name": {
-              "fi": "toimijuus kuvataiteessa ja muussa visuaalisessa kulttuurissa"
+              "fi": "Toimijuus kuvataiteessa ja muussa visuaalisessa kulttuurissa"
             }
           }
         ],
@@ -2850,10 +2876,10 @@
           {
             "code": "T1",
             "label": {
-              "fi": "tutkii, tulkitsee ja arvottaa taiteen kuvien merkityksiä"
+              "fi": "Tutkii, tulkitsee ja arvottaa taiteen kuvien merkityksiä"
             },
             "longDescription": {
-              "fi": "tutkii, tulkitsee ja arvottaa taiteen kuvien henkilökohtaisia ja yhteiskunnallisia merkityksiä"
+              "fi": "Tutkii, tulkitsee ja arvottaa taiteen kuvien henkilökohtaisia ja yhteiskunnallisia merkityksiä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -2863,7 +2889,7 @@
               "fi": "Syventää suhdetta eri aikojen ja kulttuurien kuvailmaisuun"
             },
             "longDescription": {
-              "fi": "syventää omakohtaista suhdettaan eri aikojen ja eri kulttuurien kuvailmaisuun"
+              "fi": "Syventää omakohtaista suhdettaan eri aikojen ja eri kulttuurien kuvailmaisuun"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -2873,37 +2899,37 @@
               "fi": "Syventää taitojaan omien tavoitteiden mukaisesti, yksin ja ryhmässä"
             },
             "longDescription": {
-              "fi": "syventää kuvailmaisun taitojaan omien tavoitteiden suuntaisesti itsenäisesti ja ryhmän jäsenenä"
+              "fi": "Syventää kuvailmaisun taitojaan omien tavoitteiden suuntaisesti itsenäisesti ja ryhmän jäsenenä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T4",
             "label": {
-              "fi": "soveltaa nykytaiteen ilmaisutapoja kuvan tekemisessä"
+              "fi": "Soveltaa nykytaiteen ilmaisutapoja kuvan tekemisessä"
             },
             "longDescription": {
-              "fi": "soveltaa kuvan tekemisessä nykytaiteelle ominaisia ilmaisemisen, esittämisen ja toiminnan tapoja"
+              "fi": "Soveltaa kuvan tekemisessä nykytaiteelle ominaisia ilmaisemisen, esittämisen ja toiminnan tapoja"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T5",
             "label": {
-              "fi": "tulkitsee taidetta moninäkökulmaisesti"
+              "fi": "Tulkitsee taidetta moninäkökulmaisesti"
             },
             "longDescription": {
-              "fi": "tulkitsee taidetta teoksen, tekijän, vastaanottajan, taiteen instituutioiden ja yhteiskunnan näkökulmista"
+              "fi": "Tulkitsee taidetta teoksen, tekijän, vastaanottajan, taiteen instituutioiden ja yhteiskunnan näkökulmista"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T6",
             "label": {
-              "fi": "tutkii ilmaisussaan visuaalisen kulttuurin ajankohtaisia ilmiöitä"
+              "fi": "Tutkii ilmaisussaan visuaalisen kulttuurin ajankohtaisia ilmiöitä"
             },
             "longDescription": {
-              "fi": "tutkii ilmaisussaan kuvataiteen ja muun visuaalisen kulttuurin ajankohtaisia ilmiöitä"
+              "fi": "Tutkii ilmaisussaan kuvataiteen ja muun visuaalisen kulttuurin ajankohtaisia ilmiöitä"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
@@ -2913,17 +2939,17 @@
               "fi": "Ottaa kuvillaan kantaa visuaalisen kulttuurin arvoihin"
             },
             "longDescription": {
-              "fi": "ottaa kuvillaan kantaa kuvataiteessa ja muussa visuaalisessa kulttuurissa ilmeneviin arvoihin"
+              "fi": "Ottaa kuvillaan kantaa kuvataiteessa ja muussa visuaalisessa kulttuurissa ilmeneviin arvoihin"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           },
           {
             "code": "T8",
             "label": {
-              "fi": "tutkii kuvataidetta ja visuaalista kulttuuria monipuolisesti eri näkökulmista"
+              "fi": "Tutkii kuvataidetta ja visuaalista kulttuuria monipuolisesti eri näkökulmista"
             },
             "longDescription": {
-              "fi": "tutkii kuvataidetta ja muuta visuaalista kulttuuria identiteettien rakentamisen, kulttuuriperinnön välittämisen ja uudistamisen sekä kestävän tulevaisuuden näkökulmista"
+              "fi": "Tutkii kuvataidetta ja muuta visuaalista kulttuuria identiteettien rakentamisen, kulttuuriperinnön välittämisen ja uudistamisen sekä kestävän tulevaisuuden näkökulmista"
             },
             "type": "SKILLS_AND_BEHAVIOUR"
           }
@@ -2935,6 +2961,7 @@
     ],
     "name": {
       "fi": "Kuvataide"
-    }
+    },
+    "environments": []
   }
 ]

@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
-import { getEnvironments, getEvaluableLearningObjectives, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
+import { getEnvironmentsByLevel, getEvaluableLearningObjectives, getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Keyboard, TextInput, useWindowDimensions } from "react-native";
@@ -446,25 +446,26 @@ const EnvironmentGraph = memo(function EnvironmentGraph({ data }: { data: Styled
 const StatisticsView = memo(function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & NavigationProps) {
   const { t } = useTranslation();
 
-  const environments = getEnvironments(group.subject.code);
   const moduleInfo = group.currentModule.info;
+  // const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
+
   const objectives = getEvaluableLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const colorPalette = getPredefinedColors(objectives.length);
 
-  const environmentsAndCounts: StyledBarChartDataType[] = useMemo(
-    () =>
-      environments.map((environment) => {
-        return {
-          x: environment.label.fi,
-          color: environment.color,
-          y: group.currentModule.evaluationCollections.reduce(
-            (val, evaluation) => (evaluation.environment.label.fi === environment.label.fi ? val + 1 : val),
-            0
-          ),
-        };
-      }),
-    [group, environments]
-  );
+  const environmentsAndCounts: StyledBarChartDataType[] = useMemo(() => {
+    const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
+
+    return environments.map((environment) => {
+      return {
+        x: environment.label.fi,
+        color: environment.color,
+        y: group.currentModule.evaluationCollections.reduce(
+          (val, evaluation) => (evaluation.environment.code === environment.code ? val + 1 : val),
+          0
+        ),
+      };
+    });
+  }, [group.currentModule.evaluationCollections, group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey]);
 
   const learningObjectivesAndCounts: StyledBarChartDataType[] = useMemo(
     () =>
@@ -576,14 +577,24 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.environments", "Ympäristöt")}</CText>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.environment-counts", "Arviointikerrat ympäristöittäin")}</CText>
           <EnvironmentGraph data={environmentsAndCounts} />
-          <CView style={{ gap: 2, flexDirection: "row", alignItems: "flex-start", flexWrap: "wrap", width: "100%" }}>
+          <CView style={{ flexDirection: "row", alignItems: "flex-start", flexWrap: "wrap", width: "100%", flex: 1 }}>
             {environmentsAndCounts.map((envAndCount, idx) => (
-              <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "40%", marginRight: 30 }}>
-                <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
+              <CView
+                key={`${envAndCount.x}-${idx}`}
+                style={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  width: "50%",
+                  paddingRight: "md",
+                  marginBottom: "sm",
+                }}
+              >
+                <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: "sm", width: "80%" }}>
                   <CView style={{ width: 10, height: 10, backgroundColor: envAndCount.color }} />
                   <CText style={{ fontSize: "sm" }}>{envAndCount.x}</CText>
                 </CView>
-                <CText style={{ fontSize: "sm", fontWeight: "600" }}>{envAndCount.y}</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "600", textAlign: "right" }}>{envAndCount.y}</CText>
               </CView>
             ))}
           </CView>
@@ -591,6 +602,7 @@ const StatisticsView = memo(function StatisticsView({ getGroup: group, navigatio
         <CollectionStatistics
           title={t("group.evaluation-means-title", "Arvioinnit")}
           subjectCode={group.subject.code}
+          moduleInfo={group.currentModule.info}
           collections={group.currentModule.evaluationCollections}
         />
         {objectives.length > 0 && (

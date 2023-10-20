@@ -1,5 +1,5 @@
 import { Environment, LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/subject";
-import { getEnvironments, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { getEnvironmentsByLevel, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
@@ -50,7 +50,7 @@ export default function CollectionGeneralInfoForm({
   const [environmentError, setEnvironmentError] = useState<string>();
 
   const learningObjectives = getEvaluableLearningObjectivesMinimal(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
-  const environments = getEnvironments(subjectCode);
+  const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
   const handleGeneralSubmit = () => {
     if (!selectedEnvironmentCode) {

@@ -1,4 +1,4 @@
-import { getEnvironment, getEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../utils/subjectUtils";
+import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../utils/subjectUtils";
 import { EducationLevel, Resolvers } from "../types";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
@@ -147,11 +147,7 @@ const resolvers: TypeResolvers = {
   },
   Subject: {
     environments: ({ code }) => {
-      return getEnvironments(code).map((it) => ({
-        code: it.code,
-        label: it.label,
-        color: it.color,
-      }));
+      return getAllEnvironments(code);
     },
   },
   Module: {
