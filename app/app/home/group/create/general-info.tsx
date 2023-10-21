@@ -59,7 +59,7 @@ export default function GroupNameSelectionView({
   return (
     <GroupCreationBody navigation={navigation}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
-        <CTouchableWithoutFeedback accessible={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
+        <CTouchableWithoutFeedback accessible={false} preventChildEvents={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
           <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
             <TextFormField
               ref={inputRef}

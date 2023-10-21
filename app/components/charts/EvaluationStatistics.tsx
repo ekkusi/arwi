@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
+import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
 import { FragmentType, getFragmentData } from "../../gql";
 import CircledNumber from "../CircledNumber";
 import InfoButton from "../InfoButton";
@@ -14,6 +15,7 @@ import StatisticsFilterMenu from "./StatisticsFilterMenu";
 type EvaluationsLineChartProps = Omit<LineChartBaseProps, "data"> & {
   title?: string;
   subjectCode: string;
+  moduleInfo: MinimalModuleInfo;
   evaluations: readonly FragmentType<typeof EvaluationsLineChart_Evaluation_Fragment>[];
   showAvgThreshhold?: number;
 };
@@ -21,6 +23,7 @@ type EvaluationsLineChartProps = Omit<LineChartBaseProps, "data"> & {
 export default function EvaluationsStatistics({
   title,
   subjectCode,
+  moduleInfo,
   evaluations: evaluationFragments,
   minItems = 2,
   ...rest
@@ -39,7 +42,7 @@ export default function EvaluationsStatistics({
   // If there are less than minItems, start pushing items from beginning
   const data = mapEvaluationData(sortedEvaluations);
 
-  const filteredData = filter !== undefined ? data.filter((obj) => obj.environment === filter) : data;
+  const filteredData = filter !== undefined ? data.filter((obj) => obj.environment.code === filter) : data;
 
   const evaluationsWithSkills = useMemo(() => filteredData.filter((obj) => obj.skills !== undefined), [filteredData]);
   const skillsMean = useMemo(
@@ -58,6 +61,7 @@ export default function EvaluationsStatistics({
       {title && <CText style={{ fontSize: "title", fontWeight: "500" }}>{title}</CText>}
       <StatisticsFilterMenu
         subjectCode={subjectCode}
+        moduleInfo={moduleInfo}
         title={t("group.evaluations-over-time", "Arvointien keskiarvojen kehitys")}
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}

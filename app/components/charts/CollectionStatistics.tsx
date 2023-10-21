@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment, EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
@@ -59,10 +60,11 @@ const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[
 type CollectionsChartProps = Omit<LineChartBaseProps, "data"> & {
   title?: string;
   subjectCode: string;
+  moduleInfo: MinimalModuleInfo;
   collections: readonly FragmentType<typeof CollectionsLineChart_Collection_Fragment>[];
 };
 
-export default function CollectionStatistics({ title, subjectCode, collections: collectionFragments, ...rest }: CollectionsChartProps) {
+export default function CollectionStatistics({ title, subjectCode, moduleInfo, collections: collectionFragments, ...rest }: CollectionsChartProps) {
   const { t } = useTranslation();
   const [filter, setFilter] = useState<string | undefined>(undefined);
 
@@ -89,6 +91,7 @@ export default function CollectionStatistics({ title, subjectCode, collections: 
       {title && <CText style={{ fontSize: "title", fontWeight: "500" }}>{title}</CText>}
       <StatisticsFilterMenu
         subjectCode={subjectCode}
+        moduleInfo={moduleInfo}
         title={t("group.evaluations-over-time", "Arvointien keskiarvojen kehitys")}
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}
