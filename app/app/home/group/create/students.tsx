@@ -76,6 +76,9 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     try {
       if (!group.subject) throw new Error("Unexpected error"); // Should get caught before this
       if (!group.module) throw new Error("Unexpected error"); // Should get caught before this
+
+      const allStudents = [...group.students, ...splitStudentString(newStudent)]; // Also add the student names still in the input
+
       await createGroup({
         variables: {
           input: {
@@ -83,7 +86,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
             educationLevel: group.module.educationLevel,
             learningObjectiveGroupKey: group.module.learningObjectiveGroupKey,
             subjectCode: group.subject.code,
-            students: group.students.map((it) => ({ name: it })),
+            students: allStudents.map((it) => ({ name: it })),
             teacherId: user.id, // TODO: Add correct teacher id
           },
         },
@@ -104,10 +107,15 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     setGroup({ ...group, students: filteredStudents });
   };
 
-  const addStudents = (studentString: string) => {
+  const splitStudentString = (studentString: string) => {
     const students = studentString.split(/\r?\n/);
-    const nonemptyStudents = students.filter((name) => name.length > 0);
-    setGroup({ ...group, students: [...group.students, ...nonemptyStudents] });
+    const nonEmptyStudents = students.filter((name) => name.length > 0);
+    return nonEmptyStudents;
+  };
+
+  const addStudents = (studentString: string) => {
+    const nonEmptyStudents = splitStudentString(studentString);
+    setGroup({ ...group, students: [...group.students, ...nonEmptyStudents] });
   };
 
   return (
