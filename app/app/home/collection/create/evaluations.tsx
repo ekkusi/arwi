@@ -2,14 +2,13 @@ import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent, Platform } from "react-native";
+import { FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent, Platform } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import Constants from "expo-constants";
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
-import { CreateEvaluationCardMemoed, Evaluation } from "../../../../components/EvaluationCard";
+import { CARD_HEIGHT, CreateEvaluationCardMemoed, Evaluation } from "../../../../components/EvaluationCard";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
@@ -70,12 +69,6 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
     }
   }
 `);
-
-const WINDOW_HEIGHT = Dimensions.get("window").height;
-const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
-const EXTRA_DEVICE_PADDING = Platform.OS === "ios" ? 43 : 49;
-// NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
-const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - EXTRA_DEVICE_PADDING;
 
 function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-evaluations">) {
   const { t } = useTranslation();

@@ -1,11 +1,12 @@
 import { Student } from "arwi-backend/src/types";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, Platform, Switch } from "react-native";
+import { Alert, Dimensions, Platform, Switch } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Animated from "react-native-reanimated";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "react-native-gesture-handler";
+import Constants from "expo-constants";
 import { CreateEvaluationInput, UpdateEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
@@ -66,6 +67,12 @@ const EvaluationCard_FixTextGrammatics_Mutation = graphql(`
 type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
 
 const TEXT_MIN_LENGTH_FOR_AI_FIX = 20;
+
+const WINDOW_HEIGHT = Dimensions.get("window").height;
+const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
+const EXTRA_DEVICE_PADDING = Platform.OS === "ios" ? 43 : 49;
+// NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
+export const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - EXTRA_DEVICE_PADDING;
 
 function EvaluationCard({
   onChanged,

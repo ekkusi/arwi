@@ -2,15 +2,14 @@ import { useMutation, useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import Constants from "expo-constants";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CFlatList from "../../../components/primitives/CFlatList";
 import CView from "../../../components/primitives/CView";
-import { UpdateEvaluationCard, EvaluationToUpdate } from "../../../components/EvaluationCard";
+import { UpdateEvaluationCard, EvaluationToUpdate, CARD_HEIGHT } from "../../../components/EvaluationCard";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../hooks-and-providers/keyboardHooks";
@@ -76,11 +75,6 @@ const CollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(`
 export type EvaluationDataToUpdate = Omit<EvaluationToUpdate, "student"> & {
   student: { id: string; name: string } & EvaluationToUpdate["student"];
 };
-
-const WINDOW_HEIGHT = Dimensions.get("window").height;
-const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
-// NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
-const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT;
 
 function CollectionEditAllEvaluationsContent({
   navigation,
@@ -167,7 +161,7 @@ function CollectionEditAllEvaluationsContent({
   }, [scrollOffset]);
 
   return (
-    <CView style={{ flex: 1, padding: "md", backgroundColor: "white" }}>
+    <CView style={{ flex: 1, backgroundColor: "white" }}>
       <CFlatList
         ref={scrollRef}
         data={evaluations}
@@ -191,7 +185,7 @@ function CollectionEditAllEvaluationsContent({
         snapToAlignment="center"
         directionalLockEnabled
         disableIntervalMomentum
-        style={{ flex: 1, padding: "lg" }}
+        style={{ flex: 1, paddingHorizontal: "lg" }}
       />
       <Animated.View
         style={[{ justifyContent: "flex-end", position: "absolute", bottom: 0, left: 0, right: 0, width: "100%" }, buttonsAnimatedStyle]}
