@@ -84,6 +84,7 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
     () =>
       onError(({ graphQLErrors, networkError, operation, forward }) => {
         if (graphQLErrors) {
+          let shouldThrow = true;
           for (const err of graphQLErrors) {
             switch (err.extensions.code) {
               case "UNAUTHENTICATED": {
@@ -108,11 +109,17 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
                     return forward(operation);
                   });
               }
+              // Don't throw generic error page from validation errors, these should be handled in whereever they occur.
+              case "VALIDATION_ERROR": {
+                shouldThrow = false;
+                break;
+              }
               default:
                 break;
             }
           }
-          throwCatchableError(new Error(`[GraphQL Error]: ${getGraphqlErrorMessage(graphQLErrors)}`));
+
+          if (shouldThrow) throwCatchableError(new Error(`[GraphQL Error]: ${getGraphqlErrorMessage(graphQLErrors)}`));
         }
 
         if (networkError) {

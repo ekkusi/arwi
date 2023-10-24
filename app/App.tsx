@@ -4,7 +4,6 @@ import { Logs } from "expo";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
 import { LogBox, Platform } from "react-native";
 import ErrorBoundary from "react-native-error-boundary";
-import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
@@ -12,6 +11,7 @@ import "./i18n";
 import "react-native-url-polyfill/auto";
 import LoadingIndicator from "./components/LoadingIndicator";
 import ErrorView from "./app/ErrorView";
+import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 
 Logs.enableExpoCliLogging();
 
