@@ -26,14 +26,17 @@ export type TrackParams = {
 export class MatomoTracker {
   private siteId: number;
 
-  private trackerUrl: string;
+  private trackerUrl: string | null;
 
   private disabledInDev: boolean;
 
-  constructor(siteId: number, baseUrl: string, disabledInDev = true) {
-    const normalizedUrlBase = baseUrl[baseUrl.length - 1] !== "/" ? `${baseUrl}/` : baseUrl;
+  constructor(siteId: number, baseUrl: string | null, disabledInDev = true) {
+    if (!baseUrl) this.trackerUrl = null;
+    else {
+      const normalizedUrlBase = baseUrl[baseUrl.length - 1] !== "/" ? `${baseUrl}/` : baseUrl;
+      this.trackerUrl = `${normalizedUrlBase}matomo.php`;
+    }
     this.siteId = siteId;
-    this.trackerUrl = `${normalizedUrlBase}matomo.php`;
     this.disabledInDev = disabledInDev;
   }
 
@@ -81,7 +84,7 @@ export class MatomoTracker {
    * @param {(Object)} options URL to track or options (must contain URL as well)
    */
   track(params: TrackParams): Promise<Response> | null {
-    if (process.env.NODE_ENV === "development" && this.disabledInDev) return null;
+    if ((process.env.NODE_ENV === "development" && this.disabledInDev) || !this.trackerUrl) return null;
     const { lang, userInfo, custom, ...data } = params;
 
     const { custom: customUserInfo, ...restUserInfo } = userInfo || {};
@@ -123,8 +126,8 @@ dotenv.config();
 const SITE_ID = process.env.MATOMO_SITE_ID ? Number(process.env.MATOMO_SITE_ID) : 1;
 const { MATOMO_BASE_URL } = process.env;
 
-if (!MATOMO_BASE_URL) throw new Error("Missing Matomo base URL, define MATOMO_BASE_URL in .env (or root .env.production in production)");
+if (!MATOMO_BASE_URL) console.warn("MATOMO_BASE_URL not set, Matomo tracking is disabled");
 
-const matomo = new MatomoTracker(SITE_ID, MATOMO_BASE_URL);
+const matomo = new MatomoTracker(SITE_ID, MATOMO_BASE_URL || null);
 
 export default matomo;

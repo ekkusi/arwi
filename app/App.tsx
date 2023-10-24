@@ -4,7 +4,6 @@ import { Logs } from "expo";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
 import { LogBox, Platform } from "react-native";
 import ErrorBoundary from "react-native-error-boundary";
-import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
@@ -12,6 +11,7 @@ import "./i18n";
 import "react-native-url-polyfill/auto";
 import LoadingIndicator from "./components/LoadingIndicator";
 import ErrorView from "./app/ErrorView";
+import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 
 Logs.enableExpoCliLogging();
 
@@ -47,19 +47,22 @@ function AppContent() {
 const SITE_ID = process.env.EXPO_PUBLIC_MATOMO_SITE_ID ? Number(process.env.EXPO_PUBLIC_MATOMO_SITE_ID) : 1;
 const MATOMO_BASE_URL = process.env.EXPO_PUBLIC_MATOMO_BASE_URL;
 
-if (!MATOMO_BASE_URL)
-  throw new Error("Missing Matomo base url env variable, define EXPO_PUBLIC_MATOMO_BASE_URL in .env (or root .env.production in production)");
+if (!MATOMO_BASE_URL) console.warn("EXPO_PUBLIC_MATOMO_BASE_URL not set, analytics disabled");
 
-const instance = new MatomoTracker({
-  urlBase: MATOMO_BASE_URL,
-  siteId: SITE_ID,
-  disabled: __DEV__,
-});
+const instance =
+  MATOMO_BASE_URL &&
+  new MatomoTracker({
+    urlBase: MATOMO_BASE_URL,
+    siteId: SITE_ID,
+    disabled: __DEV__,
+  });
 
 export default function App() {
-  return (
+  return instance ? (
     <MatomoProvider instance={instance}>
       <AppContent />
     </MatomoProvider>
+  ) : (
+    <AppContent />
   );
 }

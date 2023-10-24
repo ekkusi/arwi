@@ -10,6 +10,7 @@ import { MenuProvider } from "react-native-popup-menu";
 import * as SplashScreen from "expo-splash-screen";
 import * as Application from "expo-application";
 import { useMatomo } from "matomo-tracker-react-native";
+import { useFonts } from "expo-font";
 import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
@@ -48,6 +49,9 @@ export default function Main() {
   const { trackAppStart, trackScreenView } = useMatomo();
   const { authState, setUser } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
+  const [fontsLoaded] = useFonts({
+    "Aileron-Thin": require("./assets/fonts/Aileron-Thin.otf"),
+  });
   const { ready: i18nReady, i18n } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
 
   const client = useApolloClient();
@@ -55,7 +59,10 @@ export default function Main() {
   const routeNameRef = useRef<string | null>(null);
 
   const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query);
+
   const minimumAppVersion = appMetadataResult?.getAppMetadata?.minimumAppVersion || null;
+
+  const appReady = !loading && fontsLoaded && i18nReady && !loadingAppMetadata;
 
   // Fetch token and current user and set them to global state if they exist
   const setUserInfo = useCallback(async () => {
@@ -112,7 +119,7 @@ export default function Main() {
     routeNameRef.current = currentRouteName || null;
   };
 
-  if (loading || loadingAppMetadata || !i18nReady) return null;
+  if (!appReady) return null;
 
   return (
     <SafeAreaView style={{ flex: 1 }} onLayout={onRootLayout}>

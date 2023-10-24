@@ -8,8 +8,7 @@
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
         "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
-        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",
-        "EXPO_PUBLIC_MATOMO_BASE_URL": "http://77.83.247.14:9000"
+        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz"
       },
       "channel": "test-apk"
     },
@@ -21,8 +20,7 @@
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
         "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
-        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",
-        "EXPO_PUBLIC_MATOMO_BASE_URL": "http://77.83.247.14:9000"
+        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz"
       },
       "distribution": "internal",
       "channel": "test"
@@ -32,8 +30,7 @@
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
         "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
-        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",
-        "EXPO_PUBLIC_MATOMO_BASE_URL": "http://77.83.247.14:9000"
+        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz"
       },
       "developmentClient": true,
       "distribution": "internal",

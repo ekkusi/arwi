@@ -11,7 +11,7 @@ import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
-import LandingComponent from "../../components/LandingComponent";
+import LandingComponent from "./LandingComponent";
 import CImage from "../../components/primitives/CImage";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
@@ -84,70 +84,64 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
     setLoading(false);
   };
   return (
-    <LandingComponent
-      bottomChildren={
-        <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15 }}>
-          <CView style={{ flex: 2, width: "90%", gap: 10, justifyContent: "center" }}>
+    <LandingComponent title={t("login", "Kirjaudu sisään")}>
+      <CView style={{ flex: 1, width: "100%", paddingHorizontal: "lg" }}>
+        {/* <CText style={{ fontSize: "xl", marginBottom: "2xl", textAlign: "center" }}>{t("login", "Kirjaudu sisään")}</CText> */}
+        <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "2xl" }}>
+          <TextFormField
+            title={t("email", "Sähköposti")}
+            placeholder="arwioija@gmail.com"
+            validate={nameValidator}
+            style={{ width: "100%" }}
+            titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
+            onChange={handleEmailChange}
+          />
+          <CView>
             <TextFormField
-              title={t("email", "Sähköposti")}
-              placeholder="arwioija@test.fi"
+              title={t("password", "Salasana")}
+              placeholder={t("password", "Salasana")}
+              style={{ width: "100%" }}
+              secureTextEntry={secureTextEntry}
+              titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
               validate={nameValidator}
-              style={{ width: "100%" }}
-              titleStyle={{ fontSize: "md", fontWeight: "500" }}
-              onChange={handleEmailChange}
+              onChange={handlePasswordChange}
             />
-            <CView>
-              <TextFormField
-                title={t("password", "Salasana")}
-                placeholder={t("password", "Salasana")}
-                style={{ width: "100%" }}
-                secureTextEntry={secureTextEntry}
-                titleStyle={{ fontSize: "md", fontWeight: "500" }}
-                validate={nameValidator}
-                onChange={handlePasswordChange}
-              />
-              <CTouchableOpacity
-                onPress={() => setSecureTextEntry(!secureTextEntry)}
-                style={{ position: "absolute", right: 0, bottom: 0, justifyContent: "center", alignItems: "center", height: 54, width: 54 }}
-              >
-                <MaterialCommunityIcon name={secureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
-              </CTouchableOpacity>
-            </CView>
-            {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md", marginBottom: 30 }}>{generalError}</CText>}
+            <CTouchableOpacity
+              onPress={() => setSecureTextEntry(!secureTextEntry)}
+              style={{ position: "absolute", right: 0, bottom: 0, justifyContent: "center", alignItems: "center", height: 54, width: 54 }}
+            >
+              <MaterialCommunityIcon name={secureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
+            </CTouchableOpacity>
           </CView>
-          <CView style={{ flex: 1, width: "90%", gap: 5 }}>
-            <CButton
-              loading={loading}
-              title={t("login", "Kirjaudu sisään")}
-              colorScheme="secondary"
-              variant="outline"
-              style={{ width: "100%" }}
-              disabled={email !== undefined && password !== undefined && generalError !== undefined}
+          {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md", marginBottom: 30 }}>{generalError}</CText>}
+        </CView>
+        <CView style={{ width: "100%" }}>
+          <CButton
+            loading={loading}
+            title={t("login", "Kirjaudu sisään")}
+            colorScheme="secondary"
+            variant="outline"
+            style={{ width: "100%", marginBottom: "sm" }}
+            disabled={email !== undefined && password !== undefined && generalError !== undefined}
+            onPress={() => {
+              if (email && password) handleSubmit({ email, password });
+            }}
+          />
+          <CView style={{ flexDirection: "row", justifyContent: "center" }}>
+            <CText style={{ fontSize: "sm", fontWeight: "500", color: "gray" }}>
+              {t("LoginView.noUserYet", "Eikö sinulla ole vielä käyttäjää?")}{" "}
+            </CText>
+            <CTouchableOpacity
               onPress={() => {
-                if (email && password) handleSubmit({ email, password });
+                navigation.navigate("signup");
               }}
-            />
-            <CView style={{ flexDirection: "row", justifyContent: "center" }}>
-              <CText style={{ fontSize: "sm", fontWeight: "500", color: "gray" }}>
-                {t("LoginView.noUserYet", "Eikö sinulla ole vielä käyttäjää?")}{" "}
-              </CText>
-              <CTouchableOpacity
-                onPress={() => {
-                  navigation.navigate("signup");
-                }}
-              >
-                <CText style={{ fontSize: "sm", fontWeight: "500", color: "primary" }}>{t("register", "Rekisteröidy")}</CText>
-              </CTouchableOpacity>
-              <CText style={{ fontSize: "sm", fontWeight: "500", color: "gray" }}>.</CText>
-            </CView>
+            >
+              <CText style={{ fontSize: "sm", fontWeight: "500", color: "primary" }}>{t("register", "Rekisteröidy")}</CText>
+            </CTouchableOpacity>
+            <CText style={{ fontSize: "sm", fontWeight: "500", color: "gray" }}>.</CText>
           </CView>
         </CView>
-      }
-      topChildren={
-        <CView style={{ width: 300, height: 300 }}>
-          <CImage source={require("../../assets/arwilogo-transparent-white.png")} />
-        </CView>
-      }
-    />
+      </CView>
+    </LandingComponent>
   );
 }
