@@ -11,25 +11,49 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
   const { t } = useTranslation();
   return (
     <LandingComponent headerSize="big" headerPlacement="top">
-      <CView style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%", gap: 15, marginTop: 20 }}>
-        <CButton
-          colorScheme="secondary"
-          variant="outline"
-          title={t("login", "Kirjaudu sisään")}
-          style={{ width: "90%" }}
-          onPress={() => {
-            navigation.navigate("login");
-          }}
-        />
-        <CButton
-          colorScheme="secondary"
-          variant="outline"
-          title={t("register", "Rekisteröidy")}
-          style={{ width: "90%" }}
-          onPress={() => {
-            navigation.navigate("signup");
-          }}
-        />
+      <CView
+        style={{
+          flex: 1,
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          paddingBottom: "3xl",
+          paddingTop: "2xl",
+          paddingHorizontal: "xl",
+        }}
+      >
+        <CView style={{ width: "100%", gap: 15 }}>
+          <CButton
+            colorScheme="secondary"
+            variant="outline"
+            title={t("login", "Kirjaudu sisään")}
+            style={{ width: "100%" }}
+            onPress={() => {
+              navigation.navigate("login");
+            }}
+          />
+          <CButton
+            colorScheme="secondary"
+            variant="outline"
+            title={t("register", "Rekisteröidy")}
+            style={{ width: "100%" }}
+            onPress={() => {
+              navigation.navigate("signup");
+            }}
+          />
+        </CView>
+        <CView style={{ width: "100%", borderTopWidth: 1, borderColor: "lightgray", paddingTop: "2xl" }}>
+          <CView style={{ width: "100%" }}>
+            <CText style={{ fontSize: "sm", textAlign: "center", marginBottom: "sm", color: "gray", fontWeight: "600" }}>
+              {t("authenticate-with-mpassid", "Tunnistaudu palveluun MPASSid:llä")}
+            </CText>
+            <CButton
+              title="MPASSid"
+              leftIcon={<CImage variant="fixed" source={require("../../assets/mpassid-minimal-white.png")} width={25} height={25} />}
+              onPress={() => navigation.navigate("mpassid")}
+            />
+          </CView>
+        </CView>
       </CView>
     </LandingComponent>
   );
