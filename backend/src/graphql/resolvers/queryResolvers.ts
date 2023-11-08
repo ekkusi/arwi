@@ -32,11 +32,6 @@ const resolvers: QueryResolvers<CustomContext> = {
     if (!teacher) throw new ValidationError(`Opettajaa ei löytynyt id:llä '${id}'`);
     return teacher;
   },
-  // getTeachers: async (_, __, { prisma, user }) => {
-  //   if (user?.id !== ADMIN_USER.id) throw new AuthenticationError("Admin route");
-  //   const teachers = await prisma.teacher.findMany();
-  //   return teachers;
-  // },
   getGroups: async (_, { teacherId }, { prisma, user }) => {
     checkAuthenticatedByTeacher(user, teacherId);
     const groups = await prisma.group.findMany({

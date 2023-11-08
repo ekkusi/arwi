@@ -2,7 +2,6 @@ type Query {
   getAppMetadata: AppMetadata!
   getCurrentUser: Teacher!
   getTeacher(id: ID!): Teacher!
-  getTeachers: [Teacher!]!
   getGroups(teacherId: ID!): [Group!]!
   getGroup(id: ID!): Group!
   getCollection(id: ID!): EvaluationCollection!
