@@ -4,7 +4,6 @@ import { Issuer, Client as OpenIDClient } from "openid-client";
 import { initSession, logOut } from "../utils/auth";
 import prisma from "../prismaClient";
 import BadRequestError from "../errors/BadRequestError";
-import { checkAuth } from "../middleware/auth";
 
 dotenv.config();
 
@@ -22,12 +21,6 @@ type AuthorizeParams = {
   redirect_uri?: string;
   type?: "code_only" | "full_auth";
 };
-
-// const code_verifier = generators.codeVerifier();
-// store the code_verifier in your framework's session mechanism, if it is a cookie based solution
-// it should be httpOnly (not readable by javascript) and encrypted.
-
-// const code_challenge = generators.codeChallenge(code_verifier);
 
 export const grantToken = async (client: OpenIDClient, code: string) => {
   const redirectUri = client.metadata.redirect_uris?.[0];
@@ -86,13 +79,6 @@ const initAuth = async () => {
       response_types: ["code"],
     });
   }
-  // const googleIssuer = await Issuer.discover("https://accounts.google.com");
-  // const client = new googleIssuer.Client({
-  //   client_id: GOOGLE_CLIENT_ID,
-  //   client_secret: GOOGLE_CLIENT_SECRET,
-  //   redirect_uris: ["http://localhost:4000/auth/mpassid-callback"],
-  //   response_types: ["code"],
-  // });
 
   router.use("/mpassid-callback", async (req, res) => {
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
@@ -112,45 +98,7 @@ const initAuth = async () => {
     return res.redirect(`${redirectUri}?new_user=${encodeURIComponent(isNewUser)}`);
   });
 
-  // router.use("/mpassid-login", async (req, res) => {
-  //   console.log("MPASSID_LOGIN");
-  //   console.log("Sessino id", req.sessionID);
-
-  //   if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
-
-  //   if (!req.query.code) throw new BadRequestError("Query parameter code is missing from login request");
-  //   const code = decodeURIComponent(req.query.code as string);
-
-  //   const { isNewUser } = await grantAndInitSession(client, code, req);
-  //   return res.send({ msg: "Login successful!", new_user: isNewUser }).json();
-  // });
-
-  // router.use("/mpassid-connect", checkAuth, async (req, res) => {
-  //   if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
-  //   let user = req.session.userInfo!; // checkAuth middleware ensures that user is not null
-  //   if (user.mPassID) throw new BadRequestError("User is already connected to mpass-id");
-  //   if (!req.query.code) throw new BadRequestError("Query parameter code is missing from connect request");
-  //   const code = decodeURIComponent(req.query.code as string);
-  //   const { userInfo } = await grantToken(client, code);
-  //   user = req.session.userInfo!;
-  //   if (!user.mPassID) throw new Error("Something went wrong, mpass-id not found from user");
-  //   const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: user.mPassID } });
-  //   if (matchingUser) throw new BadRequestError("MPassID is already connected to another user");
-  //   await prisma.teacher.update({
-  //     where: {
-  //       id: user.id,
-  //     },
-  //     data: {
-  //       mPassID: user.mPassID,
-  //     },
-  //   });
-  //   return res.json({ msg: "MPassID connected successfully!" });
-  // });
-
   router.use("/authorize", async (req, res) => {
-    console.log("MPASSID authorize");
-    console.log("Session id", req.sessionID);
-
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const { query } = req;
