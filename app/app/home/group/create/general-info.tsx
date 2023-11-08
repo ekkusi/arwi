@@ -15,7 +15,7 @@ import GroupCreationBody from "./_body";
 import TextFormField from "../../../../components/form/TextFormField";
 import SelectFormField from "../../../../components/form/SelectFormField";
 import ProgressBar from "../../../../components/ProgressBar";
-import { useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
+import { useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
 import CTouchableWithoutFeedback from "../../../../components/primitives/CTouchableWithoutFeedback";
 
 export default function GroupNameSelectionView({

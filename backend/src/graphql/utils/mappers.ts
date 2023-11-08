@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { UpdateCollectionInput, UpdateEvaluationInput, UpdateGroupInput, UpdateStudentInput } from "../types";
+import { UpdateCollectionInput, UpdateEvaluationInput, UpdateGroupInput, UpdateStudentInput } from "../../types";
 
 export const mapUpdateStudentInput = (data: UpdateStudentInput): Prisma.StudentUpdateInput => {
   return {

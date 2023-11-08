@@ -12,7 +12,7 @@ import CView from "../../../components/primitives/CView";
 import { UpdateEvaluationCard, EvaluationToUpdate, CARD_HEIGHT } from "../../../components/EvaluationCard";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
-import { useKeyboardListener } from "../../../hooks-and-providers/keyboardHooks";
+import { useKeyboardListener } from "../../../hooks-and-providers/keyboard";
 import { COLORS } from "../../../theme";
 import { HomeStackParams } from "../types";
 

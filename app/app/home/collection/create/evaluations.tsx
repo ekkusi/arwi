@@ -12,7 +12,7 @@ import { CARD_HEIGHT, CreateEvaluationCardMemoed, Evaluation } from "../../../..
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
-import { useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
+import { useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
 import { useToast } from "../../../../hooks-and-providers/ToastProvider";
 import { COLORS } from "../../../../theme";
 import { EvaluationData, useCollectionCreationContext } from "./CollectionCreationProvider";

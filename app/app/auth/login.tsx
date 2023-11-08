@@ -12,27 +12,21 @@ import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import LandingComponent from "./LandingComponent";
-import CImage from "../../components/primitives/CImage";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
 import { COLORS } from "../../theme";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
-const initialValues = {
-  email: "",
-  password: "",
-};
-
 const LoginPage_Login_Mutation = graphql(`
   mutation LoginPage_Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      accessToken
-      teacher {
+      userData {
         email
         id
         languagePreference
         consentsAnalytics
+        isMPassIDConnected
       }
     }
   }
@@ -42,8 +36,8 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
   const { trackAppStart, trackEvent } = useMatomo();
   const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();
-  const [email, setEmail] = useState<string | undefined>();
-  const [password, setPassword] = useState<string | undefined>();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { t } = useTranslation();
@@ -60,18 +54,18 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
     setEmail(text);
   };
 
-  const handleSubmit = async (values: typeof initialValues) => {
+  const handleSubmit = async () => {
     setLoading(true);
     try {
-      const { data } = await login({ variables: { email: values.email, password: values.password } });
+      const { data } = await login({ variables: { email, password } });
       if (!data) throw new Error("Unexpected error");
-      await setUser(data.login.accessToken, data.login.teacher);
+      await setUser(data.login.userData);
       const userInfo = {
-        uid: data.login.teacher.email,
+        uid: data.login.userData.id,
       };
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,
-        action: "Login",
+        action: "Login - Custom",
         userInfo,
       });
       trackAppStart({
@@ -79,6 +73,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
       });
     } catch (error) {
       const msg = getErrorMessage(error);
+
       setGeneralError(msg);
     }
     setLoading(false);
@@ -113,7 +108,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
               <MaterialCommunityIcon name={secureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
             </CTouchableOpacity>
           </CView>
-          {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md", marginBottom: 30 }}>{generalError}</CText>}
+          {generalError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md" }}>{generalError}</CText>}
         </CView>
         <CView style={{ width: "100%" }}>
           <CButton
@@ -122,10 +117,8 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
             colorScheme="secondary"
             variant="outline"
             style={{ width: "100%", marginBottom: "sm" }}
-            disabled={email !== undefined && password !== undefined && generalError !== undefined}
-            onPress={() => {
-              if (email && password) handleSubmit({ email, password });
-            }}
+            disabled={email.length === 0 || password.length === 0 || generalError !== undefined}
+            onPress={handleSubmit}
           />
           <CView style={{ flexDirection: "row", justifyContent: "center" }}>
             <CText style={{ fontSize: "sm", fontWeight: "500", color: "gray" }}>

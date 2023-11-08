@@ -1,19 +1,25 @@
 import { IMiddleware, IMiddlewareFunction } from "graphql-middleware";
 import queryResolvers from "../resolvers/queryResolvers";
-import AuthenticationError from "../errors/AuthenticationError";
+import AuthenticationError from "../../errors/AuthenticationError";
 import mutationResolvers from "../resolvers/mutationResolvers";
-import { Mutation, Query } from "../types";
-import { CustomContext } from "../types/contextTypes";
+import { Mutation, Query } from "../../types";
+import { CustomContext } from "../../types/contextTypes";
+import { SESSION_NAME } from "../../config";
 
 const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (resolve, parent, args, context, info) => {
-  if (!context.user) {
+  // console.log("checkIsAuthenticated id", context.req.sessionID);
+  // console.log("session", context.req.session);
+
+  // console.log("checkIsauthenticated cookie", context.req.cookies[SESSION_NAME]);
+
+  if (!context.req.session?.userInfo) {
     throw new AuthenticationError();
   }
 
   return resolve(parent, args, context, info);
 };
 
-const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = ["login", "register", "refreshToken"];
+const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = ["login", "register", "mPassIDLogin"];
 const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata"];
 
 const mutationResolverKeys: (keyof Mutation)[] = Object.keys(mutationResolvers) as (keyof Mutation)[];

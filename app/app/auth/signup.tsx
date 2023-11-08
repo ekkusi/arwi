@@ -25,12 +25,12 @@ import { MATOMO_EVENT_CATEGORIES } from "../../config";
 const RegisterPage_Register_Mutation = graphql(`
   mutation RegisterPage_Register($input: CreateTeacherInput!) {
     register(data: $input) {
-      accessToken
-      teacher {
+      userData {
         email
         id
         languagePreference
         consentsAnalytics
+        isMPassIDConnected
       }
     }
   }
@@ -92,11 +92,11 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
         variables: { input: { email, password, consentsAnalytics: true, languagePreference: i18n.language } },
       });
 
-      const accessToken = data?.register?.accessToken;
-      if (!accessToken) throw new Error("Unexpected error"); // Should get caught before this
-      setUser(accessToken, data.register.teacher);
+      if (!data) throw new Error("Unexpected error");
+
+      setUser(data.register.userData);
       const userInfo = {
-        uid: data.register.teacher.email,
+        uid: data.register.userData.id,
       };
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,

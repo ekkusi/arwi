@@ -25,7 +25,7 @@ const getSpacingValue = (value: CSpacing): number => {
   return typeof value === "number" ? value : SPACING[value as keyof typeof SPACING];
 };
 
-const getColor = (colorKey: string): string | undefined => {
+export const getColor = (colorKey: string): string | undefined => {
   return COLORS[colorKey as ColorKey] || undefined;
 };
 

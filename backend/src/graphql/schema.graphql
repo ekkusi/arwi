@@ -13,8 +13,10 @@ type Query {
 type Mutation {
   register(data: CreateTeacherInput!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  mPassIDLogin(code: String!): MPassIDAuthPayload!
+  connectMPassID(code: String!): AuthPayload!
+  connectLocalCredentials(email: String!, password: String!): AuthPayload!
   logout: Boolean!
-  refreshToken: AuthPayload!
   createGroup(data: CreateGroupInput!): Group!
   createCollection(data: CreateCollectionInput!, moduleId: ID!): EvaluationCollection!
   createStudent(data: CreateStudentInput!, moduleId: ID!): Student!
@@ -36,20 +38,25 @@ type AppMetadata {
 }
 
 type AuthPayload {
-  accessToken: String!
-  teacher: Teacher!
+  userData: Teacher!
+}
+
+type MPassIDAuthPayload {
+  payload: AuthPayload!
+  newUserCreated: Boolean!
 }
 
 type Teacher {
   id: ID!
-  email: EmailAddress!
+  email: EmailAddress
   groups: [Group!]!
   languagePreference: String!
   consentsAnalytics: Boolean!
+  isMPassIDConnected: Boolean!
 }
 
 type LoginResult {
-  teacher: Teacher!
+  userData: Teacher!
 }
 
 type TranslatedString {

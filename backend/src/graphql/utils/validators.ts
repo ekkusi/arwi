@@ -1,5 +1,5 @@
-import ValidationError from "../errors/ValidationError";
-import prisma from "../prismaClient";
+import ValidationError from "../../errors/ValidationError";
+import prisma from "../../prismaClient";
 import {
   ChangeGroupModuleInput,
   CreateCollectionInput,
@@ -11,8 +11,8 @@ import {
   UpdateCollectionInput,
   UpdateEvaluationInput,
   UpdateStudentInput,
-} from "../types";
-import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject } from "./subjectUtils";
+} from "../../types";
+import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject } from "../../utils/subjectUtils";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
 

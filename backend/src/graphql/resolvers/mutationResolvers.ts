@@ -1,10 +1,10 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
-import { getEnvironment } from "../utils/subjectUtils";
-import { fixTextGrammatics, generateStudentSummary } from "../utils/openAI";
-import ValidationError from "../errors/ValidationError";
-import { MutationResolvers } from "../types";
-import { CustomContext } from "../types/contextTypes";
+import { getEnvironment } from "../../utils/subjectUtils";
+import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
+import ValidationError from "../../errors/ValidationError";
+import { MutationResolvers } from "../../types";
+import { CustomContext } from "../../types/contextTypes";
 import { mapUpdateCollectionInput, mapUpdateEvaluationInput, mapUpdateGroupInput, mapUpdateStudentInput } from "../utils/mappers";
 import {
   validateChangeGroupLevelInput,
@@ -23,12 +23,13 @@ import {
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
 } from "../utils/auth";
-import { createRefreshAndAccessTokens, parseAndVerifyToken, REFRESH_TOKEN_KEY } from "../utils/jwt";
+import { initSession, logOut } from "../../utils/auth";
+import { grantAndInitSession, grantToken } from "../../routes/auth";
 
 const BRCRYPT_SALT_ROUNDS = 12;
 
 const resolvers: MutationResolvers<CustomContext> = {
-  register: async (_, { data }, { prisma, res }) => {
+  register: async (_, { data }, { prisma, req }) => {
     const { password, ...rest } = data;
     await validateRegisterInput(data);
     const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
@@ -38,39 +39,121 @@ const resolvers: MutationResolvers<CustomContext> = {
         ...rest,
       },
     });
-    const token = createRefreshAndAccessTokens(teacher, res);
+    initSession(req, { ...teacher, type: "local" });
     return {
-      teacher,
-      accessToken: token,
+      userData: teacher,
     };
   },
-  login: async (_, { email, password }, { prisma, res }) => {
+  login: async (_, { email, password }, { prisma, req }) => {
     const matchingTeacher = await prisma.teacher.findFirst({
       where: { email },
     });
     if (!matchingTeacher) throw new ValidationError(`Käyttäjää ei löytynyt sähköpostilla '${email}'`);
+    if (!matchingTeacher.passwordHash || !matchingTeacher.email) throw new ValidationError(`Käyttäjällä ei ole sähköpostikirjautumista käytössä.`);
     const isValidPassword = await compare(password, matchingTeacher.passwordHash);
     if (!isValidPassword) throw new ValidationError(`Annettu salasana oli väärä.`);
-    const token = createRefreshAndAccessTokens(matchingTeacher, res);
+    initSession(req, { ...matchingTeacher, type: "local" });
     return {
-      teacher: matchingTeacher,
-      accessToken: token,
+      userData: matchingTeacher,
     };
   },
-  logout: async (_, __, { res }) => {
-    res.clearCookie(REFRESH_TOKEN_KEY);
+  mPassIDLogin: async (_, { code }, { req, OIDCClient }) => {
+    if (!OIDCClient) throw new Error("Something went wrong, OIDC client is not initialized");
+
+    const { isNewUser, user } = await grantAndInitSession(OIDCClient, code, req);
+    return {
+      payload: {
+        userData: user,
+      },
+      newUserCreated: isNewUser,
+    };
+  },
+  connectMPassID: async (_, { code }, { req, OIDCClient, user, prisma }) => {
+    const currentUser = user!; // Safe cast after authenticated check
+    if (!OIDCClient) throw new Error("Something went wrong, OIDC client is not initialized");
+    if (currentUser.mPassID) throw new ValidationError("Tilisi on jo liitetty mpass-id tunnuksiin");
+    const { userInfo, tokenSet } = await grantToken(OIDCClient, code);
+    if (userInfo.mPassID) throw new Error("Something went wrong, mpass-id not found from user after grant");
+    const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.sub } });
+    if (matchingUser?.email) throw new ValidationError("Kyseinen mpass-id on jo liitetty toiseen käyttäjään");
+
+    // If there is already an existing user with the mpass-id, merge it to the current user
+    if (matchingUser) {
+      // Update all groups where old user was teacher to new user
+      await prisma.group.updateMany({
+        where: {
+          teacherId: matchingUser.id,
+        },
+        data: {
+          teacherId: currentUser.id,
+        },
+      });
+      // Delete old user
+      await prisma.teacher.delete({
+        where: {
+          id: matchingUser.id,
+        },
+      });
+    }
+    const updatedUser = await prisma.teacher.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        mPassID: userInfo.sub,
+      },
+    });
+    req.session.userInfo = updatedUser;
+    req.session.tokenSet = tokenSet;
+    return {
+      userData: updatedUser,
+    };
+  },
+  connectLocalCredentials: async (_, { email, password }, { req, prisma, user }) => {
+    const currentUser = user!; // Safe cast after authenticated check
+    if (currentUser.email) throw new ValidationError("Tilisi on jo liitetty lokaaleihin tunnuksiin");
+    if (!currentUser.mPassID) throw new ValidationError("Sinun tulee olla kirjautunut mpass-id tunnuksilla liittääksesi lokaalit tunnukset");
+    const matchingTeacher = await prisma.teacher.findFirst({
+      where: { email },
+    });
+    if (!matchingTeacher) throw new ValidationError(`Käyttäjää ei löytynyt sähköpostilla '${email}'`);
+    if (matchingTeacher.mPassID) throw new ValidationError(`Käyttäjä on jo liitetty mpass-id tunnuksiin`);
+    if (!matchingTeacher.passwordHash || !matchingTeacher.email) throw new ValidationError(`Käyttäjällä ei ole sähköpostikirjautumista käytössä.`);
+    const isValidPassword = await compare(password, matchingTeacher.passwordHash);
+    if (!isValidPassword) throw new ValidationError(`Annettu salasana oli väärä.`);
+    // Update all groups where old user was teacher to new user
+    await prisma.group.updateMany({
+      where: {
+        teacherId: matchingTeacher.id,
+      },
+      data: {
+        teacherId: currentUser.id,
+      },
+    });
+    // Delete local credentials user
+    await prisma.teacher.delete({
+      where: {
+        id: matchingTeacher.id,
+      },
+    });
+    // Update old user with new credentials
+    const updatedUser = await prisma.teacher.update({
+      where: {
+        id: currentUser.id,
+      },
+      data: {
+        email: matchingTeacher.email,
+        passwordHash: matchingTeacher.passwordHash,
+      },
+    });
+    req.session.userInfo = updatedUser;
+    return {
+      userData: updatedUser,
+    };
+  },
+  logout: async (_, __, { req, res }) => {
+    await logOut(req, res);
     return true;
-  },
-  refreshToken: async (_, __, { req, res }) => {
-    const refreshToken = req.cookies[REFRESH_TOKEN_KEY];
-    if (!refreshToken) throw new ValidationError("No refresh token found");
-    const user = parseAndVerifyToken(refreshToken, "refresh");
-    if (!user) throw new ValidationError("Token is invalid");
-    const token = createRefreshAndAccessTokens(user, res);
-    return {
-      teacher: user,
-      accessToken: token,
-    };
   },
   createGroup: async (_, { data }, { prisma }) => {
     await validateCreateGroupInput(data);
@@ -301,12 +384,12 @@ const resolvers: MutationResolvers<CustomContext> = {
       environmentLabel: getEnvironment(it.evaluationCollection.environmentCode)?.label.fi,
       date: it.evaluationCollection.date,
     }));
-    const summary = await generateStudentSummary(mappedEvaluations, user!.email); // Safe cast after authenticated check
+    const summary = await generateStudentSummary(mappedEvaluations, user!.id); // Safe cast after authenticated check
     return summary;
   },
   fixTextGrammatics: async (_, { studentId, text }, { user }) => {
     await checkAuthenticatedByStudent(user, studentId);
-    const summary = await fixTextGrammatics(text, user!.email); // Safe cast after authenticated check
+    const summary = await fixTextGrammatics(text, user!.id); // Safe cast after authenticated check
     return summary;
   },
 };
