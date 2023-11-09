@@ -5,7 +5,7 @@ import RedisStore from "connect-redis";
 const { env } = process;
 
 // Used to enforce minimum app version (force update on frontend). Only update this when there is a breaking change in database/backend that makes the old version unusable.
-export const MIN_APP_VERSION = "1.0.9";
+export const MIN_APP_VERSION = "1.1.0";
 
 const ONE_DAY_MS = 1000 * 60 * 60 * 24;
 
