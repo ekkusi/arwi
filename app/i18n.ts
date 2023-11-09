@@ -10,7 +10,6 @@ export const STORAGE_LANG_KEY = "lang";
 export const languages = [
   { value: "fi_FI", name: "Suomi" },
   { value: "en_US", name: "Englanti" },
-  { value: "sv_FI", name: "Ruotsi" },
 ];
 
 export const isValidLanguage = (lang: string): boolean => languages.findIndex((l) => l.value === lang) >= 0;

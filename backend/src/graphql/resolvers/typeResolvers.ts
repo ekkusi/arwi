@@ -1,5 +1,5 @@
-import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../utils/subjectUtils";
-import { EducationLevel, Resolvers } from "../types";
+import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../../utils/subjectUtils";
+import { EducationLevel, Resolvers } from "../../types";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -12,6 +12,9 @@ const resolvers: TypeResolvers = {
         },
       });
       return groups;
+    },
+    isMPassIDConnected: async ({ mPassID }) => {
+      return !!mPassID;
     },
   },
   Group: {

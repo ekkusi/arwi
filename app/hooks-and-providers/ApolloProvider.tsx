@@ -1,7 +1,5 @@
-import { ApolloClient, ApolloLink, ApolloProvider as ApolloProviderBase, createHttpLink, fromPromise, InMemoryCache } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import { ApolloClient, ApolloLink, ApolloProvider as ApolloProviderBase, createHttpLink, InMemoryCache } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import * as SecureStore from "expo-secure-store";
 import { useMemo } from "react";
 import { ACCESS_TOKEN_KEY, useAuth } from "./AuthProvider";
 import { getErrorMessage, getGraphqlErrorMessage } from "../helpers/errorUtils";
@@ -20,39 +18,8 @@ const httpLink = createHttpLink({
   credentials: "include",
 });
 
-const authLink = setContext(async (_, { headers }) => {
-  const accessToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
-
-  return {
-    headers: {
-      ...headers,
-      authorization: accessToken ? `Bearer ${accessToken}` : "",
-    },
-  };
-});
-
-// Request a refresh token to then stores and returns the accessToken.
-const refreshToken = async () => {
-  try {
-    const response = await fetch(`${BACKEND_API_URL}/refresh-token`, {
-      method: "POST",
-      credentials: "include",
-    });
-    const { accessToken } = await response.json();
-    if (!accessToken) throw new Error("No access token returned from refresh token mutation");
-    await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, accessToken);
-    return accessToken;
-  } catch (err) {
-    await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
-    throw err;
-  }
-};
-
 const cache = new InMemoryCache({
   typePolicies: {
-    AuthPayload: {
-      keyFields: ["accessToken"],
-    },
     ModuleInfo: {
       keyFields: false,
     },
@@ -88,26 +55,8 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
           for (const err of graphQLErrors) {
             switch (err.extensions.code) {
               case "UNAUTHENTICATED": {
-                const refreshTokenPromise = new Promise((resolve, reject) => {
-                  refreshToken()
-                    .then((accessToken) => resolve(accessToken))
-                    .catch((e) => {
-                      logout();
-                      reject(e);
-                    });
-                });
-                return fromPromise(refreshTokenPromise)
-                  .filter((value) => Boolean(value))
-                  .flatMap((accessToken) => {
-                    const oldHeaders = operation.getContext().headers;
-                    operation.setContext({
-                      headers: {
-                        ...oldHeaders,
-                        authorization: `Bearer ${accessToken}`,
-                      },
-                    });
-                    return forward(operation);
-                  });
+                logout();
+                return forward(operation);
               }
               // Don't throw generic error page from validation errors, these should be handled in whereever they occur.
               case "VALIDATION_ERROR": {
@@ -118,7 +67,6 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
                 break;
             }
           }
-
           if (shouldThrow) throwCatchableError(new Error(`[GraphQL Error]: ${getGraphqlErrorMessage(graphQLErrors)}`));
         }
 
@@ -133,7 +81,7 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
     () =>
       new ApolloClient({
         uri: GRAPHQL_API_URL,
-        link: ApolloLink.from([authLink, errorLink, httpLink]),
+        link: ApolloLink.from([errorLink, httpLink]),
         cache,
       }),
     [errorLink]

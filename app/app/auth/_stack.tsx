@@ -10,9 +10,9 @@ const { Navigator, Screen } = createNativeStackNavigator<AuthStackParams>();
 export default function AuthStack() {
   return (
     <Navigator initialRouteName="welcome" screenOptions={{ headerTransparent: true }}>
-      <Screen name="welcome" component={LandingPage} options={{ title: "" }} />
-      <Screen name="login" component={LoginPage} options={{ title: "", statusBarColor: COLORS.white, statusBarAnimation: "none" }} />
-      <Screen name="signup" component={SignupPage} options={{ title: "", statusBarColor: COLORS.white, statusBarAnimation: "none" }} />
+      <Screen name="welcome" component={LandingPage} options={{ title: "", statusBarColor: COLORS.primary }} />
+      <Screen name="login" component={LoginPage} options={{ title: "", statusBarColor: COLORS.white }} />
+      <Screen name="signup" component={SignupPage} options={{ title: "", statusBarColor: COLORS.white }} />
     </Navigator>
   );
 }

@@ -98,13 +98,11 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       trackAction({
         name: "Generate student feedback",
         userInfo: {
-          uid: user.email,
+          uid: user.id,
         },
       });
 
       if (!result.data?.generateStudentFeedback) throw new Error("Summary generation failed");
-      console.log(result.data.generateStudentFeedback);
-
       setSummary(result.data?.generateStudentFeedback);
     } catch (e) {
       console.error(e);

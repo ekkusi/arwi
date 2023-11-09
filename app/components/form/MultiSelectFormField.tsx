@@ -1,7 +1,7 @@
 import React from "react";
 import { CViewStyle } from "../../theme/types";
 import FormField, { FormFieldProps } from "./FormField";
-import Select, { SelectProps } from "./Select";
+import { MultiSelect, SelectProps } from "./Select";
 
 export type MultiSelectFormFieldProps<CustomOptionType = unknown> = Omit<SelectProps<CustomOptionType, true>, "title" | "error" | "isMulti"> &
   Pick<FormFieldProps, "title" | "titleStyle" | "errorTextStyle" | "error"> & {
@@ -13,7 +13,7 @@ export default function MultiSelectFormField<CustomOptionType = unknown>(props: 
 
   return (
     <FormField title={title} error={error} errorTextStyle={errorTextStyle} titleStyle={titleStyle} {...containerStyle}>
-      <Select error={!!error} title={title} isMulti {...rest} />
+      <MultiSelect error={!!error} title={title} {...rest} />
     </FormField>
   );
 }

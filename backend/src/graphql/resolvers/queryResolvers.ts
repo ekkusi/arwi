@@ -1,8 +1,8 @@
-import { ADMIN_USER, MIN_APP_VERSION } from "../config";
-import AuthenticationError from "../errors/AuthenticationError";
-import ValidationError from "../errors/ValidationError";
-import { QueryResolvers } from "../types";
-import { CustomContext } from "../types/contextTypes";
+import { MIN_APP_VERSION } from "../../config";
+import AuthenticationError from "../../errors/AuthenticationError";
+import ValidationError from "../../errors/ValidationError";
+import { QueryResolvers } from "../../types";
+import { CustomContext } from "../../types/contextTypes";
 import {
   checkAuthenticatedByCollection,
   checkAuthenticatedByEvaluation,
@@ -19,6 +19,7 @@ const resolvers: QueryResolvers<CustomContext> = {
   },
   getCurrentUser: async (_, __, { user }) => {
     if (!user) throw new AuthenticationError("Not authenticated");
+
     return user;
   },
   getTeacher: async (_, { id }, { prisma, user }) => {
@@ -30,11 +31,6 @@ const resolvers: QueryResolvers<CustomContext> = {
     });
     if (!teacher) throw new ValidationError(`Opettajaa ei löytynyt id:llä '${id}'`);
     return teacher;
-  },
-  getTeachers: async (_, __, { prisma, user }) => {
-    if (user?.id !== ADMIN_USER.id) throw new AuthenticationError("Admin route");
-    const teachers = await prisma.teacher.findMany();
-    return teachers;
   },
   getGroups: async (_, { teacherId }, { prisma, user }) => {
     checkAuthenticatedByTeacher(user, teacherId);

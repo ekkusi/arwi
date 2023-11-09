@@ -1,5 +1,5 @@
-import prisma from "../prismaClient";
-import { UpdateEvaluationInput } from "../types";
+import prisma from "../../prismaClient";
+import { UpdateEvaluationInput } from "../../types";
 import { mapUpdateEvaluationInput } from "./mappers";
 // import { validateUpdateEvaluationInput } from "./validators";
 

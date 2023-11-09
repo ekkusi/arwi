@@ -6,7 +6,7 @@ export type LayoutProps = CKeyboardAvoidingViewProps & {
 };
 
 function Layout({ style, avoidKeyboard = true, ...props }: LayoutProps) {
-  return avoidKeyboard ? <CView style={{ flex: 1, ...style }} {...props} /> : <CKeyboardAvoidingView style={{ flex: 1, ...style }} {...props} />;
+  return !avoidKeyboard ? <CView style={{ flex: 1, ...style }} {...props} /> : <CKeyboardAvoidingView style={{ flex: 1, ...style }} {...props} />;
 }
 
 export default Layout;

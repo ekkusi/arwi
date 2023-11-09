@@ -14,7 +14,7 @@ export type OptionType = {
   label: string;
 };
 
-type DynamicSelectProps<CustomOptionType = unknown, IsMulti = boolean> = IsMulti extends true
+type DynamicSelectProps<CustomOptionType, IsMulti = boolean> = IsMulti extends true
   ? {
       onSelect: (value: CustomOptionType[]) => void;
       isMulti: IsMulti;
@@ -26,7 +26,7 @@ type DynamicSelectProps<CustomOptionType = unknown, IsMulti = boolean> = IsMulti
       defaultValue?: CustomOptionType;
     };
 
-export type SelectProps<CustomOptionType = unknown, IsMulti = boolean> = {
+export type SelectProps<CustomOptionType, IsMulti = boolean> = {
   getOptionValue: (item: CustomOptionType) => string;
   formatLabel: (item: CustomOptionType) => string;
   options: CustomOptionType[];
@@ -36,7 +36,7 @@ export type SelectProps<CustomOptionType = unknown, IsMulti = boolean> = {
   title?: string;
 } & DynamicSelectProps<CustomOptionType, IsMulti>;
 
-export default function Select<CustomOptionType = unknown>(props: SelectProps<CustomOptionType>) {
+function Select<CustomOptionType>(props: SelectProps<CustomOptionType>) {
   const { t } = useTranslation();
   const {
     options,
@@ -183,4 +183,12 @@ export default function Select<CustomOptionType = unknown>(props: SelectProps<Cu
       </CModal>
     </>
   );
+}
+
+export function SingleSelect<CustomOptionType>(props: Omit<SelectProps<CustomOptionType, false>, "isMulti">) {
+  return <Select {...props} isMulti={false} />;
+}
+
+export function MultiSelect<CustomOptionType>(props: Omit<SelectProps<CustomOptionType, true>, "isMulti">) {
+  return <Select {...props} isMulti />;
 }

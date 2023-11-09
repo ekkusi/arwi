@@ -29,6 +29,7 @@ const Main_GetCurrentUser_Query = graphql(`
       languagePreference
       consentsAnalytics
       id
+      isMPassIDConnected
     }
   }
 `);
@@ -67,16 +68,15 @@ export default function Main() {
   // Fetch token and current user and set them to global state if they exist
   const setUserInfo = useCallback(async () => {
     const { data } = await client.query({ query: Main_GetCurrentUser_Query });
-    const token = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
-    if (data && token) {
-      await setUser(token, data.getCurrentUser);
+    if (data) {
+      await setUser(data.getCurrentUser);
+      trackAppStart({
+        userInfo: {
+          uid: data.getCurrentUser.id,
+        },
+      });
     }
 
-    trackAppStart({
-      userInfo: {
-        uid: data.getCurrentUser.email,
-      },
-    });
     // NOTE: If separate separate consent asking is implemented, uncomment this
     // Enable crashlytics and analytics only if user has given consent
     // if (data.getCurrentUser.consentsAnalytics) {
@@ -84,8 +84,8 @@ export default function Main() {
     //   await firebase.analytics().setAnalyticsCollectionEnabled(true);
     // }
     // Fetch lang from storage and set it to i18n
-    const { languagePreference } = data.getCurrentUser;
-    if (i18n.language !== languagePreference && isValidLanguage(languagePreference)) i18n.changeLanguage(languagePreference);
+    const storedLang = await SecureStore.getItemAsync(STORAGE_LANG_KEY);
+    if (storedLang && i18n.language !== storedLang && isValidLanguage(storedLang)) i18n.changeLanguage(storedLang);
   }, [client, i18n, setUser, trackAppStart]);
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function Main() {
       trackScreenView({
         name: currentRouteName,
         userInfo: {
-          uid: currentUser.email,
+          uid: currentUser.id,
         },
       });
     }

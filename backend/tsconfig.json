@@ -6,7 +6,7 @@
     }
   },
   "files": [
-    "src/global.d.ts"
+    "src/types/global.d.ts"
   ],
   "compilerOptions": {
     "allowJs": true,
@@ -25,7 +25,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "types": ["node"]
+    "types": ["node"],
   },
   "include": ["src"],
   "exclude": ["node_modules", "**/*.test.ts", "src/__mocks__", "lib"]

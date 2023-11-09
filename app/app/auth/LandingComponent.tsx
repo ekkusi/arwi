@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import Constants from "expo-constants";
-import { useKeyboardListener } from "../../hooks-and-providers/keyboardHooks";
+import { useKeyboardListener } from "../../hooks-and-providers/keyboard";
 import { COLORS } from "../../theme";
 import Layout from "../../components/Layout";
 import CView from "../../components/primitives/CView";
@@ -17,10 +17,12 @@ export default function LandingComponent({
   children,
   headerSize = "small",
   headerPlacement = "bottom",
+  notWrappedChildren,
   title,
 }: React.PropsWithChildren<{
   headerSize?: "big" | "small";
   headerPlacement?: "top" | "bottom";
+  notWrappedChildren?: JSX.Element;
   title?: string;
 }>) {
   const topMargin = useSharedValue(0);
@@ -51,6 +53,7 @@ export default function LandingComponent({
         flexDirection: headerPlacement === "bottom" ? "column-reverse" : "column",
       }}
     >
+      {notWrappedChildren}
       <CView
         style={{
           flex: 1,
