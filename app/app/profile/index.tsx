@@ -138,80 +138,83 @@ export default function ProfileView() {
   };
 
   return (
-    <>
-      <CModal
-        isOpen={isLocalLoginModalOpen}
-        onClose={() => setIsLocalLoginModalOpen(false)}
-        title={t("connect-local-credentials", "Liitä tunnukset MPassID:seen")}
-      >
-        <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "2xl" }}>
-          <CText style={{ marginBottom: "md" }}>{t("login-to-connect", "Kirjaudu sisään liittääksesi tunnuksesi MPassID:seen")}</CText>
-          <TextFormField
-            title={t("email", "Sähköposti")}
-            placeholder="arwioija@gmail.com"
-            style={{ width: "100%" }}
-            titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
-            onChange={handleEmailChange}
-          />
-          <CView>
-            <TextFormField
-              title={t("password", "Salasana")}
-              placeholder={t("password", "Salasana")}
-              style={{ width: "100%" }}
-              secureTextEntry={secureTextEntry}
-              titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
-              onChange={handlePasswordChange}
-            />
-            <CTouchableOpacity
-              onPress={() => setSecureTextEntry(!secureTextEntry)}
-              style={{ position: "absolute", right: 0, bottom: 0, justifyContent: "center", alignItems: "center", height: 54, width: 54 }}
-            >
-              <MaterialCommunityIcon name={secureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
-            </CTouchableOpacity>
-          </CView>
-          {localLoginError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md" }}>{localLoginError}</CText>}
-          <CButton
-            title={t("login", "Kirjaudu sisään")}
-            style={{ marginTop: "lg" }}
-            loading={connectLocalLoading}
-            onPress={handleSyncLocalCredentials}
-          />
-        </CView>
-      </CModal>
+    <CView style={{ flex: 1, alignItems: "center", padding: "lg" }}>
+      <CText style={{ fontSize: "lg", fontWeight: "500", width: "100%" }}>{t("profile-view.language", "Kieli")}</CText>
+      <SingleSelect
+        defaultValue={languages.find((lang) => lang.value === i18n.language)}
+        options={languages}
+        formatLabel={(item) => item.name}
+        onSelect={(item) => changeLanguage(item.value)}
+        getOptionValue={(item) => item.value}
+      />
 
-      <CView style={{ flex: 1, alignItems: "center", padding: "lg" }}>
-        <CText style={{ fontSize: "lg", fontWeight: "500", width: "100%" }}>{t("profile-view.language", "Kieli")}</CText>
-        <SingleSelect
-          defaultValue={languages.find((lang) => lang.value === i18n.language)}
-          options={languages}
-          formatLabel={(item) => item.name}
-          onSelect={(item) => changeLanguage(item.value)}
-          getOptionValue={(item) => item.value}
-        />
-
-        {!user.isMPassIDConnected && (
-          <>
+      {__DEV__ && (
+        <>
+          <CModal
+            isOpen={isLocalLoginModalOpen}
+            onClose={() => setIsLocalLoginModalOpen(false)}
+            title={t("connect-local-credentials", "Liitä tunnukset MPassID:seen")}
+          >
+            <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "2xl" }}>
+              <CText style={{ marginBottom: "md" }}>{t("login-to-connect", "Kirjaudu sisään liittääksesi tunnuksesi MPassID:seen")}</CText>
+              <TextFormField
+                title={t("email", "Sähköposti")}
+                placeholder="arwioija@gmail.com"
+                style={{ width: "100%" }}
+                titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
+                onChange={handleEmailChange}
+              />
+              <CView>
+                <TextFormField
+                  title={t("password", "Salasana")}
+                  placeholder={t("password", "Salasana")}
+                  style={{ width: "100%" }}
+                  secureTextEntry={secureTextEntry}
+                  titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
+                  onChange={handlePasswordChange}
+                />
+                <CTouchableOpacity
+                  onPress={() => setSecureTextEntry(!secureTextEntry)}
+                  style={{ position: "absolute", right: 0, bottom: 0, justifyContent: "center", alignItems: "center", height: 54, width: 54 }}
+                >
+                  <MaterialCommunityIcon name={secureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
+                </CTouchableOpacity>
+              </CView>
+              {localLoginError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md" }}>{localLoginError}</CText>}
+              <CButton
+                title={t("login", "Kirjaudu sisään")}
+                style={{ marginTop: "lg" }}
+                loading={connectLocalLoading}
+                onPress={handleSyncLocalCredentials}
+              />
+            </CView>
+          </CModal>
+          {!user.isMPassIDConnected && (
+            <>
+              <CButton
+                style={{ marginTop: "3xl" }}
+                leftIcon={<CImage variant="fixed" source={require("../../assets/mpassid-minimal-white.png")} width={25} height={25} />}
+                title={t("connect-mpassid", "Liitä MPassID-tili")}
+                loading={connectMPassIDLoading}
+                onPress={handleSyncMPassID}
+              />
+              {mPassIDLoginError && (
+                <CText style={{ color: "error", fontWeight: "600", marginTop: "md", maxWidth: "100%" }}>{mPassIDLoginError}</CText>
+              )}
+            </>
+          )}
+          {!user.email && (
             <CButton
               style={{ marginTop: "3xl" }}
-              leftIcon={<CImage variant="fixed" source={require("../../assets/mpassid-minimal-white.png")} width={25} height={25} />}
-              title={t("connect-mpassid", "Liitä MPassID-tili")}
-              loading={connectMPassIDLoading}
-              onPress={handleSyncMPassID}
+              title={t("connect-local-credentials", "Liitä tunnukset MPassID:seen")}
+              onPress={() => setIsLocalLoginModalOpen(true)}
             />
-            {mPassIDLoginError && <CText style={{ color: "error", fontWeight: "600", marginTop: "md", maxWidth: "100%" }}>{mPassIDLoginError}</CText>}
-          </>
-        )}
-        {!user.email && (
-          <CButton
-            style={{ marginTop: "3xl" }}
-            title={t("connect-local-credentials", "Liitä tunnukset MPassID:seen")}
-            onPress={() => setIsLocalLoginModalOpen(true)}
-          />
-        )}
-        <CView style={{ flex: 1, width: "100%", justifyContent: "flex-end" }}>
-          <CButton title={t("logout", "Kirjaudu ulos")} style={{ width: "100%" }} disabled={loading} onPress={handleLogout} />
-        </CView>
+          )}
+        </>
+      )}
+      <CView style={{ flex: 1, width: "100%", justifyContent: "flex-end" }}>
+        <CButton title={t("logout", "Kirjaudu ulos")} style={{ width: "100%" }} disabled={loading} onPress={handleLogout} />
       </CView>
-    </>
+    </CView>
   );
 }

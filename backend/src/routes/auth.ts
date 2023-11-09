@@ -81,6 +81,7 @@ const initAuth = async () => {
   }
 
   router.use("/mpassid-callback", async (req, res) => {
+    if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const params = client.callbackParams(req);
@@ -99,6 +100,7 @@ const initAuth = async () => {
   });
 
   router.use("/authorize", async (req, res) => {
+    if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const { query } = req;

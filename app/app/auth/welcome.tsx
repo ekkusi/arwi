@@ -77,18 +77,20 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
             }}
           />
         </CView>
-        <CView style={{ width: "100%", borderTopWidth: 1, borderColor: "lightgray", paddingTop: "2xl" }}>
-          <CView style={{ width: "100%" }}>
-            <CText style={{ fontSize: "sm", textAlign: "center", marginBottom: "sm", color: "gray", fontWeight: "600" }}>
-              {t("authenticate-with-mpassid", "Tunnistaudu palveluun MPASSid:llä")}
-            </CText>
-            <CButton
-              title="MPASSid"
-              leftIcon={<CImage variant="fixed" source={require("../../assets/mpassid-minimal-white.png")} width={25} height={25} />}
-              onPress={handleMPassIDLogin}
-            />
+        {__DEV__ && (
+          <CView style={{ width: "100%", borderTopWidth: 1, borderColor: "lightgray", paddingTop: "2xl" }}>
+            <CView style={{ width: "100%" }}>
+              <CText style={{ fontSize: "sm", textAlign: "center", marginBottom: "sm", color: "gray", fontWeight: "600" }}>
+                {t("authenticate-with-mpassid", "Tunnistaudu palveluun MPASSid:llä")}
+              </CText>
+              <CButton
+                title="MPASSid"
+                leftIcon={<CImage variant="fixed" source={require("../../assets/mpassid-minimal-white.png")} width={25} height={25} />}
+                onPress={handleMPassIDLogin}
+              />
+            </CView>
           </CView>
-        </CView>
+        )}
       </CView>
     </LandingComponent>
   );
