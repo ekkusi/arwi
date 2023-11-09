@@ -32,7 +32,9 @@ jobs:
           DATABASE_URL=${{ secrets.TEST_DATABASE_URL }}
           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           OPENAI_ORGANIZATION=${{ secrets.OPENAI_ORGANIZATION }}
+          NO_REDIS_SESSION=true
         env_vars: |-
           DATABASE_URL=${{ secrets.TEST_DATABASE_URL }}
           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           OPENAI_ORGANIZATION=${{ secrets.OPENAI_ORGANIZATION }}
+          NO_REDIS_SESSION=true

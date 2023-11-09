@@ -26,7 +26,7 @@ const redisStore = new RedisStore({
 });
 
 export const SESSION_OPTIONS: SessionOptions = {
-  store: redisStore,
+  store: env.NO_REDIS_SESSION === "true" ? undefined : redisStore, // Allow disabling redis session storage for testing
   secret: SESSION_SECRET,
   name: SESSION_NAME,
   cookie: {
