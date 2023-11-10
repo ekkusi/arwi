@@ -5,7 +5,7 @@ import { json } from "body-parser";
 import cookieParser from "cookie-parser";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
-import { SESSION_OPTIONS } from "./config";
+import { HELMET_OPTIONS, SESSION_OPTIONS } from "./config";
 import initAuth from "./routes/auth";
 import { checkSessionTimeout, checkTokens } from "./middleware/auth";
 import prisma from "./prismaClient";
@@ -15,7 +15,7 @@ import "express-async-errors";
 
 const app = express();
 
-app.use(helmet());
+app.use(helmet(HELMET_OPTIONS));
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 

@@ -1,11 +1,26 @@
 import { SessionOptions } from "express-session";
 import { Redis } from "ioredis";
 import RedisStore from "connect-redis";
+import { HelmetOptions } from "helmet";
 
 const { env } = process;
 
 // Used to enforce minimum app version (force update on frontend). Only update this when there is a breaking change in database/backend that makes the old version unusable.
 export const MIN_APP_VERSION = "1.1.0";
+
+export const HELMET_OPTIONS: HelmetOptions = {
+  contentSecurityPolicy:
+    env.NODE_ENV !== "production"
+      ? {
+          directives: {
+            imgSrc: [`'self'`, "data:", "apollo-server-landing-page.cdn.apollographql.com"],
+            scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+            manifestSrc: [`'self'`, "apollo-server-landing-page.cdn.apollographql.com"],
+            frameSrc: [`'self'`, "sandbox.embed.apollographql.com"],
+          },
+        }
+      : undefined,
+};
 
 const ONE_DAY_MS = 1000 * 60 * 60 * 24;
 
