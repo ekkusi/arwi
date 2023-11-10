@@ -2,6 +2,96 @@
   {
     "code": "KA",
     "elementarySchool": {
+      "environments_1_to_2": [
+        {
+          "code": "KA_1_TO_2_ENV_IDE",
+          "color": "#4b7f80",
+          "name": {
+            "fi": "Ideointi"
+          }
+        },
+        {
+          "code": "KA_1_TO_2_ENV_SUU",
+          "color": "#5d3d37",
+          "name": {
+            "fi": "Suunnittelu"
+          }
+        },
+        {
+          "code": "KA_1_TO_2_ENV_DOK",
+          "color": "#b6970e",
+          "name": {
+            "fi": "Dokumentointi"
+          }
+        },
+        {
+          "code": "KA_1_TO_2_ENV_ARV",
+          "color": "#de0f3a",
+          "name": {
+            "fi": "Arviointi"
+          }
+        }
+      ],
+      "environments_3_to_6": [
+        {
+          "code": "KA_3_TO_6_ENV_SOV",
+          "color": "#7d247f",
+          "name": {
+            "fi": "Soveltaminen"
+          }
+        },
+        {
+          "code": "KA_3_TO_6_ENV_DOK",
+          "color": "#987222",
+          "name": {
+            "fi": "Dokumentointi ja arviointi"
+          }
+        }
+      ],
+      "environments_7_to_9": [
+        {
+          "code": "KA_7_TO_9_ENV_DOK",
+          "color": "#987222",
+          "name": {
+            "fi": "Dokumentointi ja arviointi"
+          }
+        },
+        {
+          "code": "KA_7_TO_9_ENV_INN",
+          "color": "#cc1e2e",
+          "name": {
+            "fi": "Innovointi"
+          }
+        },
+        {
+          "code": "KA_7_TO_9_ENV_MUO",
+          "color": "#187692",
+          "name": {
+            "fi": "Muotoilu"
+          }
+        },
+        {
+          "code": "KA_7_TO_9_ENV_TYÖ",
+          "color": "#bc9a41",
+          "name": {
+            "fi": "Työturvallisuus"
+          }
+        },
+        {
+          "code": "KA_7_TO_9_ENV_YRI",
+          "color": "#a15181",
+          "name": {
+            "fi": "Yrittäjämäinen oppiminen"
+          }
+        },
+        {
+          "code": "KA_7_TO_9_ENV_TIE",
+          "color": "#de191f",
+          "name": {
+            "fi": "Tiedostaminen ja osallistuminen"
+          }
+        }
+      ],
       "one_to_two_years": [
         {
           "code": "T1",
@@ -108,7 +198,7 @@
         {
           "code": "T6",
           "label": {
-            "fi": "Hyödyntää tieto- ja viestintäteknologiaa suunnittelussa ja dokumentoinnissa"
+            "fi": "Teknologian hyödyntäminen dokumentoinnissa"
           },
           "longDescription": {
             "fi": "Ohjata oppilasta käyttämään tieto- ja viestintäteknologian mahdollisuuksia käsityön suunnittelussa, valmistuksessa ja dokumentoinnissa, sekä yhteisöllisen tiedon tuottamisessa ja jakamisessa"
@@ -217,101 +307,21 @@
           },
           "type": "SKILLS_AND_BEHAVIOUR"
         }
-      ],
-      "environments_1_to_2": [],
-      "environments_3_to_6": [],
-      "environments_7_to_9": []
+      ]
     },
     "environments": [
-      {
-        "code": "KA_ENV_IDE",
-        "color": "#277094",
-        "name": {
-          "fi": "Ideointi 1-2"
-        }
-      },
       {
         "code": "KA_ENV_KOK",
         "color": "#9acae2",
         "name": {
-          "fi": "Kokeilu (kaikki luokat)"
-        }
-      },
-      {
-        "code": "KA_ENV_SUU",
-        "color": "#6abce6",
-        "name": {
-          "fi": "Suunnittelu 1-2"
+          "fi": "Kokeilu"
         }
       },
       {
         "code": "KA_ENV_TEK",
-        "color": "#3a4b53",
+        "color": "#bf8f67",
         "name": {
-          "fi": "Tekeminen (kaikki luokat)"
-        }
-      },
-      {
-        "code": "KA_ENV_DOK",
-        "color": "#0d6c9c",
-        "name": {
-          "fi": "Dokumentointi 1-2"
-        }
-      },
-      {
-        "code": "KA_ENV_ARV",
-        "color": "#0d4f70",
-        "name": {
-          "fi": "Arviointi 1-2"
-        }
-      },
-      {
-        "code": "KA_ENV_SOV",
-        "color": "#3187b3",
-        "name": {
-          "fi": "Soveltaminen 3-6"
-        }
-      },
-      {
-        "code": "KA_ENV_INN",
-        "color": "#205169",
-        "name": {
-          "fi": "Innovointi 7-9"
-        }
-      },
-      {
-        "code": "KA_ENV_MUO",
-        "color": "#093c56",
-        "name": {
-          "fi": "Muotoilu 7-9"
-        }
-      },
-      {
-        "code": "KA_ENV_DOK_1",
-        "color": "#133749",
-        "name": {
-          "fi": "Dokumentointi ja arviointi (3-6 & 7-9)"
-        }
-      },
-      {
-        "code": "KA_ENV_TYÖ",
-        "color": "#215169",
-        "name": {
-          "fi": "Työturvallisuus (7-9)"
-        }
-      },
-      {
-        "code": "KA_ENV_YRI",
-        "color": "#517486",
-        "name": {
-          "fi": "Yrittäjämäinen oppiminen (7-9)"
-        }
-      },
-      {
-        "code": "KA_ENV_TIE",
-        "color": "#2a4553",
-        "name": {
-          "fi": "Tiedostaminen ja osallistuminen (7-9)"
+          "fi": "Tekeminen"
         }
       }
     ],
@@ -1217,14 +1227,6 @@
         "environments": []
       }
     ]
-  },
-  {
-    "code": "MU",
-    "name": {
-      "fi": "Musiikki"
-    },
-    "environments": [],
-    "elementarySchool": {}
   },
   {
     "code": "TE",
@@ -2316,7 +2318,7 @@
         "environments": [
           {
             "code": "KU_HS_MODULE_KU1_ENV_OPI",
-            "color": "#ebebec",
+            "color": "#5fe17d",
             "name": {
               "fi": "Opiskelijoiden omat kuvat sekä kuvakulttuurit"
             }
@@ -2963,5 +2965,584 @@
       "fi": "Kuvataide"
     },
     "environments": []
+  },
+  {
+    "code": "MU",
+    "elementarySchool": {
+      "one_to_two_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Toimia ryhmän jäsenenä, rakentaen myönteistä minäkuvaa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta toimimaan musiikillisen ryhmän jäsenenä oppilaan myönteistä minäkuvaa rakentaen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Luonteva äänenkäyttö, laulaminen sekä soittaminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta luontevaan äänenkäyttöön sekä laulamaan ja soittamaan ryhmän jäsenenä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Ääniympäristön, äänen, musiikin ja käsitteiden hahmottaminen sekä kokeminen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta kokemaan ja hahmottamaan ääniympäristöä, ääntä, musiikkia ja musiikkikäsitteitä liikkuen ja kuunnellen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Luoda mahdollisuuksia oppilaiden toteuttaa omia musikaalisia ideoita"
+          },
+          "longDescription": {
+            "fi": "Antaa tilaa oppilaiden omille musiikillisille ideoille ja improvisoinnille sekä ohjaa heitä suunnittelemaan ja toteuttamaan pienimuotoisia sävellyksiä tai muita kokonaisuuksia käyttäen äänellisiä, liikunnallisia, kuvallisia, teknologisia tai muita ilmaisukeinoja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Musiikin kulttuuriin ja sen ilmiöihin tutustuminen toiminnallisin menetelmin"
+          },
+          "longDescription": {
+            "fi": "Innostaa oppilasta tutustumaan musiikilliseen kulttuuriperintöönsä leikkien, laulaen ja liikkuen sekä nauttimaan musiikin esteettisestä, kulttuurisesta ja historiallisesta monimuotoisuudesta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Ymmärtää musiikin merkintätapoja"
+          },
+          "longDescription": {
+            "fi": "Auttaa oppilasta ymmärtämään musiikin merkintätapojen perusperiaatteita musisoinnin yhteydessä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Vastuullinen musisointi"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta toimimaan vastuullisesti musisoinnissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Tarjota kokemuksia tavoitteiden ja harjoittelun merkityksestä"
+          },
+          "longDescription": {
+            "fi": "Tarjota oppilaille kokemuksia tavoitteiden asettamisen ja yhteisen harjoittelun merkityksestä musiikin oppimisessa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        }
+      ],
+      "seven_to_nine_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Rakentava toiminta ryhmänjäsenenä"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta rakentavaan toimintaan musisoivan ryhmän ja musiikillisten yhteisöjen jäsenenä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Äänenkäytön ja laulamisen kehittäminen/ylläpitäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ylläpitämään äänenkäyttö- ja laulutaitoaan sekä kehittämään niitä edelleen musisoivan ryhmän jäseninä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Soittotaidon kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta kehittämään edelleen soitto- ja yhteismusisointitaitojaan keho-, rytmi-, melodia- ja sointusoittimin"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Monipuolinen musiikkiliikunnallinen toiminta"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta monipuoliseen musiikkiliikunnalliseen kokemiseen ja ilmaisuun"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Musiikin kuuntelu ja siitä keskustelu"
+          },
+          "longDescription": {
+            "fi": "Tarjota oppilaalle mahdollisuuksia ääniympäristön ja musiikin elämykselliseen kuunteluun ja havainnointiin sekä ohjata häntä keskustelemaan havainnoistaan"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Kannustaa improvisointiin ja luovuuteen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta rakentamaan luovaa suhdetta musiikkiin ja ohjata heitä improvisointiin, sovittamiseen ja säveltämiseen sekä taiteidenväliseen työskentelyyn"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Digitaalisten laitteiden hyödyntäminen musiikin teossa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta musiikin tallentamiseen ja tieto- ja viestintäteknologian luovaan ilmaisulliseen käyttöön sekä musiikin tekemisessä että osana monialaisia kokonaisuuksia"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Ymmärtää musiikin merkitys viestimisessä eri kulttuureissa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tarkastelemaan musiikkia taiteenlajina ja ymmärtämään, miten musiikkia käytetään viestimiseen ja vaikuttamiseen eri kulttuureissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Keskustelu käsitteiden ja terminologian avulla"
+          },
+          "longDescription": {
+            "fi": "Rohkaista ja ohjata oppilasta keskustelemaan musiikista käyttäen musiikin käsitteitä ja terminologiaa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Tunnistaa musiikin vaikutus tunteisiin ja hyvinvointiin"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tunnistamaan musiikin vaikutuksia tunteisiin ja hyvinvointiin"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T11",
+          "label": {
+            "fi": "Kuulosta huolehtiminen/ääniympäristön turvallisuus"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta huolehtimaan kuulostaan sekä musisointi- ja ääniympäristön turvallisuudesta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T12",
+          "label": {
+            "fi": "Musiikillisen osaamisen kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kehittämään musiikillista osaamistaan harjoittelun avulla, asettamaan tavoitteita musiikilliselle oppimiselleen ja arvioimaan edistymistään suhteessa tavoitteisiin"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        }
+      ],
+      "three_to_six_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Osallistuminen yhteiseen musisointiin"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta osallistumaan yhteismusisointiin ja rakentamaan myönteistä yhteishenkeä yhteisössään"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Luonteva äänenkäyttö ja soittotaidon kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta luontevaan äänenkäyttöön ja laulamiseen sekä kehittämään keho-, rytmi-, melodia- ja sointusoittimien soittotaitoaan musisoivan ryhmän jäsenenä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Kannustaa keholliseen ilmaisuun"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta keholliseen musiikin, kuvien, tarinoiden ja tunnetilojen ilmaisuun kokonaisvaltaisesti liikkuen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Musiikin kuuntelu, sen jäsentäminen ja siitä kertominen"
+          },
+          "longDescription": {
+            "fi": "Tarjota oppilaalle mahdollisuuksia ääniympäristön ja musiikin elämykselliseen kuunteluun sekä ohjata häntä jäsentämään kuulemaansa sekä kertomaan siitä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Taiteellisten esitysten tuottaminen"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta improvisoimaan sekä suunnittelemaan ja toteuttamaan pienimuotoisia sävellyksiä tai monitaiteellisia kokonaisuuksia eri keinoin ja myös tieto- ja viestintäteknologiaa käyttäen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Musiikillisen moninaisuuden tarkastelu"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tarkastelemaan musiikillisia kokemuksiaan ja musiikillisen maailman esteettistä, kulttuurista ja historiallista monimuotoisuutta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Käsitteiden ja merkintätapojen oppiminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään musiikkikäsitteitä ja musiikin merkintätapojen periaatteita musisoinnin yhteydessä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Tunnistaa musiikin vaikutus hyvinvointiin"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tunnistamaan musiikin vaikutuksia hyvinvointiin sekä huolehtimaan musisointi- ja ääniympäristön turvallisuudesta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Musiikillisen osaamisen kehittäminen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kehittämään musiikillista osaamistaan harjoittelun avulla, osallistumaan tavoitteiden asettamiseen ja arvioimaan edistymistään suhteessa tavoitteisiin."
+          },
+          "type": "SKILLS_AND_BEHAVIOUR"
+        }
+      ],
+      "environments_1_to_2": [],
+      "environments_3_to_6": [],
+      "environments_7_to_9": []
+    },
+    "environments": [
+      {
+        "code": "MU_ENV_LAU",
+        "color": "#ff3333",
+        "name": {
+          "fi": "Laulaminen"
+        }
+      },
+      {
+        "code": "MU_ENV_SOI",
+        "color": "#4cc3ff",
+        "name": {
+          "fi": "Soittaminen"
+        }
+      },
+      {
+        "code": "MU_ENV_KUU",
+        "color": "#e3c124",
+        "name": {
+          "fi": "Kuunteleminen"
+        }
+      },
+      {
+        "code": "MU_ENV_LII",
+        "color": "#4ec841",
+        "name": {
+          "fi": "Liikkuminen"
+        }
+      },
+      {
+        "code": "MU_ENV_IMP",
+        "color": "#af39e5",
+        "name": {
+          "fi": "Improvisointi"
+        }
+      },
+      {
+        "code": "MU_ENV_SÄV",
+        "color": "#4bd1d2",
+        "name": {
+          "fi": "Säveltäminen"
+        }
+      }
+    ],
+    "highSchoolModules": [
+      {
+        "code": "MU_HS_MODULE_LI1",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Kehittää äänenkäyttöään ja musisointitaitojaan"
+            },
+            "longDescription": {
+              "fi": "Kehittää äänenkäyttöään ja musisointitaitojaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Musiikin käyttö ilmaisun välineenä"
+            },
+            "longDescription": {
+              "fi": "Uskaltaa käyttää musiikkia ilmaisunsa välineenä ja tuottaa musiikillisia ideoita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Musiikin elementtien hahmottaminen kokemusten kautta"
+            },
+            "longDescription": {
+              "fi": "Harjaantuu hahmottamaan musiikin elementtejä kokemuksellisesti"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Tutkia ja syventää omaa kuuntelusuhdettaan"
+            },
+            "longDescription": {
+              "fi": "Tutkii ja syventää omaa kuuntelusuhdettaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Teknologian hyödyntäminen musiikissa"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää ja osaa soveltaa teknologian käyttömahdollisuuksia musiikissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Ymmärtää musiikin merkitys yhteiskunnassa"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää musiikin merkityksiä ja merkityksellisyyttä elämässä ja yhteiskunnassa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T7",
+            "label": {
+              "fi": "Turvallinen toiminta"
+            },
+            "longDescription": {
+              "fi": "Toimii edistäen turvallisen ääniympäristön syntymistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "MU1 (lukion 1. moduuli)"
+        },
+        "environments": []
+      },
+      {
+        "code": "MU_HS_MODULE_MU2",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Kehittyä musiikillisessa ilmaisussa"
+            },
+            "longDescription": {
+              "fi": "Syventää osaamistaan itselleen mieluisissa musiikillisissa ilmaisutavoissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Kehittää yhteismusisointitaitojaan ja taiteellista ilmaisuaan"
+            },
+            "longDescription": {
+              "fi": "Kehittää yhteismusisointitaitojaan ja taiteellista ilmaisuaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Musiikin kulttuuristen piirteiden ja merkityksen analysointi"
+            },
+            "longDescription": {
+              "fi": "Analysoi musiikin kulttuurisia piirteitä ja merkityksiä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Rohkeus tuottaa musiikillisia ideoita"
+            },
+            "longDescription": {
+              "fi": "Heittäytyy rohkeasti tuottamaan musiikillisia ideoita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "MU2 (lukion 2. moduuli)"
+        },
+        "environments": []
+      },
+      {
+        "code": "MU_HS_MODULE_MU3",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Ymmärtää musiikin sidonnaisuus kulttuuriin"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää musiikin kulttuurisidonnaisuutta ja kulttuurien välisiä kytköksiä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Tutustuminen itselle uuteen musiikkiin ja musiikkilajeihin"
+            },
+            "longDescription": {
+              "fi": "Suhtautuu uteliaasti ja perehtyy kokemuksellisesti itselleen uusiin musiikin lajeihin ja musiikkikulttuureihin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Hahmottaa itsensä osana globaalia musiikillista maailmaa"
+            },
+            "longDescription": {
+              "fi": "Hahmottaa itsensä osana globaalia musiikillista maailmaa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Lähtökohdat ja kulttuuruvuorovaikutus, haasteet ja mahdollisuudet"
+            },
+            "longDescription": {
+              "fi": "Tunnistaa omat lähtökohtansa sekä kulttuurien välisen vastavuoroisuuden haasteet ja mahdollisuudet"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "MU3 (lukion 3. moduuli)"
+        },
+        "environments": []
+      },
+      {
+        "code": "MU_HS_MODULE_MU4",
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Luovuuden kehittäminen"
+            },
+            "longDescription": {
+              "fi": "Kehittää luovaa osaamistaan musiikillisessa tai taiteidenvälisessä prosessissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Ottaa vastuuta ryhmän musiikillisesta toiminnasta"
+            },
+            "longDescription": {
+              "fi": "Ottaa vastuuta ryhmän musiikillisesta toiminnasta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Ymmärtää musiikillista vaikuttamista ja vuorovaikutusta"
+            },
+            "longDescription": {
+              "fi": "Syventää ymmärrystään musiikillisen vaikuttamisen ja vuorovaikutuksen tavoista"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Hahmottaa musiikin suhdetta taiteenlajeihin ja mediaan"
+            },
+            "longDescription": {
+              "fi": "Hahmottaa musiikin suhdetta muihin taiteenlajeihin ja mediaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR"
+          }
+        ],
+        "name": {
+          "fi": "MU4 (lukion 4. moduuli)"
+        },
+        "environments": []
+      }
+    ],
+    "name": {
+      "fi": "Musiikki"
+    }
   }
 ]
