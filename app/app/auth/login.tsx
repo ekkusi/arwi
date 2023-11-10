@@ -1,9 +1,11 @@
 import { useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useMatomo } from "matomo-tracker-react-native";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+import { useFocusEffect } from "@react-navigation/native";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -43,6 +45,17 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
   const { t } = useTranslation();
 
   const [login] = useMutation(LoginPage_Login_Mutation);
+
+  const onFocusEffect = useCallback(() => {
+    AvoidSoftInput.setAdjustNothing();
+    AvoidSoftInput.setEnabled(true);
+    return () => {
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setAdjustResize();
+    };
+  }, []);
+
+  useFocusEffect(onFocusEffect);
 
   const handlePasswordChange = (text: string) => {
     if (generalError) setGeneralError(undefined);

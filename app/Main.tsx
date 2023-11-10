@@ -11,7 +11,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as Application from "expo-application";
 import { useMatomo } from "matomo-tracker-react-native";
 import { useFonts } from "expo-font";
-import { ACCESS_TOKEN_KEY, useAuth } from "./hooks-and-providers/AuthProvider";
+import { useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
 import { graphql } from "./gql";
@@ -125,7 +125,7 @@ export default function Main() {
     <SafeAreaView style={{ flex: 1 }} onLayout={onRootLayout}>
       <StatusBar backgroundColor={COLORS.green} />
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <NewUpdateAvailableModal isOpen={!__DEV__ && isVersionSmaller(CURRENT_APP_VERSION, minimumAppVersion)} />
+        <NewUpdateAvailableModal isOpen={isVersionSmaller(CURRENT_APP_VERSION, minimumAppVersion)} />
         <MenuProvider>
           <ModalProvider>
             <PopupProvider>
