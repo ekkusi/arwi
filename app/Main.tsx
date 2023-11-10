@@ -37,7 +37,7 @@ const Main_GetCurrentUser_Query = graphql(`
 const Main_GetAppMetadata_Query = graphql(`
   query Main_GetAppMetadata {
     getAppMetadata {
-      minimumAppVersion
+      appVersion
     }
   }
 `);
@@ -61,7 +61,7 @@ export default function Main() {
 
   const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query);
 
-  const minimumAppVersion = appMetadataResult?.getAppMetadata?.minimumAppVersion || null;
+  const minimumAppVersion = appMetadataResult?.getAppMetadata?.appVersion || null;
 
   const appReady = !loading && fontsLoaded && i18nReady && !loadingAppMetadata;
 

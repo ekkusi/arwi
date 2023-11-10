@@ -5,9 +5,6 @@ import { HelmetOptions } from "helmet";
 
 const { env } = process;
 
-// Used to enforce minimum app version (force update on frontend). Only update this when there is a breaking change in database/backend that makes the old version unusable.
-export const MIN_APP_VERSION = "1.1.0";
-
 export const HELMET_OPTIONS: HelmetOptions = {
   contentSecurityPolicy:
     env.NODE_ENV !== "production"
