@@ -29,16 +29,20 @@ if (env.NODE_ENV === "production" && !env.REDIS_PASSWORD) {
   console.warn("WARNING: REDIS_PASSWORD env var is not set. Redis storage will probably fail to connect or is not secure.");
 }
 
-const redisClient = new Redis({
-  password: env.REDIS_PASSWORD,
-});
+let sessionStore;
 
-const redisStore = new RedisStore({
-  client: redisClient,
-});
+// Allow disabling redis session storage for testing with env var
+if (env.NO_REDIS_SESSION !== "true") {
+  const redisClient = new Redis({
+    password: env.REDIS_PASSWORD,
+  });
+  sessionStore = new RedisStore({
+    client: redisClient,
+  });
+}
 
 export const SESSION_OPTIONS: SessionOptions = {
-  store: env.NO_REDIS_SESSION === "true" ? undefined : redisStore, // Allow disabling redis session storage for testing
+  store: sessionStore,
   secret: SESSION_SECRET,
   name: SESSION_NAME,
   cookie: {
