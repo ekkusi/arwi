@@ -32,6 +32,11 @@ export type EvaluationToUpdate = UpdateEvaluationInput & {
   };
 };
 
+// export type EvaluationPropKey = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
+type EvaluationData = Omit<Evaluation | EvaluationToUpdate, "student">;
+export type EvaluationPropKey = keyof EvaluationData;
+export type EvaluationNoNotesPropKey = keyof Omit<EvaluationData, "notes">;
+
 // NOTE: For whatever reason you shouldn't use CView props with the EvaluationCards. This messes the memoization and causes unnecessary renders when using cards in a list.
 // If styling or other is needed, wrap the EvaluationCard in other CView
 type UpdateEvaluationCardProps = Omit<EvaluationCardProps, "hasParticipationToggle" | "evaluation" | "onChanged"> & {
@@ -51,7 +56,7 @@ type EvaluationCardProps = {
   date?: string;
   environment?: string;
   envColor?: string;
-  onChanged: (key: EvaluationPropKeys, value: any) => void;
+  onChanged: (key: EvaluationPropKey, value: any) => void;
   height?: "auto" | number;
   hasArrowDown?: boolean;
   onArrowDownPress?: () => void;
@@ -63,8 +68,6 @@ const EvaluationCard_FixTextGrammatics_Mutation = graphql(`
     fixTextGrammatics(studentId: $studentId, text: $text)
   }
 `);
-
-type EvaluationPropKeys = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
 
 const TEXT_MIN_LENGTH_FOR_AI_FIX = 20;
 
@@ -88,19 +91,32 @@ function EvaluationCard({
 }: EvaluationCardProps) {
   const [notes, setNotes] = useState(() => evaluation.notes || "");
   const [previousNotes, setPreviousNotes] = useState<string | undefined>(undefined);
-  const [newSpeechObtained, setnewSpeechObtained] = useState(false);
+  const [newSpeechObtained, setNewSpeechObtained] = useState(false);
+  const [data, setData] = useState<Omit<Evaluation | EvaluationToUpdate, "notes">>(evaluation);
 
   const [fixTextGrammatics, { loading: isFixingText }] = useMutation(EvaluationCard_FixTextGrammatics_Mutation);
 
   const speechRef = useRef<SpeechToTextInputHandle>(null);
   const inputRef = useRef<TextInput>(null);
 
-  const changeNotes = useCallback(
+  const onDataChanged = useCallback(
+    (key: EvaluationNoNotesPropKey, value: any) => {
+      if (key === "isStellar") return;
+      setData((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+      onChanged(key, value);
+    },
+    [onChanged]
+  );
+
+  const onNotesChanged = useCallback(
     (value: string, resetPreviousNotes: boolean = false) => {
       setNotes(value);
       onChanged("notes", value);
       if (value.length === 0) {
-        setnewSpeechObtained(false);
+        setNewSpeechObtained(false);
       }
       if (resetPreviousNotes) {
         setPreviousNotes(undefined);
@@ -127,9 +143,9 @@ function EvaluationCard({
           <CustomTextInputView
             initialText={notes}
             onSave={(text, speechObtained) => {
-              changeNotes(text, true);
+              onNotesChanged(text, true);
               closeModal();
-              if (speechObtained) setnewSpeechObtained(true);
+              if (speechObtained) setNewSpeechObtained(true);
             }}
             isActive={isActive}
             onClose={() => {
@@ -158,7 +174,7 @@ function EvaluationCard({
       const resultText = result.data?.fixTextGrammatics;
       setNotes(resultText);
       onChanged("notes", resultText);
-      setnewSpeechObtained(false);
+      setNewSpeechObtained(false);
       openToast(t("ai-fix-completed", "Oppilaan {{studentName}} arvioinnin korjaus suoritettu.", { studentName: evaluation.student.name }));
     } catch (e) {
       console.error(e);
@@ -168,7 +184,7 @@ function EvaluationCard({
 
   const rollbackTextFix = () => {
     if (previousNotes) {
-      changeNotes(previousNotes, true);
+      onNotesChanged(previousNotes, true);
     }
   };
 
@@ -198,9 +214,9 @@ function EvaluationCard({
               thumbColor={COLORS.white}
               ios_backgroundColor={COLORS.lightgray}
               onValueChange={(value) => {
-                onChanged("wasPresent", value);
+                onDataChanged("wasPresent", value);
               }}
-              value={evaluation.wasPresent || false}
+              value={data.wasPresent || false}
               style={{ transform: [{ scale: Platform.OS === "ios" ? 1 : 1.4 }] }}
             />
           </CView>
@@ -211,16 +227,16 @@ function EvaluationCard({
           <CText style={{ fontWeight: "500", fontSize: "sm" }}>{t("skills", "Taidot")}</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
-            initialRating={evaluation.skillsRating}
-            onChange={(rating) => onChanged("skillsRating", rating)}
+            initialRating={data.skillsRating}
+            onChange={(rating) => onDataChanged("skillsRating", rating)}
           />
         </CView>
         <CView style={{ paddingBottom: "sm" }}>
           <CText style={{ fontWeight: "500", fontSize: "sm" }}>{t("behaviour", "Työskentely")}</CText>
           <RatingSelector
             disabled={!evaluation.wasPresent}
-            initialRating={evaluation.behaviourRating}
-            onChange={(rating) => onChanged("behaviourRating", rating)}
+            initialRating={data.behaviourRating}
+            onChange={(rating) => onDataChanged("behaviourRating", rating)}
           />
         </CView>
         <CText style={{ paddingBottom: "md", fontWeight: "300" }}>
@@ -236,8 +252,8 @@ function EvaluationCard({
             placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
             onPress={() => openTextInputModal()}
             onChange={(newText, speechObtained) => {
-              changeNotes(newText);
-              if (speechObtained) setnewSpeechObtained(true);
+              onNotesChanged(newText);
+              if (speechObtained) setNewSpeechObtained(true);
             }}
           />
 
@@ -283,45 +299,44 @@ function EvaluationCard({
   );
 }
 
-export function CreateEvaluationCard({ evaluation: initialEvaluation, onChanged: onChangedCallback, isActive, ...rest }: CreateEvaluationCardProps) {
-  const [evaluation, setEvaluation] = useState(initialEvaluation);
+export function CreateEvaluationCard({ evaluation, onChanged: onChangedCallback, ...rest }: CreateEvaluationCardProps) {
+  const [_, setEvaluation] = useState(evaluation);
 
   const onChanged = useCallback(
-    (key: EvaluationPropKeys, value: any) => {
-      const newEvaluation = {
-        ...evaluation,
-        [key]: value,
-      };
-      setEvaluation(newEvaluation);
-
-      if (onChangedCallback) {
-        onChangedCallback(newEvaluation);
-      }
+    (key: EvaluationPropKey, value: any) => {
+      setEvaluation((oldEvaluation) => {
+        const newData = {
+          ...oldEvaluation,
+          [key]: value,
+        };
+        onChangedCallback?.(newData);
+        return newData;
+      });
     },
-    [evaluation, onChangedCallback]
+    [onChangedCallback]
   );
 
-  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} isActive={isActive} {...rest} />;
+  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} {...rest} />;
 }
 
 export const CreateEvaluationCardMemoed = memo(CreateEvaluationCard);
 
-export function UpdateEvaluationCard({ evaluation: initialEvaluation, onChanged: onChangedCallback, ...rest }: UpdateEvaluationCardProps) {
-  const [evaluation, setEvaluation] = useState(initialEvaluation);
+export function UpdateEvaluationCard({ evaluation, onChanged: onChangedCallback, ...rest }: UpdateEvaluationCardProps) {
+  const [_, setEvaluation] = useState(evaluation);
 
+  // NOTE: This is a bit hacky, but it works. The problem is that the evaluation object is not updated when the user changes the notes so have to get updated data through setState callback.
   const onChanged = useCallback(
-    (key: EvaluationPropKeys, value: any) => {
-      const newEvaluation = {
-        ...evaluation,
-        [key]: value,
-      };
-      setEvaluation(newEvaluation);
-
-      if (onChangedCallback) {
-        onChangedCallback(newEvaluation);
-      }
+    (key: EvaluationPropKey, value: any) => {
+      setEvaluation((oldEvaluation) => {
+        const newData = {
+          ...oldEvaluation,
+          [key]: value,
+        };
+        onChangedCallback?.(newData);
+        return newData;
+      });
     },
-    [evaluation, onChangedCallback]
+    [onChangedCallback]
   );
 
   return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle {...rest} />;

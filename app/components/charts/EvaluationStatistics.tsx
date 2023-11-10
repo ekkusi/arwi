@@ -11,6 +11,7 @@ import { EvaluationsLineChart_Evaluation_Fragment, mapEvaluationData } from "./E
 import { LineChartBaseProps } from "./LineChartBase";
 import MovingAverageLineChart from "./MovingAverageLineChart";
 import StatisticsFilterMenu from "./StatisticsFilterMenu";
+import { getEnvironmentTranslation } from "../../helpers/translation";
 
 type EvaluationsLineChartProps = Omit<LineChartBaseProps, "data"> & {
   title?: string;
@@ -77,7 +78,10 @@ export default function EvaluationsStatistics({
               t("moving-average", "Liukuva keskiarvo"),
               t(
                 "moving-average-info",
-                "Liukuva keskiarvo lasketaan jokaiselle havainnoille huomioiden N edellistä ja N seuraavaa havaintoa ajassa, ja laskemalla keskiarvo niiden yli. Tässä kuvaajassa esitetään liukuva keskiarvo oppilaan taidoille ja työskentelylle käyttäen kahta edellistä ja kahta seuraavaa havaintoa. Arvioinnit on myös mahdollista suodattaa oppimisympäristön mukaan. Liukuvan keskiarvon avulla voidaan helposti seurata oppilaan keskimääräisen taitotason kehitystä."
+                "Liukuva keskiarvo lasketaan jokaiselle havainnoille huomioiden N edellistä ja N seuraavaa havaintoa ajassa, ja laskemalla keskiarvo niiden yli. Tässä kuvaajassa esitetään liukuva keskiarvo oppilaan taidoille ja työskentelylle käyttäen kahta edellistä ja kahta seuraavaa havaintoa. Arvioinnit on myös mahdollista suodattaa {{of_environment_string}} mukaan. Liukuvan keskiarvon avulla voidaan helposti seurata oppilaan keskimääräisen taitotason kehitystä.",
+                {
+                  of_environment_string: getEnvironmentTranslation(t, "of-environment", subjectCode).toLocaleLowerCase(),
+                }
               )
             )
           }
