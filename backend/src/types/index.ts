@@ -27,7 +27,6 @@ export type Query = {
   getAppMetadata: AppMetadata;
   getCurrentUser: Teacher;
   getTeacher: Teacher;
-  getTeachers: Array<Teacher>;
   getGroups: Array<Group>;
   getGroup: Group;
   getCollection: EvaluationCollection;
@@ -197,7 +196,7 @@ export type MutationFixTextGrammaticsArgs = {
 
 export type AppMetadata = {
   __typename?: 'AppMetadata';
-  minimumAppVersion: Scalars['String'];
+  appVersion: Scalars['String'];
 };
 
 export type AuthPayload = {
@@ -571,7 +570,6 @@ export type QueryResolvers<ContextType = CustomContext, ParentType extends Resol
   getAppMetadata?: Resolver<ResolversTypes['AppMetadata'], ParentType, ContextType>;
   getCurrentUser?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType>;
   getTeacher?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType, RequireFields<QueryGetTeacherArgs, 'id'>>;
-  getTeachers?: Resolver<Array<ResolversTypes['Teacher']>, ParentType, ContextType>;
   getGroups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType, RequireFields<QueryGetGroupsArgs, 'teacherId'>>;
   getGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<QueryGetGroupArgs, 'id'>>;
   getCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<QueryGetCollectionArgs, 'id'>>;
@@ -603,7 +601,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
 };
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
-  minimumAppVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  appVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

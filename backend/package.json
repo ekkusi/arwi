@@ -1,11 +1,11 @@
 {
   "name": "arwi-backend",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "scripts": {
-    "dev": "npm run kill && cross-env NODE_ENV=development ts-node-dev --exit-child --respawn --transpile-only src/index.ts",
+    "dev": "npm run kill && cross-env NODE_ENV=development APP_VERSION=$npm_package_version ts-node-dev --exit-child --respawn --transpile-only  src/index.ts",
     "kill": "bash ./scripts/kill-process.sh",
-    "start": "node lib/index.js",
+    "start": "APP_VERSION=$npm_package_version node lib/index.js",
     "build": "tsc -p tsconfig.prod.json && copyfiles -u 1 -e \"src/__mocks__/*\" \"src/**/*.graphql\" \"src/**/*.json\" lib",
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
@@ -18,7 +18,8 @@
     "init-mock-data": "ts-node ./src/utils/initMockData.ts",
     "init-db": "npx prisma migrate dev && yarn init-mock-data",
     "codegen": "graphql-codegen",
-    "codegen:watch": "graphql-codegen --watch"
+    "codegen:watch": "graphql-codegen --watch",
+    "version": "echo $npm_package_version"
   },
   "author": "Ekku Sipilä <ekku.eki@gmail.com>",
   "license": "MIT",

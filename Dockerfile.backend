@@ -32,4 +32,4 @@ EXPOSE 4000
 
 ENV PORT 4000
 
-CMD ["node","lib/index.js"]
+CMD ["APP_VERSION=$(npm run version)", "node","lib/index.js"]

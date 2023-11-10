@@ -1,4 +1,3 @@
-import { MIN_APP_VERSION } from "../../config";
 import AuthenticationError from "../../errors/AuthenticationError";
 import ValidationError from "../../errors/ValidationError";
 import { QueryResolvers } from "../../types";
@@ -13,8 +12,9 @@ import {
 
 const resolvers: QueryResolvers<CustomContext> = {
   getAppMetadata: () => {
+    if (!process.env.APP_VERSION) throw new Error("Something went wrong, APP_VERSION env var is not set");
     return {
-      minimumAppVersion: MIN_APP_VERSION,
+      appVersion: process.env.APP_VERSION,
     };
   },
   getCurrentUser: async (_, __, { user }) => {
