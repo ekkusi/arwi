@@ -13,6 +13,7 @@ import CTextInput from "../../../components/primitives/CTextInput";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CView from "../../../components/primitives/CView";
 import { formatDate } from "../../../helpers/dateHelpers";
+import { getEnvironmentTranslation } from "../../../helpers/translation";
 
 type CollectionGeneralInfoFormProps = {
   subjectCode: string;
@@ -54,7 +55,11 @@ export default function CollectionGeneralInfoForm({
 
   const handleGeneralSubmit = () => {
     if (!selectedEnvironmentCode) {
-      setEnvironmentError(t("environment-is-obligatory", "Ympäristö on pakollinen"));
+      setEnvironmentError(
+        t("environment-is-obligatory", "{{environment_string}} on pakollinen", {
+          environment_string: getEnvironmentTranslation(t, "environment", subjectCode),
+        })
+      );
       return;
     }
     handleSubmit(date, selectedEnvironmentCode, selectedLearningObjectiveCode, description);
@@ -65,7 +70,7 @@ export default function CollectionGeneralInfoForm({
       <ScrollView showsVerticalScrollIndicator={false}>
         <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
           <SelectFormField
-            title={t("environment", "Ympäristö")}
+            title={getEnvironmentTranslation(t, "environment", subjectCode)}
             error={environmentError}
             defaultValue={defaultEnvironment}
             onSelect={(item) => {

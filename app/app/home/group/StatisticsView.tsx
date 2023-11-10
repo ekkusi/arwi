@@ -13,6 +13,7 @@ import CollectionStatistics from "../../../components/charts/CollectionStatistic
 import CButton from "../../../components/primitives/CButton";
 import { COLORS } from "../../../theme";
 import { GroupNavigationProps } from "./types";
+import { getEnvironmentTranslation } from "../../../helpers/translation";
 
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
   const { t } = useTranslation();
@@ -86,6 +87,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
       isScrolling.value = false;
     },
   });
+  console.log("group", group);
 
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
@@ -145,8 +147,12 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         </CView>
 
         <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.environments", "Ympäristöt")}</CText>
-          <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.environment-counts", "Arviointikerrat ympäristöittäin")}</CText>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{getEnvironmentTranslation(t, "environments", group.subject.code)}</CText>
+          <CText style={{ fontSize: "md", fontWeight: "300" }}>
+            {t("group.environment-counts", "Arviointikerrat {{by_environments_string}}", {
+              by_environments_string: getEnvironmentTranslation(t, "by-environments", group.subject.code).toLocaleLowerCase(),
+            })}
+          </CText>
           <StyledBarChart data={environmentsAndCounts} style={{ height: 200 }} />
           <CView style={{ flexDirection: "row", alignItems: "flex-start", flexWrap: "wrap", width: "100%", flex: 1 }}>
             {environmentsAndCounts.map((envAndCount, idx) => (

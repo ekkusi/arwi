@@ -12,6 +12,7 @@ import CModal from "../CModal";
 import CButton from "../primitives/CButton";
 import i18n from "../../i18n";
 import { COLORS } from "../../theme";
+import { getEnvironmentTranslation } from "../../helpers/translation";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on Evaluation {
@@ -104,6 +105,7 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
 
 type EvaluationsBarChartProps = CViewProps & {
   evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
+  subjectCode: string;
 };
 
 const getFilteredData = (data: EvaluationsBarChartDataType[], filter: string) => {
@@ -117,7 +119,7 @@ const getFilteredData = (data: EvaluationsBarChartDataType[], filter: string) =>
   }
 };
 
-export default function EvaluationsBarChart({ evaluations: evaluationFragments, ...rest }: EvaluationsBarChartProps) {
+export default function EvaluationsBarChart({ evaluations: evaluationFragments, subjectCode, ...rest }: EvaluationsBarChartProps) {
   const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
   const [filter, setFilter] = useState<FilterValue>("all");
@@ -169,7 +171,9 @@ export default function EvaluationsBarChart({ evaluations: evaluationFragments, 
       </CModal>
       <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>
-          {t("evaluation-means-by-environments", "Arvointien keskiarvot ympäristöittäin")}
+          {t("evaluation-means-by-environments", "Arvointien keskiarvot {{by_environments_string}}", {
+            by_environments_string: getEnvironmentTranslation(t, "by-environments", subjectCode).toLocaleLowerCase(),
+          })}
         </CText>
         <CButton
           size="small"
