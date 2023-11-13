@@ -25,8 +25,8 @@ export const { SESSION_SECRET = "secret", SESSION_NAME = "sid", SESSION_IDLE_TIM
 
 export const SESSION_ABSOLUTE_TIMEOUT_MS = +(env.SESSION_ABSOLUTE_TIME || ONE_DAY_MS * 30);
 
-if (env.NODE_ENV === "production" && !env.REDIS_PASSWORD) {
-  console.warn("WARNING: REDIS_PASSWORD env var is not set. Redis storage will probably fail to connect or is not secure.");
+if (env.NODE_ENV === "production" && !env.REDIS_PASSWORD && !env.REDIS_HOST) {
+  console.warn("WARNING: No REDIS_PASSWORD or REDIS_HOST environment variables found. Redis session setup will probably fail.");
 }
 
 let sessionStore;
@@ -35,6 +35,7 @@ let sessionStore;
 if (env.NO_REDIS_SESSION !== "true") {
   const redisClient = new Redis({
     password: env.REDIS_PASSWORD,
+    host: env.REDIS_HOST,
   });
   sessionStore = new RedisStore({
     client: redisClient,
