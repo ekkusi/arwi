@@ -10,6 +10,8 @@ RUN yarn install --frozen-lockfile
 
 FROM base AS builder
 
+RUN apk update && apk add jq
+
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -19,6 +21,8 @@ COPY backend /app/
 RUN yarn prisma:generate
 RUN yarn build
 
+RUN jq .version package.json -r > /root/version.txt
+
 FROM base AS runner
 
 WORKDIR /app
@@ -27,9 +31,10 @@ ENV NODE_ENV production
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/lib ./lib
+COPY --from=builder /root/version.txt /root/version.txt
 
 EXPOSE 4000
 
 ENV PORT 4000
 
-CMD ["APP_VERSION=$(npm run version)", "node","lib/index.js"]
+CMD APP_VERSION=$(cat /root/version.txt) node lib/index.js
