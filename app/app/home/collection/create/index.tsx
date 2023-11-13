@@ -24,7 +24,7 @@ const CollectionGeneralInfoView_Group_Fragment = graphql(`
   }
 `);
 
-function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "index">) {
+function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-general-info">) {
   const { groupInfo, setGeneralData } = useCollectionCreationContext();
   const group = getFragmentData(CollectionGeneralInfoView_Group_Fragment, groupInfo);
 
@@ -38,7 +38,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
       environmentCode: environment.code,
       learningObjectiveCodes: learningObjectives.map((item) => item.code),
     });
-    navigation.navigate("participations");
+    navigation.navigate("collection-create-participations");
   };
 
   return (
@@ -51,7 +51,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
   );
 }
 
-export default function CollectionGeneralInfoView(props: NativeStackScreenProps<CollectionCreationStackParams, "index">) {
+export default function CollectionGeneralInfoView(props: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-general-info">) {
   return (
     <CollectionCreationLayout keyboardVerticalOffset={100}>
       <CollectionGeneralInfoContent {...props} />

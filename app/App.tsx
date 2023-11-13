@@ -1,8 +1,9 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Logs } from "expo";
-import ErrorBoundary from "react-native-error-boundary";
+// import ErrorBoundary from "react-native-error-boundary";
+import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
 import { LogBox, Platform } from "react-native";
-import ApolloProvider from "./hooks-and-providers/ApolloProvider";
+import ErrorBoundary from "react-native-error-boundary";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
@@ -10,6 +11,7 @@ import "./i18n";
 import "react-native-url-polyfill/auto";
 import LoadingIndicator from "./components/LoadingIndicator";
 import ErrorView from "./app/ErrorView";
+import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 
 Logs.enableExpoCliLogging();
 
@@ -18,11 +20,16 @@ Logs.enableExpoCliLogging();
 // Keep an eye on terminal logs for other relevant warnings.
 if (Platform.OS === "ios") LogBox.ignoreAllLogs();
 
-export default function App() {
+function AppContent() {
+  const { trackAppStart } = useMatomo();
   const onError = (error: Error, componentStack: string) => {
     console.error(error, componentStack);
-    // TODO: Add logging to Sentry or some other debug service
+    // TODO: Log error to error reporting service
   };
+
+  useEffect(() => {
+    trackAppStart({});
+  }, [trackAppStart]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorView} onError={onError}>
@@ -34,5 +41,28 @@ export default function App() {
         </ApolloProvider>
       </AuthProvider>
     </ErrorBoundary>
+  );
+}
+
+const SITE_ID = process.env.EXPO_PUBLIC_MATOMO_SITE_ID ? Number(process.env.EXPO_PUBLIC_MATOMO_SITE_ID) : 1;
+const MATOMO_BASE_URL = process.env.EXPO_PUBLIC_MATOMO_BASE_URL;
+
+if (!MATOMO_BASE_URL) console.warn("EXPO_PUBLIC_MATOMO_BASE_URL not set, analytics disabled");
+
+const instance =
+  MATOMO_BASE_URL &&
+  new MatomoTracker({
+    urlBase: MATOMO_BASE_URL,
+    siteId: SITE_ID,
+    disabled: __DEV__,
+  });
+
+export default function App() {
+  return instance ? (
+    <MatomoProvider instance={instance}>
+      <AppContent />
+    </MatomoProvider>
+  ) : (
+    <AppContent />
   );
 }

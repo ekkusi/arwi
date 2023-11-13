@@ -19,6 +19,7 @@ import GradeSuggestionView from "../../../components/GradeSuggestionView";
 import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogram";
 import Layout from "../../../components/Layout";
 import CButton from "../../../components/primitives/CButton";
+import { getEnvironmentTranslation } from "../../../helpers/translation";
 
 const StudentPage_GetStudent_Query = graphql(`
   query StudentPage_GetStudent($studentId: ID!) {
@@ -94,6 +95,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
   const evaluations = student.currentModuleEvaluations;
+  const moduleInfo = student.group.currentModule.info;
 
   return (
     <Layout>
@@ -118,10 +120,10 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           </CView>
           <CView style={{ width: "100%", gap: 20 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("statistics", "Tilastot")}</CText>
-            <EvaluationsBarChart evaluations={evaluations} />
+            <EvaluationsBarChart evaluations={evaluations} subjectCode={student.group.subject.code} />
           </CView>
-          <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} />
-          <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} />
+          <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
+          <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} moduleInfo={student.group.currentModule.info} />
           <CView style={{ gap: 10 }}>
             <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10 }}>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("characteristics", "Tunnusluvut")}</CText>
@@ -131,7 +133,12 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                     t("characteristics", "Tunnusluvut"),
                     t(
                       "characteristics-info",
-                      "Oppilaan taitojen ja työskentelyn tunnuslukuja tarkastelemalla saadaan nopeasti yleiskuva oppilaan menestyksestä. Useita eri tunnuslukuja on hyvä tarkastella pelkän keskiarvon sijasta. Moodi ja mediaani reagoivat vähemmän yksittäisiin poikkeaviin havaintoihin ja siten antavat paremman kuvan oppilaan keskimääräisestä tasosta, jos oppilaalla on esimerkiksi yksittäisiä notkahduksia arvosanoissa\n\nMediaani kuvaa järjestettyjen havaintojen keskimmäistä arvoa, ja se lasketaan järjestämällä luvut suuruusjärjestykseen ja valitsemalla keskimmäinen havainto tai kahden keskimmäisen havainnon keskiarvo\n\nMoodi kuvaa arvoa, joka on havaittu kaikista useimmin. Arvosanojen moodi tarkoittaa siis sitä arvosanaa, joka on esiintynyt oppilaan arvioinneissa eniten. \n \nYmpärisöjen keskiarvolla tarkoitetaan keskiarvoa, joka on laskettu antamalla kaikille ympäristöille yhtä suuret painot riippumatta siitä, minkä verran kullakin ympäristöllä on arviointikertoja. Tämä antaa paremman kuvan oppilaan taitotasosta, jos oppilas on esimerkiksi loistanut lajeissa, jota on arvioitu vain harvoin."
+                      "Oppilaan taitojen ja työskentelyn tunnuslukuja tarkastelemalla saadaan nopeasti yleiskuva oppilaan menestyksestä. Useita eri tunnuslukuja on hyvä tarkastella pelkän keskiarvon sijasta. Moodi ja mediaani reagoivat vähemmän yksittäisiin poikkeaviin havaintoihin ja siten antavat paremman kuvan oppilaan keskimääräisestä tasosta, jos oppilaalla on esimerkiksi yksittäisiä notkahduksia arvosanoissa\n\nMediaani kuvaa järjestettyjen havaintojen keskimmäistä arvoa, ja se lasketaan järjestämällä luvut suuruusjärjestykseen ja valitsemalla keskimmäinen havainto tai kahden keskimmäisen havainnon keskiarvo\n\nMoodi kuvaa arvoa, joka on havaittu kaikista useimmin. Arvosanojen moodi tarkoittaa siis sitä arvosanaa, joka on esiintynyt oppilaan arvioinneissa eniten. \n \n{{of_environments_string}} keskiarvolla tarkoitetaan keskiarvoa, joka on laskettu antamalla kaikille {{for_enviroments_string}} yhtä suuret painot riippumatta siitä, minkä verran kullakin {{on_environment_string}} on arviointikertoja. Tämä antaa paremman kuvan oppilaan taitotasosta, jos oppilas on esimerkiksi loistanut lajeissa, jota on arvioitu vain harvoin.",
+                      {
+                        of_environments_string: getEnvironmentTranslation(t, "of-environments", student.group.subject.code),
+                        for_enviroments_string: getEnvironmentTranslation(t, "for-environments", student.group.subject.code).toLocaleLowerCase(),
+                        on_environment_string: getEnvironmentTranslation(t, "on-environment", student.group.subject.code).toLocaleLowerCase(),
+                      }
                     )
                   );
                 }}
@@ -176,7 +183,9 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               </CView>
               <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
                 <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>
-                  {t("skills-mean-by-environments", "Ympäristöjen keskiarvo taidoille")}{" "}
+                  {t("skills-mean-by-environments", "{{of_environments_string}} keskiarvo taidoille", {
+                    of_environments_string: getEnvironmentTranslation(t, "of-environments", student.group.subject.code),
+                  })}{" "}
                 </CText>
                 <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
                   {Number.isNaN(skillsMeanByEnvironments) ? "-" : skillsMeanByEnvironments.toPrecision(2)}
@@ -184,7 +193,9 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               </CView>
               <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
                 <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>
-                  {t("behaviour-mean-by-environments", "Ympäristöjen keskiarvo työskentelylle")}{" "}
+                  {t("behaviour-mean-by-environments", "{{of_environments_string}} keskiarvo työskentelylle", {
+                    of_environments_string: getEnvironmentTranslation(t, "of-environments", student.group.subject.code),
+                  })}{" "}
                 </CText>
                 <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
                   {Number.isNaN(behaviourMeanByEnvironments) ? "-" : behaviourMeanByEnvironments.toPrecision(2)}

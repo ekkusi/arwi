@@ -1,7 +1,7 @@
 import { TranslatedString } from "arwi-backend/src/types";
 
 export type HomeStackParams = {
-  index: undefined;
+  home: undefined;
   group: {
     id: string;
     classYearId: string;

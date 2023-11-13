@@ -3,9 +3,21 @@ import { Image, ImageProps } from "react-native";
 import { CImageStyle } from "../../theme/types";
 import { createImageStyles } from "../../theme/utils";
 
-export type CImageProps = Omit<ImageProps, "style"> & {
+export type CImageProps = Omit<ImageProps, "style" | "tint"> & {
   style?: CImageStyle;
-};
+  imageStyle?: CImageStyle;
+} & (
+    | {
+        variant?: "fill";
+        width?: never;
+        height?: never;
+      }
+    | {
+        variant: "fixed";
+        width: number;
+        height: number;
+      }
+  );
 
 const DEFAULT_IMAGE_STYLES: CImageStyle = {
   width: undefined,
@@ -14,8 +26,13 @@ const DEFAULT_IMAGE_STYLES: CImageStyle = {
   resizeMode: "contain",
 };
 
-export default function CImage({ style, ...rest }: CImageProps) {
-  const styles = useMemo(() => createImageStyles({ ...DEFAULT_IMAGE_STYLES, ...style }), [style]);
+const FIXED_IMAGE_STYLES: CImageStyle = {};
 
-  return <Image style={styles} {...rest} />;
+export default function CImage({ style, width, height, variant = "fill", ...rest }: CImageProps) {
+  const imageStyles = useMemo(
+    () => createImageStyles({ ...(variant === "fill" ? DEFAULT_IMAGE_STYLES : { width, height }), ...style }),
+    [height, style, variant, width]
+  );
+
+  return <Image style={imageStyles} {...rest} />;
 }

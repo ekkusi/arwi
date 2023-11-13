@@ -6,11 +6,12 @@ const requiredOptions: {
   validation: (rule: Rule) => rule.required(),
 };
 
-const formatTranslationField = (title: string, name: string, required: boolean = true) =>
+const formatTranslationField = (title: string, name: string, required: boolean = true, description?: string) =>
   defineField({
     name,
     title,
     type: "object",
+    description,
     validation: required ? (rule) => rule.required() : undefined,
     // @ts-ignore
     codegen: { required },
@@ -110,11 +111,46 @@ const learningObjectivesField = defineField({
   },
 });
 
-const learningObjectiveCautionMessage =
-  "HUOM! Oppimistavoitteiden poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Oppimistavoitteiden poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Oppimistavoitteiden lisääminen on kuitenkin mahdollista riskittömästi.";
+const formatEnvironmentsField = (title: string, name: string, groupKey?: string) => ({
+  title,
+  name,
+  type: "array",
+  group: groupKey,
+  options: {
+    sortable: false,
+  },
+  // description:
+  //   "HUOM! Ympäristöjen poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Ympäristöjen poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Ympäristöjen lisääminen on kuitenkin mahdollista riskittömästi.",
+  of: [
+    {
+      title: "Ympäristö",
+      name: "environment",
+      type: "object",
+      ...requiredOptions,
+      fields: [
+        formatTranslationField("Nimi", "name"),
+        codeField,
+        {
+          title: "Väri",
+          name: "color",
+          type: "color",
+          ...requiredOptions,
+        },
+      ],
+      preview: {
+        select: {
+          title: "name.fi",
+        },
+      },
+    },
+  ],
+});
 
-const courseCautionMessage =
-  "HUOM! Kurssien ja moduulien poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Kurssien poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Kurssien lisääminen on kuitenkin mahdollista riskittömästi.";
+// const learningObjectiveCautionMessage =
+// "HUOM! Oppimistavoitteiden poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Oppimistavoitteiden poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Oppimistavoitteiden lisääminen on kuitenkin mahdollista riskittömästi.";
+
+// const courseCautionMessage =
+//   "HUOM! Kurssien ja moduulien poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Kurssien poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Kurssien lisääminen on kuitenkin mahdollista riskittömästi.";
 
 export const schemaTypes = [
   defineType({
@@ -140,54 +176,25 @@ export const schemaTypes = [
       },
     ],
     fields: [
-      formatTranslationField("Nimi", "name"),
+      formatTranslationField(
+        "Nimi",
+        "name",
+        true,
+        "HUOM! Aineiden tietojen, kuten ympäristöjen tai tavoitteiden poistamista tulisi välttää ensimmäisen julkaisun jälkeen. Tämä johtuu siitä, että kyseisten kenttien koodit ovat yhteydessä applikaation tietokantaan ja täten niiden välinen linkitys voi mennä rikki, mikäli kyseisen koodin kenttää ei enää löydy täältä. Kenttien lisääminen ja muiden kuin koodi-kenttien muokkaaminen on kuitenkin riskitöntä."
+      ),
       {
         title: "Koodi",
         name: "code",
-        type: "string",
+        type: "slug",
         validation: (rule) => rule.required(),
         readOnly: ({ currentUser }) => !currentUser?.roles?.find((it) => it.name === "administrator"),
       },
+      formatEnvironmentsField("Ympäristöt (kaikki vuosiluokat ja moduulit)", "environments", "environments"),
       {
-        title: "Ympäristöt",
-        name: "environments",
-        type: "array",
-        group: "environments",
-        options: {
-          sortable: false,
-        },
-        description:
-          "HUOM! Ympäristöjen poistamista tulee välttää ensimmäisen julkaisun jälkeen, sillä niiden koodit voivat olla käytössä applikaation tietokannassa. Ympäristöjen poistaminen voi aiheuttaa ongelmia applikaation toiminnassa. Ympäristöjen lisääminen on kuitenkin mahdollista riskittömästi.",
-        of: [
-          {
-            title: "Ympäristö",
-            name: "environment",
-            type: "object",
-            ...requiredOptions,
-            fields: [
-              formatTranslationField("Nimi", "name"),
-              codeField,
-              {
-                title: "Väri",
-                name: "color",
-                type: "color",
-                ...requiredOptions,
-              },
-            ],
-            preview: {
-              select: {
-                title: "name.fi",
-              },
-            },
-          },
-        ],
-      },
-      {
-        title: "Peruskoulun oppimistavoitteet",
+        title: "Peruskoulun oppimistavoitteet ja ympäristöt",
         name: "elementarySchool",
         type: "object",
         group: "elementarySchool",
-        description: learningObjectiveCautionMessage,
         fields: [
           {
             title: "1-2 vuosiluokat",
@@ -198,6 +205,7 @@ export const schemaTypes = [
             },
             of: [learningObjectivesField],
           },
+          formatEnvironmentsField("Ympäristöt (1-2 vuosiluokat)", "environments_1_to_2"),
           {
             title: "3-6 vuosiluokat",
             name: "three_to_six_years",
@@ -207,6 +215,7 @@ export const schemaTypes = [
             },
             of: [learningObjectivesField],
           },
+          formatEnvironmentsField("Ympäristöt (3-6 vuosiluokat)", "environments_3_to_6"),
           {
             title: "7-9 vuosiluokat",
             name: "seven_to_nine_years",
@@ -216,6 +225,7 @@ export const schemaTypes = [
             },
             of: [learningObjectivesField],
           },
+          formatEnvironmentsField("Ympäristöt (7-9 vuosiluokat)", "environments_7_to_9"),
         ],
       },
       {
@@ -226,7 +236,6 @@ export const schemaTypes = [
         options: {
           sortable: false,
         },
-        description: courseCautionMessage,
         of: [
           {
             title: "Moduuli",
@@ -239,12 +248,12 @@ export const schemaTypes = [
                 title: "Oppimistavoitteet",
                 name: "learningObjectives",
                 type: "array",
-                description: learningObjectiveCautionMessage,
                 of: [learningObjectivesField],
                 options: {
                   sortable: false,
                 },
               },
+              formatEnvironmentsField("Ympäristöt", "environments"),
             ],
             preview: {
               select: {
@@ -259,7 +268,6 @@ export const schemaTypes = [
         name: "vocationalSchoolModules",
         type: "array",
         group: "vocationalSchool",
-        description: courseCautionMessage,
         options: {
           sortable: false,
         },
@@ -276,11 +284,11 @@ export const schemaTypes = [
                 name: "learningObjectives",
                 type: "array",
                 of: [learningObjectivesField],
-                description: learningObjectiveCautionMessage,
                 options: {
                   sortable: false,
                 },
               },
+              formatEnvironmentsField("Ympäristöt", "environments"),
             ],
             preview: {
               select: {
@@ -294,6 +302,7 @@ export const schemaTypes = [
     preview: {
       select: {
         title: "name.fi",
+        subtitle: "description",
       },
     },
   }),

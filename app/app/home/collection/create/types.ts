@@ -1,5 +1,5 @@
 export type CollectionCreationStackParams = {
-  index: undefined;
-  participations: undefined;
-  evaluations: undefined;
+  "collection-create-general-info": undefined;
+  "collection-create-participations": undefined;
+  "collection-create-evaluations": undefined;
 };

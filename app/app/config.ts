@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { COLORS, SPACING } from "../theme";
 
 export const defaultHeaderStyles: NativeStackNavigationOptions = {
+  statusBarColor: COLORS.primary,
   headerStyle: {
     backgroundColor: COLORS.green,
   },

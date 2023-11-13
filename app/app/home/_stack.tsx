@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcon from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeView from ".";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
@@ -29,9 +29,9 @@ const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 export default function HomeStack() {
   const { t } = useTranslation();
   return (
-    <HomeStackNavigator.Navigator id="home-stack" initialRouteName="index" screenOptions={defaultHeaderStyles}>
+    <HomeStackNavigator.Navigator id="home-stack" initialRouteName="home" screenOptions={defaultHeaderStyles}>
       <HomeStackNavigator.Screen
-        name="index"
+        name="home"
         component={HomeView}
         options={({ navigation }) => {
           return {
@@ -49,7 +49,7 @@ export default function HomeStack() {
                     alignItems: "center",
                   }}
                 >
-                  <Ionicons name="person-outline" size={25} color={COLORS.white} />
+                  <Ionicons name="person" size={23} color={COLORS.white} />
                 </CTouchableOpacity>
                 <CTouchableOpacity
                   onPress={() => navigation.navigate("archive")}
@@ -62,7 +62,7 @@ export default function HomeStack() {
                     alignItems: "center",
                   }}
                 >
-                  <MaterialCommunityIcon name="history" size={25} color={COLORS.white} />
+                  <MaterialCommunityIcon name="archive" size={23} color={COLORS.white} />
                 </CTouchableOpacity>
               </CView>
             ),

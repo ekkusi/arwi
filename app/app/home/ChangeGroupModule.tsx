@@ -123,7 +123,6 @@ export default function ChangeModule({ groupId, onCancel, onSaved }: ChangeModul
 
   return (
     <CView>
-      <CText>Moduulin vaihto ei ole implementoitu tällä hetkellä</CText>
       <SelectFormField
         defaultValue={data.getGroup.currentModule.info}
         options={modules}

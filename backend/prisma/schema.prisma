@@ -10,9 +10,12 @@ datasource db {
 
 model Teacher {
   id                    String  @id @default(uuid())
-  email                 String  @unique
-  passwordHash          String
+  mPassID               String?  @unique
+  email                 String?  @unique
+  passwordHash          String?
   groups                Group[]
+  languagePreference    String  @default("fi_FI")
+  consentsAnalytics     Boolean @default(true)
 }
 
 model Group {

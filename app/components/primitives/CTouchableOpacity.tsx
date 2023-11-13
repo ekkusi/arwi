@@ -7,7 +7,7 @@ type CTouchableOpacityProps = Omit<TouchableOpacityProps, "style"> & {
   style?: CTextStyle;
 };
 
-export default function CTouchableOpacity({ style, ...rest }: CTouchableOpacityProps) {
-  const styles = useMemo(() => style && createTextStyles(style), [style]);
-  return <TouchableOpacity style={styles} {...rest} />;
+export default function CTouchableOpacity({ style, disabled, ...rest }: CTouchableOpacityProps) {
+  const styles = useMemo(() => style && createTextStyles({ opacity: disabled ? 0.7 : 1, ...style }), [disabled, style]);
+  return <TouchableOpacity style={styles} disabled={disabled} {...rest} />;
 }
