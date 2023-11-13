@@ -48,7 +48,11 @@ export const SESSION_OPTIONS: SessionOptions = {
   name: SESSION_NAME,
   cookie: {
     maxAge: +SESSION_IDLE_TIMEOUT_MS,
-    secure: env.NODE_ENV === "production",
+    // secure: env.NODE_ENV === "production",
+    // NOTE: Currently secure cookies break mobile app authentication as cookies are not being sent when it is set
+    // See: https://github.com/facebook/react-native/issues/23185
+    // TODO: Figure out how to make secure cookies work with mobile app
+    secure: false,
     sameSite: "lax",
   },
   resave: false,
