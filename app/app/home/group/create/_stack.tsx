@@ -14,7 +14,7 @@ export default function GroupCreationStack() {
   return (
     <GroupCreationProvider>
       <Navigator
-        initialRouteName="subject"
+        initialRouteName="group-create-subject"
         screenOptions={() => ({
           animationTypeForReplace: "push",
           title: t("GroupCreationStack.newGroup", "Uusi ryhmä"),
@@ -22,9 +22,9 @@ export default function GroupCreationStack() {
           ...defaultHeaderStyles,
         })}
       >
-        <Screen name="general-info" component={GroupNameSelectionView} />
-        <Screen name="subject" component={GroupSubjectSelectionView} />
-        <Screen name="students" component={GroupStudentsSelectionView} />
+        <Screen name="group-create-general-info" component={GroupNameSelectionView} />
+        <Screen name="group-create-subject" component={GroupSubjectSelectionView} />
+        <Screen name="group-create-students" component={GroupStudentsSelectionView} />
       </Navigator>
     </GroupCreationProvider>
   );

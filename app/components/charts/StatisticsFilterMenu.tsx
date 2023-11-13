@@ -1,7 +1,8 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
+import { getEnvironmentsByLevel } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
+import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
 import { COLORS } from "../../theme";
 import CButton from "../primitives/CButton";
 import CText from "../primitives/CText";
@@ -10,11 +11,13 @@ import CModal from "../CModal";
 
 export default function StatisticsFilterMenu({
   subjectCode,
+  moduleInfo,
   filter,
   setFilter,
   title,
 }: {
   subjectCode: string;
+  moduleInfo: MinimalModuleInfo;
   filter: string | undefined;
   setFilter: (filter?: string) => void;
   title?: string;
@@ -22,7 +25,7 @@ export default function StatisticsFilterMenu({
   const { t } = useTranslation();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
-  const environments = getEnvironments(subjectCode);
+  const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
   return (
     <>
@@ -46,13 +49,13 @@ export default function StatisticsFilterMenu({
               key={item.code}
               title={item.label.fi}
               variant="outline"
-              colorScheme={item.label.fi === filter ? "darkgray" : "lightgray"}
+              colorScheme={item.code === filter ? "darkgray" : "lightgray"}
               style={{ margin: 3, paddingHorizontal: "md", gap: "sm" }}
               onPress={() => {
                 setIsFiltersOpen(false);
-                setFilter(item.label.fi);
+                setFilter(item.code);
               }}
-              textStyle={{ fontSize: "xs", fontWeight: "400", color: item.code === subjectCode ? "darkgray" : "gray" }}
+              textStyle={{ fontSize: "xs", fontWeight: "400", color: item.code === filter ? "darkgray" : "gray" }}
               leftIcon={<CView style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: item.color }} />}
             />
           ))}

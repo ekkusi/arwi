@@ -1,7 +1,10 @@
 /* eslint-disable no-console */
 import { EducationLevel, PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
+import dotenv from "dotenv";
 import mockData from "../__mocks__/mockData.json";
+
+dotenv.config();
 
 const prisma = new PrismaClient();
 

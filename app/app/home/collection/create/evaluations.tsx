@@ -2,18 +2,17 @@ import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent, Platform } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import Constants from "expo-constants";
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
-import { CreateEvaluationCardMemoed, Evaluation } from "../../../../components/EvaluationCard";
+import { CARD_HEIGHT, CreateEvaluationCardMemoed, Evaluation } from "../../../../components/EvaluationCard";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
-import { useKeyboardListener } from "../../../../hooks-and-providers/keyboardHooks";
+import { useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
 import { useToast } from "../../../../hooks-and-providers/ToastProvider";
 import { COLORS } from "../../../../theme";
 import { EvaluationData, useCollectionCreationContext } from "./CollectionCreationProvider";
@@ -71,12 +70,7 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
   }
 `);
 
-const WINDOW_HEIGHT = Dimensions.get("window").height;
-const STATUS_BAR_HEIGHT = Constants.statusBarHeight;
-// NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
-const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - 50;
-
-function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "evaluations">) {
+function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-evaluations">) {
   const { t } = useTranslation();
   const { openToast } = useToast();
   const [createCollection] = useMutation(CollectionEvaluationsView_CreateCollection_Mutation);
@@ -138,7 +132,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
           },
         },
       });
-      navigation.getParent()?.navigate("index");
+      navigation.getParent()?.navigate("home");
       openToast(t("collection-created-succesfully", "Arviointi luotu onnistuneesti!"));
     } catch (e) {
       const msg = getErrorMessage(e);
@@ -173,6 +167,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
             height={CARD_HEIGHT}
             hasArrowDown={index < presentEvaluations.length - 1}
             onArrowDownPress={scrollToCard}
+            isActive={Math.round(scrollOffset / CARD_HEIGHT) === index}
           />
         )}
         onScroll={onScroll}
@@ -182,7 +177,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         snapToAlignment="center"
         directionalLockEnabled
         disableIntervalMomentum
-        style={{ flex: 1, padding: "lg" }}
+        style={{ flex: 1, paddingHorizontal: "lg" }}
       />
       <Animated.View
         style={[{ justifyContent: "flex-end", position: "absolute", bottom: 0, left: 0, right: 0, width: "100%" }, buttonsAnimatedStyle]}
@@ -190,7 +185,8 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         <CView
           style={{
             width: "100%",
-            padding: "lg",
+            paddingHorizontal: Platform.OS === "ios" ? "xl" : "lg",
+            paddingBottom: Platform.OS === "ios" ? "xl" : "lg",
             backgroundColor: "transparent",
             flexDirection: "row",
             justifyContent: "space-between",
@@ -212,7 +208,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   );
 }
 
-export default function CollectionEvaluationsView(props: NativeStackScreenProps<CollectionCreationStackParams, "evaluations">) {
+export default function CollectionEvaluationsView(props: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-evaluations">) {
   return (
     <CollectionCreationLayout style={{ padding: 0 }}>
       <CollectionEvaluationsContent {...props} />

@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { t } from "i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { getEnvironments } from "arwi-backend/src/utils/subjectUtils";
+import { getEnvironmentsByLevel } from "arwi-backend/src/utils/subjectUtils";
+import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
 import { getColorForGrade } from "../../helpers/dataMappers";
@@ -11,6 +12,7 @@ import CText from "../primitives/CText";
 import CButton from "../primitives/CButton";
 import { COLORS } from "../../theme";
 import CModal from "../CModal";
+import { getEnvironmentTranslation } from "../../helpers/translation";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on Evaluation {
@@ -96,14 +98,15 @@ const filterTempDataToChartData = (data: TempDataHash, typeFilter: string, envir
 type EvaluationsHistogramProps = CViewProps & {
   evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
   subjectCode: string;
+  moduleInfo: MinimalModuleInfo;
 };
 
-export default function EvaluationsHistogram({ evaluations: evaluationFragments, subjectCode, ...rest }: EvaluationsHistogramProps) {
+export default function EvaluationsHistogram({ evaluations: evaluationFragments, subjectCode, moduleInfo, ...rest }: EvaluationsHistogramProps) {
   const [typeFilter, setTypeFilter] = useState("all");
   const [environmentFilter, setEnvironmentFilter] = useState("all");
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
-  const environments = getEnvironments(subjectCode);
+  const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const environmentLabels = environments.map((env) => env.label.fi);
 
   const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
@@ -117,7 +120,7 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
       <CModal closeButton={false} onClose={() => setIsFiltersOpen(false)} placement="bottom" isOpen={isFiltersOpen}>
         <CView style={{ padding: "md", gap: 20 }}>
           <CView style={{ gap: 10 }}>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("environment", "Ympäristöt")}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{getEnvironmentTranslation(t, "environments", subjectCode)}</CText>
             <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%", padding: "md" }}>
               <CButton
                 key="all"

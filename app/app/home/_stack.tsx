@@ -29,9 +29,9 @@ const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 export default function HomeStack() {
   const { t } = useTranslation();
   return (
-    <HomeStackNavigator.Navigator id="home-stack" initialRouteName="index" screenOptions={defaultHeaderStyles}>
+    <HomeStackNavigator.Navigator id="home-stack" initialRouteName="home" screenOptions={defaultHeaderStyles}>
       <HomeStackNavigator.Screen
-        name="index"
+        name="home"
         component={HomeView}
         options={({ navigation }) => {
           return {

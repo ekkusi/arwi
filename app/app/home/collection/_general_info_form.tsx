@@ -1,5 +1,5 @@
 import { Environment, LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/subject";
-import { getEnvironments, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
+import { getEnvironmentsByLevel, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
@@ -13,6 +13,7 @@ import CTextInput from "../../../components/primitives/CTextInput";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CView from "../../../components/primitives/CView";
 import { formatDate } from "../../../helpers/dateHelpers";
+import { getEnvironmentTranslation } from "../../../helpers/translation";
 
 type CollectionGeneralInfoFormProps = {
   subjectCode: string;
@@ -50,11 +51,15 @@ export default function CollectionGeneralInfoForm({
   const [environmentError, setEnvironmentError] = useState<string>();
 
   const learningObjectives = getEvaluableLearningObjectivesMinimal(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
-  const environments = getEnvironments(subjectCode);
+  const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
   const handleGeneralSubmit = () => {
     if (!selectedEnvironmentCode) {
-      setEnvironmentError(t("environment-is-obligatory", "Ympäristö on pakollinen"));
+      setEnvironmentError(
+        t("environment-is-obligatory", "{{environment_string}} on pakollinen", {
+          environment_string: getEnvironmentTranslation(t, "environment", subjectCode),
+        })
+      );
       return;
     }
     handleSubmit(date, selectedEnvironmentCode, selectedLearningObjectiveCode, description);
@@ -65,7 +70,7 @@ export default function CollectionGeneralInfoForm({
       <ScrollView showsVerticalScrollIndicator={false}>
         <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
           <SelectFormField
-            title={t("environment", "Ympäristö")}
+            title={getEnvironmentTranslation(t, "environment", subjectCode)}
             error={environmentError}
             defaultValue={defaultEnvironment}
             onSelect={(item) => {

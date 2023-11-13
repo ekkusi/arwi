@@ -5,41 +5,41 @@ import { LearningObjectiveType } from "../gql/graphql";
 export const subjectToIcon = (subject: SubjectMinimal): ImageSourcePropType => {
   switch (subject.code) {
     case "KU":
-      return require("../assets/art.png");
+      return require("../assets/subjects/art.png");
     case "LI":
-      return require("../assets/sport.png");
+      return require("../assets/subjects/sport.png");
     case "PY":
-      return require("../assets/psychology.png");
+      return require("../assets/subjects/psychology.png");
     case "BI":
-      return require("../assets/biology.png");
+      return require("../assets/subjects/biology.png");
     case "FY":
-      return require("../assets/physics.png");
+      return require("../assets/subjects/physics.png");
     case "KE":
-      return require("../assets/chemistry.png");
+      return require("../assets/subjects/chemistry.png");
     case "GE":
-      return require("../assets/geoscience.png");
+      return require("../assets/subjects/geoscience.png");
     case "MA":
-      return require("../assets/math.png");
+      return require("../assets/subjects/math.png");
     case "MU":
-      return require("../assets/music.png");
+      return require("../assets/subjects/music.png");
     case "KA":
-      return require("../assets/handicraft.png");
+      return require("../assets/subjects/handicraft.png");
     case "KI":
-      return require("../assets/language.png");
+      return require("../assets/subjects/language.png");
     case "KO":
-      return require("../assets/kotitalous.png");
+      return require("../assets/subjects/kotitalous.png");
     case "US":
-      return require("../assets/religion.png");
+      return require("../assets/subjects/religion.png");
     case "TE":
-      return require("../assets/health.png");
+      return require("../assets/subjects/health.png");
     case "HI":
-      return require("../assets/history.png");
+      return require("../assets/subjects/history.png");
     case "EL":
-      return require("../assets/elamankatsomus.png");
+      return require("../assets/subjects/elamankatsomus.png");
     case "YH":
-      return require("../assets/yhteiskuntaoppi.png");
+      return require("../assets/subjects/yhteiskuntaoppi.png");
     default:
-      return require("../assets/language.png");
+      return require("../assets/subjects/language.png");
   }
 };
 
