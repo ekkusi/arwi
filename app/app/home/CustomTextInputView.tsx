@@ -22,7 +22,15 @@ export default function CustomTextInputView({ initialText, onSave, onClose, isAc
   }, []);
 
   return (
-    <CView style={{ flex: 1 }}>
+    <CView style={{ flex: 1, paddingTop: 20 }}>
+      <CView style={{ position: "absolute", left: 0, top: -45 }}>
+        <CButton
+          title={t("save", "Tallenna")}
+          onPress={() => {
+            onSave(text, speechObtained);
+          }}
+        />
+      </CView>
       <SpeechToTextInput
         placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
         initialText={initialText}
@@ -35,14 +43,6 @@ export default function CustomTextInputView({ initialText, onSave, onClose, isAc
           right: 20,
         }}
       />
-      <CView style={{ position: "absolute", left: 20, bottom: 20 }}>
-        <CButton
-          title={t("save", "Tallenna")}
-          onPress={() => {
-            onSave(text, speechObtained);
-          }}
-        />
-      </CView>
     </CView>
   );
 }
