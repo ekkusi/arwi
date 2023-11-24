@@ -35,6 +35,6 @@ jobs:
           author_email: ekku.eki@gmail.com
           commit: --allow-empty
           default_author: github_actions
-          message: "Backup ${{ steps.get_vars.outputs.date }}"
+          message: "Backup ${{ steps.get_vars.outputs.date }} [skip ci]"
           tag: "bk-${{steps.get_vars.outputs.ts}}"
           push: "origin main --force"
