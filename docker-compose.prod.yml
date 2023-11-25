@@ -48,7 +48,7 @@ services:
       - 3306:3306
 
   matomo:
-    image: matomo:fpm-alpine
+    image: matomo:4.15.1
     restart: always
     links:
       - mariadb:db
@@ -76,6 +76,10 @@ services:
       JWT_REFRESH_TOKEN_SECRET_KEY: ${JWT_REFRESH_TOKEN_SECRET_KEY}
       MATOMO_BASE_URL: ${MATOMO_BASE_URL}
       MATOMO_SITE_ID: ${MATOMO_SITE_ID}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      MPASSID_CLIENT_SECRET: ${MPASSID_CLIENT_SECRET}
+      MPASSID_CLIENT_ID: ${MPASSID_CLIENT_ID}
     ports:
       - "4000:4000"
     depends_on:
@@ -94,7 +98,7 @@ services:
       - app-network
 
   redis:
-    image: redis:latest
+    image: redis:7.2.3-alpine
     restart: always
     ports:
       - "6379:6379"
@@ -113,6 +117,4 @@ networks:
 volumes:
   postgres_data:
   pgadmin:
-  mariadb:
-  matomo:
   redis_data:

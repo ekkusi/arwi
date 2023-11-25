@@ -138,7 +138,7 @@ function EvaluationCard({
     speechRef.current?.removeVoiceListeners().then(() => {
       openModal({
         placement: "bottom",
-        innerViewStyles: { flex: 1, maxHeight: "100%", paddingTop: "2xl" },
+        innerViewStyles: { flex: 1, maxHeight: "100%", paddingTop: Platform.OS === "ios" ? 60 : 50 },
         children: (
           <CustomTextInputView
             initialText={notes}

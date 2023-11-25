@@ -22,9 +22,10 @@ jobs:
           echo "::set-output name=ts::$(date +%s)"
       - run: sleep 2
       - name: Postgres Dump Backup
-        uses: tj-actions/pg-dump@v2.3
+        uses: tj-actions/pg-dump@v3
         with:
           database_url: ${{ secrets.DATABASE_URL }}
+          postgresql_version: "15"
           path: "backups/backup.sql"
           options: "-O"
       - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
@@ -34,6 +35,6 @@ jobs:
           author_email: ekku.eki@gmail.com
           commit: --allow-empty
           default_author: github_actions
-          message: "Backup ${{ steps.get_vars.outputs.date }}"
+          message: "Backup ${{ steps.get_vars.outputs.date }} [skip ci]"
           tag: "bk-${{steps.get_vars.outputs.ts}}"
           push: "origin main --force"
