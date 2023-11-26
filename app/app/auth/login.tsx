@@ -146,6 +146,15 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
             </CTouchableOpacity>
             <CText style={{ fontSize: "sm", fontWeight: "500", color: "gray" }}>.</CText>
           </CView>
+          <CView style={{ flexDirection: "row", justifyContent: "center" }}>
+            <CTouchableOpacity
+              onPress={() => {
+                navigation.navigate("forgotPassword");
+              }}
+            >
+              <CText style={{ fontSize: "sm", fontWeight: "500", color: "primary" }}>{t("forgot-password-question", "Unhoditko salasanasi?")}</CText>
+            </CTouchableOpacity>
+          </CView>
         </CView>
       </CView>
     </LandingComponent>
