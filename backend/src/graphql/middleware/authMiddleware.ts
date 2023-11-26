@@ -19,7 +19,14 @@ const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (res
   return resolve(parent, args, context, info);
 };
 
-const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = ["login", "register", "mPassIDLogin"];
+const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = [
+  "login",
+  "register",
+  "mPassIDLogin",
+  "verifyPasswordResetCode",
+  "resetPassword",
+  "requestPasswordReset",
+];
 const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata"];
 
 const mutationResolverKeys: (keyof Mutation)[] = Object.keys(mutationResolvers) as (keyof Mutation)[];
