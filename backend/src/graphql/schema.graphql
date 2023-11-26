@@ -13,6 +13,9 @@ type Mutation {
   register(data: CreateTeacherInput!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
   mPassIDLogin(code: String!): MPassIDAuthPayload!
+  requestPasswordReset(email: String!): Boolean!
+  verifyPasswordResetCode(code: String!): Boolean!
+  resetPassword(code: String!, newPassword: String!): Boolean!
   connectMPassID(code: String!): AuthPayload!
   connectLocalCredentials(email: String!, password: String!): AuthPayload!
   logout: Boolean!

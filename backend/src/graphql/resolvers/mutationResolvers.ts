@@ -25,8 +25,9 @@ import {
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
-
-const BRCRYPT_SALT_ROUNDS = 12;
+import { checkCode, generateCode } from "../../utils/passwordRecovery";
+import { sendMail } from "../utils/mail";
+import { BRCRYPT_SALT_ROUNDS } from "../../config";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { prisma, req }) => {
@@ -156,6 +157,46 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   logout: async (_, __, { req, res }) => {
     await logOut(req, res);
+    return true;
+  },
+  requestPasswordReset: async (_, { email }, { prisma, req }) => {
+    const code = generateCode(6);
+    const matchingTeacher = await prisma.teacher.findFirst({
+      where: { email },
+    });
+    if (matchingTeacher) {
+      await sendMail(
+        email,
+        "Salasanan palautus",
+        `Olet pyytänyt salasanan palautusta Arwi-sovellukseen.\n\n Käytä koodia <b>${code}</b> palauttaaksesi salasanasi.`
+      );
+      req.session.recoveryCodeInfo = {
+        userId: matchingTeacher.id,
+        codeHash: await hash(code, BRCRYPT_SALT_ROUNDS),
+        createdAt: Date.now(),
+      };
+    }
+
+    return true;
+  },
+  verifyPasswordResetCode: (_, { code }, { req }) => {
+    return checkCode(code, req.session);
+  },
+  resetPassword: async (_, { newPassword, code }, { prisma, req }) => {
+    const isValidCode = await checkCode(code, req.session);
+    if (!isValidCode) throw new ValidationError("Annettu koodi on virheellinen tai vanhentunut");
+    const matchingTeacher = await prisma.teacher.findUnique({
+      where: { id: req.session.recoveryCodeInfo?.userId },
+    });
+    if (!matchingTeacher) throw new Error("Unexpected error, teacher not found with recovery code info");
+    await prisma.teacher.update({
+      where: { id: matchingTeacher.id },
+      data: {
+        passwordHash: await hash(newPassword, BRCRYPT_SALT_ROUNDS),
+      },
+    });
+    // Clear recovery code info from session to prevent further use
+    req.session.recoveryCodeInfo = undefined;
     return true;
   },
   createGroup: async (_, { data }, { prisma }) => {

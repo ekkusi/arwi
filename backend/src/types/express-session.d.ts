@@ -7,7 +7,10 @@ declare module "express-session" {
     tokenSet?: TokenSetParameters;
     userInfo?: UserSessionInfo;
     createdAt?: number;
-    test?: string;
-    redirectUri?: string;
+    recoveryCodeInfo?: {
+      userId: string;
+      codeHash: string;
+      createdAt: number;
+    };
   }
 }
