@@ -9,13 +9,15 @@ datasource db {
 }
 
 model Teacher {
-  id                    String  @id @default(uuid())
-  mPassID               String?  @unique
-  email                 String?  @unique
-  passwordHash          String?
-  groups                Group[]
-  languagePreference    String  @default("fi_FI")
-  consentsAnalytics     Boolean @default(true)
+  id                      String  @id @default(uuid())
+  mPassID                 String?  @unique
+  email                   String?  @unique
+  passwordHash            String?
+  groups                  Group[]
+  languagePreference      String  @default("fi_FI")
+  consentsAnalytics       Boolean @default(true)
+  passwordResetStartedAt  DateTime?
+  passwordResetTries      Int     @default(0)
 }
 
 model Group {

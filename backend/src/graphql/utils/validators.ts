@@ -1,5 +1,6 @@
 import { SessionData } from "express-session";
 import { compare } from "bcryptjs";
+import { Teacher } from "@prisma/client";
 import ValidationError from "../../errors/ValidationError";
 import prisma from "../../prismaClient";
 import {
@@ -178,16 +179,29 @@ export const validateChangeGroupLevelInput = async (input: ChangeGroupModuleInpu
     );
 };
 
-const MAX_AMOUNT_OF_TRIES = 5;
+const MAX_AMOUNT_OF_RESET_CODE_TRIES = 5;
 const FIVE_MINUTES_MS = 1000 * 60 * 5;
 
 export const validatePasswordResetCode = async (code: string, session: SessionData) => {
   const { recoveryCodeInfo } = session;
   if (!recoveryCodeInfo) throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
   recoveryCodeInfo.amountsTried += 1;
-  if (recoveryCodeInfo.amountsTried > MAX_AMOUNT_OF_TRIES) throw new ValidationError("Koodia on yritetty liian monta kertaa. Generoi uusi koodi.");
+  if (recoveryCodeInfo.amountsTried > MAX_AMOUNT_OF_RESET_CODE_TRIES)
+    throw new ValidationError("Koodia on yritetty liian monta kertaa. Generoi uusi koodi.");
   const isValidCode = await compare(code, recoveryCodeInfo.codeHash);
   if (!isValidCode) throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
   if (recoveryCodeInfo.createdAt + FIVE_MINUTES_MS < Date.now()) throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
   return true;
+};
+
+const MAX_AMOUNT_OF_RESET_PASSWORD_REQUEST = 5;
+export const REQUEST_PASSWORD_RESET_EXPIRY_IN_MS = 1000 * 60 * 15;
+
+export const validateRequestPasswordReset = async (teacher: Teacher) => {
+  if (!teacher.passwordResetStartedAt) return;
+  const resetStartedAt = new Date(teacher.passwordResetStartedAt).getTime();
+
+  if (resetStartedAt > Date.now() - REQUEST_PASSWORD_RESET_EXPIRY_IN_MS && teacher.passwordResetTries > MAX_AMOUNT_OF_RESET_PASSWORD_REQUEST) {
+    throw new ValidationError("Olet pyytänyt uutta koodia salasanasi vaihtamiseen liian monta kertaa. Yritä uudelleen 15 minuutin kuluttua.");
+  }
 };
