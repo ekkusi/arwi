@@ -25,6 +25,7 @@ export default function CodeInput({ navigation, route }: NativeStackScreenProps<
   const { email } = route.params;
   const [code, setCode] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [focused, setFocused] = useState(false);
 
   const [verifyPasswordResetCode, { loading }] = useMutation(CodeInput_VerifyPasswordResetCode_Mutation);
 
@@ -40,9 +41,10 @@ export default function CodeInput({ navigation, route }: NativeStackScreenProps<
   useFocusEffect(onFocusEffect);
 
   const handleCodeChange = (newCode: string) => {
-    setCode(newCode);
-    if (newCode.length === CODE_LENGTH) {
-      handleCheckCode(newCode);
+    const parsedCode = newCode.replace(/[^0-9]/g, "");
+    setCode(parsedCode);
+    if (parsedCode.length === CODE_LENGTH) {
+      handleCheckCode(parsedCode);
     }
   };
 
@@ -60,18 +62,35 @@ export default function CodeInput({ navigation, route }: NativeStackScreenProps<
   return (
     <LandingComponent title={t("input-code", "Syötä koodi")}>
       <CView style={{ flex: 1, width: "100%", paddingHorizontal: "lg" }}>
-        <CText style={{ marginBottom: "xl" }}>
+        <CText style={{ marginBottom: "xl", fontSize: "md", fontWeight: "300" }}>
           {t("email-sent-to", "Koodi lähetetty sähköpostiin {{email}}. Syötä lähetetty koodi alle jatkaaksesi salasanan uusimiseen.", { email })}
         </CText>
-        <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "2xl" }}>
+        <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "xl" }}>
           <TextFormField
-            title={t("code", "Koodi")}
+            title=""
+            value={code}
             placeholder="123456"
-            style={{ width: "100%" }}
+            onFocus={() => {
+              setFocused(true);
+            }}
+            onBlur={() => {
+              setFocused(false);
+            }}
+            style={{
+              width: "100%",
+              borderWidth: 1,
+              height: 60,
+              borderColor: focused ? "gray" : "lightgray",
+              borderRadius: 30,
+              fontSize: 35,
+              fontWeight: "200",
+            }}
+            keyboardType="number-pad"
+            textAlign="center"
             titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
             onChange={handleCodeChange}
           />
-          {error && <CText style={{ color: "error", fontWeight: "600" }}>{error}</CText>}
+          {error && <CText style={{ color: "error", fontWeight: "600", fontSize: "sm" }}>{error}</CText>}
           <CButton title={t("check-code", "Tarkista koodi")} loading={loading} onPress={() => handleCheckCode(code)} />
         </CView>
       </CView>
