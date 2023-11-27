@@ -59,3 +59,8 @@ export const SESSION_OPTIONS: SessionOptions = {
   resave: false,
   saveUninitialized: true,
 };
+
+export const MATOMO_EVENT_CATEGORIES = {
+  OPEN_AI: "OpenAI",
+  PASSWORD_RESET: "Password reset",
+};

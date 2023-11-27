@@ -47,8 +47,6 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
   const [password, setPassword] = useState<string>("");
   const [passwordAgain, setPasswordAgain] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [passwordSecureTextEntry, setPasswordSecureTextEntry] = useState(true);
-  const [passwordAgainSecureTextEntry, setPasswordAgainSecureTextEntry] = useState(true);
   const [termsAndConditionsAccepted, setTermsAndConditionsAccepted] = useState(false);
   const [isTermsAndConditionsOpen, setIsTermsAndConditionsOpen] = useState(false);
   const [isPrivacyPolicyOpen, setIsPrivacyPolicyOpen] = useState(false);
@@ -155,38 +153,22 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
               titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
               onChange={handleEmailChange}
             />
-            <CView style={{ marginBottom: "md" }}>
-              <TextFormField
-                title={t("password", "Salasana")}
-                placeholder={t("password", "Salasana")}
-                style={{ width: "100%" }}
-                secureTextEntry={passwordSecureTextEntry}
-                titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
-                onChange={handlePasswordChange}
-              />
-              <CTouchableOpacity
-                onPress={() => setPasswordSecureTextEntry(!passwordSecureTextEntry)}
-                style={{ position: "absolute", right: 0, bottom: 0, justifyContent: "center", alignItems: "center", height: 54, width: 54 }}
-              >
-                <MaterialCommunityIcon name={passwordSecureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
-              </CTouchableOpacity>
-            </CView>
-            <CView style={{ marginBottom: "md" }}>
-              <TextFormField
-                title={t("password-again", "Salasana uudelleen")}
-                placeholder={t("password", "Salasana")}
-                style={{ width: "100%" }}
-                secureTextEntry={passwordAgainSecureTextEntry}
-                titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
-                onChange={handlePasswordAgainChange}
-              />
-              <CTouchableOpacity
-                onPress={() => setPasswordAgainSecureTextEntry(!passwordAgainSecureTextEntry)}
-                style={{ position: "absolute", right: 0, bottom: 0, justifyContent: "center", alignItems: "center", height: 54, width: 54 }}
-              >
-                <MaterialCommunityIcon name={passwordAgainSecureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
-              </CTouchableOpacity>
-            </CView>
+            <TextFormField
+              title={t("password", "Salasana")}
+              placeholder={t("password", "Salasana")}
+              style={{ width: "100%" }}
+              titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
+              onChange={handlePasswordChange}
+              isSecret
+            />
+            <TextFormField
+              title={t("password-again", "Salasana uudelleen")}
+              placeholder={t("password", "Salasana")}
+              style={{ width: "100%" }}
+              titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
+              onChange={handlePasswordAgainChange}
+              isSecret
+            />
             <CView style={{ width: "100%", flexDirection: "row", alignItems: "center" }}>
               <Checkbox value={termsAndConditionsAccepted} onValueChange={handleTermsAndConditionsChange} style={{ marginRight: SPACING.sm }} />
               <CTouchableOpacity

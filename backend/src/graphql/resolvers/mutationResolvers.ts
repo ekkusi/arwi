@@ -11,6 +11,7 @@ import {
   validateCreateCollectionInput,
   validateCreateGroupInput,
   validateCreateStudentInput,
+  validatePasswordResetCode,
   validateRegisterInput,
   validateUpdateCollectionInput,
   validateUpdateEvaluationsInput,
@@ -25,9 +26,10 @@ import {
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
-import { checkCode, generateCode } from "../../utils/passwordRecovery";
-import { sendMail } from "../utils/mail";
-import { BRCRYPT_SALT_ROUNDS } from "../../config";
+import { generateCode } from "../../utils/passwordRecovery";
+import { sendMail } from "../../utils/mail";
+import { BRCRYPT_SALT_ROUNDS, MATOMO_EVENT_CATEGORIES } from "../../config";
+import matomo from "../../matomo";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { prisma, req }) => {
@@ -49,10 +51,11 @@ const resolvers: MutationResolvers<CustomContext> = {
     const matchingTeacher = await prisma.teacher.findFirst({
       where: { email },
     });
-    if (!matchingTeacher) throw new ValidationError(`Käyttäjää ei löytynyt sähköpostilla '${email}'`);
+    const wrongCredentialsError = new ValidationError(`Annettu sähköposti tai salasana oli virheellinen.`);
+    if (!matchingTeacher) throw wrongCredentialsError;
     if (!matchingTeacher.passwordHash || !matchingTeacher.email) throw new ValidationError(`Käyttäjällä ei ole sähköpostikirjautumista käytössä.`);
     const isValidPassword = await compare(password, matchingTeacher.passwordHash);
-    if (!isValidPassword) throw new ValidationError(`Annettu salasana oli väärä.`);
+    if (!isValidPassword) throw wrongCredentialsError;
     initSession(req, { ...matchingTeacher, type: "local" });
     return {
       userData: matchingTeacher,
@@ -165,26 +168,28 @@ const resolvers: MutationResolvers<CustomContext> = {
       where: { email },
     });
     if (matchingTeacher) {
+      matomo.trackEvent(MATOMO_EVENT_CATEGORIES.PASSWORD_RESET, "Request password reset", { userInfo: { uid: matchingTeacher.id } });
       await sendMail(
         email,
         "Salasanan palautus",
-        `Olet pyytänyt salasanan palautusta Arwi-sovellukseen.\n\n Käytä koodia <b>${code}</b> palauttaaksesi salasanasi.`
+        `Olet pyytänyt salasanan palautusta Arwi-sovellukseen. Käytä alla olevaa koodia salasanan palautukseen. Sinulla on 5 minuuttia aikaa ennen kuin koodi umpeutuu. <br /><br /> Koodi: <b>${code}</b>`
       );
       req.session.recoveryCodeInfo = {
         userId: matchingTeacher.id,
         codeHash: await hash(code, BRCRYPT_SALT_ROUNDS),
         createdAt: Date.now(),
+        amountsTried: 0,
       };
     }
 
     return true;
   },
-  verifyPasswordResetCode: (_, { code }, { req }) => {
-    return checkCode(code, req.session);
+  verifyPasswordResetCode: async (_, { code }, { req }) => {
+    await validatePasswordResetCode(code, req.session);
+    return true;
   },
-  resetPassword: async (_, { newPassword, code }, { prisma, req }) => {
-    const isValidCode = await checkCode(code, req.session);
-    if (!isValidCode) throw new ValidationError("Annettu koodi on virheellinen tai vanhentunut");
+  updatePassword: async (_, { newPassword, recoveryCode }, { prisma, req }) => {
+    await validatePasswordResetCode(recoveryCode, req.session);
     const matchingTeacher = await prisma.teacher.findUnique({
       where: { id: req.session.recoveryCodeInfo?.userId },
     });
@@ -195,6 +200,7 @@ const resolvers: MutationResolvers<CustomContext> = {
         passwordHash: await hash(newPassword, BRCRYPT_SALT_ROUNDS),
       },
     });
+    matomo.trackEvent(MATOMO_EVENT_CATEGORIES.PASSWORD_RESET, "Password updated", { userInfo: { uid: matchingTeacher.id } });
     // Clear recovery code info from session to prevent further use
     req.session.recoveryCodeInfo = undefined;
     return true;

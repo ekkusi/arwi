@@ -24,7 +24,7 @@ const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = [
   "register",
   "mPassIDLogin",
   "verifyPasswordResetCode",
-  "resetPassword",
+  "updatePassword",
   "requestPasswordReset",
 ];
 const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata"];

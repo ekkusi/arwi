@@ -71,7 +71,6 @@ export default function ProfileView() {
   const [mPassIDLoginError, setMPassIDLoginError] = useState<string | undefined>();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const [logoutMutation, { loading, client }] = useMutation(ProfileView_Logout_Mutation);
   const [connectMPassID, { loading: connectMPassIDLoading }] = useMutation(ProfileView_ConnectMPassID_Mutation);
@@ -164,22 +163,14 @@ export default function ProfileView() {
                 titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
                 onChange={handleEmailChange}
               />
-              <CView>
-                <TextFormField
-                  title={t("password", "Salasana")}
-                  placeholder={t("password", "Salasana")}
-                  style={{ width: "100%" }}
-                  secureTextEntry={secureTextEntry}
-                  titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
-                  onChange={handlePasswordChange}
-                />
-                <CTouchableOpacity
-                  onPress={() => setSecureTextEntry(!secureTextEntry)}
-                  style={{ position: "absolute", right: 0, bottom: 0, justifyContent: "center", alignItems: "center", height: 54, width: 54 }}
-                >
-                  <MaterialCommunityIcon name={secureTextEntry ? "eye" : "eye-off"} size={25} color={COLORS.darkgray} />
-                </CTouchableOpacity>
-              </CView>
+              <TextFormField
+                title={t("password", "Salasana")}
+                placeholder={t("password", "Salasana")}
+                style={{ width: "100%" }}
+                titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
+                onChange={handlePasswordChange}
+                isSecret
+              />
               {localLoginError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md" }}>{localLoginError}</CText>}
               <CButton
                 title={t("login", "Kirjaudu sisään")}

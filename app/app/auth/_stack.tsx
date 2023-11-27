@@ -16,9 +16,9 @@ export default function AuthStack() {
       <Screen name="welcome" component={LandingPage} options={{ title: "", statusBarColor: COLORS.primary }} />
       <Screen name="login" component={LoginPage} options={{ title: "", statusBarColor: COLORS.white }} />
       <Screen name="signup" component={SignupPage} options={{ title: "", statusBarColor: COLORS.white }} />
-      <Screen name="forgotPassword" component={ForgotPassword} options={{ title: "", statusBarColor: COLORS.white }} />
-      <Screen name="codeInput" component={CodeInput} options={{ title: "", statusBarColor: COLORS.white }} />
-      <Screen name="updatePassword" component={UpdatePassword} options={{ title: "", statusBarColor: COLORS.white }} />
+      <Screen name="forgot-password" component={ForgotPassword} options={{ title: "", statusBarColor: COLORS.white }} />
+      <Screen name="code-input" component={CodeInput} options={{ title: "", statusBarColor: COLORS.white }} />
+      <Screen name="update-password" component={UpdatePassword} options={{ title: "", statusBarColor: COLORS.white }} />
     </Navigator>
   );
 }

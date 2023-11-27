@@ -11,6 +11,7 @@ declare module "express-session" {
       userId: string;
       codeHash: string;
       createdAt: number;
+      amountsTried: number;
     };
   }
 }
