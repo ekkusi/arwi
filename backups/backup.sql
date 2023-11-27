@@ -10194,6 +10194,24 @@ ee1f6323-b2eb-4bb4-925d-306bdfc03a7a	9b2269f7-aba5-42f6-afab-ccfa7bc42585		df4d8
 34da5feb-659e-406b-9bb2-bb4a576dcb5e	23d41b74-018e-45f5-966c-c729188c1ca3		df4d8bd3-e41e-474a-8544-a9bc84361dd0	t	9	9	f
 1bfdbae3-e81b-47ef-baec-fba567e481cd	c0a2a247-d6f0-4e43-bfd7-79d01e4eb16c		df4d8bd3-e41e-474a-8544-a9bc84361dd0	t	9	9	f
 7d7379aa-096a-47c9-844f-f50e352f5d61	848b881e-e506-4273-b778-61cd669267d2		df4d8bd3-e41e-474a-8544-a9bc84361dd0	t	9	10	f
+6330d12d-9bb1-4320-a99e-ae5dcba422f6	8b20ba89-0fab-4cb8-a1f6-89de0bd71d99	Pysyit hienosti musiikin rytmissä. Pallotanssin harjoittelu sujui hyvin.\n	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	9	9	f
+1b05bfb8-5723-4184-b4e9-b6dc8e64cc64	c1980116-b8a9-42cd-848b-4af50d00186d	Työskentelit tänään erinomaisesti koko tunnin! Musiikin rytmissä liikkuminen sujui hienosti kaikissa harjoitteissa ja laskit rytmiä upeasti ääneen rytmiradassa.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	9	9	f
+9d52acdf-7d7d-4411-a209-428b8c0c4b6c	f05a57de-566b-426c-aed1-4105d73e4da4	Tänään et oikein halunnut osallistua mihinkään. Tuntui, että olit jo ennen tuntia päättänyt, että tanssi on tyhmää. Osaat kyllä, kunhan rohkeasti kokeilet ja yrität!	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	7	f
+14d20f0e-a097-431d-9379-a8d81d3ea7ca	7019d6bf-4771-4142-a1eb-0aa80c6f5869	Loistavaa tekemistä tämän päivän tunnilla! Pysyit hienosti musiikin rytmissä ja heittäydyit mukaan. Pallotanssissa pallo pysyi hyvin hallinnassa pomputuksissa ja harjoittelit koreografiaa hienosti.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	9	9	f
+3f655843-07c9-4084-a6bb-e240eb84475f	4f144e23-d7d8-40a1-ad55-6aa8985b0fe5	Hienoa tekemistä jälleen tunnilla! Heittäydyit rohkeasti mukaan ja musiikin rytmissä liikkuminen sujui hienosti!	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	9	9	f
+37242a32-5dff-4fb6-b4ed-cbce6408f174	5a6e87d7-5c81-4364-b0b9-c34b973ce86b	Heittäydyit rohkeasti mukaan tunnilla ja keskityit hienosti omaan tekemiseen. Osasit hyvin kuunnella musiikkia ja se näkyi rytmissä pysymisenä!	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	9	f
+de8709f2-d75a-472a-89f2-f3c76d87248a	dcf4c142-a227-4867-9a9a-787d58afe6c7	Et voinut osallistua kaikkeen toimintaan, mutta otit hienosti vastuun apuopettajana työskentelystä ja laskit hienosti muille ääneen musiikin rytmiä rytmiradassa.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	9	f
+dde03441-c601-46f7-b596-074b92c4093f	28af6b29-9f23-4c7f-b46b-a8408be92a5f	Heittäydyit rohkeasti mukaan ja olit koko tunnin aktiivinen. Pysyit hyvin musiikin rytmissä ja pallo pysyi pallotanssissa mukana hienosti. Pallotanssissa pallon kanssa pomputtelu vei välillä liikaa huomiota.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	8	f
+7cc6208b-90bb-4464-8832-4a7551eea65f	e4777d3b-9943-4a95-8236-c32cdc374cb4	Silloin kun teit, pysyit hienosti rytmissä ja osasit kyllä! Tuntui, että tänään oli vähän vaikeampi tunti osallistumisen suhteen ja olit jo ennen tuntia päättänyt, että tanssi ei ole kivaa.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	8	f
+7f3bae25-eb67-4dab-98c8-930dc30b9a2b	dddee3d7-88f2-4111-92ed-1d1b2d964c82	Työskentelit erinomaisesti koko tunnin ja osallistuit rohkeasti mukaan! Rytmissä pysyminen ei tuottanut ongelmia ja pallotanssin koreografian opettelu sujui hienosti!	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	9	f
+7060428b-5d9f-4f9e-bdfc-2e334fa8f64f	bb0cb981-956c-4a19-991e-0d933b55e675	\N	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	f	\N	\N	f
+6928f2d6-e3b2-49b3-a4f0-ba2742ccaeca	6e177d09-aed6-416f-840f-a0347350b5c4	Olit koko tunnin aktiivinen ja harjoittelit rohkeasti ja musiikin rytmissä pysyminen onnistui hyvin. Keskittyminen meni pallotanssissa välillä liikaa pallon muuhun pomputtamiseen.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	8	f
+b1d0bb75-c781-403d-a7c1-a8312fbde22f	31b293cd-259f-4f1e-82be-b7dec7756a06	Hienoa työskentelyä jälleen! Osallistuit rohkeasti kaikkeen ja harjoittelit myös rytmittämistä ääneen. Pysyit hienosti musiikin rytmissä ja opettelit pallotanssin koreografiaa hyvin.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	9	f
+530a58f0-d2a6-4f98-9018-0ba744a6240f	86996843-bd5a-4ea9-8f20-c4a0e39da0cd	Olit aktiivinen koko tunnin ja musiikin rytmissä pysyminen sujui hienosti! Pallo pysyi hyvin hallinnassa pallotanssissa.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	9	9	f
+f6848fa7-ec82-4fb6-b526-9850d702af2f	3181ad2a-a49d-408a-a083-2c0624c7101b	Heittäydyit rohkeasti mukaan ja näin hienon onnistumisen rytmiradassa! Pallotanssin harjoittelu sujui erinomaisesti ja tunnin jälkeen sanoitkin hyvin, että oli hienoa kuulla kun kaikki pallot pomppasivat ihan samaan aikaan.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	9	f
+36d7f955-632a-42c5-9f37-c7683365fb68	695db218-3ccd-41dd-a54a-5289cc4eee37	Hienoa työskentelyä ja osallistumista koko tunnin! Pysyit hienosti musiikin rytmissä ja pallon hallinta pallotanssissa oli hienoa!	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	9	9	f
+a295ba11-1c3a-476f-9301-ac54cef81c16	b853620d-d401-4c16-a31b-e3f0eff48bcf	\N	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	f	\N	\N	f
+f532c8ad-46b3-4c20-afd3-1f6c1662fe9f	c7b9b89a-40d6-4909-911b-c5be073987a6	Hienoa työskentelyä tämän päivän tunnilla! Osallistuit rohkeasti mukaan ja kuuntelit hyvin musiikkia, jonka rytmissä pysyit hienosti kaikissa harjoitteissa. Keskityit loistavasti pallotanssin harjoitteluun.	8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	t	8	9	f
 \.
 
 
@@ -10829,6 +10847,7 @@ cf77281d-a1fa-4ad5-8488-2176a0b7c917	2023-11-24 00:00:00	Sulkapallo, lentopallo,
 95076026-29e1-47cf-88e4-fc9288d3f932	2023-11-24 00:00:00	Rintauinti	LI_ENV_VES	55bc3e38-79a3-40e7-a9b5-f797554f0cb6	{}
 92fea35d-ee37-43a4-8c45-6ad13347dd53	2023-11-24 00:00:00	Kpk iskulyönnillä, sormilyönti, hihalyötnti ja peliä	LI_ENV_PAL	fd028225-16dd-4d8e-8c86-a81a9d9243e5	{T4}
 df4d8bd3-e41e-474a-8544-a9bc84361dd0	2023-11-24 00:00:00	Mahalautaviesti, Mahalautaralli, Mahalautafudis, fudis, Mahalautaleikittely	LI_ENV_MUU	640e87de-8063-4c00-9087-c17709e34059	{T1}
+8d5c33f2-cec9-48ee-8afa-89dbe7f02f49	2023-11-23 00:00:00	Musiikkiliikunta: just dance, rytmirata, pallotanssi	LI_ENV_TAN	d77b1c6d-e41d-420f-8f22-e8494af72bcf	{T1,TI3,TI7}
 \.
 
 
@@ -10973,8 +10992,8 @@ ccd44372-5947-4b45-acc4-585c5f15c338	OPEA515, liikunta	9ec8ee79-0762-4208-a893-e
 36b2f528-25fa-4ce2-8d35-6d487a5078d9	8C	df4df12f-c686-4f62-a276-e42e8162c218	2023-11-23 09:55:56.576	LI	f	45982a54-e42c-4e48-8b84-32689d592abd
 bf327012-7775-405f-b937-3a7c1508eda3	Norssi 9bde	d7ea5704-9071-41af-b5ec-4311fc5088f3	2023-11-15 15:14:23.303	LI	f	d872e1e1-07ed-4fe7-b285-f11e407754c7
 b509833f-510c-48b3-ac2f-f3a224f7689b	LPV3	a7935ade-dce6-4954-9616-d96d0534bd59	2023-11-23 14:54:48.747	LI	f	a153dc01-0752-4f56-9501-8fc52ba97f0b
+7e67bc6e-c273-42a2-9d1b-dbd39b25d5dd	Päättöharkka liikka syksy	9b9baaa3-ebc6-4b4a-a014-7e588e84a8f8	2023-11-26 13:19:31.455	LI	f	d77b1c6d-e41d-420f-8f22-e8494af72bcf
 4fe72bd5-8f67-4212-a715-4a0ca602e632	Liikka syksy	3386ad42-5f46-49ab-ab12-fa11bb8723a5	2023-11-17 11:45:19.459	LI	f	07ad7d5a-6bde-4c10-b4af-70932def7817
-7e67bc6e-c273-42a2-9d1b-dbd39b25d5dd	Päättöharkka liikka syksy	9b9baaa3-ebc6-4b4a-a014-7e588e84a8f8	2023-11-20 18:04:51.601	LI	f	d77b1c6d-e41d-420f-8f22-e8494af72bcf
 2cba9a0f-2452-495a-9fbc-0180ea49411e	Päättö syksy	9d7305e7-6591-446f-a593-7265e800d65a	2023-11-21 09:07:31.829	LI	f	d3f5eb51-9cac-441e-91ac-bad14e134b9d
 be8dad6e-58f6-4ba1-a77f-d2ff43823856	Harkkaryhmä N	755c60e1-a067-4985-9bd9-7bb29f63fac0	2023-11-10 10:47:10.301	LI	f	cb932bc8-d215-4f88-9906-a5f4fa435366
 d97d5467-0855-403e-bf76-a93297aa71f4	Norssin lukio, valinnaisliikunta pojat 	5d01bba2-588c-4846-ab76-15c6c7d84aa4	2023-10-23 13:42:30.053	LI	f	d71f3dc4-dafc-4d13-9651-2cc8294337e9
