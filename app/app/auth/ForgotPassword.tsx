@@ -12,6 +12,7 @@ import CButton from "../../components/primitives/CButton";
 import { AuthStackParams } from "./types";
 import { graphql } from "../../gql";
 import CText from "../../components/primitives/CText";
+import { getErrorMessage } from "../../helpers/errorUtils";
 
 const ForgotPassword_RequestPasswordReset_Mutation = graphql(`
   mutation ForgotPassword_RequestPasswordReset($email: String!) {
@@ -44,16 +45,10 @@ export default function ForgotPassword({ navigation }: NativeStackScreenProps<Au
   const handleResetRequest = async () => {
     try {
       await requestPasswordReset({ variables: { email } });
+      navigation.navigate("code-input", { email });
     } catch (error) {
-      setGeneralError(
-        t(
-          "error-in-password-reset",
-          "Jotakin meni pieleen salasanan palautuksessa. Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä järjestelmänvalvojaan."
-        )
-      );
+      setGeneralError(getErrorMessage(error));
     }
-    // Send code to email.
-    navigation.navigate("code-input", { email });
   };
 
   const { t } = useTranslation();
@@ -69,8 +64,14 @@ export default function ForgotPassword({ navigation }: NativeStackScreenProps<Au
             titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
             onChange={handleEmailChange}
           />
-          <CButton style={{ width: "100%" }} title={t("request-code", "Lähetä koodi")} onPress={handleResetRequest} loading={loading} />
-          {generalError && <CText style={{ color: "error", fontWeight: "500", fontSize: "md" }}>{generalError}</CText>}
+          <CButton
+            style={{ width: "100%" }}
+            title={t("request-code", "Lähetä koodi")}
+            onPress={handleResetRequest}
+            loading={loading}
+            disabled={!!generalError}
+          />
+          {generalError && <CText style={{ color: "error", fontWeight: "600" }}>{generalError}</CText>}
         </CView>
       </CView>
     </LandingComponent>

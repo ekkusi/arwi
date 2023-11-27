@@ -2,6 +2,7 @@ import { SessionOptions } from "express-session";
 import { Redis } from "ioredis";
 import RedisStore from "connect-redis";
 import { HelmetOptions } from "helmet";
+import redisClient from "./redis";
 
 const { env } = process;
 export const BRCRYPT_SALT_ROUNDS = 12;
@@ -26,25 +27,9 @@ export const { SESSION_SECRET = "secret", SESSION_NAME = "sid", SESSION_IDLE_TIM
 
 export const SESSION_ABSOLUTE_TIMEOUT_MS = +(env.SESSION_ABSOLUTE_TIME || ONE_DAY_MS * 30);
 
-if (env.NODE_ENV === "production" && !env.REDIS_PASSWORD && !env.REDIS_HOST) {
-  console.warn("WARNING: No REDIS_PASSWORD or REDIS_HOST environment variables found. Redis session setup will probably fail.");
-}
-
-let sessionStore;
-
-// Allow disabling redis session storage for testing with env var
-if (env.NO_REDIS_SESSION !== "true") {
-  const redisClient = new Redis({
-    password: env.REDIS_PASSWORD,
-    host: env.REDIS_HOST,
-  });
-  sessionStore = new RedisStore({
-    client: redisClient,
-  });
-}
-
 export const SESSION_OPTIONS: SessionOptions = {
-  store: sessionStore,
+  // Allow disabling redis session storage for testing with env var
+  store: env.NO_REDIS_SESSION !== "true" ? new RedisStore({ client: redisClient }) : undefined,
   secret: SESSION_SECRET,
   name: SESSION_NAME,
   cookie: {
