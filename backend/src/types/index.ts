@@ -69,6 +69,9 @@ export type Mutation = {
   register: AuthPayload;
   login: AuthPayload;
   mPassIDLogin: MPassIdAuthPayload;
+  requestPasswordReset: Scalars['Boolean'];
+  verifyPasswordResetCode: Scalars['Boolean'];
+  updatePassword: Scalars['Boolean'];
   connectMPassID: AuthPayload;
   connectLocalCredentials: AuthPayload;
   logout: Scalars['Boolean'];
@@ -102,6 +105,22 @@ export type MutationLoginArgs = {
 
 export type MutationMPassIdLoginArgs = {
   code: Scalars['String'];
+};
+
+
+export type MutationRequestPasswordResetArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationVerifyPasswordResetCodeArgs = {
+  code: Scalars['String'];
+};
+
+
+export type MutationUpdatePasswordArgs = {
+  recoveryCode: Scalars['String'];
+  newPassword: Scalars['String'];
 };
 
 
@@ -581,6 +600,9 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   register?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'data'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   mPassIDLogin?: Resolver<ResolversTypes['MPassIDAuthPayload'], ParentType, ContextType, RequireFields<MutationMPassIdLoginArgs, 'code'>>;
+  requestPasswordReset?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRequestPasswordResetArgs, 'email'>>;
+  verifyPasswordResetCode?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationVerifyPasswordResetCodeArgs, 'code'>>;
+  updatePassword?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'recoveryCode' | 'newPassword'>>;
   connectMPassID?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationConnectMPassIdArgs, 'code'>>;
   connectLocalCredentials?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationConnectLocalCredentialsArgs, 'email' | 'password'>>;
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;

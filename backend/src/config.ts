@@ -4,6 +4,7 @@ import RedisStore from "connect-redis";
 import { HelmetOptions } from "helmet";
 
 const { env } = process;
+export const BRCRYPT_SALT_ROUNDS = 12;
 
 export const HELMET_OPTIONS: HelmetOptions = {
   contentSecurityPolicy:
@@ -57,4 +58,9 @@ export const SESSION_OPTIONS: SessionOptions = {
   },
   resave: false,
   saveUninitialized: true,
+};
+
+export const MATOMO_EVENT_CATEGORIES = {
+  OPEN_AI: "OpenAI",
+  PASSWORD_RESET: "Password reset",
 };

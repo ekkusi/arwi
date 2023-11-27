@@ -1,3 +1,5 @@
+import { SessionData } from "express-session";
+import { compare } from "bcryptjs";
 import ValidationError from "../../errors/ValidationError";
 import prisma from "../../prismaClient";
 import {
@@ -174,4 +176,18 @@ export const validateChangeGroupLevelInput = async (input: ChangeGroupModuleInpu
         input.newEducationLevel
       }' ovat: ${allowedLearningObjectiveGroupKeys.join(", ")}`
     );
+};
+
+const MAX_AMOUNT_OF_TRIES = 5;
+const FIVE_MINUTES_MS = 1000 * 60 * 5;
+
+export const validatePasswordResetCode = async (code: string, session: SessionData) => {
+  const { recoveryCodeInfo } = session;
+  if (!recoveryCodeInfo) throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
+  recoveryCodeInfo.amountsTried += 1;
+  if (recoveryCodeInfo.amountsTried > MAX_AMOUNT_OF_TRIES) throw new ValidationError("Koodia on yritetty liian monta kertaa. Generoi uusi koodi.");
+  const isValidCode = await compare(code, recoveryCodeInfo.codeHash);
+  if (!isValidCode) throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
+  if (recoveryCodeInfo.createdAt + FIVE_MINUTES_MS < Date.now()) throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
+  return true;
 };

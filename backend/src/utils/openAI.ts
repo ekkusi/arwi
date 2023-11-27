@@ -2,6 +2,7 @@ import { Evaluation } from "types";
 import matomo from "../matomo";
 import openAIClient from "../openAIClient";
 import { formatDate } from "./date";
+import { MATOMO_EVENT_CATEGORIES } from "../config";
 
 export type EvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviourRating" | "notes">> & {
   date: Date;
@@ -9,7 +10,6 @@ export type EvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviou
 };
 
 const CHARACTERS_PER_TOKEN = 2.5;
-const OPEN_AI_EVENT_CATEGORY = "OpenAI";
 
 export async function generateStudentSummary(evaluations: EvaluationData[], userId: string) {
   const startMessage = `Olen kyseisen oppilaan liikunnanopettaja, ja minun tulee antaa hänelle yleinen palaute, kehitysehdotus ja huomio vahvuusalueesta hänen suoritustensa perusteella. Päivämäärät, ympäristöt, taitojen ja työskentelyn arvosanat sekä opettajan huomiot on annettu listana. Arvosanat on annettu asteikoilla 6-10, joista 6 on heikoin ja 10 paras. Minun tulee tehdä vertailua työskentelyn ja taitojen välillä sekä eri ympäristöjen kesken, mikäli arvosanoissa on selkeitä eroavaisuuksia. Jos oppilaan taidot tai työskentely on jossain ympäristössä 7 tai alle, minun pitää antaa siitä ympäristöstä selkeästi kehitettävää palautetta. Jos taidot tai työskentely taas on jossain ympäristössä 9 tai enemmän, minun pitää kehua oppilasta kyseisestä ympäristöstä. Pyydän sinua kirjoittamaan noin 50 sanaisen palautteen oppilaalle sinuttelevassa muodossa ja hampurilaismallin mukaisesti:\n\n Tässä on lista oppilaan suorituksista:\n\n`;
@@ -26,7 +26,7 @@ export async function generateStudentSummary(evaluations: EvaluationData[], user
   const prompt = startMessage + notes.join("\n\n");
   const tokenCount = prompt.length / CHARACTERS_PER_TOKEN;
 
-  matomo.trackEventWithValue(OPEN_AI_EVENT_CATEGORY, "Generate student feedback", tokenCount, {
+  matomo.trackEventWithValue(MATOMO_EVENT_CATEGORIES.OPEN_AI, "Generate student feedback", tokenCount, {
     userInfo: {
       uid: userId,
       custom: {
@@ -63,7 +63,7 @@ export async function fixTextGrammatics(text: string, userId: string) {
   const prompt = startMessage + text;
   const tokenCount = prompt.length / CHARACTERS_PER_TOKEN;
 
-  matomo.trackEventWithValue(OPEN_AI_EVENT_CATEGORY, "Fix text grammatics", tokenCount, {
+  matomo.trackEventWithValue(MATOMO_EVENT_CATEGORIES.OPEN_AI, "Fix text grammatics", tokenCount, {
     userInfo: {
       uid: userId,
     },
