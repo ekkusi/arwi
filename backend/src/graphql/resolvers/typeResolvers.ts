@@ -59,6 +59,14 @@ const resolvers: TypeResolvers = {
         label: matchingSubject.label,
       };
     },
+    collectionTypes: async ({ id }, _, { prisma }) => {
+      const collectionTypes = await prisma.collectionType.findMany({
+        where: {
+          groupId: id,
+        },
+      });
+      return collectionTypes;
+    },
   },
   Evaluation: {
     collection: async ({ evaluationCollectionId }, _, { prisma }) => {
@@ -190,6 +198,16 @@ const resolvers: TypeResolvers = {
         },
       });
       return students;
+    },
+  },
+  CollectionType: {
+    group: async ({ groupId }, _, { prisma }) => {
+      const group = await prisma.group.findUniqueOrThrow({
+        where: {
+          id: groupId,
+        },
+      });
+      return group;
     },
   },
 };

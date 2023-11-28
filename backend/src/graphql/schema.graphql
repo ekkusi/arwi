@@ -104,6 +104,23 @@ type Group {
   archived: Boolean!
   currentModule: Module!
   modules: [Module!]!
+  collectionTypes: [CollectionType!]!
+}
+
+type CollectionType {
+  id: ID!
+  category:    CollectionTypeCategory!
+  name:        String!
+  weight:      Int!
+  group: Group!
+}
+
+enum CollectionTypeCategory {
+  CLASS_PARTICIPATION
+  EXAM
+  WRITTEN_WORK
+  GROUP_WOR
+  OTHER
 }
 
 type ModuleInfo {
@@ -123,7 +140,7 @@ type Module {
 type EvaluationCollection {
   id: ID!
   date: Date!
-  type: String!
+  type: CollectionType!
   environment: Environment!
   description: String
   evaluations: [Evaluation!]!
@@ -177,6 +194,7 @@ input CreateGroupInput {
   educationLevel: EducationLevel!
   learningObjectiveGroupKey: String!
   students: [CreateStudentInput!]!
+  collectionTypes: [CreateCollectionTypeInput!]!
 }
 
 input UpdateGroupInput {
@@ -188,13 +206,19 @@ input CreateStudentInput {
   name: String!
 }
 
+input CreateCollectionTypeInput {
+  category: CollectionTypeCategory!
+  name: String!
+  weight: Int!
+}
+
 input UpdateStudentInput {
   name: String
 }
 
 input CreateCollectionInput {
   date: Date!
-  type: String
+  typeId: ID!
   environmentCode: ID!
   description: String
   learningObjectiveCodes: [ID!]!
@@ -203,7 +227,7 @@ input CreateCollectionInput {
 
 input UpdateCollectionInput {
   date: Date
-  type: String
+  typeId: ID
   environmentCode: ID
   description: String
   learningObjectiveCodes: [ID!]

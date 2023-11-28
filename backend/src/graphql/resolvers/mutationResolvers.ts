@@ -32,7 +32,6 @@ import { generateCode } from "../../utils/passwordRecovery";
 import { sendMail } from "../../utils/mail";
 import { BRCRYPT_SALT_ROUNDS, MATOMO_EVENT_CATEGORIES } from "../../config";
 import matomo from "../../matomo";
-import redisClient from "../../redis";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { prisma, req }) => {
@@ -241,7 +240,7 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   createGroup: async (_, { data }, { prisma }) => {
     await validateCreateGroupInput(data);
-    const { students: studentInputs, educationLevel, learningObjectiveGroupKey, ...rest } = data;
+    const { students: studentInputs, educationLevel, learningObjectiveGroupKey, collectionTypes, ...rest } = data;
     const groupId = uuidv4();
     const moduleId = uuidv4();
     const groupCreate = prisma.group.create({
@@ -249,6 +248,11 @@ const resolvers: MutationResolvers<CustomContext> = {
         ...rest,
         id: groupId,
         currentModuleId: moduleId,
+        collectionTypes: {
+          createMany: {
+            data: collectionTypes,
+          },
+        },
       },
     });
     const moduleCreate = prisma.module.create({

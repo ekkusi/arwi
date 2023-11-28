@@ -38,6 +38,7 @@ const config: CodegenConfig = {
           Module: "@prisma/client#Module",
           Subject: "./subject#SubjectMinimal",
           Environment: "./subject#Environment",
+          CollectionType: "@prisma/client#CollectionType",
         },
         contextType: "./contextTypes#CustomContext",
       },

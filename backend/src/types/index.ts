@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { UserInfo as UserInfoPrisma, CustomContext } from './contextTypes';
-import { EvaluationCollection as EvaluationCollectionPrisma, Evaluation as EvaluationPrisma, Group as GroupPrisma, Student as StudentPrisma, Module as ModulePrisma } from '@prisma/client';
+import { EvaluationCollection as EvaluationCollectionPrisma, Evaluation as EvaluationPrisma, Group as GroupPrisma, Student as StudentPrisma, Module as ModulePrisma, CollectionType as CollectionTypePrisma } from '@prisma/client';
 import { SubjectMinimal as SubjectMinimalPrisma, Environment as EnvironmentPrisma } from './subject';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -292,7 +292,25 @@ export type Group = {
   archived: Scalars['Boolean'];
   currentModule: Module;
   modules: Array<Module>;
+  collectionTypes: Array<CollectionType>;
 };
+
+export type CollectionType = {
+  __typename?: 'CollectionType';
+  id: Scalars['ID'];
+  category: CollectionTypeCategory;
+  name: Scalars['String'];
+  weight: Scalars['Int'];
+  group: Group;
+};
+
+export enum CollectionTypeCategory {
+  CLASS_PARTICIPATION = 'CLASS_PARTICIPATION',
+  EXAM = 'EXAM',
+  WRITTEN_WORK = 'WRITTEN_WORK',
+  GROUP_WOR = 'GROUP_WOR',
+  OTHER = 'OTHER'
+}
 
 export type ModuleInfo = {
   __typename?: 'ModuleInfo';
@@ -314,7 +332,7 @@ export type EvaluationCollection = {
   __typename?: 'EvaluationCollection';
   id: Scalars['ID'];
   date: Scalars['Date'];
-  type: Scalars['String'];
+  type: CollectionType;
   environment: Environment;
   description?: Maybe<Scalars['String']>;
   evaluations: Array<Evaluation>;
@@ -370,6 +388,7 @@ export type CreateGroupInput = {
   educationLevel: EducationLevel;
   learningObjectiveGroupKey: Scalars['String'];
   students: Array<CreateStudentInput>;
+  collectionTypes: Array<CreateCollectionTypeInput>;
 };
 
 export type UpdateGroupInput = {
@@ -381,13 +400,19 @@ export type CreateStudentInput = {
   name: Scalars['String'];
 };
 
+export type CreateCollectionTypeInput = {
+  category: CollectionTypeCategory;
+  name: Scalars['String'];
+  weight: Scalars['Int'];
+};
+
 export type UpdateStudentInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateCollectionInput = {
   date: Scalars['Date'];
-  type?: InputMaybe<Scalars['String']>;
+  typeId: Scalars['ID'];
   environmentCode: Scalars['ID'];
   description?: InputMaybe<Scalars['String']>;
   learningObjectiveCodes: Array<Scalars['ID']>;
@@ -396,7 +421,7 @@ export type CreateCollectionInput = {
 
 export type UpdateCollectionInput = {
   date?: InputMaybe<Scalars['Date']>;
-  type?: InputMaybe<Scalars['String']>;
+  typeId?: InputMaybe<Scalars['ID']>;
   environmentCode?: InputMaybe<Scalars['ID']>;
   description?: InputMaybe<Scalars['String']>;
   learningObjectiveCodes?: InputMaybe<Array<Scalars['ID']>>;
@@ -517,6 +542,8 @@ export type ResolversTypes = {
   Subject: ResolverTypeWrapper<SubjectMinimalPrisma>;
   Environment: ResolverTypeWrapper<EnvironmentPrisma>;
   Group: ResolverTypeWrapper<GroupPrisma>;
+  CollectionType: ResolverTypeWrapper<CollectionTypePrisma>;
+  CollectionTypeCategory: CollectionTypeCategory;
   ModuleInfo: ResolverTypeWrapper<ModuleInfo>;
   Module: ResolverTypeWrapper<ModulePrisma>;
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
@@ -527,6 +554,7 @@ export type ResolversTypes = {
   CreateGroupInput: CreateGroupInput;
   UpdateGroupInput: UpdateGroupInput;
   CreateStudentInput: CreateStudentInput;
+  CreateCollectionTypeInput: CreateCollectionTypeInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
   UpdateCollectionInput: UpdateCollectionInput;
@@ -556,6 +584,7 @@ export type ResolversParentTypes = {
   Subject: SubjectMinimalPrisma;
   Environment: EnvironmentPrisma;
   Group: GroupPrisma;
+  CollectionType: CollectionTypePrisma;
   ModuleInfo: ModuleInfo;
   Module: ModulePrisma;
   EvaluationCollection: EvaluationCollectionPrisma;
@@ -565,6 +594,7 @@ export type ResolversParentTypes = {
   CreateGroupInput: CreateGroupInput;
   UpdateGroupInput: UpdateGroupInput;
   CreateStudentInput: CreateStudentInput;
+  CreateCollectionTypeInput: CreateCollectionTypeInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateCollectionInput: CreateCollectionInput;
   UpdateCollectionInput: UpdateCollectionInput;
@@ -693,6 +723,16 @@ export type GroupResolvers<ContextType = CustomContext, ParentType extends Resol
   archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   currentModule?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
   modules?: Resolver<Array<ResolversTypes['Module']>, ParentType, ContextType>;
+  collectionTypes?: Resolver<Array<ResolversTypes['CollectionType']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CollectionTypeResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['CollectionType'] = ResolversParentTypes['CollectionType']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  category?: Resolver<ResolversTypes['CollectionTypeCategory'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  weight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -715,7 +755,7 @@ export type ModuleResolvers<ContextType = CustomContext, ParentType extends Reso
 export type EvaluationCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['EvaluationCollection'] = ResolversParentTypes['EvaluationCollection']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
   environment?: Resolver<ResolversTypes['Environment'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   evaluations?: Resolver<Array<ResolversTypes['Evaluation']>, ParentType, ContextType>;
@@ -760,6 +800,7 @@ export type Resolvers<ContextType = CustomContext> = {
   Subject?: SubjectResolvers<ContextType>;
   Environment?: EnvironmentResolvers<ContextType>;
   Group?: GroupResolvers<ContextType>;
+  CollectionType?: CollectionTypeResolvers<ContextType>;
   ModuleInfo?: ModuleInfoResolvers<ContextType>;
   Module?: ModuleResolvers<ContextType>;
   EvaluationCollection?: EvaluationCollectionResolvers<ContextType>;

@@ -1,5 +1,4 @@
 import { SessionOptions } from "express-session";
-import { Redis } from "ioredis";
 import RedisStore from "connect-redis";
 import { HelmetOptions } from "helmet";
 import redisClient from "./redis";

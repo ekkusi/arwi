@@ -27,8 +27,11 @@ export const validateRegisterInput = async ({ email, languagePreference }: Creat
   if (!VALID_LANGUAGE_CODES.includes(languagePreference)) throw new ValidationError(`Kielikoodi '${languagePreference}' ei ole sallittu`);
 };
 
-export const validateCreateGroupInput = async ({ subjectCode }: CreateGroupInput) => {
+export const validateCreateGroupInput = async ({ subjectCode, collectionTypes }: CreateGroupInput) => {
   if (!getSubject(subjectCode)) throw new ValidationError(`Aihetta koodilla '${subjectCode}' ei ole olemassa.`);
+  if (collectionTypes.length === 0) throw new ValidationError(`Arviointityyppejä on oltava vähintään yksi.`);
+  if (collectionTypes.reduce((acc, curr) => acc + curr.weight, 0) !== 100)
+    throw new ValidationError(`Arviointityyppien painotusten summan on oltava 100.`);
 };
 
 export const validateLearningObjectives = (
