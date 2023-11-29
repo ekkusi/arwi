@@ -7,7 +7,6 @@ import CButton from "../../../../components/primitives/CButton";
 import CImage from "../../../../components/primitives/CImage";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
-import ProgressBar from "../../../../components/ProgressBar";
 import { subjectToIcon } from "../../../../helpers/dataMappers";
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
@@ -24,7 +23,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
 
   const subjects = getSubjects();
   return (
-    <GroupCreationBody navigation={navigation}>
+    <GroupCreationBody navigation={navigation} progressState={1}>
       <CView style={{ flex: 1, marginTop: 20 }}>
         <CView style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 30, backgroundColor: "white" }}>
           <CView style={{ flex: 10, width: "100%", paddingHorizontal: 15, gap: 10, justifyContent: "center" }}>
@@ -78,7 +77,6 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
                 <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
               </CButton>
             </CView>
-            <ProgressBar color={COLORS.primary} progress={1 / 3} />
           </CView>
         </CView>
       </CView>

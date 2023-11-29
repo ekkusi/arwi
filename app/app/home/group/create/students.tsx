@@ -9,7 +9,6 @@ import TextFormField from "../../../../components/form/TextFormField";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
-import ProgressBar from "../../../../components/ProgressBar";
 import { graphql } from "../../../../gql";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { useAuthenticatedUser } from "../../../../hooks-and-providers/AuthProvider";
@@ -88,6 +87,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
             subjectCode: group.subject.code,
             students: allStudents.map((it) => ({ name: it })),
             teacherId: user.id, // TODO: Add correct teacher id
+            collectionTypes: group.collectionTypes,
           },
         },
         refetchQueries: ["MainPage_GetCurrentUser"],
@@ -119,7 +119,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
   };
 
   return (
-    <GroupCreationBody navigation={navigation}>
+    <GroupCreationBody navigation={navigation} progressState={4}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
         <CTouchableWithoutFeedback preventChildEvents={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
           <CView style={{ flex: 8, padding: 15, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
@@ -199,7 +199,6 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
                 />
               </CView>
             )}
-            <ProgressBar color={COLORS.primary} progress={3 / 3} />
           </CView>
         </CTouchableWithoutFeedback>
       </CView>

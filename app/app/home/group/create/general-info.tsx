@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
-import { Alert, BackHandler, Keyboard, TextInput } from "react-native";
+import { Keyboard, TextInput } from "react-native";
 import { getModuleInfos } from "arwi-backend/src/utils/subjectUtils";
 import { ModuleInfo } from "arwi-backend/src/types";
 import CButton from "../../../../components/primitives/CButton";
@@ -14,7 +14,6 @@ import { GroupCreationStackParams } from "./types";
 import GroupCreationBody from "./_body";
 import TextFormField from "../../../../components/form/TextFormField";
 import SelectFormField from "../../../../components/form/SelectFormField";
-import ProgressBar from "../../../../components/ProgressBar";
 import { useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
 import CTouchableWithoutFeedback from "../../../../components/primitives/CTouchableWithoutFeedback";
 
@@ -36,28 +35,8 @@ export default function GroupNameSelectionView({
 
   useKeyboardListener({ onHide: blurInput });
 
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert("", t("GroupCreationStack.cancelPopUpMessage", "Oletko varma, että haluat perua ryhmän luonnin?"), [
-        {
-          text: t("Dialog.no", "Ei"),
-          onPress: () => null,
-          style: "cancel",
-        },
-        { text: t("Dialog.yes", "Kyllä"), onPress: () => navigation.getParent("home-stack")?.navigate("home") },
-      ]);
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
-
-    return () => {
-      backHandler.remove();
-    };
-  }, [navigation, t]);
-
   return (
-    <GroupCreationBody navigation={navigation}>
+    <GroupCreationBody navigation={navigation} progressState={2}>
       <CView style={{ flex: 1, justifyContent: "space-between" }}>
         <CTouchableWithoutFeedback accessible={false} preventChildEvents={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
           <CView style={{ flex: 8, padding: "md", alignItems: "center", justifyContent: "center", gap: 30 }}>
@@ -87,11 +66,10 @@ export default function GroupNameSelectionView({
               </CButton>
               <CButton
                 disabled={group.name.length === 0 || group.module === undefined}
-                onPress={() => navigation.navigate("group-create-students")}
+                onPress={() => navigation.navigate("group-create-collection-types")}
                 leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
               />
             </CView>
-            <ProgressBar color={COLORS.primary} progress={2 / 3} />
           </CView>
         </CTouchableWithoutFeedback>
       </CView>

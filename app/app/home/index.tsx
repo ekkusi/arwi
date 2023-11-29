@@ -33,6 +33,12 @@ const MainPage_GetCurrentUser_Query = graphql(`
         name
         archived
         updatedAt
+        collectionTypes {
+          id
+          category
+          name
+          weight
+        }
         subject {
           label {
             fi
