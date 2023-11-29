@@ -2,10 +2,10 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import WebView from "react-native-webview";
 import { useMatomo } from "matomo-tracker-react-native";
 import Checkbox from "expo-checkbox";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
@@ -17,7 +17,7 @@ import CView from "../../components/primitives/CView";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
-import { COLORS, SPACING } from "../../theme";
+import { SPACING } from "../../theme";
 import CModal from "../../components/CModal";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
@@ -96,6 +96,8 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
       const userInfo = {
         uid: data.register.userData.id,
       };
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setAdjustResize();
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,
         action: "Register",

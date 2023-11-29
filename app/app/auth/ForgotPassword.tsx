@@ -1,9 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMutation } from "@apollo/client";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
-import { useFocusEffect } from "@react-navigation/native";
 import LandingComponent from "./LandingComponent";
 import CView from "../../components/primitives/CView";
 import TextFormField from "../../components/form/TextFormField";
@@ -25,17 +23,6 @@ export default function ForgotPassword({ navigation }: NativeStackScreenProps<Au
   const [generalError, setGeneralError] = useState<string | undefined>();
 
   const [requestPasswordReset, { loading }] = useMutation(ForgotPassword_RequestPasswordReset_Mutation);
-
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
-    AvoidSoftInput.setEnabled(true);
-    return () => {
-      AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setAdjustResize();
-    };
-  }, []);
-
-  useFocusEffect(onFocusEffect);
 
   const handleEmailChange = (text: string) => {
     if (generalError) setGeneralError(undefined);
@@ -65,6 +52,8 @@ export default function ForgotPassword({ navigation }: NativeStackScreenProps<Au
             onChange={handleEmailChange}
           />
           <CButton
+            variant="outline"
+            colorScheme="darkgray"
             style={{ width: "100%" }}
             title={t("request-code", "Lähetä koodi")}
             onPress={handleResetRequest}

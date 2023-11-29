@@ -1,10 +1,9 @@
 import { useMutation } from "@apollo/client";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { useMatomo } from "matomo-tracker-react-native";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
-import { useFocusEffect } from "@react-navigation/native";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -43,17 +42,6 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
 
   const [login] = useMutation(LoginPage_Login_Mutation);
 
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
-    AvoidSoftInput.setEnabled(true);
-    return () => {
-      AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setAdjustResize();
-    };
-  }, []);
-
-  useFocusEffect(onFocusEffect);
-
   const handlePasswordChange = (text: string) => {
     if (generalError) setGeneralError(undefined);
     setPassword(text);
@@ -73,6 +61,8 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
       const userInfo = {
         uid: data.login.userData.id,
       };
+      AvoidSoftInput.setEnabled(false);
+      AvoidSoftInput.setAdjustResize();
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,
         action: "Login - Custom",
