@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "CollectionTypeCategory" AS ENUM ('CLASS_PARTICIPATION', 'EXAM', 'WRITTEN_WORK', 'GROUP_WOR', 'OTHER');
+CREATE TYPE "CollectionTypeCategory" AS ENUM ('CLASS_PARTICIPATION', 'EXAM', 'WRITTEN_WORK', 'GROUP_WORK', 'OTHER');
 
 -- CreateTable CollectionType
 CREATE TABLE "CollectionType" (

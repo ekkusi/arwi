@@ -119,7 +119,7 @@ enum CollectionTypeCategory {
   CLASS_PARTICIPATION
   EXAM
   WRITTEN_WORK
-  GROUP_WOR
+  GROUP_WORK
   OTHER
 }
 
