@@ -23,20 +23,6 @@ export default function GroupCollectionTypeWeightsView({
 
   const types = group.collectionTypes;
 
-  const debouncedOnTypeChanged = debounce((type: CreateCollectionTypeInput) => {
-    setError(undefined);
-
-    setGroup((prev) => {
-      // At this view all names should be unique => we can identify the types by name
-      const newTypes = prev.collectionTypes.map((item) => (item.name === type.name ? type : item));
-      return {
-        ...prev,
-        collectionTypes: newTypes,
-      };
-    });
-  }, 200);
-
-  const onTypeChanged = useCallback(debouncedOnTypeChanged, [debouncedOnTypeChanged]);
   const sum = types.reduce((acc, curr) => acc + curr.weight, 0);
 
   const validate = () => {
@@ -61,6 +47,17 @@ export default function GroupCollectionTypeWeightsView({
     navigation.goBack();
   };
 
+  const onWeightChanged = (index: number, weightString: string) => {
+    const weight = parseInt(weightString, 10);
+    if (Number.isNaN(weight)) {
+      return;
+    }
+
+    const newTypes = [...types];
+    newTypes[index].weight = weight;
+    setGroup((prev) => ({ ...prev, collectionTypes: newTypes }));
+  };
+
   return (
     <GroupCreationBody navigation={navigation} progressState={3} style={{ paddingTop: "3xl", paddingHorizontal: "md" }}>
       <CView style={{ flex: 1 }}>
@@ -73,14 +70,11 @@ export default function GroupCollectionTypeWeightsView({
             <CText style={{ flex: 1 }}>{type.name}</CText>
             <CTextInput
               keyboardType="number-pad"
-              onChange={(event) => onTypeChanged({ ...type, weight: parseInt(event.nativeEvent.text, 10) })}
+              onChange={(event) => onWeightChanged(index, event.nativeEvent.text)}
               defaultValue={type.weight.toString()}
               maxLength={3}
               style={{ width: 50, marginRight: "lg", textAlign: "center" }}
             />
-            {/* <CButton variant="empty" onPress={() => onRemoveType(type)} style={{ paddingTop: "xl" }}>
-              <MaterialCommunityIcon size={20} name="trash-can-outline" color={COLORS.darkgray} />
-            </CButton> */}
           </CView>
         ))}
         <CView style={{ width: "100%", flexDirection: "row", marginTop: "lg" }}>
