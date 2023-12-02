@@ -4,6 +4,7 @@ import { Logs } from "expo";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
 import { LogBox, Platform } from "react-native";
 import ErrorBoundary from "react-native-error-boundary";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
@@ -35,9 +36,11 @@ function AppContent() {
     <ErrorBoundary FallbackComponent={ErrorView} onError={onError}>
       <AuthProvider>
         <ApolloProvider>
-          <Suspense fallback={<LoadingIndicator />}>
-            <Main />
-          </Suspense>
+          <KeyboardProvider>
+            <Suspense fallback={<LoadingIndicator />}>
+              <Main />
+            </Suspense>
+          </KeyboardProvider>
         </ApolloProvider>
       </AuthProvider>
     </ErrorBoundary>

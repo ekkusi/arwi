@@ -1,9 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
-import { useFocusEffect } from "@react-navigation/native";
 import LandingComponent from "./LandingComponent";
 import CView from "../../components/primitives/CView";
 import { AuthStackParams } from "./types";
@@ -28,17 +26,6 @@ export default function UpdatePassword({ navigation, route }: NativeStackScreenP
   const [generalError, setGeneralError] = useState<string | undefined>();
   const [newPassword, setNewPassword] = useState<string>("");
   const [repeatNewPassword, setRepeatNewPassword] = useState<string>("");
-
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
-    AvoidSoftInput.setEnabled(true);
-    return () => {
-      AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setAdjustResize();
-    };
-  }, []);
-
-  useFocusEffect(onFocusEffect);
 
   const handleUpdate = async () => {
     if (newPassword !== repeatNewPassword) {

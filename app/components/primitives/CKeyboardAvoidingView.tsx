@@ -1,10 +1,9 @@
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useMemo } from "react";
-import { KeyboardAvoidingView, KeyboardAvoidingViewProps, Platform } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
+import { KeyboardAvoidingViewProps } from "react-native";
 import { CViewStyle } from "../../theme/types";
 import { createViewStyles } from "../../theme/utils";
-
-const BEHAVIOR = Platform.OS === "ios" ? "padding" : undefined;
 
 export type CKeyboardAvoidingViewProps = Omit<KeyboardAvoidingViewProps, "style"> & {
   style?: CViewStyle;
@@ -15,12 +14,5 @@ export default function CKeyboardAvoidingView({ style, ...rest }: CKeyboardAvoid
 
   const styles = useMemo(() => style && createViewStyles(style), [style]);
 
-  return (
-    <KeyboardAvoidingView
-      style={styles}
-      behavior={BEHAVIOR}
-      keyboardVerticalOffset={Platform.OS === "ios" ? headerHeight : headerHeight + 20}
-      {...rest}
-    />
-  );
+  return <KeyboardAvoidingView style={styles} behavior="padding" keyboardVerticalOffset={headerHeight} {...rest} />;
 }

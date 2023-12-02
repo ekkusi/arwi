@@ -1,10 +1,12 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, Keyboard, TouchableOpacity } from "react-native";
+import { FlatList, Keyboard, ScrollView, TouchableOpacity, useWindowDimensions } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useFocusEffect } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import TextFormField from "../../../../components/form/TextFormField";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
@@ -18,6 +20,9 @@ import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 import GroupCreationBody from "./_body";
 import CTouchableWithoutFeedback from "../../../../components/primitives/CTouchableWithoutFeedback";
+import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
+import CKeyboardAvoidingView from "../../../../components/primitives/CKeyboardAvoidingView";
+import CScrollView from "../../../../components/primitives/CScrollView";
 
 const CreateGroupPage_CreateGroup_Mutation = graphql(`
   mutation CreateGroupPage_CreateGroup($input: CreateGroupInput!) {
@@ -38,7 +43,7 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
       alignItems: "center",
       height: 35,
     }}
-    onStartShouldSetResponder={() => true}
+    // onStartShouldSetResponder={() => true}
   >
     <CText style={{ fontSize: "md", fontWeight: "300", color: "darkgray" }}>{item}</CText>
     <TouchableOpacity
@@ -55,20 +60,14 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
   const { t } = useTranslation();
   const [newStudent, setNewStudent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const inputRef = useRef<TextInput>(null);
+  const scrollRef = useRef<KeyboardAwareScrollView>(null);
   const user = useAuthenticatedUser();
+  const dimensions = useWindowDimensions();
+  const inputRef = useRef<TextInput>(null);
 
   const [createGroup] = useMutation(CreateGroupPage_CreateGroup_Mutation);
 
   const { group, setGroup } = useGroupCreationContext();
-
-  const isKeyboardVisible = useIsKeyboardVisible();
-
-  const onShowKeyboard = useCallback(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  useKeyboardListener({ onShow: onShowKeyboard });
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -113,95 +112,78 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     return nonEmptyStudents;
   };
 
+  const scrollToInput = (studentCount: number) => {
+    console.log("scrollToInput");
+
+    // TODO: FIX THIS
+    // if (inputRef.current) scrollRef.current?.scrollToFocusedInput(inputRef.current, -50);
+  };
+
   const addStudents = (studentString: string) => {
     const nonEmptyStudents = splitStudentString(studentString);
-    setGroup({ ...group, students: [...group.students, ...nonEmptyStudents] });
+    const newStudentList = [...group.students, ...nonEmptyStudents];
+    // Refocus the scroll view to the input
+    scrollToInput(newStudentList.length);
+    setGroup({ ...group, students: newStudentList });
   };
 
   return (
-    <GroupCreationBody navigation={navigation} progressState={4}>
-      <CView style={{ flex: 1, justifyContent: "space-between" }}>
-        <CTouchableWithoutFeedback preventChildEvents={false} style={{ height: "100%" }} onPress={Keyboard.dismiss}>
-          <CView style={{ flex: 8, padding: 15, justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-            <CView style={{ flex: 1, gap: 20, width: "100%" }}>
-              <CView style={{ flex: 6, gap: 10 }}>
-                <CText style={{ fontSize: "title", fontWeight: "300" }}>{t("students", "Oppilaat")}</CText>
-                <FlatList
-                  inverted
-                  scrollEnabled
-                  data={[...group.students].reverse()}
-                  renderItem={({ item }: { item: string }) => renderStudentItem(item, removeStudent)}
-                  keyExtractor={(_, index) => index.toString()}
-                  numColumns={1}
-                  style={{ flexGrow: 1 }}
-                />
-              </CView>
-              <CView style={{ flex: 3, width: "100%" }}>
-                <CView style={{ height: 60, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                  <CView style={{ flex: 5 }}>
-                    <TextFormField
-                      ref={inputRef}
-                      placeholder={t("GroupStudentsSelectionView.newStudent", "Uusi oppilas")}
-                      multiline
-                      value={newStudent}
-                      onChange={(text) => {
-                        setNewStudent(text);
-                      }}
-                      blurOnSubmit={false}
-                      onSubmitEditing={(_) => {
-                        if (newStudent.length > 0) {
-                          addStudents(newStudent);
-                          setNewStudent("");
-                        }
-                      }}
-                    />
-                  </CView>
-                  <CButton
-                    style={{ flex: 1, position: "absolute", right: 0, height: 48, width: 48, paddingHorizontal: 0 }}
-                    disabled={newStudent.length === 0}
-                    onPress={() => {
-                      if (newStudent.length > 0) addStudents(newStudent);
-                      setNewStudent("");
-                    }}
-                  >
-                    <MaterialCommunityIcon size={25} name="plus" color={COLORS.white} />
-                  </CButton>
-                </CView>
-                <CText style={{ fontSize: "sm", fontWeight: "300" }}>
-                  {t(
-                    "add-multiple-students-info",
-                    "Voit lisätä oppilaita listana kopioimalla tekstikenttään tekstin, jossa jokaisella rivillä on yhden oppilaan nimi."
-                  )}
-                </CText>
-              </CView>
-            </CView>
+    <GroupCreationBody
+      navigation={navigation}
+      progressState={5}
+      onMoveForward={handleSubmit}
+      forwardButtonProps={{
+        loading,
+        title: t("GroupStudentsSelectionView.createGroup", "Luo ryhmä"),
+        leftIcon: <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />,
+      }}
+      // closeKeyBoardOnTap={false}
+      style={{ gap: 20, padding: "lg" }}
+    >
+      <CKeyboardAwareScrollView ref={scrollRef} extraScrollHeight={130} keyboardShouldPersistTaps="handled">
+        <CView style={{ gap: 10, minHeight: dimensions.height * 0.43 }}>
+          <CText style={{ fontSize: "title", fontWeight: "300" }}>{t("students", "Oppilaat")}</CText>
+          <CView style={{ flex: 1, marginBottom: "xl" }}>
+            {[...group.students].reverse().map((student) => renderStudentItem(student, removeStudent))}
           </CView>
-          <CView style={{ flex: 2, justifyContent: "flex-end" }}>
-            {!isKeyboardVisible && (
-              <CView
-                style={{
-                  flexGrow: 1,
-                  width: "100%",
-                  padding: "xl",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                }}
-              >
-                <CButton onPress={() => navigation.goBack()}>
-                  <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-                </CButton>
-                <CButton
-                  loading={loading}
-                  title={t("GroupStudentsSelectionView.createGroup", "Luo ryhmä")}
-                  onPress={() => handleSubmit()}
-                  leftIcon={<MaterialCommunityIcon name="check" size={25} color={COLORS.white} />}
-                />
-              </CView>
+        </CView>
+        <CView style={{ width: "100%", flex: 1 }}>
+          <CView style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+            <TextFormField
+              ref={inputRef}
+              placeholder={t("GroupStudentsSelectionView.newStudent", "Uusi oppilas")}
+              multiline
+              value={newStudent}
+              onChange={(text) => {
+                setNewStudent(text);
+              }}
+              blurOnSubmit={false}
+              onSubmitEditing={(_) => {
+                if (newStudent.length > 0) {
+                  addStudents(newStudent);
+                  setNewStudent("");
+                }
+              }}
+            />
+            <CButton
+              style={{ flex: 1, position: "absolute", right: 0, minHeight: 40, width: 40, paddingHorizontal: 0, bottom: "sm" }}
+              disabled={newStudent.length === 0}
+              onPress={() => {
+                if (newStudent.length > 0) addStudents(newStudent);
+                setNewStudent("");
+              }}
+            >
+              <MaterialCommunityIcon size={25} name="plus" color={COLORS.white} />
+            </CButton>
+          </CView>
+          <CText style={{ fontSize: "sm", fontWeight: "300" }}>
+            {t(
+              "add-multiple-students-info",
+              "Voit lisätä oppilaita listana kopioimalla tekstikenttään tekstin, jossa jokaisella rivillä on yhden oppilaan nimi."
             )}
-          </CView>
-        </CTouchableWithoutFeedback>
-      </CView>
+          </CText>
+        </CView>
+      </CKeyboardAwareScrollView>
     </GroupCreationBody>
   );
 }

@@ -15,6 +15,7 @@ import SelectFormField from "../../../../components/form/SelectFormField";
 import CText from "../../../../components/primitives/CText";
 import CTextInput from "../../../../components/primitives/CTextInput";
 import { dividePercentages } from "../../../../helpers/mathUtilts";
+import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
 
 type CollectionTypeOption = {
   name: string;
@@ -25,12 +26,12 @@ type CollectionTypeInfo = CollectionTypeOption & {
   id: string;
 };
 
-const mapCollectionTypeInfo = (type: CollectionTypeOption, selectedTypes: CollectionTypeOption[], noNameMap = false): CollectionTypeInfo => {
+const mapCollectionTypeInfo = (type: CollectionTypeOption, otherSelectedTypes: CollectionTypeOption[], noNameMap = false): CollectionTypeInfo => {
   let { name } = type;
   let id = type.category.toString();
   let matchingCount = 0;
-  for (let i = 0; i < selectedTypes.length; i += 1) {
-    if (selectedTypes[i].category === type.category) matchingCount += 1;
+  for (let i = 0; i < otherSelectedTypes.length; i += 1) {
+    if (otherSelectedTypes[i].category === type.category) matchingCount += 1;
   }
   if (matchingCount > 0) {
     if (!noNameMap) name = `${type.name} ${matchingCount + 1}`;
@@ -43,15 +44,22 @@ const mapCollectionTypeInfo = (type: CollectionTypeOption, selectedTypes: Collec
   };
 };
 
+const mapCollectionTypeInfos = (types: CollectionTypeOption[]): CollectionTypeInfo[] => {
+  const mappedTypes: CollectionTypeInfo[] = [];
+  types.forEach((type) => {
+    const mappedType = mapCollectionTypeInfo(type, mappedTypes, true);
+    mappedTypes.push(mappedType);
+  });
+  return mappedTypes;
+};
+
 export default function GroupCollectionTypesView({
   navigation,
 }: NativeStackScreenProps<GroupCreationStackParams, "group-create-collection-types", "home-stack">) {
   const { t } = useTranslation();
 
   const { group, setGroup } = useGroupCreationContext();
-  const [selectedTypes, setSelectedTypes] = useState<CollectionTypeInfo[]>(
-    group.collectionTypes.map((it) => mapCollectionTypeInfo(it, group.collectionTypes, true))
-  );
+  const [selectedTypes, setSelectedTypes] = useState<CollectionTypeInfo[]>(() => mapCollectionTypeInfos(group.collectionTypes));
   const [error, setError] = useState<string | undefined>(undefined);
 
   const collectionTypeOptions: CollectionTypeOption[] = useMemo(() => {
@@ -78,6 +86,8 @@ export default function GroupCollectionTypesView({
 
   const onSelectType = (type: CollectionTypeOption) => {
     const mappedType = mapCollectionTypeInfo(type, selectedTypes);
+    console.log("mappedType", mappedType);
+    console.log("selectedTypes", selectedTypes);
 
     setSelectedTypes((prev) => [...prev, mappedType]);
   };
@@ -116,8 +126,8 @@ export default function GroupCollectionTypesView({
   }, [onTypeChanged]);
 
   return (
-    <GroupCreationBody navigation={navigation} progressState={3} style={{ paddingTop: "3xl", paddingHorizontal: "md" }}>
-      <CView style={{ flex: 1 }}>
+    <GroupCreationBody navigation={navigation} progressState={3} onMoveBack={onMoveBack} onMoveForward={onMoveToNextView}>
+      <CKeyboardAwareScrollView>
         <SelectFormField
           title={t("evaluation-types", "Arviointityypit")}
           options={collectionTypeOptions}
@@ -148,17 +158,7 @@ export default function GroupCollectionTypesView({
           )}
         </CView>
         {error && <CText style={{ color: "error", fontWeight: "600", marginTop: "lg" }}>{error}</CText>}
-      </CView>
-      <CView style={{ flexDirection: "row", justifyContent: "space-between", padding: "xl" }}>
-        <CButton onPress={onMoveBack}>
-          <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
-        </CButton>
-        <CButton
-          disabled={!isValid}
-          onPress={onMoveToNextView}
-          leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
-        />
-      </CView>
+      </CKeyboardAwareScrollView>
     </GroupCreationBody>
   );
 }
