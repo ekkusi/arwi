@@ -13,29 +13,7 @@ const { Navigator, Screen } = createNativeStackNavigator<GroupCreationStackParam
 
 export default function GroupCreationStack() {
   const { t } = useTranslation();
-  // const onFocusEffect = useCallback(() => {
-  //   console.log("GroupCreationStack onFocusEffect");
 
-  //   // AvoidSoftInput.setAvoidOffset(hideBottomBarOnKeyboardOpen ? 0 : 84); // Calculated manually from bottom bar height
-  //   // AvoidSoftInput.setAvoidOffset(84; // Calculated manually from bottom bar height
-  //   AvoidSoftInput.setShouldMimicIOSBehavior(true);
-  //   AvoidSoftInput.setShowAnimationDuration(200);
-  //   AvoidSoftInput.setHideAnimationDuration(100);
-  //   // AvoidSoftInput.setAdjustResize();
-  //   AvoidSoftInput.setEnabled(true);
-  //   return () => {
-  //     console.log("GroupCreationStack onFocusEffect cleanup");
-
-  //     AvoidSoftInput.setEnabled(false);
-  //     AvoidSoftInput.setShouldMimicIOSBehavior(false);
-  //     AvoidSoftInput.setShowAnimationDuration();
-  //     AvoidSoftInput.setHideAnimationDuration();
-  //     // AvoidSoftInput.setAdjustResize();
-  //     AvoidSoftInput.setAvoidOffset(0);
-  //   };
-  // }, []);
-
-  // useEffect(onFocusEffect, [onFocusEffect]);
   return (
     <GroupCreationProvider>
       <Navigator

@@ -9,7 +9,7 @@ import CView from "../../../../components/primitives/CView";
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
-import GroupCreationBody from "./_body";
+import GroupCreationBody, { SCROLL_TO_INPUT_EXTRA_HEIGHT } from "./_body";
 import { getCollectionTypeTranslation } from "../../../../helpers/translation";
 import SelectFormField from "../../../../components/form/SelectFormField";
 import CText from "../../../../components/primitives/CText";
@@ -86,8 +86,6 @@ export default function GroupCollectionTypesView({
 
   const onSelectType = (type: CollectionTypeOption) => {
     const mappedType = mapCollectionTypeInfo(type, selectedTypes);
-    console.log("mappedType", mappedType);
-    console.log("selectedTypes", selectedTypes);
 
     setSelectedTypes((prev) => [...prev, mappedType]);
   };
@@ -98,8 +96,6 @@ export default function GroupCollectionTypesView({
     const hasDuplicates = selectedTypes.some((item, index) => selectedTypes.findIndex((i) => i.name === item.name) !== index);
     if (hasDuplicates) return t("collection-types-must-be-unique", "Arviointityypeillä ei saa olla samaa nimeä");
   };
-
-  const isValid = selectedTypes.length > 0 && !error;
 
   const onMoveToNextView = () => {
     const errorMessage = validate();
@@ -127,7 +123,8 @@ export default function GroupCollectionTypesView({
 
   return (
     <GroupCreationBody navigation={navigation} progressState={3} onMoveBack={onMoveBack} onMoveForward={onMoveToNextView}>
-      <CKeyboardAwareScrollView>
+      {/* <CKeyboardAvoidingView style={{ flex: 1 }} behavior={undefined}> */}
+      <CKeyboardAwareScrollView androidKeyboardAvoidProps={{ keyboardVerticalOffset: SCROLL_TO_INPUT_EXTRA_HEIGHT }}>
         <SelectFormField
           title={t("evaluation-types", "Arviointityypit")}
           options={collectionTypeOptions}
@@ -159,6 +156,7 @@ export default function GroupCollectionTypesView({
         </CView>
         {error && <CText style={{ color: "error", fontWeight: "600", marginTop: "lg" }}>{error}</CText>}
       </CKeyboardAwareScrollView>
+      {/* </CKeyboardAvoidingView> */}
     </GroupCreationBody>
   );
 }

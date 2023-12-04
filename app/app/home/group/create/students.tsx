@@ -1,12 +1,10 @@
 import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, Keyboard, ScrollView, TouchableOpacity, useWindowDimensions } from "react-native";
+import { TouchableOpacity, findNodeHandle, useWindowDimensions } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useFocusEffect } from "@react-navigation/native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import TextFormField from "../../../../components/form/TextFormField";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
@@ -14,15 +12,11 @@ import CView from "../../../../components/primitives/CView";
 import { graphql } from "../../../../gql";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { useAuthenticatedUser } from "../../../../hooks-and-providers/AuthProvider";
-import { useIsKeyboardVisible, useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
 import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
-import GroupCreationBody from "./_body";
-import CTouchableWithoutFeedback from "../../../../components/primitives/CTouchableWithoutFeedback";
+import GroupCreationBody, { SCROLL_TO_INPUT_EXTRA_HEIGHT } from "./_body";
 import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
-import CKeyboardAvoidingView from "../../../../components/primitives/CKeyboardAvoidingView";
-import CScrollView from "../../../../components/primitives/CScrollView";
 
 const CreateGroupPage_CreateGroup_Mutation = graphql(`
   mutation CreateGroupPage_CreateGroup($input: CreateGroupInput!) {
@@ -43,7 +37,6 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
       alignItems: "center",
       height: 35,
     }}
-    // onStartShouldSetResponder={() => true}
   >
     <CText style={{ fontSize: "md", fontWeight: "300", color: "darkgray" }}>{item}</CText>
     <TouchableOpacity
@@ -56,11 +49,12 @@ const renderStudentItem = (item: string, removeStudent: (student: string) => voi
     </TouchableOpacity>
   </CView>
 );
+
 export default function GroupStudentsSelectionView({ navigation }: NativeStackScreenProps<GroupCreationStackParams, "group-create-students">) {
   const { t } = useTranslation();
   const [newStudent, setNewStudent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const scrollRef = useRef<KeyboardAwareScrollView>(null);
+  const scrollRef = useRef<any | null>(null);
   const user = useAuthenticatedUser();
   const dimensions = useWindowDimensions();
   const inputRef = useRef<TextInput>(null);
@@ -112,18 +106,18 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     return nonEmptyStudents;
   };
 
-  const scrollToInput = (studentCount: number) => {
-    console.log("scrollToInput");
+  const scrollToInput = () => {
+    const inputObj = findNodeHandle(inputRef.current);
 
-    // TODO: FIX THIS
-    // if (inputRef.current) scrollRef.current?.scrollToFocusedInput(inputRef.current, -50);
+    // The magic 75 is a necessary extra height that is always added under the hood in the library (but for some reason not automatically in this method)
+    if (inputObj) scrollRef.current?.scrollToFocusedInput(inputObj, SCROLL_TO_INPUT_EXTRA_HEIGHT + 75);
   };
 
   const addStudents = (studentString: string) => {
     const nonEmptyStudents = splitStudentString(studentString);
     const newStudentList = [...group.students, ...nonEmptyStudents];
     // Refocus the scroll view to the input
-    scrollToInput(newStudentList.length);
+    scrollToInput();
     setGroup({ ...group, students: newStudentList });
   };
 
@@ -137,10 +131,9 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
         title: t("GroupStudentsSelectionView.createGroup", "Luo ryhmä"),
         leftIcon: <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />,
       }}
-      // closeKeyBoardOnTap={false}
       style={{ gap: 20, padding: "lg" }}
     >
-      <CKeyboardAwareScrollView ref={scrollRef} extraScrollHeight={130} keyboardShouldPersistTaps="handled">
+      <CKeyboardAwareScrollView ref={scrollRef} extraScrollHeight={SCROLL_TO_INPUT_EXTRA_HEIGHT} contentContainerStyle={{ paddingBottom: "2xl" }}>
         <CView style={{ gap: 10, minHeight: dimensions.height * 0.43 }}>
           <CText style={{ fontSize: "title", fontWeight: "300" }}>{t("students", "Oppilaat")}</CText>
           <CView style={{ flex: 1, marginBottom: "xl" }}>

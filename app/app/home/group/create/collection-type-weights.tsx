@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import CView from "../../../../components/primitives/CView";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
-import GroupCreationBody from "./_body";
+import GroupCreationBody, { SCROLL_TO_INPUT_EXTRA_HEIGHT } from "./_body";
 import CText from "../../../../components/primitives/CText";
 import CTextInput from "../../../../components/primitives/CTextInput";
 import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
@@ -32,7 +32,7 @@ export default function GroupCollectionTypeWeightsView({
 
   return (
     <GroupCreationBody navigation={navigation} progressState={4} moveForwardDisabled={sum !== 100}>
-      <CKeyboardAwareScrollView>
+      <CKeyboardAwareScrollView androidKeyboardAvoidProps={{ keyboardVerticalOffset: SCROLL_TO_INPUT_EXTRA_HEIGHT }}>
         <CText style={{ fontSize: "lg", marginBottom: "2xl" }}>{t("select-collection-type-weights", "Valitse arviointityyppien painoarvot")}</CText>
         <CView style={{ flexDirection: "row", justifyContent: "flex-end", paddingRight: 28 }}>
           <CText>%</CText>

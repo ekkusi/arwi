@@ -1,18 +1,15 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Keyboard, TextInput } from "react-native";
+import { TextInput } from "react-native";
 import { getModuleInfos } from "arwi-backend/src/utils/subjectUtils";
 import { ModuleInfo } from "arwi-backend/src/types";
-import CView from "../../../../components/primitives/CView";
 import { nameValidator } from "../../../../helpers/textValidation";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 import GroupCreationBody from "./_body";
 import TextFormField from "../../../../components/form/TextFormField";
 import SelectFormField from "../../../../components/form/SelectFormField";
-import { useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
-import CTouchableWithoutFeedback from "../../../../components/primitives/CTouchableWithoutFeedback";
 import CKeyboardAvoidingView from "../../../../components/primitives/CKeyboardAvoidingView";
 
 export default function GroupNameSelectionView({
@@ -26,12 +23,6 @@ export default function GroupNameSelectionView({
   const modules: ModuleInfo[] = getModuleInfos(group.subject?.code);
 
   const inputRef = useRef<TextInput>(null);
-
-  const blurInput = useCallback(() => {
-    inputRef.current?.blur();
-  }, []);
-
-  useKeyboardListener({ onHide: blurInput });
 
   return (
     <GroupCreationBody navigation={navigation} progressState={2} moveForwardDisabled={group.name.length === 0 || group.module === undefined}>
