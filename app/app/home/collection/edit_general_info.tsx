@@ -2,11 +2,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "@apollo/client";
-import { Environment, LearningObjectiveMinimal } from "arwi-backend/src/types/subject";
 import { HomeStackParams } from "../types";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { graphql } from "../../../gql";
-import CollectionGeneralInfoForm from "./_general_info_form";
+import CollectionGeneralInfoForm, { GeneralInfoData } from "./_general_info_form";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import Layout from "../../../components/Layout";
@@ -17,6 +16,11 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
       id
       date
       description
+      type {
+        id
+        name
+        category
+      }
       environment {
         label {
           fi
@@ -34,6 +38,11 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
           id
           subject {
             code
+          }
+          collectionTypes {
+            id
+            name
+            category
           }
         }
       }
@@ -95,7 +104,7 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
 
   const { t } = useTranslation();
 
-  const handleSubmit = async (date: Date, environment: Environment, learningObjectiveCodes: LearningObjectiveMinimal[], description: string) => {
+  const handleSubmit = async ({ date, environment, learningObjectives, description, collectionType }: GeneralInfoData) => {
     setSubmitting(true);
     try {
       await updateCollection({
@@ -104,8 +113,9 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
           input: {
             date: formatDate(date, "yyyy-MM-dd"),
             environmentCode: environment.code,
-            learningObjectiveCodes: learningObjectiveCodes.map((obj) => obj.code),
+            learningObjectiveCodes: learningObjectives.map((item) => item.code),
             description,
+            typeId: collectionType.id,
           },
         },
       });
@@ -138,10 +148,14 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
         moduleInfo={collection.module.info}
         buttonTitle={t("save", "Tallenna")}
         buttonLoading={submitting}
-        defaultDate={new Date(collection.date)}
-        defaultDescription={collection.description || undefined}
-        defaultEnvironment={collection.environment}
-        defaultLearningObjectives={collection.learningObjectives}
+        initialData={{
+          date: new Date(collection.date),
+          environment: collection.environment,
+          learningObjectives: collection.learningObjectives,
+          description: collection.description || undefined,
+          collectionType: collection.type,
+        }}
+        collectionTypeOptions={collection.module.group.collectionTypes}
       />
     </Layout>
   );

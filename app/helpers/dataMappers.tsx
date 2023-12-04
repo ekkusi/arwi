@@ -1,4 +1,4 @@
-import { LearningObjective, SubjectMinimal } from "arwi-backend/src/types/subject";
+import { LearningObjective, SubjectMinimal } from "arwi-backend/src/types/general";
 import { ImageSourcePropType } from "react-native";
 import { LearningObjectiveType } from "../gql/graphql";
 

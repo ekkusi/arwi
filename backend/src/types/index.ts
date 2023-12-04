@@ -2,7 +2,7 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { UserInfo as UserInfoPrisma, CustomContext } from './contextTypes';
 import { EvaluationCollection as EvaluationCollectionPrisma, Evaluation as EvaluationPrisma, Group as GroupPrisma, Student as StudentPrisma, Module as ModulePrisma, CollectionType as CollectionTypePrisma } from '@prisma/client';
-import { SubjectMinimal as SubjectMinimalPrisma, Environment as EnvironmentPrisma } from './subject';
+import { SubjectMinimal as SubjectMinimalPrisma, Environment as EnvironmentPrisma } from './general';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };

@@ -122,6 +122,13 @@ const resolvers: TypeResolvers = {
       const subjectObjectives = getLearningObjectives(group.subjectCode, module.educationLevel as EducationLevel, module.learningObjectiveGroupKey);
       return subjectObjectives.filter((objective) => learningObjectiveCodes.includes(objective.code));
     },
+    type: async ({ typeId }, _, { prisma }) => {
+      return prisma.collectionType.findUniqueOrThrow({
+        where: {
+          id: typeId,
+        },
+      });
+    },
   },
   Student: {
     group: async ({ groupId }, _, { prisma }) => {

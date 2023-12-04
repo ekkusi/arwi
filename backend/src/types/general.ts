@@ -1,4 +1,4 @@
-import { EducationLevel, LearningObjectiveType, ModuleInfo } from "types";
+import { CollectionType, EducationLevel, LearningObjectiveType, ModuleInfo } from "types";
 import subjects from "../subject-schema.json";
 
 export type TranslatedString = {
@@ -37,3 +37,5 @@ export type UnmappedEnvironment = Subject["environments"][number];
 export type MinimalEnvironment = Pick<Environment, "code" | "label">;
 
 export type PrimaryEducationLevel = Exclude<EducationLevel, EducationLevel.HIGH_SCHOOL | EducationLevel.VOCATIONAL>;
+
+export type CollectionTypeMinimal = Pick<CollectionType, "id" | "name" | "category">;

@@ -29,6 +29,7 @@ export type CollectionData = {
   date: Date;
   environmentCode: string | undefined;
   learningObjectiveCodes: string[];
+  collectionTypeId: string | undefined;
 };
 
 export type EvaluationData = Omit<Evaluation, "student"> & {
@@ -49,7 +50,13 @@ type CollectionCreationContextParams = {
   updateEvaluation: (evaluation: EvaluationData) => void;
 };
 
-const initialData: CollectionData = { description: "", date: new Date(), learningObjectiveCodes: [], environmentCode: undefined };
+const initialData: CollectionData = {
+  description: "",
+  date: new Date(),
+  learningObjectiveCodes: [],
+  environmentCode: undefined,
+  collectionTypeId: undefined,
+};
 
 const CollectionCreationContext = createContext<CollectionCreationContextParams | null>(null);
 

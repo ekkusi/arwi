@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
-import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
+import { MinimalModuleInfo } from "arwi-backend/src/types/general";
 import { FragmentType, getFragmentData } from "../../gql";
 import CircledNumber from "../CircledNumber";
 import InfoButton from "../InfoButton";

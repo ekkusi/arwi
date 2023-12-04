@@ -8,7 +8,7 @@ import {
   Subject,
   SubjectMinimal,
   UnmappedEnvironment,
-} from "../types/subject";
+} from "../types/general";
 import subjects from "../subject-schema.json";
 import { ModuleInfo, EducationLevel, LearningObjectiveType, TranslatedString } from "../types";
 

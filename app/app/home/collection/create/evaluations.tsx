@@ -110,17 +110,18 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    const { environmentCode } = generalData;
-    if (!environmentCode) throw new Error("Environment code is missing, shouldn't happen at this point");
+    const { environmentCode, collectionTypeId, ...rest } = generalData;
+    if (!environmentCode || !collectionTypeId) throw new Error("Environment code or collection type id is missing, shouldn't happen at this point");
 
     try {
       await createCollection({
         variables: {
           moduleId: groupInfo.currentModule.id,
           createCollectionInput: {
-            ...generalData,
+            ...rest,
             environmentCode,
             date: formatDate(generalData.date, "yyyy-MM-dd"),
+            typeId: collectionTypeId,
             evaluations: evaluations.map((it) => ({
               wasPresent: it.wasPresent,
               skillsRating: it.skillsRating,

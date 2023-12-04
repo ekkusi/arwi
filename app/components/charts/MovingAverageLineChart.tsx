@@ -1,4 +1,4 @@
-import { MinimalEnvironment } from "arwi-backend/src/types/subject";
+import { MinimalEnvironment } from "arwi-backend/src/types/general";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
 
 export type EvaluationDataType = DataType & {

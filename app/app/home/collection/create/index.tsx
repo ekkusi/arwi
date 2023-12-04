@@ -1,13 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Environment, LearningObjectiveMinimal } from "arwi-backend/src/types/subject";
 import { CollectionCreationStackParams } from "./types";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import CollectionCreationLayout from "./_layout";
 import { COLORS } from "../../../../theme";
 import { getFragmentData, graphql } from "../../../../gql";
-import CollectionGeneralInfoForm from "../_general_info_form";
+import CollectionGeneralInfoForm, { GeneralInfoData } from "../_general_info_form";
 
 const CollectionGeneralInfoView_Group_Fragment = graphql(`
   fragment CollectionGeneralInfoView_Group on Group {
@@ -21,6 +20,11 @@ const CollectionGeneralInfoView_Group_Fragment = graphql(`
         learningObjectiveGroupKey
       }
     }
+    collectionTypes {
+      id
+      name
+      category
+    }
   }
 `);
 
@@ -31,12 +35,13 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
   const subjectCode = group.subject.code;
   const moduleInfo = group.currentModule.info;
 
-  const handleSubmit = (date: Date, environment: Environment, learningObjectives: LearningObjectiveMinimal[], description: string) => {
+  const handleSubmit = (data: GeneralInfoData) => {
     setGeneralData({
-      date,
-      description,
-      environmentCode: environment.code,
-      learningObjectiveCodes: learningObjectives.map((item) => item.code),
+      date: data.date,
+      description: data.description,
+      environmentCode: data.environment.code,
+      learningObjectiveCodes: data.learningObjectives.map((item) => item.code),
+      collectionTypeId: data.collectionType.id,
     });
     navigation.navigate("collection-create-participations");
   };
@@ -46,6 +51,7 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
       subjectCode={subjectCode}
       moduleInfo={moduleInfo}
       handleSubmit={handleSubmit}
+      collectionTypeOptions={group.collectionTypes}
       buttonIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
     />
   );
