@@ -1,4 +1,4 @@
-name: Run tests workflow
+name: Run tests callable workflow
 on:
   workflow_call:
 
