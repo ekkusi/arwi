@@ -3,9 +3,6 @@ import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { createTestUserAndLogin, createTestGroup, TestTeacher, testLogin } from "../testHelpers";
-import openAIClient from "@/openAIClient";
-
-jest.mock("@/openAIClient");
 
 describe("fixTextGrammatics", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -17,9 +14,6 @@ describe("fixTextGrammatics", () => {
     teacher = await createTestUserAndLogin(graphqlRequest);
     const group = await createTestGroup(teacher.id);
     [student] = group.students;
-    (openAIClient?.chat.completions.create as jest.Mock).mockResolvedValue({
-      choices: [{ message: { content: "Mocked grammatical correction response from OpenAI" } }],
-    } as any);
   });
 
   it("should successfully fix text grammatics", async () => {
@@ -33,7 +27,7 @@ describe("fixTextGrammatics", () => {
     const response = await graphqlRequest(query, { studentId: student.id, text });
 
     expect(response.data?.fixTextGrammatics).toBeDefined();
-    expect(response.data?.fixTextGrammatics).toEqual("Mocked grammatical correction response from OpenAI");
+    expect(response.data?.fixTextGrammatics).toEqual("Mock response from OpenAI");
   });
 
   it("should throw error if user is not authorized for the student", async () => {

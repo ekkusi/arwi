@@ -11,9 +11,6 @@ import {
   createTestUserAndLogin,
   testLogin,
 } from "../testHelpers";
-import openAIClient from "@/openAIClient";
-
-jest.mock("@/openAIClient");
 
 describe("generateStudentFeedback", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -28,9 +25,6 @@ describe("generateStudentFeedback", () => {
     group = await createTestGroup(teacher.id);
     [student] = group.students;
     collection = await createTestEvaluationCollection(group.currentModuleId, group.collectionTypes[0].id);
-    (openAIClient?.chat.completions.create as jest.Mock).mockResolvedValue({
-      choices: [{ message: { content: "Mocked feedback response from OpenAI" } }],
-    } as any);
   });
 
   beforeEach(async () => {
@@ -51,7 +45,7 @@ describe("generateStudentFeedback", () => {
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
     expect(response.data?.generateStudentFeedback).toBeDefined();
-    expect(response.data?.generateStudentFeedback).toContain("Mocked feedback response from OpenAI");
+    expect(response.data?.generateStudentFeedback).toContain("Mock response from OpenAI");
   });
 
   it("should throw error if user is not authorized for the student", async () => {

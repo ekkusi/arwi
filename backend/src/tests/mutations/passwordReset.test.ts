@@ -12,7 +12,6 @@ import {
   RESET_CODE_EXPIRY_TIME_MS,
 } from "../../graphql/utils/validators";
 
-jest.mock("@/utils/mail");
 jest.mock("@/utils/passwordRecovery");
 
 describe("Password Reset Flow", () => {
