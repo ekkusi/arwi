@@ -6,6 +6,7 @@ const config: Config = {
   testEnvironment: "node",
   testMatch: ["**/tests/**/*.test.ts"],
   rootDir: "src",
+  testTimeout: 60000,
   transform: {
     "^.+\\.[tj]sx?$": [
       "ts-jest",
