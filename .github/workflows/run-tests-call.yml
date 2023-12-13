@@ -30,7 +30,7 @@ jobs:
         run: |
           touch .env.test
           echo DATABASE_URL=postgresql://user:password@localhost:5432/arwi-test >> .env.test
-          echo NO_REDIS_SESSIONS=true >> .env.test
+          echo NO_REDIS_SESSION=true >> .env.test
           cat .env.test
       - name: 'Copy yarn lockfile from root'
         working-directory: .
