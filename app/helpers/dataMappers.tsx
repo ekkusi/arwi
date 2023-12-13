@@ -1,5 +1,6 @@
-import { LearningObjective, SubjectMinimal } from "arwi-backend/src/types/general";
+import { LearningObjective } from "arwi-backend/src/types/general";
 import { ImageSourcePropType } from "react-native";
+import { SubjectMinimal } from "arwi-backend/src/types/codegenOverrides";
 import { LearningObjectiveType } from "../gql/graphql";
 
 export const subjectToIcon = (subject: SubjectMinimal): ImageSourcePropType => {

@@ -1,9 +1,10 @@
-import { CollectionTypeMinimal, Environment, LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/general";
+import { CollectionTypeMinimal, LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/general";
 import { getEnvironmentsByLevel, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
+import { Environment } from "arwi-backend/src/types/codegenOverrides";
 import CDateTimePicker from "../../../components/form/CDateTimePicker";
 import FormField from "../../../components/form/FormField";
 import MultiSelectFormField from "../../../components/form/MultiSelectFormField";

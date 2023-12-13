@@ -8,10 +8,11 @@ import express from "express";
 import { HELMET_OPTIONS, SESSION_OPTIONS } from "./config";
 import initAuth from "./routes/auth";
 import { checkSessionTimeout, checkTokens } from "./middleware/auth";
-import prisma from "./prismaClient";
 import graphqlServer from "./graphql/server";
 import { errorHandler, notFoundHandler } from "./middleware/errors";
 import "express-async-errors";
+import { CustomContext } from "./types/contextTypes";
+import prisma from "@/prismaClient";
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(session(SESSION_OPTIONS));
 app.use(checkSessionTimeout);
 
-const createApp = async () => {
+const createApp = async (contextOverrides?: Partial<CustomContext>) => {
   const { router, OIDCClient } = await initAuth();
 
   if (OIDCClient) app.use(checkTokens(OIDCClient));
@@ -46,18 +47,17 @@ const createApp = async () => {
         // const user = parseAndVerifyToken(authHeader);
         const user = req.session?.userInfo;
         return {
-          prisma,
-          user,
-          req,
-          res,
-          OIDCClient,
+          prisma: contextOverrides?.prisma || prisma,
+          user: contextOverrides?.user || user,
+          req: contextOverrides?.req || req,
+          res: contextOverrides?.res || res,
+          OIDCClient: contextOverrides?.OIDCClient || OIDCClient,
         };
       },
     })
   );
 
   app.use(notFoundHandler);
-
   app.use(errorHandler);
 
   return app;

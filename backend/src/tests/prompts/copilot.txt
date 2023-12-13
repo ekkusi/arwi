@@ -1,0 +1,92 @@
+###### Create test suite ######
+
+/tests Create tests for the login resolver. Write the whole file. Below you have code for context.
+
+Graphql definition(s):
+
+
+
+Example test suite (make in the same manner):
+
+import { hash } from "bcryptjs";
+import prisma from "../../prismaClient";
+import { BRCRYPT_SALT_ROUNDS } from "../../config";
+import { graphql } from "../gql";
+import { SampleTest_RegisterMutationVariables } from "../gql/graphql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+
+describe("Sample", () => {
+  const existingTeacher = {
+    email: "login@example.com",
+    passwordHash: "",
+  };
+  const existingTeacherPassword = "password";
+
+  let graphqlRequest: TestGraphQLRequest;
+
+  beforeAll(async () => {
+    graphqlRequest = (await createServer({ prisma })).graphqlRequest;
+
+    existingTeacher.passwordHash = await hash(existingTeacherPassword, BRCRYPT_SALT_ROUNDS);
+    await prisma.teacher.create({
+      data: existingTeacher,
+    });
+  });
+
+  afterAll(async () => {
+    await prisma.teacher.deleteMany();
+  });
+
+  it("should register a new teacher", async () => {
+    const password = "password";
+    const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
+    const teacherData: SampleTest_RegisterMutationVariables = {
+      data: {
+        email: "test@example.com",
+        password: passwordHash,
+      },
+    };
+
+    const query = graphql(`
+      mutation SampleTest_Register($data: CreateTeacherInput!) {
+        register(data: $data) {
+          userData {
+            email
+          }
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, teacherData);
+
+    expect(response.data?.register.userData.email).toEqual(teacherData.data.email);
+  });
+
+  it("should throw an error if email is already in use", async () => {
+    const passwordHash = await hash(existingTeacherPassword, BRCRYPT_SALT_ROUNDS);
+    const userData = {
+      data: {
+        email: "login@example.com",
+        password: passwordHash,
+      },
+    };
+
+    const query = graphql(`
+      mutation SampleTest_RegisterExistingEmail($data: CreateTeacherInput!) {
+        register(data: $data) {
+          userData {
+            email
+          }
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, userData);
+
+    expect(response.errors?.[0].message).toEqual(`Sähköposti '${userData.data.email}' on jo käytössä`);
+  });
+});
+
+
+Keep these things in mind:
+- query/mutation names have to be unique (see sample test suite)

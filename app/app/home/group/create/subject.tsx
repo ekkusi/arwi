@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SubjectMinimal } from "arwi-backend/src/types/general";
 import { getSubjects } from "arwi-backend/src/utils/subjectUtils";
 import { useTranslation } from "react-i18next";
+import { SubjectMinimal } from "arwi-backend/src/types/codegenOverrides";
 import CButton from "../../../../components/primitives/CButton";
 import CImage from "../../../../components/primitives/CImage";
 import CText from "../../../../components/primitives/CText";

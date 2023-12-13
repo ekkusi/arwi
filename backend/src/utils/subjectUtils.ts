@@ -1,16 +1,16 @@
 import {
   ElementarySchoolObjectiveGroups,
   ElementarySchoolEnvironmentKey,
-  Environment,
   LearningObjective,
   LearningObjectiveMinimal,
   PrimaryEducationLevel,
-  Subject,
-  SubjectMinimal,
   UnmappedEnvironment,
 } from "../types/general";
 import subjects from "../subject-schema.json";
 import { ModuleInfo, EducationLevel, LearningObjectiveType, TranslatedString } from "../types";
+import { Environment, Subject, SubjectMinimal } from "../types/codegenOverrides";
+
+export const ELEMENTARY_LEARNING_GROUP_KEYS = ["one_to_two_years", "three_to_six_years", "seven_to_nine_years"];
 
 export const getSubjectCode = (environmentCode: string) => {
   if (environmentCode.length < 2) {
@@ -235,6 +235,6 @@ export const getLearningObjectiveGroupKeys = (subjectCode: string, educationLeve
     case EducationLevel.VOCATIONAL:
       return subject.vocationalSchoolModules?.map((it) => it.code) || [];
     default:
-      return Object.keys(subject.elementarySchool);
+      return ELEMENTARY_LEARNING_GROUP_KEYS;
   }
 };

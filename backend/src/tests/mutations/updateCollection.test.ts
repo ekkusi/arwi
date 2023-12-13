@@ -1,103 +1,84 @@
-import { graphql } from "@/gql";
-import prisma from "@/graphql-server/prismaClient";
-import { Rating } from "@/graphql-server/types";
-import serverRequest from "@/utils/serverRequest";
-import { assertIsError } from "@/utils/errorUtils";
-import { ClassYearCode } from "@prisma/client";
+import { CollectionTypeCategory, Evaluation, EvaluationCollection } from "@prisma/client";
+import { graphql } from "../gql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import prisma from "@/prismaClient";
+import { UpdateCollectionInput } from "../../types";
+import {
+  TestGroup,
+  TestTeacher,
+  createTestEvaluation,
+  createTestEvaluationCollection,
+  createTestGroup,
+  createTestUserAndLogin,
+  testLogin,
+  testLogout,
+} from "../testHelpers";
+import { formatDate } from "../../utils/date";
 
-describe("ServerRequest - updateCollection", () => {
-  let groupId: string;
-  let classYearId: string;
-  let collectionId: string;
-  let studentId: string;
-  let evaluationId: string;
+describe("updateCollection", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let teacher: TestTeacher;
+  let group: TestGroup;
+  let collection: EvaluationCollection;
+  let evaluation: Evaluation;
+  let notPresentEvaluation: Evaluation;
+
+  beforeAll(async () => {
+    ({ graphqlRequest } = await createServer());
+    teacher = await createTestUserAndLogin(graphqlRequest);
+    group = await createTestGroup(teacher.id);
+  });
 
   beforeEach(async () => {
-    const teacher = await prisma.teacher.create({
-      data: {
-        email: "testteacher@example.com",
-        passwordHash: "hashed-password",
-      },
-    });
-
-    const group = await prisma.group.create({
-      data: {
-        name: "Test Group",
-        teacherId: teacher.id,
-        subjectCode: "LI",
-        currentYearCode: ClassYearCode.PRIMARY_FIRST,
-      },
-    });
-
-    const classYear = await prisma.classYear.create({
-      data: {
-        code: ClassYearCode.PRIMARY_FIRST,
-        groupId: group.id,
-      },
-    });
-
-    groupId = group.id;
-    classYearId = classYear.id;
-
-    const student = await prisma.student.create({
-      data: {
-        name: "Test Student",
-        groupId,
-      },
-    });
-
-    studentId = student.id;
-
-    const collection = await prisma.evaluationCollection.create({
-      data: {
-        date: new Date(),
-        type: "Test Type",
-        classYearId,
-        environmentCode: "LI_TALVI",
-      },
-    });
-
-    collectionId = collection.id;
-
-    const evaluation = await prisma.evaluation.create({
-      data: {
-        wasPresent: true,
-        skillsRating: Rating.GOOD,
-        studentId,
-        evaluationCollectionId: collectionId,
-      },
-    });
-
-    evaluationId = evaluation.id;
+    const collectionType = group.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    collection = await createTestEvaluationCollection(group.currentModule.id, collectionType.id); // Assuming createTestCollection exists
+    evaluation = await createTestEvaluation(collection.id, group.students[0].id); // Assuming createTestEvaluation exists
+    notPresentEvaluation = await createTestEvaluation(collection.id, group.students[1].id, { wasPresent: false });
   });
 
   afterEach(async () => {
-    await prisma.teacher.deleteMany();
-    await prisma.evaluation.deleteMany();
     await prisma.evaluationCollection.deleteMany();
-    await prisma.student.deleteMany();
-    await prisma.group.deleteMany();
   });
 
-  it("should update the collection's environment, date and learning codes", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        environmentCode: "LI_PALLO",
-        date: "2023-04-01",
-        learningObjectiveCodes: ["T1", "T2"],
-      },
-      collectionId,
+  it("should successfully update a collection", async () => {
+    const updatedEvaluation = {
+      id: evaluation.id,
+      wasPresent: true,
+      skillsRating: 6,
+      behaviourRating: 8,
+      notes: "Improved performance and stuff",
+      isStellar: true,
+    };
+    const updateData: UpdateCollectionInput = {
+      // Assuming correct structure for UpdateCollectionInput
+      date: formatDate(new Date(), "yyyy-MM-dd"),
+      environmentCode: "LI_ENV_TAN",
+      typeId: group.collectionTypes.find((type) => type.category === CollectionTypeCategory.EXAM)!.id,
+      description: "Midterm Exam",
+      learningObjectiveCodes: ["T1", "T3"],
+      evaluations: [updatedEvaluation],
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionDefault($data: UpdateCollectionInput!, $collectionId: ID!) {
+      mutation UpdateCollection($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
+          date
+          type {
+            id
+          }
           environment {
             code
           }
-          date
+          description
+          evaluations {
+            id
+            skillsRating
+            behaviourRating
+            notes
+            wasPresent
+            isStellar
+          }
           learningObjectives {
             code
           }
@@ -105,156 +86,147 @@ describe("ServerRequest - updateCollection", () => {
       }
     `);
 
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+    const response = await graphqlRequest(query, { data: updateData, collectionId: collection.id });
 
-    // Assert
-    expect(result.updateCollection).toEqual({
-      id: collectionId,
-      environment: {
-        code: variables.data.environmentCode,
-      },
-      date: variables.data.date,
-      learningObjectives: [
-        {
-          code: variables.data.learningObjectiveCodes[0],
-        },
-        {
-          code: variables.data.learningObjectiveCodes[1],
-        },
-      ],
+    expect(response.data?.updateCollection).toBeDefined();
+    expect(response.data?.updateCollection.id).toEqual(collection.id);
+    expect(response.data?.updateCollection.date).toEqual(updateData.date);
+    expect(response.data?.updateCollection.environment.code).toEqual(updateData.environmentCode);
+    expect(response.data?.updateCollection.type.id).toEqual(updateData.typeId);
+    expect(response.data?.updateCollection.description).toEqual(updateData.description);
+    expect(response.data?.updateCollection.learningObjectives.map((lo) => lo.code)).toEqual(updateData.learningObjectiveCodes);
+    const updatedEvaluationResponse = response.data?.updateCollection.evaluations.find((e) => e.id === updatedEvaluation.id);
+    expect(updatedEvaluationResponse).toBeDefined();
+    expect(updatedEvaluationResponse?.wasPresent).toEqual(updatedEvaluation.wasPresent);
+    expect(updatedEvaluationResponse?.skillsRating).toEqual(updatedEvaluation.skillsRating);
+    expect(updatedEvaluationResponse?.behaviourRating).toEqual(updatedEvaluation.behaviourRating);
+    expect(updatedEvaluationResponse?.notes).toEqual(updatedEvaluation.notes);
+    expect(updatedEvaluationResponse?.isStellar).toEqual(updatedEvaluation.isStellar);
+  });
+
+  it("should throw error if user is not authorized for the collection", async () => {
+    const unauthorizedTeacher = await createTestUserAndLogin(graphqlRequest, {
+      email: "new-user@email.com",
+      password: "password",
     });
-  });
-
-  it("should update the evaluation's skillsRating and behaviourRating", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        evaluations: [
-          {
-            id: evaluationId,
-            wasPresent: true,
-            skillsRating: Rating.EXCELLENT,
-            behaviourRating: Rating.EXCELLENT,
-          },
-        ],
-      },
-      collectionId,
+    const updateData: UpdateCollectionInput = {
+      description: "New description",
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionEvaluation($data: UpdateCollectionInput!, $collectionId: ID!) {
+      mutation UpdateCollectionUnauthorized($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
-          evaluations {
-            id
-            skillsRating
-            behaviourRating
-          }
         }
       }
     `);
 
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+    const response = await graphqlRequest(query, { data: updateData, collectionId: collection.id });
 
-    // Assert
-    expect(result.updateCollection).toEqual({
-      id: collectionId,
-      evaluations: [
-        {
-          id: evaluationId,
-          skillsRating: Rating.EXCELLENT,
-          behaviourRating: Rating.EXCELLENT,
-        },
-      ],
-    });
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Haettu arviointikokoelma ei kuulu sinulle");
+
+    await prisma.teacher.delete({ where: { id: unauthorizedTeacher.id } });
+    await testLogin(graphqlRequest);
   });
 
-  it("should return an error when the collection doesn't exist", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        date: "2023-04-01",
-      },
-      collectionId: "non-existent-collection-id",
+  it("should throw error for invalid collection ID", async () => {
+    const updateData: UpdateCollectionInput = {
+      description: "New description",
     };
+    const invalidCollectionId = "invalid_id";
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionError($data: UpdateCollectionInput!, $collectionId: ID!) {
+      mutation UpdateCollectionInvalidID($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
-          date
         }
       }
     `);
 
-    // Act
-    try {
-      await serverRequest({ document: query, prismaOverride: prisma }, variables);
-    } catch (error) {
-      // Assert
-      assertIsError(error);
-      expect(error.message).toContain("Unexpected error.");
-    }
+    const response = await graphqlRequest(query, { data: updateData, collectionId: invalidCollectionId });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t.`);
   });
 
-  it("should return an error when the environmentCode is invalid", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        date: "2023-04-01",
-        environmentCode: "INVALID_ENVIRONMENT_CODE",
-      },
-      collectionId,
+  it("should throw error for invalid environment code", async () => {
+    const updateData: UpdateCollectionInput = {
+      environmentCode: "invalid_env_code",
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionInvalidEnvironmentCode($data: UpdateCollectionInput!, $collectionId: ID!) {
+      mutation UpdateCollectionInvalidEnvironment($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
-          date
         }
       }
     `);
 
-    // Act
-    try {
-      await serverRequest({ document: query, prismaOverride: prisma }, variables);
-    } catch (error) {
-      // Assert
-      assertIsError(error);
-      expect(error.message).toContain("Ympäristöä koodilla 'INVALID_ENVIRONMENT_CODE' ei ole olemassa.");
-    }
+    const response = await graphqlRequest(query, { data: updateData, collectionId: collection.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Ympäristöä koodilla 'invalid_env_code' ei ole olemassa.");
   });
 
-  it("should return an error when the learningObjectiveCodes are invalid", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        date: "2023-04-01",
-        environmentCode: "LI_TALVI",
-        learningObjectiveCodes: ["INVALID_LEARNING_OBJECTIVE_CODE"],
-      },
-      collectionId,
+  it("should throw error for invalid learning objectives", async () => {
+    const updateData: UpdateCollectionInput = {
+      learningObjectiveCodes: ["invalid_lo_1", "invalid_lo_2"],
     };
 
     const query = graphql(`
-      mutation UpdateCollectionTest_UpdateCollectionInvalidLearningObjectiveCodes($data: UpdateCollectionInput!, $collectionId: ID!) {
+      mutation UpdateCollectionInvalidLearningObjectives($data: UpdateCollectionInput!, $collectionId: ID!) {
         updateCollection(data: $data, collectionId: $collectionId) {
           id
-          date
         }
       }
     `);
 
-    // Act
-    try {
-      await serverRequest({ document: query, prismaOverride: prisma }, variables);
-    } catch (error) {
-      // Assert
-      assertIsError(error);
-      expect(error.message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`);
-    }
+    const response = await graphqlRequest(query, { data: updateData, collectionId: collection.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.");
+  });
+
+  it("should throw error for evaluations not belonging to the collection", async () => {
+    const newCollection = await createTestEvaluationCollection(group.currentModule.id, group.collectionTypes[0].id);
+    const unrelatedEvaluation = await createTestEvaluation(newCollection.id, group.students[0].id);
+    const updateData: UpdateCollectionInput = {
+      evaluations: [{ id: unrelatedEvaluation.id }],
+    };
+
+    const query = graphql(`
+      mutation UpdateCollectionEvaluationsNotInCollection($data: UpdateCollectionInput!, $collectionId: ID!) {
+        updateCollection(data: $data, collectionId: $collectionId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData, collectionId: collection.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan");
+  });
+
+  it("should throw validation error if attempting to update an evaluation where the student was not present", async () => {
+    const updateData: UpdateCollectionInput = {
+      evaluations: [{ id: notPresentEvaluation.id, skillsRating: 5 }],
+    };
+
+    const query = graphql(`
+      mutation UpdateCollectionInvalidStudentPresence($data: UpdateCollectionInput!, $collectionId: ID!) {
+        updateCollection(data: $data, collectionId: $collectionId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData, collectionId: collection.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(
+      "Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää."
+    );
   });
 });

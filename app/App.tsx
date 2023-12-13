@@ -2,7 +2,7 @@ import { Suspense, useEffect } from "react";
 import { Logs } from "expo";
 // import ErrorBoundary from "react-native-error-boundary";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
-import { LogBox, Platform } from "react-native";
+import { LogBox, Platform, View, Text } from "react-native";
 import ErrorBoundary from "react-native-error-boundary";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import Main from "./Main";
@@ -61,6 +61,11 @@ const instance =
   });
 
 export default function App() {
+  // return (
+  //   <View>
+  //     <Text>Test</Text>
+  //   </View>
+  // );
   return instance ? (
     <MatomoProvider instance={instance}>
       <AppContent />

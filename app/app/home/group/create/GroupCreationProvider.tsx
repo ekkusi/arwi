@@ -1,7 +1,7 @@
 import { CollectionTypeCategory, CreateCollectionTypeInput, ModuleInfo } from "arwi-backend/src/types";
-import { SubjectMinimal } from "arwi-backend/src/types/general";
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { SubjectMinimal } from "arwi-backend/src/types/codegenOverrides";
 import { getCollectionTypeTranslation } from "../../../../helpers/translation";
 
 export type GroupMinimal = {
