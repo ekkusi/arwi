@@ -38,7 +38,7 @@ const config: CodegenConfig = {
           Student: "@prisma/client#Student",
           Module: "@prisma/client#Module",
           Subject: "./codegenOverrides#SubjectMinimal",
-          Environment: "./codegenOverrides#Environment",
+          Environment: "./codegenOverrides#EnvironmentInfo",
           CollectionType: "@prisma/client#CollectionType",
         },
         contextType: "./contextTypes#CustomContext",

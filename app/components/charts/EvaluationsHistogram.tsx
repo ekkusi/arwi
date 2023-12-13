@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { t } from "i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { getEnvironmentsByLevel } from "arwi-backend/src/utils/subjectUtils";
-import { MinimalModuleInfo } from "arwi-backend/src/types/general";
+import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
 import { getColorForGrade } from "../../helpers/dataMappers";

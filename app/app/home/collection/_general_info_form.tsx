@@ -3,8 +3,7 @@ import { getEnvironmentsByLevel, getEvaluableLearningObjectivesMinimal } from "a
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
-import { Environment } from "arwi-backend/src/types/codegenOverrides";
+import { CollectionTypeCategory, EnvironmentInfo } from "arwi-backend/src/types";
 import CDateTimePicker from "../../../components/form/CDateTimePicker";
 import FormField from "../../../components/form/FormField";
 import MultiSelectFormField from "../../../components/form/MultiSelectFormField";
@@ -19,7 +18,7 @@ import { getEnvironmentTranslation } from "../../../helpers/translation";
 
 export type GeneralInfoData = {
   date: Date;
-  environment: Environment;
+  environment: EnvironmentInfo;
   learningObjectives: LearningObjectiveMinimal[];
   description: string;
   collectionType: CollectionTypeMinimal;
@@ -48,7 +47,7 @@ export default function CollectionGeneralInfoForm({
 }: CollectionGeneralInfoFormProps) {
   const { t } = useTranslation();
 
-  const [selectedEnvironment, setSelectedEnvironment] = useState<Environment | undefined>(initialData?.environment);
+  const [selectedEnvironment, setSelectedEnvironment] = useState<EnvironmentInfo | undefined>(initialData?.environment);
   const collectionInitialValue =
     initialData?.collectionType || collectionTypeOptions.find((item) => item.category === CollectionTypeCategory.CLASS_PARTICIPATION);
   const [selectedCollectionType, setSelectedCollectionType] = useState<CollectionTypeMinimal | undefined>(() => collectionInitialValue);

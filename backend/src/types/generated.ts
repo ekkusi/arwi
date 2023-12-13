@@ -2,7 +2,7 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { UserInfo as UserInfoPrisma, CustomContext } from './contextTypes';
 import { EvaluationCollection as EvaluationCollectionPrisma, Evaluation as EvaluationPrisma, Group as GroupPrisma, Student as StudentPrisma, Module as ModulePrisma, CollectionType as CollectionTypePrisma } from '@prisma/client';
-import { SubjectMinimal as SubjectMinimalPrisma, Environment as EnvironmentPrisma } from './codegenOverrides';
+import { SubjectMinimal as SubjectMinimalPrisma, EnvironmentInfo as EnvironmentInfoPrisma } from './codegenOverrides';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -540,7 +540,7 @@ export type ResolversTypes = {
   LearningObjectiveType: LearningObjectiveType;
   LearningObjective: ResolverTypeWrapper<LearningObjective>;
   Subject: ResolverTypeWrapper<SubjectMinimalPrisma>;
-  Environment: ResolverTypeWrapper<EnvironmentPrisma>;
+  Environment: ResolverTypeWrapper<EnvironmentInfoPrisma>;
   Group: ResolverTypeWrapper<GroupPrisma>;
   CollectionType: ResolverTypeWrapper<CollectionTypePrisma>;
   CollectionTypeCategory: CollectionTypeCategory;
@@ -582,7 +582,7 @@ export type ResolversParentTypes = {
   TranslatedString: TranslatedString;
   LearningObjective: LearningObjective;
   Subject: SubjectMinimalPrisma;
-  Environment: EnvironmentPrisma;
+  Environment: EnvironmentInfoPrisma;
   Group: GroupPrisma;
   CollectionType: CollectionTypePrisma;
   ModuleInfo: ModuleInfo;

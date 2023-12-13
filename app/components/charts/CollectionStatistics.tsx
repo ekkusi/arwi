@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MinimalModuleInfo } from "arwi-backend/src/types/general";
+import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
 import { CollectionsLineChart_EvaluationCollectionFragment, EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";

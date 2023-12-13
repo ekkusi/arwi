@@ -1,4 +1,4 @@
-import { TranslatedString } from "arwi-backend/src/types/codegenOverrides";
+import { TranslatedString } from "arwi-backend/src/types";
 import { Evaluation as BaseEvaluation } from "../gql/graphql";
 import { median, mode, stdev } from "./mathUtilts";
 
