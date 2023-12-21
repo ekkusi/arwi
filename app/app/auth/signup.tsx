@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import WebView from "react-native-webview";
 import { useMatomo } from "matomo-tracker-react-native";
 import Checkbox from "expo-checkbox";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "../../gql";
 import { getErrorMessage } from "../../helpers/errorUtils";
@@ -96,8 +95,6 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
       const userInfo = {
         uid: data.register.userData.id,
       };
-      AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setAdjustResize();
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,
         action: "Register",

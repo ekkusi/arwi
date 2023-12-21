@@ -3,7 +3,6 @@ import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { useMatomo } from "matomo-tracker-react-native";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -63,8 +62,6 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
       const userInfo = {
         uid: data.login.userData.id,
       };
-      AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setAdjustResize();
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,
         action: "Login - Custom",

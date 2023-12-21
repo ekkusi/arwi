@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as WebBrowser from "expo-web-browser";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect, useState } from "react";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { useFocusEffect } from "@react-navigation/native";
 import CButton from "../../components/primitives/CButton";
 import CImage from "../../components/primitives/CImage";
@@ -26,13 +25,6 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
   const [loading, setLoading] = useState(false);
   const throwError = useThrowCatchableError();
 
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
-    AvoidSoftInput.setEnabled(true);
-  }, []);
-
-  useFocusEffect(onFocusEffect);
-
   useEffect(() => {
     WebBrowser.warmUpAsync();
 
@@ -46,8 +38,6 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
     try {
       const loginResult = await login();
       if (loginResult) await setUser(loginResult.payload.userData);
-      AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setAdjustResize();
     } catch (error) {
       throwError(error);
     }
