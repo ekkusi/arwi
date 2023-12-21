@@ -2,7 +2,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { useTranslation } from "react-i18next";
 import { getEnvironmentsByLevel } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
-import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
+import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { COLORS } from "../../theme";
 import CButton from "../primitives/CButton";
 import CText from "../primitives/CText";

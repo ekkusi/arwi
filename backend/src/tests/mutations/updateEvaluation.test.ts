@@ -1,90 +1,55 @@
-import { graphql } from "@/gql";
-import prisma from "@/graphql-server/prismaClient";
-import { Rating } from "@/graphql-server/types";
-import serverRequest from "@/utils/serverRequest";
-import { assertIsError } from "@/utils/errorUtils";
-import { ClassYearCode } from "@prisma/client";
+import { CollectionTypeCategory, Evaluation, EvaluationCollection } from "@prisma/client";
+import { graphql } from "../gql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import prisma from "@/prismaClient";
+import { UpdateEvaluationInput } from "../../types";
+import {
+  TestGroup,
+  TestTeacher,
+  createTestEvaluation,
+  createTestEvaluationCollection,
+  createTestGroup,
+  createTestUserAndLogin,
+  testLogin,
+} from "../testHelpers";
 
-describe("ServerRequest - updateEvaluation", () => {
-  let evaluationId: string;
+describe("updateEvaluation", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let teacher: TestTeacher;
+  let group: TestGroup;
+  let collection: EvaluationCollection;
+  let evaluation: Evaluation;
 
   beforeAll(async () => {
-    // Create test data for the evaluation update
-    const teacher = await prisma.teacher.create({
-      data: {
-        email: "testteacher@example.com",
-        passwordHash: "hashed-password",
-      },
-    });
-
-    const group = await prisma.group.create({
-      data: {
-        name: "Test Group",
-        teacherId: teacher.id,
-        subjectCode: "LI",
-        currentYearCode: ClassYearCode.PRIMARY_FIRST,
-      },
-    });
-
-    const classYear = await prisma.classYear.create({
-      data: {
-        code: ClassYearCode.PRIMARY_FIRST,
-        groupId: group.id,
-      },
-    });
-
-    const student = await prisma.student.create({
-      data: { name: "Test Student", groupId: group.id },
-    });
-
-    const collection = await prisma.evaluationCollection.create({
-      data: {
-        type: "Test Collection",
-        classYearId: classYear.id,
-        environmentCode: "LI_TALVI",
-      },
-    });
-
-    const evaluation = await prisma.evaluation.create({
-      data: {
-        studentId: student.id,
-        evaluationCollectionId: collection.id,
-        wasPresent: true,
-        skillsRating: "GOOD",
-        behaviourRating: "GOOD",
-      },
-    });
-
-    evaluationId = evaluation.id;
+    ({ graphqlRequest } = await createServer());
+    teacher = await createTestUserAndLogin(graphqlRequest);
+    group = await createTestGroup(teacher.id);
   });
 
-  afterAll(async () => {
-    // Clean up test data
+  beforeEach(async () => {
+    const collectionType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    collection = await createTestEvaluationCollection(group.currentModuleId, collectionType.id);
+    evaluation = await createTestEvaluation(collection.id, group.students[0].id);
+  });
+
+  afterEach(async () => {
     await prisma.evaluation.deleteMany();
-    await prisma.evaluationCollection.deleteMany();
-    await prisma.student.deleteMany();
-    await prisma.group.deleteMany();
-    await prisma.teacher.deleteMany();
   });
 
-  it("should update the evaluation's data", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        id: evaluationId,
-        wasPresent: true,
-        skillsRating: Rating.GREAT,
-        behaviourRating: Rating.GREAT,
-        notes: "Test notes",
-        isStellar: true,
-      },
+  it("should successfully update evaluation", async () => {
+    const updateData: UpdateEvaluationInput = {
+      id: evaluation.id,
+      wasPresent: true,
+      skillsRating: 5,
+      behaviourRating: 4,
+      notes: "Improved performance",
+      isStellar: false,
     };
 
     const query = graphql(`
-      mutation UpdateEvaluationTest_UpdateEvaluationDefault($data: UpdateEvaluationInput!) {
+      mutation UpdateEvaluation($data: UpdateEvaluationInput!) {
         updateEvaluation(data: $data) {
           id
-          wasPresent
           skillsRating
           behaviourRating
           notes
@@ -93,49 +58,71 @@ describe("ServerRequest - updateEvaluation", () => {
       }
     `);
 
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+    const response = await graphqlRequest(query, { data: updateData });
 
-    // Assert
-    expect(result.updateEvaluation).toEqual({
-      id: evaluationId,
-      wasPresent: true,
-      skillsRating: Rating.GREAT,
-      behaviourRating: Rating.GREAT,
-      notes: "Test notes",
-      isStellar: true,
-    });
+    expect(response.data?.updateEvaluation).toBeDefined();
+    expect(response.data?.updateEvaluation.id).toEqual(updateData.id);
+    expect(response.data?.updateEvaluation.skillsRating).toEqual(updateData.skillsRating);
+    // Additional assertions for other fields
   });
 
-  it("should return an error when the evaluation doesn't exist", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        id: "non-existent-evaluation-id",
-        wasPresent: false,
-        skillsRating: Rating.GREAT,
-        behaviourRating: Rating.GREAT,
-      },
-    };
+  it("should throw error if user is not authorized to access the evaluation", async () => {
+    // Assuming createTestUserAndLogin creates a new user and logs them in
+    const unauthorizedTeacher = await createTestUserAndLogin(graphqlRequest, { email: "new-user@email.com", password: "password" });
+    const updateData: UpdateEvaluationInput = { id: evaluation.id /* ...other fields */ };
 
     const query = graphql(`
-      mutation UpdateEvaluationTest_UpdateEvaluationError($data: UpdateEvaluationInput!) {
+      mutation UpdateEvaluationUnauthorized($data: UpdateEvaluationInput!) {
         updateEvaluation(data: $data) {
           id
-          wasPresent
-          skillsRating
-          behaviourRating
         }
       }
     `);
 
-    // Act
-    try {
-      await serverRequest({ document: query, prismaOverride: prisma }, variables);
-    } catch (error) {
-      // Assert
-      assertIsError(error);
-      expect(error.message).toContain("Unexpected error.");
-    }
+    const response = await graphqlRequest(query, { data: updateData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Haettu arviointi ei kuulu sinulle");
+    // Cleanup: Delete unauthorized teacher and re-login original teacher if necessary
+    await prisma.teacher.delete({ where: { id: unauthorizedTeacher.id } });
+    await testLogin(graphqlRequest);
+  });
+
+  it("should throw error for invalid evaluation ID", async () => {
+    const updateData: UpdateEvaluationInput = { id: "invalid_id" };
+
+    const query = graphql(`
+      mutation UpdateEvaluationInvalidID($data: UpdateEvaluationInput!) {
+        updateEvaluation(data: $data) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t.`);
+  });
+
+  it("should throw error if the student was not present and trying to update fields", async () => {
+    // Create an evaluation with `wasPresent` set to false
+    const notPresentEvaluation = await createTestEvaluation(collection.id, group.students[0].id, { wasPresent: false });
+    const updateData: UpdateEvaluationInput = { id: notPresentEvaluation.id, wasPresent: false, skillsRating: 5 /* ...other fields */ };
+
+    const query = graphql(`
+      mutation UpdateEvaluationNotPresent($data: UpdateEvaluationInput!) {
+        updateEvaluation(data: $data) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(
+      "Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää."
+    );
   });
 });

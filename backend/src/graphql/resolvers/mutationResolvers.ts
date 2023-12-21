@@ -5,17 +5,25 @@ import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
 import ValidationError from "../../errors/ValidationError";
 import { MutationResolvers } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
-import { mapUpdateCollectionInput, mapUpdateEvaluationInput, mapUpdateGroupInput, mapUpdateStudentInput } from "../utils/mappers";
+import {
+  mapCreateTeacherInput,
+  mapUpdateCollectionInput,
+  mapUpdateEvaluationInput,
+  mapUpdateGroupInput,
+  mapUpdateStudentInput,
+} from "../utils/mappers";
 import {
   REQUEST_PASSWORD_RESET_EXPIRY_IN_MS,
   validateChangeGroupLevelInput,
   validateCreateCollectionInput,
   validateCreateGroupInput,
   validateCreateStudentInput,
+  validateFixTextGrammaticsInput,
   validatePasswordResetCode,
   validateRegisterInput,
   validateRequestPasswordReset,
   validateUpdateCollectionInput,
+  validateUpdateEvaluationInput,
   validateUpdateEvaluationsInput,
   validateUpdateStudentInput,
 } from "../utils/validators";
@@ -29,10 +37,9 @@ import {
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
 import { generateCode } from "../../utils/passwordRecovery";
-import { sendMail } from "../../utils/mail";
+import { sendMail } from "@/utils/mail";
 import { BRCRYPT_SALT_ROUNDS, MATOMO_EVENT_CATEGORIES } from "../../config";
 import matomo from "../../matomo";
-import redisClient from "../../redis";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { prisma, req }) => {
@@ -40,10 +47,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     await validateRegisterInput(data);
     const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
     const teacher = await prisma.teacher.create({
-      data: {
-        passwordHash,
-        ...rest,
-      },
+      data: mapCreateTeacherInput(rest, passwordHash),
     });
     initSession(req, { ...teacher, type: "local" });
     return {
@@ -241,7 +245,7 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   createGroup: async (_, { data }, { prisma }) => {
     await validateCreateGroupInput(data);
-    const { students: studentInputs, educationLevel, learningObjectiveGroupKey, ...rest } = data;
+    const { students: studentInputs, educationLevel, learningObjectiveGroupKey, collectionTypes, ...rest } = data;
     const groupId = uuidv4();
     const moduleId = uuidv4();
     const groupCreate = prisma.group.create({
@@ -249,6 +253,11 @@ const resolvers: MutationResolvers<CustomContext> = {
         ...rest,
         id: groupId,
         currentModuleId: moduleId,
+        collectionTypes: {
+          createMany: {
+            data: collectionTypes,
+          },
+        },
       },
     });
     const moduleCreate = prisma.module.create({
@@ -301,6 +310,7 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
+
     return createdCollection;
   },
   createStudent: async (_, { data, moduleId }, { prisma }) => {
@@ -339,6 +349,7 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   updateEvaluation: async (_, { data }, { user }) => {
     await checkAuthenticatedByEvaluation(user, data.id);
+    await validateUpdateEvaluationInput(data);
     const updatedEvaluation = await updateEvaluation(data);
     return updatedEvaluation;
   },
@@ -443,13 +454,12 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   generateStudentFeedback: async (_, { studentId, moduleId }, { user, prisma }) => {
     await checkAuthenticatedByStudent(user, studentId);
-    const student = await prisma.student.findUnique({
+    const student = await prisma.student.findUniqueOrThrow({
       where: { id: studentId },
     });
-    if (!student) throw new Error(`Student with id ${studentId} not found`);
     const evaluations = await prisma.evaluation.findMany({
       where: {
-        studentId,
+        studentId: student.id,
         evaluationCollection: {
           moduleId,
         },
@@ -468,11 +478,13 @@ const resolvers: MutationResolvers<CustomContext> = {
       environmentLabel: getEnvironment(it.evaluationCollection.environmentCode)?.label.fi,
       date: it.evaluationCollection.date,
     }));
+    if (mappedEvaluations.length === 0) throw new ValidationError("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
     const summary = await generateStudentSummary(mappedEvaluations, user!.id); // Safe cast after authenticated check
     return summary;
   },
   fixTextGrammatics: async (_, { studentId, text }, { user }) => {
     await checkAuthenticatedByStudent(user, studentId);
+    validateFixTextGrammaticsInput(text);
     const summary = await fixTextGrammatics(text, user!.id); // Safe cast after authenticated check
     return summary;
   },

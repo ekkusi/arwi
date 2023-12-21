@@ -59,6 +59,14 @@ const resolvers: TypeResolvers = {
         label: matchingSubject.label,
       };
     },
+    collectionTypes: async ({ id }, _, { prisma }) => {
+      const collectionTypes = await prisma.collectionType.findMany({
+        where: {
+          groupId: id,
+        },
+      });
+      return collectionTypes;
+    },
   },
   Evaluation: {
     collection: async ({ evaluationCollectionId }, _, { prisma }) => {
@@ -113,6 +121,13 @@ const resolvers: TypeResolvers = {
       });
       const subjectObjectives = getLearningObjectives(group.subjectCode, module.educationLevel as EducationLevel, module.learningObjectiveGroupKey);
       return subjectObjectives.filter((objective) => learningObjectiveCodes.includes(objective.code));
+    },
+    type: async ({ typeId }, _, { prisma }) => {
+      return prisma.collectionType.findUniqueOrThrow({
+        where: {
+          id: typeId,
+        },
+      });
     },
   },
   Student: {
@@ -190,6 +205,16 @@ const resolvers: TypeResolvers = {
         },
       });
       return students;
+    },
+  },
+  CollectionType: {
+    group: async ({ groupId }, _, { prisma }) => {
+      const group = await prisma.group.findUniqueOrThrow({
+        where: {
+          id: groupId,
+        },
+      });
+      return group;
     },
   },
 };

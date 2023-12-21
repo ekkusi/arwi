@@ -30,7 +30,7 @@ type Mutation {
   deleteStudent(studentId: ID!): Student!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
-  changeGroupModule(data: ChangeGroupModuleInput!, groupId: String!): Group!
+  changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
   fixTextGrammatics(studentId: ID!, text: String!): String!
 }
@@ -104,6 +104,23 @@ type Group {
   archived: Boolean!
   currentModule: Module!
   modules: [Module!]!
+  collectionTypes: [CollectionType!]!
+}
+
+type CollectionType {
+  id: ID!
+  category:    CollectionTypeCategory!
+  name:        String!
+  weight:      Int!
+  group: Group!
+}
+
+enum CollectionTypeCategory {
+  CLASS_PARTICIPATION
+  EXAM
+  WRITTEN_WORK
+  GROUP_WORK
+  OTHER
 }
 
 type ModuleInfo {
@@ -123,7 +140,7 @@ type Module {
 type EvaluationCollection {
   id: ID!
   date: Date!
-  type: String!
+  type: CollectionType!
   environment: Environment!
   description: String
   evaluations: [Evaluation!]!
@@ -166,8 +183,8 @@ enum EducationLevel {
 input CreateTeacherInput {
   email: EmailAddress!
   password: String!
-  languagePreference: String!
-  consentsAnalytics: Boolean!
+  languagePreference: String
+  consentsAnalytics: Boolean
 }
 
 input CreateGroupInput {
@@ -177,6 +194,7 @@ input CreateGroupInput {
   educationLevel: EducationLevel!
   learningObjectiveGroupKey: String!
   students: [CreateStudentInput!]!
+  collectionTypes: [CreateCollectionTypeInput!]!
 }
 
 input UpdateGroupInput {
@@ -188,13 +206,19 @@ input CreateStudentInput {
   name: String!
 }
 
+input CreateCollectionTypeInput {
+  category: CollectionTypeCategory!
+  name: String!
+  weight: Int!
+}
+
 input UpdateStudentInput {
   name: String
 }
 
 input CreateCollectionInput {
   date: Date!
-  type: String
+  typeId: ID!
   environmentCode: ID!
   description: String
   learningObjectiveCodes: [ID!]!
@@ -203,7 +227,7 @@ input CreateCollectionInput {
 
 input UpdateCollectionInput {
   date: Date
-  type: String
+  typeId: ID
   environmentCode: ID
   description: String
   learningObjectiveCodes: [ID!]

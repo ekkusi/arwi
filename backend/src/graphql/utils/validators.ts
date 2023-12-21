@@ -2,7 +2,7 @@ import { SessionData } from "express-session";
 import { compare } from "bcryptjs";
 import { Teacher } from "@prisma/client";
 import ValidationError from "../../errors/ValidationError";
-import prisma from "../../prismaClient";
+import prisma from "@/prismaClient";
 import {
   ChangeGroupModuleInput,
   CreateCollectionInput,
@@ -23,12 +23,17 @@ export const validateRegisterInput = async ({ email, languagePreference }: Creat
   const matchingTeacher = await prisma.teacher.findFirst({
     where: { email },
   });
+
   if (matchingTeacher) throw new ValidationError(`Sähköposti '${email}' on jo käytössä`);
-  if (!VALID_LANGUAGE_CODES.includes(languagePreference)) throw new ValidationError(`Kielikoodi '${languagePreference}' ei ole sallittu`);
+  if (languagePreference && !VALID_LANGUAGE_CODES.includes(languagePreference))
+    throw new ValidationError(`Kielikoodi '${languagePreference}' ei ole sallittu`);
 };
 
-export const validateCreateGroupInput = async ({ subjectCode }: CreateGroupInput) => {
+export const validateCreateGroupInput = async ({ subjectCode, collectionTypes }: CreateGroupInput) => {
   if (!getSubject(subjectCode)) throw new ValidationError(`Aihetta koodilla '${subjectCode}' ei ole olemassa.`);
+  if (collectionTypes.length === 0) throw new ValidationError(`Arviointityyppejä on oltava vähintään yksi.`);
+  if (collectionTypes.reduce((acc, curr) => acc + curr.weight, 0) !== 100)
+    throw new ValidationError(`Arviointityyppien painotusten summan on oltava 100.`);
 };
 
 export const validateLearningObjectives = (
@@ -73,10 +78,10 @@ export const validateCreateCollectionInput = async ({ environmentCode, learningO
 };
 
 export const validateUpdateEvaluationInput = async (data: UpdateEvaluationInput) => {
-  const matchingEvaluation = await prisma.evaluation.findUniqueOrThrow({
+  const matchingEvaluation = await prisma.evaluation.findFirstOrThrow({
     where: { id: data.id },
   });
-  const wasPresent = data.wasPresent !== null ? data.wasPresent : matchingEvaluation.wasPresent;
+  const wasPresent = data.wasPresent ?? matchingEvaluation.wasPresent;
 
   // If the student was not present, the evaluation data cannot be updated
   if (wasPresent === false && (data.behaviourRating || data.skillsRating || data.notes)) {
@@ -172,15 +177,11 @@ export const validateChangeGroupLevelInput = async (input: ChangeGroupModuleInpu
   });
   const allowedLearningObjectiveGroupKeys = getLearningObjectiveGroupKeys(group.subjectCode, input.newEducationLevel);
   if (!allowedLearningObjectiveGroupKeys.includes(input.newLearningObjectiveGroupKey))
-    throw new ValidationError(
-      `Tason vaihdon input on virheellinen. Sallitut arviointiryhmät tasolle '${
-        input.newEducationLevel
-      }' ovat: ${allowedLearningObjectiveGroupKeys.join(", ")}`
-    );
+    throw new ValidationError("Annettu oppimistavoitteiden ryhmä ei ole sallittu kyseiselle koulutustasolle.");
 };
 
-const MAX_AMOUNT_OF_RESET_CODE_TRIES = 5;
-const FIVE_MINUTES_MS = 1000 * 60 * 5;
+export const MAX_AMOUNT_OF_RESET_CODE_TRIES = 5;
+export const RESET_CODE_EXPIRY_TIME_MS = 1000 * 60 * 5;
 
 export const validatePasswordResetCode = async (code: string, session: SessionData) => {
   const { recoveryCodeInfo } = session;
@@ -190,11 +191,12 @@ export const validatePasswordResetCode = async (code: string, session: SessionDa
     throw new ValidationError("Koodia on yritetty liian monta kertaa. Generoi uusi koodi.");
   const isValidCode = await compare(code, recoveryCodeInfo.codeHash);
   if (!isValidCode) throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
-  if (recoveryCodeInfo.createdAt + FIVE_MINUTES_MS < Date.now()) throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
+  if (recoveryCodeInfo.createdAt + RESET_CODE_EXPIRY_TIME_MS < Date.now())
+    throw new ValidationError("Syötetty koodi on virheellinen tai se on vanhentunut.");
   return true;
 };
 
-const MAX_AMOUNT_OF_RESET_PASSWORD_REQUEST = 5;
+export const MAX_AMOUNT_OF_RESET_PASSWORD_REQUEST = 5;
 export const REQUEST_PASSWORD_RESET_EXPIRY_IN_MS = 1000 * 60 * 15;
 
 export const validateRequestPasswordReset = async (teacher: Teacher) => {
@@ -204,4 +206,8 @@ export const validateRequestPasswordReset = async (teacher: Teacher) => {
   if (resetStartedAt > Date.now() - REQUEST_PASSWORD_RESET_EXPIRY_IN_MS && teacher.passwordResetTries > MAX_AMOUNT_OF_RESET_PASSWORD_REQUEST) {
     throw new ValidationError("Olet pyytänyt uutta koodia salasanasi vaihtamiseen liian monta kertaa. Yritä uudelleen 15 minuutin kuluttua.");
   }
+};
+
+export const validateFixTextGrammaticsInput = (text: string) => {
+  if (text.length === 0) throw new ValidationError("Tekstiä ei ole annettu. Tyhjää tekstiä ei voida korjata.");
 };

@@ -1,55 +1,33 @@
-import { graphql } from "@/gql";
-import prisma from "@/graphql-server/prismaClient";
-import serverRequest from "@/utils/serverRequest";
-import { assertIsError } from "@/utils/errorUtils";
-import { ClassYearCode } from "@prisma/client";
+import { Student } from "@prisma/client";
+import { graphql } from "../gql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import prisma from "@/prismaClient";
+import { UpdateStudentInput } from "../../types";
+import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
 
-describe("ServerRequest - updateStudent", () => {
-  let groupId: string;
-  let studentId: string;
+describe("updateStudent", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let teacher: TestTeacher;
+  let group: TestGroup;
+  let student: Student;
 
   beforeAll(async () => {
-    const teacher = await prisma.teacher.create({
-      data: {
-        email: "testteacher@example.com",
-        passwordHash: "hashed-password",
-      },
-    });
-
-    const group = await prisma.group.create({
-      data: {
-        name: "Test Group",
-        teacherId: teacher.id,
-        subjectCode: "LI",
-        currentYearCode: ClassYearCode.PRIMARY_FIRST,
-      },
-    });
-
-    groupId = group.id;
-
-    const student = await prisma.student.create({
-      data: {
-        name: "Test Student",
-        groupId,
-      },
-    });
-
-    studentId = student.id;
+    ({ graphqlRequest } = await createServer());
+    teacher = await createTestUserAndLogin(graphqlRequest);
   });
 
-  afterAll(async () => {
-    await prisma.teacher.deleteMany();
-    await prisma.student.deleteMany();
+  beforeEach(async () => {
+    group = await createTestGroup(teacher.id);
+    [student] = group.students;
+  });
+
+  afterEach(async () => {
     await prisma.group.deleteMany();
   });
 
-  it("should update the student's name", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        name: "Updated Student",
-      },
-      studentId,
+  it("should successfully update a student", async () => {
+    const updateData: UpdateStudentInput = {
+      name: "Updated Student Name",
     };
 
     const query = graphql(`
@@ -61,27 +39,24 @@ describe("ServerRequest - updateStudent", () => {
       }
     `);
 
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+    const response = await graphqlRequest(query, { data: updateData, studentId: student.id });
 
-    // Assert
-    expect(result.updateStudent).toEqual({
-      id: studentId,
-      name: variables.data.name,
-    });
+    expect(response.data?.updateStudent).toBeDefined();
+    expect(response.data?.updateStudent.id).toEqual(student.id);
+    expect(response.data?.updateStudent.name).toEqual(updateData.name);
   });
 
-  it("should return an error when the student doesn't exist", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        name: "Updated Student",
-      },
-      studentId: "non-existent-student-id",
+  it("should throw error if user is not authorized for the student", async () => {
+    const unauthorizedTeacher = await createTestUserAndLogin(graphqlRequest, {
+      email: "new-user@email.com",
+      password: "password",
+    });
+    const updateData: UpdateStudentInput = {
+      name: "New Name",
     };
 
     const query = graphql(`
-      mutation UpdateStudent($data: UpdateStudentInput!, $studentId: ID!) {
+      mutation UpdateStudentUnauthorized($data: UpdateStudentInput!, $studentId: ID!) {
         updateStudent(data: $data, studentId: $studentId) {
           id
           name
@@ -89,13 +64,70 @@ describe("ServerRequest - updateStudent", () => {
       }
     `);
 
-    // Act
-    try {
-      await serverRequest({ document: query, prismaOverride: prisma }, variables);
-    } catch (error) {
-      // Assert
-      assertIsError(error);
-      expect(error.message).toContain("Unexpected error.");
-    }
+    const response = await graphqlRequest(query, { data: updateData, studentId: student.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Haettu oppilas ei kuulu sinun oppilaisiin");
+
+    // Delete the unauthorized teacher and login again to default one
+    await prisma.teacher.delete({ where: { id: unauthorizedTeacher.id } });
+    await testLogin(graphqlRequest);
+  });
+
+  it("should throw error for invalid student ID", async () => {
+    const updateData: UpdateStudentInput = {
+      name: "Updated Student Name",
+    };
+    const invalidStudentId = "invalid_id";
+
+    const query = graphql(`
+      mutation UpdateStudentInvalidID($data: UpdateStudentInput!, $studentId: ID!) {
+        updateStudent(data: $data, studentId: $studentId) {
+          id
+          name
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData, studentId: invalidStudentId });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t.`);
+  });
+
+  it("should throw error for duplicate student name in the same group", async () => {
+    // Create another student with the same name in the same group
+    const duplicateStudent = await prisma.student.create({
+      data: {
+        name: "New student",
+        groupId: group.id,
+        modules: {
+          connect: [{ id: group.currentModuleId }],
+        },
+      },
+    });
+
+    const updateData: UpdateStudentInput = {
+      name: student.name,
+    };
+
+    const query = graphql(`
+      mutation UpdateStudentDuplicateName($data: UpdateStudentInput!, $studentId: ID!) {
+        updateStudent(data: $data, studentId: $studentId) {
+          id
+          name
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData, studentId: duplicateStudent.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(
+      `Ryhmässä on jo '${student.name}' niminen oppilas. Ryhmässä ei voi olla kahta samannimistä oppilasta.`
+    );
+
+    // Clean up: delete the created duplicate student
+    await prisma.student.delete({ where: { id: duplicateStudent.id } });
   });
 });

@@ -1,9 +1,18 @@
 import { Prisma } from "@prisma/client";
-import { UpdateCollectionInput, UpdateEvaluationInput, UpdateGroupInput, UpdateStudentInput } from "../../types";
+import { CreateTeacherInput, UpdateCollectionInput, UpdateEvaluationInput, UpdateGroupInput, UpdateStudentInput } from "../../types";
 
 export const mapUpdateStudentInput = (data: UpdateStudentInput): Prisma.StudentUpdateInput => {
   return {
     name: data.name ? data.name : undefined,
+  };
+};
+
+export const mapCreateTeacherInput = (data: Omit<CreateTeacherInput, "password">, passwordHash: string): Prisma.TeacherCreateInput => {
+  return {
+    email: data.email,
+    passwordHash,
+    languagePreference: data.languagePreference === null ? undefined : data.languagePreference,
+    consentsAnalytics: data.consentsAnalytics === null ? undefined : data.consentsAnalytics,
   };
 };
 
@@ -23,7 +32,9 @@ export const mapUpdateEvaluationInput = (data: UpdateEvaluationInput): Prisma.Ev
   };
 };
 
-export const mapUpdateCollectionInput = (data: Omit<UpdateCollectionInput, "evaluations">): Prisma.EvaluationCollectionUpdateInput => {
+export const mapUpdateCollectionInput = (
+  data: Omit<UpdateCollectionInput, "evaluations">
+): Prisma.EvaluationCollectionUpdateInput | Prisma.EvaluationCollectionUncheckedUpdateInput => {
   return {
     ...data,
     date: data.date ? new Date(data.date) : undefined,

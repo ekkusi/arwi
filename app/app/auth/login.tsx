@@ -32,6 +32,8 @@ const LoginPage_Login_Mutation = graphql(`
 `);
 
 export default function LoginPage({ navigation }: NativeStackScreenProps<AuthStackParams, "login">) {
+  // useKeyboardMode(AndroidSoftInputModes.SOFT_INPUT_ADJUST_NOTHING);
+
   const { trackAppStart, trackEvent } = useMatomo();
   const { setUser } = useAuth();
   const [generalError, setGeneralError] = useState<string | undefined>();

@@ -1,40 +1,42 @@
 import { PrismaClient } from "@prisma/client";
-import { execSync } from "child_process";
-import { URL } from "url";
 import { v4 } from "uuid";
+import { execSync } from "child_process";
 
-const generateDatabaseURL = (schema: string) => {
+const generateDatabaseURL = (databaseName: string) => {
   if (!process.env.DATABASE_URL) {
     throw new Error("please provide a database url");
   }
   const url = new URL(process.env.DATABASE_URL);
-  url.searchParams.append("schema", schema);
+  url.pathname = `/${databaseName}`;
   return url.toString();
 };
 
-const schemaId = `test-${v4()}`;
-const url = generateDatabaseURL(schemaId);
-process.env.DATABASE_URL = url;
-export const prisma = new PrismaClient({
+const databaseName = `arwi-test-${v4()}`;
+const url = generateDatabaseURL(databaseName);
+const prisma = new PrismaClient({
   datasources: { db: { url } },
 });
 
 beforeAll(async () => {
-  await prisma.$executeRawUnsafe(`CREATE SCHEMA IF NOT EXISTS "${schemaId}";`);
-  await prisma.$executeRawUnsafe(`SET search_path TO "${schemaId}";`);
-  await prisma.$executeRawUnsafe(`DROP EXTENSION IF EXISTS "uuid-ossp";`);
-  await prisma.$executeRawUnsafe(`CREATE EXTENSION "uuid-ossp" SCHEMA "${schemaId}";`);
+  const adminPrisma = new PrismaClient();
+
+  await adminPrisma.$executeRawUnsafe(`CREATE DATABASE "${databaseName}";`);
+  await adminPrisma.$disconnect();
 
   execSync(`npx prisma migrate dev`, {
     env: {
       ...process.env,
-      DATABASE_URL: generateDatabaseURL(schemaId),
+      DATABASE_URL: url,
     },
   });
 });
+
 afterAll(async () => {
-  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE;`);
   await prisma.$disconnect();
+  const adminPrisma = new PrismaClient();
+
+  await adminPrisma.$executeRawUnsafe(`DROP DATABASE IF EXISTS "${databaseName}";`);
+  await adminPrisma.$disconnect();
 });
 
 export default prisma;

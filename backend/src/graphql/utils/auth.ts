@@ -1,5 +1,5 @@
 import AuthenticationError from "../../errors/AuthenticationError";
-import prisma from "../../prismaClient";
+import prisma from "@/prismaClient";
 import { CustomContext } from "../../types/contextTypes";
 
 type User = CustomContext["user"];
@@ -16,6 +16,7 @@ export const checkAuthenticatedByGroup = async (user: User, groupId: string) => 
 
 export const checkAuthenticatedByCollection = async (user: User, collectionId: string) => {
   if (!user) throw new AuthenticationError();
+
   const matchingGroup = await prisma.group.findFirstOrThrow({
     where: {
       modules: {
@@ -29,6 +30,7 @@ export const checkAuthenticatedByCollection = async (user: User, collectionId: s
       },
     },
   });
+
   if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointikokoelma ei kuulu sinulle");
 };
 

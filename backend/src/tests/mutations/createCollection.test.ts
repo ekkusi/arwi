@@ -1,65 +1,70 @@
-import { graphql } from "@/gql";
-import { Rating } from "@/gql/graphql";
-import ValidationError from "@/graphql-server/errors/ValidationError";
-import prisma from "@/graphql-server/prismaClient";
-import serverRequest from "@/utils/serverRequest";
-import { ClassYearCode } from "@prisma/client";
+import { graphql } from "../gql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import prisma from "@/prismaClient";
+import { CollectionTypeCategory, CreateCollectionInput } from "../../types";
+import { TestGroup, TestTeacher, VALID_LI_ENV_CODE, createTestGroup, createTestUserAndLogin, deleteTestUser } from "../testHelpers";
+import { formatDate } from "../../utils/date";
 
-describe("ServerRequest - createCollection", () => {
-  let classYearId: string;
-  let groupId: string;
+describe("CreateCollection", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let teacher: TestTeacher;
+  let group: TestGroup;
+
+  let baseCollectionData: CreateCollectionInput;
 
   beforeAll(async () => {
-    const teacher = await prisma.teacher.create({
-      data: {
-        email: "testteacher@example.com",
-        passwordHash: "hashed-password",
-      },
-    });
-    const group = await prisma.group.create({
-      data: {
-        name: "Test Group",
-        subjectCode: "LI",
-        teacherId: teacher.id,
-        currentYearCode: ClassYearCode.PRIMARY_FIRST,
-      },
-    });
-    const classYear = await prisma.classYear.create({
-      data: {
-        code: ClassYearCode.PRIMARY_FIRST,
-        groupId: group.id,
-      },
-    });
-    classYearId = classYear.id;
-    groupId = group.id;
-  });
+    ({ graphqlRequest } = await createServer());
 
-  afterAll(async () => {
-    await prisma.student.deleteMany();
-    await prisma.evaluationCollection.deleteMany();
-    await prisma.group.deleteMany();
-  });
+    teacher = await createTestUserAndLogin(graphqlRequest);
+    group = await createTestGroup(teacher.id);
 
-  it("should create an evaluation collection without evaluations", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        date: "2023-04-01",
-        description: "Test description",
-        environmentCode: "LI_TALVI",
-        learningObjectiveCodes: ["T1", "T2"],
-      },
-      classYearId,
+    baseCollectionData = {
+      date: formatDate(new Date(), "yyyy-MM-dd"),
+      environmentCode: VALID_LI_ENV_CODE,
+      description: "Test Description",
+      learningObjectiveCodes: ["T1", "T2"],
+      typeId: group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)?.id!,
     };
+  });
+
+  afterEach(async () => {
+    await prisma.evaluationCollection.deleteMany();
+  });
+
+  it("should successfully create a collection", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      evaluations: [
+        {
+          studentId: group.students[0].id,
+          wasPresent: true,
+          skillsRating: 7,
+          behaviourRating: 9,
+          notes: "Good performance",
+          isStellar: false,
+        },
+      ],
+    };
+
     const query = graphql(`
-      mutation CreateCollection($data: CreateCollectionInput!, $classYearId: ID!) {
-        createCollection(data: $data, classYearId: $classYearId) {
+      mutation CreateCollection($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
           id
           date
+          type {
+            id
+          }
           environment {
             code
           }
           description
+          evaluations {
+            student {
+              id
+            }
+            skillsRating
+            behaviourRating
+          }
           learningObjectives {
             code
           }
@@ -67,181 +72,75 @@ describe("ServerRequest - createCollection", () => {
       }
     `);
 
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
 
-    // Assert
-    expect(result.createCollection).toEqual({
-      id: expect.any(String),
-      date: variables.data.date,
-      description: variables.data.description,
-      environment: {
-        code: variables.data.environmentCode,
-      },
-      learningObjectives: [
-        {
-          code: variables.data.learningObjectiveCodes[0],
-        },
-        {
-          code: variables.data.learningObjectiveCodes[1],
-        },
-      ],
-    });
+    expect(response.data?.createCollection).toBeDefined();
+    expect(response.data?.createCollection.date).toEqual(collectionData.date);
+    expect(response.data?.createCollection.environment.code).toEqual(collectionData.environmentCode);
+    expect(response.data?.createCollection.evaluations.length).toEqual(collectionData.evaluations.length);
+    expect(response.data?.createCollection.evaluations[0].behaviourRating).toEqual(collectionData.evaluations[0].behaviourRating);
+    expect(response.data?.createCollection.evaluations[0].skillsRating).toEqual(collectionData.evaluations[0].skillsRating);
+    expect(response.data?.createCollection.evaluations[0].student.id).toEqual(collectionData.evaluations[0].studentId);
+    expect(response.data?.createCollection.learningObjectives.map((lo) => lo.code)).toEqual(collectionData.learningObjectiveCodes);
   });
 
-  it("should create an evaluation collection with evaluations", async () => {
-    const student1 = await prisma.student.create({
-      data: {
-        name: "Test Student 1",
-        groupId,
-        classYears: { connect: { id: classYearId } },
-      },
-    });
-    const student2 = await prisma.student.create({
-      data: {
-        name: "Test Student 2",
-        groupId,
-        classYears: { connect: { id: classYearId } },
-      },
-    });
-    // Arrange
-    const variables = {
-      data: {
-        date: "2023-04-01",
-
-        description: "Test description",
-        environmentCode: "LI_TALVI",
-        evaluations: [
-          {
-            studentId: student1.id,
-            wasPresent: true,
-            skillsRating: Rating.GOOD,
-            behaviourRating: Rating.FAIR,
-            notes: "Student 1 notes",
-          },
-          {
-            studentId: student2.id,
-            wasPresent: false,
-            skillsRating: Rating.POOR,
-            behaviourRating: Rating.GREAT,
-            notes: "Student 2 notes",
-          },
-        ],
-        learningObjectiveCodes: [],
-      },
-      classYearId,
+  it("should throw error for invalid environment code", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      environmentCode: "InvalidEnvironmentCode",
     };
-    const query = graphql(
-      `
-        mutation CreateCollectionWithEvaluations($data: CreateCollectionInput!, $classYearId: ID!) {
-          createCollection(data: $data, classYearId: $classYearId) {
-            id
-            date
-            description
-            environment {
-              code
-            }
-            evaluations {
-              id
-              wasPresent
-              skillsRating
-              behaviourRating
-              notes
-            }
-          }
-        }
-      `
-    );
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
 
-    // Assert
-    expect(result.createCollection).toEqual({
-      id: expect.any(String),
-      date: variables.data.date,
-      description: variables.data.description,
-      environment: {
-        code: variables.data.environmentCode,
-      },
-      evaluations: [
-        {
-          id: expect.any(String),
-          wasPresent: true,
-          skillsRating: "GOOD",
-          behaviourRating: "FAIR",
-          notes: "Student 1 notes",
-        },
-        {
-          id: expect.any(String),
-          wasPresent: false,
-          skillsRating: "POOR",
-          behaviourRating: "GREAT",
-          notes: "Student 2 notes",
-        },
-      ],
-    });
-  });
-  it("should throw an error when invalid environmentCode is provided", async () => {
-    // Arrange
-    const invalidEnvironmentCode = "INVALID_CODE";
-    const variables = {
-      data: {
-        date: "2023-04-01",
-        description: "Test description",
-        environmentCode: invalidEnvironmentCode,
-        learningObjectiveCodes: [],
-      },
-      classYearId,
-    };
     const query = graphql(`
-      mutation CreateCollectionWithInvalidSubjectCode($data: CreateCollectionInput!, $classYearId: ID!) {
-        createCollection(data: $data, classYearId: $classYearId) {
+      mutation CreateCollectionInvalidEnvironment($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
           id
         }
       }
     `);
 
-    // Act
-    const result = serverRequest(
-      { document: query, prismaOverride: prisma },
-      {
-        ...variables,
-      }
-    ).catch((e) => e);
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
 
-    // Assert
-    await expect(result).resolves.toThrow(new ValidationError(`Ympäristöä koodilla '${invalidEnvironmentCode}' ei ole olemassa.`));
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Ympäristöä koodilla '${collectionData.environmentCode}' ei ole olemassa`);
   });
 
-  it("should throw an error when invalid learningObjectiveCode is provided", async () => {
-    // Arrange
-    const invalidLearningObjectiveCode = "INVALID_CODE";
-    const variables = {
-      data: {
-        date: "2023-04-01",
-        description: "Test description",
-        environmentCode: "LI_TALVI",
-        learningObjectiveCodes: [invalidLearningObjectiveCode],
-      },
-      classYearId,
+  it("should throw error for invalid learning objectives", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      learningObjectiveCodes: ["InvalidObjective1", "InvalidObjective2"],
     };
+
     const query = graphql(`
-      mutation CreateCollectionWithInvalidLearningObjectiveCode($data: CreateCollectionInput!, $classYearId: ID!) {
-        createCollection(data: $data, classYearId: $classYearId) {
+      mutation CreateCollectionInvalidLearningObjectives($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
           id
         }
       }
     `);
 
-    // Act
-    const result = serverRequest(
-      { document: query, prismaOverride: prisma },
-      {
-        ...variables,
-      }
-    ).catch((e) => e);
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
 
-    // Assert
-    await expect(result).resolves.toThrow(new ValidationError(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`));
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia`);
+  });
+
+  it("should throw error if learning objectives are NOT_EVALUATED type", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      learningObjectiveCodes: ["T1", "T11"], // T11 is NOT_EVALUATED type in LI subject's 7-9 years
+    };
+
+    const query = graphql(`
+      mutation CreateCollectionNotEvaluatedLearningObjectives($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia`);
   });
 });
