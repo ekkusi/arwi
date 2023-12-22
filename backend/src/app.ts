@@ -36,6 +36,18 @@ const createApp = async (contextOverrides?: Partial<CustomContext>) => {
     res.send("Welcome to the Arwi API! Head to /graphql for the main GraphQL API.");
   });
 
+  // To be used in tests only
+  if (process.env.NODE_ENV === "test") {
+    app.get("/test/reset-session", (req, res) => {
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).send("Could not reset session");
+        }
+        res.status(200).send("Session reset");
+      });
+    });
+  }
+
   // Must be called before setting graphql middleware
   await graphqlServer.start();
 
