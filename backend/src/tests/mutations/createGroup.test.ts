@@ -3,6 +3,8 @@ import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { CollectionTypeCategory, EducationLevel } from "../../types";
 import { TestTeacher, createTestUserAndLogin, deleteTestUser } from "../testHelpers";
+import { modulesByGroupLoader } from "../../graphql/dataLoaders/module";
+import { groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
 
 const groupData = {
   name: "Test Group",
@@ -135,5 +137,34 @@ describe("CreateGroup", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain("Arviointityyppien painotusten summan on oltava 100");
+  });
+
+  it("should update DataLoaders after creating a group", async () => {
+    const groupsByTeacher = await groupsByTeacherLoader.load(teacher.id);
+    expect(groupsByTeacher).toEqual([]);
+
+    // Create a group
+    const validGroupData = { ...groupData, teacherId: teacher.id };
+    const query = graphql(`
+      mutation CreateGroupDataLoadersCheck($data: CreateGroupInput!) {
+        createGroup(data: $data) {
+          id
+          name
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: validGroupData });
+
+    const newGroupId = response.data?.createGroup.id;
+    // Check if the modules are correctly loaded in modulesByGroupLoader
+    const updatedModulesByGroup = await modulesByGroupLoader.load(newGroupId!);
+    expect(updatedModulesByGroup.length).toEqual(1);
+    expect(updatedModulesByGroup[0].groupId).toEqual(newGroupId!);
+
+    // Check if the group is correctly loaded in groupsByTeacherLoader
+    const groupsFromTeacherLoader = await groupsByTeacherLoader.load(teacher.id);
+    const createdGroupFromTeacherLoader = groupsFromTeacherLoader.find((group) => group.id === newGroupId);
+    expect(createdGroupFromTeacherLoader).toEqual(expect.objectContaining({ id: newGroupId, name: validGroupData.name }));
   });
 });

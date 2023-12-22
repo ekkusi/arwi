@@ -11,6 +11,7 @@ import {
   REQUEST_PASSWORD_RESET_EXPIRY_IN_MS,
   RESET_CODE_EXPIRY_TIME_MS,
 } from "../../graphql/utils/validators";
+import { teacherLoader } from "../../graphql/dataLoaders/teacher";
 
 jest.mock("@/utils/passwordRecovery");
 
@@ -155,5 +156,27 @@ describe("Password Reset Flow", () => {
     const errorResponse = await graphqlRequest(verifyCodeMutation, { code: invalidCode });
     expect(errorResponse.errors).toBeDefined();
     expect(errorResponse.errors?.[0].message).toContain("Koodia on yritetty liian monta kertaa. Generoi uusi koodi.");
+  });
+
+  it("should update the DataLoader after a password update", async () => {
+    // Step 1: Request Password Reset
+    const newPassword = "newSecurePassword123";
+
+    // Fetch teacher's information before password update
+    const teacherBeforeUpdate = await teacherLoader.load(teacher.id);
+    expect(await compare("password", teacherBeforeUpdate.passwordHash!)).toBeTruthy();
+
+    // Step 2: Update Password
+    const updatePasswordMutation = graphql(`
+      mutation UpdatePasswordDataLoaders($newPassword: String!, $recoveryCode: String!) {
+        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)
+      }
+    `);
+
+    await graphqlRequest(updatePasswordMutation, { newPassword, recoveryCode: mockCode });
+
+    // Fetch teacher's information after password update
+    const updatedTeacher = await teacherLoader.load(teacher.id);
+    expect(await compare(newPassword, updatedTeacher.passwordHash!)).toBeTruthy();
   });
 });

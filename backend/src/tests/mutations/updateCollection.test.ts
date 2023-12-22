@@ -11,9 +11,10 @@ import {
   createTestGroup,
   createTestUserAndLogin,
   testLogin,
-  testLogout,
 } from "../testHelpers";
 import { formatDate } from "../../utils/date";
+import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
+import { evaluationLoader, evaluationsByCollectionLoader } from "../../graphql/dataLoaders/evaluation";
 
 describe("updateCollection", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -228,5 +229,74 @@ describe("updateCollection", () => {
     expect(response.errors?.[0].message).toContain(
       "Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää."
     );
+  });
+
+  it("should update DataLoaders after updating a collection and its evaluations", async () => {
+    // Fetch initial state from DataLoaders
+    const collectionFromDataLoaderBeforeUpdate = await collectionLoader.load(collection.id);
+    const collectionsFromModuleLoaderBeforeUpdate = await collectionsByModuleLoader.load(group.currentModule.id);
+    const evaluationFromDataLoaderBeforeUpdate = await evaluationLoader.load(evaluation.id);
+    const evaluationsFromCollectionLoaderBeforeUpdate = await evaluationsByCollectionLoader.load(collection.id);
+
+    expect(collectionFromDataLoaderBeforeUpdate).toEqual(collection);
+    expect(collectionsFromModuleLoaderBeforeUpdate).toContainEqual(collection);
+    expect(evaluationFromDataLoaderBeforeUpdate).toEqual(evaluation);
+    expect(evaluationsFromCollectionLoaderBeforeUpdate).toContainEqual(evaluation);
+
+    // Update the collection
+    const updatedEvaluationData = {
+      id: evaluation.id,
+      wasPresent: true,
+      skillsRating: 7,
+      behaviourRating: 8,
+      notes: "Improved significantly",
+      isStellar: true,
+    };
+    const updateData: UpdateCollectionInput = {
+      date: formatDate(new Date(), "yyyy-MM-dd"),
+      environmentCode: "LI_ENV_TAN",
+      typeId: group.collectionTypes.find((type) => type.category === CollectionTypeCategory.EXAM)!.id,
+      description: "Updated Midterm Exam",
+      learningObjectiveCodes: ["T1", "T4"],
+      evaluations: [updatedEvaluationData],
+    };
+
+    const updateCollectionQuery = graphql(`
+      mutation UpdateCollectionDataLoaderCheck($data: UpdateCollectionInput!, $collectionId: ID!) {
+        updateCollection(data: $data, collectionId: $collectionId) {
+          id
+        }
+      }
+    `);
+
+    await graphqlRequest(updateCollectionQuery, { data: updateData, collectionId: collection.id });
+
+    // Fetch the updated data from DataLoaders
+    const updatedCollectionFromDataLoader = await collectionLoader.load(collection.id);
+    const updatedCollectionsFromModuleLoader = await collectionsByModuleLoader.load(group.currentModule.id);
+    const updatedEvaluationFromDataLoader = await evaluationLoader.load(evaluation.id);
+    const updatedEvaluationsFromCollectionLoader = await evaluationsByCollectionLoader.load(collection.id);
+
+    // Assertions for collection data
+    expect(updatedCollectionFromDataLoader).toEqual(
+      expect.objectContaining({
+        id: collection.id,
+        date: new Date(updateData.date!),
+        description: updateData.description,
+        learningObjectiveCodes: updateData.learningObjectiveCodes,
+      })
+    );
+    expect(updatedCollectionsFromModuleLoader).toContainEqual(
+      expect.objectContaining({
+        id: collection.id,
+        date: new Date(updateData.date!),
+        description: updateData.description,
+        learningObjectiveCodes: updateData.learningObjectiveCodes,
+      })
+    );
+
+    // Assertions for evaluation data
+    expect(updatedEvaluationFromDataLoader).toEqual(expect.objectContaining(updatedEvaluationData));
+    expect(updatedEvaluationsFromCollectionLoader).toContainEqual(expect.objectContaining(updatedEvaluationData));
   });
 });

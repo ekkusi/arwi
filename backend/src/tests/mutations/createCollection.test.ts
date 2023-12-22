@@ -4,6 +4,8 @@ import prisma from "@/prismaClient";
 import { CollectionTypeCategory, CreateCollectionInput } from "../../types";
 import { TestGroup, TestTeacher, VALID_LI_ENV_CODE, createTestGroup, createTestUserAndLogin, deleteTestUser } from "../testHelpers";
 import { formatDate } from "../../utils/date";
+import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
+import { groupLoader } from "../../graphql/dataLoaders/group";
 
 describe("CreateCollection", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -142,5 +144,63 @@ describe("CreateCollection", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia`);
+  });
+
+  it("should update DataLoaders after creating a collection", async () => {
+    // Initial state: Load collections for a module and check initial state
+    const initialCollectionsByModule = await collectionsByModuleLoader.load(group.currentModule.id);
+    expect(initialCollectionsByModule).toEqual([]);
+
+    // Load group to cache
+    const initialGroupFromLoader = await groupLoader.load(group.id);
+
+    // Create a collection
+    const collectionData = {
+      ...baseCollectionData,
+      evaluations: [
+        {
+          studentId: group.students[0].id,
+          wasPresent: true,
+          skillsRating: 7,
+          behaviourRating: 9,
+          notes: "Good performance",
+          isStellar: false,
+        },
+      ],
+    };
+
+    // Wait 2 seconds to make sure updatedAt is different
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    });
+
+    const query = graphql(`
+      mutation CreateCollectionDataLoaderCheck($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
+          id
+          date
+        }
+      }
+    `);
+
+    const createCollectionResponse = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+    const newCollection = createCollectionResponse.data?.createCollection!;
+    expect(newCollection).toBeDefined();
+
+    // Check if the collection is correctly loaded in collectionLoader
+    const newCollectionFromLoader = await collectionLoader.load(newCollection.id);
+    expect(newCollectionFromLoader).toEqual(expect.objectContaining({ id: newCollection.id }));
+
+    // Check if the collectionsByModuleLoader is updated
+    const updatedCollectionsByModule = await collectionsByModuleLoader.load(group.currentModule.id);
+    expect(updatedCollectionsByModule.length).toEqual(1);
+    expect(updatedCollectionsByModule[0]).toEqual(expect.objectContaining({ id: newCollection.id }));
+
+    // Check if the groupLoader is updated
+    const updatedGroupFromLoader = await groupLoader.load(group.id);
+
+    expect(formatDate(updatedGroupFromLoader.updatedAt, "dd.MM.yyyy HH:mm:ss")).not.toEqual(
+      formatDate(initialGroupFromLoader.updatedAt, "dd.MM.yyyy HH:mm:ss")
+    );
   });
 });

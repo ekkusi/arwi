@@ -12,6 +12,7 @@ import {
   createTestUserAndLogin,
   testLogin,
 } from "../testHelpers";
+import { evaluationLoader, evaluationsByCollectionLoader } from "../../graphql/dataLoaders/evaluation";
 
 describe("updateEvaluation", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -36,14 +37,18 @@ describe("updateEvaluation", () => {
     await prisma.evaluation.deleteMany();
   });
 
+  const baseUpdateData: Omit<UpdateEvaluationInput, "id"> = {
+    wasPresent: true,
+    skillsRating: 5,
+    behaviourRating: 4,
+    notes: "Updated notes",
+    isStellar: false,
+  };
+
   it("should successfully update evaluation", async () => {
     const updateData: UpdateEvaluationInput = {
       id: evaluation.id,
-      wasPresent: true,
-      skillsRating: 5,
-      behaviourRating: 4,
-      notes: "Improved performance",
-      isStellar: false,
+      ...baseUpdateData,
     };
 
     const query = graphql(`
@@ -63,7 +68,74 @@ describe("updateEvaluation", () => {
     expect(response.data?.updateEvaluation).toBeDefined();
     expect(response.data?.updateEvaluation.id).toEqual(updateData.id);
     expect(response.data?.updateEvaluation.skillsRating).toEqual(updateData.skillsRating);
-    // Additional assertions for other fields
+  });
+
+  it("should throw error for behaviourRating less than 4", async () => {
+    const updateData = { ...baseUpdateData, id: evaluation.id, behaviourRating: 3 };
+
+    const query = graphql(`
+      mutation UpdateEvaluationBehaviourRatingLow($data: UpdateEvaluationInput!) {
+        updateEvaluation(data: $data) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Käytöksen arvosanan on oltava välillä 4-10");
+  });
+
+  it("should throw error for behaviourRating greater than 10", async () => {
+    const updateData = { ...baseUpdateData, id: evaluation.id, behaviourRating: 11 };
+
+    const query = graphql(`
+      mutation UpdateEvaluationBehaviourRatingHigh($data: UpdateEvaluationInput!) {
+        updateEvaluation(data: $data) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Käytöksen arvosanan on oltava välillä 4-10");
+  });
+
+  it("should throw error for skillsRating less than 4", async () => {
+    const updateData = { ...baseUpdateData, id: evaluation.id, skillsRating: 3 };
+
+    const query = graphql(`
+      mutation UpdateEvaluationSkillsRatingLow($data: UpdateEvaluationInput!) {
+        updateEvaluation(data: $data) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Taitojen arvosanan on oltava välillä 4-10");
+  });
+
+  it("should throw error for skillsRating greater than 10", async () => {
+    const updateData = { ...baseUpdateData, id: evaluation.id, skillsRating: 11 };
+
+    const query = graphql(`
+      mutation UpdateEvaluationSkillsRatingHigh($data: UpdateEvaluationInput!) {
+        updateEvaluation(data: $data) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Taitojen arvosanan on oltava välillä 4-10");
   });
 
   it("should throw error if user is not authorized to access the evaluation", async () => {
@@ -124,5 +196,47 @@ describe("updateEvaluation", () => {
     expect(response.errors?.[0].message).toContain(
       "Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää."
     );
+  });
+
+  it("should update DataLoaders after updating an evaluation", async () => {
+    // Fetch the initial state of the evaluation from the DataLoader
+    const evaluationFromDataLoaderBeforeUpdate = await evaluationLoader.load(evaluation.id);
+    const evaluationsFromCollectionLoaderBeforeUpdate = await evaluationsByCollectionLoader.load(collection.id);
+    const matchingEvaluationBeforeUpdate = evaluationsFromCollectionLoaderBeforeUpdate.find((e) => e.id === evaluation.id);
+
+    expect(evaluationFromDataLoaderBeforeUpdate).toEqual(evaluation);
+    expect(matchingEvaluationBeforeUpdate).toEqual(evaluation);
+
+    // Update the evaluation
+    const updatedData = {
+      id: evaluation.id,
+      wasPresent: true,
+      skillsRating: 6,
+      behaviourRating: 6,
+      notes: "Newly updated notes",
+      isStellar: false,
+    };
+
+    const query = graphql(`
+      mutation UpdateEvaluationDataLoaderCheck($data: UpdateEvaluationInput!) {
+        updateEvaluation(data: $data) {
+          id
+          skillsRating
+          behaviourRating
+          notes
+          isStellar
+        }
+      }
+    `);
+
+    await graphqlRequest(query, { data: updatedData });
+
+    // Fetch the updated evaluation and compare the data
+    const updatedEvaluationFromDataLoader = await evaluationLoader.load(evaluation.id);
+    const updatedEvaluationsFromCollectionLoader = await evaluationsByCollectionLoader.load(collection.id);
+    const matchingUpdatedEvaluation = updatedEvaluationsFromCollectionLoader.find((e) => e.id === evaluation.id);
+
+    expect(updatedEvaluationFromDataLoader).toEqual(expect.objectContaining(updatedData));
+    expect(matchingUpdatedEvaluation).toEqual(expect.objectContaining(updatedData));
   });
 });

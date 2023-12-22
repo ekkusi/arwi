@@ -13,6 +13,7 @@ import {
   testLogin,
   testLogout,
 } from "../testHelpers";
+import { evaluationLoader, evaluationsByCollectionLoader } from "../../graphql/dataLoaders/evaluation";
 
 describe("updateEvaluations", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -144,5 +145,42 @@ describe("updateEvaluations", () => {
     expect(response.errors?.[0].message).toContain(
       "Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää."
     );
+  });
+
+  it("should reflect updates in DataLoader after updating evaluations", async () => {
+    // Fetch the evaluation and compare the data
+    const evaluationFromDataLoader = await evaluationLoader.load(evaluation.id);
+    const evaluationsFromCollectionLoader = await evaluationsByCollectionLoader.load(collection.id);
+    const matchingEvaluation = evaluationsFromCollectionLoader.find((e) => e.id === evaluation.id);
+    expect(evaluationFromDataLoader).toEqual(evaluation);
+    expect(matchingEvaluation).toEqual(evaluation);
+
+    const updatedData = [
+      {
+        id: evaluation.id,
+        wasPresent: true,
+        skillsRating: 6,
+        behaviourRating: 6,
+        notes: "Updated notes",
+        isStellar: false,
+      },
+    ];
+
+    const updateQuery = graphql(`
+      mutation UpdateEvaluationsDataLoader($data: [UpdateEvaluationInput!]!, $collectionId: ID!) {
+        updateEvaluations(data: $data, collectionId: $collectionId)
+      }
+    `);
+
+    const result = await graphqlRequest(updateQuery, { data: updatedData, collectionId: collection.id });
+
+    expect(result.data?.updateEvaluations).toEqual(1);
+
+    // Fetch the evaluation and compare the data
+    const updatedEvaluationFromDataLoader = await evaluationLoader.load(evaluation.id);
+    const updatedEvaluationsFromCollectionLoader = await evaluationsByCollectionLoader.load(collection.id);
+    const matchingUpdatedEvaluation = updatedEvaluationsFromCollectionLoader.find((e) => e.id === evaluation.id);
+    expect(updatedEvaluationFromDataLoader).toEqual({ ...evaluation, ...updatedData[0] });
+    expect(matchingUpdatedEvaluation).toEqual({ ...evaluation, ...updatedData[0] });
   });
 });

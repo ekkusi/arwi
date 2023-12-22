@@ -5,51 +5,25 @@ type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
 const resolvers: TypeResolvers = {
   Teacher: {
-    groups: async ({ id }, _, { prisma }) => {
-      const groups = await prisma.group.findMany({
-        where: {
-          teacherId: id,
-        },
-      });
-      return groups;
+    groups: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.groupsByTeacherLoader.load(id);
     },
     isMPassIDConnected: async ({ mPassID }) => {
       return !!mPassID;
     },
   },
   Group: {
-    currentModule: async ({ currentModuleId }, _, { prisma }) => {
-      const module = await prisma.module.findUniqueOrThrow({
-        where: {
-          id: currentModuleId,
-        },
-      });
-      return module;
+    currentModule: ({ currentModuleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(currentModuleId);
     },
-    modules: async ({ id }, _, { prisma }) => {
-      const modules = await prisma.module.findMany({
-        where: {
-          groupId: id,
-        },
-      });
-      return modules;
+    modules: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.modulesByGroupLoader.load(id);
     },
-    students: async ({ id }, _, { prisma }) => {
-      const students = await prisma.student.findMany({
-        where: {
-          groupId: id,
-        },
-      });
-      return students;
+    students: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.studentsByGroupLoader.load(id);
     },
-    teacher: async ({ teacherId }, _, { prisma }) => {
-      // TODO: Maybe implement custom NotFoundError
-      const teacher = await prisma.teacher.findUniqueOrThrow({
-        where: {
-          id: teacherId,
-        },
-      });
-      return teacher;
+    teacher: ({ teacherId }, _, { dataLoaders }) => {
+      return dataLoaders.teacherLoader.load(teacherId);
     },
     subject: ({ subjectCode }) => {
       const matchingSubject = getSubject(subjectCode);
@@ -59,90 +33,49 @@ const resolvers: TypeResolvers = {
         label: matchingSubject.label,
       };
     },
-    collectionTypes: async ({ id }, _, { prisma }) => {
-      const collectionTypes = await prisma.collectionType.findMany({
-        where: {
-          groupId: id,
-        },
-      });
-      return collectionTypes;
+    collectionTypes: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.collectionTypesByGroupLoader.load(id);
     },
   },
   Evaluation: {
-    collection: async ({ evaluationCollectionId }, _, { prisma }) => {
-      const collection = await prisma.evaluationCollection.findUniqueOrThrow({
-        where: {
-          id: evaluationCollectionId,
-        },
-      });
-      return collection;
+    collection: ({ evaluationCollectionId }, _, { dataLoaders }) => {
+      return dataLoaders.collectionLoader.load(evaluationCollectionId);
     },
-    student: async ({ studentId }, _, { prisma }) => {
-      const student = await prisma.student.findUniqueOrThrow({
-        where: {
-          id: studentId,
-        },
-      });
-      return student;
+    student: ({ studentId }, _, { dataLoaders }) => {
+      return dataLoaders.studentLoader.load(studentId);
     },
   },
   EvaluationCollection: {
-    module: async ({ moduleId }, _, { prisma }) => {
-      const module = await prisma.module.findUniqueOrThrow({
-        where: {
-          id: moduleId,
-        },
-      });
-      return module;
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
     },
-    evaluations: async ({ id }, _, { prisma }) => {
-      const evaluations = await prisma.evaluation.findMany({
-        where: {
-          evaluationCollectionId: id,
-        },
-      });
-      return evaluations;
+    evaluations: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.evaluationsByCollectionLoader.load(id);
     },
     environment: ({ environmentCode }) => {
       const environment = getEnvironment(environmentCode);
       if (!environment) throw new Error(`Environment not found with code: ${environmentCode}`);
       return environment;
     },
-    learningObjectives: async ({ moduleId, learningObjectiveCodes }, _, { prisma }) => {
-      const module = await prisma.module.findUniqueOrThrow({
-        where: {
-          id: moduleId,
-        },
-      });
-      const group = await prisma.group.findFirstOrThrow({
-        where: {
-          modules: { some: { id: moduleId } },
-        },
-      });
+    learningObjectives: async ({ moduleId, learningObjectiveCodes }, _, { dataLoaders }) => {
+      const module = await dataLoaders.moduleLoader.load(moduleId);
+      const group = await dataLoaders.groupLoader.load(module.groupId);
       const subjectObjectives = getLearningObjectives(group.subjectCode, module.educationLevel as EducationLevel, module.learningObjectiveGroupKey);
       return subjectObjectives.filter((objective) => learningObjectiveCodes.includes(objective.code));
     },
-    type: async ({ typeId }, _, { prisma }) => {
-      return prisma.collectionType.findUniqueOrThrow({
-        where: {
-          id: typeId,
-        },
-      });
+    type: ({ typeId }, _, { dataLoaders }) => {
+      return dataLoaders.collectionTypeLoader.load(typeId);
     },
   },
   Student: {
-    group: async ({ groupId }, _, { prisma }) => {
-      const matchingGroup = await prisma.group.findUniqueOrThrow({
-        where: {
-          id: groupId,
-        },
-      });
-      return matchingGroup;
+    group: ({ groupId }, _, { dataLoaders }) => {
+      return dataLoaders.groupLoader.load(groupId);
     },
-    currentModuleEvaluations: async ({ id, groupId }, _, { prisma }) => {
-      const group = await prisma.group.findUniqueOrThrow({
-        where: { id: groupId },
-      });
+    currentModuleEvaluations: async ({ id, groupId }, _, { prisma, dataLoaders }) => {
+      const group = await dataLoaders.groupLoader.load(groupId);
+
+      // A dataloader could be added for this but might be redundant as it is really specific.
+      // The usage could be monitored and if this is queried a lot, a dataloader could be added.
       const evaluations = await prisma.evaluation.findMany({
         where: {
           studentId: id,
@@ -169,12 +102,8 @@ const resolvers: TypeResolvers = {
     },
   },
   Module: {
-    info: async ({ educationLevel, learningObjectiveGroupKey, groupId }, _, { prisma }) => {
-      const group = await prisma.group.findUniqueOrThrow({
-        where: {
-          id: groupId,
-        },
-      });
+    info: async ({ educationLevel, learningObjectiveGroupKey, groupId }, _, { dataLoaders }) => {
+      const group = await dataLoaders.groupLoader.load(groupId);
       const info = getModuleInfo(group.subjectCode, educationLevel as EducationLevel, learningObjectiveGroupKey);
       if (!info)
         throw new Error(
@@ -182,23 +111,15 @@ const resolvers: TypeResolvers = {
         );
       return info;
     },
-    group: async ({ groupId }, _, { prisma }) => {
-      const group = await prisma.group.findUniqueOrThrow({
-        where: {
-          id: groupId,
-        },
-      });
-      return group;
+    group: ({ groupId }, _, { dataLoaders }) => {
+      return dataLoaders.groupLoader.load(groupId);
     },
-    evaluationCollections: async ({ id }, _, { prisma }) => {
-      const collections = await prisma.evaluationCollection.findMany({
-        where: {
-          moduleId: id,
-        },
-      });
-      return collections;
+    evaluationCollections: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.collectionsByModuleLoader.load(id);
     },
     students: async ({ id }, _, { prisma }) => {
+      // A dataloader could be added for this but it would be complicated.
+      // The usage could be monitored and if this is queried a lot, a dataloader could be added.
       const students = await prisma.student.findMany({
         where: {
           modules: { some: { id } },
@@ -208,13 +129,8 @@ const resolvers: TypeResolvers = {
     },
   },
   CollectionType: {
-    group: async ({ groupId }, _, { prisma }) => {
-      const group = await prisma.group.findUniqueOrThrow({
-        where: {
-          id: groupId,
-        },
-      });
-      return group;
+    group: ({ groupId }, _, { dataLoaders }) => {
+      return dataLoaders.groupLoader.load(groupId);
     },
   },
 };

@@ -16,6 +16,7 @@ import CText from "../../../../components/primitives/CText";
 import CTextInput from "../../../../components/primitives/CTextInput";
 import { dividePercentages } from "../../../../helpers/mathUtilts";
 import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
+import CKeyboardAvoidingView from "../../../../components/primitives/CKeyboardAvoidingView";
 
 type CollectionTypeOption = {
   name: string;

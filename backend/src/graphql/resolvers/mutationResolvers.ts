@@ -27,7 +27,6 @@ import {
   validateUpdateEvaluationsInput,
   validateUpdateStudentInput,
 } from "../utils/validators";
-import { updateEvaluation } from "../utils/resolverUtils";
 import {
   checkAuthenticatedByCollection,
   checkAuthenticatedByEvaluation,
@@ -40,15 +39,20 @@ import { generateCode } from "../../utils/passwordRecovery";
 import { sendMail } from "@/utils/mail";
 import { BRCRYPT_SALT_ROUNDS, MATOMO_EVENT_CATEGORIES } from "../../config";
 import matomo from "../../matomo";
+import { createTeacher, deleteTeacher, updateTeacher } from "../mutationWrappers/teacher";
+import { deleteGroup, updateGroup, updateGroupByModule, updateGroupMany } from "../mutationWrappers/group";
+import { createCollection, deleteCollection, updateCollection } from "../mutationWrappers/collection";
+import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers/student";
+import { updateEvaluation } from "../mutationWrappers/evaluation";
+import { createModule } from "../mutationWrappers/module";
 
 const resolvers: MutationResolvers<CustomContext> = {
-  register: async (_, { data }, { prisma, req }) => {
+  register: async (_, { data }, { req }) => {
     const { password, ...rest } = data;
     await validateRegisterInput(data);
     const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
-    const teacher = await prisma.teacher.create({
-      data: mapCreateTeacherInput(rest, passwordHash),
-    });
+    const teacher = await createTeacher({ data: mapCreateTeacherInput(rest, passwordHash) });
+
     initSession(req, { ...teacher, type: "local" });
     return {
       userData: teacher,
@@ -93,29 +97,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     // If there is already an existing user with the mpass-id, merge it to the current user
     if (matchingUser) {
       // Update all groups where old user was teacher to new user
-      await prisma.group.updateMany({
-        where: {
-          teacherId: matchingUser.id,
-        },
-        data: {
-          teacherId: currentUser.id,
-        },
-      });
+      await updateGroupMany(matchingUser.id, { data: { teacherId: currentUser.id } });
       // Delete old user
-      await prisma.teacher.delete({
-        where: {
-          id: matchingUser.id,
-        },
-      });
+      await deleteTeacher(matchingUser.id);
     }
-    const updatedUser = await prisma.teacher.update({
-      where: {
-        id: currentUser.id,
-      },
-      data: {
-        mPassID: userInfo.sub,
-      },
-    });
+
+    const updatedUser = await updateTeacher(currentUser.id, { data: { mPassID: userInfo.sub } });
     req.session.userInfo = updatedUser;
     req.session.tokenSet = tokenSet;
     return {
@@ -136,30 +123,11 @@ const resolvers: MutationResolvers<CustomContext> = {
     const isValidPassword = await compare(password, matchingTeacher.passwordHash);
     if (!isValidPassword) throw new ValidationError(`Annettu salasana oli väärä.`);
     // Update all groups where old user was teacher to new user
-    await prisma.group.updateMany({
-      where: {
-        teacherId: matchingTeacher.id,
-      },
-      data: {
-        teacherId: currentUser.id,
-      },
-    });
+    await updateGroupMany(matchingTeacher.id, { data: { teacherId: currentUser.id } });
     // Delete local credentials user
-    await prisma.teacher.delete({
-      where: {
-        id: matchingTeacher.id,
-      },
-    });
+    await deleteTeacher(matchingTeacher.id);
     // Update old user with new credentials
-    const updatedUser = await prisma.teacher.update({
-      where: {
-        id: currentUser.id,
-      },
-      data: {
-        email: matchingTeacher.email,
-        passwordHash: matchingTeacher.passwordHash,
-      },
-    });
+    const updatedUser = await updateTeacher(currentUser.id, { data: { email: matchingTeacher.email, passwordHash: matchingTeacher.passwordHash } });
     req.session.userInfo = updatedUser;
     return {
       userData: updatedUser,
@@ -176,13 +144,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     if (matchingTeacher) {
       let updatePromise;
+      // If there is no password reset started or the started at time is expired, reset the started at time
       if (
         !matchingTeacher.passwordResetStartedAt ||
         matchingTeacher.passwordResetStartedAt.getTime() + REQUEST_PASSWORD_RESET_EXPIRY_IN_MS < Date.now()
       ) {
-        // If there is no password reset started or the started at time is expired, reset the started at time
-        updatePromise = prisma.teacher.update({
-          where: { id: matchingTeacher.id },
+        updatePromise = updateTeacher(matchingTeacher.id, {
           data: {
             passwordResetStartedAt: new Date(),
             passwordResetTries: 1,
@@ -190,8 +157,7 @@ const resolvers: MutationResolvers<CustomContext> = {
         });
       } else {
         // If there is already a password reset started and it hasn't expired, only update the amount of tries
-        updatePromise = prisma.teacher.update({
-          where: { id: matchingTeacher.id },
+        updatePromise = updateTeacher(matchingTeacher.id, {
           data: {
             passwordResetTries: matchingTeacher.passwordResetTries + 1,
           },
@@ -226,14 +192,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     await validatePasswordResetCode(code, req.session);
     return true;
   },
-  updatePassword: async (_, { newPassword, recoveryCode }, { prisma, req }) => {
+  updatePassword: async (_, { newPassword, recoveryCode }, { req, dataLoaders }) => {
     await validatePasswordResetCode(recoveryCode, req.session);
-    const matchingTeacher = await prisma.teacher.findUnique({
-      where: { id: req.session.recoveryCodeInfo?.userId },
-    });
+    if (!req.session.recoveryCodeInfo) throw new Error("Unexpected error, recovery code info not found from session");
+    const matchingTeacher = await dataLoaders.teacherLoader.load(req.session.recoveryCodeInfo.userId);
     if (!matchingTeacher) throw new Error("Unexpected error, teacher not found with recovery code info");
-    await prisma.teacher.update({
-      where: { id: matchingTeacher.id },
+    await updateTeacher(matchingTeacher.id, {
       data: {
         passwordHash: await hash(newPassword, BRCRYPT_SALT_ROUNDS),
       },
@@ -243,11 +207,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     req.session.recoveryCodeInfo = undefined;
     return true;
   },
-  createGroup: async (_, { data }, { prisma }) => {
+  createGroup: async (_, { data }, { prisma, dataLoaders }) => {
     await validateCreateGroupInput(data);
     const { students: studentInputs, educationLevel, learningObjectiveGroupKey, collectionTypes, ...rest } = data;
     const groupId = uuidv4();
     const moduleId = uuidv4();
+
     const groupCreate = prisma.group.create({
       data: {
         ...rest,
@@ -275,12 +240,17 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
     });
     const [group] = await prisma.$transaction([groupCreate, moduleCreate]);
+
+    // Clear loaders (necesssary here because of prisma modifications done by transaction and not the wrappers)
+    dataLoaders.groupsByTeacherLoader.clear(data.teacherId);
+    dataLoaders.modulesByGroupLoader.clear(groupId);
+
     return group;
   },
-  createCollection: async (_, { data, moduleId }, { prisma }) => {
+  createCollection: async (_, { data, moduleId }) => {
     await validateCreateCollectionInput(data, moduleId);
     const { evaluations, ...rest } = data;
-    const createdCollection = await prisma.evaluationCollection.create({
+    const createdCollection = await createCollection(moduleId, {
       data: {
         ...rest,
         moduleId,
@@ -296,29 +266,21 @@ const resolvers: MutationResolvers<CustomContext> = {
             }
           : undefined,
       },
+      include: {
+        module: true,
+      },
     });
     // Should always only find one group, updateMany only here because of typescript constraint
-    await prisma.group.updateMany({
-      data: {
-        updatedAt: new Date(),
-      },
-      where: {
-        modules: {
-          some: {
-            id: moduleId,
-          },
-        },
-      },
+    await updateGroupByModule(moduleId, createdCollection.module.groupId, {
+      data: { updatedAt: new Date() },
     });
 
     return createdCollection;
   },
-  createStudent: async (_, { data, moduleId }, { prisma }) => {
+  createStudent: async (_, { data, moduleId }, { dataLoaders }) => {
     await validateCreateStudentInput(data, moduleId);
-    const module = await prisma.module.findUniqueOrThrow({
-      where: { id: moduleId },
-    });
-    const createdStudent = await prisma.student.create({
+    const module = await dataLoaders.moduleLoader.load(moduleId);
+    const createdStudent = await createStudent(module.groupId, {
       data: {
         ...data,
         groupId: module.groupId,
@@ -329,99 +291,62 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return createdStudent;
   },
-  updateEvaluations: async (_, { data, collectionId }, { prisma, user }) => {
+  updateEvaluations: async (_, { data, collectionId }, { user }) => {
     await checkAuthenticatedByCollection(user, collectionId);
     await validateUpdateEvaluationsInput(data, collectionId);
-    await prisma.evaluationCollection.update({
-      data: {
-        evaluations: {
-          update: data.map((it) => ({
-            data: mapUpdateEvaluationInput(it),
-            where: {
-              id: it.id,
-            },
-          })),
-        },
-      },
-      where: { id: collectionId },
-    });
+    await updateCollection(collectionId, {}, data);
     return data.length;
   },
   updateEvaluation: async (_, { data }, { user }) => {
     await checkAuthenticatedByEvaluation(user, data.id);
     await validateUpdateEvaluationInput(data);
-    const updatedEvaluation = await updateEvaluation(data);
+    const updatedEvaluation = await updateEvaluation(data.id, { data: mapUpdateEvaluationInput(data) });
     return updatedEvaluation;
   },
-  updateCollection: async (_, { data, collectionId }, { prisma, user }) => {
+  updateCollection: async (_, { data, collectionId }, { user }) => {
     await checkAuthenticatedByCollection(user, collectionId);
     await validateUpdateCollectionInput(data, collectionId);
     const { evaluations, ...rest } = data;
-    const updatedCollection = await prisma.evaluationCollection.update({
-      data: {
-        ...mapUpdateCollectionInput(rest),
-        evaluations: evaluations
-          ? {
-              update: evaluations.map((it) => ({
-                data: mapUpdateEvaluationInput(it),
-                where: {
-                  id: it.id,
-                },
-              })),
-            }
-          : undefined,
-      },
-      where: { id: collectionId },
-    });
+    const updatedCollection = await updateCollection(collectionId, { data: mapUpdateCollectionInput(rest) }, evaluations ?? undefined);
     return updatedCollection;
   },
-  updateStudent: async (_, { data, studentId }, { prisma, user }) => {
+  updateStudent: async (_, { data, studentId }, { user }) => {
     await checkAuthenticatedByStudent(user, studentId);
     await validateUpdateStudentInput(data, studentId);
-    const updatedStudent = await prisma.student.update({
-      where: { id: studentId },
+    const updatedStudent = await updateStudent(studentId, {
       data: mapUpdateStudentInput(data),
     });
     return updatedStudent;
   },
-  updateGroup: async (_, { data, groupId }, { prisma, user }) => {
+  updateGroup: async (_, { data, groupId }, { user }) => {
     await checkAuthenticatedByGroup(user, groupId);
-    const updatedGroup = await prisma.group.update({
-      where: { id: groupId },
+    const updatedGroup = await updateGroup(groupId, {
       data: mapUpdateGroupInput(data),
     });
     return updatedGroup;
   },
-  deleteStudent: async (_, { studentId }, { prisma, user }) => {
+  deleteStudent: async (_, { studentId }, { user }) => {
     await checkAuthenticatedByStudent(user, studentId);
-    const student = await prisma.student.delete({
-      where: { id: studentId },
-    });
+    const student = await deleteStudent(studentId);
     return student;
   },
-  deleteGroup: async (_, { groupId }, { prisma, user }) => {
+  deleteGroup: async (_, { groupId }, { user }) => {
     await checkAuthenticatedByGroup(user, groupId);
-    const group = await prisma.group.delete({
-      where: { id: groupId },
-    });
+    const group = await deleteGroup(groupId);
     return group;
   },
-  deleteCollection: async (_, { collectionId }, { prisma, user }) => {
+  deleteCollection: async (_, { collectionId }, { user }) => {
     await checkAuthenticatedByCollection(user, collectionId);
-    const collection = await prisma.evaluationCollection.delete({
-      where: { id: collectionId },
-    });
+    const collection = await deleteCollection(collectionId);
     return collection;
   },
-  changeGroupModule: async (_, { data, groupId }, { prisma, user }) => {
+  changeGroupModule: async (_, { data, groupId }, { prisma, dataLoaders, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
     await validateChangeGroupLevelInput(data, groupId);
     let newYear = await prisma.module.findFirst({
       where: { groupId, educationLevel: data.newEducationLevel, learningObjectiveGroupKey: data.newLearningObjectiveGroupKey },
     });
-    const group = await prisma.group.findUniqueOrThrow({
-      where: { id: groupId },
-    });
+    const group = await dataLoaders.groupLoader.load(groupId);
     if (!newYear) {
       // Copy students from current year to new year
       const currentYearStudents = await prisma.student.findMany({
@@ -433,7 +358,7 @@ const resolvers: MutationResolvers<CustomContext> = {
           },
         },
       });
-      newYear = await prisma.module.create({
+      newYear = await createModule({
         data: {
           educationLevel: data.newEducationLevel,
           learningObjectiveGroupKey: data.newLearningObjectiveGroupKey,
@@ -444,19 +369,16 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       });
     }
-    const updatedGroup = await prisma.group.update({
+    const updatedGroup = await updateGroup(groupId, {
       data: {
         currentModuleId: newYear.id,
       },
-      where: { id: groupId },
     });
     return updatedGroup;
   },
-  generateStudentFeedback: async (_, { studentId, moduleId }, { user, prisma }) => {
+  generateStudentFeedback: async (_, { studentId, moduleId }, { dataLoaders, user, prisma }) => {
     await checkAuthenticatedByStudent(user, studentId);
-    const student = await prisma.student.findUniqueOrThrow({
-      where: { id: studentId },
-    });
+    const student = await dataLoaders.studentLoader.load(studentId);
     const evaluations = await prisma.evaluation.findMany({
       where: {
         studentId: student.id,

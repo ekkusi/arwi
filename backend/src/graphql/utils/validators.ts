@@ -16,6 +16,7 @@ import {
   UpdateStudentInput,
 } from "../../types";
 import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject } from "../../utils/subjectUtils";
+import { evaluationLoader } from "../dataLoaders/evaluation";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
 
@@ -78,14 +79,19 @@ export const validateCreateCollectionInput = async ({ environmentCode, learningO
 };
 
 export const validateUpdateEvaluationInput = async (data: UpdateEvaluationInput) => {
-  const matchingEvaluation = await prisma.evaluation.findFirstOrThrow({
-    where: { id: data.id },
-  });
+  const matchingEvaluation = await evaluationLoader.load(data.id);
   const wasPresent = data.wasPresent ?? matchingEvaluation.wasPresent;
 
   // If the student was not present, the evaluation data cannot be updated
   if (wasPresent === false && (data.behaviourRating || data.skillsRating || data.notes)) {
     throw new ValidationError(`Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää.`);
+  }
+
+  if (data.behaviourRating && (data.behaviourRating < 4 || data.behaviourRating > 10)) {
+    throw new ValidationError(`Käytöksen arvosanan on oltava välillä 4-10.`);
+  }
+  if (data.skillsRating && (data.skillsRating < 4 || data.skillsRating > 10)) {
+    throw new ValidationError(`Taitojen arvosanan on oltava välillä 4-10.`);
   }
 };
 

@@ -4,6 +4,7 @@ import { CustomContext } from "../../types/contextTypes";
 import mutationResolvers from "./mutationResolvers";
 import queryResolvers from "./queryResolvers";
 import typeResolvers from "./typeResolvers";
+import NotFoundError from "../../errors/NotFoundError";
 
 function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Resolver<CustomContext> {
   return async (parent, args, context, info) => {
@@ -11,7 +12,7 @@ function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Res
       return await resolver(parent, args, context, info);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-        throw new Error("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t.");
+        throw new NotFoundError();
       }
       throw error;
     }

@@ -34,7 +34,7 @@ export const mapUpdateEvaluationInput = (data: UpdateEvaluationInput): Prisma.Ev
 
 export const mapUpdateCollectionInput = (
   data: Omit<UpdateCollectionInput, "evaluations">
-): Prisma.EvaluationCollectionUpdateInput | Prisma.EvaluationCollectionUncheckedUpdateInput => {
+): Omit<Prisma.EvaluationCollectionUpdateInput | Prisma.EvaluationCollectionUncheckedUpdateInput, "evaluations"> => {
   return {
     ...data,
     date: data.date ? new Date(data.date) : undefined,

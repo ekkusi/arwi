@@ -22,51 +22,29 @@ const resolvers: QueryResolvers<CustomContext> = {
 
     return user;
   },
-  getTeacher: async (_, { id }, { prisma, user }) => {
+  getTeacher: (_, { id }, { user, dataLoaders }) => {
     checkAuthenticatedByTeacher(user, id);
-    const teacher = await prisma.teacher.findUnique({
-      where: {
-        id,
-      },
-    });
-    if (!teacher) throw new ValidationError(`Opettajaa ei löytynyt id:llä '${id}'`);
-    return teacher;
+    return dataLoaders.teacherLoader.load(id);
   },
-  getGroups: async (_, { teacherId }, { prisma, user }) => {
+  getGroups: (_, { teacherId }, { dataLoaders, user }) => {
     checkAuthenticatedByTeacher(user, teacherId);
-    const groups = await prisma.group.findMany({
-      where: { teacherId },
-    });
-    return groups;
+    return dataLoaders.groupsByTeacherLoader.load(teacherId);
   },
-  getGroup: async (_, { id }, { prisma, user }) => {
+  getGroup: async (_, { id }, { user, dataLoaders }) => {
     await checkAuthenticatedByGroup(user, id);
-    const group = await prisma.group.findFirstOrThrow({
-      where: { id },
-    });
-    return group;
+    return dataLoaders.groupLoader.load(id);
   },
-  getCollection: async (_, { id }, { prisma, user }) => {
+  getCollection: async (_, { id }, { dataLoaders, user }) => {
     await checkAuthenticatedByCollection(user, id);
-    const matchingCollection = await prisma.evaluationCollection.findFirstOrThrow({
-      where: { id },
-    });
-
-    return matchingCollection;
+    return dataLoaders.collectionLoader.load(id);
   },
-  getStudent: async (_, { id }, { prisma, user }) => {
+  getStudent: async (_, { id }, { user, dataLoaders }) => {
     await checkAuthenticatedByStudent(user, id);
-    const matchingStudent = await prisma.student.findFirstOrThrow({
-      where: { id },
-    });
-    return matchingStudent;
+    return dataLoaders.studentLoader.load(id);
   },
-  getEvaluation: async (_, { id }, { prisma, user }) => {
+  getEvaluation: async (_, { id }, { dataLoaders, user }) => {
     await checkAuthenticatedByEvaluation(user, id);
-    const matchingEvaluation = await prisma.evaluation.findFirstOrThrow({
-      where: { id },
-    });
-    return matchingEvaluation;
+    return dataLoaders.evaluationLoader.load(id);
   },
 };
 

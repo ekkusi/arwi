@@ -1,6 +1,7 @@
 import { PrismaClient, Teacher } from "@prisma/client";
 import { Request, Response } from "express";
 import { BaseClient } from "openid-client";
+import loaders from "../graphql/dataLoaders";
 
 export type UserInfo = Omit<Teacher, "passwordHash">;
 export type UserSessionInfo = UserInfo & {
@@ -11,6 +12,7 @@ export type CustomContext = {
   prisma: PrismaClient;
   req: Request;
   res: Response;
+  dataLoaders: typeof loaders;
   user?: UserSessionInfo;
   OIDCClient?: BaseClient;
 };

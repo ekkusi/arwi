@@ -13,6 +13,7 @@ import { errorHandler, notFoundHandler } from "./middleware/errors";
 import "express-async-errors";
 import { CustomContext } from "./types/contextTypes";
 import prisma from "@/prismaClient";
+import loaders from "./graphql/dataLoaders";
 
 const app = express();
 
@@ -49,6 +50,7 @@ const createApp = async (contextOverrides?: Partial<CustomContext>) => {
         return {
           prisma: contextOverrides?.prisma || prisma,
           user: contextOverrides?.user || user,
+          dataLoaders: loaders,
           req: contextOverrides?.req || req,
           res: contextOverrides?.res || res,
           OIDCClient: contextOverrides?.OIDCClient || OIDCClient,
