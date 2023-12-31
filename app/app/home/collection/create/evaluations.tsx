@@ -77,7 +77,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const scrollRef = useRef<FlatList<EvaluationData> | null>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const { generalData, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
+  const { generalData, collectionType, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
 
   const presentEvaluations = useMemo(() => {
     return evaluations?.filter((it) => it.wasPresent) || [];
@@ -110,8 +110,8 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    const { environmentCode, collectionTypeId, ...rest } = generalData;
-    if (!environmentCode || !collectionTypeId) throw new Error("Environment code or collection type id is missing, shouldn't happen at this point");
+    const { environmentCode, ...rest } = generalData;
+    if (!environmentCode) throw new Error("Environment code or collection type id is missing, shouldn't happen at this point");
 
     try {
       await createCollection({
@@ -121,7 +121,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
             ...rest,
             environmentCode,
             date: formatDate(generalData.date, "yyyy-MM-dd"),
-            typeId: collectionTypeId,
+            typeId: collectionType.id,
             evaluations: evaluations.map((it) => ({
               wasPresent: it.wasPresent,
               skillsRating: it.skillsRating,

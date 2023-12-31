@@ -104,7 +104,7 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
 
   const { t } = useTranslation();
 
-  const handleSubmit = async ({ date, environment, learningObjectives, description, collectionType }: GeneralInfoData) => {
+  const handleSubmit = async ({ date, environment, learningObjectives, description }: GeneralInfoData) => {
     setSubmitting(true);
     try {
       await updateCollection({
@@ -115,7 +115,6 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
             environmentCode: environment.code,
             learningObjectiveCodes: learningObjectives.map((item) => item.code),
             description,
-            typeId: collectionType.id,
           },
         },
       });
@@ -153,9 +152,7 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
           environment: collection.environment,
           learningObjectives: collection.learningObjectives,
           description: collection.description || undefined,
-          collectionType: collection.type,
         }}
-        collectionTypeOptions={collection.module.group.collectionTypes}
       />
     </Layout>
   );

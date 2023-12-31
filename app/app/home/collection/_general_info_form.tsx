@@ -1,9 +1,9 @@
-import { CollectionTypeMinimal, LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/general";
+import { LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/general";
 import { getEnvironmentsByLevel, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { CollectionTypeCategory, EnvironmentInfo } from "arwi-backend/src/types";
+import { EnvironmentInfo } from "arwi-backend/src/types";
 import CDateTimePicker from "../../../components/form/CDateTimePicker";
 import FormField from "../../../components/form/FormField";
 import MultiSelectFormField from "../../../components/form/MultiSelectFormField";
@@ -21,13 +21,11 @@ export type GeneralInfoData = {
   environment: EnvironmentInfo;
   learningObjectives: LearningObjectiveMinimal[];
   description: string;
-  collectionType: CollectionTypeMinimal;
 };
 
 type CollectionGeneralInfoFormProps = {
   subjectCode: string;
   moduleInfo: MinimalModuleInfo;
-  collectionTypeOptions: CollectionTypeMinimal[];
   initialData?: Partial<GeneralInfoData>;
   handleSubmit: (data: GeneralInfoData) => void;
   buttonIcon?: JSX.Element;
@@ -38,7 +36,6 @@ type CollectionGeneralInfoFormProps = {
 export default function CollectionGeneralInfoForm({
   subjectCode,
   moduleInfo,
-  collectionTypeOptions,
   initialData,
   handleSubmit,
   buttonIcon,
@@ -48,16 +45,12 @@ export default function CollectionGeneralInfoForm({
   const { t } = useTranslation();
 
   const [selectedEnvironment, setSelectedEnvironment] = useState<EnvironmentInfo | undefined>(initialData?.environment);
-  const collectionInitialValue =
-    initialData?.collectionType || collectionTypeOptions.find((item) => item.category === CollectionTypeCategory.CLASS_PARTICIPATION);
-  const [selectedCollectionType, setSelectedCollectionType] = useState<CollectionTypeMinimal | undefined>(() => collectionInitialValue);
   const [selectedLearningObjectives, setSelectedLearningObjectives] = useState<LearningObjectiveMinimal[]>(initialData?.learningObjectives || []);
   const [date, setDate] = useState(initialData?.date || new Date());
   const [isDateOpen, setIsDateOpen] = useState(false);
   const [description, setDescription] = useState(initialData?.description || "");
 
   const [environmentError, setEnvironmentError] = useState<string>();
-  const [collectionTypeError, setCollectionTypeError] = useState<string>();
 
   const learningObjectives = getEvaluableLearningObjectivesMinimal(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
@@ -71,16 +64,11 @@ export default function CollectionGeneralInfoForm({
       );
       return;
     }
-    if (!selectedCollectionType) {
-      setCollectionTypeError(t("collection-type-is-obligatory", "Arvioinnin tyyppi on pakollinen"));
-      return;
-    }
     handleSubmit({
       date,
       environment: selectedEnvironment,
       learningObjectives: selectedLearningObjectives,
       description,
-      collectionType: selectedCollectionType,
     });
   };
 
@@ -99,18 +87,6 @@ export default function CollectionGeneralInfoForm({
             options={environments}
             getOptionValue={(item) => item.code}
             formatLabel={(item) => item.label.fi}
-          />
-          <SelectFormField
-            title={t("collection-type", "Arvioinnin tyyppi")}
-            error={collectionTypeError}
-            defaultValue={collectionInitialValue}
-            onSelect={(item) => {
-              setSelectedCollectionType(item);
-              setCollectionTypeError(undefined);
-            }}
-            options={collectionTypeOptions}
-            getOptionValue={(item) => item.id}
-            formatLabel={(item) => item.name}
           />
           <MultiSelectFormField
             title={t("learningObjectives", "Oppimistavoitteet")}

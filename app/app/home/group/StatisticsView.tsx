@@ -3,6 +3,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { getEnvironmentsByLevel, getEvaluableLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import React, { useMemo } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { getPredefinedColors, subjectToIcon } from "../../../helpers/dataMappers";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
@@ -87,7 +88,6 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
       isScrolling.value = false;
     },
   });
-  console.log("group", group);
 
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
@@ -206,7 +206,9 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           <CButton
             shadowed
             title={t("new-evaluation", "Uusi arviointi")}
-            onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
+            onPress={() =>
+              navigation.navigate("collection-create", { groupId: group.id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION })
+            }
             leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
           />
         </Animated.View>

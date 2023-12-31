@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import React from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
@@ -88,7 +89,9 @@ export default function EvaluationList({ getGroup: group, navigation }: GroupOve
           <CButton
             shadowed
             title={t("new-evaluation", "Uusi arviointi")}
-            onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
+            onPress={() =>
+              navigation.navigate("collection-create", { groupId: group.id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION })
+            }
             leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
           />
         </Animated.View>

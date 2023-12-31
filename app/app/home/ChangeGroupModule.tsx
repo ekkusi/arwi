@@ -31,7 +31,7 @@ const ChangeModule_GetGroup_Query = graphql(`
 `);
 
 const ChangeModule_ChangeModule_Mutation = graphql(`
-  mutation ChangeModule_ChangeModule($data: ChangeGroupModuleInput!, $groupId: String!) {
+  mutation ChangeModule_ChangeModule($data: ChangeGroupModuleInput!, $groupId: ID!) {
     changeGroupModule(data: $data, groupId: $groupId) {
       id
       currentModule {

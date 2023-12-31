@@ -20,11 +20,6 @@ const CollectionGeneralInfoView_Group_Fragment = graphql(`
         learningObjectiveGroupKey
       }
     }
-    collectionTypes {
-      id
-      name
-      category
-    }
   }
 `);
 
@@ -41,7 +36,6 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
       description: data.description,
       environmentCode: data.environment.code,
       learningObjectiveCodes: data.learningObjectives.map((item) => item.code),
-      collectionTypeId: data.collectionType.id,
     });
     navigation.navigate("collection-create-participations");
   };
@@ -51,7 +45,6 @@ function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<Col
       subjectCode={subjectCode}
       moduleInfo={moduleInfo}
       handleSubmit={handleSubmit}
-      collectionTypeOptions={group.collectionTypes}
       buttonIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
     />
   );
