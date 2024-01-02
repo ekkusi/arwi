@@ -4,6 +4,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
+import { isClassParticipationEvaluation } from "arwi-backend/src/types/typeGuards";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
@@ -20,6 +21,7 @@ import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogra
 import Layout from "../../../components/Layout";
 import CButton from "../../../components/primitives/CButton";
 import { getEnvironmentTranslation } from "../../../helpers/translation";
+import { StudentPage_GetStudentQuery } from "../../../gql/graphql";
 
 const StudentPage_GetStudent_Query = graphql(`
   query StudentPage_GetStudent($studentId: ID!) {
@@ -50,25 +52,43 @@ const StudentPage_GetStudent_Query = graphql(`
         id
         notes
         wasPresent
-        behaviourRating
-        skillsRating
-        isStellar
-        collection {
-          id
-          environment {
-            code
-            label {
-              fi
+        __typename
+        ... on ClassParticipationEvaluation {
+          behaviourRating
+          skillsRating
+          collection {
+            environment {
+              code
+              label {
+                fi
+              }
             }
           }
+          ...EvaluationsAccordion_Evaluation
+          ...EvaluationsLineChart_Evaluation
+          ...EvaluationsBarChart_Evaluation
         }
-        ...EvaluationsAccordion_Evaluation
-        ...EvaluationsLineChart_Evaluation
-        ...EvaluationsBarChart_Evaluation
+        ... on DefaultEvaluation {
+          rating
+        }
+        collection {
+          id
+        }
       }
     }
   }
 `);
+
+// // Type for ClassParticipationEvaluation
+export type ClassParticipationEvaluation = StudentPage_GetStudentQuery["getStudent"]["currentModuleEvaluations"][number] & {
+  __typename: "ClassParticipationEvaluation";
+};
+
+// Type guard function
+// export function isClassParticipationEvaluation(evaluation: any): evaluation is ClassParticipationEvaluation {
+//   // eslint-disable-next-line
+//   return evaluation.__typename === "ClassParticipationEvaluation";
+// }
 
 export default function StudentView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "student">) {
   const { id: studentId, archived } = route.params;
@@ -95,6 +115,10 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   if (!data) return <LoadingIndicator />;
   const { getStudent: student } = data;
   const evaluations = student.currentModuleEvaluations;
+
+  // const classParticipationEvaluations = evaluations.filter((evaluation) => isClassParticipationEvaluation(evaluation));
+  const classParticipationEvaluations =
+    evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
   const moduleInfo = student.group.currentModule.info;
 
   return (
@@ -120,7 +144,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           </CView>
           <CView style={{ width: "100%", gap: 20 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("statistics", "Tilastot")}</CText>
-            <EvaluationsBarChart evaluations={evaluations} subjectCode={student.group.subject.code} />
+            <EvaluationsBarChart evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} />
           </CView>
           <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
           <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} moduleInfo={student.group.currentModule.info} />

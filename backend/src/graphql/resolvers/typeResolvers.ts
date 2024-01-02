@@ -1,5 +1,7 @@
+import { CollectionTypeCategory } from "@prisma/client";
 import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../../utils/subjectUtils";
 import { EducationLevel, Resolvers } from "../../types";
+import MissingDataError from "../../errors/MissingDataError";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -37,7 +39,8 @@ const resolvers: TypeResolvers = {
       return dataLoaders.collectionTypesByGroupLoader.load(id);
     },
   },
-  Evaluation: {
+  DefaultEvaluation: {
+    rating: ({ generalRating }) => generalRating,
     collection: ({ evaluationCollectionId }, _, { dataLoaders }) => {
       return dataLoaders.collectionLoader.load(evaluationCollectionId);
     },
@@ -45,16 +48,37 @@ const resolvers: TypeResolvers = {
       return dataLoaders.studentLoader.load(studentId);
     },
   },
-  EvaluationCollection: {
-    module: ({ moduleId }, _, { dataLoaders }) => {
-      return dataLoaders.moduleLoader.load(moduleId);
+  ClassParticipationEvaluation: {
+    collection: ({ evaluationCollectionId }, _, { dataLoaders }) => {
+      return dataLoaders.collectionLoader.load(evaluationCollectionId);
     },
-    evaluations: ({ id }, _, { dataLoaders }) => {
-      return dataLoaders.evaluationsByCollectionLoader.load(id);
+    student: ({ studentId }, _, { dataLoaders }) => {
+      return dataLoaders.studentLoader.load(studentId);
     },
+  },
+  Evaluation: {
+    __resolveType: async ({ evaluationCollectionId }, { dataLoaders }) => {
+      const collection = await dataLoaders.collectionLoader.load(evaluationCollectionId);
+      const type = await dataLoaders.collectionTypeLoader.load(collection.typeId);
+
+      switch (type.category) {
+        case CollectionTypeCategory.CLASS_PARTICIPATION:
+          return "ClassParticipationEvaluation";
+        case CollectionTypeCategory.EXAM:
+        case CollectionTypeCategory.GROUP_WORK:
+        case CollectionTypeCategory.WRITTEN_WORK:
+        case CollectionTypeCategory.OTHER:
+          return "DefaultEvaluation";
+        default:
+          return null;
+      }
+    },
+  },
+  ClassParticipationCollection: {
     environment: ({ environmentCode }) => {
+      if (!environmentCode) throw new MissingDataError();
       const environment = getEnvironment(environmentCode);
-      if (!environment) throw new Error(`Environment not found with code: ${environmentCode}`);
+      if (!environment) throw new MissingDataError(`Environment not found with code: ${environmentCode}`);
       return environment;
     },
     learningObjectives: async ({ moduleId, learningObjectiveCodes }, _, { dataLoaders }) => {
@@ -65,6 +89,40 @@ const resolvers: TypeResolvers = {
     },
     type: ({ typeId }, _, { dataLoaders }) => {
       return dataLoaders.collectionTypeLoader.load(typeId);
+    },
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
+    },
+    evaluations: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.evaluationsByCollectionLoader.load(id);
+    },
+  },
+  DefaultCollection: {
+    type: ({ typeId }, _, { dataLoaders }) => {
+      return dataLoaders.collectionTypeLoader.load(typeId);
+    },
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
+    },
+    evaluations: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.evaluationsByCollectionLoader.load(id);
+    },
+  },
+  EvaluationCollection: {
+    __resolveType: async ({ typeId }, { dataLoaders }) => {
+      const type = await dataLoaders.collectionTypeLoader.load(typeId);
+
+      switch (type.category) {
+        case CollectionTypeCategory.CLASS_PARTICIPATION:
+          return "ClassParticipationCollection";
+        case CollectionTypeCategory.EXAM:
+        case CollectionTypeCategory.GROUP_WORK:
+        case CollectionTypeCategory.WRITTEN_WORK:
+        case CollectionTypeCategory.OTHER:
+          return "DefaultCollection";
+        default:
+          return null;
+      }
     },
   },
   Student: {

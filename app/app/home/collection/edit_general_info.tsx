@@ -21,12 +21,22 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
         name
         category
       }
-      environment {
-        label {
-          fi
+      __typename
+      ... on ClassParticipationCollection {
+        environment {
+          label {
+            fi
+          }
+          code
+          color
         }
-        code
-        color
+        learningObjectives {
+          code
+          label {
+            fi
+          }
+          type
+        }
       }
       module {
         id
@@ -46,20 +56,13 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
           }
         }
       }
-      learningObjectives {
-        code
-        label {
-          fi
-        }
-        type
-      }
     }
   }
 `);
 
 const EditGeneralDetails_UpdateCollection_Mutation = graphql(`
-  mutation EditGeneralDetails_UpdateCollection($id: ID!, $input: UpdateCollectionInput!) {
-    updateCollection(collectionId: $id, data: $input) {
+  mutation EditGeneralDetails_UpdateCollection($id: ID!, $input: UpdateClassParticipationCollectionInput!) {
+    updateClassParticipationCollection(collectionId: $id, data: $input) {
       id
       date
       description

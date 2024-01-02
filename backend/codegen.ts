@@ -7,7 +7,7 @@ const customScalars = {
 
 const config: CodegenConfig = {
   schema: "http://localhost:4000/graphql",
-  documents: ["./src/**/*.graphql", "./src/tests/**/*.{ts,tsx}", "!./src/tests/gql/**/*"],
+  documents: ["./src/**/*.graphql", "!./src/tests/**/*.{ts,tsx}", "!./src/tests/gql/**/*"],
   ignoreNoDocuments: true,
   config: {
     sort: false, // Disable sorting so enums will be in same order as in schema (applies to others than enums as well as side effect)
@@ -33,7 +33,11 @@ const config: CodegenConfig = {
         mappers: {
           Teacher: "./contextTypes#UserInfo",
           EvaluationCollection: "@prisma/client#EvaluationCollection",
+          DefaultCollection: "@prisma/client#EvaluationCollection",
+          ClassParticipationCollection: "@prisma/client#EvaluationCollection",
           Evaluation: "@prisma/client#Evaluation",
+          ClassParticipationEvaluation: "@prisma/client#Evaluation",
+          DefaultEvaluation: "@prisma/client#Evaluation",
           Group: "@prisma/client#Group",
           Student: "@prisma/client#Student",
           Module: "@prisma/client#Module",

@@ -13,20 +13,28 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
   fragment EvaluationsAccordion_Evaluation on Evaluation {
     id
     notes
-    behaviourRating
-    skillsRating
-    wasPresent
-    isStellar
-    collection {
-      date
-      environment {
-        label {
-          fi
+    __typename
+    ... on ClassParticipationEvaluation {
+      behaviourRating
+      skillsRating
+      collection {
+        date
+        environment {
+          label {
+            fi
+          }
+          code
+          color
         }
-        code
-        color
       }
     }
+    ... on DefaultEvaluation {
+      rating
+      collection {
+        date
+      }
+    }
+    wasPresent
     student {
       name
     }
@@ -67,12 +75,7 @@ export default function EvaluationsAccordion({
             ? it.behaviourRating !== undefined && it.behaviourRating !== null && it.skillsRating !== undefined && it.skillsRating !== null
             : undefined,
         color: it.collection.environment.color,
-        icons: it.wasPresent && (
-          <>
-            {it.isStellar && <MaterialCommunityIcon name="star-outline" size={20} />}
-            {!!it.notes && <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />}
-          </>
-        ),
+        icons: it.wasPresent && !!it.notes && <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />,
         content: (
           <>
             <CText style={{ fontSize: "sm", fontWeight: "500", color: it.wasPresent ? "green" : "red", paddingBottom: 10 }}>

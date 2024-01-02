@@ -20,8 +20,8 @@ import { CollectionCreationStackParams } from "./types";
 import CollectionCreationLayout from "./_layout";
 
 const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
-  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateCollectionInput!, $moduleId: ID!) {
-    createCollection(data: $createCollectionInput, moduleId: $moduleId) {
+  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+    createClassParticipationCollection(data: $createCollectionInput, moduleId: $moduleId) {
       id
       date
       description
@@ -48,7 +48,6 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
         skillsRating
         behaviourRating
         notes
-        isStellar
         student {
           id
           currentModuleEvaluations {
@@ -127,7 +126,6 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
               skillsRating: it.skillsRating,
               behaviourRating: it.behaviourRating,
               notes: it.notes,
-              isStellar: it.isStellar,
               studentId: it.student.id,
             })),
           },

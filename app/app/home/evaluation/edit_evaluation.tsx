@@ -18,21 +18,23 @@ const EvaluationEditView_GetEvaluation_Query = graphql(`
     getEvaluation(id: $evaluationId) {
       id
       wasPresent
-      skillsRating
-      behaviourRating
-      notes
-      isStellar
-      collection {
-        id
-        date
-        environment {
-          code
-          label {
-            fi
+      __typename
+      ... on ClassParticipationEvaluation {
+        skillsRating
+        behaviourRating
+        collection {
+          id
+          date
+          environment {
+            code
+            label {
+              fi
+            }
+            color
           }
-          color
         }
       }
+      notes
       student {
         id
         name
@@ -46,14 +48,13 @@ const EvaluationEditView_GetEvaluation_Query = graphql(`
 `);
 
 const EvaluationEditView_UpdateEvaluation_Mutation = graphql(`
-  mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateEvaluationInput!) {
-    updateEvaluation(data: $updateEvaluationInput) {
+  mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateClassParticipationEvaluationInput!) {
+    updateClassParticipationEvaluation(input: $updateEvaluationInput) {
       id
       wasPresent
       skillsRating
       behaviourRating
       notes
-      isStellar
     }
   }
 `);
@@ -88,7 +89,6 @@ function EvaluationEditViewContent({
             skillsRating: evaluation.wasPresent ? evaluation.skillsRating : undefined,
             behaviourRating: evaluation.wasPresent ? evaluation.behaviourRating : undefined,
             notes: evaluation.wasPresent ? evaluation.notes : undefined,
-            isStellar: evaluation.wasPresent ? evaluation.isStellar : undefined,
           },
         },
       });

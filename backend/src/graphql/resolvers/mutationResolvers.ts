@@ -6,25 +6,31 @@ import ValidationError from "../../errors/ValidationError";
 import { MutationResolvers } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
 import {
+  mapCreateClassParticipationEvaluationInput,
+  mapCreateDefaultEvaluationInput,
   mapCreateTeacherInput,
-  mapUpdateCollectionInput,
-  mapUpdateEvaluationInput,
+  mapUpdateClassParticipationCollectionInput,
+  mapUpdateClassParticipationEvaluationInput,
+  mapUpdateDefaultCollectionInput,
+  mapUpdateDefaultEvaluationInput,
   mapUpdateGroupInput,
   mapUpdateStudentInput,
 } from "../utils/mappers";
 import {
   REQUEST_PASSWORD_RESET_EXPIRY_IN_MS,
   validateChangeGroupLevelInput,
-  validateCreateCollectionInput,
+  validateCreateClassParticipationCollectionInput,
+  validateCreateDefaultCollectionInput,
   validateCreateGroupInput,
   validateCreateStudentInput,
   validateFixTextGrammaticsInput,
   validatePasswordResetCode,
   validateRegisterInput,
   validateRequestPasswordReset,
-  validateUpdateCollectionInput,
-  validateUpdateEvaluationInput,
-  validateUpdateEvaluationsInput,
+  validateUpdateClassParticipationCollectionInput,
+  validateUpdateClassParticipationEvaluationInput,
+  validateUpdateDefaultCollectionInput,
+  validateUpdateDefaultEvaluationInput,
   validateUpdateStudentInput,
 } from "../utils/validators";
 import {
@@ -40,11 +46,12 @@ import { sendMail } from "@/utils/mail";
 import { BRCRYPT_SALT_ROUNDS, MATOMO_EVENT_CATEGORIES } from "../../config";
 import matomo from "../../matomo";
 import { createTeacher, deleteTeacher, updateTeacher } from "../mutationWrappers/teacher";
-import { deleteGroup, updateGroup, updateGroupByModule, updateGroupMany } from "../mutationWrappers/group";
-import { createCollection, deleteCollection, updateCollection } from "../mutationWrappers/collection";
+import { deleteGroup, updateGroup, updateGroupMany } from "../mutationWrappers/group";
+import { deleteCollection, updateClassParticipationCollection, updateDefaultCollection } from "../mutationWrappers/collection";
 import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers/student";
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
+import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -247,35 +254,17 @@ const resolvers: MutationResolvers<CustomContext> = {
 
     return group;
   },
-  createCollection: async (_, { data, moduleId }) => {
-    await validateCreateCollectionInput(data, moduleId);
+  createDefaultCollection: async (_, { data, moduleId }) => {
+    await validateCreateDefaultCollectionInput(data);
     const { evaluations, ...rest } = data;
-    const createdCollection = await createCollection(moduleId, {
-      data: {
-        ...rest,
-        moduleId,
-        // Create evaluations if there are some in input
-        evaluations: evaluations
-          ? {
-              createMany: {
-                data: evaluations.map((it) => ({
-                  ...it,
-                  isStellar: it.isStellar === null ? undefined : it.isStellar,
-                })),
-              },
-            }
-          : undefined,
-      },
-      include: {
-        module: true,
-      },
-    });
-    // Should always only find one group, updateMany only here because of typescript constraint
-    await updateGroupByModule(moduleId, createdCollection.module.groupId, {
-      data: { updatedAt: new Date() },
-    });
-
-    return createdCollection;
+    const evaluationsInput = evaluations ? evaluations.map((it) => mapCreateDefaultEvaluationInput(it)) : undefined;
+    return createCollectionAndUpdateGroup(rest, moduleId, evaluationsInput);
+  },
+  createClassParticipationCollection: async (_, { data, moduleId }) => {
+    await validateCreateClassParticipationCollectionInput(data, moduleId);
+    const { evaluations, ...rest } = data;
+    const evaluationsInput = evaluations ? evaluations.map((it) => mapCreateClassParticipationEvaluationInput(it)) : undefined;
+    return createCollectionAndUpdateGroup(rest, moduleId, evaluationsInput);
   },
   createStudent: async (_, { data, moduleId }, { dataLoaders }) => {
     await validateCreateStudentInput(data, moduleId);
@@ -291,23 +280,34 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     return createdStudent;
   },
-  updateEvaluations: async (_, { data, collectionId }, { user }) => {
-    await checkAuthenticatedByCollection(user, collectionId);
-    await validateUpdateEvaluationsInput(data, collectionId);
-    await updateCollection(collectionId, {}, data);
-    return data.length;
-  },
-  updateEvaluation: async (_, { data }, { user }) => {
-    await checkAuthenticatedByEvaluation(user, data.id);
-    await validateUpdateEvaluationInput(data);
-    const updatedEvaluation = await updateEvaluation(data.id, { data: mapUpdateEvaluationInput(data) });
+  updateClassParticipationEvaluation: async (_, { input }, { user }) => {
+    await checkAuthenticatedByEvaluation(user, input.id);
+    await validateUpdateClassParticipationEvaluationInput(input);
+    const updatedEvaluation = await updateEvaluation(input.id, { data: mapUpdateClassParticipationEvaluationInput(input) });
     return updatedEvaluation;
   },
-  updateCollection: async (_, { data, collectionId }, { user }) => {
+  updateDefaultEvaluation: async (_, { input }, { user }) => {
+    await checkAuthenticatedByEvaluation(user, input.id);
+    await validateUpdateDefaultEvaluationInput(input);
+    const updatedEvaluation = await updateEvaluation(input.id, { data: mapUpdateDefaultEvaluationInput(input) });
+    return updatedEvaluation;
+  },
+  updateClassParticipationCollection: async (_, { data, collectionId }, { user }) => {
     await checkAuthenticatedByCollection(user, collectionId);
-    await validateUpdateCollectionInput(data, collectionId);
+    await validateUpdateClassParticipationCollectionInput(data, collectionId);
     const { evaluations, ...rest } = data;
-    const updatedCollection = await updateCollection(collectionId, { data: mapUpdateCollectionInput(rest) }, evaluations ?? undefined);
+    const updatedCollection = await updateClassParticipationCollection(
+      collectionId,
+      { data: mapUpdateClassParticipationCollectionInput(rest) },
+      evaluations ?? undefined
+    );
+    return updatedCollection;
+  },
+  updateDefaultCollection: async (_, { data, collectionId }, { user }) => {
+    await checkAuthenticatedByCollection(user, collectionId);
+    await validateUpdateDefaultCollectionInput(data, collectionId);
+    const { evaluations, ...rest } = data;
+    const updatedCollection = await updateDefaultCollection(collectionId, { data: mapUpdateDefaultCollectionInput(rest) }, evaluations ?? undefined);
     return updatedCollection;
   },
   updateStudent: async (_, { data, studentId }, { user }) => {
@@ -395,11 +395,14 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-    const mappedEvaluations = evaluations.map((it) => ({
-      ...it,
-      environmentLabel: getEnvironment(it.evaluationCollection.environmentCode)?.label.fi,
-      date: it.evaluationCollection.date,
-    }));
+    const mappedEvaluations = evaluations.map((it) => {
+      const { environmentCode } = it.evaluationCollection;
+      return {
+        ...it,
+        environmentLabel: environmentCode ? getEnvironment(environmentCode)?.label.fi : "Ympäristitön arviointi",
+        date: it.evaluationCollection.date,
+      };
+    });
     if (mappedEvaluations.length === 0) throw new ValidationError("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
     const summary = await generateStudentSummary(mappedEvaluations, user!.id); // Safe cast after authenticated check
     return summary;

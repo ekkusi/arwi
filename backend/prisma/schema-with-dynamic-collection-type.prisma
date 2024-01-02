@@ -1,11 +1,13 @@
 generator client {
   provider = "prisma-client-js"
   binaryTargets   = ["native"]
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  extensions = [uuidOssp(map: "uuid-ossp", schema: "public")]
 }
 
 model Teacher {
@@ -46,17 +48,44 @@ model Module {
   evaluationCollections       EvaluationCollection[]
 }
 
+enum CollectionDataType {
+  CLASS_PARTICIPATION
+  DEFAULT
+}
+
 model EvaluationCollection {
   id                      String       @id @default(uuid())
   type                    CollectionType @relation(fields: [typeId], references: [id], onDelete: Restrict)
   typeId                  String        
   date                    DateTime     @default(now())
-  learningObjectiveCodes  String[]
   description             String?
   evaluations             Evaluation[]
-  environmentCode         String?
   module                  Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   moduleId                String
+
+  classParticipationCollectionData ClassParticipationCollectionData? @relation("ClassParticipationCollectionData", fields: [collectionDataId], references: [id], onDelete: Restrict, map: "classParticipationCollection_collectionDataId")
+  defaultCollectionData            DefaultCollectionData?           @relation("DefaultCollectionData", fields: [collectionDataId], references: [id], onDelete: Restrict, map: "defaultCollection_collectionDataId")
+  collectionDataId        String
+  collectionDataType      CollectionDataType
+}
+
+model ClassParticipationCollectionData {
+  id                      String       @id @default(uuid())
+  learningObjectiveCodes  String[]
+  environmentCode         String
+
+  collections   EvaluationCollection[] @relation("ClassParticipationCollectionData")
+}
+
+enum RatingScaleType {
+  FOUR_TO_TEN_REGULAR
+}
+
+model DefaultCollectionData {
+  id                     String       @id @default(uuid())
+  ratingScaleType        RatingScaleType
+
+  collections EvaluationCollection[] @relation("DefaultCollectionData")
 }
 
 model Evaluation {
@@ -64,10 +93,10 @@ model Evaluation {
   student                Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
   wasPresent             Boolean              @default(true)
   studentId              String
-  skillsRating           Int? // For CLASS_PARTICIPATION collection type 
-  behaviourRating        Int? // For CLASS_PARTICIPATION collection type
-  generalRating          Float? // For other collections types
+  skillsRating           Int?
+  behaviourRating        Int?
   notes                  String?
+  isStellar              Boolean              @default(false)
   evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id], onDelete: Cascade)
   evaluationCollectionId String
 }

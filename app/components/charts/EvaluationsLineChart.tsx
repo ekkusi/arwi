@@ -5,7 +5,7 @@ import { LineChartBaseProps } from "./LineChartBase";
 import MovingAverageLineChart, { EvaluationDataType } from "./MovingAverageLineChart";
 
 export const EvaluationsLineChart_Evaluation_Fragment = graphql(`
-  fragment EvaluationsLineChart_Evaluation on Evaluation {
+  fragment EvaluationsLineChart_Evaluation on ClassParticipationEvaluation {
     id
     skillsRating
     behaviourRating

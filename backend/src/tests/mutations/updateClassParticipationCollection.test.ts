@@ -2,7 +2,6 @@ import { CollectionTypeCategory, Evaluation, EvaluationCollection } from "@prism
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { UpdateCollectionInput } from "../../types";
 import {
   TestGroup,
   TestTeacher,
@@ -15,8 +14,9 @@ import {
 import { formatDate } from "../../utils/date";
 import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
 import { evaluationLoader, evaluationsByCollectionLoader } from "../../graphql/dataLoaders/evaluation";
+import { UpdateClassParticipationCollectionInput } from "../../types";
 
-describe("updateCollection", () => {
+describe("updateClassParticipationCollection", () => {
   let graphqlRequest: TestGraphQLRequest;
   let teacher: TestTeacher;
   let group: TestGroup;
@@ -48,21 +48,19 @@ describe("updateCollection", () => {
       skillsRating: 6,
       behaviourRating: 8,
       notes: "Improved performance and stuff",
-      isStellar: true,
     };
-    const updateData: UpdateCollectionInput = {
-      // Assuming correct structure for UpdateCollectionInput
+    const updateData: UpdateClassParticipationCollectionInput = {
+      // Assuming correct structure for UpdateClassParticipationCollectionInput
       date: formatDate(new Date(), "yyyy-MM-dd"),
       environmentCode: "LI_ENV_TAN",
-      typeId: group.collectionTypes.find((type) => type.category === CollectionTypeCategory.EXAM)!.id,
       description: "Midterm Exam",
       learningObjectiveCodes: ["T1", "T3"],
       evaluations: [updatedEvaluation],
     };
 
     const query = graphql(`
-      mutation UpdateCollection($data: UpdateCollectionInput!, $collectionId: ID!) {
-        updateCollection(data: $data, collectionId: $collectionId) {
+      mutation UpdateClassParticipationCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
           id
           date
           type {
@@ -78,7 +76,6 @@ describe("updateCollection", () => {
             behaviourRating
             notes
             wasPresent
-            isStellar
           }
           learningObjectives {
             code
@@ -89,20 +86,18 @@ describe("updateCollection", () => {
 
     const response = await graphqlRequest(query, { data: updateData, collectionId: collection.id });
 
-    expect(response.data?.updateCollection).toBeDefined();
-    expect(response.data?.updateCollection.id).toEqual(collection.id);
-    expect(response.data?.updateCollection.date).toEqual(updateData.date);
-    expect(response.data?.updateCollection.environment.code).toEqual(updateData.environmentCode);
-    expect(response.data?.updateCollection.type.id).toEqual(updateData.typeId);
-    expect(response.data?.updateCollection.description).toEqual(updateData.description);
-    expect(response.data?.updateCollection.learningObjectives.map((lo) => lo.code)).toEqual(updateData.learningObjectiveCodes);
-    const updatedEvaluationResponse = response.data?.updateCollection.evaluations.find((e) => e.id === updatedEvaluation.id);
+    expect(response.data?.updateClassParticipationCollection).toBeDefined();
+    expect(response.data?.updateClassParticipationCollection.id).toEqual(collection.id);
+    expect(response.data?.updateClassParticipationCollection.date).toEqual(updateData.date);
+    expect(response.data?.updateClassParticipationCollection.environment.code).toEqual(updateData.environmentCode);
+    expect(response.data?.updateClassParticipationCollection.description).toEqual(updateData.description);
+    expect(response.data?.updateClassParticipationCollection.learningObjectives.map((lo) => lo.code)).toEqual(updateData.learningObjectiveCodes);
+    const updatedEvaluationResponse = response.data?.updateClassParticipationCollection.evaluations.find((e) => e.id === updatedEvaluation.id);
     expect(updatedEvaluationResponse).toBeDefined();
     expect(updatedEvaluationResponse?.wasPresent).toEqual(updatedEvaluation.wasPresent);
     expect(updatedEvaluationResponse?.skillsRating).toEqual(updatedEvaluation.skillsRating);
     expect(updatedEvaluationResponse?.behaviourRating).toEqual(updatedEvaluation.behaviourRating);
     expect(updatedEvaluationResponse?.notes).toEqual(updatedEvaluation.notes);
-    expect(updatedEvaluationResponse?.isStellar).toEqual(updatedEvaluation.isStellar);
   });
 
   it("should throw error if user is not authorized for the collection", async () => {
@@ -110,13 +105,13 @@ describe("updateCollection", () => {
       email: "new-user@email.com",
       password: "password",
     });
-    const updateData: UpdateCollectionInput = {
+    const updateData: UpdateClassParticipationCollectionInput = {
       description: "New description",
     };
 
     const query = graphql(`
-      mutation UpdateCollectionUnauthorized($data: UpdateCollectionInput!, $collectionId: ID!) {
-        updateCollection(data: $data, collectionId: $collectionId) {
+      mutation UpdateClassParticipationCollectionUnauthorized($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
           id
         }
       }
@@ -132,14 +127,14 @@ describe("updateCollection", () => {
   });
 
   it("should throw error for invalid collection ID", async () => {
-    const updateData: UpdateCollectionInput = {
+    const updateData: UpdateClassParticipationCollectionInput = {
       description: "New description",
     };
     const invalidCollectionId = "invalid_id";
 
     const query = graphql(`
-      mutation UpdateCollectionInvalidID($data: UpdateCollectionInput!, $collectionId: ID!) {
-        updateCollection(data: $data, collectionId: $collectionId) {
+      mutation UpdateClassParticipationCollectionInvalidID($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
           id
         }
       }
@@ -152,13 +147,13 @@ describe("updateCollection", () => {
   });
 
   it("should throw error for invalid environment code", async () => {
-    const updateData: UpdateCollectionInput = {
+    const updateData: UpdateClassParticipationCollectionInput = {
       environmentCode: "invalid_env_code",
     };
 
     const query = graphql(`
-      mutation UpdateCollectionInvalidEnvironment($data: UpdateCollectionInput!, $collectionId: ID!) {
-        updateCollection(data: $data, collectionId: $collectionId) {
+      mutation UpdateClassParticipationCollectionInvalidEnvironment($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
           id
         }
       }
@@ -171,13 +166,13 @@ describe("updateCollection", () => {
   });
 
   it("should throw error for invalid learning objectives", async () => {
-    const updateData: UpdateCollectionInput = {
+    const updateData: UpdateClassParticipationCollectionInput = {
       learningObjectiveCodes: ["invalid_lo_1", "invalid_lo_2"],
     };
 
     const query = graphql(`
-      mutation UpdateCollectionInvalidLearningObjectives($data: UpdateCollectionInput!, $collectionId: ID!) {
-        updateCollection(data: $data, collectionId: $collectionId) {
+      mutation UpdateClassParticipationCollectionInvalidLearningObjectives($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
           id
         }
       }
@@ -192,13 +187,13 @@ describe("updateCollection", () => {
   it("should throw error for evaluations not belonging to the collection", async () => {
     const newCollection = await createTestEvaluationCollection(group.currentModule.id, group.collectionTypes[0].id);
     const unrelatedEvaluation = await createTestEvaluation(newCollection.id, group.students[0].id);
-    const updateData: UpdateCollectionInput = {
+    const updateData: UpdateClassParticipationCollectionInput = {
       evaluations: [{ id: unrelatedEvaluation.id }],
     };
 
     const query = graphql(`
-      mutation UpdateCollectionEvaluationsNotInCollection($data: UpdateCollectionInput!, $collectionId: ID!) {
-        updateCollection(data: $data, collectionId: $collectionId) {
+      mutation UpdateClassParticipationCollectionEvaluationsNotInCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
           id
         }
       }
@@ -211,13 +206,13 @@ describe("updateCollection", () => {
   });
 
   it("should throw validation error if attempting to update an evaluation where the student was not present", async () => {
-    const updateData: UpdateCollectionInput = {
+    const updateData: UpdateClassParticipationCollectionInput = {
       evaluations: [{ id: notPresentEvaluation.id, skillsRating: 5 }],
     };
 
     const query = graphql(`
-      mutation UpdateCollectionInvalidStudentPresence($data: UpdateCollectionInput!, $collectionId: ID!) {
-        updateCollection(data: $data, collectionId: $collectionId) {
+      mutation UpdateClassParticipationCollectionInvalidStudentPresence($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
           id
         }
       }
@@ -228,6 +223,38 @@ describe("updateCollection", () => {
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain(
       "Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää."
+    );
+  });
+
+  it("should throw error if attempting to update an evaluation that is not CLASS_PARTICIPATION", async () => {
+    // Create a collection that is not of type CLASS_PARTICIPATION
+    const collectionType = group.collectionTypes.find((ct) => ct.category !== CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const defaultCollection = await createTestEvaluationCollection(group.currentModuleId, collectionType.id, {
+      environmentCode: undefined,
+      learningObjectiveCodes: [],
+    });
+    const defaultEvaluation = await createTestEvaluation(defaultCollection.id, group.students[0].id, {
+      skillsRating: undefined,
+      behaviourRating: undefined,
+      generalRating: 6,
+    });
+    const updateData: UpdateClassParticipationCollectionInput = {
+      evaluations: [{ id: defaultEvaluation.id, skillsRating: 5 }],
+    };
+
+    const query = graphql(`
+      mutation UpdateClassParticipationCollectionInvalidEvaluationType($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData, collectionId: defaultCollection.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(
+      `Arviointikokoelman tyyppi on väärä. Et voi päivittää muita kuin CLASS_PARTICIPATION arviointeja tämän endpointin kautta.`
     );
   });
 
@@ -250,26 +277,24 @@ describe("updateCollection", () => {
       skillsRating: 7,
       behaviourRating: 8,
       notes: "Improved significantly",
-      isStellar: true,
     };
-    const updateData: UpdateCollectionInput = {
+    const updateData: UpdateClassParticipationCollectionInput = {
       date: formatDate(new Date(), "yyyy-MM-dd"),
       environmentCode: "LI_ENV_TAN",
-      typeId: group.collectionTypes.find((type) => type.category === CollectionTypeCategory.EXAM)!.id,
       description: "Updated Midterm Exam",
       learningObjectiveCodes: ["T1", "T4"],
       evaluations: [updatedEvaluationData],
     };
 
-    const updateCollectionQuery = graphql(`
-      mutation UpdateCollectionDataLoaderCheck($data: UpdateCollectionInput!, $collectionId: ID!) {
-        updateCollection(data: $data, collectionId: $collectionId) {
+    const updateClassParticipationCollectionQuery = graphql(`
+      mutation UpdateClassParticipationCollectionDataLoaderCheck($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {
           id
         }
       }
     `);
 
-    await graphqlRequest(updateCollectionQuery, { data: updateData, collectionId: collection.id });
+    await graphqlRequest(updateClassParticipationCollectionQuery, { data: updateData, collectionId: collection.id });
 
     // Fetch the updated data from DataLoaders
     const updatedCollectionFromDataLoader = await collectionLoader.load(collection.id);

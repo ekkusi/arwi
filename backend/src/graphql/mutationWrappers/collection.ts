@@ -2,9 +2,9 @@ import { EvaluationCollection, Prisma } from "@prisma/client";
 import { GetResult } from "@prisma/client/runtime/library";
 import prisma from "../../prismaClient";
 import { clearCollectionLoaders, clearCollectionLoadersById, clearCollectionLoadersByModule } from "../dataLoaders/collection";
-import { UpdateEvaluationInput } from "../../types";
-import { mapUpdateEvaluationInput } from "../utils/mappers";
 import { clearEvaluationLoaders, clearEvaluationLoadersById } from "../dataLoaders/evaluation";
+import { UpdateClassParticipationEvaluationInput, UpdateDefaultEvaluationInput } from "../../types";
+import { mapUpdateClassParticipationEvaluationInput, mapUpdateDefaultEvaluationInput } from "../utils/mappers";
 
 type CreateCollectionReturnType<T extends Prisma.EvaluationCollectionCreateArgs> = GetResult<Prisma.$EvaluationCollectionPayload, T, "create">;
 
@@ -45,39 +45,65 @@ type UpdateCollectionWithoutEvaluations = Omit<Prisma.EvaluationCollectionUpdate
 
 type UpdateCollectionReturnType<T extends UpdateCollectionWithoutEvaluations> = GetResult<Prisma.$EvaluationCollectionPayload, T, "update">;
 
-const mapCollectionUpdateData = (
-  data: Prisma.EvaluationCollectionUpdateInput,
-  evaluations?: UpdateEvaluationInput[]
-): EvaluationCollectionUpdateInput => {
-  return {
-    ...data,
-    evaluations: {
-      update: evaluations
-        ? evaluations.map((evaluation) => ({
-            where: { id: evaluation.id },
-            data: mapUpdateEvaluationInput(evaluation),
-          }))
-        : undefined,
-    },
-  };
-};
+export async function clearUpdateLoaders(collectionId: string, evaluations?: { id: string }[]): Promise<void> {
+  const evaluationLoaderClearPromises = evaluations?.map((it) => clearEvaluationLoadersById(it.id)) || [];
+  await Promise.all([clearCollectionLoadersById(collectionId), ...evaluationLoaderClearPromises]);
+}
 
-export async function updateCollection<T extends UpdateCollectionWithoutEvaluations>(
+export async function updateClassParticipationCollection<T extends UpdateCollectionWithoutEvaluations>(
   id: string,
   args: Omit<T, "where">,
-  evaluations?: UpdateEvaluationInput[]
+  evaluations?: UpdateClassParticipationEvaluationInput[]
 ): Promise<UpdateCollectionReturnType<T>> {
   const { data, ...rest } = args;
 
+  const updateInput: EvaluationCollectionUpdateInput = {
+    ...data,
+    evaluations: {
+      update: evaluations?.map((evaluation) => ({
+        data: mapUpdateClassParticipationEvaluationInput(evaluation),
+        where: { id: evaluation.id },
+      })),
+    },
+  };
+
   const updatedCollection = (await prisma.evaluationCollection.update({
     ...rest,
-    data: mapCollectionUpdateData(data || {}, evaluations),
+    data: updateInput,
     where: { id },
   })) as UpdateCollectionReturnType<T>;
 
   // Clear the DataLoader cache for this collection
-  const evaluationLoaderClearPromises = (evaluations ?? []).map((evaluation) => clearEvaluationLoadersById(evaluation.id));
-  await Promise.all([clearCollectionLoadersById(id), ...evaluationLoaderClearPromises]);
+  await clearUpdateLoaders(id, evaluations);
+
+  return updatedCollection;
+}
+
+export async function updateDefaultCollection<T extends UpdateCollectionWithoutEvaluations>(
+  id: string,
+  args: Omit<T, "where">,
+  evaluations?: UpdateDefaultEvaluationInput[]
+): Promise<UpdateCollectionReturnType<T>> {
+  const { data, ...rest } = args;
+
+  const updateInput: EvaluationCollectionUpdateInput = {
+    ...data,
+    evaluations: {
+      update: evaluations?.map((evaluation) => ({
+        data: mapUpdateDefaultEvaluationInput(evaluation),
+        where: { id: evaluation.id },
+      })),
+    },
+  };
+
+  const updatedCollection = (await prisma.evaluationCollection.update({
+    ...rest,
+    data: updateInput,
+    where: { id },
+  })) as UpdateCollectionReturnType<T>;
+
+  // Clear the DataLoader cache for this collection
+  await clearUpdateLoaders(id, evaluations);
 
   return updatedCollection;
 }

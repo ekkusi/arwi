@@ -33,18 +33,26 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
         id
         notes
         wasPresent
-        behaviourRating
-        skillsRating
-        isStellar
+        __typename
+        ... on ClassParticipationEvaluation {
+          behaviourRating
+          skillsRating
+          collection {
+            environment {
+              label {
+                fi
+              }
+              code
+              color
+            }
+          }
+        }
+        ... on DefaultEvaluation {
+          rating
+        }
         collection {
           id
           date
-          environment {
-            code
-            label {
-              fi
-            }
-          }
         }
       }
     }

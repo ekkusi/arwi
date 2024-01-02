@@ -29,7 +29,6 @@ Here are two examples of a updated test casees that check the data loaders that 
         skillsRating: 6,
         behaviourRating: 6,
         notes: "Updated notes",
-        isStellar: false,
       },
     ];
 

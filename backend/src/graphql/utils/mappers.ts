@@ -1,5 +1,15 @@
 import { Prisma } from "@prisma/client";
-import { CreateTeacherInput, UpdateCollectionInput, UpdateEvaluationInput, UpdateGroupInput, UpdateStudentInput } from "../../types";
+import {
+  CreateClassParticipationEvaluationInput,
+  CreateDefaultEvaluationInput,
+  CreateTeacherInput,
+  UpdateClassParticipationCollectionInput,
+  UpdateClassParticipationEvaluationInput,
+  UpdateDefaultCollectionInput,
+  UpdateDefaultEvaluationInput,
+  UpdateGroupInput,
+  UpdateStudentInput,
+} from "../../types";
 
 export const mapUpdateStudentInput = (data: UpdateStudentInput): Prisma.StudentUpdateInput => {
   return {
@@ -16,6 +26,27 @@ export const mapCreateTeacherInput = (data: Omit<CreateTeacherInput, "password">
   };
 };
 
+export const mapCreateClassParticipationEvaluationInput = (
+  data: CreateClassParticipationEvaluationInput
+): Prisma.EvaluationCreateManyEvaluationCollectionInput => {
+  return {
+    studentId: data.studentId,
+    wasPresent: data.wasPresent,
+    skillsRating: data.skillsRating,
+    behaviourRating: data.behaviourRating,
+    notes: data.notes,
+  };
+};
+
+export const mapCreateDefaultEvaluationInput = (data: CreateDefaultEvaluationInput): Prisma.EvaluationCreateManyEvaluationCollectionInput => {
+  return {
+    studentId: data.studentId,
+    wasPresent: data.wasPresent,
+    notes: data.notes,
+    generalRating: data.rating,
+  };
+};
+
 export const mapUpdateGroupInput = (data: UpdateGroupInput): Prisma.GroupUpdateInput => {
   return {
     name: data.name ? data.name : undefined,
@@ -23,22 +54,39 @@ export const mapUpdateGroupInput = (data: UpdateGroupInput): Prisma.GroupUpdateI
   };
 };
 
-export const mapUpdateEvaluationInput = (data: UpdateEvaluationInput): Prisma.EvaluationUpdateInput => {
-  const { wasPresent, isStellar, ...rest } = data;
+export const mapUpdateClassParticipationEvaluationInput = (data: UpdateClassParticipationEvaluationInput): Prisma.EvaluationUpdateInput => {
   return {
-    ...rest,
-    wasPresent: wasPresent === null ? undefined : wasPresent,
-    isStellar: isStellar === null ? undefined : isStellar,
+    behaviourRating: data.behaviourRating,
+    skillsRating: data.skillsRating,
+    notes: data.notes,
+    wasPresent: data.wasPresent === null ? undefined : data.wasPresent,
   };
 };
 
-export const mapUpdateCollectionInput = (
-  data: Omit<UpdateCollectionInput, "evaluations">
-): Omit<Prisma.EvaluationCollectionUpdateInput | Prisma.EvaluationCollectionUncheckedUpdateInput, "evaluations"> => {
+export const mapUpdateDefaultEvaluationInput = (data: UpdateDefaultEvaluationInput): Prisma.EvaluationUpdateInput => {
+  return {
+    generalRating: data.rating,
+    notes: data.notes,
+    wasPresent: data.wasPresent === null ? undefined : data.wasPresent,
+  };
+};
+
+export const mapUpdateClassParticipationCollectionInput = (
+  data: Omit<UpdateClassParticipationCollectionInput, "evaluations">
+): Prisma.EvaluationCollectionUpdateInput | Prisma.EvaluationCollectionUncheckedUpdateInput => {
   return {
     ...data,
     date: data.date ? new Date(data.date) : undefined,
     environmentCode: data.environmentCode || undefined,
     learningObjectiveCodes: data.learningObjectiveCodes || undefined,
+  };
+};
+
+export const mapUpdateDefaultCollectionInput = (
+  data: Omit<UpdateDefaultCollectionInput, "evaluations">
+): Prisma.EvaluationCollectionUpdateInput | Prisma.EvaluationCollectionUncheckedUpdateInput => {
+  return {
+    ...data,
+    date: data.date ? new Date(data.date) : undefined,
   };
 };

@@ -1,18 +1,19 @@
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { CollectionTypeCategory, CreateCollectionInput } from "../../types";
-import { TestGroup, TestTeacher, VALID_LI_ENV_CODE, createTestGroup, createTestUserAndLogin, deleteTestUser } from "../testHelpers";
+import { CollectionTypeCategory, CreateClassParticipationCollectionInput } from "../../types";
+import { TestGroup, TestTeacher, VALID_LI_ENV_CODE, createTestGroup, createTestUserAndLogin } from "../testHelpers";
 import { formatDate } from "../../utils/date";
 import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
 import { groupLoader } from "../../graphql/dataLoaders/group";
+import { isClassParticipationCollection } from "../../types/typeGuards";
 
-describe("CreateCollection", () => {
+describe("createClassParticipationCollection", () => {
   let graphqlRequest: TestGraphQLRequest;
   let teacher: TestTeacher;
   let group: TestGroup;
 
-  let baseCollectionData: CreateCollectionInput;
+  let baseCollectionData: CreateClassParticipationCollectionInput;
 
   beforeAll(async () => {
     ({ graphqlRequest } = await createServer());
@@ -25,7 +26,7 @@ describe("CreateCollection", () => {
       environmentCode: VALID_LI_ENV_CODE,
       description: "Test Description",
       learningObjectiveCodes: ["T1", "T2"],
-      typeId: group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)?.id!,
+      typeId: group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)?.id!,
     };
   });
 
@@ -43,20 +44,23 @@ describe("CreateCollection", () => {
           skillsRating: 7,
           behaviourRating: 9,
           notes: "Good performance",
-          isStellar: false,
         },
       ],
     };
 
     const query = graphql(`
-      mutation CreateCollection($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
+      mutation CreateClassParticipationCollection($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+        createClassParticipationCollection(data: $data, moduleId: $moduleId) {
           id
           date
           type {
             id
           }
+          __typename
           environment {
+            code
+          }
+          learningObjectives {
             code
           }
           description
@@ -64,11 +68,9 @@ describe("CreateCollection", () => {
             student {
               id
             }
+            __typename
             skillsRating
             behaviourRating
-          }
-          learningObjectives {
-            code
           }
         }
       }
@@ -76,14 +78,18 @@ describe("CreateCollection", () => {
 
     const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
 
-    expect(response.data?.createCollection).toBeDefined();
-    expect(response.data?.createCollection.date).toEqual(collectionData.date);
-    expect(response.data?.createCollection.environment.code).toEqual(collectionData.environmentCode);
-    expect(response.data?.createCollection.evaluations.length).toEqual(collectionData.evaluations.length);
-    expect(response.data?.createCollection.evaluations[0].behaviourRating).toEqual(collectionData.evaluations[0].behaviourRating);
-    expect(response.data?.createCollection.evaluations[0].skillsRating).toEqual(collectionData.evaluations[0].skillsRating);
-    expect(response.data?.createCollection.evaluations[0].student.id).toEqual(collectionData.evaluations[0].studentId);
-    expect(response.data?.createCollection.learningObjectives.map((lo) => lo.code)).toEqual(collectionData.learningObjectiveCodes);
+    expect(response.data?.createClassParticipationCollection).toBeDefined();
+    expect(response.data?.createClassParticipationCollection.date).toEqual(collectionData.date);
+    if (response.data && isClassParticipationCollection(response.data.createClassParticipationCollection)) {
+      expect(response.data?.createClassParticipationCollection.environment.code).toEqual(collectionData.environmentCode);
+      expect(response.data?.createClassParticipationCollection.evaluations.length).toEqual(collectionData.evaluations.length);
+      expect(response.data?.createClassParticipationCollection.evaluations[0].behaviourRating).toEqual(collectionData.evaluations[0].behaviourRating);
+      expect(response.data?.createClassParticipationCollection.evaluations[0].skillsRating).toEqual(collectionData.evaluations[0].skillsRating);
+      expect(response.data?.createClassParticipationCollection.evaluations[0].student.id).toEqual(collectionData.evaluations[0].studentId);
+      expect(response.data?.createClassParticipationCollection.learningObjectives.map((lo) => lo.code)).toEqual(
+        collectionData.learningObjectiveCodes
+      );
+    }
   });
 
   it("should throw error for invalid environment code", async () => {
@@ -93,8 +99,8 @@ describe("CreateCollection", () => {
     };
 
     const query = graphql(`
-      mutation CreateCollectionInvalidEnvironment($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
+      mutation CreateClassParticipationCollectionInvalidEnvironment($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+        createClassParticipationCollection(data: $data, moduleId: $moduleId) {
           id
         }
       }
@@ -113,8 +119,8 @@ describe("CreateCollection", () => {
     };
 
     const query = graphql(`
-      mutation CreateCollectionInvalidLearningObjectives($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
+      mutation CreateClassParticipationCollectionInvalidLearningObjectives($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+        createClassParticipationCollection(data: $data, moduleId: $moduleId) {
           id
         }
       }
@@ -133,8 +139,8 @@ describe("CreateCollection", () => {
     };
 
     const query = graphql(`
-      mutation CreateCollectionNotEvaluatedLearningObjectives($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
+      mutation CreateClassParticipationCollectionNotEvaluatedLearningObjectives($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+        createClassParticipationCollection(data: $data, moduleId: $moduleId) {
           id
         }
       }
@@ -144,6 +150,28 @@ describe("CreateCollection", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia`);
+  });
+
+  it("should throw error if type is not CLASS_PARTICIPATION", async () => {
+    const newType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)!;
+
+    const collectionData = {
+      ...baseCollectionData,
+      typeId: newType.id,
+    };
+
+    const query = graphql(`
+      mutation CreateClassParticipationCollectionInvalidType($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+        createClassParticipationCollection(data: $data, moduleId: $moduleId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Syötetty arviointikokoelman tyyppi on väärä. Sen kuuluu olla 'CLASS_PARTICIPATION'.`);
   });
 
   it("should update DataLoaders after creating a collection", async () => {
@@ -164,7 +192,6 @@ describe("CreateCollection", () => {
           skillsRating: 7,
           behaviourRating: 9,
           notes: "Good performance",
-          isStellar: false,
         },
       ],
     };
@@ -175,16 +202,16 @@ describe("CreateCollection", () => {
     });
 
     const query = graphql(`
-      mutation CreateCollectionDataLoaderCheck($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
+      mutation CreateClassParticipationCollectionDataLoaderCheck($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+        createClassParticipationCollection(data: $data, moduleId: $moduleId) {
           id
           date
         }
       }
     `);
 
-    const createCollectionResponse = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
-    const newCollection = createCollectionResponse.data?.createCollection!;
+    const createClassParticipationCollectionResponse = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+    const newCollection = createClassParticipationCollectionResponse.data?.createClassParticipationCollection!;
     expect(newCollection).toBeDefined();
 
     // Check if the collection is correctly loaded in collectionLoader

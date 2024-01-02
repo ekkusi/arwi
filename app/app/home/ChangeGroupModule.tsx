@@ -54,22 +54,25 @@ const ChangeModule_ChangeModule_Mutation = graphql(`
         evaluationCollections {
           id
           date
-          environment {
-            label {
-              fi
+          __typename
+          ... on ClassParticipationCollection {
+            environment {
+              label {
+                fi
+              }
+              code
+              color
             }
-            code
-            color
-          }
-          learningObjectives {
-            code
-            label {
-              fi
+            learningObjectives {
+              code
+              label {
+                fi
+              }
+              description {
+                fi
+              }
+              type
             }
-            description {
-              fi
-            }
-            type
           }
           ...CollectionsLineChart_EvaluationCollection
         }

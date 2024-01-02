@@ -76,13 +76,15 @@ export type Mutation = {
   connectLocalCredentials: AuthPayload;
   logout: Scalars['Boolean'];
   createGroup: Group;
-  createCollection: EvaluationCollection;
+  createClassParticipationCollection: ClassParticipationCollection;
+  createDefaultCollection: DefaultCollection;
   createStudent: Student;
-  updateEvaluations: Scalars['Int'];
-  updateCollection: EvaluationCollection;
+  updateClassParticipationCollection: ClassParticipationCollection;
+  updateDefaultCollection: DefaultCollection;
   updateStudent: Student;
   updateGroup: Group;
-  updateEvaluation: Evaluation;
+  updateClassParticipationEvaluation: ClassParticipationEvaluation;
+  updateDefaultEvaluation: DefaultEvaluation;
   deleteStudent: Student;
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
@@ -140,8 +142,14 @@ export type MutationCreateGroupArgs = {
 };
 
 
-export type MutationCreateCollectionArgs = {
-  data: CreateCollectionInput;
+export type MutationCreateClassParticipationCollectionArgs = {
+  data: CreateClassParticipationCollectionInput;
+  moduleId: Scalars['ID'];
+};
+
+
+export type MutationCreateDefaultCollectionArgs = {
+  data: CreateDefaultCollectionInput;
   moduleId: Scalars['ID'];
 };
 
@@ -152,14 +160,14 @@ export type MutationCreateStudentArgs = {
 };
 
 
-export type MutationUpdateEvaluationsArgs = {
-  data: Array<UpdateEvaluationInput>;
+export type MutationUpdateClassParticipationCollectionArgs = {
+  data: UpdateClassParticipationCollectionInput;
   collectionId: Scalars['ID'];
 };
 
 
-export type MutationUpdateCollectionArgs = {
-  data: UpdateCollectionInput;
+export type MutationUpdateDefaultCollectionArgs = {
+  data: UpdateDefaultCollectionInput;
   collectionId: Scalars['ID'];
 };
 
@@ -176,8 +184,13 @@ export type MutationUpdateGroupArgs = {
 };
 
 
-export type MutationUpdateEvaluationArgs = {
-  data: UpdateEvaluationInput;
+export type MutationUpdateClassParticipationEvaluationArgs = {
+  input: UpdateClassParticipationEvaluationInput;
+};
+
+
+export type MutationUpdateDefaultEvaluationArgs = {
+  input: UpdateDefaultEvaluationInput;
 };
 
 
@@ -329,27 +342,63 @@ export type Module = {
 };
 
 export type EvaluationCollection = {
-  __typename?: 'EvaluationCollection';
+  id: Scalars['ID'];
+  date: Scalars['Date'];
+  type: CollectionType;
+  description?: Maybe<Scalars['String']>;
+  evaluations: Array<Evaluation>;
+  module: Module;
+};
+
+export type ClassParticipationCollection = EvaluationCollection & {
+  __typename?: 'ClassParticipationCollection';
   id: Scalars['ID'];
   date: Scalars['Date'];
   type: CollectionType;
   environment: Environment;
   description?: Maybe<Scalars['String']>;
-  evaluations: Array<Evaluation>;
+  evaluations: Array<ClassParticipationEvaluation>;
   module: Module;
   learningObjectives: Array<LearningObjective>;
 };
 
+export type DefaultCollection = EvaluationCollection & {
+  __typename?: 'DefaultCollection';
+  id: Scalars['ID'];
+  date: Scalars['Date'];
+  type: CollectionType;
+  description?: Maybe<Scalars['String']>;
+  evaluations: Array<DefaultEvaluation>;
+  module: Module;
+};
+
 export type Evaluation = {
-  __typename?: 'Evaluation';
   id: Scalars['ID'];
   student: Student;
   wasPresent: Scalars['Boolean'];
+  notes?: Maybe<Scalars['String']>;
+  collection: EvaluationCollection;
+};
+
+export type ClassParticipationEvaluation = Evaluation & {
+  __typename?: 'ClassParticipationEvaluation';
+  id: Scalars['ID'];
+  student: Student;
+  wasPresent: Scalars['Boolean'];
+  notes?: Maybe<Scalars['String']>;
+  collection: ClassParticipationCollection;
   skillsRating?: Maybe<Scalars['Int']>;
   behaviourRating?: Maybe<Scalars['Int']>;
+};
+
+export type DefaultEvaluation = Evaluation & {
+  __typename?: 'DefaultEvaluation';
+  id: Scalars['ID'];
+  student: Student;
+  wasPresent: Scalars['Boolean'];
   notes?: Maybe<Scalars['String']>;
-  isStellar: Scalars['Boolean'];
-  collection: EvaluationCollection;
+  collection: DefaultCollection;
+  rating?: Maybe<Scalars['Float']>;
 };
 
 export type Student = {
@@ -410,40 +459,64 @@ export type UpdateStudentInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
-export type CreateCollectionInput = {
+export type CreateClassParticipationCollectionInput = {
   date: Scalars['Date'];
   typeId: Scalars['ID'];
   environmentCode: Scalars['ID'];
   description?: InputMaybe<Scalars['String']>;
   learningObjectiveCodes: Array<Scalars['ID']>;
-  evaluations?: InputMaybe<Array<CreateEvaluationInput>>;
+  evaluations?: InputMaybe<Array<CreateClassParticipationEvaluationInput>>;
 };
 
-export type UpdateCollectionInput = {
-  date?: InputMaybe<Scalars['Date']>;
-  typeId?: InputMaybe<Scalars['ID']>;
-  environmentCode?: InputMaybe<Scalars['ID']>;
+export type CreateDefaultCollectionInput = {
+  date: Scalars['Date'];
+  typeId: Scalars['ID'];
   description?: InputMaybe<Scalars['String']>;
-  learningObjectiveCodes?: InputMaybe<Array<Scalars['ID']>>;
-  evaluations?: InputMaybe<Array<UpdateEvaluationInput>>;
+  evaluations?: InputMaybe<Array<CreateDefaultEvaluationInput>>;
 };
 
-export type CreateEvaluationInput = {
+export type CreateClassParticipationEvaluationInput = {
   studentId: Scalars['ID'];
   wasPresent: Scalars['Boolean'];
   skillsRating?: InputMaybe<Scalars['Int']>;
   behaviourRating?: InputMaybe<Scalars['Int']>;
   notes?: InputMaybe<Scalars['String']>;
-  isStellar?: InputMaybe<Scalars['Boolean']>;
 };
 
-export type UpdateEvaluationInput = {
+export type CreateDefaultEvaluationInput = {
+  studentId: Scalars['ID'];
+  wasPresent: Scalars['Boolean'];
+  rating?: InputMaybe<Scalars['Float']>;
+  notes?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateClassParticipationCollectionInput = {
+  date?: InputMaybe<Scalars['Date']>;
+  environmentCode?: InputMaybe<Scalars['ID']>;
+  description?: InputMaybe<Scalars['String']>;
+  learningObjectiveCodes?: InputMaybe<Array<Scalars['ID']>>;
+  evaluations?: InputMaybe<Array<UpdateClassParticipationEvaluationInput>>;
+};
+
+export type UpdateDefaultCollectionInput = {
+  date?: InputMaybe<Scalars['Date']>;
+  description?: InputMaybe<Scalars['String']>;
+  evaluations?: InputMaybe<Array<UpdateDefaultEvaluationInput>>;
+};
+
+export type UpdateClassParticipationEvaluationInput = {
   id: Scalars['ID'];
   wasPresent?: InputMaybe<Scalars['Boolean']>;
   skillsRating?: InputMaybe<Scalars['Int']>;
   behaviourRating?: InputMaybe<Scalars['Int']>;
   notes?: InputMaybe<Scalars['String']>;
-  isStellar?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type UpdateDefaultEvaluationInput = {
+  id: Scalars['ID'];
+  wasPresent?: InputMaybe<Scalars['Boolean']>;
+  rating?: InputMaybe<Scalars['Float']>;
+  notes?: InputMaybe<Scalars['String']>;
 };
 
 export type ChangeGroupModuleInput = {
@@ -530,7 +603,6 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   AppMetadata: ResolverTypeWrapper<AppMetadata>;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   MPassIDAuthPayload: ResolverTypeWrapper<Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversTypes['AuthPayload'] }>;
@@ -543,11 +615,17 @@ export type ResolversTypes = {
   Environment: ResolverTypeWrapper<EnvironmentInfoPrisma>;
   Group: ResolverTypeWrapper<GroupPrisma>;
   CollectionType: ResolverTypeWrapper<CollectionTypePrisma>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   CollectionTypeCategory: CollectionTypeCategory;
   ModuleInfo: ResolverTypeWrapper<ModuleInfo>;
   Module: ResolverTypeWrapper<ModulePrisma>;
   EvaluationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
+  ClassParticipationCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
+  DefaultCollection: ResolverTypeWrapper<EvaluationCollectionPrisma>;
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
+  ClassParticipationEvaluation: ResolverTypeWrapper<EvaluationPrisma>;
+  DefaultEvaluation: ResolverTypeWrapper<EvaluationPrisma>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   Student: ResolverTypeWrapper<StudentPrisma>;
   EducationLevel: EducationLevel;
   CreateTeacherInput: CreateTeacherInput;
@@ -556,10 +634,14 @@ export type ResolversTypes = {
   CreateStudentInput: CreateStudentInput;
   CreateCollectionTypeInput: CreateCollectionTypeInput;
   UpdateStudentInput: UpdateStudentInput;
-  CreateCollectionInput: CreateCollectionInput;
-  UpdateCollectionInput: UpdateCollectionInput;
-  CreateEvaluationInput: CreateEvaluationInput;
-  UpdateEvaluationInput: UpdateEvaluationInput;
+  CreateClassParticipationCollectionInput: CreateClassParticipationCollectionInput;
+  CreateDefaultCollectionInput: CreateDefaultCollectionInput;
+  CreateClassParticipationEvaluationInput: CreateClassParticipationEvaluationInput;
+  CreateDefaultEvaluationInput: CreateDefaultEvaluationInput;
+  UpdateClassParticipationCollectionInput: UpdateClassParticipationCollectionInput;
+  UpdateDefaultCollectionInput: UpdateDefaultCollectionInput;
+  UpdateClassParticipationEvaluationInput: UpdateClassParticipationEvaluationInput;
+  UpdateDefaultEvaluationInput: UpdateDefaultEvaluationInput;
   ChangeGroupModuleInput: ChangeGroupModuleInput;
 };
 
@@ -573,7 +655,6 @@ export type ResolversParentTypes = {
   Mutation: {};
   String: Scalars['String'];
   Boolean: Scalars['Boolean'];
-  Int: Scalars['Int'];
   AppMetadata: AppMetadata;
   AuthPayload: Omit<AuthPayload, 'userData'> & { userData: ResolversParentTypes['Teacher'] };
   MPassIDAuthPayload: Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversParentTypes['AuthPayload'] };
@@ -585,10 +666,16 @@ export type ResolversParentTypes = {
   Environment: EnvironmentInfoPrisma;
   Group: GroupPrisma;
   CollectionType: CollectionTypePrisma;
+  Int: Scalars['Int'];
   ModuleInfo: ModuleInfo;
   Module: ModulePrisma;
   EvaluationCollection: EvaluationCollectionPrisma;
+  ClassParticipationCollection: EvaluationCollectionPrisma;
+  DefaultCollection: EvaluationCollectionPrisma;
   Evaluation: EvaluationPrisma;
+  ClassParticipationEvaluation: EvaluationPrisma;
+  DefaultEvaluation: EvaluationPrisma;
+  Float: Scalars['Float'];
   Student: StudentPrisma;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
@@ -596,10 +683,14 @@ export type ResolversParentTypes = {
   CreateStudentInput: CreateStudentInput;
   CreateCollectionTypeInput: CreateCollectionTypeInput;
   UpdateStudentInput: UpdateStudentInput;
-  CreateCollectionInput: CreateCollectionInput;
-  UpdateCollectionInput: UpdateCollectionInput;
-  CreateEvaluationInput: CreateEvaluationInput;
-  UpdateEvaluationInput: UpdateEvaluationInput;
+  CreateClassParticipationCollectionInput: CreateClassParticipationCollectionInput;
+  CreateDefaultCollectionInput: CreateDefaultCollectionInput;
+  CreateClassParticipationEvaluationInput: CreateClassParticipationEvaluationInput;
+  CreateDefaultEvaluationInput: CreateDefaultEvaluationInput;
+  UpdateClassParticipationCollectionInput: UpdateClassParticipationCollectionInput;
+  UpdateDefaultCollectionInput: UpdateDefaultCollectionInput;
+  UpdateClassParticipationEvaluationInput: UpdateClassParticipationEvaluationInput;
+  UpdateDefaultEvaluationInput: UpdateDefaultEvaluationInput;
   ChangeGroupModuleInput: ChangeGroupModuleInput;
 };
 
@@ -637,13 +728,15 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   connectLocalCredentials?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationConnectLocalCredentialsArgs, 'email' | 'password'>>;
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationCreateGroupArgs, 'data'>>;
-  createCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<MutationCreateCollectionArgs, 'data' | 'moduleId'>>;
+  createClassParticipationCollection?: Resolver<ResolversTypes['ClassParticipationCollection'], ParentType, ContextType, RequireFields<MutationCreateClassParticipationCollectionArgs, 'data' | 'moduleId'>>;
+  createDefaultCollection?: Resolver<ResolversTypes['DefaultCollection'], ParentType, ContextType, RequireFields<MutationCreateDefaultCollectionArgs, 'data' | 'moduleId'>>;
   createStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationCreateStudentArgs, 'data' | 'moduleId'>>;
-  updateEvaluations?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationUpdateEvaluationsArgs, 'data' | 'collectionId'>>;
-  updateCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<MutationUpdateCollectionArgs, 'data' | 'collectionId'>>;
+  updateClassParticipationCollection?: Resolver<ResolversTypes['ClassParticipationCollection'], ParentType, ContextType, RequireFields<MutationUpdateClassParticipationCollectionArgs, 'data' | 'collectionId'>>;
+  updateDefaultCollection?: Resolver<ResolversTypes['DefaultCollection'], ParentType, ContextType, RequireFields<MutationUpdateDefaultCollectionArgs, 'data' | 'collectionId'>>;
   updateStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationUpdateStudentArgs, 'data' | 'studentId'>>;
   updateGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, 'data' | 'groupId'>>;
-  updateEvaluation?: Resolver<ResolversTypes['Evaluation'], ParentType, ContextType, RequireFields<MutationUpdateEvaluationArgs, 'data'>>;
+  updateClassParticipationEvaluation?: Resolver<ResolversTypes['ClassParticipationEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateClassParticipationEvaluationArgs, 'input'>>;
+  updateDefaultEvaluation?: Resolver<ResolversTypes['DefaultEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateDefaultEvaluationArgs, 'input'>>;
   deleteStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, 'studentId'>>;
   deleteGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, 'groupId'>>;
   deleteCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<MutationDeleteCollectionArgs, 'collectionId'>>;
@@ -753,26 +846,64 @@ export type ModuleResolvers<ContextType = CustomContext, ParentType extends Reso
 };
 
 export type EvaluationCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['EvaluationCollection'] = ResolversParentTypes['EvaluationCollection']> = {
+  __resolveType: TypeResolveFn<'ClassParticipationCollection' | 'DefaultCollection', ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  evaluations?: Resolver<Array<ResolversTypes['Evaluation']>, ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
+};
+
+export type ClassParticipationCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['ClassParticipationCollection'] = ResolversParentTypes['ClassParticipationCollection']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
   environment?: Resolver<ResolversTypes['Environment'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  evaluations?: Resolver<Array<ResolversTypes['Evaluation']>, ParentType, ContextType>;
+  evaluations?: Resolver<Array<ResolversTypes['ClassParticipationEvaluation']>, ParentType, ContextType>;
   module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
   learningObjectives?: Resolver<Array<ResolversTypes['LearningObjective']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DefaultCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['DefaultCollection'] = ResolversParentTypes['DefaultCollection']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  evaluations?: Resolver<Array<ResolversTypes['DefaultEvaluation']>, ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type EvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Evaluation'] = ResolversParentTypes['Evaluation']> = {
+  __resolveType: TypeResolveFn<'ClassParticipationEvaluation' | 'DefaultEvaluation', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
   wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType>;
+};
+
+export type ClassParticipationEvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['ClassParticipationEvaluation'] = ResolversParentTypes['ClassParticipationEvaluation']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
+  wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collection?: Resolver<ResolversTypes['ClassParticipationCollection'], ParentType, ContextType>;
   skillsRating?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   behaviourRating?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DefaultEvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['DefaultEvaluation'] = ResolversParentTypes['DefaultEvaluation']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
+  wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  isStellar?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  collection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType>;
+  collection?: Resolver<ResolversTypes['DefaultCollection'], ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -804,7 +935,11 @@ export type Resolvers<ContextType = CustomContext> = {
   ModuleInfo?: ModuleInfoResolvers<ContextType>;
   Module?: ModuleResolvers<ContextType>;
   EvaluationCollection?: EvaluationCollectionResolvers<ContextType>;
+  ClassParticipationCollection?: ClassParticipationCollectionResolvers<ContextType>;
+  DefaultCollection?: DefaultCollectionResolvers<ContextType>;
   Evaluation?: EvaluationResolvers<ContextType>;
+  ClassParticipationEvaluation?: ClassParticipationEvaluationResolvers<ContextType>;
+  DefaultEvaluation?: DefaultEvaluationResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;
 };
 

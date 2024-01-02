@@ -14,8 +14,8 @@ import { COLORS } from "../../theme";
 import CModal from "../CModal";
 import { getEnvironmentTranslation } from "../../helpers/translation";
 
-const EvaluationsBarChart_Evaluation_Fragment = graphql(`
-  fragment EvaluationsBarChart_Evaluation on Evaluation {
+const EvaluationsHistogram_Evaluation_Fragment = graphql(`
+  fragment EvaluationsHistogram_Evaluation on ClassParticipationEvaluation {
     id
     skillsRating
     behaviourRating
@@ -96,7 +96,7 @@ const filterTempDataToChartData = (data: TempDataHash, typeFilter: string, envir
 };
 
 type EvaluationsHistogramProps = CViewProps & {
-  evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
+  evaluations: readonly FragmentType<typeof EvaluationsHistogram_Evaluation_Fragment>[];
   subjectCode: string;
   moduleInfo: MinimalModuleInfo;
 };
@@ -109,7 +109,7 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
   const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const environmentLabels = environments.map((env) => env.label.fi);
 
-  const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
+  const evaluations = getFragmentData(EvaluationsHistogram_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
 
   const data = useMemo(() => mapDataToTempData(filteredEvaluations, environmentLabels), [filteredEvaluations, environmentLabels]);

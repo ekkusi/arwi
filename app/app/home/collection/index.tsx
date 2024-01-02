@@ -19,23 +19,26 @@ const CollectionPage_GetCollection_Query = graphql(`
       id
       date
       description
-      environment {
-        label {
-          fi
+      __typename
+      ... on ClassParticipationCollection {
+        environment {
+          label {
+            fi
+          }
+          code
+          color
         }
-        code
-        color
+        learningObjectives {
+          code
+          label {
+            fi
+          }
+        }
       }
       module {
         group {
           name
           id
-        }
-      }
-      learningObjectives {
-        code
-        label {
-          fi
         }
       }
       evaluations {

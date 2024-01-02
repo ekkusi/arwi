@@ -167,8 +167,6 @@ type Evaluation {
   skillsRating: Int
   behaviourRating: Int
   notes: String
-  isStellar: Boolean!
-  collection: EvaluationCollection!
 }
 
 type Student {
@@ -252,7 +250,6 @@ input CreateEvaluationInput {
   skillsRating: Int
   behaviourRating: Int
   notes: String
-  isStellar: Boolean
 }
 
 input UpdateEvaluationInput {
@@ -261,7 +258,6 @@ input UpdateEvaluationInput {
   skillsRating: Int
   behaviourRating: Int
   notes: String
-  isStellar: Boolean
 }
 
 input ChangeGroupModuleInput {
@@ -314,7 +310,6 @@ describe("CreateCollection", () => {
           skillsRating: 7,
           behaviourRating: 9,
           notes: "Good performance",
-          isStellar: false,
         },
       ],
     };
