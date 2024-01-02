@@ -130,7 +130,7 @@ export default function GroupCollectionTypesView({
             {selectedTypes.length > 0 ? (
               <CView style={{ gap: 3 }}>
                 {selectedTypes.map((type) => (
-                  <Card key={type.id} disabled={type.category === "CLASS_PARTICIPATION"}>
+                  <Card key={type.id} disabled={type.category === "CLASS_PARTICIPATION"} style={{}}>
                     <CView style={{ flex: 6, flexDirection: "row", gap: 10, alignItems: "center", justifyContent: "flex-start" }}>
                       <CView style={{ flexGrow: 1, gap: 2 }}>
                         <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>

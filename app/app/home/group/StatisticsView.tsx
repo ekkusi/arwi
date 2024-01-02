@@ -148,9 +148,26 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         <CView style={{ gap: 10 }}>
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arviointikohteet")}</CText>
           <CView style={{ gap: 5 }}>
-            <Card>
+            <Card
+              style={{
+                borderColor: "primary",
+                borderWidth: 1,
+              }}
+            >
               <CView>
-                <CText>moi</CText>
+                <CText style={{ fontSize: "md", fontWeight: "500" }}>Tuntityöskentely</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "300" }}>Jatkuvasti arvioitava</CText>
+              </CView>
+            </Card>
+            <Card
+              style={{
+                borderColor: "primary",
+                borderWidth: 1,
+              }}
+            >
+              <CView>
+                <CText style={{ fontSize: "md", fontWeight: "500" }}>Geometrian koe</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "300" }}>Koe, kerran arvioitava</CText>
               </CView>
             </Card>
           </CView>

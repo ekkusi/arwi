@@ -174,7 +174,7 @@ export default function GroupCollectionTypeWeightsView({
                 <CView key={`${type.category}-${index}`}>
                   <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <CText style={{ fontSize: "sm", fontWeight: "500" }}>{type.name}</CText>
-                    <CView style={{ gap: 2, alignItems: "center", flexDirection: "row" }}>
+                    <CView style={{ gap: 2, alignItems: "center", justifyContent: "center", flexDirection: "row" }}>
                       <CTouchableOpacity onPress={() => changeWeightByOne(false, index)}>
                         <CView style={{ width: 30, height: 30, justifyContent: "center", alignItems: "center" }}>
                           <MaterialCommunityIcon name="minus" size={25} color={COLORS.primary} />
