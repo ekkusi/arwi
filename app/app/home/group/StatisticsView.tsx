@@ -14,6 +14,7 @@ import CButton from "../../../components/primitives/CButton";
 import { COLORS } from "../../../theme";
 import { GroupNavigationProps } from "./types";
 import { getEnvironmentTranslation } from "../../../helpers/translation";
+import Card from "../../../components/Card";
 
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
   const { t } = useTranslation();
@@ -87,7 +88,6 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
       isScrolling.value = false;
     },
   });
-  console.log("group", group);
 
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
@@ -143,6 +143,16 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                 />
               </CView>
             </CView>
+          </CView>
+        </CView>
+        <CView style={{ gap: 10 }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arviointikohteet")}</CText>
+          <CView style={{ gap: 5 }}>
+            <Card>
+              <CView>
+                <CText>moi</CText>
+              </CView>
+            </Card>
           </CView>
         </CView>
 

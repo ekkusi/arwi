@@ -89,12 +89,6 @@ export default function GroupCollectionTypesView({
     setSelectedTypes((prev) => prev.filter((item) => item.id !== type.id));
   };
 
-  const onSelectType = (type: CollectionTypeOption) => {
-    const mappedType = mapCollectionTypeInfo(type, selectedTypes);
-
-    setSelectedTypes((prev) => [...prev, mappedType]);
-  };
-
   const validate = () => {
     if (selectedTypes.length === 0) return t("select-at-least-one-type", "Valitse vähintään yksi arviointityyppi");
 
@@ -132,7 +126,7 @@ export default function GroupCollectionTypesView({
       <CKeyboardAwareScrollView androidKeyboardAvoidProps={{ keyboardVerticalOffset: SCROLL_TO_INPUT_EXTRA_HEIGHT }}>
         <CView style={{ gap: 15 }}>
           <CView style={{ gap: 15 }}>
-            <CText style={{ fontSize: "md", color: "darkgray", fontWeight: "500" }}>{t("selected-evaluation-types", "Arviointikohteet")}</CText>
+            <CText style={{ fontSize: "md", color: "darkgray", fontWeight: "500" }}>{t("evaluation-types", "Arviointikohteet")}</CText>
             {selectedTypes.length > 0 ? (
               <CView style={{ gap: 3 }}>
                 {selectedTypes.map((type) => (
@@ -229,6 +223,7 @@ export default function GroupCollectionTypesView({
               title={t("save", "Tallenna")}
               variant="empty"
               colorScheme="primary"
+              textStyle={{ color: "primary" }}
               onPress={() => {
                 if (targetOnEdit.id === "") {
                   const modifiedTarget = mapCollectionTypeInfo({ name: targetOnEdit.name, category: targetOnEdit.category }, selectedTypes);

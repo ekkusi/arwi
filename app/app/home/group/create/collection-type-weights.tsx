@@ -1,22 +1,19 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
-import { forwardRef, useCallback, useRef, useState } from "react";
-import { CreateCollectionTypeInput } from "arwi-backend/src/types";
-import Animated, { runOnJS, useAnimatedProps, useAnimatedRef, useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated";
+import { useState } from "react";
+import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated";
 import { Alert, Dimensions } from "react-native";
-import debounce from "lodash.debounce";
 import { ReText } from "react-native-redash";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CView from "../../../../components/primitives/CView";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 import GroupCreationBody, { SCROLL_TO_INPUT_EXTRA_HEIGHT } from "./_body";
 import CText from "../../../../components/primitives/CText";
-import CTextInput from "../../../../components/primitives/CTextInput";
 import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
 import { COLORS, FONT_SIZES } from "../../../../theme";
-import { Slider, SliderProps } from "../../../../components/Slider";
-import CButton from "../../../../components/primitives/CButton";
-import Palikka, { PalikkaProps } from "./palikka";
+import { Slider } from "../../../../components/Slider";
+import CTouchableOpacity from "../../../../components/primitives/CTouchableOpacity";
 
 const windowWidth = Dimensions.get("window").width;
 const DEFAULT_SLIDER_HORIZONTAL_MARGIN = 10;
@@ -32,8 +29,16 @@ export default function GroupCollectionTypeWeightsView({
   const { group, setGroup } = useGroupCreationContext();
   const isModified = useSharedValue<boolean[]>(group.collectionTypes.map((_) => false));
   const weights = useSharedValue<number[]>(group.collectionTypes.map((obj) => obj.weight));
-  const [forwardDisabled, setForwardDisabled] = useState(true);
-  const roundedWeights = useDerivedValue(() => weights.value.map((val) => Math.round(val)));
+  const [forwardDisabled, setForwardDisabled] = useState(false);
+  const roundedWeights = useDerivedValue(() => {
+    const newWeights = weights.value.map((val) => Math.round(val));
+    const remainder = 100 - newWeights.reduce((prev, cur) => prev + cur, 0);
+    const remainderIndex = isModified.value.findIndex((val) => !val);
+    if (remainder !== 0) {
+      newWeights[remainderIndex] += 1 * (remainder < 0 ? -1 : 1);
+    }
+    return newWeights;
+  });
   const sum = useDerivedValue(() => roundedWeights.value.reduce((acc, curr) => acc + curr, 0));
   const translates = useDerivedValue(() =>
     roundedWeights.value.map((value) => ((value - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * DEFAULT_SLIDER_WIDTH)
@@ -44,8 +49,16 @@ export default function GroupCollectionTypeWeightsView({
 
   const sumString = useDerivedValue(() => `${sum.value} %`);
 
-  const setAlert = (msg: string) => {
-    Alert.alert(msg);
+  const changeWeightByOne = (increase: boolean, index: number) => {
+    const newWeight = weights.value[index] + (increase ? 1 : -1);
+    const newSum = onWeightChanged(newWeight, index);
+    Alert.alert((newSum || 0).toString());
+    if (newSum && newSum === 100) {
+      setForwardDisabled(false);
+    } else {
+      setForwardDisabled(true);
+    }
+    setStartTranslateValues(translates.value);
   };
 
   const onWeightChanged = (weight: number, index: number) => {
@@ -65,7 +78,7 @@ export default function GroupCollectionTypeWeightsView({
     const weightResid = weights.value[index] - weight;
 
     const newWeights = weights.value.map((val, idx) => {
-      if (!isModified.value[idx] && residSum !== 0) {
+      if (!isModified.value[idx] && residSum !== 0 && idx !== index) {
         const resVal = val + (1 / nonDirtyCount) * weightResid;
         if (resVal < 0) {
           return 0;
@@ -83,6 +96,8 @@ export default function GroupCollectionTypeWeightsView({
     isModified.value = newIsModified;
 
     weights.value = newWeights;
+
+    return newWeights.reduce((acc, curr) => acc + curr, 0);
     // setGroup((prev) => ({ ...prev, collectionTypes: newTypes }));
   };
   const onEndDrag = () => {
@@ -159,7 +174,19 @@ export default function GroupCollectionTypeWeightsView({
                 <CView key={`${type.category}-${index}`}>
                   <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <CText style={{ fontSize: "sm", fontWeight: "500" }}>{type.name}</CText>
-                    <ReText style={{ fontWeight: "500", fontSize: FONT_SIZES.sm }} text={weightString} />
+                    <CView style={{ gap: 2, alignItems: "center", flexDirection: "row" }}>
+                      <CTouchableOpacity onPress={() => changeWeightByOne(false, index)}>
+                        <CView style={{ width: 30, height: 30, justifyContent: "center", alignItems: "center" }}>
+                          <MaterialCommunityIcon name="minus" size={25} color={COLORS.primary} />
+                        </CView>
+                      </CTouchableOpacity>
+                      <ReText style={{ fontWeight: "500", fontSize: FONT_SIZES.sm }} text={weightString} />
+                      <CTouchableOpacity onPress={() => changeWeightByOne(true, index)}>
+                        <CView style={{ width: 30, height: 30, justifyContent: "center", alignItems: "center" }}>
+                          <MaterialCommunityIcon name="plus" size={25} color={COLORS.primary} />
+                        </CView>
+                      </CTouchableOpacity>
+                    </CView>
                   </CView>
                   <Slider
                     minValue={0}
