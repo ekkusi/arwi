@@ -4,7 +4,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { getEnvironmentsByLevel } from "arwi-backend/src/utils/subjectUtils";
 import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
-import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
+import { EvaluationsBarChart_EvaluationFragment, EvaluationsHistogram_EvaluationFragment } from "../../gql/graphql";
 import { getColorForGrade } from "../../helpers/dataMappers";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
@@ -41,7 +41,7 @@ type TempDataHash = { [grade: number]: { [environment: string]: TempDataType } }
 
 const INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD = 0;
 
-const mapDataToTempData = (evaluations: EvaluationsBarChart_EvaluationFragment[], environments: string[]) => {
+const mapDataToTempData = (evaluations: EvaluationsHistogram_EvaluationFragment[], environments: string[]) => {
   const tempData: TempDataHash = {};
   [4, 5, 6, 7, 8, 9, 10].forEach((grade) => {
     tempData[grade] = {};

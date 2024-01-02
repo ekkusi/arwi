@@ -10,29 +10,24 @@ import { SPACING } from "../theme";
 import CircledNumber from "./CircledNumber";
 
 const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
-  fragment EvaluationsAccordion_Evaluation on Evaluation {
+  fragment EvaluationsAccordion_Evaluation on ClassParticipationEvaluation {
     id
     notes
     __typename
-    ... on ClassParticipationEvaluation {
-      behaviourRating
-      skillsRating
-      collection {
-        date
-        environment {
-          label {
-            fi
-          }
-          code
-          color
+    behaviourRating
+    skillsRating
+    collection {
+      date
+      environment {
+        label {
+          fi
         }
+        code
+        color
       }
     }
-    ... on DefaultEvaluation {
-      rating
-      collection {
-        date
-      }
+    collection {
+      date
     }
     wasPresent
     student {
@@ -58,6 +53,7 @@ export default function EvaluationsAccordion({
 }: EvaluationsAccordionProps) {
   const { t } = useTranslation();
   const evaluations = getFragmentData(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
+
   const sortedEvaluations = [...evaluations].sort((a, b) =>
     titleFrom === "collection"
       ? new Date(b.collection.date).getTime() - new Date(a.collection.date).getTime()

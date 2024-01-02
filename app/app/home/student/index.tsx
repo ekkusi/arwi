@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
@@ -21,7 +20,6 @@ import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogra
 import Layout from "../../../components/Layout";
 import CButton from "../../../components/primitives/CButton";
 import { getEnvironmentTranslation } from "../../../helpers/translation";
-import { StudentPage_GetStudentQuery } from "../../../gql/graphql";
 
 const StudentPage_GetStudent_Query = graphql(`
   query StudentPage_GetStudent($studentId: ID!) {
@@ -64,9 +62,10 @@ const StudentPage_GetStudent_Query = graphql(`
               }
             }
           }
-          ...EvaluationsAccordion_Evaluation
           ...EvaluationsLineChart_Evaluation
           ...EvaluationsBarChart_Evaluation
+          ...EvaluationsHistogram_Evaluation
+          ...EvaluationsAccordion_Evaluation
         }
         ... on DefaultEvaluation {
           rating
@@ -79,23 +78,18 @@ const StudentPage_GetStudent_Query = graphql(`
   }
 `);
 
-// // Type for ClassParticipationEvaluation
-export type ClassParticipationEvaluation = StudentPage_GetStudentQuery["getStudent"]["currentModuleEvaluations"][number] & {
-  __typename: "ClassParticipationEvaluation";
-};
-
-// Type guard function
-// export function isClassParticipationEvaluation(evaluation: any): evaluation is ClassParticipationEvaluation {
-//   // eslint-disable-next-line
-//   return evaluation.__typename === "ClassParticipationEvaluation";
-// }
-
 export default function StudentView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "student">) {
   const { id: studentId, archived } = route.params;
 
   const { data } = useQuery(StudentPage_GetStudent_Query, { variables: { studentId } });
   const { t } = useTranslation();
 
+  if (!data) return <LoadingIndicator />;
+  const { getStudent: student } = data;
+  const evaluations = student.currentModuleEvaluations;
+
+  const classParticipationEvaluations =
+    evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
   const {
     absencesAmount,
     presencesAmount,
@@ -107,18 +101,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     behaviourMedian,
     behaviourMode,
     behaviourMeanByEnvironments,
-  } = useMemo(() => {
-    const evaluations = data?.getStudent.currentModuleEvaluations ?? [];
-    return analyzeEvaluations([...evaluations]);
-  }, [data]);
-
-  if (!data) return <LoadingIndicator />;
-  const { getStudent: student } = data;
-  const evaluations = student.currentModuleEvaluations;
-
-  // const classParticipationEvaluations = evaluations.filter((evaluation) => isClassParticipationEvaluation(evaluation));
-  const classParticipationEvaluations =
-    evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
+  } = analyzeEvaluations([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
 
   return (
@@ -146,8 +129,12 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("statistics", "Tilastot")}</CText>
             <EvaluationsBarChart evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} />
           </CView>
-          <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
-          <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} moduleInfo={student.group.currentModule.info} />
+          <EvaluationsHistogram evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
+          <EvaluationStatistics
+            subjectCode={student.group.subject.code}
+            evaluations={classParticipationEvaluations}
+            moduleInfo={student.group.currentModule.info}
+          />
           <CView style={{ gap: 10 }}>
             <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10 }}>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("characteristics", "Tunnusluvut")}</CText>
@@ -231,7 +218,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
           <EvaluationsAccordion
             allowEditing={!archived}
-            evaluations={student.currentModuleEvaluations}
+            evaluations={classParticipationEvaluations}
             onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
           />
           {!archived && (

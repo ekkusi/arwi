@@ -1,6 +1,6 @@
 import { TranslatedString } from "arwi-backend/src/types";
-import { Evaluation as BaseEvaluation } from "../gql/graphql";
 import { median, mode, stdev } from "./mathUtilts";
+import { ClassParticipationEvaluation } from "../gql/graphql";
 
 type EvaluationResultSimple = {
   skillsAverage: number;
@@ -24,7 +24,7 @@ type EvaluationResult = EvaluationResultSimple & {
   behaviourMeanByEnvironments: number;
 };
 
-type EvaluationSimple = Pick<BaseEvaluation, "skillsRating" | "behaviourRating" | "wasPresent" | "isStellar">;
+type EvaluationSimple = Pick<ClassParticipationEvaluation, "skillsRating" | "behaviourRating" | "wasPresent">;
 
 type Evaluation = EvaluationSimple & {
   collection: {
@@ -61,9 +61,6 @@ export const analyzeEvaluationsSimple = (evaluations: EvaluationSimple[]) => {
       result.presencesAmount += 1;
     } else {
       result.absencesAmount += 1;
-    }
-    if (evaluation.isStellar) {
-      result.isStellarCount += 1;
     }
   });
   result.skillsAverage /= skillsArray.length;
