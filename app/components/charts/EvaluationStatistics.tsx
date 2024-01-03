@@ -47,13 +47,16 @@ export default function EvaluationsStatistics({
 
   const evaluationsWithSkills = useMemo(() => filteredData.filter((obj) => obj.skills !== undefined), [filteredData]);
   const skillsMean = useMemo(
-    () => evaluationsWithSkills.reduce((prev, evaluation) => prev + (evaluation.skills || 0), 0) / evaluationsWithSkills.length,
+    () =>
+      evaluationsWithSkills.reduce((prev, evaluation) => prev + (evaluation.skills || 0), 0) / evaluationsWithSkills.filter((ev) => ev.skills).length,
     [evaluationsWithSkills]
   );
 
   const evaluationsWithBehaviour = useMemo(() => filteredData.filter((obj) => obj.behaviour !== undefined), [filteredData]);
   const behaviourMean = useMemo(
-    () => evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) / evaluationsWithBehaviour.length,
+    () =>
+      evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) /
+      evaluationsWithBehaviour.filter((ev) => ev.behaviour).length,
     [evaluationsWithBehaviour]
   );
 

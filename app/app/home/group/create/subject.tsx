@@ -23,7 +23,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
   return (
     <GroupCreationBody navigation={navigation} progressState={1} moveForwardDisabled={group.subject === undefined} noBackButton>
       <CView style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 30, marginTop: 20, backgroundColor: "white" }}>
-        <CView style={{ flex: 10, width: "100%", paddingHorizontal: 15, gap: 10, justifyContent: "center" }}>
+        <CView style={{ flex: 10, width: "100%", gap: 10, justifyContent: "center" }}>
           <CText style={{ color: "darkgray", fontSize: "title" }}>{t("GroupSubjectSelectionView.selectSubject", "Valitse oppiaine")}</CText>
           <CView style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 1, width: "100%" }}>
             {subjects.map((item) => (
@@ -52,7 +52,7 @@ export default function GroupSubjectSelectionView({ navigation }: NativeStackScr
               />
             ))}
           </CView>
-          <CText style={{ color: "darkgray", fontSize: "sm", paddingHorizontal: 15 }}>
+          <CText style={{ color: "darkgray", fontSize: "sm" }}>
             {t(
               "GroupSubjectSelectionView.description",
               "Valitsemalla oppiaineen, saat juuri kyseiselle oppiaineelle personoidun arvostelunäkymän sekä oppiainetta vastaavan opetussuunnitelman automaattisesti arvioinnin tueksi."

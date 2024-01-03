@@ -68,7 +68,14 @@ export default function UpdatePassword({ navigation, route }: NativeStackScreenP
             isSecret
           />
           {generalError && <CText style={{ color: "error", fontWeight: "600" }}>{generalError}</CText>}
-          <CButton style={{ width: "100%" }} title={t("update-password", "Vaihda salasana")} onPress={handleUpdate} loading={loading} />
+          <CButton
+            variant="outline"
+            colorScheme="secondary"
+            style={{ width: "100%" }}
+            title={t("update-password", "Vaihda salasana")}
+            onPress={handleUpdate}
+            loading={loading}
+          />
         </CView>
       </CView>
     </LandingComponent>

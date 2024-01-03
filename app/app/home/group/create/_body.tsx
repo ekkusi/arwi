@@ -113,7 +113,7 @@ export default function GroupCreationBody({
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <CView style={{ flex: 1 }}>
           <CView style={{ flexGrow: 1, paddingTop: "2xl", paddingHorizontal: "md", ...style }}>{children}</CView>
-          <CKeyboardStickyView style={{ flexDirection: "row", justifyContent: buttonSpacing, padding: "xl" }}>
+          <CView style={{ flexDirection: "row", justifyContent: buttonSpacing, padding: "xl" }}>
             {!noBackButton && (
               <CButton onPress={handleMoveBack}>
                 <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
@@ -127,7 +127,7 @@ export default function GroupCreationBody({
                 {...forwardButtonProps}
               />
             )}
-          </CKeyboardStickyView>
+          </CView>
           <ProgressBar
             color={COLORS.primary}
             progress={progressState / 5}

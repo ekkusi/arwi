@@ -52,6 +52,8 @@ export default function ForgotPassword({ navigation }: NativeStackScreenProps<Au
             onChange={handleEmailChange}
           />
           <CButton
+            variant="outline"
+            colorScheme="darkgray"
             style={{ width: "100%" }}
             title={t("request-code", "Lähetä koodi")}
             onPress={handleResetRequest}

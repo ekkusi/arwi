@@ -27,6 +27,8 @@ export default function StatisticsFilterMenu({
 
   const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
+  const buttonText = environments.find((env) => env.code === filter)?.label;
+
   return (
     <>
       <CModal isOpen={isFiltersOpen} onClose={() => setIsFiltersOpen(false)} placement="bottom" closeButton={false}>
@@ -66,7 +68,7 @@ export default function StatisticsFilterMenu({
         <CButton
           size="small"
           variant="outline"
-          title={filter || t("all", "Kaikki")}
+          title={buttonText?.fi || t("all", "Kaikki")}
           colorScheme="darkgray"
           style={{ width: "auto" }}
           leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}

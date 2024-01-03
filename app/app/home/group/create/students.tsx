@@ -135,7 +135,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
     >
       <CKeyboardAwareScrollView ref={scrollRef} extraScrollHeight={SCROLL_TO_INPUT_EXTRA_HEIGHT} contentContainerStyle={{ paddingBottom: "2xl" }}>
         <CView style={{ gap: 10, minHeight: dimensions.height * 0.43 }}>
-          <CText style={{ fontSize: "title", fontWeight: "300" }}>{t("students", "Oppilaat")}</CText>
+          <CText style={{ fontSize: "title" }}>{t("students", "Oppilaat")}</CText>
           <CView style={{ flex: 1, marginBottom: "xl" }}>
             {[...group.students].reverse().map((student) => renderStudentItem(student, removeStudent))}
           </CView>

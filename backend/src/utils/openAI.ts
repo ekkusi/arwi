@@ -59,9 +59,9 @@ export async function generateStudentSummary(evaluations: EvaluationData[], user
 
 export async function fixTextGrammatics(text: string, userId: string) {
   if (openAIClient === null) throw new Error("OpenAI client not initialized, cannot fix text grammatics");
-  const startMessage = `Seuraava teksti on saatu äänittämällä puhetta. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi siten, että korjattu teksti on maksimissaan ${
+  const startMessage = `Seuraava teksti on saatu äänittämällä puhetta. Teksti sisältää palautteen/muistiinpanoja oppilaan suoriutumisesta oppitunnilla/tehtävässä. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi siten, että korjattu teksti on maksimissaan ${
     text.length + 30
-  } kirjainta pitkä. Palauta pelkkä korjattu teksti: \n\n`;
+  } kirjainta pitkä. Teksti saattaa sisältää puheentunnistuksen aiheuttamia virheitä, kuten väärin tunnistettuja sanoja. Palauta pelkkä korjattu teksti: \n\n`;
   const prompt = startMessage + text;
   const tokenCount = prompt.length / CHARACTERS_PER_TOKEN;
 

@@ -78,7 +78,13 @@ export default function CodeInput({ navigation, route }: NativeStackScreenProps<
             onChange={handleCodeChange}
           />
           {error && <CText style={{ color: "error", fontWeight: "600", fontSize: "sm" }}>{error}</CText>}
-          <CButton title={t("check-code", "Tarkista koodi")} loading={loading} onPress={() => handleCheckCode(code)} />
+          <CButton
+            variant="outline"
+            colorScheme="darkgray"
+            title={t("check-code", "Tarkista koodi")}
+            loading={loading}
+            onPress={() => handleCheckCode(code)}
+          />
         </CView>
       </CView>
     </LandingComponent>
