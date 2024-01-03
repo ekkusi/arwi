@@ -30,6 +30,7 @@ export type Query = {
   getGroups: Array<Group>;
   getGroup: Group;
   getCollection: EvaluationCollection;
+  getType: CollectionType;
   getStudent: Student;
   getEvaluation: Evaluation;
 };
@@ -54,6 +55,9 @@ export type QueryGetCollectionArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type QueryGetTypeArgs = {
+  id: Scalars['ID']['input'];
+};
 
 export type QueryGetStudentArgs = {
   id: Scalars['ID']['input'];

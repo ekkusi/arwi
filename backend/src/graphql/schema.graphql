@@ -5,6 +5,7 @@ type Query {
   getGroups(teacherId: ID!): [Group!]!
   getGroup(id: ID!): Group!
   getCollection(id: ID!): EvaluationCollection!
+  getType(id: ID!): CollectionType!
   getStudent(id: ID!): Student!
   getEvaluation(id: ID!): Evaluation!
 }

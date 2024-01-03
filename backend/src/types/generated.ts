@@ -30,6 +30,7 @@ export type Query = {
   getGroups: Array<Group>;
   getGroup: Group;
   getCollection: EvaluationCollection;
+  getType: CollectionType;
   getStudent: Student;
   getEvaluation: Evaluation;
 };
@@ -51,6 +52,11 @@ export type QueryGetGroupArgs = {
 
 
 export type QueryGetCollectionArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetTypeArgs = {
   id: Scalars['ID'];
 };
 
@@ -355,10 +361,10 @@ export type ClassParticipationCollection = EvaluationCollection & {
   id: Scalars['ID'];
   date: Scalars['Date'];
   type: CollectionType;
-  environment: Environment;
   description?: Maybe<Scalars['String']>;
   evaluations: Array<ClassParticipationEvaluation>;
   module: Module;
+  environment: Environment;
   learningObjectives: Array<LearningObjective>;
 };
 
@@ -713,6 +719,7 @@ export type QueryResolvers<ContextType = CustomContext, ParentType extends Resol
   getGroups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType, RequireFields<QueryGetGroupsArgs, 'teacherId'>>;
   getGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<QueryGetGroupArgs, 'id'>>;
   getCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<QueryGetCollectionArgs, 'id'>>;
+  getType?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType, RequireFields<QueryGetTypeArgs, 'id'>>;
   getStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<QueryGetStudentArgs, 'id'>>;
   getEvaluation?: Resolver<ResolversTypes['Evaluation'], ParentType, ContextType, RequireFields<QueryGetEvaluationArgs, 'id'>>;
 };
@@ -859,10 +866,10 @@ export type ClassParticipationCollectionResolvers<ContextType = CustomContext, P
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
-  environment?: Resolver<ResolversTypes['Environment'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   evaluations?: Resolver<Array<ResolversTypes['ClassParticipationEvaluation']>, ParentType, ContextType>;
   module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
+  environment?: Resolver<ResolversTypes['Environment'], ParentType, ContextType>;
   learningObjectives?: Resolver<Array<ResolversTypes['LearningObjective']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

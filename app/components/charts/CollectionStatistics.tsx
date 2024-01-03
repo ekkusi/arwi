@@ -91,7 +91,7 @@ export default function CollectionStatistics({ title, subjectCode, moduleInfo, c
       <StatisticsFilterMenu
         subjectCode={subjectCode}
         moduleInfo={moduleInfo}
-        title={t("group.evaluations-over-time", "Arvointien keskiarvojen kehitys")}
+        title={t("group.evaluations-over-time", "Arviontien keskiarvojen kehitys")}
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}
       />

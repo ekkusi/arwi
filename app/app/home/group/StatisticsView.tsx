@@ -38,6 +38,8 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
 
   const otherSelectedTypes = group.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
 
+  const classParticipationType = group.collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
+
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(() => {
     const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
@@ -167,15 +169,12 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                       borderColor: "primary",
                       borderWidth: 1,
                     }}
+                    key={type.id}
                   >
                     <CTouchableOpacity
                       style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
                       onPress={() => {
-                        if (evaluation) {
-                          navigation.navigate("default-evaluation-collection", { id: evaluation.id, name: type.name });
-                        } else {
-                          Alert.alert("Evaluate!");
-                        }
+                        navigation.navigate("default-evaluation-collection", { id: type.id, name: type.name });
                       }}
                     >
                       <CView style={{ gap: 5 }}>
@@ -211,8 +210,10 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         )}
 
         <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
-          <CText style={{ fontSize: "md", fontWeight: "300" }}>
+          <CView style={{ gap: 5 }}>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
+          </CView>
+          <CText style={{ fontSize: "lg", fontWeight: "300" }}>
             {t("group.environment-counts", "Arviointikerrat {{by_environments_string}}", {
               by_environments_string: getEnvironmentTranslation(t, "by-environments", group.subject.code).toLocaleLowerCase(),
             })}
@@ -243,7 +244,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         <CollectionStatistics subjectCode={group.subject.code} moduleInfo={group.currentModule.info} collections={classParticipationCollections} />
         {objectives.length > 0 && (
           <CView style={{ gap: 10 }}>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.objective-counts", "Arviointikerrat tavoitteittain")}</CText>
+            <CText style={{ fontSize: "lg", fontWeight: "300" }}>{t("group.objective-counts", "Arviointikerrat tavoitteittain")}</CText>
             <StyledBarChart data={learningObjectivesAndCounts} style={{ height: 200 }} />
             <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
               {learningObjectivesAndCounts.map((objAndCount, idx) => (

@@ -63,8 +63,8 @@ export default function StatisticsFilterMenu({
           ))}
         </CView>
       </CModal>
-      <CView style={{ flexDirection: "row" }}>
-        <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>{title}</CText>
+      <CView style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+        <CText style={{ flex: 1, fontSize: "lg", fontWeight: "300" }}>{title}</CText>
         <CButton
           size="small"
           variant="outline"

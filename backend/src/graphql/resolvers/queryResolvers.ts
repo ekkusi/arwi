@@ -8,6 +8,7 @@ import {
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
   checkAuthenticatedByTeacher,
+  checkAuthenticatedByType,
 } from "../utils/auth";
 
 const resolvers: QueryResolvers<CustomContext> = {
@@ -37,6 +38,10 @@ const resolvers: QueryResolvers<CustomContext> = {
   getCollection: async (_, { id }, { dataLoaders, user }) => {
     await checkAuthenticatedByCollection(user, id);
     return dataLoaders.collectionLoader.load(id);
+  },
+  getType: async (_, { id }, { dataLoaders, user }) => {
+    await checkAuthenticatedByType(user, id);
+    return dataLoaders.collectionTypeLoader.load(id);
   },
   getStudent: async (_, { id }, { user, dataLoaders }) => {
     await checkAuthenticatedByStudent(user, id);

@@ -42,28 +42,37 @@ const DefaultEvaluationCollection_GetCollection_Query = graphql(`
   }
 `);
 
+const DefaultEvaluationCollection_GetCollectionType_Query = graphql(`
+  query DefaultEvaluationCollection_GetCollectionType($typeId: ID!) {
+    getType(id: $typeId) {
+      id
+      category
+      name
+      weight
+    }
+  }
+`);
+
 export default function DefaultEvaluationCollection({ route: { params } }: NativeStackScreenProps<HomeStackParams, "default-evaluation-collection">) {
   const { t } = useTranslation();
-  const { data, loading } = useQuery(DefaultEvaluationCollection_GetCollection_Query, {
-    variables: { collectionId: params.id },
+  const { data, loading } = useQuery(DefaultEvaluationCollection_GetCollectionType_Query, {
+    variables: { typeId: params.id },
   });
 
   if (loading || !data) return <LoadingIndicator />;
 
-  const collection = data.getCollection;
+  const type = data.getType;
 
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
       <CScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }} showsVerticalScrollIndicator={false}>
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
           <CView>
-            <CText style={{ fontSize: "title", fontWeight: "500" }}>{collection.type.name}</CText>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>
-              {getCollectionTypeTranslation(t, collection.type.category as CollectionTypeCategory)}
-            </CText>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{type.name}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{getCollectionTypeTranslation(t, type.category as CollectionTypeCategory)}</CText>
             <CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{`${t("weight-value", "Painoarvo")}: `}</CText>
-              <CText style={{ fontSize: "md", fontWeight: "500" }}>{`${Math.round(collection.type.weight * 100)} / 100 %`}</CText>
+              <CText style={{ fontSize: "md", fontWeight: "500" }}>{`${Math.round(type.weight)} / 100 %`}</CText>
             </CText>
           </CView>
         </CView>

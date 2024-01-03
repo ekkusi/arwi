@@ -34,6 +34,25 @@ export const checkAuthenticatedByCollection = async (user: User, collectionId: s
   if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointikokoelma ei kuulu sinulle");
 };
 
+export const checkAuthenticatedByType = async (user: User, typeId: string) => {
+  if (!user) throw new AuthenticationError();
+
+  const matchingGroup = await prisma.group.findFirstOrThrow({
+    where: {
+      collectionTypes: {
+        some: {
+          id: typeId,
+        },
+      },
+    },
+    select: {
+      teacherId: true,
+    },
+  });
+
+  if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointisisältö ei kuulu sinulle");
+};
+
 export const checkAuthenticatedByStudent = async (user: User, studentId: string) => {
   if (!user) throw new AuthenticationError();
   const matchingGroup = await prisma.group.findFirstOrThrow({
