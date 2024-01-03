@@ -13,4 +13,4 @@ type Override<T, O extends Partial<Record<keyof T, any>>> = Pick<T, Exclude<keyo
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
-type WithTypename<T, K> = T & { __typename: K };
+type WithTypename<T, K extends T["__typename"]> = T & { __typename: K };
