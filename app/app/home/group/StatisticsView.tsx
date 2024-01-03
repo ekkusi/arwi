@@ -4,7 +4,8 @@ import { getEnvironmentsByLevel, getEvaluableLearningObjectives } from "arwi-bac
 import React, { useMemo } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
-import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
+import { isClassParticipationCollection, isDefaultCollection } from "arwi-backend/src/types/typeGuards";
+import { Alert } from "react-native";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { getPredefinedColors, subjectToIcon } from "../../../helpers/dataMappers";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
@@ -15,8 +16,9 @@ import CollectionStatistics from "../../../components/charts/CollectionStatistic
 import CButton from "../../../components/primitives/CButton";
 import { COLORS } from "../../../theme";
 import { GroupNavigationProps } from "./types";
-import { getEnvironmentTranslation } from "../../../helpers/translation";
+import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
 import Card from "../../../components/Card";
+import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
   const { t } = useTranslation();
@@ -31,6 +33,10 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
     evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "ClassParticipationCollection">>(
       isClassParticipationCollection
     );
+  const otherCollections =
+    evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "DefaultCollection">>(isDefaultCollection);
+
+  const otherSelectedTypes = group.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
 
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(() => {
     const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
@@ -149,36 +155,63 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             </CView>
           </CView>
         </CView>
-        <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arviointikohteet")}</CText>
-          <CView style={{ gap: 5 }}>
-            <Card
-              style={{
-                borderColor: "primary",
-                borderWidth: 1,
-              }}
-            >
-              <CView>
-                <CText style={{ fontSize: "md", fontWeight: "500" }}>Tuntityöskentely</CText>
-                <CText style={{ fontSize: "sm", fontWeight: "300" }}>Jatkuvasti arvioitava</CText>
-              </CView>
-            </Card>
-            <Card
-              style={{
-                borderColor: "primary",
-                borderWidth: 1,
-              }}
-            >
-              <CView>
-                <CText style={{ fontSize: "md", fontWeight: "500" }}>Geometrian koe</CText>
-                <CText style={{ fontSize: "sm", fontWeight: "300" }}>Koe, kerran arvioitava</CText>
-              </CView>
-            </Card>
+        {otherSelectedTypes.length > 0 && (
+          <CView style={{ gap: 20 }}>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arviointikohteet")}</CText>
+            <CView style={{ gap: 5 }}>
+              {otherSelectedTypes.map((type) => {
+                const evaluation = otherCollections.find((coll) => coll.type.id === type.id);
+                return (
+                  <Card
+                    style={{
+                      borderColor: "primary",
+                      borderWidth: 1,
+                    }}
+                  >
+                    <CTouchableOpacity
+                      style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
+                      onPress={() => {
+                        if (evaluation) {
+                          navigation.navigate("default-evaluation-collection", { id: evaluation.id, name: type.name });
+                        } else {
+                          Alert.alert("Evaluate!");
+                        }
+                      }}
+                    >
+                      <CView style={{ gap: 5 }}>
+                        <CText style={{ fontSize: "md", fontWeight: "500" }}>{type.name}</CText>
+                        <CText>
+                          {type.category === "CLASS_PARTICIPATION" ? (
+                            <CText />
+                          ) : (
+                            <CText style={{ fontSize: "sm", color: "gray" }}>
+                              {getCollectionTypeTranslation(t, type.category as CollectionTypeCategory)},{" "}
+                            </CText>
+                          )}
+                          <CText style={{ fontSize: "sm", color: "gray" }}>
+                            {type.category === "CLASS_PARTICIPATION"
+                              ? t("evaluated-continuously", "jatkuvasti arvioitava")
+                              : t("evaluated-once", "kerran arvioitava")}
+                          </CText>
+                        </CText>
+                      </CView>
+                      {!evaluation && (
+                        <CButton
+                          variant="empty"
+                          textStyle={{ color: "primary", fontSize: "sm", fontWeight: "500" }}
+                          title={t("evaluate", "Arvioi").toLocaleUpperCase()}
+                        />
+                      )}
+                    </CTouchableOpacity>
+                  </Card>
+                );
+              })}
+            </CView>
           </CView>
-        </CView>
+        )}
 
         <CView style={{ gap: 10 }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{getEnvironmentTranslation(t, "environments", group.subject.code)}</CText>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>
             {t("group.environment-counts", "Arviointikerrat {{by_environments_string}}", {
               by_environments_string: getEnvironmentTranslation(t, "by-environments", group.subject.code).toLocaleLowerCase(),
@@ -207,15 +240,9 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             ))}
           </CView>
         </CView>
-        <CollectionStatistics
-          title={t("group.evaluation-means-title", "Arvioinnit")}
-          subjectCode={group.subject.code}
-          moduleInfo={group.currentModule.info}
-          collections={classParticipationCollections}
-        />
+        <CollectionStatistics subjectCode={group.subject.code} moduleInfo={group.currentModule.info} collections={classParticipationCollections} />
         {objectives.length > 0 && (
           <CView style={{ gap: 10 }}>
-            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("group.objectives", "Tavoitteet")}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.objective-counts", "Arviointikerrat tavoitteittain")}</CText>
             <StyledBarChart data={learningObjectivesAndCounts} style={{ height: 200 }} />
             <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
@@ -236,7 +263,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
           <CButton
             shadowed
-            title={t("new-evaluation", "Uusi arviointi")}
+            title={t("new-class-evaluation", "Uusi tuntiarviointi")}
             onPress={() =>
               navigation.navigate("collection-create", { groupId: group.id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION })
             }

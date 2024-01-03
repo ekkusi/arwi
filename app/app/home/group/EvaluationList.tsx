@@ -94,7 +94,7 @@ export default function EvaluationList({ getGroup: group, navigation }: GroupOve
         <Animated.View style={[{ position: "absolute", bottom: 20, right: 15, backgroundColor: "rgba(0,0,0,0)" }, newEvaluationButtonStyle]}>
           <CButton
             shadowed
-            title={t("new-evaluation", "Uusi arviointi")}
+            title={t("new-class-evaluation", "Uusi tuntiarviointi")}
             onPress={() =>
               navigation.navigate("collection-create", { groupId: group.id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION })
             }

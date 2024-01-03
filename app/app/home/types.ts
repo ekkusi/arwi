@@ -18,6 +18,10 @@ export type HomeStackParams = {
     id: string;
     name: string;
   };
+  "default-evaluation-collection": {
+    id: string;
+    name: string;
+  };
   collection: {
     id: string;
     date: string;

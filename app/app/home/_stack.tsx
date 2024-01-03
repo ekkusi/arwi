@@ -23,6 +23,7 @@ import GroupHeaderRightButton from "./GroupHeaderRightButton";
 import CollectionHeaderRightButton from "./CollectionHeaderRightButton";
 import StudentHeaderRightButton from "./StudentHeaderRightButton";
 import StudentFeedbackView from "./student/feedback";
+import DefaultEvaluationCollection from "./group/DefaultEvaluationCollection";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -124,6 +125,13 @@ export default function HomeStack() {
       <HomeStackNavigator.Screen name="profile" component={ProfileView} options={{ title: t("profile", "Profiili") }} />
       <HomeStackNavigator.Screen name="edit-all-evaluations" component={CollectionEditAllEvaluationsView} options={{ title: t("edit", "Muokkaa") }} />
       <HomeStackNavigator.Screen name="archive" component={ArchivePage} options={{ title: t("archive", "Arkisto") }} />
+      <HomeStackNavigator.Screen
+        name="default-evaluation-collection"
+        component={DefaultEvaluationCollection}
+        options={(props) => {
+          return { title: props.route.params.name };
+        }}
+      />
       <HomeStackNavigator.Group screenOptions={{ presentation: "modal" }}>
         <HomeStackNavigator.Screen name="learning-objective" component={LearningObjective} options={({ route }) => ({ title: route.params.code })} />
       </HomeStackNavigator.Group>

@@ -50,6 +50,9 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
         evaluationCollections {
           id
           date
+          type {
+            id
+          }
           __typename
           ... on ClassParticipationCollection {
             environment {
@@ -73,6 +76,12 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           }
         }
       }
+      collectionTypes {
+        id
+        category
+        name
+        weight
+      }
     }
   }
 `);
@@ -89,7 +98,7 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
   const { t } = useTranslation();
   const [routes] = useState([
     { key: "statistics", title: t("group.statistics", "Tiedot") },
-    { key: "evaluations", title: t("group.evaluations", "Arvioinnit") },
+    { key: "evaluations", title: t("group.evaluations", "Tuntiarvioinnit") },
     { key: "students", title: t("group.students", "Oppilaat") },
     { key: "objectives", title: t("group.objectives", "Tavoitteet") },
   ]);
