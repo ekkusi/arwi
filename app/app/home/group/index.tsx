@@ -16,6 +16,7 @@ import StatisticsView from "./StatisticsView";
 import EvaluationList from "./EvaluationList";
 import ObjectiveList from "./ObjectiveList";
 import StudentList from "./StudentList";
+import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 
 const GroupOverviewPage_GetGroup_Query = graphql(`
   query GroupOverviewPage_GetGroup($groupId: ID!) {
@@ -68,7 +69,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
               }
               type
             }
-            ...CollectionsLineChart_EvaluationCollection
+            ...CollectionStatistics_EvaluationCollection
           }
         }
       }

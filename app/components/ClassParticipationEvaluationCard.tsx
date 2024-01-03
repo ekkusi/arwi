@@ -7,7 +7,7 @@ import Animated from "react-native-reanimated";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "react-native-gesture-handler";
 import Constants from "expo-constants";
-import { CreateEvaluationInput, UpdateEvaluationInput } from "../gql/graphql";
+import { CreateClassParticipationEvaluationInput, UpdateClassParticipationEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 import { COLORS } from "../theme";
@@ -20,13 +20,13 @@ import { graphql } from "../gql";
 import { useToast } from "../hooks-and-providers/ToastProvider";
 import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";
 
-export type Evaluation = Omit<CreateEvaluationInput, "studentId"> & {
+export type Evaluation = Omit<CreateClassParticipationEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
     currentModuleEvaluations: Pick<Evaluation, "notes">[];
   };
 };
 
-export type EvaluationToUpdate = UpdateEvaluationInput & {
+export type EvaluationToUpdate = UpdateClassParticipationEvaluationInput & {
   student: Pick<Student, "id" | "name"> & {
     currentModuleEvaluations: Pick<Evaluation, "notes">[];
   };
@@ -37,20 +37,26 @@ type EvaluationData = Omit<Evaluation | EvaluationToUpdate, "student">;
 export type EvaluationPropKey = keyof EvaluationData;
 export type EvaluationNoNotesPropKey = keyof Omit<EvaluationData, "notes">;
 
-// NOTE: For whatever reason you shouldn't use CView props with the EvaluationCards. This messes the memoization and causes unnecessary renders when using cards in a list.
-// If styling or other is needed, wrap the EvaluationCard in other CView
-type UpdateEvaluationCardProps = Omit<EvaluationCardProps, "hasParticipationToggle" | "evaluation" | "onChanged"> & {
+// NOTE: For whatever reason you shouldn't use CView props with the ClassParticipationEvaluationCards. This messes the memoization and causes unnecessary renders when using cards in a list.
+// If styling or other is needed, wrap the ClassParticipationEvaluationCard in other CView
+type UpdateClassParticipationEvaluationCardProps = Omit<
+  ClassParticipationEvaluationCardProps,
+  "hasParticipationToggle" | "evaluation" | "onChanged"
+> & {
   evaluation: EvaluationToUpdate;
   onChanged?: (evaluation: EvaluationToUpdate) => void;
 };
 
-type CreateEvaluationCardProps = Omit<EvaluationCardProps, "hasParticipationToggle" | "evaluation" | "onChanged"> & {
+type CreateClassParticipationEvaluationCardProps = Omit<
+  ClassParticipationEvaluationCardProps,
+  "hasParticipationToggle" | "evaluation" | "onChanged"
+> & {
   evaluation: Evaluation;
   onChanged?: (evaluation: Evaluation) => void;
   isActive: boolean;
 };
 
-type EvaluationCardProps = {
+type ClassParticipationEvaluationCardProps = {
   hasParticipationToggle?: boolean;
   evaluation: Evaluation | EvaluationToUpdate;
   date?: string;
@@ -63,8 +69,8 @@ type EvaluationCardProps = {
   isActive?: boolean;
 };
 
-const EvaluationCard_FixTextGrammatics_Mutation = graphql(`
-  mutation EvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
+const ClassParticipationEvaluationCard_FixTextGrammatics_Mutation = graphql(`
+  mutation ClassParticipationEvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
     fixTextGrammatics(studentId: $studentId, text: $text)
   }
 `);
@@ -77,7 +83,7 @@ const EXTRA_DEVICE_PADDING = Platform.OS === "ios" ? 43 : 49;
 // NOTE: This is calculated manually and tested in a few devices. If the evaluation view UI gets broken on some devices, this might be the culprit.
 export const CARD_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT - EXTRA_DEVICE_PADDING;
 
-function EvaluationCard({
+function ClassParticipationEvaluationCard({
   onChanged,
   evaluation,
   date,
@@ -88,13 +94,13 @@ function EvaluationCard({
   hasParticipationToggle = true,
   height = "auto",
   isActive = true,
-}: EvaluationCardProps) {
+}: ClassParticipationEvaluationCardProps) {
   const [notes, setNotes] = useState(() => evaluation.notes || "");
   const [previousNotes, setPreviousNotes] = useState<string | undefined>(undefined);
   const [newSpeechObtained, setNewSpeechObtained] = useState(false);
   const [data, setData] = useState<Omit<Evaluation | EvaluationToUpdate, "notes">>(evaluation);
 
-  const [fixTextGrammatics, { loading: isFixingText }] = useMutation(EvaluationCard_FixTextGrammatics_Mutation);
+  const [fixTextGrammatics, { loading: isFixingText }] = useMutation(ClassParticipationEvaluationCard_FixTextGrammatics_Mutation);
 
   const speechRef = useRef<SpeechToTextInputHandle>(null);
   const inputRef = useRef<TextInput>(null);
@@ -297,7 +303,11 @@ function EvaluationCard({
   );
 }
 
-export function CreateEvaluationCard({ evaluation, onChanged: onChangedCallback, ...rest }: CreateEvaluationCardProps) {
+export function CreateClassParticipationEvaluationCard({
+  evaluation,
+  onChanged: onChangedCallback,
+  ...rest
+}: CreateClassParticipationEvaluationCardProps) {
   const [_, setEvaluation] = useState(evaluation);
 
   const onChanged = useCallback(
@@ -314,12 +324,16 @@ export function CreateEvaluationCard({ evaluation, onChanged: onChangedCallback,
     [onChangedCallback]
   );
 
-  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} {...rest} />;
+  return <ClassParticipationEvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle={false} {...rest} />;
 }
 
-export const CreateEvaluationCardMemoed = memo(CreateEvaluationCard);
+export const CreateClassParticipationEvaluationCardMemoed = memo(CreateClassParticipationEvaluationCard);
 
-export function UpdateEvaluationCard({ evaluation, onChanged: onChangedCallback, ...rest }: UpdateEvaluationCardProps) {
+export function UpdateClassParticipationEvaluationCard({
+  evaluation,
+  onChanged: onChangedCallback,
+  ...rest
+}: UpdateClassParticipationEvaluationCardProps) {
   const [_, setEvaluation] = useState(evaluation);
 
   // NOTE: This is a bit hacky, but it works. The problem is that the evaluation object is not updated when the user changes the notes so have to get updated data through setState callback.
@@ -337,7 +351,7 @@ export function UpdateEvaluationCard({ evaluation, onChanged: onChangedCallback,
     [onChangedCallback]
   );
 
-  return <EvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle {...rest} />;
+  return <ClassParticipationEvaluationCard evaluation={evaluation} onChanged={onChanged} hasParticipationToggle {...rest} />;
 }
 
-export const UpdateEvaluationCardMemoed = memo(UpdateEvaluationCard);
+export const UpdateClassParticipationEvaluationCardMemoed = memo(UpdateClassParticipationEvaluationCard);
