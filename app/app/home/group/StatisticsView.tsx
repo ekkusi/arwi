@@ -4,6 +4,7 @@ import { getEnvironmentsByLevel, getEvaluableLearningObjectives } from "arwi-bac
 import React, { useMemo } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
+import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { getPredefinedColors, subjectToIcon } from "../../../helpers/dataMappers";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
@@ -24,6 +25,11 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
 
   const objectives = getEvaluableLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const colorPalette = getPredefinedColors(objectives.length);
+  const { evaluationCollections } = group.currentModule;
+  const classParticipationCollections =
+    evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "ClassParticipationCollection">>(
+      isClassParticipationCollection
+    );
 
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(() => {
     const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
@@ -32,13 +38,10 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
       return {
         x: environment.label.fi,
         color: environment.color,
-        y: group.currentModule.evaluationCollections.reduce(
-          (val, evaluation) => (evaluation.environment.code === environment.code ? val + 1 : val),
-          0
-        ),
+        y: classParticipationCollections.reduce((val, evaluation) => (evaluation.environment.code === environment.code ? val + 1 : val), 0),
       };
     });
-  }, [group.currentModule.evaluationCollections, group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey]);
+  }, [classParticipationCollections, group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey]);
 
   const learningObjectivesAndCounts: StyledBarChartDataType[] = useMemo(
     () =>
@@ -46,13 +49,13 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         return {
           x: `${objective.code}: ${objective.label.fi}`,
           color: colorPalette[idx],
-          y: group.currentModule.evaluationCollections.reduce(
+          y: classParticipationCollections.reduce(
             (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
             0
           ),
         };
       }),
-    [group, objectives, colorPalette]
+    [objectives, colorPalette, classParticipationCollections]
   );
 
   const translateY = useSharedValue(0);
@@ -180,7 +183,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           title={t("group.evaluation-means-title", "Arvioinnit")}
           subjectCode={group.subject.code}
           moduleInfo={group.currentModule.info}
-          collections={group.currentModule.evaluationCollections}
+          collections={classParticipationCollections}
         />
         {objectives.length > 0 && (
           <CView style={{ gap: 10 }}>

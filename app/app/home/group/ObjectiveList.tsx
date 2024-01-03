@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import React from "react";
 import { getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import { LearningObjectiveType } from "arwi-backend/src/types";
+import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
@@ -16,10 +17,16 @@ export default function ObjectiveList({ getGroup: group, navigation }: GroupOver
   const objectives = getLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const { t } = useTranslation();
 
+  const { evaluationCollections } = group.currentModule;
+  const classParticipationCollections =
+    evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "ClassParticipationCollection">>(
+      isClassParticipationCollection
+    );
+
   const learningObjectiveCounts = objectives.map((objective) => {
     return {
       ...objective,
-      count: group.currentModule.evaluationCollections.reduce(
+      count: classParticipationCollections.reduce(
         (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
         0
       ),
