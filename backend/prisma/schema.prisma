@@ -54,7 +54,7 @@ model EvaluationCollection {
   learningObjectiveCodes  String[]
   description             String?
   evaluations             Evaluation[]
-  environmentCode         String
+  environmentCode         String?
   module                  Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   moduleId                String
 }
@@ -64,10 +64,10 @@ model Evaluation {
   student                Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
   wasPresent             Boolean              @default(true)
   studentId              String
-  skillsRating           Int?
-  behaviourRating        Int?
+  skillsRating           Int? // For CLASS_PARTICIPATION collection type 
+  behaviourRating        Int? // For CLASS_PARTICIPATION collection type
+  generalRating          Float? // For other collections types
   notes                  String?
-  isStellar              Boolean              @default(false)
   evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id], onDelete: Cascade)
   evaluationCollectionId String
 }

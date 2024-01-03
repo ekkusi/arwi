@@ -1,9 +1,9 @@
-import { useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
+import { isClassParticipationEvaluation } from "arwi-backend/src/types/typeGuards";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
@@ -50,21 +50,29 @@ const StudentPage_GetStudent_Query = graphql(`
         id
         notes
         wasPresent
-        behaviourRating
-        skillsRating
-        isStellar
-        collection {
-          id
-          environment {
-            code
-            label {
-              fi
+        __typename
+        ... on ClassParticipationEvaluation {
+          behaviourRating
+          skillsRating
+          collection {
+            environment {
+              code
+              label {
+                fi
+              }
             }
           }
+          ...EvaluationsLineChart_Evaluation
+          ...EvaluationsBarChart_Evaluation
+          ...EvaluationsHistogram_Evaluation
+          ...EvaluationsAccordion_Evaluation
         }
-        ...EvaluationsAccordion_Evaluation
-        ...EvaluationsLineChart_Evaluation
-        ...EvaluationsBarChart_Evaluation
+        ... on DefaultEvaluation {
+          rating
+        }
+        collection {
+          id
+        }
       }
     }
   }
@@ -76,6 +84,12 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   const { data } = useQuery(StudentPage_GetStudent_Query, { variables: { studentId } });
   const { t } = useTranslation();
 
+  if (!data) return <LoadingIndicator />;
+  const { getStudent: student } = data;
+  const evaluations = student.currentModuleEvaluations;
+
+  const classParticipationEvaluations =
+    evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
   const {
     absencesAmount,
     presencesAmount,
@@ -87,14 +101,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     behaviourMedian,
     behaviourMode,
     behaviourMeanByEnvironments,
-  } = useMemo(() => {
-    const evaluations = data?.getStudent.currentModuleEvaluations ?? [];
-    return analyzeEvaluations([...evaluations]);
-  }, [data]);
-
-  if (!data) return <LoadingIndicator />;
-  const { getStudent: student } = data;
-  const evaluations = student.currentModuleEvaluations;
+  } = analyzeEvaluations([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
 
   return (
@@ -120,10 +127,14 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           </CView>
           <CView style={{ width: "100%", gap: 20 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("statistics", "Tilastot")}</CText>
-            <EvaluationsBarChart evaluations={evaluations} subjectCode={student.group.subject.code} />
+            <EvaluationsBarChart evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} />
           </CView>
-          <EvaluationsHistogram evaluations={evaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
-          <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={evaluations} moduleInfo={student.group.currentModule.info} />
+          <EvaluationsHistogram evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
+          <EvaluationStatistics
+            subjectCode={student.group.subject.code}
+            evaluations={classParticipationEvaluations}
+            moduleInfo={student.group.currentModule.info}
+          />
           <CView style={{ gap: 10 }}>
             <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10 }}>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("characteristics", "Tunnusluvut")}</CText>
@@ -207,7 +218,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
           <EvaluationsAccordion
             allowEditing={!archived}
-            evaluations={student.currentModuleEvaluations}
+            evaluations={classParticipationEvaluations}
             onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
           />
           {!archived && (

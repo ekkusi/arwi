@@ -1,8 +1,18 @@
-import { Student } from "@prisma/client";
+import { CollectionTypeCategory, Student } from "@prisma/client";
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
+import {
+  TestGroup,
+  TestTeacher,
+  createTestEvaluation,
+  createTestEvaluationCollection,
+  createTestGroup,
+  createTestUserAndLogin,
+  testLogin,
+} from "../testHelpers";
+import { studentLoader, studentsByGroupLoader } from "../../graphql/dataLoaders/student";
+import { evaluationLoader, evaluationsByCollectionLoader } from "../../graphql/dataLoaders/evaluation";
 
 describe("deleteStudent", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -75,5 +85,47 @@ describe("deleteStudent", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain(`Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t.`);
+  });
+
+  it("should update DataLoaders after deleting a student", async () => {
+    // Create a collection and evaluation for the student
+    const collection = await createTestEvaluationCollection(
+      group.currentModuleId,
+      group.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!.id
+    );
+    const evaluation = await createTestEvaluation(collection.id, student.id);
+
+    // Fetch initial state from DataLoaders
+    const studentFromDataLoaderBeforeDelete = await studentLoader.load(student.id);
+    const studentsFromGroupLoaderBeforeDelete = await studentsByGroupLoader.load(group.id);
+    expect(studentFromDataLoaderBeforeDelete).toEqual(student);
+    expect(studentsFromGroupLoaderBeforeDelete).toContainEqual(student);
+
+    // Load evaluations from DataLoaders to cache them
+    await Promise.all([evaluationLoader.load(evaluation.id), evaluationsByCollectionLoader.load(collection.id)]);
+
+    // Delete the student
+    const deleteStudentQuery = graphql(`
+      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {
+        deleteStudent(studentId: $studentId) {
+          id
+        }
+      }
+    `);
+
+    await graphqlRequest(deleteStudentQuery, { studentId: student.id });
+
+    // Expect to throw an error when trying to fetch the deleted student from the DataLoader
+    await expect(studentLoader.load(student.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t.");
+
+    // Fetch updated data from DataLoaders and expect the deleted student to be missing
+    const updatedStudentsFromGroupLoader = await studentsByGroupLoader.load(group.id);
+    expect(updatedStudentsFromGroupLoader).not.toContainEqual(expect.objectContaining({ id: student.id }));
+
+    // Check if evaluation DataLoaders are cleared
+    await Promise.all([
+      expect(evaluationLoader.load(evaluation.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
+      expect(evaluationsByCollectionLoader.load(collection.id)).resolves.not.toContainEqual(expect.objectContaining({ id: evaluation.id })),
+    ]);
   });
 });

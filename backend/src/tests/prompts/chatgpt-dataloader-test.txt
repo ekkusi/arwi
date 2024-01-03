@@ -1,0 +1,106 @@
+I want to you to update my test suites for my GraphQL-API. I have implemented DataLoaders for the API. Write the tests to test that the DataLoader gets updated with the mutations. Only write the new test cases. Here is some context for you:
+
+Here is my old test suite:
+
+
+
+And here is the resolver and the functions it is using:
+
+
+
+And here is the DataLoader(s):
+
+
+
+Here are two examples of a updated test casees that check the data loaders that you can use as a base:
+
+  it("should reflect updates in DataLoader after updating evaluations", async () => {
+    // Fetch the evaluation and compare the data
+    const evaluationFromDataLoader = await evaluationLoader.load(evaluation.id);
+    const evaluationsFromCollectionLoader = await evaluationsByCollectionLoader.load(collection.id);
+    const matchingEvaluation = evaluationsFromCollectionLoader.find((e) => e.id === evaluation.id);
+    expect(evaluationFromDataLoader).toEqual(evaluation);
+    expect(matchingEvaluation).toEqual(evaluation);
+
+    const updatedData = [
+      {
+        id: evaluation.id,
+        wasPresent: true,
+        skillsRating: 6,
+        behaviourRating: 6,
+        notes: "Updated notes",
+      },
+    ];
+
+    const updateQuery = graphql(`
+      mutation UpdateEvaluationsDataLoader($data: [UpdateEvaluationInput!]!, $collectionId: ID!) {
+        updateEvaluations(data: $data, collectionId: $collectionId)
+      }
+    `);
+
+    const result = await graphqlRequest(updateQuery, { data: updatedData, collectionId: collection.id });
+
+    expect(result.data?.updateEvaluations).toEqual(1);
+
+    // Fetch the evaluation and compare the data
+    const updatedEvaluationFromDataLoader = await evaluationLoader.load(evaluation.id);
+    const updatedEvaluationsFromCollectionLoader = await evaluationsByCollectionLoader.load(collection.id);
+    const matchingUpdatedEvaluation = updatedEvaluationsFromCollectionLoader.find((e) => e.id === evaluation.id);
+    expect(updatedEvaluationFromDataLoader).toEqual({ ...evaluation, ...updatedData[0] });
+    expect(matchingUpdatedEvaluation).toEqual({ ...evaluation, ...updatedData[0] });
+  });
+
+  it("should update DataLoaders and throw errors after deleting a group and its related entities", async () => {
+    // Create a collection and evaluation
+    const collection = await createTestEvaluationCollection(
+      group.currentModuleId,
+      group.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!.id
+    );
+    const evaluation = await createTestEvaluation(collection.id, student.id);
+
+    // Fetch initial state from DataLoaders
+    const groupFromGroupLoaderBeforeDelete = await groupLoader.load(group.id);
+    const groupsFromTeacherLoaderBeforeDelete = await groupsByTeacherLoader.load(teacher.id);
+    expect(groupFromGroupLoaderBeforeDelete).toBeDefined();
+    expect(groupsFromTeacherLoaderBeforeDelete).toContainEqual(expect.objectContaining({ id: group.id }));
+
+    // Assuming the group has modules, collections, evaluations, and students linked to it
+    await Promise.all([
+      moduleLoader.load(group.currentModuleId),
+      modulesByGroupLoader.load(group.id),
+      collectionLoader.load(collection.id),
+      collectionsByModuleLoader.load(group.currentModuleId),
+      evaluationLoader.load(evaluation.id),
+      evaluationsByCollectionLoader.load(collection.id),
+    ]);
+
+    // Delete the group
+    const deleteGroupQuery = graphql(`
+      mutation DeleteGroupDataLoaderCheck($groupId: ID!) {
+        deleteGroup(groupId: $groupId) {
+          id
+        }
+      }
+    `);
+
+    await graphqlRequest(deleteGroupQuery, { groupId: group.id });
+
+    // Assert DataLoader errors for deleted group and its related entities
+    await Promise.all([
+      expect(groupLoader.load(group.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
+      expect(groupsByTeacherLoader.load(teacher.id)).resolves.not.toContainEqual(expect.objectContaining({ id: group.id })),
+      expect(moduleLoader.load(group.currentModuleId)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
+      expect(modulesByGroupLoader.load(group.id)).resolves.not.toContainEqual(expect.objectContaining({ id: group.currentModuleId })),
+      expect(collectionLoader.load(collection.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
+      expect(collectionsByModuleLoader.load(group.currentModuleId)).resolves.not.toContainEqual(expect.objectContaining({ id: collection.id })),
+      expect(evaluationLoader.load(evaluation.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
+      expect(evaluationsByCollectionLoader.load(collection.id)).resolves.not.toContainEqual(expect.objectContaining({ id: evaluation.id })),
+    ]);
+  });
+
+Keep these things in mind:
+- remember to test all the loaders that are affected by the mutation, not just one loader (see given example test suite)
+- remember to test that the affected data loaders are cleared as well after delete (see given example of deleteStudent) 
+- query/mutation names have to be unique (see sample test suite)
+- only write the new test cases, no other information is needed
+- after delete the test should expect a error to be thrown from dataloader

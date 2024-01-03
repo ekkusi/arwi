@@ -12,3 +12,5 @@ declare type Maybe<T> = T | null;
 type Override<T, O extends Partial<Record<keyof T, any>>> = Pick<T, Exclude<keyof T, keyof O>> & O;
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+type WithTypename<T, K> = T & { __typename: K };

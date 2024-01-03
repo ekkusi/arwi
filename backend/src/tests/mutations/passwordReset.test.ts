@@ -1,4 +1,5 @@
 import { compare } from "bcryptjs";
+import supertest from "supertest";
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
@@ -11,6 +12,7 @@ import {
   REQUEST_PASSWORD_RESET_EXPIRY_IN_MS,
   RESET_CODE_EXPIRY_TIME_MS,
 } from "../../graphql/utils/validators";
+import { teacherLoader } from "../../graphql/dataLoaders/teacher";
 
 jest.mock("@/utils/passwordRecovery");
 
@@ -18,26 +20,39 @@ describe("Password Reset Flow", () => {
   let graphqlRequest: TestGraphQLRequest;
   let teacher: TestTeacher;
   const mockCode = "123456";
+  let request: supertest.SuperAgentTest;
 
-  beforeAll(async () => {
-    ({ graphqlRequest } = await createServer());
-    teacher = await createTestUserAndLogin(graphqlRequest);
-    (generateCode as jest.Mock).mockReturnValue(mockCode);
-  });
-
-  afterEach(async () => {
-    jest.clearAllMocks();
-  });
-
-  it("should handle the complete password reset flow", async () => {
-    // Step 1: Request Password Reset
+  const requestReset = async () => {
     const requestResetMutation = graphql(`
       mutation RequestPasswordResetValid($email: String!) {
         requestPasswordReset(email: $email)
       }
     `);
 
-    const resetResponse = await graphqlRequest(requestResetMutation, { email: teacher.email });
+    return graphqlRequest(requestResetMutation, { email: teacher.email });
+  };
+
+  beforeAll(async () => {
+    ({ graphqlRequest, request } = await createServer());
+    (generateCode as jest.Mock).mockReturnValue(mockCode);
+  });
+
+  beforeEach(async () => {
+    // Reset session
+    await request.get("/test/reset-session");
+
+    teacher = await createTestUserAndLogin(graphqlRequest);
+  });
+
+  afterEach(async () => {
+    await prisma.teacher.deleteMany();
+    jest.clearAllMocks();
+  });
+
+  it("should handle the complete password reset flow", async () => {
+    // Step 1: Request Password Reset
+    const resetResponse = await requestReset();
+
     expect(resetResponse.data?.requestPasswordReset).toBeTruthy();
     expect(sendMail).toHaveBeenCalledWith(teacher.email, "Salasanan palautus", expect.any(String));
 
@@ -110,6 +125,9 @@ describe("Password Reset Flow", () => {
   });
 
   it("should throw an error if the code is invalid", async () => {
+    // Request a reset code to set the session
+    await requestReset();
+
     const invalidCode = "invalid123";
     const verifyCodeMutation = graphql(`
       mutation VerifyPasswordResetCodeInvalid($code: String!) {
@@ -123,6 +141,9 @@ describe("Password Reset Flow", () => {
   });
 
   it("should throw an error if the code is expired", async () => {
+    // Request a reset code to set the session
+    await requestReset();
+
     // Simulate code expiry
     jest.spyOn(Date, "now").mockReturnValue(Date.now() + RESET_CODE_EXPIRY_TIME_MS + 1000);
 
@@ -138,6 +159,9 @@ describe("Password Reset Flow", () => {
   });
 
   it("should throw an error if the maximum number of reset attempts is exceeded", async () => {
+    // Request a reset code to set the session
+    await requestReset();
+
     const verifyCodeMutation = graphql(`
       mutation VerifyPasswordResetCodeExceedTries($code: String!) {
         verifyPasswordResetCode(code: $code)
@@ -155,5 +179,29 @@ describe("Password Reset Flow", () => {
     const errorResponse = await graphqlRequest(verifyCodeMutation, { code: invalidCode });
     expect(errorResponse.errors).toBeDefined();
     expect(errorResponse.errors?.[0].message).toContain("Koodia on yritetty liian monta kertaa. Generoi uusi koodi.");
+  });
+
+  it("should update the DataLoader after a password update", async () => {
+    // Request a reset code to set the session
+    await requestReset();
+
+    const newPassword = "newSecurePassword123";
+
+    // Fetch teacher's information before password update
+    const teacherBeforeUpdate = await teacherLoader.load(teacher.id);
+    expect(await compare("password", teacherBeforeUpdate.passwordHash!)).toBeTruthy();
+
+    // Step 2: Update Password
+    const updatePasswordMutation = graphql(`
+      mutation UpdatePasswordDataLoaders($newPassword: String!, $recoveryCode: String!) {
+        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)
+      }
+    `);
+
+    await graphqlRequest(updatePasswordMutation, { newPassword, recoveryCode: mockCode });
+
+    // Fetch teacher's information after password update
+    const updatedTeacher = await teacherLoader.load(teacher.id);
+    expect(await compare(newPassword, updatedTeacher.passwordHash!)).toBeTruthy();
   });
 });

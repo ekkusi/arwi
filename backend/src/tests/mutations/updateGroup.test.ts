@@ -3,6 +3,7 @@ import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { UpdateGroupInput } from "../../types";
 import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
+import { groupLoader, groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
 
 describe("updateGroup", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -96,5 +97,43 @@ describe("updateGroup", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain(`Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t.`);
+  });
+
+  it("should update DataLoaders after updating a group", async () => {
+    // Fetch the initial state of the group from the DataLoaders
+    const groupFromGroupLoaderBeforeUpdate = await groupLoader.load(groupId);
+    const groupsFromTeacherLoaderBeforeUpdate = await groupsByTeacherLoader.load(teacher.id);
+    expect(group).toEqual(expect.objectContaining(groupFromGroupLoaderBeforeUpdate));
+    expect(group).toEqual(expect.objectContaining(groupsFromTeacherLoaderBeforeUpdate[0]));
+
+    // Update the group
+    const updateData: UpdateGroupInput = {
+      name: "Updated Group Name",
+      archived: false,
+    };
+
+    const query = graphql(`
+      mutation UpdateGroupDataLoaderCheck($data: UpdateGroupInput!, $groupId: ID!) {
+        updateGroup(data: $data, groupId: $groupId) {
+          id
+          name
+          archived
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: updateData, groupId });
+    expect(response.data?.updateGroup).toBeDefined();
+    expect(response.data?.updateGroup.id).toEqual(groupId);
+    expect(response.data?.updateGroup.name).toEqual(updateData.name);
+    expect(response.data?.updateGroup.archived).toEqual(updateData.archived);
+
+    // Fetch the updated group from the DataLoaders
+    const updatedGroupFromGroupLoader = await groupLoader.load(groupId);
+    const updatedGroupsFromTeacherLoader = await groupsByTeacherLoader.load(teacher.id);
+
+    // Assert that the DataLoaders reflect the updated group information
+    expect(updatedGroupFromGroupLoader).toEqual(expect.objectContaining(updateData));
+    expect(updatedGroupsFromTeacherLoader).toContainEqual(expect.objectContaining(updateData));
   });
 });

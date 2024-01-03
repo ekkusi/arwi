@@ -20,8 +20,8 @@ import { CollectionCreationStackParams } from "./types";
 import CollectionCreationLayout from "./_layout";
 
 const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
-  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateCollectionInput!, $moduleId: ID!) {
-    createCollection(data: $createCollectionInput, moduleId: $moduleId) {
+  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+    createClassParticipationCollection(data: $createCollectionInput, moduleId: $moduleId) {
       id
       date
       description
@@ -48,7 +48,6 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
         skillsRating
         behaviourRating
         notes
-        isStellar
         student {
           id
           currentModuleEvaluations {
@@ -77,7 +76,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const scrollRef = useRef<FlatList<EvaluationData> | null>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const { generalData, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
+  const { generalData, collectionType, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
 
   const presentEvaluations = useMemo(() => {
     return evaluations?.filter((it) => it.wasPresent) || [];
@@ -110,8 +109,8 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    const { environmentCode, collectionTypeId, ...rest } = generalData;
-    if (!environmentCode || !collectionTypeId) throw new Error("Environment code or collection type id is missing, shouldn't happen at this point");
+    const { environmentCode, ...rest } = generalData;
+    if (!environmentCode) throw new Error("Environment code or collection type id is missing, shouldn't happen at this point");
 
     try {
       await createCollection({
@@ -121,13 +120,12 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
             ...rest,
             environmentCode,
             date: formatDate(generalData.date, "yyyy-MM-dd"),
-            typeId: collectionTypeId,
+            typeId: collectionType.id,
             evaluations: evaluations.map((it) => ({
               wasPresent: it.wasPresent,
               skillsRating: it.skillsRating,
               behaviourRating: it.behaviourRating,
               notes: it.notes,
-              isStellar: it.isStellar,
               studentId: it.student.id,
             })),
           },

@@ -2,6 +2,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { HomeStackParams } from "./types";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -78,7 +79,7 @@ export default function GroupHeaderRightButton({
               </MenuOption>
               <MenuOption
                 onSelect={() => {
-                  navigation.navigate("collection-create", { groupId: id });
+                  navigation.navigate("collection-create", { groupId: id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION });
                 }}
               >
                 <CText>{t("new-evaluation", "Uusi arviointi")}</CText>

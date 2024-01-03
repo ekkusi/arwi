@@ -21,20 +21,25 @@ const CollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
     getCollection(id: $collectionId) {
       id
       date
-      environment {
-        code
-        label {
-          fi
+      __typename
+      ... on ClassParticipationCollection {
+        environment {
+          code
+          label {
+            fi
+          }
+          color
         }
-        color
       }
       evaluations {
         id
         wasPresent
-        skillsRating
-        behaviourRating
+        __typename
+        ... on ClassParticipationEvaluation {
+          skillsRating
+          behaviourRating
+        }
         notes
-        isStellar
         student {
           id
           name
@@ -49,8 +54,8 @@ const CollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
 `);
 
 const CollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(`
-  mutation CollectionEvaluationsView_UpdateCollection($updateCollectionInput: UpdateCollectionInput!, $collectionId: ID!) {
-    updateCollection(data: $updateCollectionInput, collectionId: $collectionId) {
+  mutation CollectionEvaluationsView_UpdateCollection($updateCollectionInput: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+    updateClassParticipationCollection(data: $updateCollectionInput, collectionId: $collectionId) {
       id
       evaluations {
         id
@@ -58,7 +63,6 @@ const CollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(`
         skillsRating
         behaviourRating
         notes
-        isStellar
         student {
           id
           name
@@ -108,7 +112,6 @@ function CollectionEditAllEvaluationsContent({
               skillsRating: it.wasPresent ? it.skillsRating : undefined,
               behaviourRating: it.wasPresent ? it.behaviourRating : undefined,
               notes: it.wasPresent ? it.notes : undefined,
-              isStellar: it.wasPresent ? it.isStellar : undefined,
             })),
           },
         },

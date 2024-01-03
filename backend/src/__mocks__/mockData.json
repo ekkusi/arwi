@@ -436,16 +436,14 @@
           "skillsRating": 8,
           "behaviourRating": 10,
           "notes": "Liisa nautti lenkkeilystä luonnonkauniilla polulla ja jakoi mielenkiintoisia havaintojaan maisemista muiden kanssa. Hän oli hyvässä kunnossa koko lenkin ajan.",
-          "collectionId": 2,
-          "isStellar": true
+          "collectionId": 2
         },
         {
           "wasPresent": true,
           "skillsRating": 10,
           "behaviourRating": 9,
           "notes": "Liisa harjoitteli tanssin koreografiaa erittäin hyvin ja osasi seurata rytmiä. Hän auttoi muita oppimaan haastavat liikkeet ja piti tunnelman kevyenä.",
-          "collectionId": 3,
-          "isStellar": true
+          "collectionId": 3
         },
         {
           "wasPresent": false,
@@ -472,8 +470,7 @@
           "skillsRating": 7,
           "behaviourRating": 8,
           "notes": "Liisa treenasi perusvoimistelutreeniä ahkerasti, mutta tarvitsi apua muutamissa liikkeissä. Hän kuunteli ohjeita ja pyrki parantamaan suoritustaan.",
-          "collectionId": 7,
-          "isStellar": true
+          "collectionId": 7
         },
         {
           "wasPresent": true,
@@ -493,8 +490,7 @@
           "skillsRating": 9,
           "behaviourRating": 9,
           "notes": "Liisa nautti retkeilystä metsässä ja käveli reippaasti koko 10 kilometrin lenkin. Hän ihasteli luontoa ja otti valokuvia matkan varrella.",
-          "collectionId": 10,
-          "isStellar": true
+          "collectionId": 10
         },
         {
           "wasPresent": true,
@@ -515,16 +511,14 @@
           "skillsRating": 10,
           "behaviourRating": 9,
           "notes": "Liisa harjoitteli latinalaistansseja tanssitunnilla ja oppi nopeasti uudet askeleet. Hän auttoi muita oppimaan ja piti tunnelman kevyenä.",
-          "collectionId": 13,
-          "isStellar": true
+          "collectionId": 13
         },
         {
           "wasPresent": true,
           "skillsRating": 8,
           "behaviourRating": 7,
           "notes": "Liisa teki kuntoiluharjoituksia puistossa, mutta keskittyminen herpaantui ajoittain. Hän suoritti liikkeet oikein, mutta olisi voinut olla tarkkaavaisempi.",
-          "collectionId": 14,
-          "isStellar": true
+          "collectionId": 14
         },
         {
           "wasPresent": true,
@@ -545,16 +539,14 @@
           "skillsRating": 8,
           "behaviourRating": 8,
           "notes": "Liisa harjoitteli voimistelutreeniä salilla ja teki hyviä hyppyjä ja liikkeitä. Hän tarvitsi apua tasapainossa, mutta oli motivoitunut ja kuunteli ohjeita.",
-          "collectionId": 17,
-          "isStellar": true
+          "collectionId": 17
         },
         {
           "wasPresent": true,
           "skillsRating": 7,
           "behaviourRating": 9,
           "notes": "Liisa osallistui uintitreeniin ja yritti parantaa tekniikkaansa. Vaikka hän ei ollut nopein uimari, hän pysyi positiivisena ja kannusti muita osallistujia.",
-          "collectionId": 18,
-          "isStellar": true
+          "collectionId": 18
         },
         {
           "wasPresent": true,

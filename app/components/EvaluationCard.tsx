@@ -32,7 +32,7 @@ export type EvaluationToUpdate = UpdateEvaluationInput & {
   };
 };
 
-// export type EvaluationPropKey = "skillsRating" | "behaviourRating" | "notes" | "wasPresent" | "isStellar";
+// export type EvaluationPropKey = "skillsRating" | "behaviourRating" | "notes" | "wasPresent";
 type EvaluationData = Omit<Evaluation | EvaluationToUpdate, "student">;
 export type EvaluationPropKey = keyof EvaluationData;
 export type EvaluationNoNotesPropKey = keyof Omit<EvaluationData, "notes">;
@@ -101,7 +101,6 @@ function EvaluationCard({
 
   const onDataChanged = useCallback(
     (key: EvaluationNoNotesPropKey, value: any) => {
-      if (key === "isStellar") return;
       setData((prev) => ({
         ...prev,
         [key]: value,
@@ -202,7 +201,6 @@ function EvaluationCard({
           </CView>
         )}
       </CView>
-      {/* TODO: Add isStellar star-button */}
       {hasParticipationToggle && (
         <CView style={{ width: "100%" }}>
           <CView style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>

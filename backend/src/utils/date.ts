@@ -29,7 +29,7 @@ export function timeSince(date: string) {
   return { count: undefined, key: "just-now" };
 }
 
-export type DateFormat = "yyyy-MM-dd" | "dd.MM.yyyy";
+export type DateFormat = "yyyy-MM-dd" | "dd.MM.yyyy" | "dd.MM.yyyy HH:mm:ss";
 
 export const formatDate = (_date: Date | string, dateFormat: DateFormat = "dd.MM.yyyy"): string => {
   const date = typeof _date === "string" ? new Date(_date) : _date;

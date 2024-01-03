@@ -144,7 +144,11 @@ export async function createTestGroup(teacherId: string): Promise<TestGroup> {
   });
 }
 
-export const createTestEvaluationCollection = async (moduleId: string, typeId: string) => {
+export const createTestEvaluationCollection = async (
+  moduleId: string,
+  typeId: string,
+  dataOverride?: Omit<Partial<Prisma.EvaluationCollectionCreateInput>, "type" | "module" | "evaluations">
+) => {
   return prisma.evaluationCollection.create({
     data: {
       date: new Date(),
@@ -153,6 +157,7 @@ export const createTestEvaluationCollection = async (moduleId: string, typeId: s
       environmentCode: VALID_LI_ENV_CODE,
       description: "Test Description",
       learningObjectiveCodes: ["T1", "T2"],
+      ...dataOverride,
     },
   });
 };
@@ -170,7 +175,6 @@ export const createTestEvaluation = async (
       skillsRating: 5,
       behaviourRating: 4,
       notes: "Improved performance",
-      isStellar: false,
       ...dataOverride,
     },
   });

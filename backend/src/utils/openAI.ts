@@ -1,4 +1,4 @@
-import { Evaluation } from "@/types";
+import { Evaluation } from "@prisma/client";
 import matomo from "../matomo";
 import openAIClient from "@/openAIClient";
 import { formatDate } from "./date";

@@ -3,6 +3,8 @@ import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { ChangeGroupModuleInput, EducationLevel } from "../../types";
 import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
+import { modulesByGroupLoader } from "../../graphql/dataLoaders/module";
+import { groupLoader, groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
 
 describe("changeGroupModule", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -119,5 +121,46 @@ describe("changeGroupModule", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain("Annettu oppimistavoitteiden ryhmä ei ole sallittu kyseiselle koulutustasolle.");
+  });
+
+  it("should reflect updates in DataLoader after changing group module", async () => {
+    const changeGroupModuleData: ChangeGroupModuleInput = {
+      newEducationLevel: EducationLevel.PRIMARY_FOURTH,
+      newLearningObjectiveGroupKey: "three_to_six_years",
+    };
+
+    // Fetch initial group and module information from DataLoader
+    const groupBeforeChange = await groupLoader.load(groupId);
+    const groupsByTeacherBeforeChange = await groupsByTeacherLoader.load(teacher.id);
+    const modulesBeforeChange = await modulesByGroupLoader.load(groupId);
+    expect(modulesBeforeChange).toContainEqual(expect.objectContaining({ id: group.currentModuleId }));
+    expect(groupBeforeChange.currentModuleId).toEqual(group.currentModuleId);
+    expect(groupsByTeacherBeforeChange).toContainEqual(expect.objectContaining({ currentModuleId: group.currentModuleId }));
+
+    // Perform the changeGroupModule mutation
+    const changeModuleQuery = graphql(`
+      mutation ChangeGroupModuleDataLoadersCheck($data: ChangeGroupModuleInput!, $groupId: ID!) {
+        changeGroupModule(data: $data, groupId: $groupId) {
+          currentModule {
+            info {
+              educationLevel
+              learningObjectiveGroupKey
+            }
+          }
+        }
+      }
+    `);
+
+    await graphqlRequest(changeModuleQuery, { data: changeGroupModuleData, groupId });
+
+    // Fetch updated group and module information from DataLoader
+    const updatedGroup = await groupLoader.load(groupId);
+    const updatedModules = await modulesByGroupLoader.load(groupId);
+    const updatedGroupsByTeacher = await groupsByTeacherLoader.load(teacher.id);
+
+    // Assert DataLoader reflects changes
+    expect(updatedGroup.currentModuleId).not.toEqual(group.currentModuleId);
+    expect(updatedModules).toContainEqual(expect.objectContaining({ id: updatedGroup.currentModuleId }));
+    expect(updatedGroupsByTeacher).toContainEqual(expect.objectContaining({ currentModuleId: updatedGroup.currentModuleId }));
   });
 });

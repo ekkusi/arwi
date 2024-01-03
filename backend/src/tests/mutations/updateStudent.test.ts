@@ -4,6 +4,7 @@ import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { UpdateStudentInput } from "../../types";
 import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
+import { studentLoader, studentsByGroupLoader } from "../../graphql/dataLoaders/student";
 
 describe("updateStudent", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -129,5 +130,37 @@ describe("updateStudent", () => {
 
     // Clean up: delete the created duplicate student
     await prisma.student.delete({ where: { id: duplicateStudent.id } });
+  });
+
+  it("should update DataLoaders after updating a student", async () => {
+    // Fetch the initial state of the student from the DataLoaders
+    const studentFromDataLoaderBeforeUpdate = await studentLoader.load(student.id);
+    const studentsFromGroupLoaderBeforeUpdate = await studentsByGroupLoader.load(group.id);
+    expect(studentFromDataLoaderBeforeUpdate).toEqual(student);
+    expect(studentsFromGroupLoaderBeforeUpdate).toContainEqual(student);
+
+    // Update the student
+    const updateData: UpdateStudentInput = {
+      name: "Updated Student Name",
+    };
+
+    const query = graphql(`
+      mutation UpdateStudentDataLoaderCheck($data: UpdateStudentInput!, $studentId: ID!) {
+        updateStudent(data: $data, studentId: $studentId) {
+          id
+          name
+        }
+      }
+    `);
+
+    await graphqlRequest(query, { data: updateData, studentId: student.id });
+
+    // Fetch the updated student from the DataLoaders
+    const updatedStudentFromDataLoader = await studentLoader.load(student.id);
+    const updatedStudentsFromGroupLoader = await studentsByGroupLoader.load(group.id);
+
+    // Assert that the DataLoaders reflect the updated student information
+    expect(updatedStudentFromDataLoader).toEqual(expect.objectContaining(updateData));
+    expect(updatedStudentsFromGroupLoader).toContainEqual(expect.objectContaining(updateData));
   });
 });

@@ -1,21 +1,26 @@
 import { SessionData } from "express-session";
 import { compare } from "bcryptjs";
-import { Teacher } from "@prisma/client";
+import { CollectionTypeCategory, Teacher } from "@prisma/client";
 import ValidationError from "../../errors/ValidationError";
 import prisma from "@/prismaClient";
 import {
   ChangeGroupModuleInput,
-  CreateCollectionInput,
+  CreateClassParticipationCollectionInput,
+  CreateDefaultCollectionInput,
   CreateGroupInput,
   CreateStudentInput,
   CreateTeacherInput,
   EducationLevel,
   LearningObjectiveType,
-  UpdateCollectionInput,
-  UpdateEvaluationInput,
+  UpdateClassParticipationCollectionInput,
+  UpdateClassParticipationEvaluationInput,
+  UpdateDefaultEvaluationInput,
   UpdateStudentInput,
 } from "../../types";
 import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject } from "../../utils/subjectUtils";
+import { evaluationLoader } from "../dataLoaders/evaluation";
+import { collectionTypeLoader } from "../dataLoaders/collectionType";
+import { collectionLoader } from "../dataLoaders/collection";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
 
@@ -51,7 +56,19 @@ export const validateLearningObjectives = (
     throw new ValidationError(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`);
 };
 
-export const validateCreateCollectionInput = async ({ environmentCode, learningObjectiveCodes }: CreateCollectionInput, moduleId: string) => {
+export const validateCreateDefaultCollectionInput = async ({ typeId }: CreateDefaultCollectionInput) => {
+  const type = await collectionTypeLoader.load(typeId);
+  if (type.category === CollectionTypeCategory.CLASS_PARTICIPATION)
+    throw new ValidationError(`Syötetty arviointikokoelman tyyppi on väärä. Se ei saa olla 'CLASS_PARTICIPATION'.`);
+};
+
+export const validateCreateClassParticipationCollectionInput = async (
+  { environmentCode, learningObjectiveCodes, typeId }: CreateClassParticipationCollectionInput,
+  moduleId: string
+) => {
+  const type = await collectionTypeLoader.load(typeId);
+  if (type.category !== CollectionTypeCategory.CLASS_PARTICIPATION)
+    throw new ValidationError(`Syötetty arviointikokoelman tyyppi on väärä. Sen kuuluu olla 'CLASS_PARTICIPATION'.`);
   if (!getEnvironment(environmentCode)) throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
   if (learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({
@@ -77,19 +94,44 @@ export const validateCreateCollectionInput = async ({ environmentCode, learningO
   }
 };
 
-export const validateUpdateEvaluationInput = async (data: UpdateEvaluationInput) => {
-  const matchingEvaluation = await prisma.evaluation.findFirstOrThrow({
-    where: { id: data.id },
-  });
+export const validateUpdateClassParticipationEvaluationInput = async (
+  data: UpdateClassParticipationEvaluationInput,
+  validateType: boolean = true
+) => {
+  const matchingEvaluation = await evaluationLoader.load(data.id);
+
+  if (validateType) {
+    const collection = await collectionLoader.load(matchingEvaluation.evaluationCollectionId);
+    const type = await collectionTypeLoader.load(collection.typeId);
+    if (type.category !== CollectionTypeCategory.CLASS_PARTICIPATION)
+      throw new ValidationError(
+        `Arviointikokoelman tyyppi on väärä. Et voi päivittää muita kuin CLASS_PARTICIPATION arviointeja tämän endpointin kautta.`
+      );
+  }
+
   const wasPresent = data.wasPresent ?? matchingEvaluation.wasPresent;
 
   // If the student was not present, the evaluation data cannot be updated
   if (wasPresent === false && (data.behaviourRating || data.skillsRating || data.notes)) {
     throw new ValidationError(`Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää.`);
   }
+
+  if (data.behaviourRating && (data.behaviourRating < 4 || data.behaviourRating > 10)) {
+    throw new ValidationError(`Käytöksen arvosanan on oltava välillä 4-10.`);
+  }
+  if (data.skillsRating && (data.skillsRating < 4 || data.skillsRating > 10)) {
+    throw new ValidationError(`Taitojen arvosanan on oltava välillä 4-10.`);
+  }
 };
 
-export const validateUpdateEvaluationsInput = async (data: UpdateEvaluationInput[], collectionId: string) => {
+export const validateUpdateClassParticipationEvaluationsInput = async (data: UpdateClassParticipationEvaluationInput[], collectionId: string) => {
+  const collection = await collectionLoader.load(collectionId);
+  const type = await collectionTypeLoader.load(collection.typeId);
+  if (type.category !== CollectionTypeCategory.CLASS_PARTICIPATION)
+    throw new ValidationError(
+      `Arviointikokoelman tyyppi on väärä. Et voi päivittää muita kuin CLASS_PARTICIPATION arviointeja tämän endpointin kautta.`
+    );
+
   const ids = data.map((it) => it.id);
   const evaluations = await prisma.evaluation.findMany({
     where: {
@@ -101,12 +143,12 @@ export const validateUpdateEvaluationsInput = async (data: UpdateEvaluationInput
   });
 
   if (ids.length !== evaluations.length) throw new ValidationError("Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan");
-  const validatePromises = data.map((it) => validateUpdateEvaluationInput(it));
+  const validatePromises = data.map((it) => validateUpdateClassParticipationEvaluationInput(it, false));
   await Promise.all(validatePromises);
 };
 
-export const validateUpdateCollectionInput = async (
-  { environmentCode, learningObjectiveCodes, evaluations }: UpdateCollectionInput,
+export const validateUpdateClassParticipationCollectionInput = async (
+  { environmentCode, learningObjectiveCodes, evaluations }: UpdateClassParticipationCollectionInput,
   collectionId: string
 ) => {
   if (environmentCode && !getEnvironment(environmentCode)) throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
@@ -137,7 +179,57 @@ export const validateUpdateCollectionInput = async (
       learningObjectiveCodes
     );
   }
-  if (evaluations) await validateUpdateEvaluationsInput(evaluations, collectionId);
+  if (evaluations) await validateUpdateClassParticipationEvaluationsInput(evaluations, collectionId);
+};
+
+export const validateUpdateDefaultEvaluationInput = async (data: UpdateDefaultEvaluationInput, validateType: boolean = true) => {
+  const matchingEvaluation = await evaluationLoader.load(data.id);
+
+  // Allow not checking the type for when updating evaluations in bulk
+  if (validateType) {
+    const collection = await collectionLoader.load(matchingEvaluation.evaluationCollectionId);
+    const type = await collectionTypeLoader.load(collection.typeId);
+    if (type.category === CollectionTypeCategory.CLASS_PARTICIPATION)
+      throw new ValidationError(`Arviointikokoelman tyyppi on väärä. Et voi päivittää CLASS_PARTICIPATION arviointeja tämän endpointin kautta.`);
+  }
+
+  const wasPresent = data.wasPresent ?? matchingEvaluation.wasPresent;
+
+  // If the student was not present, the evaluation data cannot be updated
+  if (wasPresent === false && (data.rating || data.notes)) {
+    throw new ValidationError(`Arvioinnin tallentaminen ei onnistunut. Mikäli oppilas ei ole ollut läsnä, ei arvioinnin tietoja voida päivittää.`);
+  }
+  if (data.rating && (data.rating < 4 || data.rating > 10)) {
+    throw new ValidationError(`Arvosanan on oltava välillä 4-10.`);
+  }
+  if (data.rating && data.rating % 0.25 !== 0) {
+    throw new ValidationError(`Arvosanan on oltava jaollinen 0.25:llä.`);
+  }
+};
+
+export const validateUpdateDefaultEvaluationsInput = async (data: UpdateDefaultEvaluationInput[], collectionId: string) => {
+  const collection = await collectionLoader.load(collectionId);
+  const type = await collectionTypeLoader.load(collection.typeId);
+  if (type.category === CollectionTypeCategory.CLASS_PARTICIPATION)
+    throw new ValidationError(`Arviointikokoelman tyyppi on väärä. Et voi päivittää CLASS_PARTICIPATION arviointeja tämän endpointin kautta.`);
+
+  const ids = data.map((it) => it.id);
+  const evaluations = await prisma.evaluation.findMany({
+    where: {
+      evaluationCollectionId: collectionId,
+      id: {
+        in: ids,
+      },
+    },
+  });
+
+  if (ids.length !== evaluations.length) throw new ValidationError("Osa muokattavista arvioinneista eivät kuulu arviointikokoelmaan");
+  const validatePromises = data.map((it) => validateUpdateDefaultEvaluationInput(it, false));
+  await Promise.all(validatePromises);
+};
+
+export const validateUpdateDefaultCollectionInput = async ({ evaluations }: UpdateClassParticipationCollectionInput, collectionId: string) => {
+  if (evaluations) await validateUpdateDefaultEvaluationsInput(evaluations, collectionId);
 };
 
 export const validateCreateStudentInput = async (data: CreateStudentInput, moduleId: string) => {

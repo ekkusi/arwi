@@ -49,24 +49,27 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
         evaluationCollections {
           id
           date
-          environment {
-            label {
-              fi
+          __typename
+          ... on ClassParticipationCollection {
+            environment {
+              label {
+                fi
+              }
+              code
+              color
             }
-            code
-            color
+            learningObjectives {
+              code
+              label {
+                fi
+              }
+              description {
+                fi
+              }
+              type
+            }
+            ...CollectionsLineChart_EvaluationCollection
           }
-          learningObjectives {
-            code
-            label {
-              fi
-            }
-            description {
-              fi
-            }
-            type
-          }
-          ...CollectionsLineChart_EvaluationCollection
         }
       }
     }

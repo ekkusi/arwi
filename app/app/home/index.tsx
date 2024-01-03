@@ -12,6 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { graphql } from "../../gql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -126,7 +127,9 @@ function HomePageContent({
               enterAnimation={firstRender.current ? undefined : SlideInLeft}
               exitAnimation={SlideOutRight}
               group={item}
-              onEvaluateIconPress={() => navigation.navigate("collection-create", { groupId: item.id })}
+              onEvaluateIconPress={() =>
+                navigation.navigate("collection-create", { groupId: item.id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION })
+              }
               onListItemPress={() =>
                 navigation.navigate("group", { id: item.id, classYearId: item.currentModule.id, name: item.name, archived: item.archived })
               }
