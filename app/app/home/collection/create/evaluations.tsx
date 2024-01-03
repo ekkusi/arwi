@@ -8,7 +8,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
-import { CARD_HEIGHT, CreateEvaluationCardMemoed, Evaluation } from "../../../../components/EvaluationCard";
+import { CARD_HEIGHT, CreateClassParticipationEvaluationCardMemoed, Evaluation } from "../../../../components/ClassParticipationEvaluationCard";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
@@ -160,7 +160,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         ref={scrollRef}
         data={presentEvaluations}
         renderItem={({ item, index }) => (
-          <CreateEvaluationCardMemoed
+          <CreateClassParticipationEvaluationCardMemoed
             evaluation={item}
             onChanged={onEvaluationChanged}
             height={CARD_HEIGHT}

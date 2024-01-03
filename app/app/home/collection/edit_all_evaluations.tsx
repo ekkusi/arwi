@@ -5,16 +5,18 @@ import { useTranslation } from "react-i18next";
 import { FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CFlatList from "../../../components/primitives/CFlatList";
 import CView from "../../../components/primitives/CView";
-import { UpdateEvaluationCard, EvaluationToUpdate, CARD_HEIGHT } from "../../../components/EvaluationCard";
+import { EvaluationToUpdate, CARD_HEIGHT, UpdateClassParticipationEvaluationCardMemoed } from "../../../components/ClassParticipationEvaluationCard";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../hooks-and-providers/keyboard";
 import { COLORS } from "../../../theme";
 import { HomeStackParams } from "../types";
+import CText from "../../../components/primitives/CText";
 
 const CollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
   query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {
@@ -169,7 +171,7 @@ function CollectionEditAllEvaluationsContent({
         ref={scrollRef}
         data={evaluations}
         renderItem={({ item, index }) => (
-          <UpdateEvaluationCard
+          <UpdateClassParticipationEvaluationCardMemoed
             key={item.student.id}
             evaluation={item}
             date={date}
@@ -217,13 +219,14 @@ function CollectionEditAllEvaluationsContent({
 
 export default function CollectionEditAllEvaluationsView(props: NativeStackScreenProps<HomeStackParams, "edit-all-evaluations">) {
   const { route } = props;
+  const { t } = useTranslation();
   const { data, loading } = useQuery(CollectionEditAllEvaluationsView_GetCollection_Query, {
     variables: { collectionId: route.params.collectionId },
   });
 
   if (loading || !data) return <LoadingIndicator />;
 
-  return (
+  return isClassParticipationCollection<WithTypename<typeof data.getCollection, "ClassParticipationCollection">>(data.getCollection) ? (
     <CollectionEditAllEvaluationsContent
       defaultEvaluations={data.getCollection.evaluations}
       envColor={data.getCollection.environment.color}
@@ -231,5 +234,7 @@ export default function CollectionEditAllEvaluationsView(props: NativeStackScree
       date={data.getCollection.date}
       {...props}
     />
+  ) : (
+    <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
   );
 }
