@@ -57,6 +57,13 @@ export const validateLearningObjectives = (
 };
 
 export const validateCreateDefaultCollectionInput = async ({ typeId }: CreateDefaultCollectionInput) => {
+  const existingCollection = await prisma.evaluationCollection.findFirst({
+    where: {
+      typeId,
+    },
+  });
+  if (existingCollection)
+    throw new ValidationError(`Arviointikokoelma tällä arviointityypillä on jo olemassa ja kyseisellä tyypillä niitä ei voi olla yhtä enempää.`);
   const type = await collectionTypeLoader.load(typeId);
   if (type.category === CollectionTypeCategory.CLASS_PARTICIPATION)
     throw new ValidationError(`Syötetty arviointikokoelman tyyppi on väärä. Se ei saa olla 'CLASS_PARTICIPATION'.`);

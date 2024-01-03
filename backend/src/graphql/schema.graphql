@@ -116,6 +116,7 @@ type CollectionType {
   name:        String!
   weight:      Int!
   group: Group!
+  defaultTypeCollection: DefaultCollection
 }
 
 enum CollectionTypeCategory {

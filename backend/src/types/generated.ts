@@ -321,6 +321,7 @@ export type CollectionType = {
   name: Scalars['String'];
   weight: Scalars['Int'];
   group: Group;
+  defaultTypeCollection?: Maybe<DefaultCollection>;
 };
 
 export enum CollectionTypeCategory {
@@ -833,6 +834,7 @@ export type CollectionTypeResolvers<ContextType = CustomContext, ParentType exte
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   weight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
+  defaultTypeCollection?: Resolver<Maybe<ResolversTypes['DefaultCollection']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

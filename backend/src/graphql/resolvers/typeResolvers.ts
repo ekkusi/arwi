@@ -190,6 +190,14 @@ const resolvers: TypeResolvers = {
     group: ({ groupId }, _, { dataLoaders }) => {
       return dataLoaders.groupLoader.load(groupId);
     },
+    defaultTypeCollection: ({ id, category }, _, { prisma }) => {
+      if (category === CollectionTypeCategory.CLASS_PARTICIPATION) return null;
+      return prisma.evaluationCollection.findFirst({
+        where: {
+          typeId: id,
+        },
+      });
+    },
   },
 };
 

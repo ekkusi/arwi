@@ -79,6 +79,36 @@ describe("createDefaultCollection", () => {
     }
   });
 
+  it("should throw an error if a collection with the type already exists", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      evaluations: [
+        {
+          studentId: group.students[0].id,
+          wasPresent: true,
+          rating: 7,
+          notes: "Good performance",
+        },
+      ],
+    };
+
+    const query = graphql(`
+      mutation CreateDefaultCollectionDuplicate($data: CreateDefaultCollectionInput!, $moduleId: ID!) {
+        createDefaultCollection(data: $data, moduleId: $moduleId) {
+          id
+        }
+      }
+    `);
+
+    await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors![0].message).toEqual(
+      `Arviointikokoelma tällä arviointityypillä on jo olemassa ja kyseisellä tyypillä niitä ei voi olla yhtä enempää.`
+    );
+  });
+
   it("should throw an error if the collection type is CLASS_PARTICIPATION type", async () => {
     const classParticipationType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
 
