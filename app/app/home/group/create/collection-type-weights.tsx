@@ -52,7 +52,6 @@ export default function GroupCollectionTypeWeightsView({
   const changeWeightByOne = (increase: boolean, index: number) => {
     const newWeight = weights.value[index] + (increase ? 1 : -1);
     const newSum = onWeightChanged(newWeight, index);
-    Alert.alert((newSum || 0).toString());
     if (newSum && newSum === 100) {
       setForwardDisabled(false);
     } else {
