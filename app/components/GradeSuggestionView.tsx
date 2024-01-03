@@ -2,24 +2,47 @@ import { useState } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { Slider } from "@miblanchard/react-native-slider";
+import { DefaultEvaluation, CollectionType } from "arwi-backend/src/types";
+import { Alert } from "react-native";
 import { COLORS } from "../theme";
 import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
 import CircledNumber from "./CircledNumber";
 import CModal from "./CModal";
+import InfoButton from "./InfoButton";
+
+type PartialCollection = Pick<CollectionType, "category" | "weight" | "name" | "id">;
+
+type PartialEvaluation = Pick<DefaultEvaluation, "__typename" | "id" | "rating">;
 
 type GradeSuggestionViewProps = CViewProps & {
   skillsMean: number;
   behaviourMean: number;
+  collections: PartialCollection[];
+  otherEvaluations: PartialEvaluation[];
 };
 
-export default function GradeSuggestionView({ skillsMean, behaviourMean, ...rest }: GradeSuggestionViewProps) {
+export default function GradeSuggestionView({ skillsMean, behaviourMean, collections, otherEvaluations, ...rest }: GradeSuggestionViewProps) {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [gradeSuggestionSkillsWeight, setGradeSuggestionSkillWeight] = useState(0.5);
-  const gradeSuggestion = skillsMean * gradeSuggestionSkillsWeight + behaviourMean * (1 - gradeSuggestionSkillsWeight);
-
+  const classParticipationGrade = skillsMean * gradeSuggestionSkillsWeight + behaviourMean * (1 - gradeSuggestionSkillsWeight);
+  let weightSum = 0;
+  let weightedRating = 0;
+  collections.forEach((coll) => {
+    if (coll.category === "CLASS_PARTICIPATION") {
+      weightSum += coll.weight;
+      weightedRating += classParticipationGrade * coll.weight;
+    } else {
+      const collEvaluation = otherEvaluations.find((ev) => ev.id === coll.id);
+      if (collEvaluation?.rating) {
+        weightSum += coll.weight;
+        weightedRating += coll.weight * collEvaluation.rating;
+      }
+    }
+  });
+  const gradeSuggestion = weightedRating / weightSum;
   return (
     <>
       <CModal isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} closeButton={false} placement="bottom">
@@ -32,13 +55,16 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean, ...rest
             padding: "md",
           }}
         >
-          <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <CText style={{ fontSize: "lg", fontWeight: "500" }}>{t("modify-weights", "Muokkaa painoja")}</CText>
+          <CView style={{ flexDirection: "row", justifyContent: "space-between", flex: 1 }}>
+            <CText style={{ flex: 0.6, fontSize: "md", fontWeight: "300" }}>
+              {t("modify-class-participation-weights", "Muokkaa taitojen ja työskentelyn painoarvoja")}
+            </CText>
             <CButton
               title={t("default-settings", "Oletusasetukset")}
               size="small"
               variant="outline"
               colorScheme="darkgray"
+              style={{ flex: 0.4, height: 40 }}
               onPress={() => setGradeSuggestionSkillWeight(0.5)}
             />
           </CView>
@@ -74,22 +100,37 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean, ...rest
         </CView>
       </CModal>
       <CView {...rest} style={{ gap: 10, ...rest?.style }}>
-        <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <CText style={{ fontSize: "lg", fontWeight: "400" }}>{t("grade-suggestion", "Arvosanaehdotus")}</CText>
-          <CButton
-            size="small"
-            variant="outline"
-            title={t("edit", "Muokkaa")}
-            colorScheme="darkgray"
-            style={{ width: "auto" }}
-            leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
-            rightIcon={
-              gradeSuggestionSkillsWeight !== 0.5 ? (
-                <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} />
-              ) : undefined
-            }
-            onPress={() => setIsMenuOpen(true)}
-          />
+        <CView style={{ gap: 5 }}>
+          <CView style={{ flexDirection: "row", gap: "md", justifyContent: "flex-start", alignItems: "center" }}>
+            <CText style={{ fontSize: "lg", fontWeight: "300" }}>{t("grade-suggestion", "Arvosanaehdotus")}</CText>
+            <InfoButton
+              onPress={() => {
+                Alert.alert(
+                  t("grade-suggestion", "Arvosanaehdotus"),
+                  t(
+                    "grade-suggestion-info",
+                    "Arvosanaehdotus on laskettu painottamalla valittuja arviointisisältöjä ryhmälle asetettujen painojen mukaisesti. Painoja pääset tarkastelemaan ja muokkaamaan Ryhmä-sivulta."
+                  )
+                );
+              }}
+            />
+          </CView>
+          <CView style={{ flexDirection: "row" }}>
+            <CButton
+              size="small"
+              variant="outline"
+              title={t("edit", "Muokkaa")}
+              colorScheme="darkgray"
+              style={{ width: "auto" }}
+              leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}
+              rightIcon={
+                gradeSuggestionSkillsWeight !== 0.5 ? (
+                  <CView style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: "primary" }} />
+                ) : undefined
+              }
+              onPress={() => setIsMenuOpen(true)}
+            />
+          </CView>
         </CView>
         <CView style={{ justifyContent: "center", alignItems: "center" }}>
           <CircledNumber borderColor="darkgray" borderWidth={2} value={gradeSuggestion} decimals={0} />

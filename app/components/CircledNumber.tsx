@@ -28,7 +28,7 @@ export default function CircledNumber({
   }
   return (
     <CView style={{ justifyContent: "center", alignItems: "center", gap: 5 }}>
-      <CText style={{ fontSize: "xs", fontWeight: "500" }}>{title}</CText>
+      <CText style={{ fontSize: "xs", fontWeight: "500", width: 100, textAlign: "center" }}>{title}</CText>
       <CView
         style={{
           width: size || 70,

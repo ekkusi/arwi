@@ -3,7 +3,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
-import { isClassParticipationEvaluation } from "arwi-backend/src/types/typeGuards";
+import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
+import collection from "arwi-backend/src/graphql/dataLoaders/collection";
+import group from "arwi-backend/src/graphql/dataLoaders/group";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
@@ -11,7 +14,7 @@ import CView from "../../../components/primitives/CView";
 import { graphql } from "../../../gql";
 import { HomeStackParams } from "../types";
 import CircledNumber from "../../../components/CircledNumber";
-import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
+import { analyzeEvaluations, parseFloatToGradeString } from "../../../helpers/evaluationUtils";
 import EvaluationsBarChart from "../../../components/charts/EvaluationsBarChart";
 import EvaluationStatistics from "../../../components/charts/EvaluationStatistics";
 import InfoButton from "../../../components/InfoButton";
@@ -19,7 +22,8 @@ import GradeSuggestionView from "../../../components/GradeSuggestionView";
 import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogram";
 import Layout from "../../../components/Layout";
 import CButton from "../../../components/primitives/CButton";
-import { getEnvironmentTranslation } from "../../../helpers/translation";
+import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
+import Card from "../../../components/Card";
 
 const StudentPage_GetStudent_Query = graphql(`
   query StudentPage_GetStudent($studentId: ID!) {
@@ -44,6 +48,12 @@ const StudentPage_GetStudent_Query = graphql(`
               fi
             }
           }
+        }
+        collectionTypes {
+          id
+          category
+          name
+          weight
         }
       }
       currentModuleEvaluations {
@@ -90,6 +100,11 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const classParticipationEvaluations =
     evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
+
+  const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
+
+  const allCollections = student.group.collectionTypes;
+  const otherCollections = allCollections.filter((coll) => coll.category !== "CLASS_PARTICIPATION");
   const {
     absencesAmount,
     presencesAmount,
@@ -104,6 +119,14 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   } = analyzeEvaluations([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
 
+  const evaluate = () => {
+    Alert.alert("Evaluate");
+  };
+
+  const editEvaluation = () => {
+    Alert.alert("Edit evaluation");
+  };
+
   return (
     <Layout>
       <ScrollView>
@@ -116,17 +139,76 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.subject.label.fi}</CText>
               <CText>
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>{presencesAmount} </CText>
-                <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("evaluation", "arviointia", { count: presencesAmount })}</CText>
+                <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("class-evaluation", "tuntiarviointia", { count: presencesAmount })}</CText>
               </CText>
               <CText>
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>{absencesAmount} </CText>
                 <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("absence", "poissaoloa", { count: absencesAmount })}</CText>
               </CText>
             </CView>
-            <CircledNumber value={(skillsAverage + behaviourAverage) / 2} title={t("mean", "Keskiarvo")} />
+            <CircledNumber value={(skillsAverage + behaviourAverage) / 2} title={t("class-evaluation-mean", "Tuntityöskentelyn keskiarvo")} />
           </CView>
+          {otherCollections.length > 0 && (
+            <CView style={{ width: "100%", gap: 20 }}>
+              <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arvioitavat sisällöt")}</CText>
+              <CView style={{ gap: 10 }}>
+                {otherCollections.map((coll) => {
+                  const collectionEvaluation = otherEvaluations.find((ev) => ev.collection.id === coll.id);
+                  return (
+                    <Card>
+                      <CView style={{ flex: 6, flexDirection: "row", gap: 10, alignItems: "center", justifyContent: "flex-start" }}>
+                        <CView style={{ flexGrow: 1, gap: 2 }}>
+                          <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                            <CText style={{ fontWeight: "700", color: "darkgray", flex: 1 }}>{coll.name}</CText>
+                          </CView>
+                          <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
+                            <CText>
+                              <CText style={{ fontSize: "sm", color: "gray" }}>
+                                {getCollectionTypeTranslation(t, coll.category as CollectionTypeCategory)},{" "}
+                              </CText>
+                              <CText style={{ fontSize: "sm", color: "gray" }}>{t("evaluated-once", "kerran arvioitava")}</CText>
+                            </CText>
+                          </CView>
+                        </CView>
+                      </CView>
+                      <CView style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
+                        <CView style={{ gap: 4, justifyContent: "center", alignItems: "center" }}>
+                          {collectionEvaluation && (
+                            <CText>
+                              <CText style={{ fontSize: "sm", fontWeight: "500" }}>
+                                {collectionEvaluation.rating ? `${t("grade", "arvosana")}: ` : t("grade-missing", "Arvosanaa ei ole annettu")}
+                              </CText>
+                              {collectionEvaluation.rating && (
+                                <CText style={{ fontSize: "md", fontWeight: "500" }}>{parseFloatToGradeString(collectionEvaluation.rating)}</CText>
+                              )}
+                            </CText>
+                          )}
+                          <CButton
+                            title={
+                              collectionEvaluation
+                                ? t("evaluate", "Arvioi").toLocaleUpperCase()
+                                : t("edit-evaluation", "Muokkaa arviointia").toLocaleUpperCase()
+                            }
+                            variant="empty"
+                            textStyle={{ color: "primary" }}
+                            onPress={() => {
+                              if (collectionEvaluation) {
+                                editEvaluation();
+                              } else {
+                                evaluate();
+                              }
+                            }}
+                          />
+                        </CView>
+                      </CView>
+                    </Card>
+                  );
+                })}
+              </CView>
+            </CView>
+          )}
           <CView style={{ width: "100%", gap: 20 }}>
-            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("statistics", "Tilastot")}</CText>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluation-statistics", "Tuntityöskentely")}</CText>
             <EvaluationsBarChart evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} />
           </CView>
           <EvaluationsHistogram evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
@@ -144,7 +226,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                     t("characteristics", "Tunnusluvut"),
                     t(
                       "characteristics-info",
-                      "Oppilaan taitojen ja työskentelyn tunnuslukuja tarkastelemalla saadaan nopeasti yleiskuva oppilaan menestyksestä. Useita eri tunnuslukuja on hyvä tarkastella pelkän keskiarvon sijasta. Moodi ja mediaani reagoivat vähemmän yksittäisiin poikkeaviin havaintoihin ja siten antavat paremman kuvan oppilaan keskimääräisestä tasosta, jos oppilaalla on esimerkiksi yksittäisiä notkahduksia arvosanoissa\n\nMediaani kuvaa järjestettyjen havaintojen keskimmäistä arvoa, ja se lasketaan järjestämällä luvut suuruusjärjestykseen ja valitsemalla keskimmäinen havainto tai kahden keskimmäisen havainnon keskiarvo\n\nMoodi kuvaa arvoa, joka on havaittu kaikista useimmin. Arvosanojen moodi tarkoittaa siis sitä arvosanaa, joka on esiintynyt oppilaan arvioinneissa eniten. \n \n{{of_environments_string}} keskiarvolla tarkoitetaan keskiarvoa, joka on laskettu antamalla kaikille {{for_enviroments_string}} yhtä suuret painot riippumatta siitä, minkä verran kullakin {{on_environment_string}} on arviointikertoja. Tämä antaa paremman kuvan oppilaan taitotasosta, jos oppilas on esimerkiksi loistanut lajeissa, jota on arvioitu vain harvoin.",
+                      "Oppilaan taitojen ja työskentelyn tunnuslukuja tarkastelemalla saadaan nopeasti yleiskuva oppilaan menestyksestä. Useita eri tunnuslukuja on hyvä tarkastella pelkän keskiarvon sijasta. Moodi ja mediaani reagoivat vähemmän yksittäisiin poikkeaviin havaintoihin ja siten antavat paremman kuvan oppilaan keskimääräisestä tasosta, jos oppilaalla on esimerkiksi yksittäisiä notkahduksia arvosanoissa \n \nMediaani kuvaa järjestettyjen havaintojen keskimmäistä arvoa, ja se lasketaan järjestämällä luvut suuruusjärjestykseen ja valitsemalla keskimmäinen havainto tai kahden keskimmäisen havainnon keskiarvo \n \nMoodi kuvaa arvoa, joka on havaittu kaikista useimmin. Arvosanojen moodi tarkoittaa siis sitä arvosanaa, joka on esiintynyt oppilaan arvioinneissa eniten. \n \n{{of_environments_string}} keskiarvolla tarkoitetaan keskiarvoa, joka on laskettu antamalla kaikille {{for_enviroments_string}} yhtä suuret painot riippumatta siitä, minkä verran kullakin {{on_environment_string}} on arviointikertoja. Tämä antaa paremman kuvan oppilaan taitotasosta, jos oppilas on esimerkiksi loistanut lajeissa, jota on arvioitu vain harvoin.",
                       {
                         of_environments_string: getEnvironmentTranslation(t, "of-environments", student.group.subject.code),
                         for_enviroments_string: getEnvironmentTranslation(t, "for-environments", student.group.subject.code).toLocaleLowerCase(),
@@ -214,8 +296,13 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               </CView>
             </CView>
           </CView>
-          <GradeSuggestionView skillsMean={skillsAverage} behaviourMean={behaviourAverage} />
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
+          <GradeSuggestionView
+            skillsMean={skillsAverage}
+            behaviourMean={behaviourAverage}
+            otherEvaluations={otherEvaluations}
+            collections={allCollections}
+          />
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
           <EvaluationsAccordion
             allowEditing={!archived}
             evaluations={classParticipationEvaluations}
