@@ -88,9 +88,9 @@ export const useCollectionCreationContext = (): Required<Omit<CollectionCreation
   };
 };
 
-type CollectionCreationProviderProps = React.PropsWithChildren<{ groupId: string; collectionType: CollectionTypeCategory }>;
+type CollectionCreationProviderProps = React.PropsWithChildren<{ groupId: string }>;
 
-function CollectionCreationProvider({ children, groupId, collectionType: collectionTypeCategory }: CollectionCreationProviderProps) {
+function CollectionCreationProvider({ children, groupId }: CollectionCreationProviderProps) {
   const throwCatchableError = useThrowCatchableError();
   const [generalData, setGeneralData] = useState<CollectionData>(initialData);
   const [evaluations, setEvaluations] = useState<EvaluationData[]>();
@@ -123,7 +123,7 @@ function CollectionCreationProvider({ children, groupId, collectionType: collect
           wasPresent: it.wasPresent,
         };
       });
-      const matchingCollectionType = queryData?.getGroup?.collectionTypes.find((it) => it.category === collectionTypeCategory);
+      const matchingCollectionType = queryData?.getGroup?.collectionTypes.find((it) => it.category === CollectionTypeCategory.CLASS_PARTICIPATION);
       if (!matchingCollectionType)
         throwCatchableError(new Error("Invalid collection type passed to collection creation, type not found in group's collection types"));
 
@@ -132,7 +132,7 @@ function CollectionCreationProvider({ children, groupId, collectionType: collect
       setEvaluationData(evaluationDataTemp);
       setCollectionType(matchingCollectionType);
     }
-  }, [collectionTypeCategory, queryData, throwCatchableError]);
+  }, [queryData, throwCatchableError]);
 
   return (
     <Provider

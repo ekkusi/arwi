@@ -18,7 +18,7 @@ const { Navigator, Screen } = createNativeStackNavigator<DefaultCollectionCreati
 export default function DefaultCollectionCreationStack({ route, navigation }: NativeStackScreenProps<HomeStackParams, "default-collection-create">) {
   const { t } = useTranslation();
   return (
-    <DefaultCollectionCreationProvider groupId={route.params.groupId} collectionType={route.params.collectionType}>
+    <DefaultCollectionCreationProvider groupId={route.params.groupId} collectionTypeId={route.params.collectionTypeId}>
       <Navigator
         initialRouteName="default-collection-create-general-info"
         screenOptions={() => ({

@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Dimensions } from "react-native";
-import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated";
+import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated";
 import { ReText } from "react-native-redash";
 import { parseFloatToGradeString } from "../helpers/evaluationUtils";
 import CView from "./primitives/CView";
 import { Slider } from "./Slider";
 import CText from "./primitives/CText";
-import { COLORS } from "../theme";
 
 const windowWidth = Dimensions.get("window").width;
 const DEFAULT_SLIDER_HORIZONTAL_MARGIN = 30;
@@ -67,7 +66,11 @@ export default function SliderWithScale({
 
   const tickGap = DEFAULT_SLIDER_WIDTH / (maxValue - minValue);
 
-  onUpdate(value.value);
+  // Run onUpdate when component is mounted
+  useEffect(() => {
+    onUpdate(value.value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <CView style={{ width: "100%", paddingLeft: 16 }}>

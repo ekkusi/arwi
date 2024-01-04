@@ -12,7 +12,6 @@ import LoadingIndicator from "../../../components/LoadingIndicator";
 import CScrollView from "../../../components/primitives/CScrollView";
 import { getCollectionTypeTranslation } from "../../../helpers/translation";
 import CButton from "../../../components/primitives/CButton";
-import CFlatList from "../../../components/primitives/CFlatList";
 import { Accordion } from "../../../components/Accordion";
 import { SPACING } from "../../../theme";
 import { formatDate } from "../../../helpers/dateHelpers";
@@ -99,7 +98,7 @@ export default function DefaultEvaluationCollection({
             variant="filled"
             title={t("evaluate", "Arvioi")}
             onPress={() => {
-              navigation.navigate("default-collection-create", { groupId: type.group.id, collectionType: type.category });
+              navigation.navigate("default-collection-create", { groupId: type.group.id, collectionTypeId: type.id });
             }}
           />
         )}

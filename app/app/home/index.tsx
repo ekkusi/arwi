@@ -127,9 +127,7 @@ function HomePageContent({
               enterAnimation={firstRender.current ? undefined : SlideInLeft}
               exitAnimation={SlideOutRight}
               group={item}
-              onEvaluateIconPress={() =>
-                navigation.navigate("collection-create", { groupId: item.id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION })
-              }
+              onEvaluateIconPress={() => navigation.navigate("collection-create", { groupId: item.id })}
               onListItemPress={() =>
                 navigation.navigate("group", { id: item.id, classYearId: item.currentModule.id, name: item.name, archived: item.archived })
               }

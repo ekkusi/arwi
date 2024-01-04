@@ -199,6 +199,9 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                           variant="empty"
                           textStyle={{ color: "primary", fontSize: "sm", fontWeight: "500" }}
                           title={t("evaluate", "Arvioi").toLocaleUpperCase()}
+                          onPress={() => {
+                            navigation.navigate("default-collection-create", { groupId: group.id, collectionTypeId: type.id });
+                          }}
                         />
                       )}
                     </CTouchableOpacity>
@@ -265,9 +268,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           <CButton
             shadowed
             title={t("new-class-evaluation", "Uusi tuntiarviointi")}
-            onPress={() =>
-              navigation.navigate("collection-create", { groupId: group.id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION })
-            }
+            onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
             leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
           />
         </Animated.View>

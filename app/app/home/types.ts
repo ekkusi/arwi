@@ -34,11 +34,10 @@ export type HomeStackParams = {
   };
   "collection-create": {
     groupId: string;
-    collectionType: CollectionTypeCategory;
   };
   "default-collection-create": {
     groupId: string;
-    collectionType: CollectionTypeCategory;
+    collectionTypeId: string;
   };
   "edit-evaluation": {
     evaluationId: string;

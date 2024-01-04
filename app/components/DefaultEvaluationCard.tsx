@@ -11,7 +11,6 @@ import { CreateDefaultEvaluationInput, UpdateDefaultEvaluationInput } from "../g
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 import { COLORS } from "../theme";
-import RatingSelector from "./RatingSelector";
 import CButton from "./primitives/CButton";
 import { formatDate } from "../helpers/dateHelpers";
 import { useModal } from "../hooks-and-providers/ModalProvider";
@@ -19,7 +18,6 @@ import CustomTextInputView from "../app/home/CustomTextInputView";
 import { graphql } from "../gql";
 import { useToast } from "../hooks-and-providers/ToastProvider";
 import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";
-import { Slider } from "./Slider";
 import SliderWithScale from "./SliderWithScale";
 
 export type DefaultEvaluation = Omit<CreateDefaultEvaluationInput, "studentId"> & {

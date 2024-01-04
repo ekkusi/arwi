@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
-import { CollectionTypeCategory, CollectionTypeMinimal } from "arwi-backend/src/types";
+import { CollectionTypeMinimal } from "arwi-backend/src/types";
 import { DefaultEvaluation } from "../../../../../components/DefaultEvaluationCard";
 import { graphql } from "../../../../../gql";
 import { CollectionCreationProvider_GetGroupQuery } from "../../../../../gql/graphql";
@@ -84,9 +84,9 @@ export const useDefaultCollectionCreationContext = (): Required<Omit<DefaultColl
   };
 };
 
-type DefaultCollectionCreationProviderProps = React.PropsWithChildren<{ groupId: string; collectionType: CollectionTypeCategory }>;
+type DefaultCollectionCreationProviderProps = React.PropsWithChildren<{ groupId: string; collectionTypeId: string }>;
 
-function DefaultCollectionCreationProvider({ children, groupId, collectionType: collectionTypeCategory }: DefaultCollectionCreationProviderProps) {
+function DefaultCollectionCreationProvider({ children, groupId, collectionTypeId }: DefaultCollectionCreationProviderProps) {
   const throwCatchableError = useThrowCatchableError();
   const [generalData, setGeneralData] = useState<DefaultCollectionData>(initialData);
   const [evaluations, setEvaluations] = useState<DefaultEvaluationData[]>();
@@ -119,7 +119,7 @@ function DefaultCollectionCreationProvider({ children, groupId, collectionType: 
           wasPresent: it.wasPresent,
         };
       });
-      const matchingCollectionType = queryData?.getGroup?.collectionTypes.find((it) => it.category === collectionTypeCategory);
+      const matchingCollectionType = queryData?.getGroup?.collectionTypes.find((it) => it.id === collectionTypeId);
       if (!matchingCollectionType)
         throwCatchableError(new Error("Invalid collection type passed to collection creation, type not found in group's collection types"));
 
@@ -128,7 +128,7 @@ function DefaultCollectionCreationProvider({ children, groupId, collectionType: 
       setEvaluationData(evaluationDataTemp);
       setCollectionType(matchingCollectionType);
     }
-  }, [collectionTypeCategory, queryData, throwCatchableError]);
+  }, [collectionTypeId, queryData, throwCatchableError]);
 
   return (
     <Provider
