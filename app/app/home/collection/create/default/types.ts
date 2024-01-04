@@ -1,5 +1,5 @@
-export type CollectionCreationStackParams = {
-  "collection-create-general-info": undefined;
-  "collection-create-participations": undefined;
-  "collection-create-evaluations": undefined;
+export type DefaultCollectionCreationStackParams = {
+  "default-collection-create-general-info": undefined;
+  "default-collection-create-participations": undefined;
+  "default-collection-create-evaluations": undefined;
 };
