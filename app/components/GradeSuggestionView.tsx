@@ -12,25 +12,25 @@ import CircledNumber from "./CircledNumber";
 import CModal from "./CModal";
 import InfoButton from "./InfoButton";
 
-type PartialCollection = Pick<CollectionType, "category" | "weight" | "name" | "id">;
+type PartialCollectionType = Pick<CollectionType, "category" | "weight" | "name" | "id">;
 
 type PartialEvaluation = Pick<DefaultEvaluation, "__typename" | "id" | "rating">;
 
 type GradeSuggestionViewProps = CViewProps & {
   skillsMean: number;
   behaviourMean: number;
-  collections: PartialCollection[];
+  collectionTypes: PartialCollectionType[];
   otherEvaluations: PartialEvaluation[];
 };
 
-export default function GradeSuggestionView({ skillsMean, behaviourMean, collections, otherEvaluations, ...rest }: GradeSuggestionViewProps) {
+export default function GradeSuggestionView({ skillsMean, behaviourMean, collectionTypes, otherEvaluations, ...rest }: GradeSuggestionViewProps) {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [gradeSuggestionSkillsWeight, setGradeSuggestionSkillWeight] = useState(0.5);
   const classParticipationGrade = skillsMean * gradeSuggestionSkillsWeight + behaviourMean * (1 - gradeSuggestionSkillsWeight);
   let weightSum = 0;
   let weightedRating = 0;
-  collections.forEach((coll) => {
+  collectionTypes.forEach((coll) => {
     if (coll.category === "CLASS_PARTICIPATION") {
       weightSum += coll.weight;
       weightedRating += classParticipationGrade * coll.weight;

@@ -4,8 +4,6 @@ import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
-import collection from "arwi-backend/src/graphql/dataLoaders/collection";
-import group from "arwi-backend/src/graphql/dataLoaders/group";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
@@ -103,8 +101,8 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
 
-  const allCollections = student.group.collectionTypes;
-  const otherCollections = allCollections.filter((coll) => coll.category !== "CLASS_PARTICIPATION");
+  const { collectionTypes } = student.group;
+  const otherCollectionTypes = collectionTypes.filter((coll) => coll.category !== "CLASS_PARTICIPATION");
   const {
     absencesAmount,
     presencesAmount,
@@ -148,11 +146,11 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             </CView>
             <CircledNumber value={(skillsAverage + behaviourAverage) / 2} title={t("class-evaluation-mean", "Tuntityöskentelyn keskiarvo")} />
           </CView>
-          {otherCollections.length > 0 && (
+          {otherCollectionTypes.length > 0 && (
             <CView style={{ width: "100%", gap: 20 }}>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arvioitavat sisällöt")}</CText>
               <CView style={{ gap: 10 }}>
-                {otherCollections.map((coll) => {
+                {otherCollectionTypes.map((coll) => {
                   const collectionEvaluation = otherEvaluations.find((ev) => ev.collection.id === coll.id);
                   return (
                     <Card>
@@ -300,7 +298,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             skillsMean={skillsAverage}
             behaviourMean={behaviourAverage}
             otherEvaluations={otherEvaluations}
-            collections={allCollections}
+            collectionTypes={collectionTypes}
           />
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
           <EvaluationsAccordion
