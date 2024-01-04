@@ -80,7 +80,7 @@ export default function DefaultEvaluationCollection({
   });
 
   return (
-    <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
+    <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg", paddingVertical: "2xl" }}>
       <CScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }} showsVerticalScrollIndicator={false}>
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
           <CView style={{ gap: 2 }}>
@@ -99,7 +99,7 @@ export default function DefaultEvaluationCollection({
             variant="filled"
             title={t("evaluate", "Arvioi")}
             onPress={() => {
-              navigation.navigate("collection-create", { groupId: type.group.id, collectionType: type.category });
+              navigation.navigate("default-collection-create", { groupId: type.group.id, collectionType: type.category });
             }}
           />
         )}
@@ -162,7 +162,7 @@ export default function DefaultEvaluationCollection({
                 }))}
             />
           ) : (
-            <CText style={{ alignSelf: "center" }}>{t("no-evaluations", "Ei arviointeja")}</CText>
+            <CText style={{ alignSelf: "center", marginTop: 50 }}>{t("no-evaluations", "Ei arviointeja")}</CText>
           )}
         </CView>
       </CScrollView>

@@ -10,6 +10,7 @@ import { defaultHeaderStyles } from "../config";
 import ProfileView from "../profile";
 import CollectionView from "./collection";
 import CollectionCreationStack from "./collection/create/_stack";
+import DefaultCollectionCreationStack from "./collection/create/default/_stack";
 import GroupView from "./group";
 import GroupCreationStack from "./group/create/_stack";
 import LearningObjective from "./group/learningObjective";
@@ -118,6 +119,11 @@ export default function HomeStack() {
       <HomeStackNavigator.Screen
         name="collection-create"
         component={CollectionCreationStack}
+        options={{ title: t("new-evaluation", "Uusi arviointi"), headerShown: false }}
+      />
+      <HomeStackNavigator.Screen
+        name="default-collection-create"
+        component={DefaultCollectionCreationStack}
         options={{ title: t("new-evaluation", "Uusi arviointi"), headerShown: false }}
       />
       <HomeStackNavigator.Screen name="collection-edit" component={EditCollectionGeneralInfoView} options={{ title: t("edit", "Muokkaa") }} />

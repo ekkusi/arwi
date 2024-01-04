@@ -12,6 +12,8 @@ export type SliderStyleProps = {
   maxTrackAnimatedStyle: StyleProp<Animated.AnimateStyle<StyleProp<ViewStyle>>>;
   maxTrackStyle?: StyleProp<ViewStyle>;
   minTrackStyle?: StyleProp<ViewStyle>;
+  minTrackColor?: string;
+  maxTrackColor?: string;
   thumbContainerStyle?: StyleProp<ViewStyle>;
   thumbSize?: number;
   thumbStyle?: StyleProp<ViewStyle>;
@@ -64,6 +66,8 @@ export function Slider({
   // Styles
   maxTrackStyle = styles.maxTrack,
   minTrackStyle = styles.minTrack,
+  maxTrackColor,
+  minTrackColor,
   thumbContainerStyle: thumbBoxStyle = styles.thumbBox,
   thumbSize = DEFAULT_THUMB_SIZE,
   thumbStyle = styles.thumb,
@@ -140,10 +144,10 @@ export function Slider({
   return (
     <View style={[styles.container, { height: thumbSize, width: width || windowWidth - thumbSize }]}>
       <View style={styles.absoluteFillCenter} pointerEvents="box-none">
-        <View style={minTrackStyle} />
+        <View style={[minTrackStyle, minTrackColor ? { backgroundColor: minTrackColor } : {}]} />
       </View>
       <View style={styles.absoluteFillCenterStart} pointerEvents="box-none">
-        <Animated.View style={[maxTrackStyle, maxTrackAnimatedStyle]} />
+        <Animated.View style={[maxTrackStyle, maxTrackAnimatedStyle, maxTrackColor ? { backgroundColor: maxTrackColor } : {}]} />
       </View>
       <View style={styles.absoluteFillCenterStart} pointerEvents="box-none">
         <GestureDetector gesture={gesture}>

@@ -72,6 +72,8 @@ export const analyzeEvaluationsSimple = (evaluations: EvaluationSimple[]) => {
 };
 
 export const parseFloatToGradeString = (number: number) => {
+  "worklet";
+
   const base = Math.floor(number + 0.25);
   const remainder = number - base;
   let suffix = "";
