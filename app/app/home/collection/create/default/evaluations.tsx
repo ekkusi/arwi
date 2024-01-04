@@ -105,6 +105,7 @@ function DefaultCollectionEvaluationsContent({
             evaluations: evaluations.map((it) => ({
               wasPresent: it.wasPresent,
               notes: it.notes,
+              rating: it.rating,
               studentId: it.student.id,
             })),
           },

@@ -114,7 +114,7 @@ export default function DefaultEvaluationCollection({
           {type.defaultTypeCollection && type.defaultTypeCollection.evaluations.length > 0 ? (
             <Accordion
               allowMultiple
-              data={type.defaultTypeCollection.evaluations
+              data={[...type.defaultTypeCollection.evaluations]
                 .sort((a, b) => a.student.name.localeCompare(b.student.name))
                 .map((it) => ({
                   title: it.student.name,

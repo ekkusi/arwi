@@ -67,6 +67,8 @@ export default function SliderWithScale({
 
   const tickGap = DEFAULT_SLIDER_WIDTH / (maxValue - minValue);
 
+  onUpdate(value.value);
+
   return (
     <CView style={{ width: "100%", paddingLeft: 16 }}>
       <ReText text={valueString} style={valueStringAnimatedStyle} />
