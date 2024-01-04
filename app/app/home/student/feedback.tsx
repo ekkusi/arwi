@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as Clipboard from "expo-clipboard";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -6,6 +6,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMutation, useQuery } from "@apollo/client";
 import { useMatomo } from "matomo-tracker-react-native";
+import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
 import Layout from "../../../components/Layout";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
@@ -27,6 +28,12 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
         archived
         currentModule {
           id
+        }
+        collectionTypes {
+          id
+          category
+          name
+          weight
         }
       }
       currentModuleEvaluations {
@@ -82,11 +89,6 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
 
   const [generateFeedback, { loading: isGeneratingSummary }] = useMutation(StudentFeedbackView_GenerateFeedback_Mutation);
 
-  const { skillsAverage, behaviourAverage } = useMemo(() => {
-    const evaluations = data?.getStudent.currentModuleEvaluations ?? [];
-    return analyzeEvaluations([...evaluations]);
-  }, [data]);
-
   const generateSummary = async () => {
     try {
       const moduleId = data?.getStudent.group.currentModule.id;
@@ -133,6 +135,15 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
 
   const { getStudent: student } = data;
 
+  const evaluations = student.currentModuleEvaluations ?? [];
+  const classParticipationEvaluations =
+    evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
+  const { skillsAverage, behaviourAverage } = analyzeEvaluations([...classParticipationEvaluations]);
+
+  const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
+
+  const { collectionTypes } = student.group;
+
   if (student.group.archived)
     return (
       <Layout style={{ padding: "lg" }}>
@@ -171,7 +182,13 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
     <Layout>
       <ScrollView style={{ padding: SPACING.lg }}>
         <CText style={{ fontSize: "xl", marginBottom: "2xl", marginTop: "md", textAlign: "center" }}>{t("final-feedback", "Loppuarviointi")}</CText>
-        <GradeSuggestionView style={{ marginBottom: "3xl" }} skillsMean={skillsAverage} behaviourMean={behaviourAverage} />
+        <GradeSuggestionView
+          style={{ marginBottom: "3xl" }}
+          skillsMean={skillsAverage}
+          behaviourMean={behaviourAverage}
+          otherEvaluations={otherEvaluations}
+          collectionTypes={collectionTypes}
+        />
         <CText style={{ fontSize: "lg", fontWeight: "400", marginBottom: "lg" }}>{t("oral-feedback", "Sanallinen palaute:")}</CText>
         <CView style={{ marginBottom: "4xl" }}>
           <CText style={{ marginBottom: "lg" }}>{summary}</CText>

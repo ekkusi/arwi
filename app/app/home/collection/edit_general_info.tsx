@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "@apollo/client";
+import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import { HomeStackParams } from "../types";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { graphql } from "../../../gql";
@@ -9,6 +10,7 @@ import CollectionGeneralInfoForm, { GeneralInfoData } from "./_general_info_form
 import { formatDate } from "../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import Layout from "../../../components/Layout";
+import CText from "../../../components/primitives/CText";
 
 const EditGeneralDetails_GetCollection_Query = graphql(`
   query EditGeneralDetails_GetCollection($collectionId: ID!) {
@@ -144,19 +146,23 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
 
   return (
     <Layout keyboardVerticalOffset={100}>
-      <CollectionGeneralInfoForm
-        handleSubmit={handleSubmit}
-        subjectCode={collection.module.group.subject.code}
-        moduleInfo={collection.module.info}
-        buttonTitle={t("save", "Tallenna")}
-        buttonLoading={submitting}
-        initialData={{
-          date: new Date(collection.date),
-          environment: collection.environment,
-          learningObjectives: collection.learningObjectives,
-          description: collection.description || undefined,
-        }}
-      />
+      {isClassParticipationCollection<WithTypename<typeof collection, "ClassParticipationCollection">>(collection) ? (
+        <CollectionGeneralInfoForm
+          handleSubmit={handleSubmit}
+          subjectCode={collection.module.group.subject.code}
+          moduleInfo={collection.module.info}
+          buttonTitle={t("save", "Tallenna")}
+          buttonLoading={submitting}
+          initialData={{
+            date: new Date(collection.date),
+            environment: collection.environment,
+            learningObjectives: collection.learningObjectives,
+            description: collection.description || undefined,
+          }}
+        />
+      ) : (
+        <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
+      )}
     </Layout>
   );
 }
