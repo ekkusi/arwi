@@ -166,7 +166,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                               <CText style={{ fontSize: "sm", color: "gray" }}>
                                 {getCollectionTypeTranslation(t, coll.category as CollectionTypeCategory)},{" "}
                               </CText>
-                              <CText style={{ fontSize: "sm", color: "gray" }}>{t("evaluated-once", "kerran arvioitava")}</CText>
+                              <CText style={{ fontSize: "sm", color: "gray" }}>{t("evaluated-once", "Kerran arvioitava").toLocaleLowerCase()}</CText>
                             </CText>
                           </CView>
                         </CView>

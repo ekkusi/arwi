@@ -148,7 +148,7 @@ export default function GroupCollectionTypesView({
                             <CText style={{ fontSize: "sm", color: "gray" }}>
                               {type.category === "CLASS_PARTICIPATION"
                                 ? t("evaluated-continuously", "jatkuvasti arvioitava")
-                                : t("evaluated-once", "kerran arvioitava")}
+                                : t("evaluated-once", "Kerran arvioitava").toLocaleLowerCase()}
                             </CText>
                           </CText>
                         </CView>

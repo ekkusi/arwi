@@ -1,7 +1,9 @@
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
+import { Alert } from "react-native";
 import { HomeStackParams } from "../types";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
@@ -9,38 +11,14 @@ import { graphql } from "../../../gql";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CScrollView from "../../../components/primitives/CScrollView";
 import { getCollectionTypeTranslation } from "../../../helpers/translation";
-
-const DefaultEvaluationCollection_GetCollection_Query = graphql(`
-  query DefaultEvaluationCollection_GetCollection($collectionId: ID!) {
-    getCollection(id: $collectionId) {
-      id
-      date
-      type {
-        id
-        category
-        name
-        weight
-      }
-      evaluations {
-        id
-        wasPresent
-        __typename
-        ... on DefaultEvaluation {
-          rating
-        }
-        notes
-        student {
-          id
-          name
-          currentModuleEvaluations {
-            id
-            notes
-          }
-        }
-      }
-    }
-  }
-`);
+import CButton from "../../../components/primitives/CButton";
+import CFlatList from "../../../components/primitives/CFlatList";
+import { Accordion } from "../../../components/Accordion";
+import { SPACING } from "../../../theme";
+import { formatDate } from "../../../helpers/dateHelpers";
+import CircledNumber from "../../../components/CircledNumber";
+import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
+import { getColorForGrade } from "../../../helpers/dataMappers";
 
 const DefaultEvaluationCollection_GetCollectionType_Query = graphql(`
   query DefaultEvaluationCollection_GetCollectionType($typeId: ID!) {
@@ -49,11 +27,33 @@ const DefaultEvaluationCollection_GetCollectionType_Query = graphql(`
       category
       name
       weight
+      defaultTypeCollection {
+        id
+        date
+        evaluations {
+          id
+          student {
+            id
+            name
+          }
+          wasPresent
+          notes
+          rating
+        }
+      }
+      group {
+        id
+      }
     }
   }
 `);
 
-export default function DefaultEvaluationCollection({ route: { params } }: NativeStackScreenProps<HomeStackParams, "default-evaluation-collection">) {
+type TempDataHash = { [grade: number]: number };
+
+export default function DefaultEvaluationCollection({
+  route: { params },
+  navigation,
+}: NativeStackScreenProps<HomeStackParams, "default-evaluation-collection">) {
   const { t } = useTranslation();
   const { data, loading } = useQuery(DefaultEvaluationCollection_GetCollectionType_Query, {
     variables: { typeId: params.id },
@@ -63,18 +63,107 @@ export default function DefaultEvaluationCollection({ route: { params } }: Nativ
 
   const type = data.getType;
 
+  const histogramData: StyledBarChartDataType[] = [];
+  const gradeCounts: TempDataHash = {};
+  [4, 5, 6, 7, 8, 9, 10].forEach((val) => {
+    gradeCounts[val] = 0;
+  });
+  if (type.defaultTypeCollection) {
+    type.defaultTypeCollection.evaluations.forEach((ev) => {
+      if (ev.rating) {
+        gradeCounts[Math.round(ev.rating)] += 1;
+      }
+    });
+  }
+  Object.keys(gradeCounts).forEach((key) => {
+    histogramData.push({ x: key, y: gradeCounts[parseInt(key, 10)], color: getColorForGrade(parseInt(key, 10)) });
+  });
+
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
       <CScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }} showsVerticalScrollIndicator={false}>
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
-          <CView>
+          <CView style={{ gap: 2 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{type.name}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{getCollectionTypeTranslation(t, type.category as CollectionTypeCategory)}</CText>
-            <CText>
-              <CText style={{ fontSize: "md", fontWeight: "300" }}>{`${t("weight-value", "Painoarvo")}: `}</CText>
-              <CText style={{ fontSize: "md", fontWeight: "500" }}>{`${Math.round(type.weight)} / 100 %`}</CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("evaluated-once", "Kerran arvioitava")}</CText>
+            <CText style={{ fontSize: "sm", fontWeight: "500", color: type.defaultTypeCollection ? "primary" : "error" }}>
+              {type.defaultTypeCollection ? t("evaluated", "Arvioitu").toLocaleUpperCase() : t("unevaluated", "Ei arvioitu").toLocaleUpperCase()}
             </CText>
           </CView>
+          <CircledNumber size={70} valueString={`${type.weight}%`} title={t("weight-value", "Painoarvo")} />
+        </CView>
+
+        {!type.defaultTypeCollection && (
+          <CButton
+            variant="filled"
+            title={t("evaluate", "Arvioi")}
+            onPress={() => {
+              navigation.navigate("collection-create", { groupId: type.group.id, collectionType: type.category });
+            }}
+          />
+        )}
+        <CView style={{ gap: "lg" }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-distribution", "Arvosanajakauma")}</CText>
+          <CView style={{ width: "100%" }}>
+            <StyledBarChart data={histogramData} countAxis showAxisLabels style={{ height: 200 }} />
+          </CView>
+        </CView>
+        <CView style={{ gap: "lg" }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
+          {type.defaultTypeCollection && type.defaultTypeCollection.evaluations.length > 0 ? (
+            <Accordion
+              allowMultiple
+              data={type.defaultTypeCollection.evaluations
+                .sort((a, b) => a.student.name.localeCompare(b.student.name))
+                .map((it) => ({
+                  title: it.student.name,
+                  date: formatDate(type.defaultTypeCollection!.date),
+                  isEvaluated: it.rating !== undefined && it.rating !== null,
+                  color: "white",
+                  icons: it.wasPresent && !!it.notes && (
+                    <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />
+                  ),
+                  content: (
+                    <>
+                      <CText style={{ fontSize: "sm", fontWeight: "500", color: it.wasPresent ? "green" : "red", paddingBottom: 10 }}>
+                        {it.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
+                      </CText>
+                      {it.wasPresent ? (
+                        <CView style={{ gap: 10 }}>
+                          <CView style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>
+                            <CircledNumber decimals={0} size={48} title={t("grade", "Arvosana")} value={it.rating ? it.rating : undefined} />
+                          </CView>
+                          {it.notes ? (
+                            <CView>
+                              <CText style={{ fontSize: "sm" }}>{it.notes}</CText>
+                            </CView>
+                          ) : (
+                            <CText style={{ fontSize: "sm" }}>
+                              {t("components.EvaluationsAccordion.verbalFeedbackNotGiven", "Sanallista palautetta ei annettu")}
+                            </CText>
+                          )}
+                        </CView>
+                      ) : (
+                        <CText style={{ fontSize: "sm" }}>
+                          {t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}
+                        </CText>
+                      )}
+                      <CButton
+                        size="small"
+                        title={t("edit", "Muokkaa")}
+                        style={{ marginTop: "md" }}
+                        onPress={() => {
+                          Alert.alert("Edit evaluation");
+                        }}
+                      />
+                    </>
+                  ),
+                }))}
+            />
+          ) : (
+            <CText style={{ alignSelf: "center" }}>{t("no-evaluations", "Ei arviointeja")}</CText>
+          )}
         </CView>
       </CScrollView>
     </CView>
