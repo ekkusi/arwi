@@ -55,13 +55,12 @@ export function AccordionItem({
           <CView style={{ flexDirection: "row", gap: 20, justifyContent: "center", alignItems: "center" }}>
             <CView>
               <CText style={{ fontSize: "md", fontWeight: "500" }}>{title}</CText>
-              {color ||
-                (date && (
-                  <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
-                    {color && <CView style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />}
-                    {date && <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>}
-                  </CView>
-                ))}
+              {(color || date) && (
+                <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+                  {color && <CView style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />}
+                  {date && <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>}
+                </CView>
+              )}
               {isEvaluated !== undefined && (
                 <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>
                   {isEvaluated ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu")}

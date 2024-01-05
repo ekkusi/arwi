@@ -94,6 +94,7 @@ export type Mutation = {
   deleteStudent: Student;
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
+  deleteCollectionType: CollectionType;
   changeGroupModule: Group;
   generateStudentFeedback: Scalars['String'];
   fixTextGrammatics: Scalars['String'];
@@ -212,6 +213,11 @@ export type MutationDeleteGroupArgs = {
 
 export type MutationDeleteCollectionArgs = {
   collectionId: Scalars['ID'];
+};
+
+
+export type MutationDeleteCollectionTypeArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -447,11 +453,6 @@ export type CreateGroupInput = {
   collectionTypes: Array<CreateCollectionTypeInput>;
 };
 
-export type UpdateGroupInput = {
-  name?: InputMaybe<Scalars['String']>;
-  archived?: InputMaybe<Scalars['Boolean']>;
-};
-
 export type CreateStudentInput = {
   name: Scalars['String'];
 };
@@ -460,6 +461,21 @@ export type CreateCollectionTypeInput = {
   category: CollectionTypeCategory;
   name: Scalars['String'];
   weight: Scalars['Int'];
+};
+
+export type UpdateGroupInput = {
+  name?: InputMaybe<Scalars['String']>;
+  archived?: InputMaybe<Scalars['Boolean']>;
+  updateCollectionTypeInputs?: InputMaybe<Array<UpdateCollectionTypeInput>>;
+  deleteCollectionTypeIds?: InputMaybe<Array<Scalars['ID']>>;
+  createCollectionTypeInputs?: InputMaybe<Array<CreateCollectionTypeInput>>;
+};
+
+export type UpdateCollectionTypeInput = {
+  id: Scalars['ID'];
+  category?: InputMaybe<CollectionTypeCategory>;
+  name?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateStudentInput = {
@@ -637,9 +653,10 @@ export type ResolversTypes = {
   EducationLevel: EducationLevel;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
-  UpdateGroupInput: UpdateGroupInput;
   CreateStudentInput: CreateStudentInput;
   CreateCollectionTypeInput: CreateCollectionTypeInput;
+  UpdateGroupInput: UpdateGroupInput;
+  UpdateCollectionTypeInput: UpdateCollectionTypeInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateClassParticipationCollectionInput: CreateClassParticipationCollectionInput;
   CreateDefaultCollectionInput: CreateDefaultCollectionInput;
@@ -686,9 +703,10 @@ export type ResolversParentTypes = {
   Student: StudentPrisma;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
-  UpdateGroupInput: UpdateGroupInput;
   CreateStudentInput: CreateStudentInput;
   CreateCollectionTypeInput: CreateCollectionTypeInput;
+  UpdateGroupInput: UpdateGroupInput;
+  UpdateCollectionTypeInput: UpdateCollectionTypeInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateClassParticipationCollectionInput: CreateClassParticipationCollectionInput;
   CreateDefaultCollectionInput: CreateDefaultCollectionInput;
@@ -748,6 +766,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   deleteStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, 'studentId'>>;
   deleteGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, 'groupId'>>;
   deleteCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<MutationDeleteCollectionArgs, 'collectionId'>>;
+  deleteCollectionType?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType, RequireFields<MutationDeleteCollectionTypeArgs, 'id'>>;
   changeGroupModule?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationChangeGroupModuleArgs, 'data' | 'groupId'>>;
   generateStudentFeedback?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationGenerateStudentFeedbackArgs, 'studentId' | 'moduleId'>>;
   fixTextGrammatics?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'studentId' | 'text'>>;

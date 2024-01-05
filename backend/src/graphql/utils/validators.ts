@@ -15,11 +15,12 @@ import {
   UpdateClassParticipationCollectionInput,
   UpdateClassParticipationEvaluationInput,
   UpdateDefaultEvaluationInput,
+  UpdateGroupInput,
   UpdateStudentInput,
 } from "../../types";
 import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject } from "../../utils/subjectUtils";
 import { evaluationLoader } from "../dataLoaders/evaluation";
-import { collectionTypeLoader } from "../dataLoaders/collectionType";
+import { collectionTypeLoader, collectionTypesByGroupLoader } from "../dataLoaders/collectionType";
 import { collectionLoader } from "../dataLoaders/collection";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
@@ -309,4 +310,76 @@ export const validateRequestPasswordReset = async (teacher: Teacher) => {
 
 export const validateFixTextGrammaticsInput = (text: string) => {
   if (text.length === 0) throw new ValidationError("Tekstiä ei ole annettu. Tyhjää tekstiä ei voida korjata.");
+};
+
+export const validateUpdateGroupInput = async (input: UpdateGroupInput, groupId: string) => {
+  if (!input.createCollectionTypeInputs && !input.updateCollectionTypeInputs && !input.deleteCollectionTypeIds) return;
+  const createInputs = input.createCollectionTypeInputs ?? [];
+  const updateInputs = input.updateCollectionTypeInputs ?? [];
+  const deleteIds = new Set(input.deleteCollectionTypeIds ?? []);
+
+  // Check for duplicates in updated or deleted IDs
+  const updatedOrDeletedIds = [...updateInputs.map((it) => it.id), ...deleteIds];
+  if (new Set(updatedOrDeletedIds).size !== updatedOrDeletedIds.length) {
+    throw new ValidationError("Syötetyissä muokattavissa arviointityypeissä on duplikaatteja. Tarkista syötetyt arviointityypit.");
+  }
+
+  // Check for unmatched IDs
+  const oldCollectionTypes = await collectionTypesByGroupLoader.load(groupId);
+  const oldCollectionsMap = new Map(oldCollectionTypes.map((it) => [it.id, it]));
+  const oldIdsSet = new Set(oldCollectionTypes.map((it) => it.id));
+  const unmatchedIds = updatedOrDeletedIds.filter((id) => !oldIdsSet.has(id));
+  if (unmatchedIds.length > 0) {
+    throw new ValidationError(
+      `Syötetyissä muokattavissa arviointityypeissä on arviointityyppejä, jotka eivät kuulu ryhmään. Tarkista syötetyt arviointityypit.`
+    );
+  }
+
+  // Check if new categories are valid
+  updateInputs.forEach((it) => {
+    const oldType = oldCollectionsMap.get(it.id);
+    if (
+      oldType?.category === CollectionTypeCategory.CLASS_PARTICIPATION &&
+      it.category &&
+      it.category !== CollectionTypeCategory.CLASS_PARTICIPATION
+    ) {
+      throw new ValidationError("Arviointityyppiä ei voi muuttaa CLASS_PARTICIPATION tyypistä muuksi tyypiksi. Tarkista syötetyt arviointityypit.");
+    }
+    if (
+      oldType?.category !== CollectionTypeCategory.CLASS_PARTICIPATION &&
+      it.category &&
+      it.category === CollectionTypeCategory.CLASS_PARTICIPATION
+    ) {
+      throw new ValidationError("Arviointityyppiä ei voi muuttaa CLASS_PARTICIPATION tyypiksi toisesta tyypistä. Tarkista syötetyt arviointityypit.");
+    }
+  });
+
+  const remainingOldTypes = oldCollectionTypes.filter((it) => !deleteIds.has(it.id));
+
+  // Check if new categories or old undeleted types have CLASS_PARTICIPATION in them
+  const newCategories = [...createInputs, ...updateInputs].map((it) => it.category);
+  const remainingOldCategories = remainingOldTypes.map((it) => it.category);
+  const classParticipationCategories = [...newCategories, ...remainingOldCategories].filter(
+    (category) => category === CollectionTypeCategory.CLASS_PARTICIPATION
+  );
+  if (classParticipationCategories.length > 1) {
+    throw new ValidationError("Ryhmässä voi olla vain yksi CLASS_PARTICIPATION arviointityyppi. Tarkista syötetyt arviointityypit.");
+  }
+  if (classParticipationCategories.length === 0) {
+    throw new ValidationError("Ryhmässä on oltava vähintään yksi CLASS_PARTICIPATION arviointityyppi. Tarkista syötetyt arviointityypit.");
+  }
+
+  // Check if new weights are valid
+  const updateMap = new Map(updateInputs.map((it) => [it.id, it]));
+  const totalWeight = remainingOldTypes.reduce(
+    (sum, type) => {
+      const updatedType = updateMap.get(type.id);
+      return sum + (updatedType?.weight ?? type.weight);
+    },
+    createInputs.reduce((sum, type) => sum + type.weight, 0)
+  );
+
+  if (totalWeight !== 100) {
+    throw new ValidationError("Arviointityyppien painotusten summan on oltava 100. Tarkista syötetyt arviointityypit.");
+  }
 };

@@ -33,6 +33,7 @@ type Mutation {
   deleteStudent(studentId: ID!): Student!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
+  deleteCollectionType(id: ID!): CollectionType!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
   fixTextGrammatics(studentId: ID!, text: String!): String!
@@ -235,11 +236,6 @@ input CreateGroupInput {
   collectionTypes: [CreateCollectionTypeInput!]!
 }
 
-input UpdateGroupInput {
-  name: String
-  archived: Boolean
-}
-
 input CreateStudentInput {
   name: String!
 }
@@ -248,6 +244,21 @@ input CreateCollectionTypeInput {
   category: CollectionTypeCategory!
   name: String!
   weight: Int!
+}
+
+input UpdateGroupInput {
+  name: String
+  archived: Boolean
+  updateCollectionTypeInputs: [UpdateCollectionTypeInput!]
+  deleteCollectionTypeIds: [ID!]
+  createCollectionTypeInputs: [CreateCollectionTypeInput!]
+}
+
+input UpdateCollectionTypeInput {
+  id: ID!
+  category: CollectionTypeCategory
+  name: String
+  weight: Int
 }
 
 input UpdateStudentInput {
