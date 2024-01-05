@@ -11,6 +11,7 @@ import GroupCollectionTypeWeightsBodyView from "../create/_collection_type_weigh
 import { COLORS } from "../../../../theme";
 import { graphql } from "../../../../gql";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
+import { useToast } from "../../../../hooks-and-providers/ToastProvider";
 
 const EditTypeWeightsView_UpdateGroup_Mutation = graphql(`
   mutation EditTypeWeightsView_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {
@@ -21,6 +22,9 @@ const EditTypeWeightsView_UpdateGroup_Mutation = graphql(`
         category
         weight
         name
+        group {
+          id
+        }
       }
     }
   }
@@ -31,6 +35,7 @@ export default function EditTypeWeightsView({
   navigation,
 }: NativeStackScreenProps<UpdateTypesStackParams, "group-edit-collection-types-weights", "home-stack">) {
   const { t } = useTranslation();
+  const { openToast } = useToast();
 
   const { types, setTypes } = useUpdateTypesContext();
   const [updateGroup] = useMutation(EditTypeWeightsView_UpdateGroup_Mutation);
@@ -74,6 +79,7 @@ export default function EditTypeWeightsView({
       });
 
       navigation.getParent()?.goBack();
+      openToast(t("edit-successful", "Muokkaus onnistui!"));
     } catch (error) {
       const msg = getErrorMessage(error);
       console.error(msg);

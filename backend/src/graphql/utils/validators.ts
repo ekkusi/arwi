@@ -335,6 +335,24 @@ export const validateUpdateGroupInput = async (input: UpdateGroupInput, groupId:
     );
   }
 
+  const fullUpdateInputs = updateInputs.map((inputType) => {
+    const equivalentOldInput = oldCollectionTypes.find((type) => type.id === inputType.id);
+    if (!equivalentOldInput) {
+      throw new ValidationError(
+        `Syötetyissä muokattavissa arviointityypeissä on arviointityyppejä, jotka eivät kuulu ryhmään. Tarkista syötetyt arviointityypit.`
+      );
+    }
+    const name = inputType.name || equivalentOldInput.name;
+    const category = inputType.category || equivalentOldInput.category;
+    const weight = inputType.weight || equivalentOldInput.weight;
+    return {
+      ...inputType,
+      name,
+      category,
+      weight,
+    };
+  });
+
   // Check if new categories are valid
   updateInputs.forEach((it) => {
     const oldType = oldCollectionsMap.get(it.id);
@@ -354,7 +372,7 @@ export const validateUpdateGroupInput = async (input: UpdateGroupInput, groupId:
     }
   });
 
-  const remainingOldTypes = oldCollectionTypes.filter((it) => !deleteIds.has(it.id));
+  const remainingOldTypes = oldCollectionTypes.filter((it) => !updatedOrDeletedIds.includes(it.id));
 
   // Check if new categories or old undeleted types have CLASS_PARTICIPATION in them
   const newCategories = [...createInputs, ...updateInputs].map((it) => it.category);
@@ -370,15 +388,10 @@ export const validateUpdateGroupInput = async (input: UpdateGroupInput, groupId:
   }
 
   // Check if new weights are valid
-  const updateMap = new Map(updateInputs.map((it) => [it.id, it]));
-  const totalWeight = remainingOldTypes.reduce(
-    (sum, type) => {
-      const updatedType = updateMap.get(type.id);
-      return sum + (updatedType?.weight ?? type.weight);
-    },
-    createInputs.reduce((sum, type) => sum + type.weight, 0)
-  );
-
+  const remainingWeightSum = remainingOldTypes.reduce((sum, type) => sum + type.weight, 0);
+  const updatedWeightsSum = fullUpdateInputs.reduce((sum, type) => sum + type.weight, 0);
+  const createdWeightSum = createInputs.reduce((sum, type) => sum + type.weight, 0);
+  const totalWeight = remainingWeightSum + updatedWeightsSum + createdWeightSum;
   if (totalWeight !== 100) {
     throw new ValidationError("Arviointityyppien painotusten summan on oltava 100. Tarkista syötetyt arviointityypit.");
   }

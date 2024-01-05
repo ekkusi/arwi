@@ -98,8 +98,14 @@ export default function GroupCollectionTypeWeightsBodyView({ initialTypes, setFo
     isModified.value = newIsModified;
 
     weights.value = newWeights;
+    const newRoundedWeights = newWeights.map((val) => Math.round(val));
+    const remainder = 100 - newRoundedWeights.reduce((prev, cur) => prev + cur, 0);
+    const remainderIndex = newIsModified.findIndex((val) => !val);
+    if (remainder !== 0) {
+      newRoundedWeights[remainderIndex] += 1 * (remainder < 0 ? -1 : 1);
+    }
 
-    return newWeights;
+    return newRoundedWeights;
     // setGroup((prev) => ({ ...prev, collectionTypes: newTypes }));
   };
   const onEndDrag = () => {
@@ -111,7 +117,7 @@ export default function GroupCollectionTypeWeightsBodyView({ initialTypes, setFo
       runOnJS(setForwardDisabled)(true);
     }
     runOnJS(setStartTranslateValues)(translates.value);
-    runOnJS(onUpdate)(weights.value);
+    runOnJS(onUpdate)(roundedWeights.value);
   };
 
   const animatedColor = useDerivedValue(() => (sum.value !== 100 ? COLORS.error : COLORS.darkgray));
