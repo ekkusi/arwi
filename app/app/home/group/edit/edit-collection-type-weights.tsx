@@ -6,10 +6,11 @@ import { Alert } from "react-native";
 import { useMutation } from "@apollo/client";
 import UpdateTypesBody from "./_update_types_body";
 import { UpdateTypesStackParams } from "./update_type_stack_types";
-import { useUpdateTypesContext } from "./UpdateTypesProvider";
+import { CollectionTypeFull, useUpdateTypesContext } from "./UpdateTypesProvider";
 import GroupCollectionTypeWeightsBodyView from "../create/_collection_type_weights_body";
 import { COLORS } from "../../../../theme";
 import { graphql } from "../../../../gql";
+import { getErrorMessage } from "../../../../helpers/errorUtils";
 
 const EditTypeWeightsView_UpdateGroup_Mutation = graphql(`
   mutation EditTypeWeightsView_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {
@@ -38,18 +39,61 @@ export default function EditTypeWeightsView({
   const [weights, setWeights] = useState(types.map((type) => type.weight));
   const [forwardDisabled, setForwardDisabled] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (newTypes: CollectionTypeFull[]) => {
     setLoading(true);
     try {
-      const newIds = types.map((type) => type.id);
+      const newIds = newTypes.map((type) => type.id);
+      newTypes.forEach((typ) => {
+        Alert.alert(`To : ${typ.category} ${typ.id}`);
+      });
       const oldIds = route.params.originalTypes.map((type) => type.id);
-      const typesToDelete = route.params.originalTypes.filter((type) => !newIds.includes(type.id));
-      const typesToUpdate = route.params.originalTypes.filter((type) => newIds.includes(type.id));
-      const typesToAdd = types.filter((type) => !type.id);
-    } catch {
-      console.log("moi");
+      const typesToDelete = route.params.originalTypes.filter((type) => type.id && !newIds.includes(type.id));
+      const typesToUpdate = newTypes.filter((type) => type.id && oldIds.includes(type.id));
+      const typesToAdd = newTypes.filter((type) => !type.id);
+      typesToDelete.forEach((typ) => {
+        Alert.alert(`To delete: ${typ.category} ${typ.id}`);
+      });
+      typesToUpdate.forEach((typ) => {
+        Alert.alert(`To update: ${typ.category} ${typ.id}`);
+      });
+      typesToAdd.forEach((typ) => {
+        Alert.alert(`To add: ${typ.category}`);
+      });
+      await updateGroup({
+        variables: {
+          id: route.params.groupId,
+          input: {
+            updateCollectionTypeInputs: typesToUpdate.map((type) => {
+              return {
+                id: type.id!,
+                name: type.name,
+                weight: type.weight,
+                category: type.category,
+              };
+            }),
+            deleteCollectionTypeIds: typesToDelete.map((type) => {
+              return type.id!;
+            }),
+            createCollectionTypeInputs: typesToAdd.map((type) => {
+              return {
+                name: type.name,
+                weight: type.weight,
+                category: type.category,
+              };
+            }),
+          },
+        },
+      });
+
+      navigation.getParent()?.goBack();
+    } catch (error) {
+      const msg = getErrorMessage(error);
+      console.error(msg);
+      // TODO: Show error in UI
     }
+    setLoading(false);
   };
+
   const sum = weights.reduce((prev, curr) => prev + curr, 0);
   const onMoveBack = () => {
     setTypes(types.map((item, i) => ({ category: item.category, name: item.name, weight: weights[i], id: item.id })));
@@ -60,9 +104,9 @@ export default function EditTypeWeightsView({
     if (sum !== 100) {
       return;
     }
-    setTypes(types.map((item, i) => ({ category: item.category, name: item.name, weight: weights[i], id: item.id })));
-
-    Alert.alert("Add update method here!");
+    const newTypes = types.map((item, i) => ({ category: item.category, name: item.name, weight: weights[i], id: item.id }));
+    setTypes(newTypes);
+    handleSubmit(newTypes);
   };
 
   return (
@@ -72,7 +116,7 @@ export default function EditTypeWeightsView({
       moveForwardDisabled={forwardDisabled}
       onMoveBack={onMoveBack}
       onMoveForward={onMoveForward}
-      forwardButtonProps={{ title: t("save", "Tallenna"), leftIcon: <MaterialCommunityIcon name="check" size={25} color={COLORS.white} /> }}
+      forwardButtonProps={{ title: t("save", "Tallenna"), leftIcon: <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />, loading }}
       style={{ gap: 20, padding: "lg" }}
     >
       <GroupCollectionTypeWeightsBodyView

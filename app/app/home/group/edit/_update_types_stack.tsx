@@ -19,9 +19,6 @@ const UpdateTypesProvider_GetGroup_Query = graphql(`
         category
         name
         weight
-        defaultTypeCollection {
-          id
-        }
       }
     }
   }
