@@ -12,6 +12,7 @@ import AddNewStudent from "./AddNewStudent";
 import ChangeGroupModule from "./ChangeGroupModule";
 import ChangeArchiveStatus from "./ChangeArchiveStatus";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
+import UpdateTypesStack from "./group/edit/_update_types_stack";
 
 export default function GroupHeaderRightButton({
   id,
@@ -79,10 +80,10 @@ export default function GroupHeaderRightButton({
               </MenuOption>
               <MenuOption
                 onSelect={() => {
-                  navigation.navigate("collection-create", { groupId: id, collectionType: CollectionTypeCategory.CLASS_PARTICIPATION });
+                  navigation.navigate("collection-create", { groupId: id });
                 }}
               >
-                <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
+                <CText>{t("new-class-evaluation", "Uusi tuntiarviointi")}</CText>
               </MenuOption>
               <MenuOption
                 onSelect={() => {
@@ -93,6 +94,16 @@ export default function GroupHeaderRightButton({
                 }}
               >
                 <CText>{t("change-class-year", "Vaihda vuosiluokka")}</CText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  openModal({
+                    title: t("edit-evaluation-types", "Muokkaa arviointisisältöjä"),
+                    children: <UpdateTypesStack groupId={id} />,
+                  });
+                }}
+              >
+                <CText>{t("edit-evaluation-types", "Muokkaa arviointisisältöjä")}</CText>
               </MenuOption>
               <MenuOption
                 onSelect={() => {
