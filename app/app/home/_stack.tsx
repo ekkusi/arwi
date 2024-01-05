@@ -25,6 +25,9 @@ import CollectionHeaderRightButton from "./CollectionHeaderRightButton";
 import StudentHeaderRightButton from "./StudentHeaderRightButton";
 import StudentFeedbackView from "./student/feedback";
 import DefaultEvaluationCollection from "./group/DefaultEvaluationCollection";
+import DefaultCollectionEditAllEvaluationsView from "./collection/edit_all_default_evaluations";
+import EditDefaultCollectionGeneralInfoView from "./collection/edit_default_general_info";
+import DefaultEvaluationEditView from "./evaluation/edit_default_evaluation";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -108,7 +111,8 @@ export default function HomeStack() {
         component={CollectionView}
         options={({ route, navigation }) => ({
           title: `${route.params.date}: ${route.params.environmentLabel.fi}`,
-          headerRight: () => (route.params.archived ? undefined : <CollectionHeaderRightButton id={route.params.id} navigation={navigation} />),
+          headerRight: () =>
+            route.params.archived ? undefined : <CollectionHeaderRightButton id={route.params.id} isClassParticipation navigation={navigation} />,
         })}
       />
       <HomeStackNavigator.Screen
@@ -127,15 +131,33 @@ export default function HomeStack() {
         options={{ title: t("new-evaluation", "Uusi arviointi"), headerShown: false }}
       />
       <HomeStackNavigator.Screen name="collection-edit" component={EditCollectionGeneralInfoView} options={{ title: t("edit", "Muokkaa") }} />
+      <HomeStackNavigator.Screen
+        name="default-collection-edit"
+        component={EditDefaultCollectionGeneralInfoView}
+        options={{ title: t("edit", "Muokkaa") }}
+      />
       <HomeStackNavigator.Screen name="edit-evaluation" component={EvaluationEditView} options={{ title: t("edit", "Muokkaa") }} />
+      <HomeStackNavigator.Screen name="edit-default-evaluation" component={DefaultEvaluationEditView} options={{ title: t("edit", "Muokkaa") }} />
       <HomeStackNavigator.Screen name="profile" component={ProfileView} options={{ title: t("profile", "Profiili") }} />
       <HomeStackNavigator.Screen name="edit-all-evaluations" component={CollectionEditAllEvaluationsView} options={{ title: t("edit", "Muokkaa") }} />
+      <HomeStackNavigator.Screen
+        name="edit-all-default-evaluations"
+        component={DefaultCollectionEditAllEvaluationsView}
+        options={{ title: t("edit", "Muokkaa") }}
+      />
       <HomeStackNavigator.Screen name="archive" component={ArchivePage} options={{ title: t("archive", "Arkisto") }} />
       <HomeStackNavigator.Screen
         name="default-evaluation-collection"
         component={DefaultEvaluationCollection}
-        options={(props) => {
-          return { title: props.route.params.name };
+        options={({ route, navigation }) => {
+          return {
+            title: route.params.name,
+
+            headerRight: () =>
+              route.params.archived ? undefined : (
+                <CollectionHeaderRightButton id={route.params.id} isClassParticipation={false} navigation={navigation} />
+              ),
+          };
         }}
       />
       <HomeStackNavigator.Group screenOptions={{ presentation: "modal" }}>

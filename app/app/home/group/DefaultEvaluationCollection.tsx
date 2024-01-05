@@ -18,6 +18,7 @@ import { formatDate } from "../../../helpers/dateHelpers";
 import CircledNumber from "../../../components/CircledNumber";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
 import { getColorForGrade } from "../../../helpers/dataMappers";
+import { parseFloatToGradeString } from "../../../helpers/evaluationUtils";
 
 const DefaultEvaluationCollection_GetCollectionType_Query = graphql(`
   query DefaultEvaluationCollection_GetCollectionType($typeId: ID!) {
@@ -109,7 +110,19 @@ export default function DefaultEvaluationCollection({
           </CView>
         </CView>
         <CView style={{ gap: "lg" }}>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
+          <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluations", "Arvioinnit")}</CText>
+            {!params.archived && type.defaultTypeCollection && (
+              <CButton
+                size="small"
+                variant="outline"
+                title={t("edit-all", "Muokkaa kaikkia")}
+                onPress={() => {
+                  navigation.navigate("edit-all-default-evaluations", { collectionId: type.defaultTypeCollection!.id });
+                }}
+              />
+            )}
+          </CView>
           {type.defaultTypeCollection && type.defaultTypeCollection.evaluations.length > 0 ? (
             <Accordion
               allowMultiple
@@ -119,10 +132,10 @@ export default function DefaultEvaluationCollection({
                   title: it.student.name,
                   date: formatDate(type.defaultTypeCollection!.date),
                   isEvaluated: it.rating !== undefined && it.rating !== null,
-                  color: "white",
                   icons: it.wasPresent && !!it.notes && (
                     <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />
                   ),
+                  headerContentRight: <CircledNumber decimals={0} size={48} valueString={it.rating ? parseFloatToGradeString(it.rating) : "-"} />,
                   content: (
                     <>
                       <CText style={{ fontSize: "sm", fontWeight: "500", color: it.wasPresent ? "green" : "red", paddingBottom: 10 }}>
@@ -130,9 +143,6 @@ export default function DefaultEvaluationCollection({
                       </CText>
                       {it.wasPresent ? (
                         <CView style={{ gap: 10 }}>
-                          <CView style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>
-                            <CircledNumber decimals={0} size={48} title={t("grade", "Arvosana")} value={it.rating ? it.rating : undefined} />
-                          </CView>
                           {it.notes ? (
                             <CView>
                               <CText style={{ fontSize: "sm" }}>{it.notes}</CText>
@@ -153,7 +163,7 @@ export default function DefaultEvaluationCollection({
                         title={t("edit", "Muokkaa")}
                         style={{ marginTop: "md" }}
                         onPress={() => {
-                          Alert.alert("Edit evaluation");
+                          navigation.navigate("edit-default-evaluation", { evaluationId: it.id });
                         }}
                       />
                     </>

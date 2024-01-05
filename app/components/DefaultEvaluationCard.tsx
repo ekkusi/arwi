@@ -54,8 +54,6 @@ type DefaultEvaluationCardProps = {
   hasParticipationToggle?: boolean;
   evaluation: DefaultEvaluation | DefaultEvaluationToUpdate;
   date?: string;
-  environment?: string;
-  envColor?: string;
   onChanged: (key: DefaultEvaluationPropKey, value: any) => void;
   height?: "auto" | number;
   hasArrowDown?: boolean;
@@ -81,8 +79,6 @@ function DefaultEvaluationCard({
   onChanged,
   evaluation,
   date,
-  environment,
-  envColor,
   hasArrowDown,
   onArrowDownPress,
   hasParticipationToggle = true,
@@ -194,12 +190,6 @@ function DefaultEvaluationCard({
       <CView style={{ gap: 3 }}>
         <CText style={{ fontSize: "title", fontWeight: "500" }}>{evaluation.student.name}</CText>
         {date && <CText style={{ fontSize: "sm", fontWeight: "300" }}>{formatDate(date)}</CText>}
-        {envColor && environment && (
-          <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
-            <CView style={{ height: 12, width: 12, borderRadius: 6, backgroundColor: envColor }} />
-            <CText style={{ fontSize: "sm", fontWeight: "300" }}>{environment}</CText>
-          </CView>
-        )}
       </CView>
       {hasParticipationToggle && (
         <CView style={{ width: "100%" }}>
@@ -227,7 +217,7 @@ function DefaultEvaluationCard({
             minValue={4}
             maxValue={10}
             step={0.25}
-            initialValue={7}
+            initialValue={data.rating || 7}
             ticks={[4, 5, 6, 7, 8, 9, 10]}
             onUpdate={(val) => onDataChanged("rating", val)}
           />

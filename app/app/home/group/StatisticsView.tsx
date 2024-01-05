@@ -174,7 +174,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                     <CTouchableOpacity
                       style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
                       onPress={() => {
-                        navigation.navigate("default-evaluation-collection", { id: type.id, name: type.name });
+                        navigation.navigate("default-evaluation-collection", { id: type.id, name: type.name, archived: group.archived });
                       }}
                     >
                       <CView style={{ gap: 5 }}>

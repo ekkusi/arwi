@@ -21,6 +21,7 @@ export type HomeStackParams = {
   "default-evaluation-collection": {
     id: string;
     name: string;
+    archived: boolean;
   };
   collection: {
     id: string;
@@ -32,6 +33,9 @@ export type HomeStackParams = {
     collectionId: string;
     onSaved?: (newEnvironmentLabel: TranslatedString, newDate: string) => void;
   };
+  "default-collection-edit": {
+    collectionId: string;
+  };
   "collection-create": {
     groupId: string;
   };
@@ -40,6 +44,9 @@ export type HomeStackParams = {
     collectionTypeId: string;
   };
   "edit-evaluation": {
+    evaluationId: string;
+  };
+  "edit-default-evaluation": {
     evaluationId: string;
   };
   "edit-students": {
@@ -53,6 +60,9 @@ export type HomeStackParams = {
     type: string;
   };
   "edit-all-evaluations": {
+    collectionId: string;
+  };
+  "edit-all-default-evaluations": {
     collectionId: string;
   };
   archive: undefined;
