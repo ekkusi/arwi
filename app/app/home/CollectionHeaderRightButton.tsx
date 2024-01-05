@@ -11,6 +11,7 @@ import CText from "../../components/primitives/CText";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
 import SaveAndCancelButtons from "../../components/SaveAndCancelButtons";
 import { getErrorMessage } from "../../helpers/errorUtils";
+import { CollectionTypeCategory } from "../../gql/graphql";
 
 const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
   mutation CollectionHeaderRightButton_DeleteCollection($id: ID!) {
@@ -53,9 +54,11 @@ function DeleteCollection({ collectionId, onDeleted, onCancel }: { collectionId:
 
 export default function CollectionHeaderRightButton({
   id,
+  isClassParticipation,
   navigation,
 }: {
   id: string;
+  isClassParticipation: boolean;
   navigation: NativeStackNavigationProp<HomeStackParams, "collection">;
 }) {
   const { t } = useTranslation();
@@ -69,19 +72,27 @@ export default function CollectionHeaderRightButton({
         <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
           <MenuOption
             onSelect={() => {
-              navigation.navigate("collection-edit", {
-                collectionId: id,
-                onSaved: (newEnvironmentLabel, newDate) => {
-                  navigation.setParams({ environmentLabel: newEnvironmentLabel, date: newDate });
-                },
-              });
+              if (isClassParticipation) {
+                navigation.navigate("collection-edit", {
+                  collectionId: id,
+                  onSaved: (newEnvironmentLabel, newDate) => {
+                    navigation.setParams({ environmentLabel: newEnvironmentLabel, date: newDate });
+                  },
+                });
+              } else {
+                navigation.navigate("default-collection-edit", { collectionId: id });
+              }
             }}
           >
             <CText>{t("edit-general-details", "Muokkaa yleistietoja")}</CText>
           </MenuOption>
           <MenuOption
             onSelect={() => {
-              navigation.navigate("edit-all-evaluations", { collectionId: id });
+              if (isClassParticipation) {
+                navigation.navigate("edit-all-evaluations", { collectionId: id });
+              } else {
+                navigation.navigate("edit-all-default-evaluations", { collectionId: id });
+              }
             }}
           >
             <CText>{t("edit-evaluations", "Muokkaa arviointeja")}</CText>
