@@ -447,11 +447,6 @@ export type CreateGroupInput = {
   collectionTypes: Array<CreateCollectionTypeInput>;
 };
 
-export type UpdateGroupInput = {
-  name?: InputMaybe<Scalars['String']>;
-  archived?: InputMaybe<Scalars['Boolean']>;
-};
-
 export type CreateStudentInput = {
   name: Scalars['String'];
 };
@@ -460,6 +455,21 @@ export type CreateCollectionTypeInput = {
   category: CollectionTypeCategory;
   name: Scalars['String'];
   weight: Scalars['Int'];
+};
+
+export type UpdateGroupInput = {
+  name?: InputMaybe<Scalars['String']>;
+  archived?: InputMaybe<Scalars['Boolean']>;
+  updateCollectionTypeInputs?: InputMaybe<Array<UpdateCollectionTypeInput>>;
+  deleteCollectionTypeIds?: InputMaybe<Array<Scalars['ID']>>;
+  createCollectionTypeInputs?: InputMaybe<Array<CreateCollectionTypeInput>>;
+};
+
+export type UpdateCollectionTypeInput = {
+  id: Scalars['ID'];
+  category?: InputMaybe<CollectionTypeCategory>;
+  name?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateStudentInput = {
@@ -637,9 +647,10 @@ export type ResolversTypes = {
   EducationLevel: EducationLevel;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
-  UpdateGroupInput: UpdateGroupInput;
   CreateStudentInput: CreateStudentInput;
   CreateCollectionTypeInput: CreateCollectionTypeInput;
+  UpdateGroupInput: UpdateGroupInput;
+  UpdateCollectionTypeInput: UpdateCollectionTypeInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateClassParticipationCollectionInput: CreateClassParticipationCollectionInput;
   CreateDefaultCollectionInput: CreateDefaultCollectionInput;
@@ -686,9 +697,10 @@ export type ResolversParentTypes = {
   Student: StudentPrisma;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
-  UpdateGroupInput: UpdateGroupInput;
   CreateStudentInput: CreateStudentInput;
   CreateCollectionTypeInput: CreateCollectionTypeInput;
+  UpdateGroupInput: UpdateGroupInput;
+  UpdateCollectionTypeInput: UpdateCollectionTypeInput;
   UpdateStudentInput: UpdateStudentInput;
   CreateClassParticipationCollectionInput: CreateClassParticipationCollectionInput;
   CreateDefaultCollectionInput: CreateDefaultCollectionInput;

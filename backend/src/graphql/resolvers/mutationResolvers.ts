@@ -31,6 +31,7 @@ import {
   validateUpdateClassParticipationEvaluationInput,
   validateUpdateDefaultCollectionInput,
   validateUpdateDefaultEvaluationInput,
+  validateUpdateGroupInput,
   validateUpdateStudentInput,
 } from "../utils/validators";
 import {
@@ -320,9 +321,15 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   updateGroup: async (_, { data, groupId }, { user }) => {
     await checkAuthenticatedByGroup(user, groupId);
-    const updatedGroup = await updateGroup(groupId, {
-      data: mapUpdateGroupInput(data),
-    });
+    await validateUpdateGroupInput(data, groupId);
+    const { updateCollectionTypeInputs, deleteCollectionTypeIds, createCollectionTypeInputs, ...rest } = data;
+    const updatedGroup = await updateGroup(
+      groupId,
+      {
+        data: mapUpdateGroupInput(rest),
+      },
+      { updateCollectionTypeInputs, deleteCollectionTypeIds, createCollectionTypeInputs }
+    );
     return updatedGroup;
   },
   deleteStudent: async (_, { studentId }, { user }) => {
@@ -369,11 +376,15 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       });
     }
-    const updatedGroup = await updateGroup(groupId, {
-      data: {
-        currentModuleId: newYear.id,
+    const updatedGroup = await updateGroup(
+      groupId,
+      {
+        data: {
+          currentModuleId: newYear.id,
+        },
       },
-    });
+      {}
+    );
     return updatedGroup;
   },
   generateStudentFeedback: async (_, { studentId, moduleId }, { dataLoaders, user, prisma }) => {

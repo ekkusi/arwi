@@ -47,7 +47,7 @@ export const mapCreateDefaultEvaluationInput = (data: CreateDefaultEvaluationInp
   };
 };
 
-export const mapUpdateGroupInput = (data: UpdateGroupInput): Prisma.GroupUpdateInput => {
+export const mapUpdateGroupInput = (data: Omit<UpdateGroupInput, "collectionTypes">): Prisma.GroupUpdateInput => {
   return {
     name: data.name ? data.name : undefined,
     archived: data.archived === null ? undefined : data.archived,
