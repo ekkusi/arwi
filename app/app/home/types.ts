@@ -29,6 +29,9 @@ export type HomeStackParams = {
     environmentLabel: TranslatedString;
     archived: boolean;
   };
+  "edit-evaluation-types": {
+    groupId: string;
+  };
   "collection-edit": {
     collectionId: string;
     onSaved?: (newEnvironmentLabel: TranslatedString, newDate: string) => void;

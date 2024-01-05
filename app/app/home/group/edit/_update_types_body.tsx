@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { RouteProp } from "@react-navigation/native";
 import CButton, { CButtonProps } from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { COLORS } from "../../../../theme";
@@ -19,7 +20,7 @@ type UpdateTypesBodyProps = Omit<CKeyboardAvoidingViewProps, "avoidKeyboard"> & 
   forwardButtonProps?: Omit<CButtonProps, "onPress" | "variant">;
   moveForwardDisabled?: boolean;
   onMoveBack?: () => void;
-  onMoveForward?: () => void;
+  onMoveForward: () => void;
   hideBottomBarOnKeyboardOpen?: boolean;
   closeKeyBoardOnTap?: boolean;
 };
@@ -62,20 +63,6 @@ export default function UpdateTypesBody({
     navigation.goBack();
   };
 
-  const handleMoveForward = () => {
-    if (onMoveForward) {
-      onMoveForward();
-      return;
-    }
-    switch (progressState) {
-      case 1:
-        navigation.navigate("group-edit-collection-types-weights");
-        break;
-      default:
-        break;
-    }
-  };
-
   const buttonSpacing = useMemo(() => {
     if (noBackButton) return "flex-end";
     if (noForwardButton) return "flex-start";
@@ -96,7 +83,7 @@ export default function UpdateTypesBody({
             {!noForwardButton && (
               <CButton
                 disabled={moveForwardDisabled}
-                onPress={handleMoveForward}
+                onPress={onMoveForward}
                 leftIcon={<MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />}
                 {...forwardButtonProps}
               />

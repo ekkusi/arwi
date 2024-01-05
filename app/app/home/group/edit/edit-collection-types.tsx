@@ -10,7 +10,10 @@ import UpdateTypesBody from "./_update_types_body";
 import CollectionTypesBody from "../create/_collection_types_body";
 import { dividePercentages } from "../../../../helpers/mathUtilts";
 
-export default function EditTypesView({ navigation }: NativeStackScreenProps<UpdateTypesStackParams, "group-edit-collection-types", "home-stack">) {
+export default function EditTypesView({
+  route,
+  navigation,
+}: NativeStackScreenProps<UpdateTypesStackParams, "group-edit-collection-types", "home-stack">) {
   const { t } = useTranslation();
 
   const { types, setTypes } = useUpdateTypesContext();
@@ -35,7 +38,7 @@ export default function EditTypesView({ navigation }: NativeStackScreenProps<Upd
     const weights = typesChanged ? dividePercentages(selectedTypes.length) : types.map((type) => type.weight);
 
     setTypes(selectedTypes.map((item, i) => ({ id: item.id, category: item.category, name: item.name, weight: weights[i] })));
-    navigation.navigate("group-edit-collection-types-weights");
+    navigation.navigate("group-edit-collection-types-weights", { groupId: route.params.groupId, originalTypes: route.params.originalTypes });
   };
 
   return (

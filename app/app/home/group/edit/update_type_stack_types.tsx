@@ -1,4 +1,12 @@
+import { CollectionTypeFull } from "./UpdateTypesProvider";
+
 export type UpdateTypesStackParams = {
-  "group-edit-collection-types": undefined;
-  "group-edit-collection-types-weights": undefined;
+  "group-edit-collection-types": {
+    groupId: string;
+    originalTypes: CollectionTypeFull[];
+  };
+  "group-edit-collection-types-weights": {
+    groupId: string;
+    originalTypes: CollectionTypeFull[];
+  };
 };
