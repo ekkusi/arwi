@@ -11,7 +11,6 @@ import CText from "../../components/primitives/CText";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
 import SaveAndCancelButtons from "../../components/SaveAndCancelButtons";
 import { getErrorMessage } from "../../helpers/errorUtils";
-import { CollectionTypeCategory } from "../../gql/graphql";
 
 const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
   mutation CollectionHeaderRightButton_DeleteCollection($id: ID!) {
@@ -25,6 +24,26 @@ const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
         group {
           id
           name
+        }
+      }
+    }
+  }
+`);
+
+const CollectionHeaderRightButton_DeleteCollectionType_Mutation = graphql(`
+  mutation CollectionHeaderRightButton_DeleteCollectionType($id: ID!) {
+    deleteCollectionType(id: $id) {
+      id
+      group {
+        id
+        collectionTypes {
+          id
+        }
+        modules {
+          id
+          evaluationCollections {
+            id
+          }
         }
       }
     }
@@ -45,9 +64,33 @@ function DeleteCollection({ collectionId, onDeleted, onCancel }: { collectionId:
   return (
     <>
       <CText style={{ marginBottom: "lg" }}>
-        {t("delete-evaluation-confirmation-info", "Jos poistat arvioinnin, menetät kaikki arviointiin liittyvät tiedot.")}
+        {t("delete-collection-confirmation-info", "Jos poistat arvioinnin, menetät kaikki arviointiin liittyvät tiedot.")}
       </CText>
       <SaveAndCancelButtons variant="delete" loading={loading} onSave={deleteCollection} onCancel={onCancel} />
+    </>
+  );
+}
+
+function DeleteCollectionType({ collectionTypeId, onDeleted, onCancel }: { collectionTypeId: string; onDeleted: () => void; onCancel: () => void }) {
+  const { t } = useTranslation();
+  const [deleteCollectionType, { loading }] = useMutation(CollectionHeaderRightButton_DeleteCollectionType_Mutation, {
+    variables: { id: collectionTypeId },
+    onCompleted: onDeleted,
+    onError: (e) => {
+      console.error(e);
+      Alert.alert(t("general-error"), getErrorMessage(e));
+    },
+  });
+
+  return (
+    <>
+      <CText style={{ marginBottom: "lg" }}>
+        {t(
+          "delete-default-collection-confirmation-info",
+          "Jos poistat arviointikohteen, menetät kaikki siihen liittyvät tiedot, mukaan lukien siitä tehdyn arvioinnin."
+        )}
+      </CText>
+      <SaveAndCancelButtons variant="delete" loading={loading} onSave={deleteCollectionType} onCancel={onCancel} />
     </>
   );
 }
@@ -100,8 +143,8 @@ export default function CollectionHeaderRightButton({
           <MenuOption
             onSelect={() => {
               openModal({
-                title: t("delete-evaluation-confirmation-title", "Oletko varma?"),
-                children: (
+                title: t("delete-collection-confirmation-title", "Oletko varma?"),
+                children: isClassParticipation ? (
                   <DeleteCollection
                     onCancel={closeModal}
                     onDeleted={() => {
@@ -110,11 +153,20 @@ export default function CollectionHeaderRightButton({
                     }}
                     collectionId={id}
                   />
+                ) : (
+                  <DeleteCollectionType
+                    onCancel={closeModal}
+                    onDeleted={() => {
+                      navigation.goBack();
+                      closeModal();
+                    }}
+                    collectionTypeId={id}
+                  />
                 ),
               });
             }}
           >
-            <CText>{t("delete-evaluation", "Poista arviointi")}</CText>
+            <CText>{t("delete-collection", "Poista arviointi")}</CText>
           </MenuOption>
         </CView>
       </MenuOptions>

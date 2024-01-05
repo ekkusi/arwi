@@ -70,6 +70,15 @@ export async function updateGroup<T extends Prisma.GroupUpdateArgs>(
           },
         })
       : [];
+  deletedCollectionTypes.forEach((collectionType) => {
+    clearCollectionTypeLoaders(collectionType);
+    collectionType.collection.forEach((collection) => {
+      clearCollectionLoaders(collection);
+      collection.evaluations.forEach((evaluation) => {
+        clearEvaluationLoaders(evaluation);
+      });
+    });
+  });
   // Clear the DataLoader cache for the updated collection types
   updateCollectionTypeInputs?.forEach((collectionType) => {
     collectionTypeLoader.clear(collectionType.id);
