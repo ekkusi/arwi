@@ -48,7 +48,7 @@ model Module {
 
 model EvaluationCollection {
   id                      String       @id @default(uuid())
-  type                    CollectionType @relation(fields: [typeId], references: [id], onDelete: Restrict)
+  type                    CollectionType @relation(fields: [typeId], references: [id], onDelete: Cascade)
   typeId                  String        
   date                    DateTime     @default(now())
   learningObjectiveCodes  String[]

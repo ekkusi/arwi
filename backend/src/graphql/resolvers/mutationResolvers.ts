@@ -39,6 +39,7 @@ import {
   checkAuthenticatedByEvaluation,
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
+  checkAuthenticatedByType,
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
@@ -53,6 +54,7 @@ import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
+import { deleteCollectionType } from "../mutationWrappers/collectionType";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -346,6 +348,11 @@ const resolvers: MutationResolvers<CustomContext> = {
     await checkAuthenticatedByCollection(user, collectionId);
     const collection = await deleteCollection(collectionId);
     return collection;
+  },
+  deleteCollectionType: async (_, { id }, { user }) => {
+    await checkAuthenticatedByType(user, id);
+    const collectionType = await deleteCollectionType(id);
+    return collectionType;
   },
   changeGroupModule: async (_, { data, groupId }, { prisma, dataLoaders, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
