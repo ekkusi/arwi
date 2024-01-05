@@ -43,22 +43,10 @@ export default function EditTypeWeightsView({
     setLoading(true);
     try {
       const newIds = newTypes.map((type) => type.id);
-      newTypes.forEach((typ) => {
-        Alert.alert(`To : ${typ.category} ${typ.id}`);
-      });
       const oldIds = route.params.originalTypes.map((type) => type.id);
       const typesToDelete = route.params.originalTypes.filter((type) => type.id && !newIds.includes(type.id));
       const typesToUpdate = newTypes.filter((type) => type.id && oldIds.includes(type.id));
-      const typesToAdd = newTypes.filter((type) => !type.id);
-      typesToDelete.forEach((typ) => {
-        Alert.alert(`To delete: ${typ.category} ${typ.id}`);
-      });
-      typesToUpdate.forEach((typ) => {
-        Alert.alert(`To update: ${typ.category} ${typ.id}`);
-      });
-      typesToAdd.forEach((typ) => {
-        Alert.alert(`To add: ${typ.category}`);
-      });
+      const typesToAdd = newTypes.filter((type) => !oldIds.includes(type.id));
       await updateGroup({
         variables: {
           id: route.params.groupId,
@@ -121,7 +109,7 @@ export default function EditTypeWeightsView({
     >
       <GroupCollectionTypeWeightsBodyView
         initialTypes={[...types].map((type) => {
-          return { ...type, id: undefined };
+          return { ...type };
         })}
         setForwardDisabled={(val) => {
           setForwardDisabled(val);

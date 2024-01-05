@@ -3,6 +3,7 @@ import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { useTranslation } from "react-i18next";
 import { SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
 import debounce from "lodash.debounce";
+import { Alert } from "react-native";
 import Card from "../../../../components/Card";
 import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
 import CText from "../../../../components/primitives/CText";
@@ -19,11 +20,13 @@ import { CollectionTypeInfo, CollectionTypeOption } from "./types_body";
 import { mapCollectionTypeInfo } from "./helpers";
 
 export default function CollectionTypesBody({
+  edit = false,
   error,
   removeError,
   selectedTypes,
   setNewTypes,
 }: {
+  edit?: boolean;
   error: string | undefined;
   removeError: () => void;
   selectedTypes: CollectionTypeInfo[];
@@ -106,7 +109,29 @@ export default function CollectionTypesBody({
                             <MaterialCommunityIcon name="pencil-outline" color={COLORS.primary} size={24} />
                           </CTouchableOpacity>
                           <CTouchableOpacity
-                            onPress={() => onRemoveType(type)}
+                            onPress={() => {
+                              if (edit) {
+                                Alert.alert(
+                                  t("delete", "Poista"),
+                                  t("confirm-delete-info", "Jos poistat sisällön, myös mahdolliset sisällön arviointitiedot poistuvat."),
+                                  [
+                                    {
+                                      text: t("no", "Ei"),
+                                      onPress: () => null,
+                                      style: "cancel",
+                                    },
+                                    {
+                                      text: t("yes", "Kyllä"),
+                                      onPress: () => {
+                                        onRemoveType(type);
+                                      },
+                                    },
+                                  ]
+                                );
+                              } else {
+                                onRemoveType(type);
+                              }
+                            }}
                             style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}
                           >
                             <MaterialCommunityIcon name="trash-can-outline" color={COLORS.primary} size={24} />
