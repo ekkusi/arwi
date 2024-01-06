@@ -1,20 +1,25 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { CollectionTypeOption } from "../create/types_body";
 import { UpdateTypesStackParams } from "./update_type_stack_types";
 import { useUpdateTypesContext } from "./UpdateTypesProvider";
 import { mapCollectionTypeInfos } from "../create/helpers";
-import GroupCreationBody from "../create/_body";
 import UpdateTypesBody from "./_update_types_body";
 import CollectionTypesBody from "../create/_collection_types_body";
 import { dividePercentages } from "../../../../helpers/mathUtilts";
 
-export default function EditTypesView({ navigation }: NativeStackScreenProps<UpdateTypesStackParams, "group-edit-collection-types", "home-stack">) {
+export default function EditTypesView({
+  route,
+  navigation,
+}: NativeStackScreenProps<UpdateTypesStackParams, "group-edit-collection-types", "home-stack">) {
   const { t } = useTranslation();
 
   const { types, setTypes } = useUpdateTypesContext();
-  const [selectedTypes, setSelectedTypes] = useState(mapCollectionTypeInfos(types));
+  const [selectedTypes, setSelectedTypes] = useState(
+    types.map((type, i) => {
+      return { name: type.name, category: type.category, id: type.id || `${type.category}-${i}` };
+    })
+  );
   const [error, setError] = useState<string | undefined>(undefined);
   const [typesChanged, setTypesChanged] = useState(false);
 
@@ -35,12 +40,13 @@ export default function EditTypesView({ navigation }: NativeStackScreenProps<Upd
     const weights = typesChanged ? dividePercentages(selectedTypes.length) : types.map((type) => type.weight);
 
     setTypes(selectedTypes.map((item, i) => ({ id: item.id, category: item.category, name: item.name, weight: weights[i] })));
-    navigation.navigate("group-edit-collection-types-weights");
+    navigation.navigate("group-edit-collection-types-weights", { groupId: route.params.groupId, originalTypes: route.params.originalTypes });
   };
 
   return (
     <UpdateTypesBody navigation={navigation} progressState={1} onMoveForward={onMoveToNextView}>
       <CollectionTypesBody
+        edit
         error={error}
         removeError={() => setError(undefined)}
         selectedTypes={selectedTypes}

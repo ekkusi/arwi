@@ -97,10 +97,7 @@ export default function GroupHeaderRightButton({
               </MenuOption>
               <MenuOption
                 onSelect={() => {
-                  openModal({
-                    title: t("edit-evaluation-types", "Muokkaa arviointisisältöjä"),
-                    children: <UpdateTypesStack groupId={id} />,
-                  });
+                  navigation.navigate("edit-evaluation-types", { groupId: id });
                 }}
               >
                 <CText>{t("edit-evaluation-types", "Muokkaa arviointisisältöjä")}</CText>

@@ -28,6 +28,7 @@ import DefaultEvaluationCollection from "./group/DefaultEvaluationCollection";
 import DefaultCollectionEditAllEvaluationsView from "./collection/edit_all_default_evaluations";
 import EditDefaultCollectionGeneralInfoView from "./collection/edit_default_general_info";
 import DefaultEvaluationEditView from "./evaluation/edit_default_evaluation";
+import UpdateTypesStack from "./group/edit/_update_types_stack";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -119,6 +120,11 @@ export default function HomeStack() {
         name="group-create"
         component={GroupCreationStack}
         options={{ title: t("HomeStack.newGroup", "Uusi ryhmä"), headerShown: false }}
+      />
+      <HomeStackNavigator.Screen
+        name="edit-evaluation-types"
+        component={UpdateTypesStack}
+        options={{ title: t("edit-evaluation-types", "Muokkaa arviointisisältöjä"), headerShown: false }}
       />
       <HomeStackNavigator.Screen
         name="collection-create"
