@@ -41,6 +41,9 @@ const AddNewStudent_CreateStudent_Mutation = graphql(`
           evaluationCollections {
             id
             date
+            evaluations {
+              id
+            }
             __typename
             ... on ClassParticipationCollection {
               environment {

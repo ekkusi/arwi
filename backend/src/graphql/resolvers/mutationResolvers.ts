@@ -271,6 +271,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     await validateCreateStudentInput(data, moduleId);
     const module = await dataLoaders.moduleLoader.load(moduleId);
     const collections = await dataLoaders.collectionsByModuleLoader.load(moduleId);
+
     const createdStudent = await createStudent(module.groupId, {
       data: {
         ...data,
@@ -285,6 +286,10 @@ const resolvers: MutationResolvers<CustomContext> = {
           })),
         },
       },
+    });
+    // Clear loaders for the collections that the evaluations were made to
+    collections.forEach((it) => {
+      dataLoaders.evaluationsByCollectionLoader.clear(it.id);
     });
     return createdStudent;
   },
