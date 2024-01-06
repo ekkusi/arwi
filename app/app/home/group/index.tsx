@@ -51,6 +51,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           date
           type {
             id
+            category
           }
           __typename
           ... on ClassParticipationCollection {
@@ -80,6 +81,9 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
         category
         name
         weight
+        defaultTypeCollection {
+          id
+        }
       }
     }
   }

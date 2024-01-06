@@ -88,7 +88,7 @@ export default function EvaluationList({ getGroup: group, navigation }: GroupOve
           )}
         />
       ) : (
-        <CText style={{ paddingTop: 50, alignSelf: "center" }}>{t("group.no-collections", "Ryhmälle ei vielä olla tehty arviointeja")}</CText>
+        <CText style={{ paddingTop: 50, alignSelf: "center" }}>{t("group.no-collections", "Ryhmälle ei vielä olla tehty tuntiarviointeja")}</CText>
       )}
       {!group.archived && (
         <Animated.View style={[{ position: "absolute", bottom: 20, right: 15, backgroundColor: "rgba(0,0,0,0)" }, newEvaluationButtonStyle]}>

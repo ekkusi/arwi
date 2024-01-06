@@ -131,7 +131,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
           },
         },
       });
-      navigation.getParent()?.navigate("home");
+      navigation.getParent()?.goBack();
       openToast(t("collection-created-succesfully", "Arviointi luotu onnistuneesti!"));
     } catch (e) {
       const msg = getErrorMessage(e);

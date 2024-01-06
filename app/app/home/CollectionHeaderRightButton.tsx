@@ -100,76 +100,80 @@ export default function CollectionHeaderRightButton({
   isClassParticipation,
   navigation,
 }: {
-  id: string;
+  id?: string;
   isClassParticipation: boolean;
-  navigation: NativeStackNavigationProp<HomeStackParams, "collection">;
+  navigation: NativeStackNavigationProp<HomeStackParams, "collection" | "default-evaluation-collection">;
 }) {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   return (
-    <Menu>
-      <MenuTrigger>
-        <MaterialCommunityIcon name="dots-vertical" size={25} color="white" />
-      </MenuTrigger>
-      <MenuOptions>
-        <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
-          <MenuOption
-            onSelect={() => {
-              if (isClassParticipation) {
-                navigation.navigate("collection-edit", {
-                  collectionId: id,
-                  onSaved: (newEnvironmentLabel, newDate) => {
-                    navigation.setParams({ environmentLabel: newEnvironmentLabel, date: newDate });
-                  },
-                });
-              } else {
-                navigation.navigate("default-collection-edit", { collectionId: id });
-              }
-            }}
-          >
-            <CText>{t("edit-general-details", "Muokkaa yleistietoja")}</CText>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => {
-              if (isClassParticipation) {
-                navigation.navigate("edit-all-evaluations", { collectionId: id });
-              } else {
-                navigation.navigate("edit-all-default-evaluations", { collectionId: id });
-              }
-            }}
-          >
-            <CText>{t("edit-evaluations", "Muokkaa arviointeja")}</CText>
-          </MenuOption>
-          <MenuOption
-            onSelect={() => {
-              openModal({
-                title: t("delete-collection-confirmation-title", "Oletko varma?"),
-                children: isClassParticipation ? (
-                  <DeleteCollection
-                    onCancel={closeModal}
-                    onDeleted={() => {
-                      navigation.goBack();
-                      closeModal();
-                    }}
-                    collectionId={id}
-                  />
-                ) : (
-                  <DeleteCollectionType
-                    onCancel={closeModal}
-                    onDeleted={() => {
-                      navigation.goBack();
-                      closeModal();
-                    }}
-                    collectionTypeId={id}
-                  />
-                ),
-              });
-            }}
-          >
-            <CText>{t("delete-collection", "Poista arviointi")}</CText>
-          </MenuOption>
-        </CView>
-      </MenuOptions>
-    </Menu>
+    <CView>
+      {id && (
+        <Menu>
+          <MenuTrigger>
+            <MaterialCommunityIcon name="dots-vertical" size={25} color="white" />
+          </MenuTrigger>
+          <MenuOptions>
+            <CView style={{ padding: 10, borderRadius: 10, gap: 4 }}>
+              <MenuOption
+                onSelect={() => {
+                  if (isClassParticipation) {
+                    navigation.navigate("collection-edit", {
+                      collectionId: id,
+                      onSaved: (newEnvironmentLabel, newDate) => {
+                        navigation.setParams({ environmentLabel: newEnvironmentLabel, date: newDate });
+                      },
+                    });
+                  } else {
+                    navigation.navigate("default-collection-edit", { collectionId: id });
+                  }
+                }}
+              >
+                <CText>{t("edit-general-details", "Muokkaa yleistietoja")}</CText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  if (isClassParticipation) {
+                    navigation.navigate("edit-all-evaluations", { collectionId: id });
+                  } else {
+                    navigation.navigate("edit-all-default-evaluations", { collectionId: id });
+                  }
+                }}
+              >
+                <CText>{t("edit-evaluations", "Muokkaa arviointeja")}</CText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  openModal({
+                    title: t("delete-collection-confirmation-title", "Oletko varma?"),
+                    children: isClassParticipation ? (
+                      <DeleteCollection
+                        onCancel={closeModal}
+                        onDeleted={() => {
+                          navigation.goBack();
+                          closeModal();
+                        }}
+                        collectionId={id}
+                      />
+                    ) : (
+                      <DeleteCollectionType
+                        onCancel={closeModal}
+                        onDeleted={() => {
+                          navigation.goBack();
+                          closeModal();
+                        }}
+                        collectionTypeId={id}
+                      />
+                    ),
+                  });
+                }}
+              >
+                <CText>{t("delete-collection", "Poista arviointi")}</CText>
+              </MenuOption>
+            </CView>
+          </MenuOptions>
+        </Menu>
+      )}
+    </CView>
   );
 }

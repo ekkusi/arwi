@@ -116,7 +116,9 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.subject.label.fi}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.student-count", { count: group.currentModule.students.length })}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>
-              {t("group.evaluation-count", { count: group.currentModule.evaluationCollections.length })}
+              {t("class-evaluation-count", "{{count}} tuntiarviointia", {
+                count: group.currentModule.evaluationCollections.filter((ev) => ev.type.category === "CLASS_PARTICIPATION").length,
+              })}
             </CText>
           </CView>
           <CView style={{ gap: 10, alignItems: "center", justifyContent: "center" }}>
@@ -174,7 +176,12 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                     <CTouchableOpacity
                       style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
                       onPress={() => {
-                        navigation.navigate("default-evaluation-collection", { id: type.id, name: type.name, archived: group.archived });
+                        navigation.navigate("default-evaluation-collection", {
+                          id: type.id,
+                          collectionId: type.defaultTypeCollection?.id,
+                          name: type.name,
+                          archived: group.archived,
+                        });
                       }}
                     >
                       <CView style={{ gap: 5 }}>
@@ -203,6 +210,9 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                             navigation.navigate("default-collection-create", { groupId: group.id, collectionTypeId: type.id });
                           }}
                         />
+                      )}
+                      {evaluation && (
+                        <CText style={{ color: "gray", fontSize: "sm", fontWeight: "500" }}>{t("evaluated", "Arvioitu").toLocaleUpperCase()}</CText>
                       )}
                     </CTouchableOpacity>
                   </Card>

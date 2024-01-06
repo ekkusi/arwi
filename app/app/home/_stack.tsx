@@ -161,7 +161,7 @@ export default function HomeStack() {
 
             headerRight: () =>
               route.params.archived ? undefined : (
-                <CollectionHeaderRightButton id={route.params.id} isClassParticipation={false} navigation={navigation} />
+                <CollectionHeaderRightButton id={route.params.collectionId} isClassParticipation={false} navigation={navigation} />
               ),
           };
         }}
