@@ -397,7 +397,7 @@ const resolvers: MutationResolvers<CustomContext> = {
   generateStudentFeedback: async (_, { studentId, moduleId }, { dataLoaders, user, prisma }) => {
     await checkAuthenticatedByStudent(user, studentId);
     const student = await dataLoaders.studentLoader.load(studentId);
-    const evaluations = await prisma.evaluation.findMany({
+    const evaluationsPromise = prisma.evaluation.findMany({
       where: {
         studentId: student.id,
         evaluationCollection: {
@@ -409,20 +409,45 @@ const resolvers: MutationResolvers<CustomContext> = {
           select: {
             environmentCode: true,
             date: true,
+            type: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
     });
+    const groupPromise = prisma.group.findFirstOrThrow({
+      where: {
+        modules: {
+          some: {
+            id: moduleId,
+          },
+        },
+      },
+      select: {
+        subjectCode: true,
+      },
+    });
+    const [evaluations, group] = await Promise.all([evaluationsPromise, groupPromise]);
     const mappedEvaluations = evaluations.map((it) => {
       const { environmentCode } = it.evaluationCollection;
-      return {
-        ...it,
-        environmentLabel: environmentCode ? getEnvironment(environmentCode)?.label.fi : "Ympäristitön arviointi",
-        date: it.evaluationCollection.date,
-      };
+      return environmentCode
+        ? {
+            environmentLabel: getEnvironment(environmentCode)?.label.fi || "Ei ympäristöä",
+            date: it.evaluationCollection.date,
+            skillsRating: it.skillsRating,
+            behaviourRating: it.behaviourRating,
+          }
+        : {
+            date: it.evaluationCollection.date,
+            generalRating: it.generalRating,
+            collectionTypeName: it.evaluationCollection.type.name,
+          };
     });
     if (mappedEvaluations.length === 0) throw new ValidationError("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
-    const summary = await generateStudentSummary(mappedEvaluations, user!.id); // Safe cast after authenticated check
+    const summary = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode); // Safe cast after authenticated check
     return summary;
   },
   fixTextGrammatics: async (_, { studentId, text }, { user }) => {

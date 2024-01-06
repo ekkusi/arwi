@@ -4,18 +4,75 @@ import openAIClient from "@/openAIClient";
 import { formatDate } from "./date";
 import { MATOMO_EVENT_CATEGORIES } from "../config";
 
-export type EvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviourRating" | "notes">> & {
+export type ClassParticipationEvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviourRating" | "notes">> & {
   date: Date;
-  environmentLabel: string | undefined;
+  environmentLabel: string;
 };
+
+export type DefaultEvaluationData = Partial<Pick<Evaluation, "generalRating" | "notes">> & {
+  date: Date;
+  collectionTypeName: string;
+};
+
+export function isClassParticipationEvaluationData(evaluation: any): evaluation is ClassParticipationEvaluationData {
+  return !!evaluation.environmentLabel;
+}
+
+export function isDefaultEvaluationData(evaluation: any): evaluation is DefaultEvaluationData {
+  return !evaluation.environmentLabel;
+}
 
 const CHARACTERS_PER_TOKEN = 2.5;
 
-export async function generateStudentSummary(evaluations: EvaluationData[], userId: string) {
+function getTeacherLabel(subjectCode: string): string {
+  switch (subjectCode) {
+    case "LI":
+      return "liikunnanopettaja";
+    case "BI":
+      return "biologianopettaja";
+    case "MA":
+      return "matematiikanopettaja";
+    case "US":
+      return "uskonnonopettaja";
+    case "FY":
+      return "fysiikanopettaja";
+    case "HI":
+      return "historianopettaja";
+    case "AI":
+      return "äidinkielenopettaja";
+    case "KA":
+      return "käsityönopettaja";
+    case "MU":
+      return "musiikinopettaja";
+    case "KU":
+      return "kuvataiteenopettaja";
+    case "TE":
+      return "terveystiedonopettaja";
+    case "KO":
+      return "kotitaloudenopettaja";
+    default:
+      return "opettaja";
+  }
+}
+
+export async function generateStudentSummary(
+  evaluations: (ClassParticipationEvaluationData | DefaultEvaluationData)[],
+  userId: string,
+  subjectCode: string
+) {
   if (openAIClient === null) throw new Error("OpenAI client not initialized, cannot generate student summary");
-  const startMessage = `Olen kyseisen oppilaan liikunnanopettaja, ja minun tulee antaa hänelle yleinen palaute, kehitysehdotus ja huomio vahvuusalueesta hänen suoritustensa perusteella. Päivämäärät, ympäristöt, taitojen ja työskentelyn arvosanat sekä opettajan huomiot on annettu listana. Arvosanat on annettu asteikoilla 6-10, joista 6 on heikoin ja 10 paras. Minun tulee tehdä vertailua työskentelyn ja taitojen välillä sekä eri ympäristöjen kesken, mikäli arvosanoissa on selkeitä eroavaisuuksia. Jos oppilaan taidot tai työskentely on jossain ympäristössä 7 tai alle, minun pitää antaa siitä ympäristöstä selkeästi kehitettävää palautetta. Jos taidot tai työskentely taas on jossain ympäristössä 9 tai enemmän, minun pitää kehua oppilasta kyseisestä ympäristöstä. Pyydän sinua kirjoittamaan noin 50 sanaisen palautteen oppilaalle sinuttelevassa muodossa ja hampurilaismallin mukaisesti:\n\n Tässä on lista oppilaan suorituksista:\n\n`;
-  // const notes: string[] = [];
-  const notes = evaluations.map((it) => {
+  let prompt = `Olen kyseisen oppilaan ${getTeacherLabel(subjectCode)}, ja minun tulee antaa hänelle yleinen palaute,
+                        kehitysehdotus ja huomio vahvuusalueesta hänen suoritustensa perusteella. Päivämäärät,
+                        oppimisympäristöt/-sisällöt, taitojen ja työskentelyn arvosanat sekä opettajan huomiot on annettu listana.
+                        Arvosanat on annettu asteikoilla 4-10, joista 4 on heikoin ja 10 paras. Minun tulee tehdä
+                        vertailua työskentelyn ja taitojen välillä sekä eri oppimisympäristöjen kesken, mikäli arvosanoissa
+                        on selkeitä eroavaisuuksia. Jos oppilaan taidot tai työskentely on jossain ympäristössä 7 tai alle,
+                        minun pitää antaa siitä ympäristöstä selkeästi kehitettävää palautetta. Jos taidot tai työskentely
+                        taas on jossain ympäristössä 9 tai enemmän, minun pitää kehua oppilasta kyseisestä ympäristöstä.
+                        \n\nTässä on lista oppilaan tuntityöskentelyjen arvioinneista:\n\n`;
+  const classParticipationEvaluations = evaluations.filter(isClassParticipationEvaluationData);
+  const defaultEvaluations = evaluations.filter(isDefaultEvaluationData);
+  const classParticipationNotes = classParticipationEvaluations.map((it) => {
     let note = "";
     if (it.environmentLabel) note += `${formatDate(it.date)} - ${it.environmentLabel}\n`;
     note += `Taidot: ${it.skillsRating ? it.skillsRating : "Ei arvioitu"}\n`;
@@ -23,21 +80,26 @@ export async function generateStudentSummary(evaluations: EvaluationData[], user
     note += `Huomiot: ${it.notes ? it.notes : "Ei huomioita"}`;
     return note;
   });
-  // const endMessage = `\n\nKirjoita oppilaalle noin ${length} sanan pituinen palaute näiden muistiinpanojen pohjalta`;
-  const prompt = startMessage + notes.join("\n\n");
-  const tokenCount = prompt.length / CHARACTERS_PER_TOKEN;
 
-  matomo.trackEventWithValue(MATOMO_EVENT_CATEGORIES.OPEN_AI, "Generate student feedback", tokenCount, {
-    userInfo: {
-      uid: userId,
-      custom: {
-        test: "Test custom user field",
-      },
-    },
-    custom: {
-      token_count: prompt.length / CHARACTERS_PER_TOKEN,
-    },
+  prompt += classParticipationNotes.join("\n\n");
+  if (defaultEvaluations.length > 0) {
+    prompt += "\n\nJa tässä lista hänen kokeiden ja muiden arviointikohteiden arvioinneista:\n\n";
+  }
+
+  const defaultEvaluationNotes = defaultEvaluations.map((it) => {
+    let note = `Arviointikohde: ${it.collectionTypeName}\n`;
+    note += `Päivämäärä: ${formatDate(it.date)}\n`;
+    note += `Arvosana: ${it.generalRating ?? "Ei arvioitu"}\n`;
+    note += `Huomiot: ${it.notes ?? "Ei huomioita"}`;
+    return note;
   });
+
+  prompt += defaultEvaluationNotes.join("\n\n");
+  prompt +=
+    "\n\nKirjoita edellä annetun datan pohjalta noin 50 sanan pituinen palautte oppilaalle sinuttelevassa muodossa ja hampurilaismallin mukaisesti.";
+  console.log("Calling generate student feedback with prompt:\n\n", prompt);
+
+  const tokenCountFallback = prompt.length / CHARACTERS_PER_TOKEN;
 
   try {
     const completion = await openAIClient.chat.completions.create({
@@ -46,12 +108,22 @@ export async function generateStudentSummary(evaluations: EvaluationData[], user
     });
 
     if (completion.choices[0]?.message?.content) {
+      const tokenCount = completion.usage?.total_tokens || tokenCountFallback;
+      matomo.trackEventWithValue(MATOMO_EVENT_CATEGORIES.OPEN_AI, "Generate student feedback", tokenCount, {
+        userInfo: {
+          uid: userId,
+          custom: {
+            test: "Test custom user field",
+          },
+        },
+        custom: {
+          token_count: tokenCount,
+        },
+      });
       return completion.choices[0].message.content;
     }
     throw new Error(`Error with generateSumamry: no message found from result`);
   } catch (error: any) {
-    // console.log();
-
     console.error("error", error?.response?.data || error);
     throw new Error(`Unknown error: ${error?.response?.data?.error}` || "");
   }
