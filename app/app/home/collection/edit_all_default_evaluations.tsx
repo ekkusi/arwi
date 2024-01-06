@@ -145,8 +145,12 @@ function DefaultCollectionEditAllEvaluationsContent({
   };
 
   const scrollToCard = useCallback(() => {
-    scrollRef.current?.scrollToOffset({ animated: true, offset: scrollOffset + CARD_HEIGHT });
-  }, [scrollOffset]);
+    // Hack to make this not depend on the scrollOffset which causes renderers to all cards
+    setScrollOffset((offset) => {
+      scrollRef.current?.scrollToOffset({ animated: true, offset: offset + CARD_HEIGHT });
+      return offset;
+    });
+  }, []);
 
   return (
     <CView style={{ flex: 1, backgroundColor: "white" }}>
