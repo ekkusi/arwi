@@ -4,6 +4,7 @@ import { clearCollectionTypeLoaders } from "../dataLoaders/collectionType";
 import { clearCollectionLoaders } from "../dataLoaders/collection";
 import { clearEvaluationLoaders } from "../dataLoaders/evaluation";
 
+// NOTE: This function is not used currently but is here for possible future use
 export async function deleteCollectionType(id: string): Promise<CollectionType> {
   const collectionType = await prisma.collectionType.delete({
     where: { id },

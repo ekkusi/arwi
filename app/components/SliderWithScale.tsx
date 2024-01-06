@@ -66,12 +66,6 @@ export default function SliderWithScale({
 
   const tickGap = DEFAULT_SLIDER_WIDTH / (maxValue - minValue);
 
-  // Run onUpdate when component is mounted
-  useEffect(() => {
-    onUpdate(value.value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <CView style={{ width: "100%", paddingLeft: 16 }}>
       <ReText text={valueString} style={valueStringAnimatedStyle} />
@@ -95,6 +89,7 @@ export default function SliderWithScale({
           const tickTranslate = tickGap * (tick - minValue);
           return (
             <CView
+              key={tick}
               style={{
                 width: 60,
                 position: "absolute",

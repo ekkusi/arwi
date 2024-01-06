@@ -39,7 +39,6 @@ import {
   checkAuthenticatedByEvaluation,
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
-  checkAuthenticatedByType,
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
@@ -54,7 +53,6 @@ import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
-import { deleteCollectionType } from "../mutationWrappers/collectionType";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -272,12 +270,19 @@ const resolvers: MutationResolvers<CustomContext> = {
   createStudent: async (_, { data, moduleId }, { dataLoaders }) => {
     await validateCreateStudentInput(data, moduleId);
     const module = await dataLoaders.moduleLoader.load(moduleId);
+    const collections = await dataLoaders.collectionsByModuleLoader.load(moduleId);
     const createdStudent = await createStudent(module.groupId, {
       data: {
         ...data,
         groupId: module.groupId,
         modules: {
           connect: { id: moduleId },
+        },
+        evaluations: {
+          create: collections.map((col) => ({
+            evaluationCollectionId: col.id,
+            wasPresent: false,
+          })),
         },
       },
     });
@@ -349,11 +354,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     const collection = await deleteCollection(collectionId);
     return collection;
   },
-  deleteCollectionType: async (_, { id }, { user }) => {
-    await checkAuthenticatedByType(user, id);
-    const collectionType = await deleteCollectionType(id);
-    return collectionType;
-  },
+  // NOTE: This function is not used currently but is here for possible future use
+  // deleteCollectionType: async (_, { id }, { user }) => {
+  //   await checkAuthenticatedByType(user, id);
+  //   const collectionType = await deleteCollectionType(id);
+  //   return collectionType;
+  // },
   changeGroupModule: async (_, { data, groupId }, { prisma, dataLoaders, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
     await validateChangeGroupLevelInput(data, groupId);

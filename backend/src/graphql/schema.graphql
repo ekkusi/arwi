@@ -33,7 +33,6 @@ type Mutation {
   deleteStudent(studentId: ID!): Student!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
-  deleteCollectionType(id: ID!): CollectionType!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
   fixTextGrammatics(studentId: ID!, text: String!): String!

@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useState } from "react";
-import { Alert } from "react-native";
 import { useMutation } from "@apollo/client";
 import UpdateTypesBody from "./_update_types_body";
 import { UpdateTypesStackParams } from "./update_type_stack_types";

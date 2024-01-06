@@ -2,7 +2,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { HomeStackParams } from "./types";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -12,7 +11,6 @@ import AddNewStudent from "./AddNewStudent";
 import ChangeGroupModule from "./ChangeGroupModule";
 import ChangeArchiveStatus from "./ChangeArchiveStatus";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
-import UpdateTypesStack from "./group/edit/_update_types_stack";
 
 export default function GroupHeaderRightButton({
   id,
