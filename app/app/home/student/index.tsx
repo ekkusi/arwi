@@ -1,3 +1,4 @@
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
@@ -22,6 +23,9 @@ import Layout from "../../../components/Layout";
 import CButton from "../../../components/primitives/CButton";
 import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
 import Card from "../../../components/Card";
+import { Accordion } from "../../../components/Accordion";
+import { formatDate } from "../../../helpers/dateHelpers";
+import { SPACING } from "../../../theme";
 
 const StudentPage_GetStudent_Query = graphql(`
   query StudentPage_GetStudent($studentId: ID!) {
@@ -52,6 +56,9 @@ const StudentPage_GetStudent_Query = graphql(`
           category
           name
           weight
+          defaultTypeCollection {
+            id
+          }
         }
       }
       currentModuleEvaluations {
@@ -80,6 +87,7 @@ const StudentPage_GetStudent_Query = graphql(`
         }
         collection {
           id
+          date
         }
       }
     }
@@ -150,58 +158,80 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             <CView style={{ width: "100%", gap: 20 }}>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arvioitavat sisällöt")}</CText>
               <CView style={{ gap: 10 }}>
-                {otherCollectionTypes.map((coll) => {
-                  const collectionEvaluation = otherEvaluations.find((ev) => ev.collection.id === coll.id);
-                  return (
-                    <Card>
-                      <CView style={{ flex: 6, flexDirection: "row", gap: 10, alignItems: "center", justifyContent: "flex-start" }}>
-                        <CView style={{ flexGrow: 1, gap: 2 }}>
-                          <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                            <CText style={{ fontWeight: "700", color: "darkgray", flex: 1 }}>{coll.name}</CText>
-                          </CView>
-                          <CView style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 5 }}>
-                            <CText>
-                              <CText style={{ fontSize: "sm", color: "gray" }}>
-                                {getCollectionTypeTranslation(t, coll.category as CollectionTypeCategory)},{" "}
-                              </CText>
-                              <CText style={{ fontSize: "sm", color: "gray" }}>{t("evaluated-once", "Kerran arvioitava").toLocaleLowerCase()}</CText>
-                            </CText>
-                          </CView>
-                        </CView>
-                      </CView>
-                      <CView style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
-                        <CView style={{ gap: 4, justifyContent: "center", alignItems: "center" }}>
-                          {collectionEvaluation && (
-                            <CText>
-                              <CText style={{ fontSize: "sm", fontWeight: "500" }}>
-                                {collectionEvaluation.rating ? `${t("grade", "arvosana")}: ` : t("grade-missing", "Arvosanaa ei ole annettu")}
-                              </CText>
-                              {collectionEvaluation.rating && (
-                                <CText style={{ fontSize: "md", fontWeight: "500" }}>{parseFloatToGradeString(collectionEvaluation.rating)}</CText>
+                <Accordion
+                  allowMultiple={false}
+                  data={[...otherCollectionTypes].map((type) => {
+                    const collectionEvaluation = type.defaultTypeCollection?.id
+                      ? otherEvaluations.find((ev) => ev.collection.id === type.defaultTypeCollection!.id)
+                      : undefined;
+                    return {
+                      title: type.name,
+                      date: collectionEvaluation ? formatDate(collectionEvaluation.collection.date) : undefined,
+                      isEvaluated: collectionEvaluation?.rating != null,
+                      icons: collectionEvaluation?.wasPresent && !!collectionEvaluation.notes && (
+                        <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />
+                      ),
+                      headerContentRight: (
+                        <CircledNumber
+                          decimals={0}
+                          size={48}
+                          valueString={collectionEvaluation?.rating ? parseFloatToGradeString(collectionEvaluation.rating) : "-"}
+                        />
+                      ),
+                      content: (
+                        <>
+                          <CText
+                            style={{
+                              fontSize: "sm",
+                              fontWeight: "500",
+                              color: collectionEvaluation?.wasPresent ? "green" : "red",
+                              paddingBottom: 10,
+                            }}
+                          >
+                            {collectionEvaluation?.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
+                          </CText>
+                          {collectionEvaluation?.wasPresent ? (
+                            <CView style={{ gap: 10 }}>
+                              {collectionEvaluation?.notes ? (
+                                <CView>
+                                  <CText style={{ fontSize: "sm" }}>{collectionEvaluation.notes}</CText>
+                                </CView>
+                              ) : (
+                                <CText style={{ fontSize: "sm" }}>
+                                  {t("components.EvaluationsAccordion.verbalFeedbackNotGiven", "Sanallista palautetta ei annettu")}
+                                </CText>
                               )}
+                            </CView>
+                          ) : (
+                            <CText style={{ fontSize: "sm" }}>
+                              {t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}
                             </CText>
                           )}
-                          <CButton
-                            title={
-                              collectionEvaluation
-                                ? t("evaluate", "Arvioi").toLocaleUpperCase()
-                                : t("edit-evaluation", "Muokkaa arviointia").toLocaleUpperCase()
-                            }
-                            variant="empty"
-                            textStyle={{ color: "primary" }}
-                            onPress={() => {
-                              if (collectionEvaluation) {
-                                editEvaluation();
-                              } else {
-                                evaluate();
-                              }
-                            }}
-                          />
-                        </CView>
-                      </CView>
-                    </Card>
-                  );
-                })}
+                          {collectionEvaluation && (
+                            <CButton
+                              size="small"
+                              title={t("edit", "Muokkaa")}
+                              style={{ marginTop: "md" }}
+                              onPress={() => {
+                                navigation.navigate("edit-default-evaluation", { evaluationId: collectionEvaluation.id });
+                              }}
+                            />
+                          )}
+                          {!collectionEvaluation && (
+                            <CButton
+                              size="small"
+                              title={t("evaluate", "Arvioi")}
+                              style={{ marginTop: "md" }}
+                              onPress={() => {
+                                navigation.navigate("default-collection-create", { groupId: student.group.id, collectionTypeId: type.id });
+                              }}
+                            />
+                          )}
+                        </>
+                      ),
+                    };
+                  })}
+                />
               </CView>
             </CView>
           )}
