@@ -97,7 +97,6 @@ export async function generateStudentSummary(
   prompt += defaultEvaluationNotes.join("\n\n");
   prompt +=
     "\n\nKirjoita edellä annetun datan pohjalta noin 50 sanan pituinen palautte oppilaalle sinuttelevassa muodossa ja hampurilaismallin mukaisesti.";
-  console.log("Calling generate student feedback with prompt:\n\n", prompt);
 
   const tokenCountFallback = prompt.length / CHARACTERS_PER_TOKEN;
 
