@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Dimensions } from "react-native";
 import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated";
 import { ReText } from "react-native-redash";
