@@ -51,6 +51,7 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           date
           type {
             id
+            category
           }
           __typename
           ... on ClassParticipationCollection {

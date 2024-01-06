@@ -116,7 +116,9 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.subject.label.fi}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("group.student-count", { count: group.currentModule.students.length })}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>
-              {t("group.evaluation-count", { count: group.currentModule.evaluationCollections.length })}
+              {t("class-evaluation-count", "{{count}} tuntiarviointia", {
+                count: group.currentModule.evaluationCollections.filter((ev) => ev.type.category === "CLASS_PARTICIPATION").length,
+              })}
             </CText>
           </CView>
           <CView style={{ gap: 10, alignItems: "center", justifyContent: "center" }}>
