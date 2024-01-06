@@ -6,11 +6,11 @@ import { isDefaultCollection } from "arwi-backend/src/types/typeGuards";
 import { HomeStackParams } from "../types";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { graphql } from "../../../gql";
-import CollectionGeneralInfoForm, { GeneralInfoData } from "./_general_info_form";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import Layout from "../../../components/Layout";
 import CText from "../../../components/primitives/CText";
+import DefaultCollectionGeneralInfoForm, { DefaultGeneralInfoData } from "./_default_general_info_form";
 
 const EditDefaultGeneralDetails_GetCollection_Query = graphql(`
   query EditDefaultGeneralDetails_GetCollection($collectionId: ID!) {
@@ -79,7 +79,7 @@ export default function EditDefaultCollectionGeneralInfoView({
 
   const { t } = useTranslation();
 
-  const handleSubmit = async ({ date, description }: GeneralInfoData) => {
+  const handleSubmit = async ({ date, description }: DefaultGeneralInfoData) => {
     setSubmitting(true);
     try {
       await updateCollection({
@@ -112,10 +112,8 @@ export default function EditDefaultCollectionGeneralInfoView({
   return (
     <Layout keyboardVerticalOffset={100}>
       {isDefaultCollection<WithTypename<typeof collection, "DefaultCollection">>(collection) ? (
-        <CollectionGeneralInfoForm
+        <DefaultCollectionGeneralInfoForm
           handleSubmit={handleSubmit}
-          subjectCode={collection.module.group.subject.code}
-          moduleInfo={collection.module.info}
           buttonTitle={t("save", "Tallenna")}
           buttonLoading={submitting}
           initialData={{

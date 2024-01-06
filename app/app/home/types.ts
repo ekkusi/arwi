@@ -20,6 +20,7 @@ export type HomeStackParams = {
   };
   "default-evaluation-collection": {
     id: string;
+    collectionId?: string;
     name: string;
     archived: boolean;
   };

@@ -80,6 +80,9 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
         category
         name
         weight
+        defaultTypeCollection {
+          id
+        }
       }
     }
   }

@@ -174,7 +174,12 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                     <CTouchableOpacity
                       style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
                       onPress={() => {
-                        navigation.navigate("default-evaluation-collection", { id: type.id, name: type.name, archived: group.archived });
+                        navigation.navigate("default-evaluation-collection", {
+                          id: type.id,
+                          collectionId: type.defaultTypeCollection?.id,
+                          name: type.name,
+                          archived: group.archived,
+                        });
                       }}
                     >
                       <CView style={{ gap: 5 }}>
@@ -203,6 +208,9 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                             navigation.navigate("default-collection-create", { groupId: group.id, collectionTypeId: type.id });
                           }}
                         />
+                      )}
+                      {evaluation && (
+                        <CText style={{ color: "gray", fontSize: "sm", fontWeight: "500" }}>{t("evaluated", "Arvioitu").toLocaleUpperCase()}</CText>
                       )}
                     </CTouchableOpacity>
                   </Card>

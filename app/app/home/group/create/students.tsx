@@ -27,8 +27,9 @@ const CreateGroupPage_CreateGroup_Mutation = graphql(`
   }
 `);
 
-const renderStudentItem = (item: string, removeStudent: (student: string) => void) => (
+const renderStudentItem = (item: string, index: number, removeStudent: (student: string) => void) => (
   <CView
+    key={item + index.toString()}
     style={{
       borderBottomWidth: 1,
       borderBottomColor: "lightgray",
@@ -137,7 +138,7 @@ export default function GroupStudentsSelectionView({ navigation }: NativeStackSc
         <CView style={{ gap: 10, minHeight: dimensions.height * 0.43 }}>
           <CText style={{ fontSize: "title" }}>{t("students", "Oppilaat")}</CText>
           <CView style={{ flex: 1, marginBottom: "xl" }}>
-            {[...group.students].reverse().map((student) => renderStudentItem(student, removeStudent))}
+            {[...group.students].reverse().map((student, i) => renderStudentItem(student, i, removeStudent))}
           </CView>
         </CView>
         <CView style={{ width: "100%", flex: 1 }}>
