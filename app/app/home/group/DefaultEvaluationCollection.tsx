@@ -3,7 +3,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
-import { Alert } from "react-native";
 import { HomeStackParams } from "../types";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
@@ -135,7 +134,9 @@ export default function DefaultEvaluationCollection({
                   icons: it.wasPresent && !!it.notes && (
                     <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />
                   ),
-                  headerContentRight: <CircledNumber decimals={0} size={48} valueString={it.rating ? parseFloatToGradeString(it.rating) : "-"} />,
+                  headerContentRight: (
+                    <CircledNumber decimals={0} size={48} valueString={it.wasPresent && it.rating ? parseFloatToGradeString(it.rating) : "-"} />
+                  ),
                   content: (
                     <>
                       <CText style={{ fontSize: "sm", fontWeight: "500", color: it.wasPresent ? "green" : "red", paddingBottom: 10 }}>
