@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
+import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
-import { CollectionsLineChart_EvaluationCollectionFragment, EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
+import { CollectionStatistics_EvaluationCollectionFragment, EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
 import { analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
 import CircledNumber from "../CircledNumber";
@@ -12,8 +12,8 @@ import { LineChartBaseProps } from "./LineChartBase";
 import MovingAverageLineChart, { EvaluationDataType } from "./MovingAverageLineChart";
 import StatisticsFilterMenu from "./StatisticsFilterMenu";
 
-const CollectionsLineChart_Collection_Fragment = graphql(`
-  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {
+const CollectionStatistics_Collection_Fragment = graphql(`
+  fragment CollectionStatistics_EvaluationCollection on ClassParticipationCollection {
     id
     date
     environment {
@@ -26,12 +26,11 @@ const CollectionsLineChart_Collection_Fragment = graphql(`
       skillsRating
       behaviourRating
       wasPresent
-      isStellar
     }
   }
 `);
 
-const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[]) => {
+const mapData = (collections: CollectionStatistics_EvaluationCollectionFragment[]) => {
   const data: EvaluationDataType[] = [];
   let currentSkillsSum = 0;
   let notNullSkillsCount = 0;
@@ -61,14 +60,14 @@ type CollectionsChartProps = Omit<LineChartBaseProps, "data"> & {
   title?: string;
   subjectCode: string;
   moduleInfo: MinimalModuleInfo;
-  collections: readonly FragmentType<typeof CollectionsLineChart_Collection_Fragment>[];
+  collections: readonly FragmentType<typeof CollectionStatistics_Collection_Fragment>[];
 };
 
 export default function CollectionStatistics({ title, subjectCode, moduleInfo, collections: collectionFragments, ...rest }: CollectionsChartProps) {
   const { t } = useTranslation();
   const [filter, setFilter] = useState<string | undefined>(undefined);
 
-  const collections = getFragmentData(CollectionsLineChart_Collection_Fragment, collectionFragments);
+  const collections = getFragmentData(CollectionStatistics_Collection_Fragment, collectionFragments);
 
   const sortedCollections = useMemo(() => [...collections].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()), [collections]);
   const evaluationData = useMemo(() => mapData(sortedCollections), [sortedCollections]);
@@ -92,7 +91,7 @@ export default function CollectionStatistics({ title, subjectCode, moduleInfo, c
       <StatisticsFilterMenu
         subjectCode={subjectCode}
         moduleInfo={moduleInfo}
-        title={t("group.evaluations-over-time", "Arvointien keskiarvojen kehitys")}
+        title={t("group.evaluations-over-time", "Arviontien keskiarvojen kehitys")}
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}
       />

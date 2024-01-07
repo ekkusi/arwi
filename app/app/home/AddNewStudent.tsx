@@ -41,22 +41,28 @@ const AddNewStudent_CreateStudent_Mutation = graphql(`
           evaluationCollections {
             id
             date
-            environment {
-              label {
-                fi
-              }
-              code
-              color
+            evaluations {
+              id
             }
-            learningObjectives {
-              code
-              label {
-                fi
+            __typename
+            ... on ClassParticipationCollection {
+              environment {
+                label {
+                  fi
+                }
+                code
+                color
               }
-              description {
-                fi
+              learningObjectives {
+                code
+                label {
+                  fi
+                }
+                description {
+                  fi
+                }
+                type
               }
-              type
             }
           }
         }

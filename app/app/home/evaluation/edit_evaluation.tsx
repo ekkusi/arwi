@@ -3,36 +3,40 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-naviga
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
+import { isClassParticipationEvaluation } from "arwi-backend/src/types/typeGuards";
 import Layout from "../../../components/Layout";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
-import { UpdateEvaluationCard } from "../../../components/EvaluationCard";
+import { UpdateClassParticipationEvaluationCard } from "../../../components/ClassParticipationEvaluationCard";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { EvaluationDataToUpdate } from "../collection/edit_all_evaluations";
 import { HomeStackParams } from "../types";
+import CText from "../../../components/primitives/CText";
 
 const EvaluationEditView_GetEvaluation_Query = graphql(`
   query EvaluationEditView_GetEvaluation($evaluationId: ID!) {
     getEvaluation(id: $evaluationId) {
       id
       wasPresent
-      skillsRating
-      behaviourRating
-      notes
-      isStellar
-      collection {
-        id
-        date
-        environment {
-          code
-          label {
-            fi
+      __typename
+      ... on ClassParticipationEvaluation {
+        skillsRating
+        behaviourRating
+        collection {
+          id
+          date
+          environment {
+            code
+            label {
+              fi
+            }
+            color
           }
-          color
         }
       }
+      notes
       student {
         id
         name
@@ -46,14 +50,13 @@ const EvaluationEditView_GetEvaluation_Query = graphql(`
 `);
 
 const EvaluationEditView_UpdateEvaluation_Mutation = graphql(`
-  mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateEvaluationInput!) {
-    updateEvaluation(data: $updateEvaluationInput) {
+  mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateClassParticipationEvaluationInput!) {
+    updateClassParticipationEvaluation(input: $updateEvaluationInput) {
       id
       wasPresent
       skillsRating
       behaviourRating
       notes
-      isStellar
     }
   }
 `);
@@ -88,7 +91,6 @@ function EvaluationEditViewContent({
             skillsRating: evaluation.wasPresent ? evaluation.skillsRating : undefined,
             behaviourRating: evaluation.wasPresent ? evaluation.behaviourRating : undefined,
             notes: evaluation.wasPresent ? evaluation.notes : undefined,
-            isStellar: evaluation.wasPresent ? evaluation.isStellar : undefined,
           },
         },
       });
@@ -103,7 +105,7 @@ function EvaluationEditViewContent({
 
   return (
     <CView style={{ backgroundColor: "white", alignItems: "center", gap: 30 }}>
-      <UpdateEvaluationCard
+      <UpdateClassParticipationEvaluationCard
         evaluation={evaluation}
         date={date}
         environment={environmentLabel}
@@ -118,18 +120,25 @@ function EvaluationEditViewContent({
 export default function EvaluationEditView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "edit-evaluation">) {
   const { evaluationId } = route.params;
   const { data, loading } = useQuery(EvaluationEditView_GetEvaluation_Query, { variables: { evaluationId } });
+  const { t } = useTranslation();
 
   if (!data || loading) return <LoadingIndicator />;
 
+  const evaluation = data.getEvaluation;
+
   return (
     <Layout style={{ paddingHorizontal: 10, paddingTop: 20, backgroundColor: "white" }}>
-      <EvaluationEditViewContent
-        initialEvaluation={data.getEvaluation}
-        date={data.getEvaluation.collection.date}
-        environmentLabel={data.getEvaluation.collection.environment.label.fi}
-        envColor={data.getEvaluation.collection.environment.color}
-        navigation={navigation}
-      />
+      {isClassParticipationEvaluation<WithTypename<typeof evaluation, "ClassParticipationEvaluation">>(evaluation) ? (
+        <EvaluationEditViewContent
+          initialEvaluation={evaluation}
+          date={evaluation.collection.date}
+          environmentLabel={evaluation.collection.environment.label.fi}
+          envColor={evaluation.collection.environment.color}
+          navigation={navigation}
+        />
+      ) : (
+        <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
+      )}
     </Layout>
   );
 }

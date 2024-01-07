@@ -5,7 +5,7 @@ import { analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
 
 const CollectionsLineChart_Collection_Fragment = graphql(`
-  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {
+  fragment CollectionsLineChart_EvaluationCollection on ClassParticipationCollection {
     id
     date
     environment {
@@ -18,7 +18,6 @@ const CollectionsLineChart_Collection_Fragment = graphql(`
       skillsRating
       behaviourRating
       wasPresent
-      isStellar
     }
   }
 `);

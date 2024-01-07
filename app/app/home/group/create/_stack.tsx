@@ -6,11 +6,14 @@ import { GroupCreationProvider } from "./GroupCreationProvider";
 import GroupStudentsSelectionView from "./students";
 import GroupSubjectSelectionView from "./subject";
 import { GroupCreationStackParams } from "./types";
+import GroupCollectionTypesView from "./collection-types";
+import GroupCollectionTypeWeightsView from "./collection-type-weights";
 
 const { Navigator, Screen } = createNativeStackNavigator<GroupCreationStackParams>();
 
 export default function GroupCreationStack() {
   const { t } = useTranslation();
+
   return (
     <GroupCreationProvider>
       <Navigator
@@ -25,6 +28,8 @@ export default function GroupCreationStack() {
         <Screen name="group-create-general-info" component={GroupNameSelectionView} />
         <Screen name="group-create-subject" component={GroupSubjectSelectionView} />
         <Screen name="group-create-students" component={GroupStudentsSelectionView} />
+        <Screen name="group-create-collection-types" component={GroupCollectionTypesView} />
+        <Screen name="group-create-collection-type-weights" component={GroupCollectionTypeWeightsView} />
       </Navigator>
     </GroupCreationProvider>
   );

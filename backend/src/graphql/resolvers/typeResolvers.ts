@@ -1,55 +1,31 @@
+import { CollectionTypeCategory } from "@prisma/client";
 import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../../utils/subjectUtils";
 import { EducationLevel, Resolvers } from "../../types";
+import MissingDataError from "../../errors/MissingDataError";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
 const resolvers: TypeResolvers = {
   Teacher: {
-    groups: async ({ id }, _, { prisma }) => {
-      const groups = await prisma.group.findMany({
-        where: {
-          teacherId: id,
-        },
-      });
-      return groups;
+    groups: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.groupsByTeacherLoader.load(id);
     },
     isMPassIDConnected: async ({ mPassID }) => {
       return !!mPassID;
     },
   },
   Group: {
-    currentModule: async ({ currentModuleId }, _, { prisma }) => {
-      const module = await prisma.module.findUniqueOrThrow({
-        where: {
-          id: currentModuleId,
-        },
-      });
-      return module;
+    currentModule: ({ currentModuleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(currentModuleId);
     },
-    modules: async ({ id }, _, { prisma }) => {
-      const modules = await prisma.module.findMany({
-        where: {
-          groupId: id,
-        },
-      });
-      return modules;
+    modules: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.modulesByGroupLoader.load(id);
     },
-    students: async ({ id }, _, { prisma }) => {
-      const students = await prisma.student.findMany({
-        where: {
-          groupId: id,
-        },
-      });
-      return students;
+    students: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.studentsByGroupLoader.load(id);
     },
-    teacher: async ({ teacherId }, _, { prisma }) => {
-      // TODO: Maybe implement custom NotFoundError
-      const teacher = await prisma.teacher.findUniqueOrThrow({
-        where: {
-          id: teacherId,
-        },
-      });
-      return teacher;
+    teacher: ({ teacherId }, _, { dataLoaders }) => {
+      return dataLoaders.teacherLoader.load(teacherId);
     },
     subject: ({ subjectCode }) => {
       const matchingSubject = getSubject(subjectCode);
@@ -59,75 +35,105 @@ const resolvers: TypeResolvers = {
         label: matchingSubject.label,
       };
     },
+    collectionTypes: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.collectionTypesByGroupLoader.load(id);
+    },
+  },
+  DefaultEvaluation: {
+    rating: ({ generalRating }) => generalRating,
+    collection: ({ evaluationCollectionId }, _, { dataLoaders }) => {
+      return dataLoaders.collectionLoader.load(evaluationCollectionId);
+    },
+    student: ({ studentId }, _, { dataLoaders }) => {
+      return dataLoaders.studentLoader.load(studentId);
+    },
+  },
+  ClassParticipationEvaluation: {
+    collection: ({ evaluationCollectionId }, _, { dataLoaders }) => {
+      return dataLoaders.collectionLoader.load(evaluationCollectionId);
+    },
+    student: ({ studentId }, _, { dataLoaders }) => {
+      return dataLoaders.studentLoader.load(studentId);
+    },
   },
   Evaluation: {
-    collection: async ({ evaluationCollectionId }, _, { prisma }) => {
-      const collection = await prisma.evaluationCollection.findUniqueOrThrow({
-        where: {
-          id: evaluationCollectionId,
-        },
-      });
-      return collection;
-    },
-    student: async ({ studentId }, _, { prisma }) => {
-      const student = await prisma.student.findUniqueOrThrow({
-        where: {
-          id: studentId,
-        },
-      });
-      return student;
+    __resolveType: async ({ evaluationCollectionId }, { dataLoaders }) => {
+      const collection = await dataLoaders.collectionLoader.load(evaluationCollectionId);
+      const type = await dataLoaders.collectionTypeLoader.load(collection.typeId);
+
+      switch (type.category) {
+        case CollectionTypeCategory.CLASS_PARTICIPATION:
+          return "ClassParticipationEvaluation";
+        case CollectionTypeCategory.EXAM:
+        case CollectionTypeCategory.GROUP_WORK:
+        case CollectionTypeCategory.WRITTEN_WORK:
+        case CollectionTypeCategory.OTHER:
+          return "DefaultEvaluation";
+        default:
+          return null;
+      }
     },
   },
-  EvaluationCollection: {
-    module: async ({ moduleId }, _, { prisma }) => {
-      const module = await prisma.module.findUniqueOrThrow({
-        where: {
-          id: moduleId,
-        },
-      });
-      return module;
-    },
-    evaluations: async ({ id }, _, { prisma }) => {
-      const evaluations = await prisma.evaluation.findMany({
-        where: {
-          evaluationCollectionId: id,
-        },
-      });
-      return evaluations;
-    },
+  ClassParticipationCollection: {
     environment: ({ environmentCode }) => {
+      if (!environmentCode) throw new MissingDataError();
       const environment = getEnvironment(environmentCode);
-      if (!environment) throw new Error(`Environment not found with code: ${environmentCode}`);
+      if (!environment) throw new MissingDataError(`Environment not found with code: ${environmentCode}`);
       return environment;
     },
-    learningObjectives: async ({ moduleId, learningObjectiveCodes }, _, { prisma }) => {
-      const module = await prisma.module.findUniqueOrThrow({
-        where: {
-          id: moduleId,
-        },
-      });
-      const group = await prisma.group.findFirstOrThrow({
-        where: {
-          modules: { some: { id: moduleId } },
-        },
-      });
+    learningObjectives: async ({ moduleId, learningObjectiveCodes }, _, { dataLoaders }) => {
+      const module = await dataLoaders.moduleLoader.load(moduleId);
+      const group = await dataLoaders.groupLoader.load(module.groupId);
       const subjectObjectives = getLearningObjectives(group.subjectCode, module.educationLevel as EducationLevel, module.learningObjectiveGroupKey);
       return subjectObjectives.filter((objective) => learningObjectiveCodes.includes(objective.code));
     },
+    type: ({ typeId }, _, { dataLoaders }) => {
+      return dataLoaders.collectionTypeLoader.load(typeId);
+    },
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
+    },
+    evaluations: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.evaluationsByCollectionLoader.load(id);
+    },
+  },
+  DefaultCollection: {
+    type: ({ typeId }, _, { dataLoaders }) => {
+      return dataLoaders.collectionTypeLoader.load(typeId);
+    },
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
+    },
+    evaluations: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.evaluationsByCollectionLoader.load(id);
+    },
+  },
+  EvaluationCollection: {
+    __resolveType: async ({ typeId }, { dataLoaders }) => {
+      const type = await dataLoaders.collectionTypeLoader.load(typeId);
+
+      switch (type.category) {
+        case CollectionTypeCategory.CLASS_PARTICIPATION:
+          return "ClassParticipationCollection";
+        case CollectionTypeCategory.EXAM:
+        case CollectionTypeCategory.GROUP_WORK:
+        case CollectionTypeCategory.WRITTEN_WORK:
+        case CollectionTypeCategory.OTHER:
+          return "DefaultCollection";
+        default:
+          return null;
+      }
+    },
   },
   Student: {
-    group: async ({ groupId }, _, { prisma }) => {
-      const matchingGroup = await prisma.group.findUniqueOrThrow({
-        where: {
-          id: groupId,
-        },
-      });
-      return matchingGroup;
+    group: ({ groupId }, _, { dataLoaders }) => {
+      return dataLoaders.groupLoader.load(groupId);
     },
-    currentModuleEvaluations: async ({ id, groupId }, _, { prisma }) => {
-      const group = await prisma.group.findUniqueOrThrow({
-        where: { id: groupId },
-      });
+    currentModuleEvaluations: async ({ id, groupId }, _, { prisma, dataLoaders }) => {
+      const group = await dataLoaders.groupLoader.load(groupId);
+
+      // A dataloader could be added for this but might be redundant as it is really specific.
+      // The usage could be monitored and if this is queried a lot, a dataloader could be added.
       const evaluations = await prisma.evaluation.findMany({
         where: {
           studentId: id,
@@ -154,12 +160,8 @@ const resolvers: TypeResolvers = {
     },
   },
   Module: {
-    info: async ({ educationLevel, learningObjectiveGroupKey, groupId }, _, { prisma }) => {
-      const group = await prisma.group.findUniqueOrThrow({
-        where: {
-          id: groupId,
-        },
-      });
+    info: async ({ educationLevel, learningObjectiveGroupKey, groupId }, _, { dataLoaders }) => {
+      const group = await dataLoaders.groupLoader.load(groupId);
       const info = getModuleInfo(group.subjectCode, educationLevel as EducationLevel, learningObjectiveGroupKey);
       if (!info)
         throw new Error(
@@ -167,29 +169,34 @@ const resolvers: TypeResolvers = {
         );
       return info;
     },
-    group: async ({ groupId }, _, { prisma }) => {
-      const group = await prisma.group.findUniqueOrThrow({
-        where: {
-          id: groupId,
-        },
-      });
-      return group;
+    group: ({ groupId }, _, { dataLoaders }) => {
+      return dataLoaders.groupLoader.load(groupId);
     },
-    evaluationCollections: async ({ id }, _, { prisma }) => {
-      const collections = await prisma.evaluationCollection.findMany({
-        where: {
-          moduleId: id,
-        },
-      });
-      return collections;
+    evaluationCollections: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.collectionsByModuleLoader.load(id);
     },
     students: async ({ id }, _, { prisma }) => {
+      // A dataloader could be added for this but it would be complicated.
+      // The usage could be monitored and if this is queried a lot, a dataloader could be added.
       const students = await prisma.student.findMany({
         where: {
           modules: { some: { id } },
         },
       });
       return students;
+    },
+  },
+  CollectionType: {
+    group: ({ groupId }, _, { dataLoaders }) => {
+      return dataLoaders.groupLoader.load(groupId);
+    },
+    defaultTypeCollection: ({ id, category }, _, { prisma }) => {
+      if (category === CollectionTypeCategory.CLASS_PARTICIPATION) return null;
+      return prisma.evaluationCollection.findFirst({
+        where: {
+          typeId: id,
+        },
+      });
     },
   },
 };

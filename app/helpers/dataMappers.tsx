@@ -1,5 +1,6 @@
-import { LearningObjective, SubjectMinimal } from "arwi-backend/src/types/subject";
+import { LearningObjectiveInfo } from "arwi-backend/src/types";
 import { ImageSourcePropType } from "react-native";
+import { SubjectMinimal } from "arwi-backend/src/types/codegenOverrides";
 import { LearningObjectiveType } from "../gql/graphql";
 
 export const subjectToIcon = (subject: SubjectMinimal): ImageSourcePropType => {
@@ -113,7 +114,7 @@ export const formatRatingKey = (rating: number) => {
   }
 };
 
-export const formatObjectiveLabel = (learningObjective: LearningObjective) => {
+export const formatObjectiveLabel = (learningObjective: LearningObjectiveInfo) => {
   return `${learningObjective.code}: ${learningObjective.label.fi}`;
 };
 

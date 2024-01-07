@@ -31,7 +31,7 @@ const ChangeModule_GetGroup_Query = graphql(`
 `);
 
 const ChangeModule_ChangeModule_Mutation = graphql(`
-  mutation ChangeModule_ChangeModule($data: ChangeGroupModuleInput!, $groupId: String!) {
+  mutation ChangeModule_ChangeModule($data: ChangeGroupModuleInput!, $groupId: ID!) {
     changeGroupModule(data: $data, groupId: $groupId) {
       id
       currentModule {
@@ -54,22 +54,25 @@ const ChangeModule_ChangeModule_Mutation = graphql(`
         evaluationCollections {
           id
           date
-          environment {
-            label {
-              fi
+          __typename
+          ... on ClassParticipationCollection {
+            environment {
+              label {
+                fi
+              }
+              code
+              color
             }
-            code
-            color
-          }
-          learningObjectives {
-            code
-            label {
-              fi
+            learningObjectives {
+              code
+              label {
+                fi
+              }
+              description {
+                fi
+              }
+              type
             }
-            description {
-              fi
-            }
-            type
           }
           ...CollectionsLineChart_EvaluationCollection
         }

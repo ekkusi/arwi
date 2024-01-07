@@ -1,19 +1,21 @@
-import { ModuleInfo } from "arwi-backend/src/types";
-import { SubjectMinimal } from "arwi-backend/src/types/subject";
-import { createContext, useContext, useState } from "react";
+import { CollectionTypeCategory, CreateCollectionTypeInput, ModuleInfo, SubjectMinimal } from "arwi-backend/src/types";
+import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { getCollectionTypeTranslation } from "../../../../helpers/translation";
 
 export type GroupMinimal = {
   name: string;
   module?: ModuleInfo;
   subject?: SubjectMinimal;
   students: string[];
+  collectionTypes: CreateCollectionTypeInput[];
 };
 
 type GroupContextParams = {
   group: GroupMinimal;
-  setGroup: (group: GroupMinimal) => void;
+  setGroup: Dispatch<SetStateAction<GroupMinimal>>;
 };
-const GroupCreationContext = createContext<GroupContextParams>({ group: { name: "", students: [] }, setGroup: () => {} });
+const GroupCreationContext = createContext<GroupContextParams>({ group: { name: "", students: [], collectionTypes: [] }, setGroup: () => {} });
 
 const { Provider } = GroupCreationContext;
 
@@ -25,10 +27,19 @@ export const useGroupCreationContext = () => {
   return context;
 };
 
-const initialGroup: GroupMinimal = { name: "", students: [] };
-
 function GroupCreationProvider({ children }: React.PropsWithChildren) {
-  const [group, setGroup] = useState<GroupMinimal>(initialGroup);
+  const { t } = useTranslation();
+  const [group, setGroup] = useState<GroupMinimal>({
+    name: "",
+    students: [],
+    collectionTypes: [
+      {
+        category: CollectionTypeCategory.CLASS_PARTICIPATION,
+        name: getCollectionTypeTranslation(t, CollectionTypeCategory.CLASS_PARTICIPATION),
+        weight: 100,
+      },
+    ],
+  });
 
   return <Provider value={{ group, setGroup }}>{children}</Provider>;
 }

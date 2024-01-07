@@ -59,8 +59,8 @@ const styles = createStyles({
     textAlignVertical: "top",
     paddingVertical: "sm",
     paddingHorizontal: "lg",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    // justifyContent: "flex-start",
+    // alignItems: "flex-start",
   },
   lightThemeStyle: {
     color: "white",

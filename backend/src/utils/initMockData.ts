@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
-import { EducationLevel, PrismaClient } from "@prisma/client";
+import { CollectionTypeCategory, EducationLevel, PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 import dotenv from "dotenv";
+import { v4 as uuidv4 } from "uuid";
 import mockData from "../__mocks__/mockData.json";
 
 dotenv.config();
@@ -24,8 +25,8 @@ const initMockData = async () => {
       passwordHash: hashedPassword,
     },
   });
-  const groupId = "test-group-id";
-  const moduleId = "test-module-id";
+  const groupId = uuidv4();
+  const moduleId = uuidv4();
   const testGroup = prisma.group.create({
     data: {
       id: groupId,
@@ -44,10 +45,19 @@ const initMockData = async () => {
     },
   });
   await prisma.$transaction([testGroup, classYear]);
+  const collectionType = await prisma.collectionType.create({
+    data: {
+      groupId,
+      category: CollectionTypeCategory.CLASS_PARTICIPATION,
+      weight: 100,
+      name: "Tuntityöskentely",
+    },
+  });
   const collectionPromises = mockData.collections.map(({ id: _, learningObjectives, ...rest }) =>
     prisma.evaluationCollection.create({
       data: {
         ...rest,
+        typeId: collectionType.id,
         learningObjectiveCodes: learningObjectives,
         moduleId,
       },

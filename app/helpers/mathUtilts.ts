@@ -49,3 +49,17 @@ export function mode(arr: number[]) {
 
   return max;
 }
+
+// Divide 100 into int percentages
+export const dividePercentages = (parts: number) => {
+  const individualAmount = Math.floor(100 / parts);
+  const total = individualAmount * parts;
+  const remainder = 100 - total;
+  const percentages = Array(parts).fill(individualAmount);
+
+  for (let i = 0; i < remainder; i += 1) {
+    percentages[i] += 1;
+  }
+
+  return percentages;
+};

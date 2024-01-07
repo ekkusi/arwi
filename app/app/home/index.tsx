@@ -12,6 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { graphql } from "../../gql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -33,6 +34,12 @@ const MainPage_GetCurrentUser_Query = graphql(`
         name
         archived
         updatedAt
+        collectionTypes {
+          id
+          category
+          name
+          weight
+        }
         subject {
           label {
             fi

@@ -8,7 +8,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import CButton from "../../../../components/primitives/CButton";
 import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
-import { CARD_HEIGHT, CreateEvaluationCardMemoed, Evaluation } from "../../../../components/EvaluationCard";
+import { CARD_HEIGHT, CreateClassParticipationEvaluationCardMemoed, Evaluation } from "../../../../components/ClassParticipationEvaluationCard";
 import { graphql } from "../../../../gql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
@@ -20,8 +20,8 @@ import { CollectionCreationStackParams } from "./types";
 import CollectionCreationLayout from "./_layout";
 
 const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
-  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateCollectionInput!, $moduleId: ID!) {
-    createCollection(data: $createCollectionInput, moduleId: $moduleId) {
+  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+    createClassParticipationCollection(data: $createCollectionInput, moduleId: $moduleId) {
       id
       date
       description
@@ -48,7 +48,6 @@ const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
         skillsRating
         behaviourRating
         notes
-        isStellar
         student {
           id
           currentModuleEvaluations {
@@ -77,7 +76,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const scrollRef = useRef<FlatList<EvaluationData> | null>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const { generalData, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
+  const { generalData, collectionType, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
 
   const presentEvaluations = useMemo(() => {
     return evaluations?.filter((it) => it.wasPresent) || [];
@@ -110,29 +109,29 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    const { environmentCode } = generalData;
-    if (!environmentCode) throw new Error("Environment code is missing, shouldn't happen at this point");
+    const { environmentCode, ...rest } = generalData;
+    if (!environmentCode) throw new Error("Environment code or collection type id is missing, shouldn't happen at this point");
 
     try {
       await createCollection({
         variables: {
           moduleId: groupInfo.currentModule.id,
           createCollectionInput: {
-            ...generalData,
+            ...rest,
             environmentCode,
             date: formatDate(generalData.date, "yyyy-MM-dd"),
+            typeId: collectionType.id,
             evaluations: evaluations.map((it) => ({
               wasPresent: it.wasPresent,
               skillsRating: it.skillsRating,
               behaviourRating: it.behaviourRating,
               notes: it.notes,
-              isStellar: it.isStellar,
               studentId: it.student.id,
             })),
           },
         },
       });
-      navigation.getParent()?.navigate("home");
+      navigation.getParent()?.goBack();
       openToast(t("collection-created-succesfully", "Arviointi luotu onnistuneesti!"));
     } catch (e) {
       const msg = getErrorMessage(e);
@@ -152,8 +151,12 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   };
 
   const scrollToCard = useCallback(() => {
-    scrollRef.current?.scrollToOffset({ animated: true, offset: scrollOffset + CARD_HEIGHT });
-  }, [scrollOffset]);
+    // Hack to make this not depend on the scrollOffset which causes renderers to all cards
+    setScrollOffset((offset) => {
+      scrollRef.current?.scrollToOffset({ animated: true, offset: offset + CARD_HEIGHT });
+      return offset;
+    });
+  }, []);
 
   return (
     <CView style={{ flex: 1, backgroundColor: "white" }}>
@@ -161,7 +164,7 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
         ref={scrollRef}
         data={presentEvaluations}
         renderItem={({ item, index }) => (
-          <CreateEvaluationCardMemoed
+          <CreateClassParticipationEvaluationCardMemoed
             evaluation={item}
             onChanged={onEvaluationChanged}
             height={CARD_HEIGHT}

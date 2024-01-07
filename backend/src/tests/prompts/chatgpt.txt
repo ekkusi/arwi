@@ -1,0 +1,420 @@
+Write me a test suite for a graphql resolver. Write the whole file. Write at least one test entirely and others can be skeletons. Here is the resolver:
+
+
+
+Below you will have the necessary context:
+
+Validator function(s) code:
+
+
+
+Graphql definition(s):
+
+type Query {
+  getAppMetadata: AppMetadata!
+  getCurrentUser: Teacher!
+  getTeacher(id: ID!): Teacher!
+  getGroups(teacherId: ID!): [Group!]!
+  getGroup(id: ID!): Group!
+  getCollection(id: ID!): EvaluationCollection!
+  getStudent(id: ID!): Student!
+  getEvaluation(id: ID!): Evaluation!
+}
+
+type Mutation {
+  register(data: CreateTeacherInput!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  mPassIDLogin(code: String!): MPassIDAuthPayload!
+  requestPasswordReset(email: String!): Boolean!
+  verifyPasswordResetCode(code: String!): Boolean!
+  updatePassword(recoveryCode: String!, newPassword: String!): Boolean!
+  connectMPassID(code: String!): AuthPayload!
+  connectLocalCredentials(email: String!, password: String!): AuthPayload!
+  logout: Boolean!
+  createGroup(data: CreateGroupInput!): Group!
+  createCollection(data: CreateCollectionInput!, moduleId: ID!): EvaluationCollection!
+  createStudent(data: CreateStudentInput!, moduleId: ID!): Student!
+  updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
+  updateCollection(data: UpdateCollectionInput!, collectionId: ID!): EvaluationCollection!
+  updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
+  updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
+  updateEvaluation(data: UpdateEvaluationInput!): Evaluation!
+  deleteStudent(studentId: ID!): Student!
+  deleteGroup(groupId: ID!): Group!
+  deleteCollection(collectionId: ID!): EvaluationCollection!
+  changeGroupModule(data: ChangeGroupModuleInput!, groupId: String!): Group!
+  generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
+  fixTextGrammatics(studentId: ID!, text: String!): String!
+}
+
+type AppMetadata {
+  appVersion: String!
+}
+
+type AuthPayload {
+  userData: Teacher!
+}
+
+type MPassIDAuthPayload {
+  payload: AuthPayload!
+  newUserCreated: Boolean!
+}
+
+type Teacher {
+  id: ID!
+  email: EmailAddress
+  groups: [Group!]!
+  languagePreference: String!
+  consentsAnalytics: Boolean!
+  isMPassIDConnected: Boolean!
+}
+
+type LoginResult {
+  userData: Teacher!
+}
+
+type TranslatedString {
+  fi: String!
+  en: String
+  se: String
+}
+
+enum LearningObjectiveType {
+  BEHAVIOUR
+  SKILLS
+  SKILLS_AND_BEHAVIOUR
+  NOT_EVALUATED
+}
+
+type LearningObjective {
+  code: ID!
+  label: TranslatedString!
+  description: TranslatedString!
+  type: LearningObjectiveType!
+}
+
+type Subject {
+  code: ID!
+  label: TranslatedString!
+  environments: [Environment!]!
+}
+
+type Environment {
+  code: ID!
+  color: String!
+  label: TranslatedString!
+  subject: Subject!
+}
+
+type Group {
+  id: ID!
+  name: String!
+  students: [Student!]!
+  subject: Subject!
+  teacher: Teacher!
+  updatedAt: DateTime!
+  archived: Boolean!
+  currentModule: Module!
+  modules: [Module!]!
+  collectionTypes: [CollectionType!]!
+}
+
+type CollectionType {
+  id: ID!
+  category:    CollectionTypeCategory!
+  name:        String!
+  weight:      Int!
+  group: Group!
+}
+
+enum CollectionTypeCategory {
+  CLASS_PARTICIPATION
+  EXAM
+  WRITTEN_WORK
+  GROUP_WORK
+  OTHER
+}
+
+type ModuleInfo {
+  educationLevel: EducationLevel!
+  learningObjectiveGroupKey: String!
+  label: TranslatedString!
+}
+
+type Module {
+  id: ID!
+  info: ModuleInfo!
+  evaluationCollections: [EvaluationCollection!]!
+  students: [Student!]!
+  group: Group!
+}
+
+type EvaluationCollection {
+  id: ID!
+  date: Date!
+  type: CollectionType!
+  environment: Environment!
+  description: String
+  evaluations: [Evaluation!]!
+  module: Module!
+  learningObjectives: [LearningObjective!]!
+}
+
+type Evaluation {
+  id: ID!
+  student: Student!
+  wasPresent: Boolean!
+  skillsRating: Int
+  behaviourRating: Int
+  notes: String
+}
+
+type Student {
+  id: ID!
+  name: String!
+  group: Group!
+  currentModuleEvaluations: [Evaluation!]!
+}
+
+enum EducationLevel {
+  PRIMARY_FIRST
+  PRIMARY_SECOND
+  PRIMARY_THIRD
+  PRIMARY_FOURTH
+  PRIMARY_FIFTH
+  PRIMARY_SIXTH
+  PRIMARY_SEVENTH
+  PRIMARY_EIGHTH
+  PRIMARY_NINTH
+  HIGH_SCHOOL
+  VOCATIONAL
+}
+
+input CreateTeacherInput {
+  email: EmailAddress!
+  password: String!
+  languagePreference: String
+  consentsAnalytics: Boolean
+}
+
+input CreateGroupInput {
+  name: String!
+  teacherId: ID!
+  subjectCode: ID!
+  educationLevel: EducationLevel!
+  learningObjectiveGroupKey: String!
+  students: [CreateStudentInput!]!
+  collectionTypes: [CreateCollectionTypeInput!]!
+}
+
+input UpdateGroupInput {
+  name: String
+  archived: Boolean
+}
+
+input CreateStudentInput {
+  name: String!
+}
+
+input CreateCollectionTypeInput {
+  category: CollectionTypeCategory!
+  name: String!
+  weight: Int!
+}
+
+input UpdateStudentInput {
+  name: String
+}
+
+input CreateCollectionInput {
+  date: Date!
+  typeId: ID!
+  environmentCode: ID!
+  description: String
+  learningObjectiveCodes: [ID!]!
+  evaluations: [CreateEvaluationInput!]
+}
+
+input UpdateCollectionInput {
+  date: Date
+  typeId: ID
+  environmentCode: ID
+  description: String
+  learningObjectiveCodes: [ID!]
+  evaluations: [UpdateEvaluationInput!]
+}
+
+input CreateEvaluationInput {
+  studentId: ID!
+  wasPresent: Boolean!
+  skillsRating: Int
+  behaviourRating: Int
+  notes: String
+}
+
+input UpdateEvaluationInput {
+  id: ID!
+  wasPresent: Boolean
+  skillsRating: Int
+  behaviourRating: Int
+  notes: String
+}
+
+input ChangeGroupModuleInput {
+  newEducationLevel: EducationLevel!
+  newLearningObjectiveGroupKey: String!
+}
+
+The createCollection test suite to be used as an example:
+
+import { graphql } from "../gql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import prisma from "@/prismaClient";
+import { CollectionTypeCategory, CreateCollectionInput } from "../../types";
+import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin } from "../testHelpers";
+import { formatDate } from "../../utils/date";
+
+describe("CreateCollection", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let teacher: TestTeacher;
+  let group: TestGroup;
+
+  let baseCollectionData: CreateCollectionInput;
+
+  beforeAll(async () => {
+    ({ graphqlRequest } = await createServer());
+
+    teacher = await createTestUserAndLogin(graphqlRequest);
+    group = await createTestGroup(teacher.id);
+
+    baseCollectionData = {
+      date: formatDate(new Date(), "yyyy-MM-dd"),
+      environmentCode: "LI_ENV_TAL",
+      description: "Test Description",
+      learningObjectiveCodes: ["T1", "T2"],
+      typeId: group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)?.id!,
+    };
+  });
+
+  afterEach(async () => {
+    await prisma.evaluationCollection.deleteMany();
+  });
+
+  it("should successfully create a collection", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      evaluations: [
+        {
+          studentId: group.students[0].id,
+          wasPresent: true,
+          skillsRating: 7,
+          behaviourRating: 9,
+          notes: "Good performance",
+        },
+      ],
+    };
+
+    const query = graphql(`
+      mutation CreateCollection($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
+          id
+          date
+          type {
+            id
+          }
+          environment {
+            code
+          }
+          description
+          evaluations {
+            student {
+              id
+            }
+            skillsRating
+            behaviourRating
+          }
+          learningObjectives {
+            code
+          }
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+
+    expect(response.data?.createCollection).toBeDefined();
+    expect(response.data?.createCollection.date).toEqual(collectionData.date);
+    expect(response.data?.createCollection.environment.code).toEqual(collectionData.environmentCode);
+    expect(response.data?.createCollection.evaluations.length).toEqual(collectionData.evaluations.length);
+    expect(response.data?.createCollection.evaluations[0].behaviourRating).toEqual(collectionData.evaluations[0].behaviourRating);
+    expect(response.data?.createCollection.evaluations[0].skillsRating).toEqual(collectionData.evaluations[0].skillsRating);
+    expect(response.data?.createCollection.evaluations[0].student.id).toEqual(collectionData.evaluations[0].studentId);
+    expect(response.data?.createCollection.learningObjectives.map((lo) => lo.code)).toEqual(collectionData.learningObjectiveCodes);
+  });
+
+  it("should throw error for invalid environment code", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      environmentCode: "InvalidEnvironmentCode",
+    };
+
+    const query = graphql(`
+      mutation CreateCollectionInvalidEnvironment($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Ympäristöä koodilla '${collectionData.environmentCode}' ei ole olemassa`);
+  });
+
+  it("should throw error for invalid learning objectives", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      learningObjectiveCodes: ["InvalidObjective1", "InvalidObjective2"],
+    };
+
+    const query = graphql(`
+      mutation CreateCollectionInvalidLearningObjectives($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia`);
+  });
+
+  it("should throw error if learning objectives are NOT_EVALUATED type", async () => {
+    const collectionData = {
+      ...baseCollectionData,
+      learningObjectiveCodes: ["T1", "T11"], // T11 is NOT_EVALUATED type in LI subject's 7-9 years
+    };
+
+    const query = graphql(`
+      mutation CreateCollectionNotEvaluatedLearningObjectives($data: CreateCollectionInput!, $moduleId: ID!) {
+        createCollection(data: $data, moduleId: $moduleId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia`);
+  });
+});
+
+Keep these things in mind:
+- query/mutation names have to be unique (see sample test suite)
+- remember to test all the possible validation cases
+- remember to take error messages to be checked from the thrown errors in the validators
+- the error message for invalid ID is the following: "Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."

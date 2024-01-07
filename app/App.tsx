@@ -2,8 +2,9 @@ import { Suspense, useEffect } from "react";
 import { Logs } from "expo";
 // import ErrorBoundary from "react-native-error-boundary";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
-import { LogBox, Platform } from "react-native";
+import { LogBox, Platform, View, Text } from "react-native";
 import ErrorBoundary from "react-native-error-boundary";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
@@ -35,9 +36,11 @@ function AppContent() {
     <ErrorBoundary FallbackComponent={ErrorView} onError={onError}>
       <AuthProvider>
         <ApolloProvider>
-          <Suspense fallback={<LoadingIndicator />}>
-            <Main />
-          </Suspense>
+          <KeyboardProvider>
+            <Suspense fallback={<LoadingIndicator />}>
+              <Main />
+            </Suspense>
+          </KeyboardProvider>
         </ApolloProvider>
       </AuthProvider>
     </ErrorBoundary>
@@ -58,6 +61,11 @@ const instance =
   });
 
 export default function App() {
+  // return (
+  //   <View>
+  //     <Text>Test</Text>
+  //   </View>
+  // );
   return instance ? (
     <MatomoProvider instance={instance}>
       <AppContent />

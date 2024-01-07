@@ -84,7 +84,7 @@ export class MatomoTracker {
    * @param {(Object)} options URL to track or options (must contain URL as well)
    */
   track(params: TrackParams): Promise<Response> | null {
-    if ((process.env.NODE_ENV === "development" && this.disabledInDev) || !this.trackerUrl) return null;
+    if ((process.env.NODE_ENV !== "production" && this.disabledInDev) || !this.trackerUrl) return null;
     const { lang, userInfo, custom, ...data } = params;
 
     const { custom: customUserInfo, ...restUserInfo } = userInfo || {};

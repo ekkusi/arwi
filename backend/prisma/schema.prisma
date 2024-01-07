@@ -9,19 +9,22 @@ datasource db {
 }
 
 model Teacher {
-  id                    String  @id @default(uuid())
-  mPassID               String?  @unique
-  email                 String?  @unique
-  passwordHash          String?
-  groups                Group[]
-  languagePreference    String  @default("fi_FI")
-  consentsAnalytics     Boolean @default(true)
+  id                      String      @id @default(uuid())
+  mPassID                 String?     @unique
+  email                   String?     @unique
+  passwordHash            String?
+  groups                  Group[]
+  languagePreference      String      @default("fi_FI")
+  consentsAnalytics       Boolean     @default(true)
+  passwordResetStartedAt  DateTime?
+  passwordResetTries      Int         @default(0)
 }
 
 model Group {
   id                    String                 @id @default(uuid())
   name                  String
   subjectCode           String
+  collectionTypes       CollectionType[]
   students              Student[]
   modules               Module[]               @relation(name: "GroupModules")
   currentModule         Module                 @relation(name: "GroupCurrentModule", fields: [currentModuleId], references: [id], onDelete: Cascade)
@@ -45,11 +48,13 @@ model Module {
 
 model EvaluationCollection {
   id                      String       @id @default(uuid())
+  type                    CollectionType @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  typeId                  String        
   date                    DateTime     @default(now())
   learningObjectiveCodes  String[]
   description             String?
   evaluations             Evaluation[]
-  environmentCode         String
+  environmentCode         String?
   module                  Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   moduleId                String
 }
@@ -59,10 +64,10 @@ model Evaluation {
   student                Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
   wasPresent             Boolean              @default(true)
   studentId              String
-  skillsRating           Int?
-  behaviourRating        Int?
+  skillsRating           Int? // For CLASS_PARTICIPATION collection type 
+  behaviourRating        Int? // For CLASS_PARTICIPATION collection type
+  generalRating          Float? // For other collections types
   notes                  String?
-  isStellar              Boolean              @default(false)
   evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id], onDelete: Cascade)
   evaluationCollectionId String
 }
@@ -74,6 +79,24 @@ model Student {
   groupId     String
   modules     Module[]  
   evaluations Evaluation[]
+}
+
+model CollectionType {
+  id          String       @id @default(uuid())
+  category    CollectionTypeCategory
+  name        String
+  weight      Int
+  collection EvaluationCollection[]
+  group      Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId    String
+}
+
+enum CollectionTypeCategory {
+  CLASS_PARTICIPATION
+  EXAM
+  WRITTEN_WORK
+  GROUP_WORK
+  OTHER
 }
 
 enum EducationLevel {

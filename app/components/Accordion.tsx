@@ -11,6 +11,7 @@ import CTouchableOpacity from "./primitives/CTouchableOpacity";
 import CView, { CViewProps } from "./primitives/CView";
 
 type AccordionData = {
+  headerContentRight?: JSX.Element;
   title: string;
   date?: string;
   isEvaluated?: boolean;
@@ -27,6 +28,7 @@ export type AccordionItemProps = CViewProps &
 
 export function AccordionItem({
   children,
+  headerContentRight,
   title,
   date,
   isEvaluated,
@@ -50,19 +52,22 @@ export function AccordionItem({
           }}
           onPress={onHeaderPress}
         >
-          <CView>
-            <CText style={{ fontSize: "md", fontWeight: "500" }}>{title}</CText>
-            {color && date && (
-              <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
-                <CView style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />
-                <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>
-              </CView>
-            )}
-            {isEvaluated !== undefined && (
-              <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>
-                {isEvaluated ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu")}
-              </CText>
-            )}
+          <CView style={{ flexDirection: "row", gap: 20, justifyContent: "center", alignItems: "center" }}>
+            <CView>
+              <CText style={{ fontSize: "md", fontWeight: "500" }}>{title}</CText>
+              {(color || date) && (
+                <CView style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+                  {color && <CView style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />}
+                  {date && <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>}
+                </CView>
+              )}
+              {isEvaluated !== undefined && (
+                <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>
+                  {isEvaluated ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu")}
+                </CText>
+              )}
+            </CView>
+            {headerContentRight}
           </CView>
           <CView style={{ flexDirection: "row", alignItems: "center" }}>
             {icons}

@@ -32,10 +32,33 @@ const cache = new InMemoryCache({
     Environment: {
       keyFields: ["code"],
     },
+    EvaluationCollection: {
+      fields: {
+        evaluations: {
+          merge(_, incoming) {
+            return incoming;
+          },
+        },
+      },
+    },
+    Student: {
+      fields: {
+        currentModuleEvaluations: {
+          merge(_, incoming) {
+            return incoming;
+          },
+        },
+      },
+    },
     Module: {
       fields: {
         info: {
           merge: true,
+        },
+        evaluationCollections: {
+          merge(_, incoming) {
+            return incoming;
+          },
         },
       },
     },

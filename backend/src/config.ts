@@ -1,9 +1,10 @@
 import { SessionOptions } from "express-session";
-import { Redis } from "ioredis";
 import RedisStore from "connect-redis";
 import { HelmetOptions } from "helmet";
+import Redis from "ioredis";
 
 const { env } = process;
+export const BRCRYPT_SALT_ROUNDS = 12;
 
 export const HELMET_OPTIONS: HelmetOptions = {
   contentSecurityPolicy:
@@ -29,21 +30,19 @@ if (env.NODE_ENV === "production" && !env.REDIS_PASSWORD && !env.REDIS_HOST) {
   console.warn("WARNING: No REDIS_PASSWORD or REDIS_HOST environment variables found. Redis session setup will probably fail.");
 }
 
-let sessionStore;
+if (env.NODE_ENV === "production" && env.NO_REDIS_SESSION === "true") throw new Error("NO_REDIS_SESSION cannot be true in production");
 
-// Allow disabling redis session storage for testing with env var
-if (env.NO_REDIS_SESSION !== "true") {
-  const redisClient = new Redis({
-    password: env.REDIS_PASSWORD,
-    host: env.REDIS_HOST,
-  });
-  sessionStore = new RedisStore({
-    client: redisClient,
-  });
-}
+const sessionClient =
+  env.NO_REDIS_SESSION !== "true"
+    ? new Redis({
+        password: env.REDIS_PASSWORD,
+        host: env.REDIS_HOST,
+      })
+    : undefined;
 
 export const SESSION_OPTIONS: SessionOptions = {
-  store: sessionStore,
+  // Allow disabling redis session storage for testing with env var
+  store: sessionClient ? new RedisStore({ client: sessionClient }) : undefined,
   secret: SESSION_SECRET,
   name: SESSION_NAME,
   cookie: {
@@ -57,4 +56,9 @@ export const SESSION_OPTIONS: SessionOptions = {
   },
   resave: false,
   saveUninitialized: true,
+};
+
+export const MATOMO_EVENT_CATEGORIES = {
+  OPEN_AI: "OpenAI",
+  PASSWORD_RESET: "Password reset",
 };

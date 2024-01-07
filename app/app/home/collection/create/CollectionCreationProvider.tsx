@@ -1,8 +1,10 @@
 import { useQuery } from "@apollo/client";
-import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
-import { Evaluation } from "../../../../components/EvaluationCard";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { CollectionTypeCategory, CollectionTypeMinimal } from "arwi-backend/src/types";
+import { Evaluation } from "../../../../components/ClassParticipationEvaluationCard";
 import { graphql } from "../../../../gql";
 import { CollectionCreationProvider_GetGroupQuery } from "../../../../gql/graphql";
+import { useThrowCatchableError } from "../../../../hooks-and-providers/error";
 
 const CollectionCreationProvider_GetGroup_Query = graphql(`
   query CollectionCreationProvider_GetGroup($groupId: ID!) {
@@ -18,6 +20,11 @@ const CollectionCreationProvider_GetGroup_Query = graphql(`
             notes
           }
         }
+      }
+      collectionTypes {
+        id
+        name
+        category
       }
       ...CollectionGeneralInfoView_Group
     }
@@ -35,21 +42,22 @@ export type EvaluationData = Omit<Evaluation, "student"> & {
   student: { id: string; name: string } & Evaluation["student"];
 };
 
-type EvaluationStructure = Record<string, EvaluationData>;
+const initialData: Omit<CollectionData, "collectionType"> = {
+  description: "",
+  date: new Date(),
+  environmentCode: undefined,
+  learningObjectiveCodes: [],
+};
 
 type CollectionCreationContextParams = {
   generalData: CollectionData;
   loading: boolean;
+  collectionType?: CollectionTypeMinimal;
   evaluations?: EvaluationData[];
-  evaluationIds?: string[];
-  evaluationData?: EvaluationStructure;
   groupInfo?: CollectionCreationProvider_GetGroupQuery["getGroup"];
   setGeneralData: (data: CollectionData) => void;
   setEvaluations: Dispatch<SetStateAction<EvaluationData[] | undefined>>;
-  updateEvaluation: (evaluation: EvaluationData) => void;
 };
-
-const initialData: CollectionData = { description: "", date: new Date(), learningObjectiveCodes: [], environmentCode: undefined };
 
 const CollectionCreationContext = createContext<CollectionCreationContextParams | null>(null);
 
@@ -60,8 +68,8 @@ export const useCollectionCreationContext = (): Required<Omit<CollectionCreation
   if (!context) {
     throw new Error("useCollectionCreationContext context not found or not loaded. Make sure view is wrapped with CollectionCreationLayout.");
   }
-  const { groupInfo, evaluations, evaluationIds, evaluationData } = context;
-  if (!groupInfo || !evaluations || !evaluationIds || !evaluationData)
+  const { groupInfo, evaluations, collectionType } = context;
+  if (!groupInfo || !evaluations || !collectionType)
     throw new Error(
       "CollectionCreationContext is missing data. Make sure you have conditional rendering for children using this with loading from original context as condition"
     );
@@ -69,28 +77,23 @@ export const useCollectionCreationContext = (): Required<Omit<CollectionCreation
     ...context,
     groupInfo,
     evaluations,
-    evaluationIds,
-    evaluationData,
+    collectionType,
   };
 };
 
 type CollectionCreationProviderProps = React.PropsWithChildren<{ groupId: string }>;
 
 function CollectionCreationProvider({ children, groupId }: CollectionCreationProviderProps) {
+  const throwCatchableError = useThrowCatchableError();
   const [generalData, setGeneralData] = useState<CollectionData>(initialData);
   const [evaluations, setEvaluations] = useState<EvaluationData[]>();
-  const [evaluationIds, setEvaluationIds] = useState<string[]>();
-  const [evaluationData, setEvaluationData] = useState<EvaluationStructure>();
+  const [collectionType, setCollectionType] = useState<CollectionTypeMinimal>();
 
   const { data: queryData } = useQuery(CollectionCreationProvider_GetGroup_Query, {
     variables: {
       groupId,
     },
   });
-
-  const updateEvaluation = useCallback((evaluation: EvaluationData) => {
-    setEvaluationData((prev) => ({ ...prev, [evaluation.student.id]: evaluation }));
-  }, []);
 
   useEffect(() => {
     if (queryData?.getGroup) {
@@ -99,20 +102,14 @@ function CollectionCreationProvider({ children, groupId }: CollectionCreationPro
         .map((student) => ({ student, wasPresent: true }))
         .sort((a, b) => a.student.name.localeCompare(b.student.name));
 
-      const evaluationDataTemp: EvaluationStructure = {};
-      const evaluationIdsTemp: string[] = sortedEvaluations.map((it) => it.student.id);
-      sortedEvaluations.forEach((it) => {
-        evaluationDataTemp[it.student.id] = {
-          student: it.student,
-          wasPresent: it.wasPresent,
-        };
-      });
+      const matchingCollectionType = queryData?.getGroup?.collectionTypes.find((it) => it.category === CollectionTypeCategory.CLASS_PARTICIPATION);
+      if (!matchingCollectionType)
+        throwCatchableError(new Error("Invalid collection type passed to collection creation, type not found in group's collection types"));
 
       setEvaluations(sortedEvaluations);
-      setEvaluationIds(evaluationIdsTemp);
-      setEvaluationData(evaluationDataTemp);
+      setCollectionType(matchingCollectionType);
     }
-  }, [queryData]);
+  }, [queryData, throwCatchableError]);
 
   return (
     <Provider
@@ -120,12 +117,10 @@ function CollectionCreationProvider({ children, groupId }: CollectionCreationPro
         generalData,
         evaluations,
         setEvaluations,
-        evaluationIds,
-        evaluationData,
+        collectionType,
         groupInfo: queryData?.getGroup,
-        updateEvaluation,
         setGeneralData,
-        loading: !queryData || !evaluations || !evaluationIds || !evaluationData,
+        loading: !queryData || !evaluations || !collectionType,
       }}
     >
       {children}

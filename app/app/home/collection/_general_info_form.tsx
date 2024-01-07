@@ -1,8 +1,9 @@
-import { Environment, LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/subject";
+import { LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/general";
 import { getEnvironmentsByLevel, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
+import { EnvironmentInfo } from "arwi-backend/src/types";
 import CDateTimePicker from "../../../components/form/CDateTimePicker";
 import FormField from "../../../components/form/FormField";
 import MultiSelectFormField from "../../../components/form/MultiSelectFormField";
@@ -15,14 +16,18 @@ import CView from "../../../components/primitives/CView";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { getEnvironmentTranslation } from "../../../helpers/translation";
 
+export type GeneralInfoData = {
+  date: Date;
+  environment: EnvironmentInfo;
+  learningObjectives: LearningObjectiveMinimal[];
+  description: string;
+};
+
 type CollectionGeneralInfoFormProps = {
   subjectCode: string;
   moduleInfo: MinimalModuleInfo;
-  defaultEnvironment?: Environment;
-  defaultLearningObjectives?: LearningObjectiveMinimal[];
-  defaultDescription?: string;
-  defaultDate?: Date;
-  handleSubmit: (date: Date, environment: Environment, learningObjectives: LearningObjectiveMinimal[], description: string) => void;
+  initialData?: Partial<GeneralInfoData>;
+  handleSubmit: (data: GeneralInfoData) => void;
   buttonIcon?: JSX.Element;
   buttonTitle?: string;
   buttonLoading?: boolean;
@@ -31,10 +36,7 @@ type CollectionGeneralInfoFormProps = {
 export default function CollectionGeneralInfoForm({
   subjectCode,
   moduleInfo,
-  defaultEnvironment,
-  defaultLearningObjectives,
-  defaultDescription,
-  defaultDate,
+  initialData,
   handleSubmit,
   buttonIcon,
   buttonTitle,
@@ -42,11 +44,11 @@ export default function CollectionGeneralInfoForm({
 }: CollectionGeneralInfoFormProps) {
   const { t } = useTranslation();
 
-  const [selectedEnvironmentCode, setSelectedEnvironmentCode] = useState<Environment | undefined>(defaultEnvironment);
-  const [selectedLearningObjectiveCode, setSelectedLearningObjectivesCode] = useState<LearningObjectiveMinimal[]>(defaultLearningObjectives || []);
-  const [date, setDate] = useState(defaultDate || new Date());
+  const [selectedEnvironment, setSelectedEnvironment] = useState<EnvironmentInfo | undefined>(initialData?.environment);
+  const [selectedLearningObjectives, setSelectedLearningObjectives] = useState<LearningObjectiveMinimal[]>(initialData?.learningObjectives || []);
+  const [date, setDate] = useState(initialData?.date || new Date());
   const [isDateOpen, setIsDateOpen] = useState(false);
-  const [description, setDescription] = useState(defaultDescription || "");
+  const [description, setDescription] = useState(initialData?.description || "");
 
   const [environmentError, setEnvironmentError] = useState<string>();
 
@@ -54,7 +56,7 @@ export default function CollectionGeneralInfoForm({
   const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
   const handleGeneralSubmit = () => {
-    if (!selectedEnvironmentCode) {
+    if (!selectedEnvironment) {
       setEnvironmentError(
         t("environment-is-obligatory", "{{environment_string}} on pakollinen", {
           environment_string: getEnvironmentTranslation(t, "environment", subjectCode),
@@ -62,7 +64,12 @@ export default function CollectionGeneralInfoForm({
       );
       return;
     }
-    handleSubmit(date, selectedEnvironmentCode, selectedLearningObjectiveCode, description);
+    handleSubmit({
+      date,
+      environment: selectedEnvironment,
+      learningObjectives: selectedLearningObjectives,
+      description,
+    });
   };
 
   return (
@@ -72,9 +79,9 @@ export default function CollectionGeneralInfoForm({
           <SelectFormField
             title={getEnvironmentTranslation(t, "environment", subjectCode)}
             error={environmentError}
-            defaultValue={defaultEnvironment}
+            defaultValue={initialData?.environment}
             onSelect={(item) => {
-              setSelectedEnvironmentCode(item);
+              setSelectedEnvironment(item);
               setEnvironmentError(undefined);
             }}
             options={environments}
@@ -83,8 +90,8 @@ export default function CollectionGeneralInfoForm({
           />
           <MultiSelectFormField
             title={t("learningObjectives", "Oppimistavoitteet")}
-            defaultValue={defaultLearningObjectives || []}
-            onSelect={(items) => setSelectedLearningObjectivesCode(items)}
+            defaultValue={initialData?.learningObjectives || []}
+            onSelect={(items) => setSelectedLearningObjectives(items)}
             options={learningObjectives}
             formatLabel={(item) => `${item.code}: ${item.label.fi}`}
             getOptionValue={(item) => item.code}

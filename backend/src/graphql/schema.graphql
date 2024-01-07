@@ -5,6 +5,7 @@ type Query {
   getGroups(teacherId: ID!): [Group!]!
   getGroup(id: ID!): Group!
   getCollection(id: ID!): EvaluationCollection!
+  getType(id: ID!): CollectionType!
   getStudent(id: ID!): Student!
   getEvaluation(id: ID!): Evaluation!
 }
@@ -13,21 +14,26 @@ type Mutation {
   register(data: CreateTeacherInput!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
   mPassIDLogin(code: String!): MPassIDAuthPayload!
+  requestPasswordReset(email: String!): Boolean!
+  verifyPasswordResetCode(code: String!): Boolean!
+  updatePassword(recoveryCode: String!, newPassword: String!): Boolean!
   connectMPassID(code: String!): AuthPayload!
   connectLocalCredentials(email: String!, password: String!): AuthPayload!
   logout: Boolean!
   createGroup(data: CreateGroupInput!): Group!
-  createCollection(data: CreateCollectionInput!, moduleId: ID!): EvaluationCollection!
+  createClassParticipationCollection(data: CreateClassParticipationCollectionInput!, moduleId: ID!): ClassParticipationCollection!
+  createDefaultCollection(data: CreateDefaultCollectionInput!, moduleId: ID!): DefaultCollection!
   createStudent(data: CreateStudentInput!, moduleId: ID!): Student!
-  updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
-  updateCollection(data: UpdateCollectionInput!, collectionId: ID!): EvaluationCollection!
+  updateClassParticipationCollection(data: UpdateClassParticipationCollectionInput!, collectionId: ID!): ClassParticipationCollection!
+  updateDefaultCollection(data: UpdateDefaultCollectionInput!, collectionId: ID!): DefaultCollection!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
-  updateEvaluation(data: UpdateEvaluationInput!): Evaluation!
+  updateClassParticipationEvaluation(input: UpdateClassParticipationEvaluationInput!): ClassParticipationEvaluation!
+  updateDefaultEvaluation(input: UpdateDefaultEvaluationInput!): DefaultEvaluation!
   deleteStudent(studentId: ID!): Student!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
-  changeGroupModule(data: ChangeGroupModuleInput!, groupId: String!): Group!
+  changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
   fixTextGrammatics(studentId: ID!, text: String!): String!
 }
@@ -101,6 +107,24 @@ type Group {
   archived: Boolean!
   currentModule: Module!
   modules: [Module!]!
+  collectionTypes: [CollectionType!]!
+}
+
+type CollectionType {
+  id: ID!
+  category:    CollectionTypeCategory!
+  name:        String!
+  weight:      Int!
+  group: Group!
+  defaultTypeCollection: DefaultCollection
+}
+
+enum CollectionTypeCategory {
+  CLASS_PARTICIPATION
+  EXAM
+  WRITTEN_WORK
+  GROUP_WORK
+  OTHER
 }
 
 type ModuleInfo {
@@ -117,26 +141,60 @@ type Module {
   group: Group!
 }
 
-type EvaluationCollection {
+interface EvaluationCollection {
   id: ID!
   date: Date!
-  type: String!
-  environment: Environment!
+  type: CollectionType!
   description: String
   evaluations: [Evaluation!]!
   module: Module!
+}
+
+type ClassParticipationCollection implements EvaluationCollection {
+  id: ID!
+  date: Date!
+  type: CollectionType!
+  description: String
+  evaluations: [ClassParticipationEvaluation!]!
+  module: Module!
+  environment: Environment!
   learningObjectives: [LearningObjective!]!
 }
 
-type Evaluation {
+type DefaultCollection implements EvaluationCollection {
+  id: ID!
+  date: Date!
+  type: CollectionType!
+  description: String
+  evaluations: [DefaultEvaluation!]!
+  module: Module!
+}
+
+interface Evaluation {
   id: ID!
   student: Student!
   wasPresent: Boolean!
+  notes: String
+  collection: EvaluationCollection!
+}
+
+type ClassParticipationEvaluation implements Evaluation {
+  id: ID!
+  student: Student!
+  wasPresent: Boolean!
+  notes: String
+  collection: ClassParticipationCollection!
   skillsRating: Int
   behaviourRating: Int
+}
+
+type DefaultEvaluation implements Evaluation {
+  id: ID!
+  student: Student!
+  wasPresent: Boolean!
   notes: String
-  isStellar: Boolean!
-  collection: EvaluationCollection!
+  collection: DefaultCollection!
+  rating: Float
 }
 
 type Student {
@@ -163,8 +221,8 @@ enum EducationLevel {
 input CreateTeacherInput {
   email: EmailAddress!
   password: String!
-  languagePreference: String!
-  consentsAnalytics: Boolean!
+  languagePreference: String
+  consentsAnalytics: Boolean
 }
 
 input CreateGroupInput {
@@ -174,55 +232,96 @@ input CreateGroupInput {
   educationLevel: EducationLevel!
   learningObjectiveGroupKey: String!
   students: [CreateStudentInput!]!
-}
-
-input UpdateGroupInput {
-  name: String
-  archived: Boolean
+  collectionTypes: [CreateCollectionTypeInput!]!
 }
 
 input CreateStudentInput {
   name: String!
 }
 
+input CreateCollectionTypeInput {
+  category: CollectionTypeCategory!
+  name: String!
+  weight: Int!
+}
+
+input UpdateGroupInput {
+  name: String
+  archived: Boolean
+  updateCollectionTypeInputs: [UpdateCollectionTypeInput!]
+  deleteCollectionTypeIds: [ID!]
+  createCollectionTypeInputs: [CreateCollectionTypeInput!]
+}
+
+input UpdateCollectionTypeInput {
+  id: ID!
+  category: CollectionTypeCategory
+  name: String
+  weight: Int
+}
+
 input UpdateStudentInput {
   name: String
 }
 
-input CreateCollectionInput {
+input CreateClassParticipationCollectionInput {
   date: Date!
-  type: String
+  typeId: ID!
   environmentCode: ID!
   description: String
   learningObjectiveCodes: [ID!]!
-  evaluations: [CreateEvaluationInput!]
+  evaluations: [CreateClassParticipationEvaluationInput!]
 }
 
-input UpdateCollectionInput {
-  date: Date
-  type: String
-  environmentCode: ID
+input CreateDefaultCollectionInput {
+  date: Date!
+  typeId: ID!
   description: String
-  learningObjectiveCodes: [ID!]
-  evaluations: [UpdateEvaluationInput!]
+  evaluations: [CreateDefaultEvaluationInput!]
 }
 
-input CreateEvaluationInput {
+input CreateClassParticipationEvaluationInput {
   studentId: ID!
   wasPresent: Boolean!
   skillsRating: Int
   behaviourRating: Int
   notes: String
-  isStellar: Boolean
 }
 
-input UpdateEvaluationInput {
+input CreateDefaultEvaluationInput {
+  studentId: ID!
+  wasPresent: Boolean!
+  rating: Float
+  notes: String
+}
+
+input UpdateClassParticipationCollectionInput {
+  date: Date
+  environmentCode: ID
+  description: String
+  learningObjectiveCodes: [ID!]
+  evaluations: [UpdateClassParticipationEvaluationInput!]
+}
+
+input UpdateDefaultCollectionInput {
+  date: Date
+  description: String
+  evaluations: [UpdateDefaultEvaluationInput!]
+}
+
+input UpdateClassParticipationEvaluationInput {
   id: ID!
   wasPresent: Boolean
   skillsRating: Int
   behaviourRating: Int
   notes: String
-  isStellar: Boolean
+}
+
+input UpdateDefaultEvaluationInput {
+  id: ID!
+  wasPresent: Boolean
+  rating: Float
+  notes: String
 }
 
 input ChangeGroupModuleInput {

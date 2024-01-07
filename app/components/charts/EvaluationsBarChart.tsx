@@ -15,7 +15,7 @@ import { COLORS } from "../../theme";
 import { getEnvironmentTranslation } from "../../helpers/translation";
 
 const EvaluationsBarChart_Evaluation_Fragment = graphql(`
-  fragment EvaluationsBarChart_Evaluation on Evaluation {
+  fragment EvaluationsBarChart_Evaluation on ClassParticipationEvaluation {
     id
     skillsRating
     behaviourRating

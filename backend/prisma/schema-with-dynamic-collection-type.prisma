@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets   = ["native"]
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  extensions = [uuidOssp(map: "uuid-ossp", schema: "public")]
+}
+
+model Teacher {
+  id                      String      @id @default(uuid())
+  mPassID                 String?     @unique
+  email                   String?     @unique
+  passwordHash            String?
+  groups                  Group[]
+  languagePreference      String      @default("fi_FI")
+  consentsAnalytics       Boolean     @default(true)
+  passwordResetStartedAt  DateTime?
+  passwordResetTries      Int         @default(0)
+}
+
+model Group {
+  id                    String                 @id @default(uuid())
+  name                  String
+  subjectCode           String
+  collectionTypes       CollectionType[]
+  students              Student[]
+  modules               Module[]               @relation(name: "GroupModules")
+  currentModule         Module                 @relation(name: "GroupCurrentModule", fields: [currentModuleId], references: [id], onDelete: Cascade)
+  currentModuleId       String
+  teacher               Teacher                @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId             String
+  updatedAt             DateTime               @updatedAt @default(now())
+  archived              Boolean                @default(false)
+}
+
+model Module {
+  id                          String                 @id @default(uuid())
+  educationLevel              EducationLevel 
+  learningObjectiveGroupKey   String
+  currentGroups               Group[]                @relation(name: "GroupCurrentModule") // For prisma to be able to resolve the relation, not needed in practice
+  group                       Group                  @relation(name: "GroupModules", fields: [groupId], references: [id], onDelete: Cascade)
+  groupId                     String
+  students                    Student[]
+  evaluationCollections       EvaluationCollection[]
+}
+
+enum CollectionDataType {
+  CLASS_PARTICIPATION
+  DEFAULT
+}
+
+model EvaluationCollection {
+  id                      String       @id @default(uuid())
+  type                    CollectionType @relation(fields: [typeId], references: [id], onDelete: Restrict)
+  typeId                  String        
+  date                    DateTime     @default(now())
+  description             String?
+  evaluations             Evaluation[]
+  module                  Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  moduleId                String
+
+  classParticipationCollectionData ClassParticipationCollectionData? @relation("ClassParticipationCollectionData", fields: [collectionDataId], references: [id], onDelete: Restrict, map: "classParticipationCollection_collectionDataId")
+  defaultCollectionData            DefaultCollectionData?           @relation("DefaultCollectionData", fields: [collectionDataId], references: [id], onDelete: Restrict, map: "defaultCollection_collectionDataId")
+  collectionDataId        String
+  collectionDataType      CollectionDataType
+}
+
+model ClassParticipationCollectionData {
+  id                      String       @id @default(uuid())
+  learningObjectiveCodes  String[]
+  environmentCode         String
+
+  collections   EvaluationCollection[] @relation("ClassParticipationCollectionData")
+}
+
+enum RatingScaleType {
+  FOUR_TO_TEN_REGULAR
+}
+
+model DefaultCollectionData {
+  id                     String       @id @default(uuid())
+  ratingScaleType        RatingScaleType
+
+  collections EvaluationCollection[] @relation("DefaultCollectionData")
+}
+
+model Evaluation {
+  id                     String               @id @default(uuid())
+  student                Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  wasPresent             Boolean              @default(true)
+  studentId              String
+  skillsRating           Int?
+  behaviourRating        Int?
+  notes                  String?
+  isStellar              Boolean              @default(false)
+  evaluationCollection   EvaluationCollection @relation(fields: [evaluationCollectionId], references: [id], onDelete: Cascade)
+  evaluationCollectionId String
+}
+
+model Student {
+  id          String       @id @default(uuid())
+  name        String
+  group       Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId     String
+  modules     Module[]  
+  evaluations Evaluation[]
+}
+
+model CollectionType {
+  id          String       @id @default(uuid())
+  category    CollectionTypeCategory
+  name        String
+  weight      Int
+  collection EvaluationCollection[]
+  group      Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId    String
+}
+
+enum CollectionTypeCategory {
+  CLASS_PARTICIPATION
+  EXAM
+  WRITTEN_WORK
+  GROUP_WORK
+  OTHER
+}
+
+enum EducationLevel {
+  PRIMARY_FIRST
+  PRIMARY_SECOND
+  PRIMARY_THIRD
+  PRIMARY_FOURTH
+  PRIMARY_FIFTH
+  PRIMARY_SIXTH
+  PRIMARY_SEVENTH
+  PRIMARY_EIGHTH
+  PRIMARY_NINTH
+  HIGH_SCHOOL
+  VOCATIONAL
+}

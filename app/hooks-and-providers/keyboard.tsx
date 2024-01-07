@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Keyboard, KeyboardEvent, Platform } from "react-native";
+import { AndroidSoftInputModes, KeyboardController } from "react-native-keyboard-controller";
 
 const KEYBOARD_SHOW_EVENT = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
 const KEYBOARD_CLOSE_EVENT = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
@@ -50,4 +51,11 @@ export const useKeyboardListener = ({ onShow, onHide }: UseKeyboardListenerProps
       keyboardDidShowListener.remove();
     };
   }, []);
+};
+
+export const useKeyboardMode = (mode: AndroidSoftInputModes) => {
+  useEffect(() => {
+    KeyboardController.setInputMode(mode);
+    return () => KeyboardController.setDefaultMode();
+  }, [mode]);
 };
