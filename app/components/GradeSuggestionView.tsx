@@ -2,7 +2,7 @@ import { useState } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { Slider } from "@miblanchard/react-native-slider";
-import { DefaultEvaluation, CollectionType } from "arwi-backend/src/types";
+import { DefaultEvaluation, CollectionType, DefaultCollection } from "arwi-backend/src/types";
 import { Alert } from "react-native";
 import { COLORS } from "../theme";
 import CButton from "./primitives/CButton";
@@ -12,9 +12,13 @@ import CircledNumber from "./CircledNumber";
 import CModal from "./CModal";
 import InfoButton from "./InfoButton";
 
-type PartialCollectionType = Pick<CollectionType, "category" | "weight" | "name" | "id">;
+type PartialCollectionType = Pick<CollectionType, "category" | "weight" | "name" | "id"> & {
+  defaultTypeCollection?: Pick<DefaultCollection, "id"> | null;
+};
 
-type PartialEvaluation = Pick<DefaultEvaluation, "__typename" | "id" | "rating">;
+type PartialEvaluation = Pick<DefaultEvaluation, "__typename" | "id" | "rating"> & {
+  collection: Pick<DefaultCollection, "id">;
+};
 
 type GradeSuggestionViewProps = CViewProps & {
   skillsMean: number;
@@ -30,15 +34,15 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean, collect
   const classParticipationGrade = skillsMean * gradeSuggestionSkillsWeight + behaviourMean * (1 - gradeSuggestionSkillsWeight);
   let weightSum = 0;
   let weightedRating = 0;
-  collectionTypes.forEach((coll) => {
-    if (coll.category === "CLASS_PARTICIPATION") {
-      weightSum += coll.weight;
-      weightedRating += classParticipationGrade * coll.weight;
-    } else {
-      const collEvaluation = otherEvaluations.find((ev) => ev.id === coll.id);
+  collectionTypes.forEach((colType) => {
+    if (colType.category === "CLASS_PARTICIPATION") {
+      weightSum += colType.weight;
+      weightedRating += classParticipationGrade * colType.weight;
+    } else if (colType.defaultTypeCollection != null) {
+      const collEvaluation = otherEvaluations.find((ev) => ev.collection.id === colType.defaultTypeCollection!.id);
       if (collEvaluation?.rating) {
-        weightSum += coll.weight;
-        weightedRating += coll.weight * collEvaluation.rating;
+        weightSum += colType.weight;
+        weightedRating += colType.weight * collEvaluation.rating;
       }
     }
   });
