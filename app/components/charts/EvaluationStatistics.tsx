@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
-import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
+import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { FragmentType, getFragmentData } from "../../gql";
 import CircledNumber from "../CircledNumber";
 import InfoButton from "../InfoButton";
@@ -47,13 +47,16 @@ export default function EvaluationsStatistics({
 
   const evaluationsWithSkills = useMemo(() => filteredData.filter((obj) => obj.skills !== undefined), [filteredData]);
   const skillsMean = useMemo(
-    () => evaluationsWithSkills.reduce((prev, evaluation) => prev + (evaluation.skills || 0), 0) / evaluationsWithSkills.length,
+    () =>
+      evaluationsWithSkills.reduce((prev, evaluation) => prev + (evaluation.skills || 0), 0) / evaluationsWithSkills.filter((ev) => ev.skills).length,
     [evaluationsWithSkills]
   );
 
   const evaluationsWithBehaviour = useMemo(() => filteredData.filter((obj) => obj.behaviour !== undefined), [filteredData]);
   const behaviourMean = useMemo(
-    () => evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) / evaluationsWithBehaviour.length,
+    () =>
+      evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) /
+      evaluationsWithBehaviour.filter((ev) => ev.behaviour).length,
     [evaluationsWithBehaviour]
   );
 

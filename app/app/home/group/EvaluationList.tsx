@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import React from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
+import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
@@ -15,7 +17,12 @@ import { formatDate } from "../../../helpers/dateHelpers";
 export default function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
   const { t } = useTranslation();
 
-  const collections = [...group.currentModule.evaluationCollections].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const { evaluationCollections } = group.currentModule;
+  const classParticipationCollections =
+    evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "ClassParticipationCollection">>(
+      isClassParticipationCollection
+    );
+  const sortedCollections = classParticipationCollections.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const translateY = useSharedValue(0);
   const isScrolling = useSharedValue(false);
@@ -53,12 +60,12 @@ export default function EvaluationList({ getGroup: group, navigation }: GroupOve
 
   return (
     <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
-      {collections.length > 0 ? (
+      {sortedCollections.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingVertical: SPACING.md }}
-          data={collections}
+          data={sortedCollections}
           renderItem={({ item }) => (
             <Card style={{ marginBottom: "md" }} key={item.id}>
               <CTouchableOpacity
@@ -81,13 +88,13 @@ export default function EvaluationList({ getGroup: group, navigation }: GroupOve
           )}
         />
       ) : (
-        <CText style={{ paddingTop: 50, alignSelf: "center" }}>{t("group.no-collections", "Ryhmälle ei vielä olla tehty arviointeja")}</CText>
+        <CText style={{ paddingTop: 50, alignSelf: "center" }}>{t("group.no-collections", "Ryhmälle ei vielä olla tehty tuntiarviointeja")}</CText>
       )}
       {!group.archived && (
         <Animated.View style={[{ position: "absolute", bottom: 20, right: 15, backgroundColor: "rgba(0,0,0,0)" }, newEvaluationButtonStyle]}>
           <CButton
             shadowed
-            title={t("new-evaluation", "Uusi arviointi")}
+            title={t("new-class-evaluation", "Uusi tuntiarviointi")}
             onPress={() => navigation.navigate("collection-create", { groupId: group.id })}
             leftIcon={<MaterialCommunityIcon name="plus" size={30} color={COLORS.white} />}
           />

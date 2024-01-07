@@ -49,24 +49,40 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
         evaluationCollections {
           id
           date
-          environment {
-            label {
-              fi
-            }
-            code
-            color
+          type {
+            id
+            category
           }
-          learningObjectives {
-            code
-            label {
-              fi
+          __typename
+          ... on ClassParticipationCollection {
+            environment {
+              label {
+                fi
+              }
+              code
+              color
             }
-            description {
-              fi
+            learningObjectives {
+              code
+              label {
+                fi
+              }
+              description {
+                fi
+              }
+              type
             }
-            type
+            ...CollectionStatistics_EvaluationCollection
           }
-          ...CollectionsLineChart_EvaluationCollection
+        }
+      }
+      collectionTypes {
+        id
+        category
+        name
+        weight
+        defaultTypeCollection {
+          id
         }
       }
     }
@@ -145,7 +161,7 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
       case "objectives":
         return <ObjectiveListMemoed {...data} navigation={navigation} />;
       case "statistics":
-        return <StatisticsViewMemoed {...data} navigation={navigation} />;
+        return <StatisticsView {...data} navigation={navigation} />;
       default:
         return null;
     }

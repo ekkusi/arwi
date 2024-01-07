@@ -1,21 +1,19 @@
 import AuthenticationError from "../../errors/AuthenticationError";
-import prisma from "../../prismaClient";
+import prisma from "@/prismaClient";
 import { CustomContext } from "../../types/contextTypes";
+import { groupLoader } from "../dataLoaders/group";
 
 type User = CustomContext["user"];
 
 export const checkAuthenticatedByGroup = async (user: User, groupId: string) => {
   if (!user) throw new AuthenticationError();
-  const matchingGroup = await prisma.group.findUniqueOrThrow({
-    where: {
-      id: groupId,
-    },
-  });
+  const matchingGroup = await groupLoader.load(groupId);
   if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu ryhmä ei kuulu sinulle");
 };
 
 export const checkAuthenticatedByCollection = async (user: User, collectionId: string) => {
   if (!user) throw new AuthenticationError();
+
   const matchingGroup = await prisma.group.findFirstOrThrow({
     where: {
       modules: {
@@ -28,8 +26,31 @@ export const checkAuthenticatedByCollection = async (user: User, collectionId: s
         },
       },
     },
+    select: {
+      teacherId: true,
+    },
   });
+
   if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointikokoelma ei kuulu sinulle");
+};
+
+export const checkAuthenticatedByType = async (user: User, typeId: string) => {
+  if (!user) throw new AuthenticationError();
+
+  const matchingGroup = await prisma.group.findFirstOrThrow({
+    where: {
+      collectionTypes: {
+        some: {
+          id: typeId,
+        },
+      },
+    },
+    select: {
+      teacherId: true,
+    },
+  });
+
+  if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointisisältö ei kuulu sinulle");
 };
 
 export const checkAuthenticatedByStudent = async (user: User, studentId: string) => {
@@ -41,6 +62,9 @@ export const checkAuthenticatedByStudent = async (user: User, studentId: string)
           id: studentId,
         },
       },
+    },
+    select: {
+      teacherId: true,
     },
   });
   if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu oppilas ei kuulu sinun oppilaisiin");
@@ -59,6 +83,9 @@ export const checkAuthenticatedByEvaluation = async (user: User, evaluationId: s
           },
         },
       },
+    },
+    select: {
+      teacherId: true,
     },
   });
   if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointi ei kuulu sinulle");

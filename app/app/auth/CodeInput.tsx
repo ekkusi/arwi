@@ -1,9 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
-import { useFocusEffect } from "@react-navigation/native";
 import LandingComponent from "./LandingComponent";
 import CView from "../../components/primitives/CView";
 import TextFormField from "../../components/form/TextFormField";
@@ -28,17 +26,6 @@ export default function CodeInput({ navigation, route }: NativeStackScreenProps<
   const [focused, setFocused] = useState(false);
 
   const [verifyPasswordResetCode, { loading }] = useMutation(CodeInput_VerifyPasswordResetCode_Mutation);
-
-  const onFocusEffect = useCallback(() => {
-    AvoidSoftInput.setAdjustNothing();
-    AvoidSoftInput.setEnabled(true);
-    return () => {
-      AvoidSoftInput.setEnabled(false);
-      AvoidSoftInput.setAdjustResize();
-    };
-  }, []);
-
-  useFocusEffect(onFocusEffect);
 
   const handleCodeChange = (newCode: string) => {
     const parsedCode = newCode.replace(/[^0-9]/g, "");
@@ -91,7 +78,13 @@ export default function CodeInput({ navigation, route }: NativeStackScreenProps<
             onChange={handleCodeChange}
           />
           {error && <CText style={{ color: "error", fontWeight: "600", fontSize: "sm" }}>{error}</CText>}
-          <CButton title={t("check-code", "Tarkista koodi")} loading={loading} onPress={() => handleCheckCode(code)} />
+          <CButton
+            variant="outline"
+            colorScheme="darkgray"
+            title={t("check-code", "Tarkista koodi")}
+            loading={loading}
+            onPress={() => handleCheckCode(code)}
+          />
         </CView>
       </CView>
     </LandingComponent>

@@ -1,3 +1,4 @@
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { TFunction } from "i18next";
 
 type EnvironmentTranslationKey =
@@ -9,12 +10,12 @@ type EnvironmentTranslationKey =
   | "for-environments"
   | "on-environment";
 
-type EnvironmentTranslation = {
+type Translation = {
   key: string;
   defaultTranslation: string;
 };
 
-const TRANSLATION_KEYS: Record<string, Record<EnvironmentTranslationKey, EnvironmentTranslation>> = {
+const TRANSLATION_KEYS: Record<string, Record<EnvironmentTranslationKey, Translation>> = {
   sports: {
     environment: {
       key: "environment",
@@ -84,4 +85,31 @@ export const getEnvironmentTranslation = (t: TFunction, key: EnvironmentTranslat
     default:
       return t(TRANSLATION_KEYS.default[key].key, TRANSLATION_KEYS.default[key].defaultTranslation);
   }
+};
+
+const COLLECTION_TYPE_TRANSLATIONS: Record<CollectionTypeCategory, Translation> = {
+  CLASS_PARTICIPATION: {
+    key: "class-participation",
+    defaultTranslation: "Tuntityöskentely",
+  },
+  EXAM: {
+    key: "exam",
+    defaultTranslation: "Koe",
+  },
+  GROUP_WORK: {
+    key: "group-work",
+    defaultTranslation: "Ryhmätyö",
+  },
+  WRITTEN_WORK: {
+    key: "written-work",
+    defaultTranslation: "Kirjallinen työ",
+  },
+  OTHER: {
+    key: "other",
+    defaultTranslation: "Muu",
+  },
+};
+
+export const getCollectionTypeTranslation = (t: TFunction, type: CollectionTypeCategory): string => {
+  return t(COLLECTION_TYPE_TRANSLATIONS[type].key, COLLECTION_TYPE_TRANSLATIONS[type].defaultTranslation);
 };

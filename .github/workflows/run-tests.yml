@@ -1,0 +1,11 @@
+name: Run tests workflow
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
+      - '!v*'
+
+jobs:
+  run-tests:
+    uses: ekkusi/arwi/.github/workflows/run-tests-call.yml@main

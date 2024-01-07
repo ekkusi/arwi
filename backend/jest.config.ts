@@ -5,9 +5,8 @@ const config: Config = {
   preset: "ts-jest",
   testEnvironment: "node",
   testMatch: ["**/tests/**/*.test.ts"],
-  moduleNameMapper: {
-    "^@/(.*)": "<rootDir>/src/$1",
-  },
+  rootDir: "src",
+  testTimeout: 60000,
   transform: {
     "^.+\\.[tj]sx?$": [
       "ts-jest",
@@ -16,7 +15,10 @@ const config: Config = {
       },
     ],
   },
-  setupFilesAfterEnv: ["./src/__mocks__/mocks.ts"],
+  setupFilesAfterEnv: ["./__mocks__/jest.setup.ts"],
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/$1"
+  },
 };
 
 export default config;

@@ -2,7 +2,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { useTranslation } from "react-i18next";
 import { getEnvironmentsByLevel } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
-import { MinimalModuleInfo } from "arwi-backend/src/types/subject";
+import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { COLORS } from "../../theme";
 import CButton from "../primitives/CButton";
 import CText from "../primitives/CText";
@@ -26,6 +26,8 @@ export default function StatisticsFilterMenu({
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
+
+  const buttonText = environments.find((env) => env.code === filter)?.label;
 
   return (
     <>
@@ -61,12 +63,12 @@ export default function StatisticsFilterMenu({
           ))}
         </CView>
       </CModal>
-      <CView style={{ flexDirection: "row" }}>
-        <CText style={{ flex: 1, fontSize: "md", fontWeight: "300" }}>{title}</CText>
+      <CView style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+        <CText style={{ flex: 1, fontSize: "lg", fontWeight: "300" }}>{title}</CText>
         <CButton
           size="small"
           variant="outline"
-          title={filter || t("all", "Kaikki")}
+          title={buttonText?.fi || t("all", "Kaikki")}
           colorScheme="darkgray"
           style={{ width: "auto" }}
           leftIcon={<MaterialCommunityIcon name="filter-variant" size={25} color={COLORS.darkgray} />}

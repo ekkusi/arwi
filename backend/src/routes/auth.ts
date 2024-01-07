@@ -2,7 +2,7 @@ import { Request, Router } from "express";
 import dotenv from "dotenv";
 import { Issuer, Client as OpenIDClient } from "openid-client";
 import { initSession, logOut } from "../utils/auth";
-import prisma from "../prismaClient";
+import prisma from "@/prismaClient";
 import BadRequestError from "../errors/BadRequestError";
 
 dotenv.config();
@@ -68,7 +68,7 @@ export const grantAndInitSession = async (client: OpenIDClient, code: string, re
 const initAuth = async () => {
   const mPassIDIssuer = await Issuer.discover(MPASSID_ISSUER_URL);
 
-  let client: OpenIDClient | null = null;
+  let client: OpenIDClient | undefined;
 
   if (MPASSID_CLIENT_ID && MPASSID_CLIENT_SECRET) {
     client = new mPassIDIssuer.Client({

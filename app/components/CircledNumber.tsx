@@ -5,6 +5,7 @@ import CView from "./primitives/CView";
 export default function CircledNumber({
   size = 70,
   value,
+  valueString,
   decimals = 1,
   borderWidth = 1,
   borderColor = "lightgray",
@@ -12,6 +13,7 @@ export default function CircledNumber({
 }: {
   size?: number;
   value?: number;
+  valueString?: string;
   decimals?: number;
   borderWidth?: number;
   borderColor?: CColor;
@@ -25,10 +27,12 @@ export default function CircledNumber({
   let valueText = "-";
   if (value) {
     valueText = Number.isNaN(value) ? "-" : value.toFixed(decimals);
+  } else if (valueString) {
+    valueText = valueString;
   }
   return (
     <CView style={{ justifyContent: "center", alignItems: "center", gap: 5 }}>
-      <CText style={{ fontSize: "xs", fontWeight: "500" }}>{title}</CText>
+      {title && <CText style={{ fontSize: "xs", fontWeight: "500", width: 100, textAlign: "center" }}>{title}</CText>}
       <CView
         style={{
           width: size || 70,

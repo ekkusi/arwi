@@ -1,16 +1,21 @@
 import {
   ElementarySchoolObjectiveGroups,
   ElementarySchoolEnvironmentKey,
-  Environment,
-  LearningObjective,
+  LearningObjectiveInfo,
   LearningObjectiveMinimal,
   PrimaryEducationLevel,
-  Subject,
-  SubjectMinimal,
   UnmappedEnvironment,
-} from "../types/subject";
+  ModuleInfo,
+  EducationLevel,
+  LearningObjectiveType,
+  TranslatedString,
+  SubjectInfo,
+  SubjectMinimal,
+  EnvironmentInfo,
+} from "../types";
 import subjects from "../subject-schema.json";
-import { ModuleInfo, EducationLevel, LearningObjectiveType, TranslatedString } from "../types";
+
+export const ELEMENTARY_LEARNING_GROUP_KEYS = ["one_to_two_years", "three_to_six_years", "seven_to_nine_years"];
 
 export const getSubjectCode = (environmentCode: string) => {
   if (environmentCode.length < 2) {
@@ -19,7 +24,7 @@ export const getSubjectCode = (environmentCode: string) => {
   return environmentCode.slice(0, 2);
 };
 
-export const getSubject = (subjectCode: string): Subject | undefined => {
+export const getSubject = (subjectCode: string): SubjectInfo | undefined => {
   const matchingSubject = subjects.find((it) => it.code === subjectCode);
   return (
     matchingSubject && {
@@ -108,7 +113,7 @@ export const getLearningObjectives = (
   subjectCode: string,
   educationLevel: EducationLevel,
   learningObjectivesGroupKey: string
-): LearningObjective[] => {
+): LearningObjectiveInfo[] => {
   const subject = getSubject(subjectCode);
   if (!subject) return [];
 
@@ -165,12 +170,12 @@ export const getElementarySchoolEnvironmentsKey = (learningObjectiveGroupKey: El
   }
 };
 
-export const mapEnvironment = (environment: UnmappedEnvironment): Environment => ({
+export const mapEnvironment = (environment: UnmappedEnvironment): EnvironmentInfo => ({
   ...environment,
   label: environment.name,
 });
 
-export const getEnvironment = (environmentCode: string): Environment | undefined => {
+export const getEnvironment = (environmentCode: string): EnvironmentInfo | undefined => {
   const subject = getSubject(getSubjectCode(environmentCode));
   if (!subject) return undefined;
   let environment = subject.environments.find((it) => it.code === environmentCode);
@@ -183,7 +188,7 @@ export const getEnvironment = (environmentCode: string): Environment | undefined
   return environment && mapEnvironment(environment);
 };
 
-export const getEnvironmentsByLevel = (subjectCode: string, educationLevel: EducationLevel, learningObjectiveGroupKey: string): Environment[] => {
+export const getEnvironmentsByLevel = (subjectCode: string, educationLevel: EducationLevel, learningObjectiveGroupKey: string): EnvironmentInfo[] => {
   const subject = getSubject(subjectCode);
   if (!subject) return [];
   const allLevelEnvironments = [...subject.environments] as UnmappedEnvironment[];
@@ -209,7 +214,7 @@ export const getEnvironmentsByLevel = (subjectCode: string, educationLevel: Educ
   return allLevelEnvironments.map((it) => mapEnvironment(it));
 };
 
-export const getAllEnvironments = (subjectCode: string): Environment[] => {
+export const getAllEnvironments = (subjectCode: string): EnvironmentInfo[] => {
   const subject = getSubject(subjectCode);
   if (!subject) return [];
   const unmappedEnvironments = [...subject.environments] as UnmappedEnvironment[];
@@ -235,6 +240,6 @@ export const getLearningObjectiveGroupKeys = (subjectCode: string, educationLeve
     case EducationLevel.VOCATIONAL:
       return subject.vocationalSchoolModules?.map((it) => it.code) || [];
     default:
-      return Object.keys(subject.elementarySchool);
+      return ELEMENTARY_LEARNING_GROUP_KEYS;
   }
 };

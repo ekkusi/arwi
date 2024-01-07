@@ -16,12 +16,12 @@ export type OptionType = {
 
 type DynamicSelectProps<CustomOptionType, IsMulti = boolean> = IsMulti extends true
   ? {
-      onSelect: (value: CustomOptionType[]) => void;
+      onSelect?: (value: CustomOptionType[]) => void;
       isMulti: IsMulti;
       defaultValue?: CustomOptionType[];
     }
   : {
-      onSelect: (value: CustomOptionType) => void;
+      onSelect?: (value: CustomOptionType) => void;
       isMulti: IsMulti;
       defaultValue?: CustomOptionType;
     };
@@ -34,6 +34,7 @@ export type SelectProps<CustomOptionType, IsMulti = boolean> = {
   placeholder?: string;
   closeAfterSelect?: boolean;
   title?: string;
+  selectAutomaticallyToInput?: boolean;
 } & DynamicSelectProps<CustomOptionType, IsMulti>;
 
 function Select<CustomOptionType>(props: SelectProps<CustomOptionType>) {
@@ -48,6 +49,7 @@ function Select<CustomOptionType>(props: SelectProps<CustomOptionType>) {
     defaultValue,
     formatLabel,
     getOptionValue,
+    selectAutomaticallyToInput = true,
     placeholder = t("select-default-placeholder", "Valitse"),
   } = props;
 
@@ -68,10 +70,10 @@ function Select<CustomOptionType>(props: SelectProps<CustomOptionType>) {
       } else {
         newSelected = [...selected, value];
       }
-      setSelected(newSelected);
+      if (selectAutomaticallyToInput) setSelected(newSelected);
       _onSelect?.(newSelected);
     } else {
-      setSelected([value]);
+      if (selectAutomaticallyToInput) setSelected([value]);
       _onSelect?.(value);
     }
     if (closeAfterSelect) setSelectModalOpen(false);

@@ -10,6 +10,7 @@ import { defaultHeaderStyles } from "../config";
 import ProfileView from "../profile";
 import CollectionView from "./collection";
 import CollectionCreationStack from "./collection/create/_stack";
+import DefaultCollectionCreationStack from "./collection/create/default/_stack";
 import GroupView from "./group";
 import GroupCreationStack from "./group/create/_stack";
 import LearningObjective from "./group/learningObjective";
@@ -23,6 +24,11 @@ import GroupHeaderRightButton from "./GroupHeaderRightButton";
 import CollectionHeaderRightButton from "./CollectionHeaderRightButton";
 import StudentHeaderRightButton from "./StudentHeaderRightButton";
 import StudentFeedbackView from "./student/feedback";
+import DefaultEvaluationCollection from "./group/DefaultEvaluationCollection";
+import DefaultCollectionEditAllEvaluationsView from "./collection/edit_all_default_evaluations";
+import EditDefaultCollectionGeneralInfoView from "./collection/edit_default_general_info";
+import DefaultEvaluationEditView from "./evaluation/edit_default_evaluation";
+import UpdateTypesStack from "./group/edit/_update_types_stack";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -106,7 +112,8 @@ export default function HomeStack() {
         component={CollectionView}
         options={({ route, navigation }) => ({
           title: `${route.params.date}: ${route.params.environmentLabel.fi}`,
-          headerRight: () => (route.params.archived ? undefined : <CollectionHeaderRightButton id={route.params.id} navigation={navigation} />),
+          headerRight: () =>
+            route.params.archived ? undefined : <CollectionHeaderRightButton id={route.params.id} isClassParticipation navigation={navigation} />,
         })}
       />
       <HomeStackNavigator.Screen
@@ -115,15 +122,50 @@ export default function HomeStack() {
         options={{ title: t("HomeStack.newGroup", "Uusi ryhmä"), headerShown: false }}
       />
       <HomeStackNavigator.Screen
+        name="edit-evaluation-types"
+        component={UpdateTypesStack}
+        options={{ title: t("edit-evaluation-types", "Muokkaa arviointisisältöjä"), headerShown: false }}
+      />
+      <HomeStackNavigator.Screen
         name="collection-create"
         component={CollectionCreationStack}
         options={{ title: t("new-evaluation", "Uusi arviointi"), headerShown: false }}
       />
+      <HomeStackNavigator.Screen
+        name="default-collection-create"
+        component={DefaultCollectionCreationStack}
+        options={{ title: t("new-evaluation", "Uusi arviointi"), headerShown: false }}
+      />
       <HomeStackNavigator.Screen name="collection-edit" component={EditCollectionGeneralInfoView} options={{ title: t("edit", "Muokkaa") }} />
+      <HomeStackNavigator.Screen
+        name="default-collection-edit"
+        component={EditDefaultCollectionGeneralInfoView}
+        options={{ title: t("edit", "Muokkaa") }}
+      />
       <HomeStackNavigator.Screen name="edit-evaluation" component={EvaluationEditView} options={{ title: t("edit", "Muokkaa") }} />
+      <HomeStackNavigator.Screen name="edit-default-evaluation" component={DefaultEvaluationEditView} options={{ title: t("edit", "Muokkaa") }} />
       <HomeStackNavigator.Screen name="profile" component={ProfileView} options={{ title: t("profile", "Profiili") }} />
       <HomeStackNavigator.Screen name="edit-all-evaluations" component={CollectionEditAllEvaluationsView} options={{ title: t("edit", "Muokkaa") }} />
+      <HomeStackNavigator.Screen
+        name="edit-all-default-evaluations"
+        component={DefaultCollectionEditAllEvaluationsView}
+        options={{ title: t("edit", "Muokkaa") }}
+      />
       <HomeStackNavigator.Screen name="archive" component={ArchivePage} options={{ title: t("archive", "Arkisto") }} />
+      <HomeStackNavigator.Screen
+        name="default-evaluation-collection"
+        component={DefaultEvaluationCollection}
+        options={({ route, navigation }) => {
+          return {
+            title: route.params.name,
+
+            headerRight: () =>
+              route.params.archived ? undefined : (
+                <CollectionHeaderRightButton id={route.params.collectionId} isClassParticipation={false} navigation={navigation} />
+              ),
+          };
+        }}
+      />
       <HomeStackNavigator.Group screenOptions={{ presentation: "modal" }}>
         <HomeStackNavigator.Screen name="learning-objective" component={LearningObjective} options={({ route }) => ({ title: route.params.code })} />
       </HomeStackNavigator.Group>

@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    image: postgres
+    image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -28,7 +28,7 @@ services:
       - app-network
     restart: unless-stopped
   redis:
-      image: redis:latest
+      image: redis:7.2.3-alpine
       restart: always
       ports:
         - "6379:6379"
