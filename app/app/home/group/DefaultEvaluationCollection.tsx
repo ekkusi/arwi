@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
+import { useEffect } from "react";
 import { HomeStackParams } from "../types";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
@@ -57,6 +58,13 @@ export default function DefaultEvaluationCollection({
   const { data, loading } = useQuery(DefaultEvaluationCollection_GetCollectionType_Query, {
     variables: { typeId: params.id },
   });
+
+  useEffect(() => {
+    const collection = data?.getType.defaultTypeCollection;
+    if (!params.collectionId && collection) {
+      navigation.setParams({ collectionId: collection.id });
+    }
+  }, [data, navigation, params.collectionId]);
 
   if (loading || !data) return <LoadingIndicator />;
 

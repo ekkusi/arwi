@@ -113,6 +113,7 @@ export default function CollectionHeaderRightButton({
                       onCancel={closeModal}
                       onDeleted={() => {
                         if (isClassParticipation) navigation.goBack();
+                        else navigation.setParams({ collectionId: undefined });
                         closeModal();
                       }}
                       collectionId={id}
