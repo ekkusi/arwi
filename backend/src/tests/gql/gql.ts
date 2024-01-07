@@ -13,6 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  ": types.Test_LoginDocument,
+    "\n    mutation Test_Logout {\n      logout\n    }\n  ": types.Test_LogoutDocument,
     "\n      mutation ChangeGroupModuleValidInput($data: ChangeGroupModuleInput!, $groupId: ID!) {\n        changeGroupModule(data: $data, groupId: $groupId) {\n          id\n          currentModule {\n            id\n            info {\n              educationLevel\n              learningObjectiveGroupKey\n            }\n          }\n        }\n      }\n    ": types.ChangeGroupModuleValidInputDocument,
     "\n      mutation ChangeGroupModuleUnAuthorized($data: ChangeGroupModuleInput!, $groupId: ID!) {\n        changeGroupModule(data: $data, groupId: $groupId) {\n          id\n        }\n      }\n    ": types.ChangeGroupModuleUnAuthorizedDocument,
     "\n      mutation ChangeGroupModuleInvalidID($data: ChangeGroupModuleInput!, $groupId: ID!) {\n        changeGroupModule(data: $data, groupId: $groupId) {\n          id\n        }\n      }\n    ": types.ChangeGroupModuleInvalidIdDocument,
@@ -24,8 +26,6 @@ const documents = {
     "\n      mutation CreateClassParticipationCollectionNotEvaluatedLearningObjectives($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {\n        createClassParticipationCollection(data: $data, moduleId: $moduleId) {\n          id\n        }\n      }\n    ": types.CreateClassParticipationCollectionNotEvaluatedLearningObjectivesDocument,
     "\n      mutation CreateClassParticipationCollectionInvalidType($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {\n        createClassParticipationCollection(data: $data, moduleId: $moduleId) {\n          id\n        }\n      }\n    ": types.CreateClassParticipationCollectionInvalidTypeDocument,
     "\n      mutation CreateClassParticipationCollectionDataLoaderCheck($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {\n        createClassParticipationCollection(data: $data, moduleId: $moduleId) {\n          id\n          date\n        }\n      }\n    ": types.CreateClassParticipationCollectionDataLoaderCheckDocument,
-    "\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  ": types.Test_LoginDocument,
-    "\n    mutation Test_Logout {\n      logout\n    }\n  ": types.Test_LogoutDocument,
     "\n      mutation CreateDefaultCollection($data: CreateDefaultCollectionInput!, $moduleId: ID!) {\n        createDefaultCollection(data: $data, moduleId: $moduleId) {\n          id\n          date\n          type {\n            id\n          }\n          __typename\n          description\n          evaluations {\n            student {\n              id\n            }\n            __typename\n            notes\n            rating\n          }\n        }\n      }\n    ": types.CreateDefaultCollectionDocument,
     "\n      mutation CreateDefaultCollectionDuplicate($data: CreateDefaultCollectionInput!, $moduleId: ID!) {\n        createDefaultCollection(data: $data, moduleId: $moduleId) {\n          id\n        }\n      }\n    ": types.CreateDefaultCollectionDuplicateDocument,
     "\n      mutation CreateDefaultCollectionInvalidType($data: CreateDefaultCollectionInput!, $moduleId: ID!) {\n        createDefaultCollection(data: $data, moduleId: $moduleId) {\n          id\n        }\n      }\n    ": types.CreateDefaultCollectionInvalidTypeDocument,
@@ -42,14 +42,14 @@ const documents = {
     "\n      mutation DeleteCollectionUnauthorized($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n          description\n        }\n      }\n    ": types.DeleteCollectionUnauthorizedDocument,
     "\n      mutation DeleteCollectionInvalidID($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.DeleteCollectionInvalidIdDocument,
     "\n      mutation DeleteCollectionDataLoaderCheck($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.DeleteCollectionDataLoaderCheckDocument,
-    "\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentDocument,
-    "\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentUnauthorizedDocument,
-    "\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentInvalidIdDocument,
-    "\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentDataLoaderCheckDocument,
     "\n      mutation DeleteGroup($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    ": types.DeleteGroupDocument,
     "\n      mutation DeleteGroupUnauthorized($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    ": types.DeleteGroupUnauthorizedDocument,
     "\n      mutation DeleteGroupInvalidID($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    ": types.DeleteGroupInvalidIdDocument,
     "\n      mutation DeleteGroupDataLoaderCheck($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    ": types.DeleteGroupDataLoaderCheckDocument,
+    "\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentDocument,
+    "\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentUnauthorizedDocument,
+    "\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentInvalidIdDocument,
+    "\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentDataLoaderCheckDocument,
     "\n      mutation FixTextGrammaticsValidInput($studentId: ID!, $text: String!) {\n        fixTextGrammatics(studentId: $studentId, text: $text)\n      }\n    ": types.FixTextGrammaticsValidInputDocument,
     "\n      mutation FixTextGrammaticsUnauthorized($studentId: ID!, $text: String!) {\n        fixTextGrammatics(studentId: $studentId, text: $text)\n      }\n    ": types.FixTextGrammaticsUnauthorizedDocument,
     "\n      mutation FixTextGrammaticsInvalidStudent($studentId: ID!, $text: String!) {\n        fixTextGrammatics(studentId: $studentId, text: $text)\n      }\n    ": types.FixTextGrammaticsInvalidStudentDocument,
@@ -114,6 +114,14 @@ const documents = {
     "\n      mutation UpdateGroupUnauthorized($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          name\n          archived\n        }\n      }\n    ": types.UpdateGroupUnauthorizedDocument,
     "\n      mutation UpdateGroupInvalidID($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          name\n          archived\n        }\n      }\n    ": types.UpdateGroupInvalidIdDocument,
     "\n      mutation UpdateGroupDataLoaderCheck($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          name\n          archived\n        }\n      }\n    ": types.UpdateGroupDataLoaderCheckDocument,
+    "\n      mutation UpdateGroupCollectionTypes($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    ": types.UpdateGroupCollectionTypesDocument,
+    "\n      mutation UpdateGroupCollectionTypesDuplicateIds($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    ": types.UpdateGroupCollectionTypesDuplicateIdsDocument,
+    "\n      mutation UpdateGroupCollectionTypesUnmatchedIds($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    ": types.UpdateGroupCollectionTypesUnmatchedIdsDocument,
+    "\n      mutation UpdateGroupCollectionTypesInvalidCategoryChange($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    ": types.UpdateGroupCollectionTypesInvalidCategoryChangeDocument,
+    "\n      mutation UpdateGroupCollectionTypesInvalidCategoryChange2($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    ": types.UpdateGroupCollectionTypesInvalidCategoryChange2Document,
+    "\n      mutation UpdateGroupCollectionTypesInvalidTotalWeight($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    ": types.UpdateGroupCollectionTypesInvalidTotalWeightDocument,
+    "\n      mutation UpdateGroupCollectionTypesInvalidCategoryCount($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    ": types.UpdateGroupCollectionTypesInvalidCategoryCountDocument,
+    "\n      mutation UpdateGroupCollectionTypesInvalidCategoryCount2($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    ": types.UpdateGroupCollectionTypesInvalidCategoryCount2Document,
     "\n      mutation UpdateStudent($data: UpdateStudentInput!, $studentId: ID!) {\n        updateStudent(data: $data, studentId: $studentId) {\n          id\n          name\n        }\n      }\n    ": types.UpdateStudentDocument,
     "\n      mutation UpdateStudentUnauthorized($data: UpdateStudentInput!, $studentId: ID!) {\n        updateStudent(data: $data, studentId: $studentId) {\n          id\n          name\n        }\n      }\n    ": types.UpdateStudentUnauthorizedDocument,
     "\n      mutation UpdateStudentInvalidID($data: UpdateStudentInput!, $studentId: ID!) {\n        updateStudent(data: $data, studentId: $studentId) {\n          id\n          name\n        }\n      }\n    ": types.UpdateStudentInvalidIdDocument,
@@ -135,6 +143,14 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  "): (typeof documents)["\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation Test_Logout {\n      logout\n    }\n  "): (typeof documents)["\n    mutation Test_Logout {\n      logout\n    }\n  "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -179,14 +195,6 @@ export function graphql(source: "\n      mutation CreateClassParticipationCollec
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      mutation CreateClassParticipationCollectionDataLoaderCheck($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {\n        createClassParticipationCollection(data: $data, moduleId: $moduleId) {\n          id\n          date\n        }\n      }\n    "): (typeof documents)["\n      mutation CreateClassParticipationCollectionDataLoaderCheck($data: CreateClassParticipationCollectionInput!, $moduleId: ID!) {\n        createClassParticipationCollection(data: $data, moduleId: $moduleId) {\n          id\n          date\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  "): (typeof documents)["\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    mutation Test_Logout {\n      logout\n    }\n  "): (typeof documents)["\n    mutation Test_Logout {\n      logout\n    }\n  "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -254,22 +262,6 @@ export function graphql(source: "\n      mutation DeleteCollectionDataLoaderChec
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n      mutation DeleteGroup($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteGroup($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -283,6 +275,22 @@ export function graphql(source: "\n      mutation DeleteGroupInvalidID($groupId:
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      mutation DeleteGroupDataLoaderCheck($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteGroupDataLoaderCheck($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -539,6 +547,38 @@ export function graphql(source: "\n      mutation UpdateGroupInvalidID($data: Up
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      mutation UpdateGroupDataLoaderCheck($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          name\n          archived\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupDataLoaderCheck($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          name\n          archived\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateGroupCollectionTypes($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupCollectionTypes($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateGroupCollectionTypesDuplicateIds($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupCollectionTypesDuplicateIds($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateGroupCollectionTypesUnmatchedIds($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupCollectionTypesUnmatchedIds($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateGroupCollectionTypesInvalidCategoryChange($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupCollectionTypesInvalidCategoryChange($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateGroupCollectionTypesInvalidCategoryChange2($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupCollectionTypesInvalidCategoryChange2($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateGroupCollectionTypesInvalidTotalWeight($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupCollectionTypesInvalidTotalWeight($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateGroupCollectionTypesInvalidCategoryCount($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupCollectionTypesInvalidCategoryCount($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateGroupCollectionTypesInvalidCategoryCount2($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateGroupCollectionTypesInvalidCategoryCount2($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          collectionTypes {\n            id\n            name\n            weight\n            category\n          }\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

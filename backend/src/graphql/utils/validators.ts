@@ -375,11 +375,12 @@ export const validateUpdateGroupInput = async (input: UpdateGroupInput, groupId:
   const remainingOldTypes = oldCollectionTypes.filter((it) => !updatedOrDeletedIds.includes(it.id));
 
   // Check if new categories or old undeleted types have CLASS_PARTICIPATION in them
-  const newCategories = [...createInputs, ...updateInputs].map((it) => it.category);
+  const newCategories = [...createInputs, ...fullUpdateInputs].map((it) => it.category);
   const remainingOldCategories = remainingOldTypes.map((it) => it.category);
   const classParticipationCategories = [...newCategories, ...remainingOldCategories].filter(
     (category) => category === CollectionTypeCategory.CLASS_PARTICIPATION
   );
+
   if (classParticipationCategories.length > 1) {
     throw new ValidationError("Ryhmässä voi olla vain yksi CLASS_PARTICIPATION arviointityyppi. Tarkista syötetyt arviointityypit.");
   }
