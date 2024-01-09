@@ -81,6 +81,8 @@ services:
       REDIS_HOST: ${REDIS_HOST}
       MPASSID_CLIENT_SECRET: ${MPASSID_CLIENT_SECRET}
       MPASSID_CLIENT_ID: ${MPASSID_CLIENT_ID}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
     ports:
       - "4000:4000"
     depends_on:
