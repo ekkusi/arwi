@@ -4,12 +4,12 @@
 // NOTE: These need to be updated in case of new aliases are added to tsconfig.json
 import moduleAlias from "module-alias";
 import path from "path";
-moduleAlias.addAlias("@", path.join(__dirname, "..", "lib"));
-
 import dotenv from "dotenv";
-import createApp from "./app";
-
 dotenv.config();
+
+if (!process.env.TS_NODE_DEV) moduleAlias.addAlias("@", path.join(__dirname, "..", "lib"));
+
+import createApp from "./app";
 
 if (!process.env.APP_VERSION)
   throw new Error("Something went wrong, APP_VERSION env var is not set. This should come automatically from package.json version.");
