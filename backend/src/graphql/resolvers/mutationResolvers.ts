@@ -176,19 +176,13 @@ const resolvers: MutationResolvers<CustomContext> = {
       // Validate request after update to make sure started at date is set correctly
       await validateRequestPasswordReset(updatedTeacher);
 
-      try {
-        await sendMail(
-          email,
-          "Salasanan palautus",
-          `Olet pyytänyt salasanan palautusta Arwi-sovellukseen. Käytä alla olevaa koodia salasanan palautukseen.
+      await sendMail(
+        email,
+        "Salasanan palautus",
+        `Olet pyytänyt salasanan palautusta Arwi-sovellukseen. Käytä alla olevaa koodia salasanan palautukseen.
          Sinulla on 5 minuuttia aikaa ennen kuin koodi umpeutuu. <br /><br /> Koodi: <b>${code}</b><br /><br />
          Jos sinä et tehnyt kyseistä pyyntöä salasanan palautuksesta, suosittelemme ottamaan yhteyttä järjestelmänvalvontaan info@arwi.fi.`
-        );
-      } catch (error) {
-        // TODO: Log error to logging service
-        console.error("Something went wrong with sending email:", error);
-        return false;
-      }
+      );
 
       matomo.trackEvent(MATOMO_EVENT_CATEGORIES.PASSWORD_RESET, "Request password reset", { userInfo: { uid: matchingTeacher.id } });
 
