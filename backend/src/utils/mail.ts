@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 dotenv.config();
 
@@ -20,12 +21,33 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendMail = (to: string, subject: string, html: string) => {
+export const sendMail = async (to: string, subject: string, html: string): Promise<SMTPTransport.SentMessageInfo> => {
   if (!MAIL_USER || !MAIL_PASS) throw new Error("Missing mail credentials, cannot send email. Define MAIL_USER and MAIL_PASS");
-  return transporter.sendMail({
-    from: `Arwi <${MAIL_USER}>`,
-    to,
-    subject,
-    html,
+
+  await new Promise((resolve, reject) => {
+    // verify connection configuration
+    transporter.verify((error, success) => {
+      if (error) {
+        console.error("Something went wrong with verifying send mail config:", error);
+        reject(error);
+      } else {
+        resolve(success);
+      }
+    });
+  });
+
+  return new Promise((res, rej) => {
+    transporter.sendMail(
+      {
+        from: `Arwi <${MAIL_USER}>`,
+        to,
+        subject,
+        html,
+      },
+      (err, info) => {
+        if (err) rej(err);
+        else res(info);
+      }
+    );
   });
 };
