@@ -2,9 +2,10 @@ import { Suspense, useEffect } from "react";
 import { Logs } from "expo";
 // import ErrorBoundary from "react-native-error-boundary";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
-import { LogBox, Platform, View, Text } from "react-native";
+import { LogBox, Platform } from "react-native";
 import ErrorBoundary from "react-native-error-boundary";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import * as Sentry from "sentry-expo";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
@@ -15,6 +16,16 @@ import ErrorView from "./app/ErrorView";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 
 Logs.enableExpoCliLogging();
+const SENTRY_URL = process.env.EXPO_PUBLIC_SENTRY_URL;
+
+if (!SENTRY_URL) console.warn("EXPO_PUBLIC_SENTRY_URL not set, error reporting disabled");
+
+Sentry.init({
+  dsn: SENTRY_URL,
+  // enableInExpoDevelopment: true,
+
+  // debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 // iOS dev build on iOS simulator causes the following warning: Overriding previous layout animation with new one before the first began...
 // There seems to be no way to fix this as this comes simply from using KeyboardAvoidingView so logs are ignored.
@@ -23,9 +34,10 @@ if (Platform.OS === "ios") LogBox.ignoreAllLogs();
 
 function AppContent() {
   const { trackAppStart } = useMatomo();
+
   const onError = (error: Error, componentStack: string) => {
+    Sentry.Native.captureException(error);
     console.error(error, componentStack);
-    // TODO: Log error to error reporting service
   };
 
   useEffect(() => {
@@ -61,11 +73,6 @@ const instance =
   });
 
 export default function App() {
-  // return (
-  //   <View>
-  //     <Text>Test</Text>
-  //   </View>
-  // );
   return instance ? (
     <MatomoProvider instance={instance}>
       <AppContent />

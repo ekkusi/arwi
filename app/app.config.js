@@ -52,5 +52,6 @@ module.exports = {
         speechRecognitionPermission: "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech",
       },
     ],
+    "sentry-expo",
   ],
 };
