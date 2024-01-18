@@ -1,7 +1,7 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { useTranslation } from "react-i18next";
-import { SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import debounce from "lodash.debounce";
 import { Alert } from "react-native";
 import Card from "../../../../components/Card";
@@ -38,6 +38,7 @@ export default function CollectionTypesBody({
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [targetOnEdit, setTargetOnEdit] = useState<CollectionTypeInfo>(defaultType);
+  const [isNameDirty, setIsNameDirty] = useState(false);
 
   const collectionTypeOptions: CollectionTypeOption[] = useMemo(() => {
     // const filteredTypes = Object.keys(CollectionTypeCategory).filter((key) => !selectedTypes.find((item) => item.value === key));
@@ -57,6 +58,15 @@ export default function CollectionTypesBody({
 
   const onRemoveType = (type: CollectionTypeInfo) => {
     setNewTypes([...selectedTypes].filter((item) => item.id !== type.id));
+  };
+
+  const onTypeSelected = (val: CollectionTypeCategory) => {
+    setTargetOnEdit({ ...targetOnEdit, name: !isNameDirty ? getCollectionTypeTranslation(t, val) : targetOnEdit.name, category: val });
+  };
+
+  const onTypeNameChanged = (val: string) => {
+    if (!isNameDirty) setIsNameDirty(true);
+    setTargetOnEdit({ ...targetOnEdit, name: val });
   };
 
   useEffect(() => {
@@ -171,6 +181,7 @@ export default function CollectionTypesBody({
             title={t("add-evaluation-target", "Uusi arviointikohde")}
             onPress={() => {
               setTargetOnEdit(defaultType);
+              setIsNameDirty(false);
               setEditModalOpen(true);
             }}
           />
@@ -203,14 +214,14 @@ export default function CollectionTypesBody({
         }
       >
         <CView style={{ height: "100%", gap: 10 }}>
-          <TextFormField title={t("name", "Nimi")} value={targetOnEdit.name} onChange={(val) => setTargetOnEdit({ ...targetOnEdit, name: val })} />
+          <TextFormField title={t("name", "Nimi")} value={targetOnEdit.name} onChange={onTypeNameChanged} />
           <SelectFormField
             title={t("evaluation-type", "Arviointityyppi")}
             defaultValue={targetOnEdit.category}
             options={collectionTypeOptions.map((obj) => obj.category).filter((type) => type !== "CLASS_PARTICIPATION")}
             getOptionValue={(cat) => cat}
             formatLabel={(cat) => getCollectionTypeTranslation(t, cat)}
-            onSelect={(val) => setTargetOnEdit({ ...targetOnEdit, category: val })}
+            onSelect={onTypeSelected}
           />
         </CView>
       </CModal>
