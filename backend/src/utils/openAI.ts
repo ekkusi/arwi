@@ -111,9 +111,6 @@ export async function generateStudentSummary(
       matomo.trackEventWithValue(MATOMO_EVENT_CATEGORIES.OPEN_AI, "Generate student feedback", tokenCount, {
         userInfo: {
           uid: userId,
-          custom: {
-            test: "Test custom user field",
-          },
         },
         custom: {
           token_count: tokenCount,

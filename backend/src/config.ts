@@ -59,6 +59,6 @@ export const SESSION_OPTIONS: SessionOptions = {
 };
 
 export const MATOMO_EVENT_CATEGORIES = {
-  OPEN_AI: "OpenAI",
-  PASSWORD_RESET: "Password reset",
+  OPEN_AI: "Backend: OpenAI",
+  PASSWORD_RESET: "Backend: Password reset",
 };

@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import * as Sentry from "@sentry/node";
-import { ProfilingIntegration } from "@sentry/profiling-node";
 import { HELMET_OPTIONS, SESSION_OPTIONS } from "./config";
 import initAuth from "./routes/auth";
 import { checkSessionTimeout, checkTokens } from "./middleware/auth";
@@ -32,7 +31,6 @@ Sentry.init({
         new Sentry.Integrations.Http({ tracing: true }),
         // enable Express.js middleware tracing
         new Sentry.Integrations.Express({ app }),
-        new ProfilingIntegration(),
       ]
     : undefined,
   // Performance Monitoring
