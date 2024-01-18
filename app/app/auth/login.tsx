@@ -15,7 +15,6 @@ import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
-import { useThrowCatchableError } from "../../hooks-and-providers/error";
 
 const LoginPage_Login_Mutation = graphql(`
   mutation LoginPage_Login($email: String!, $password: String!) {
@@ -40,7 +39,6 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const throwError = useThrowCatchableError();
   const { t } = useTranslation();
 
   const [login] = useMutation(LoginPage_Login_Mutation);
@@ -57,7 +55,6 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
 
   const handleSubmit = async () => {
     setLoading(true);
-    throwError(new Error("Test error"));
     try {
       const { data } = await login({ variables: { email, password } });
       if (!data) throw new Error("Unexpected error");

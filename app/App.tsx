@@ -1,11 +1,10 @@
 import { Suspense, useEffect } from "react";
-import { Logs } from "expo";
 // import ErrorBoundary from "react-native-error-boundary";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
 import { LogBox, Platform } from "react-native";
 import ErrorBoundary from "react-native-error-boundary";
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import * as Sentry from "sentry-expo";
+import * as Sentry from "@sentry/react-native";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
@@ -15,16 +14,14 @@ import LoadingIndicator from "./components/LoadingIndicator";
 import ErrorView from "./app/ErrorView";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 
-Logs.enableExpoCliLogging();
 const SENTRY_URL = process.env.EXPO_PUBLIC_SENTRY_URL;
 
 if (!SENTRY_URL) console.warn("EXPO_PUBLIC_SENTRY_URL not set, error reporting disabled");
 
 Sentry.init({
   dsn: SENTRY_URL,
-  // enableInExpoDevelopment: true,
-
-  // debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+  enabled: true,
+  environment: __DEV__ ? "development" : "production",
 });
 
 // iOS dev build on iOS simulator causes the following warning: Overriding previous layout animation with new one before the first began...
@@ -36,7 +33,7 @@ function AppContent() {
   const { trackAppStart } = useMatomo();
 
   const onError = (error: Error, componentStack: string) => {
-    Sentry.Native.captureException(error);
+    Sentry.captureException(error);
     console.error(error, componentStack);
   };
 
@@ -72,7 +69,7 @@ const instance =
     disabled: __DEV__,
   });
 
-export default function App() {
+function App() {
   return instance ? (
     <MatomoProvider instance={instance}>
       <AppContent />
@@ -81,3 +78,5 @@ export default function App() {
     <AppContent />
   );
 }
+
+export default Sentry.wrap(App);

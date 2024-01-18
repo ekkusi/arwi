@@ -74,7 +74,6 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
   };
 
   const handleSubmit = async () => {
-    if (password !== passwordAgain) throw new Error("Uncatched error test");
     if (password !== passwordAgain) {
       setGeneralError(t("signup.passwords-dont-match", "Salasanat eivät täsmää"));
       return;

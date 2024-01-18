@@ -52,6 +52,14 @@ module.exports = {
         speechRecognitionPermission: "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech",
       },
     ],
-    "sentry-expo",
+    [
+      "@sentry/react-native/expo",
+      {
+        // You also need to set SENTRY_AUTH_TOKEN when building locally with eas. You can use .env file and scripts/build-local.sh for this.
+        url: "https://sentry.io/",
+        project: "arwi-app",
+        organization: "arwi",
+      },
+    ],
   ],
 };
