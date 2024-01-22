@@ -161,7 +161,7 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
       case "objectives":
         return <ObjectiveListMemoed {...data} navigation={navigation} />;
       case "statistics":
-        return <StatisticsView {...data} navigation={navigation} />;
+        return <StatisticsViewMemoed {...data} navigation={navigation} />;
       default:
         return null;
     }
