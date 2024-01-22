@@ -21,6 +21,7 @@ import { isValidLanguage, STORAGE_LANG_KEY } from "./i18n";
 import PopupProvider from "./hooks-and-providers/ToastProvider";
 import { isVersionSmaller } from "./helpers/versionUtils";
 import NewUpdateAvailableModal from "./components/NewUpdateAvailableModal";
+import { useThrowCatchableError } from "./hooks-and-providers/error";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -55,11 +56,22 @@ export default function Main() {
   });
   const { ready: i18nReady, i18n } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
 
+  const throwError = useThrowCatchableError();
   const client = useApolloClient();
   const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
   const routeNameRef = useRef<string | null>(null);
 
-  const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query);
+  const throwErrorAndHideSplash = useCallback(
+    (err: Error) => {
+      SplashScreen.hideAsync();
+      throwError(err);
+    },
+    [throwError]
+  );
+
+  const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query, {
+    onError: throwErrorAndHideSplash,
+  });
 
   const minimumAppVersion = appMetadataResult?.getAppMetadata?.appVersion || null;
 
@@ -90,13 +102,11 @@ export default function Main() {
 
   useEffect(() => {
     setUserInfo()
-      .catch((err) => {
-        console.info(err);
-      })
+      .catch(throwErrorAndHideSplash)
       .finally(() => {
         setLoading(false);
       });
-  }, [setUserInfo]);
+  }, [setUserInfo, throwErrorAndHideSplash]);
 
   const onRootLayout = useCallback(async () => {
     await SplashScreen.hideAsync();
