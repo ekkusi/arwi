@@ -11,10 +11,11 @@ import CTouchableOpacity from "./primitives/CTouchableOpacity";
 import CView, { CViewProps } from "./primitives/CView";
 
 type AccordionData = {
+  key: string;
   headerContentRight?: JSX.Element;
   title: string;
   date?: string;
-  isEvaluated?: boolean;
+  stateText?: string;
   color?: string;
   content: JSX.Element | string;
   icons?: React.ReactNode;
@@ -31,7 +32,7 @@ export function AccordionItem({
   headerContentRight,
   title,
   date,
-  isEvaluated,
+  stateText,
   color,
   expanded,
   onHeaderPress,
@@ -61,11 +62,7 @@ export function AccordionItem({
                   {date && <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{date}</CText>}
                 </CView>
               )}
-              {isEvaluated !== undefined && (
-                <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>
-                  {isEvaluated ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu")}
-                </CText>
-              )}
+              {stateText && <CText style={{ fontSize: "sm", fontWeight: "300", color: "gray" }}>{stateText}</CText>}
             </CView>
             {headerContentRight}
           </CView>
@@ -131,12 +128,7 @@ export function Accordion({ data, allowMultiple = false, showAllButton = allowMu
         </CView>
       )}
       {data.map((item, index) => (
-        <AccordionItem
-          key={`${item.title}-${index}`}
-          expanded={expandedIndexes.includes(index)}
-          onHeaderPress={() => handleHeaderPress(index)}
-          {...item}
-        >
+        <AccordionItem expanded={expandedIndexes.includes(index)} onHeaderPress={() => handleHeaderPress(index)} {...item}>
           {item.content}
         </AccordionItem>
       ))}

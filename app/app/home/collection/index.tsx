@@ -118,7 +118,7 @@ export default function CollectionView({ route: { params }, navigation }: Native
             <EvaluationsAccordion
               allowEditing={!params.archived}
               evaluations={collection.evaluations}
-              titleFrom="student"
+              type="student"
               onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
             />
           )}

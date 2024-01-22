@@ -136,9 +136,10 @@ export default function DefaultEvaluationCollection({
               data={[...type.defaultTypeCollection.evaluations]
                 .sort((a, b) => a.student.name.localeCompare(b.student.name))
                 .map((it) => ({
+                  key: it.id,
                   title: it.student.name,
                   date: formatDate(type.defaultTypeCollection!.date),
-                  isEvaluated: it.rating !== undefined && it.rating !== null,
+                  stateText: it.rating ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu"),
                   icons: it.wasPresent && !!it.notes && (
                     <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />
                   ),

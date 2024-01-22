@@ -155,9 +155,11 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                       ? otherEvaluations.find((ev) => ev.collection.id === type.defaultTypeCollection!.id)
                       : undefined;
                     return {
+                      key: type.id,
                       title: type.name,
                       date: collectionEvaluation ? formatDate(collectionEvaluation.collection.date) : undefined,
-                      isEvaluated: collectionEvaluation?.rating != null,
+                      stateText:
+                        collectionEvaluation?.rating !== null ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu"),
                       icons: collectionEvaluation?.wasPresent && !!collectionEvaluation.notes && (
                         <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />
                       ),
