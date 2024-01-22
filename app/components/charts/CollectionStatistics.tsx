@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
-import { CollectionStatistics_EvaluationCollectionFragment, EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
+import { CollectionStatistics_EvaluationCollectionFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
 import { analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
 import CircledNumber from "../CircledNumber";

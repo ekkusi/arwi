@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
@@ -21,8 +20,7 @@ import GradeSuggestionView from "../../../components/GradeSuggestionView";
 import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogram";
 import Layout from "../../../components/Layout";
 import CButton from "../../../components/primitives/CButton";
-import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
-import Card from "../../../components/Card";
+import { getEnvironmentTranslation } from "../../../helpers/translation";
 import { Accordion } from "../../../components/Accordion";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { SPACING } from "../../../theme";
@@ -77,7 +75,7 @@ const StudentPage_GetStudent_Query = graphql(`
               }
             }
           }
-          ...EvaluationsLineChart_Evaluation
+          ...EvaluationStatistics_Evaluation
           ...EvaluationsBarChart_Evaluation
           ...EvaluationsHistogram_Evaluation
           ...EvaluationsAccordion_Evaluation
@@ -124,14 +122,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     behaviourMeanByEnvironments,
   } = analyzeEvaluations([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
-
-  const evaluate = () => {
-    Alert.alert("Evaluate");
-  };
-
-  const editEvaluation = () => {
-    Alert.alert("Edit evaluation");
-  };
 
   return (
     <Layout>

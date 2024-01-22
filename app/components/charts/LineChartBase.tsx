@@ -17,11 +17,25 @@ export type LineChartBaseProps = CViewProps & {
 export default function LineChartBase({ data, minItems = 2, ...rest }: LineChartBaseProps) {
   const { t } = useTranslation();
 
+  const hasEnoughData = data.length >= minItems;
+
   return (
     <CView {...rest} style={{ position: "relative", backgroundColor: "white", ...rest.style }}>
       <VictoryChart padding={{ top: 20, bottom: 50, left: 40, right: 60 }} domain={{ y: [3.5, 10.5] }}>
-        <VictoryLine interpolation="natural" data={data} x="date" y="skills" style={{ data: { stroke: COLORS.primary, strokeWidth: 5 } }} />
-        <VictoryLine interpolation="natural" data={data} x="date" y="behaviour" style={{ data: { stroke: COLORS.secondary, strokeWidth: 5 } }} />
+        <VictoryLine
+          interpolation="natural"
+          data={data}
+          x="date"
+          y="skills"
+          style={{ data: { stroke: hasEnoughData ? COLORS.primary : "transparent", strokeWidth: 5 } }}
+        />
+        <VictoryLine
+          interpolation="natural"
+          data={data}
+          x="date"
+          y="behaviour"
+          style={{ data: { stroke: hasEnoughData ? COLORS.secondary : "transparent", strokeWidth: 5 } }}
+        />
         <VictoryAxis dependentAxis tickValues={[4, 5, 6, 7, 8, 9, 10]} />
         <VictoryAxis tickCount={2} />
         <VictoryLegend
@@ -36,7 +50,7 @@ export default function LineChartBase({ data, minItems = 2, ...rest }: LineChart
           ]}
         />
       </VictoryChart>
-      {data.length < minItems && (
+      {!hasEnoughData && (
         <CView
           style={{
             display: "flex",
