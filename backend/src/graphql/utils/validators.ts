@@ -18,10 +18,12 @@ import {
   UpdateGroupInput,
   UpdateStudentInput,
 } from "../../types";
-import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject } from "../../utils/subjectUtils";
+import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject, isPrimaryEducationLevel } from "../../utils/subjectUtils";
 import { evaluationLoader } from "../dataLoaders/evaluation";
 import { collectionTypeLoader, collectionTypesByGroupLoader } from "../dataLoaders/collectionType";
 import { collectionLoader } from "../dataLoaders/collection";
+import { moduleLoader } from "../dataLoaders/module";
+import { groupLoader } from "../dataLoaders/group";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
 
@@ -272,9 +274,18 @@ export const validateUpdateStudentInput = async (data: UpdateStudentInput, stude
 };
 
 export const validateChangeGroupLevelInput = async (input: ChangeGroupModuleInput, groupId: string) => {
-  const group = await prisma.group.findUniqueOrThrow({
-    where: { id: groupId },
-  });
+  const group = await groupLoader.load(groupId);
+  const module = await moduleLoader.load(group.currentModuleId);
+
+  // If the group is primary level, the new level must be primary level as well
+  if (isPrimaryEducationLevel(module.educationLevel as EducationLevel)) {
+    if (!isPrimaryEducationLevel(input.newEducationLevel)) {
+      throw new ValidationError(
+        "Annettu koulutustaso ei ole sallittu kyseiselle ryhmälle. Et voi vaihtaa ryhmää peruskouluasteesta toiselle asteelle"
+      );
+    }
+  } else if (input.newEducationLevel !== module.educationLevel)
+    throw new ValidationError("Annettu koulutustaso ei ole sallittu kyseiselle ryhmälle. Et voi vaihtaa ryhmää toiselta asteelta muulle asteelle.");
   const allowedLearningObjectiveGroupKeys = getLearningObjectiveGroupKeys(group.subjectCode, input.newEducationLevel);
   if (!allowedLearningObjectiveGroupKeys.includes(input.newLearningObjectiveGroupKey))
     throw new ValidationError("Annettu oppimistavoitteiden ryhmä ei ole sallittu kyseiselle koulutustasolle.");

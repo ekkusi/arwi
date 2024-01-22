@@ -243,3 +243,20 @@ export const getLearningObjectiveGroupKeys = (subjectCode: string, educationLeve
       return ELEMENTARY_LEARNING_GROUP_KEYS;
   }
 };
+
+export const isPrimaryEducationLevel = (educationLevel: EducationLevel): boolean => {
+  switch (educationLevel) {
+    case EducationLevel.PRIMARY_FIRST:
+    case EducationLevel.PRIMARY_SECOND:
+    case EducationLevel.PRIMARY_THIRD:
+    case EducationLevel.PRIMARY_FOURTH:
+    case EducationLevel.PRIMARY_FIFTH:
+    case EducationLevel.PRIMARY_SIXTH:
+    case EducationLevel.PRIMARY_SEVENTH:
+    case EducationLevel.PRIMARY_EIGHTH:
+    case EducationLevel.PRIMARY_NINTH:
+      return true;
+    default:
+      return false;
+  }
+};
