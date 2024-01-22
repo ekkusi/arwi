@@ -1,4 +1,12 @@
+declare type NonNullableProperty<T, K extends keyof T> = {
+  [P in K]: NonNullable<T[P]>;
+};
+
 declare type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
+type WithRequiredNonNull<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 
 declare type PickByType<T, Value> = {
   [P in keyof T as T[P] extends Value | undefined ? P : never]: T[P];

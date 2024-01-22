@@ -74,15 +74,21 @@ export default function CollectionStatistics({ title, subjectCode, moduleInfo, c
 
   const filteredData = filter ? evaluationData.filter((coll) => coll.environment.code === filter) : evaluationData;
 
-  const evaluationsWithSkills = useMemo(() => filteredData.filter((obj) => obj.skills !== undefined), [filteredData]);
+  const evaluationsWithSkills = useMemo(
+    () => filteredData.filter((obj) => !!obj.skills) as WithRequiredNonNull<EvaluationDataType, "skills">[],
+    [filteredData]
+  );
   const skillsMean = useMemo(
-    () => evaluationsWithSkills.reduce((prev, evaluation) => prev + (evaluation.skills || 0), 0) / evaluationsWithSkills.length,
+    () => evaluationsWithSkills.reduce((prev, evaluation) => prev + evaluation.skills, 0) / evaluationsWithSkills.length,
     [evaluationsWithSkills]
   );
 
-  const evaluationsWithBehaviour = useMemo(() => filteredData.filter((obj) => obj.behaviour !== undefined), [filteredData]);
+  const evaluationsWithBehaviour = useMemo(
+    () => filteredData.filter((obj) => !!obj.behaviour) as WithRequiredNonNull<EvaluationDataType, "behaviour">[],
+    [filteredData]
+  );
   const behaviourMean = useMemo(
-    () => evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) / evaluationsWithBehaviour.length,
+    () => evaluationsWithBehaviour.reduce((prev, evaluation) => prev + evaluation.behaviour, 0) / evaluationsWithBehaviour.length,
     [evaluationsWithBehaviour]
   );
   return (
@@ -91,7 +97,7 @@ export default function CollectionStatistics({ title, subjectCode, moduleInfo, c
       <StatisticsFilterMenu
         subjectCode={subjectCode}
         moduleInfo={moduleInfo}
-        title={t("group.evaluations-over-time", "Arviontien keskiarvojen kehitys")}
+        title={t("group.evaluations-over-time", "Arviointien keskiarvojen kehitys")}
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}
       />
