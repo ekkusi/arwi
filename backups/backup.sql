@@ -459,6 +459,7 @@ a8a205c0-c232-4941-a28b-e536283bdf59	CLASS_PARTICIPATION	Tuntityöskentely	100	3
 995052de-df3b-4c01-9570-cddb089aea6b	CLASS_PARTICIPATION	Tuntityöskentely	24	108646ef-3d4d-4902-a269-d9a0ced21a1d
 f04e8a45-bfae-4585-96a0-d27741bdbfa2	EXAM	Koe	76	108646ef-3d4d-4902-a269-d9a0ced21a1d
 dc73c3b2-ca1b-4be5-92e6-76b1e00c9286	CLASS_PARTICIPATION	Tuntityöskentely	100	cdea2573-6fbe-418a-b03b-8beeeba14044
+51f33c0c-6ee2-4101-a4fa-7ea337f2af29	CLASS_PARTICIPATION	Tuntityöskentely	100	1d334b67-e387-48bb-a56a-98774ecb0b2f
 \.
 
 
@@ -13996,6 +13997,7 @@ f53bf41a-69c0-4b5b-8877-839346e818bf	8 luokka valinnainen TO	786d367e-855b-4ac6-
 455f8546-5462-4759-8dc9-625a3b9dbb82	7 luokka lyhyt valinnainen	786d367e-855b-4ac6-8e28-d5fdec21efcd	2024-01-18 11:51:09.087	LI	f	7434eab0-bbd6-4080-9f03-3788a6e323c1
 1643545f-6915-4d0e-b4b7-47b69b94ca8e	9 luokka valinnainen pojat Pe	786d367e-855b-4ac6-8e28-d5fdec21efcd	2024-01-19 19:28:06.561	LI	f	5c9bdeeb-9d9f-4d72-8b63-416c7ab553e7
 495e9cc5-76d3-4fdf-93dc-bbd1c2116797	Viitaniemen koulun 7F	a7bcc47a-e782-473a-aeb1-d8b9b72578f9	2024-01-18 22:09:26.663	LI	f	67fdb4d3-c51f-4e67-a0f9-4d7579fbb5c1
+1d334b67-e387-48bb-a56a-98774ecb0b2f	LIP8	9f926abb-96f8-4ccd-baf0-f52eead78eb3	2024-01-21 16:01:51.013	LI	f	c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98
 108646ef-3d4d-4902-a269-d9a0ced21a1d	Islam 6 luokka	fd175dea-80b0-462f-b20f-5e7ed120ea98	2024-01-19 07:33:27.901	US	f	79ef8753-5012-4464-8e6e-4c05d32757e2
 57fbbd04-f977-4f10-95ef-cba23cd8b0e2	Palloilu ja mailapelikurssi	4f38a727-897b-40d0-a974-cf8a7d2efda1	2024-01-19 08:08:42.788	LI	f	8398c180-2e1d-444d-a6c3-aa233f144388
 3313387b-a1ad-4246-9bd5-981f75d14aa4	OPEA525, liikunta	9ec8ee79-0762-4208-a893-e44b5061b468	2024-01-19 08:11:55.561	LI	f	85f22ec1-9f53-4df7-9467-b6b2313063ef
@@ -14237,6 +14239,7 @@ a6529d45-707f-4e00-857e-9f72c2c15c91	f53bf41a-69c0-4b5b-8877-839346e818bf	PRIMAR
 79ef8753-5012-4464-8e6e-4c05d32757e2	108646ef-3d4d-4902-a269-d9a0ced21a1d	PRIMARY_SIXTH	three_to_six_years
 918f96c9-ce1a-4056-965e-de906d191f08	cdea2573-6fbe-418a-b03b-8beeeba14044	PRIMARY_SEVENTH	seven_to_nine_years
 8e076b26-377e-4fad-b814-1d17f8087e23	cdea2573-6fbe-418a-b03b-8beeeba14044	PRIMARY_EIGHTH	seven_to_nine_years
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	1d334b67-e387-48bb-a56a-98774ecb0b2f	PRIMARY_EIGHTH	seven_to_nine_years
 \.
 
 
@@ -16645,6 +16648,22 @@ f6627d9e-45d6-4f44-bfcb-a2661abc61fb	Eelis	3313387b-a1ad-4246-9bd5-981f75d14aa4
 a5eadd88-1abb-4d5a-93df-11d50b86d6e3	Jonatan	3313387b-a1ad-4246-9bd5-981f75d14aa4
 e1a23fdc-4ee3-4e98-8eeb-3fddecf6c187	1Alhiiti 	cdea2573-6fbe-418a-b03b-8beeeba14044
 454c7bfe-18ef-4e8e-a625-722e095ea077	Ezel8B2Ali Anisa8B3Banguni Ashton8B4Hautalampi Nona8B5Hrincea Adelina8B6Joshi Varad8B7Kalenius Pihla8B8Karkulahti Mariia8B9Laiho Katariina8B10Musse Naasir8B11Otranen Mea8B12Paajanen Ella8B13Reponen Sofia8B14Rizgar Yusuf8B15Said Zakariya8B16Stotesbury Telma8B17Tuominen Maiju8B18Venditto Leonardo8B19Wdane Mohaimen	cdea2573-6fbe-418a-b03b-8beeeba14044
+4dc6092f-ab4a-4977-9780-d681c275723f	Dipan	1d334b67-e387-48bb-a56a-98774ecb0b2f
+0b700bd3-222e-4295-92d5-2001caf941c4	Otso	1d334b67-e387-48bb-a56a-98774ecb0b2f
+d3bf6748-a50d-4082-a86f-9375be46da05	Hermanni	1d334b67-e387-48bb-a56a-98774ecb0b2f
+595fd3ab-af80-4a75-b748-042eb8e1a903	Christian	1d334b67-e387-48bb-a56a-98774ecb0b2f
+b0c1d24b-9d49-47aa-89a5-e5aa40f8f759	Miska	1d334b67-e387-48bb-a56a-98774ecb0b2f
+bd5d09ed-2ef9-4def-bcea-6b6fa5d449c7	Joona	1d334b67-e387-48bb-a56a-98774ecb0b2f
+d02a3f83-faaa-4d75-9829-ff06793b3a82	Oliver	1d334b67-e387-48bb-a56a-98774ecb0b2f
+be39bc04-8efa-4e1a-9bc1-15e25edf7d28	Aapo	1d334b67-e387-48bb-a56a-98774ecb0b2f
+7f534938-1d01-4f4c-96a6-b69ec4e2431b	Eerik	1d334b67-e387-48bb-a56a-98774ecb0b2f
+7ba914c2-eba2-4a53-8095-11ed306cf971	Kaapo	1d334b67-e387-48bb-a56a-98774ecb0b2f
+4de897a2-0bf4-4ffe-82ff-71a57509e734	Pekka	1d334b67-e387-48bb-a56a-98774ecb0b2f
+75a86df1-f99d-4645-bb9e-bb452fd4151e	Kaarle	1d334b67-e387-48bb-a56a-98774ecb0b2f
+01260f07-0765-46f4-8f0c-0e09ac8ff554	Iivari	1d334b67-e387-48bb-a56a-98774ecb0b2f
+8d96567d-b37a-4a31-a385-9b1ecb226e76	Urho	1d334b67-e387-48bb-a56a-98774ecb0b2f
+05207d69-b2cd-414e-9698-687efafb3e81	Eliel	1d334b67-e387-48bb-a56a-98774ecb0b2f
+6a09b0b9-c730-437f-acb1-a6b4fa47d1c0	Eino	1d334b67-e387-48bb-a56a-98774ecb0b2f
 \.
 
 
@@ -19203,6 +19222,22 @@ a6529d45-707f-4e00-857e-9f72c2c15c91	59926494-5d64-482e-a5fa-3f92628ee3fc
 918f96c9-ce1a-4056-965e-de906d191f08	454c7bfe-18ef-4e8e-a625-722e095ea077
 8e076b26-377e-4fad-b814-1d17f8087e23	e1a23fdc-4ee3-4e98-8eeb-3fddecf6c187
 8e076b26-377e-4fad-b814-1d17f8087e23	454c7bfe-18ef-4e8e-a625-722e095ea077
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	4dc6092f-ab4a-4977-9780-d681c275723f
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	0b700bd3-222e-4295-92d5-2001caf941c4
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	d3bf6748-a50d-4082-a86f-9375be46da05
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	595fd3ab-af80-4a75-b748-042eb8e1a903
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	b0c1d24b-9d49-47aa-89a5-e5aa40f8f759
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	bd5d09ed-2ef9-4def-bcea-6b6fa5d449c7
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	d02a3f83-faaa-4d75-9829-ff06793b3a82
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	be39bc04-8efa-4e1a-9bc1-15e25edf7d28
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	7f534938-1d01-4f4c-96a6-b69ec4e2431b
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	7ba914c2-eba2-4a53-8095-11ed306cf971
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	4de897a2-0bf4-4ffe-82ff-71a57509e734
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	75a86df1-f99d-4645-bb9e-bb452fd4151e
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	01260f07-0765-46f4-8f0c-0e09ac8ff554
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	8d96567d-b37a-4a31-a385-9b1ecb226e76
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	05207d69-b2cd-414e-9698-687efafb3e81
+c114084f-bd1e-4bfc-9e87-4eb4f8b9bf98	6a09b0b9-c730-437f-acb1-a6b4fa47d1c0
 \.
 
 
