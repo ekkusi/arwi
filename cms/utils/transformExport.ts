@@ -13,13 +13,40 @@ const deleteKeyAndType = (arr: any[]) => {
   }
 };
 
+function hslToHex(hue: number, sat: number, light: number): string {
+  const lightConverted = light / 100;
+  const a = (sat * Math.min(lightConverted, 1 - lightConverted)) / 100;
+  const f = (n: number) => {
+    const k = (n + hue / 30) % 12;
+    const color = lightConverted - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, "0"); // Convert to Hex and format
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+}
+
+function generatePastelColors(numColors: number): string[] {
+  const colors: string[] = [];
+  const saturation = 60; // Saturation percentage
+  const lightness = 60; // Lightness percentage
+  const hueStep = 360 / numColors; // Distribute the hues evenly
+
+  for (let i = 0; i < numColors; i += 1) {
+    const hue = i * hueStep; // Calculate the hue
+    const color = hslToHex(hue, saturation, lightness); // Create HEX color
+    colors.push(color); // Add the color to the array
+  }
+
+  return colors;
+}
+
 const formatEnvironments = (environments: any[]) => {
   deleteKeyAndType(environments);
+  const colors = generatePastelColors(environments.length);
   for (let i = 0; i < environments.length; i += 1) {
     const environment = environments[i];
-    if (environment.color?.hex) {
-      environment.color = environment.color.hex;
-    }
+    environment.color = colors[i];
     Object.keys(environment.name).forEach((lang) => {
       const label: string = environment.name[lang].trim();
       if (label.length > 0) {
@@ -31,8 +58,10 @@ const formatEnvironments = (environments: any[]) => {
 
 const formatLearningObjecives = (objectives: any[]) => {
   deleteKeyAndType(objectives);
+  const colors = generatePastelColors(objectives.length);
   for (let i = 0; i < objectives.length; i += 1) {
     const objective = objectives[i];
+    objective.color = colors[i];
     Object.keys(objective.label).forEach((lang) => {
       const label: string = objective.label[lang].trim();
       if (label.length > 0) {
@@ -51,22 +80,27 @@ const formatLearningObjecives = (objectives: any[]) => {
 for (let i = 0; i < data.length; i += 1) {
   const subject = data[i];
   subject.code = subject.code.current;
-  if (subject.environments) {
-    formatEnvironments(subject.environments);
-  } else {
-    subject.environments = [];
-  }
+  const commonEnvironments = subject.environments || [];
+  delete subject.environments;
   if (subject.elementarySchool) {
     const elementary = subject.elementarySchool;
+    // Format learning objectives
     if (elementary.one_to_two_years) formatLearningObjecives(elementary.one_to_two_years);
     if (elementary.three_to_six_years) formatLearningObjecives(elementary.three_to_six_years);
     if (elementary.seven_to_nine_years) formatLearningObjecives(elementary.seven_to_nine_years);
-    if (elementary.environments_1_to_2) formatEnvironments(elementary.environments_1_to_2);
-    else elementary.environments_1_to_2 = [];
-    if (elementary.environments_3_to_6) formatEnvironments(elementary.environments_3_to_6);
-    else elementary.environments_3_to_6 = [];
-    if (elementary.environments_7_to_9) formatEnvironments(elementary.environments_7_to_9);
-    else elementary.environments_7_to_9 = [];
+    // Format environments by combining common environments and level specific environments
+    elementary.environments_1_to_2 = elementary.environments_1_to_2
+      ? [...commonEnvironments, ...elementary.environments_1_to_2]
+      : [...commonEnvironments];
+    formatEnvironments(elementary.environments_1_to_2);
+    elementary.environments_3_to_6 = elementary.environments_3_to_6
+      ? [...commonEnvironments, ...elementary.environments_3_to_6]
+      : [...commonEnvironments];
+    formatEnvironments(elementary.environments_3_to_6);
+    elementary.environments_7_to_9 = elementary.environments_7_to_9
+      ? [...commonEnvironments, ...elementary.environments_7_to_9]
+      : [...commonEnvironments];
+    formatEnvironments(elementary.environments_7_to_9);
   } else subject.elementarySchool = {};
   if (subject.highSchoolModules) {
     const modules = subject.highSchoolModules;
@@ -76,9 +110,8 @@ for (let i = 0; i < data.length; i += 1) {
       if (module.learningObjectives) {
         formatLearningObjecives(module.learningObjectives);
       }
-      if (module.environments) {
-        formatEnvironments(module.environments);
-      } else module.environments = [];
+      module.environments = module.environments ? [...commonEnvironments, ...module.environments] : [...commonEnvironments];
+      formatEnvironments(module.environments);
     });
   }
   if (subject.vocationalSchoolModules) {
@@ -89,9 +122,8 @@ for (let i = 0; i < data.length; i += 1) {
       if (module.learningObjectives) {
         formatLearningObjecives(module.learningObjectives);
       }
-      if (module.environments) {
-        formatEnvironments(module.environments);
-      } else module.environments = [];
+      module.environments = module.environments ? [...commonEnvironments, ...module.environments] : [...commonEnvironments];
+      formatEnvironments(module.environments);
     });
   }
   delete subject._createdAt;

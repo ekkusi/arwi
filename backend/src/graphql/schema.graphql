@@ -82,6 +82,7 @@ type LearningObjective {
   label: TranslatedString!
   description: TranslatedString!
   type: LearningObjectiveType!
+  color: String!
 }
 
 type Subject {
