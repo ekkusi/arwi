@@ -61,5 +61,8 @@ module.exports = {
         organization: "arwi",
       },
     ],
+    "expo-build-properties",
+    "expo-font",
+    "expo-secure-store",
   ],
 };

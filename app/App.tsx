@@ -20,7 +20,7 @@ if (!SENTRY_URL) console.warn("EXPO_PUBLIC_SENTRY_URL not set, error reporting d
 
 Sentry.init({
   dsn: SENTRY_URL,
-  enabled: true,
+  enabled: !__DEV__,
   environment: __DEV__ ? "development" : "production",
 });
 
