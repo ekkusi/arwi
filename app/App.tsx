@@ -28,6 +28,7 @@ Sentry.init({
 // There seems to be no way to fix this as this comes simply from using KeyboardAvoidingView so logs are ignored.
 // Keep an eye on terminal logs for other relevant warnings.
 if (Platform.OS === "ios") LogBox.ignoreAllLogs();
+if (__DEV__ && process.env.EXPO_PUBLIC_IGNORE_LOGS === "true") LogBox.ignoreAllLogs();
 
 function AppContent() {
   const { trackAppStart } = useMatomo();
