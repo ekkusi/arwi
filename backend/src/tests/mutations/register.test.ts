@@ -24,11 +24,10 @@ describe("Register", () => {
 
   it("should register a new teacher", async () => {
     const password = "password";
-    const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
     const teacherData: RegisterTest_RegisterMutationVariables = {
       data: {
         email: "test@example.com",
-        password: passwordHash,
+        password,
       },
     };
 
@@ -48,11 +47,10 @@ describe("Register", () => {
   });
 
   it("should throw an error if email is already in use", async () => {
-    const passwordHash = await hash("password", BRCRYPT_SALT_ROUNDS);
     const userData = {
       data: {
         email: existingTeacher.email,
-        password: passwordHash,
+        password: "password",
       },
     };
 
@@ -71,13 +69,35 @@ describe("Register", () => {
     expect(response.errors?.[0].message).toEqual(`Sähköposti '${userData.data.email}' on jo käytössä`);
   });
 
+  it("should register email in lowercase", async () => {
+    const userData = {
+      data: {
+        email: "Test-user@email.com",
+        password: "password",
+      },
+    };
+
+    const query = graphql(`
+      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {
+        register(data: $data) {
+          userData {
+            email
+          }
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, userData);
+
+    expect(response.data?.register.userData.email).toEqual(userData.data.email.toLowerCase());
+  });
+
   it("should throw an error if language preference is invalid", async () => {
     const password = "password";
-    const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
     const userData = {
       data: {
         email: "test@example.com",
-        password: passwordHash,
+        password,
         languagePreference: "invalid_language",
       },
     };

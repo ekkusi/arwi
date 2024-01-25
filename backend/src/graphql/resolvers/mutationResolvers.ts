@@ -57,17 +57,22 @@ import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
-    const { password, ...rest } = data;
-    await validateRegisterInput(data);
+    const { password } = data;
+    const mappedData = {
+      ...data,
+      email: data.email.toLowerCase(),
+    };
+    await validateRegisterInput(mappedData);
     const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
-    const teacher = await createTeacher({ data: mapCreateTeacherInput(rest, passwordHash) });
+    const teacher = await createTeacher({ data: mapCreateTeacherInput(mappedData, passwordHash) });
 
     initSession(req, { ...teacher, type: "local" });
     return {
       userData: teacher,
     };
   },
-  login: async (_, { email, password }, { prisma, req }) => {
+  login: async (_, { email: initialEmail, password }, { prisma, req }) => {
+    const email = initialEmail.toLowerCase();
     const matchingTeacher = await prisma.teacher.findFirst({
       where: { email },
     });
@@ -118,7 +123,8 @@ const resolvers: MutationResolvers<CustomContext> = {
       userData: updatedUser,
     };
   },
-  connectLocalCredentials: async (_, { email, password }, { req, prisma, user }) => {
+  connectLocalCredentials: async (_, { email: initialEmail, password }, { req, prisma, user }) => {
+    const email = initialEmail.toLowerCase();
     if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
     const currentUser = user!; // Safe cast after authenticated check
     if (currentUser.email) throw new ValidationError("Tilisi on jo liitetty lokaaleihin tunnuksiin");
@@ -146,7 +152,8 @@ const resolvers: MutationResolvers<CustomContext> = {
     await logOut(req, res);
     return true;
   },
-  requestPasswordReset: async (_, { email }, { prisma, req }) => {
+  requestPasswordReset: async (_, { email: initialEmail }, { prisma, req }) => {
+    const email = initialEmail.toLowerCase();
     const code = generateCode(6);
     const matchingTeacher = await prisma.teacher.findFirst({
       where: { email },
