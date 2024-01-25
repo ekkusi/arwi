@@ -24,6 +24,7 @@ import { collectionTypeLoader, collectionTypesByGroupLoader } from "../dataLoade
 import { collectionLoader } from "../dataLoaders/collection";
 import { moduleLoader } from "../dataLoaders/module";
 import { groupLoader } from "../dataLoaders/group";
+import { mapModuleInfo } from "./mappers";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
 
@@ -77,30 +78,17 @@ export const validateCreateClassParticipationCollectionInput = async (
   moduleId: string
 ) => {
   const type = await collectionTypeLoader.load(typeId);
+  const module = await moduleLoader.load(moduleId);
   if (type.category !== CollectionTypeCategory.CLASS_PARTICIPATION)
     throw new ValidationError(`Syötetty arviointikokoelman tyyppi on väärä. Sen kuuluu olla 'CLASS_PARTICIPATION'.`);
-  if (!getEnvironment(environmentCode)) throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
+  if (!getEnvironment(environmentCode, mapModuleInfo(module))) throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
   if (learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({
       where: {
         currentModuleId: moduleId,
       },
-      include: {
-        currentModule: {
-          select: {
-            educationLevel: true,
-            learningObjectiveGroupKey: true,
-          },
-        },
-      },
     });
-    const { currentModule } = group;
-    validateLearningObjectives(
-      group.subjectCode,
-      currentModule.educationLevel as EducationLevel,
-      currentModule.learningObjectiveGroupKey,
-      learningObjectiveCodes
-    );
+    validateLearningObjectives(group.subjectCode, module.educationLevel as EducationLevel, module.learningObjectiveGroupKey, learningObjectiveCodes);
   }
 };
 
@@ -161,7 +149,10 @@ export const validateUpdateClassParticipationCollectionInput = async (
   { environmentCode, learningObjectiveCodes, evaluations }: UpdateClassParticipationCollectionInput,
   collectionId: string
 ) => {
-  if (environmentCode && !getEnvironment(environmentCode)) throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
+  const collection = await collectionLoader.load(collectionId);
+  const module = await moduleLoader.load(collection.moduleId);
+  if (environmentCode && !getEnvironment(environmentCode, mapModuleInfo(module)))
+    throw new ValidationError(`Ympäristöä koodilla '${environmentCode}' ei ole olemassa.`);
 
   if (learningObjectiveCodes && learningObjectiveCodes.length > 0) {
     const group = await prisma.group.findFirstOrThrow({

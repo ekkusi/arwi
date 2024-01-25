@@ -9,6 +9,7 @@ import {
   mapCreateClassParticipationEvaluationInput,
   mapCreateDefaultEvaluationInput,
   mapCreateTeacherInput,
+  mapModuleInfo,
   mapUpdateClassParticipationCollectionInput,
   mapUpdateClassParticipationEvaluationInput,
   mapUpdateDefaultCollectionInput,
@@ -439,14 +440,16 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
       select: {
         subjectCode: true,
+        currentModule: true,
       },
     });
     const [evaluations, group] = await Promise.all([evaluationsPromise, groupPromise]);
+    const { currentModule } = group;
     const mappedEvaluations = evaluations.map((it) => {
       const { environmentCode } = it.evaluationCollection;
       return environmentCode
         ? {
-            environmentLabel: getEnvironment(environmentCode)?.label.fi || "Ei ympäristöä",
+            environmentLabel: getEnvironment(environmentCode, mapModuleInfo(currentModule))?.label.fi || "Ei ympäristöä",
             date: it.evaluationCollection.date,
             skillsRating: it.skillsRating,
             behaviourRating: it.behaviourRating,
