@@ -1,14 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
-import { Modal, ModalProps, TouchableWithoutFeedback } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Animated, Modal, ModalProps, StatusBar, TouchableWithoutFeedback } from "react-native";
 import {
   BaseAnimationBuilder,
   FadeIn,
   FadeOut,
+  interpolateColor,
   runOnJS,
   SlideInDown,
+  SlideInLeft,
   SlideInUp,
   SlideOutDown,
   SlideOutUp,
+  useAnimatedProps,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
   ZoomIn,
   ZoomOut,
 } from "react-native-reanimated";
@@ -18,6 +25,8 @@ import CAnimatedView from "./primitives/CAnimatedView";
 import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
+import { blendColors, hexToRgbA, rgbaToString } from "../helpers/color";
+import { COLORS } from "../theme";
 
 export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   isOpen: boolean;
@@ -30,8 +39,8 @@ export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   closeOnBackgroundPress?: boolean;
   animated?: boolean;
   onClose?: () => void;
-  exitingAnimation?: BaseAnimationBuilder | typeof BaseAnimationBuilder;
-  enteringAnimation?: BaseAnimationBuilder | typeof BaseAnimationBuilder;
+  exitingAnimation?: typeof BaseAnimationBuilder;
+  enteringAnimation?: typeof BaseAnimationBuilder;
   animationDuration?: number;
 };
 
@@ -54,6 +63,8 @@ const innerViewStyle: CViewStyle = {
   backgroundColor: "white",
   overflow: "hidden",
 };
+
+const AnimatedStatusBar = Animated.createAnimatedComponent(StatusBar);
 
 export default function CModal({
   animated = true,
@@ -171,7 +182,7 @@ export default function CModal({
               flexDirection: "row",
               justifyContent: title ? "space-between" : "flex-end",
               alignItems: "center",
-              marginBottom: title ? "md" : 0,
+              // marginBottom: title ? "md" : 0,
               ...headerStyles,
             }}
           >
@@ -208,14 +219,14 @@ export default function CModal({
     );
   }, [animated, animationDuration, body, enterAnimation, exitAnimationWithCallback, innerViewProps, outerViewStyles]);
 
+  const bgRgba = hexToRgbA(COLORS.green);
+  const targetBgColor = rgbaToString(blendColors("rgba(0,0,0,0.6)", bgRgba));
+
+  const barColor = isOpen ? targetBgColor : bgRgba;
+
   return (
-    <Modal
-      statusBarTranslucent={statusBarTranslucent}
-      transparent={transparent}
-      visible={isOpen || !exitAnimationFinished}
-      onRequestClose={onClose}
-      {...rest}
-    >
+    <Modal statusBarTranslucent={false} transparent={transparent} visible={isOpen || !exitAnimationFinished} onRequestClose={onClose} {...rest}>
+      {statusBarTranslucent && <StatusBar backgroundColor={barColor} animated />}
       {isOpen && (closeOnBackgroundPress ? <TouchableWithoutFeedback onPress={onClose}>{views}</TouchableWithoutFeedback> : views)}
     </Modal>
   );
