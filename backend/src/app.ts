@@ -24,6 +24,7 @@ if (process.env.NODE_ENV === "production" && !process.env.SENTRY_URL) throw new 
 
 Sentry.init({
   dsn: process.env.SENTRY_URL,
+  enabled: process.env.NODE_ENV === "production",
   environment: process.env.NODE_ENV === "production" ? "production" : "development",
   integrations: ADVANCED_SENTRY_LOGGING
     ? [
