@@ -85,7 +85,7 @@ export default function RootLayout({ children, params: { lng } }: { children: JS
         <meta name="msapplication-TileColor" content="#65af53" />
         <meta name="theme-color" content="#65af53" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <Providers lng={lng} theme={theme}>
           {children}
         </Providers>
