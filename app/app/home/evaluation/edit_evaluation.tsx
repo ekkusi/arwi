@@ -57,6 +57,16 @@ const EvaluationEditView_UpdateEvaluation_Mutation = graphql(`
       skillsRating
       behaviourRating
       notes
+      collection {
+        id
+        evaluations {
+          id
+          wasPresent
+          skillsRating
+          behaviourRating
+          notes
+        }
+      }
     }
   }
 `);

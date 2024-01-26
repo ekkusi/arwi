@@ -7,11 +7,6 @@ import { CustomContext } from "../../types/contextTypes";
 import { SESSION_NAME } from "../../config";
 
 const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (resolve, parent, args, context, info) => {
-  // console.log("checkIsAuthenticated id", context.req.sessionID);
-  // console.log("session", context.req.session);
-
-  // console.log("checkIsauthenticated cookie", context.req.cookies[SESSION_NAME]);
-
   if (!context.req.session?.userInfo) {
     throw new AuthenticationError();
   }

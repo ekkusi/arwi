@@ -1,5 +1,4 @@
 import { useMutation } from "@apollo/client";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import * as SecureStore from "expo-secure-store";
 import { useMatomo } from "matomo-tracker-react-native";
@@ -16,9 +15,8 @@ import { useMPassIDAuth } from "../../hooks-and-providers/mPassID";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
 import CModal from "../../components/CModal";
 import TextFormField from "../../components/form/TextFormField";
-import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
-import { COLORS } from "../../theme";
 import { getErrorMessage } from "../../helpers/errorUtils";
+import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
 const ProfileView_Logout_Mutation = graphql(`
   mutation ProfileView_Logout {
@@ -62,7 +60,7 @@ const REDIRECT_URI = "arwi-app://profile";
 export default function ProfileView() {
   const { logout, setUser } = useAuth();
   const user = useAuthenticatedUser();
-  const { trackAction } = useMatomo();
+  const { trackEvent } = useMatomo();
   const { openToast } = useToast();
   const { grantCode } = useMPassIDAuth(REDIRECT_URI);
 
@@ -81,8 +79,9 @@ export default function ProfileView() {
   const handleLogout = async () => {
     await logoutMutation();
     await client.clearStore();
-    trackAction({
-      name: "Logout",
+    trackEvent({
+      category: MATOMO_EVENT_CATEGORIES.AUTH,
+      action: "Logout",
       userInfo: {
         uid: user.id,
       },
@@ -113,6 +112,13 @@ export default function ProfileView() {
         const { data } = await connectMPassID({ variables: { code } });
         if (!data?.connectMPassID) throw new Error("Unexpected error, no user data");
         setUser(data.connectMPassID.userData);
+        trackEvent({
+          category: MATOMO_EVENT_CATEGORIES.ACCOUNT_MODIFICATION,
+          action: "Sync MPassID to local credentials",
+          userInfo: {
+            uid: user.id,
+          },
+        });
         openToast(t("mpassid-connect-succesful", "MPassID yhdistetty onnistuneesti. Voit jatkossa kirjautua sisään MPassID:llä."));
       }
     } catch (error) {
@@ -127,6 +133,13 @@ export default function ProfileView() {
       if (!data?.connectLocalCredentials) throw new Error("Local credentials connection failed");
       setUser(data.connectLocalCredentials.userData);
       setIsLocalLoginModalOpen(false);
+      trackEvent({
+        category: MATOMO_EVENT_CATEGORIES.ACCOUNT_MODIFICATION,
+        action: "Sync local credentials to MPassID",
+        userInfo: {
+          uid: user.id,
+        },
+      });
       openToast(
         t("local-credentials-connect-succesful", "Tunnukset yhdistetty onnistuneesti. Voit jatkossa kirjautua sisään sähköpostilla ja salasanalla.")
       );

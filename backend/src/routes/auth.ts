@@ -74,7 +74,7 @@ const initAuth = async () => {
     client = new mPassIDIssuer.Client({
       client_id: MPASSID_CLIENT_ID,
       client_secret: MPASSID_CLIENT_SECRET,
-      token_endpoint_auth_method: "client_secret_basic",
+      token_endpoint_auth_method: "client_secret_post",
       redirect_uris: ["http://localhost:4000/auth/mpassid-callback"],
       response_types: ["code"],
     });

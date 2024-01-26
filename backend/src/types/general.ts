@@ -14,9 +14,9 @@ export type LearningObjectiveInfo = Omit<
   type: LearningObjectiveType;
 };
 
-export type LearningObjectiveMinimal = Omit<LearningObjectiveInfo, "description">;
+export type LearningObjectiveMinimal = Omit<LearningObjectiveInfo, "description" | "color">;
 
-export type UnmappedEnvironment = SubjectInfo["environments"][number];
+export type UnmappedEnvironment = SubjectInfo["elementarySchool"]["environments_1_to_2"][number];
 
 export type MinimalEnvironment = Pick<EnvironmentInfo, "code" | "label">;
 

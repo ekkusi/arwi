@@ -3,7 +3,7 @@ import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useApolloClient, useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { MenuProvider } from "react-native-popup-menu";
@@ -21,6 +21,7 @@ import { isValidLanguage, STORAGE_LANG_KEY } from "./i18n";
 import PopupProvider from "./hooks-and-providers/ToastProvider";
 import { isVersionSmaller } from "./helpers/versionUtils";
 import NewUpdateAvailableModal from "./components/NewUpdateAvailableModal";
+import { useThrowCatchableError } from "./hooks-and-providers/error";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -55,11 +56,25 @@ export default function Main() {
   });
   const { ready: i18nReady, i18n } = useTranslation(); // i18n works weirdly with Gridly connection. For some initial screen is not rendered if this is not checked here.
 
-  const client = useApolloClient();
+  const throwError = useThrowCatchableError();
   const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
   const routeNameRef = useRef<string | null>(null);
 
-  const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query);
+  const throwErrorAndHideSplash = useCallback(
+    (err: Error) => {
+      SplashScreen.hideAsync();
+      throwError(err);
+    },
+    [throwError]
+  );
+
+  const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query, {
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
+  const [getUser] = useLazyQuery(Main_GetCurrentUser_Query);
 
   const minimumAppVersion = appMetadataResult?.getAppMetadata?.appVersion || null;
 
@@ -67,7 +82,8 @@ export default function Main() {
 
   // Fetch token and current user and set them to global state if they exist
   const setUserInfo = useCallback(async () => {
-    const { data } = await client.query({ query: Main_GetCurrentUser_Query });
+    const { data, error } = await getUser();
+
     if (data) {
       await setUser(data.getCurrentUser);
       trackAppStart({
@@ -75,28 +91,23 @@ export default function Main() {
           uid: data.getCurrentUser.id,
         },
       });
+    } else if (error && error.graphQLErrors[0]?.extensions.code !== "UNAUTHENTICATED") {
+      // Don't throw if error is just UNAUTHENTICATED error
+      throwErrorAndHideSplash(error);
     }
 
-    // NOTE: If separate separate consent asking is implemented, uncomment this
-    // Enable crashlytics and analytics only if user has given consent
-    // if (data.getCurrentUser.consentsAnalytics) {
-    //   await crashlytics().setCrashlyticsCollectionEnabled(true);
-    //   await firebase.analytics().setAnalyticsCollectionEnabled(true);
-    // }
     // Fetch lang from storage and set it to i18n
     const storedLang = await SecureStore.getItemAsync(STORAGE_LANG_KEY);
     if (storedLang && i18n.language !== storedLang && isValidLanguage(storedLang)) i18n.changeLanguage(storedLang);
-  }, [client, i18n, setUser, trackAppStart]);
+  }, [getUser, i18n, setUser, throwErrorAndHideSplash, trackAppStart]);
 
   useEffect(() => {
     setUserInfo()
-      .catch((err) => {
-        console.info(err);
-      })
+      .catch(throwErrorAndHideSplash)
       .finally(() => {
         setLoading(false);
       });
-  }, [setUserInfo]);
+  }, [setUserInfo, throwErrorAndHideSplash]);
 
   const onRootLayout = useCallback(async () => {
     await SplashScreen.hideAsync();

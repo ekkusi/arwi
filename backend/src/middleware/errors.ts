@@ -1,5 +1,4 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import { Prisma } from "@prisma/client";
 import BadRequestError from "../errors/BadRequestError";
 
 export const notFoundHandler: RequestHandler = (_, res) => {

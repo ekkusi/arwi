@@ -2,6 +2,7 @@ import { CollectionTypeCategory } from "@prisma/client";
 import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../../utils/subjectUtils";
 import { EducationLevel, Resolvers } from "../../types";
 import MissingDataError from "../../errors/MissingDataError";
+import { mapModuleInfo } from "../utils/mappers";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -75,9 +76,10 @@ const resolvers: TypeResolvers = {
     },
   },
   ClassParticipationCollection: {
-    environment: ({ environmentCode }) => {
+    environment: async ({ environmentCode, moduleId }, _, { dataLoaders }) => {
       if (!environmentCode) throw new MissingDataError();
-      const environment = getEnvironment(environmentCode);
+      const module = await dataLoaders.moduleLoader.load(moduleId);
+      const environment = getEnvironment(environmentCode, mapModuleInfo(module));
       if (!environment) throw new MissingDataError(`Environment not found with code: ${environmentCode}`);
       return environment;
     },

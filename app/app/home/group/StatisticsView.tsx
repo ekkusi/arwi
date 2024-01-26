@@ -6,7 +6,7 @@ import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useShared
 import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { isClassParticipationCollection, isDefaultCollection } from "arwi-backend/src/types/typeGuards";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
-import { getPredefinedColors, subjectToIcon } from "../../../helpers/dataMappers";
+import { subjectToIcon } from "../../../helpers/dataMappers";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
@@ -26,7 +26,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
   // const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
   const objectives = getEvaluableLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
-  const colorPalette = getPredefinedColors(objectives.length);
+
   const { evaluationCollections } = group.currentModule;
   const classParticipationCollections =
     evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "ClassParticipationCollection">>(
@@ -51,17 +51,17 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
 
   const learningObjectivesAndCounts: StyledBarChartDataType[] = useMemo(
     () =>
-      objectives.map((objective, idx) => {
+      objectives.map((objective) => {
         return {
           x: `${objective.code}: ${objective.label.fi}`,
-          color: colorPalette[idx],
+          color: objective.color,
           y: classParticipationCollections.reduce(
             (val, evaluation) => (evaluation.learningObjectives.map((obj) => obj.code).includes(objective.code) ? val + 1 : val),
             0
           ),
         };
       }),
-    [objectives, colorPalette, classParticipationCollections]
+    [objectives, classParticipationCollections]
   );
 
   const translateY = useSharedValue(0);

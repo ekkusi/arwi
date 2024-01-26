@@ -1,8 +1,10 @@
-import { Prisma } from "@prisma/client";
+import { Module, Prisma } from "@prisma/client";
 import {
   CreateClassParticipationEvaluationInput,
   CreateDefaultEvaluationInput,
   CreateTeacherInput,
+  EducationLevel,
+  MinimalModuleInfo,
   UpdateClassParticipationCollectionInput,
   UpdateClassParticipationEvaluationInput,
   UpdateDefaultCollectionInput,
@@ -88,5 +90,12 @@ export const mapUpdateDefaultCollectionInput = (
   return {
     ...data,
     date: data.date ? new Date(data.date) : undefined,
+  };
+};
+
+export const mapModuleInfo = (module: Module): MinimalModuleInfo => {
+  return {
+    ...module,
+    educationLevel: module.educationLevel as EducationLevel,
   };
 };

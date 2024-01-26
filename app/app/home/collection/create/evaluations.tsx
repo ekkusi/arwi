@@ -2,11 +2,11 @@ import { useMutation } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, KeyboardEventListener, NativeScrollEvent, NativeSyntheticEvent, Platform } from "react-native";
+import { KeyboardEventListener, Platform } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import PagerView, { PagerViewOnPageSelectedEvent } from "react-native-pager-view";
 import CButton from "../../../../components/primitives/CButton";
-import CFlatList from "../../../../components/primitives/CFlatList";
 import CView from "../../../../components/primitives/CView";
 import { CARD_HEIGHT, CreateClassParticipationEvaluationCardMemoed, Evaluation } from "../../../../components/ClassParticipationEvaluationCard";
 import { graphql } from "../../../../gql";
@@ -15,9 +15,10 @@ import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
 import { useToast } from "../../../../hooks-and-providers/ToastProvider";
 import { COLORS } from "../../../../theme";
-import { EvaluationData, useCollectionCreationContext } from "./CollectionCreationProvider";
+import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import { CollectionCreationStackParams } from "./types";
 import CollectionCreationLayout from "./_layout";
+import LazyLoadView from "../../../../components/LazyLoadView";
 
 const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
   mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
@@ -73,8 +74,9 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
   const { t } = useTranslation();
   const { openToast } = useToast();
   const [createCollection] = useMutation(CollectionEvaluationsView_CreateCollection_Mutation);
-  const scrollRef = useRef<FlatList<EvaluationData> | null>(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const pagerRef = useRef<PagerView>(null);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const { generalData, collectionType, evaluations, groupInfo, setEvaluations } = useCollectionCreationContext();
 
@@ -146,42 +148,43 @@ function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<Col
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setScrollOffset(event.nativeEvent.contentOffset.y);
+  const onPageSelected = (event: PagerViewOnPageSelectedEvent) => {
+    setCurrentIndex(event.nativeEvent.position);
   };
 
   const scrollToCard = useCallback(() => {
     // Hack to make this not depend on the scrollOffset which causes renderers to all cards
-    setScrollOffset((offset) => {
-      scrollRef.current?.scrollToOffset({ animated: true, offset: offset + CARD_HEIGHT });
-      return offset;
+    setCurrentIndex((index) => {
+      pagerRef.current?.setPage(index + 1);
+      return index;
     });
   }, []);
 
   return (
-    <CView style={{ flex: 1, backgroundColor: "white" }}>
-      <CFlatList
-        ref={scrollRef}
-        data={presentEvaluations}
-        renderItem={({ item, index }) => (
-          <CreateClassParticipationEvaluationCardMemoed
-            evaluation={item}
-            onChanged={onEvaluationChanged}
-            height={CARD_HEIGHT}
-            hasArrowDown={index < presentEvaluations.length - 1}
-            onArrowDownPress={scrollToCard}
-            isActive={Math.round(scrollOffset / CARD_HEIGHT) === index}
-          />
-        )}
-        onScroll={onScroll}
-        keyExtractor={(item) => item.student.id}
-        snapToInterval={CARD_HEIGHT}
-        decelerationRate="fast"
-        snapToAlignment="center"
-        directionalLockEnabled
-        disableIntervalMomentum
-        style={{ flex: 1, paddingHorizontal: "lg" }}
-      />
+    <CView style={{ flex: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
+      <PagerView
+        ref={pagerRef}
+        orientation="vertical"
+        scrollEnabled
+        initialPage={0}
+        style={{ flex: 1, width: "100%" }}
+        onPageSelected={onPageSelected}
+      >
+        {presentEvaluations?.map((evaluation, index) => {
+          return (
+            <LazyLoadView key={evaluation.student.id} currentIndex={currentIndex} index={index} style={{ flex: 1 }}>
+              <CreateClassParticipationEvaluationCardMemoed
+                evaluation={evaluation}
+                onChanged={onEvaluationChanged}
+                height={CARD_HEIGHT}
+                hasArrowDown={index < presentEvaluations.length - 1}
+                onArrowDownPress={scrollToCard}
+                isActive={currentIndex === index}
+              />
+            </LazyLoadView>
+          );
+        })}
+      </PagerView>
       <Animated.View
         style={[{ justifyContent: "flex-end", position: "absolute", bottom: 0, left: 0, right: 0, width: "100%" }, buttonsAnimatedStyle]}
       >

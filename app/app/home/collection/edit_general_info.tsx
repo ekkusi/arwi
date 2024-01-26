@@ -74,6 +74,20 @@ const EditGeneralDetails_UpdateCollection_Mutation = graphql(`
         }
         code
       }
+      evaluations {
+        id
+        collection {
+          id
+          date
+          description
+          environment {
+            label {
+              fi
+            }
+            code
+          }
+        }
+      }
       module {
         id
         info {
