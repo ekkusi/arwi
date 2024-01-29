@@ -2614,7 +2614,7 @@
     "elementarySchool": {
       "one_to_two_years": [
         {
-          "code": "TI1",
+          "code": "T1",
           "label": {
             "fi": "Aktiivisuus, kokeilu, yhteistyö, liikunta-ilmaisu"
           },
@@ -2625,7 +2625,7 @@
           "color": "#d65c5c"
         },
         {
-          "code": "TI2",
+          "code": "T2",
           "label": {
             "fi": "Havaintomotoristen taitojen harjoittelu"
           },
@@ -2636,7 +2636,7 @@
           "color": "#d6a55c"
         },
         {
-          "code": "TI3",
+          "code": "T3",
           "label": {
             "fi": "Motoristen perustaitojen soveltaminen"
           },
@@ -2647,7 +2647,7 @@
           "color": "#bed65c"
         },
         {
-          "code": "TI4",
+          "code": "T4",
           "label": {
             "fi": "Turvallinen liikkuminen eri ympäristöissä"
           },
@@ -2658,7 +2658,7 @@
           "color": "#74d65c"
         },
         {
-          "code": "TI5",
+          "code": "T5",
           "label": {
             "fi": "Vesiliikuntaan tutustuminen, alkeisuimataito"
           },
@@ -2669,7 +2669,7 @@
           "color": "#5cd68d"
         },
         {
-          "code": "TI6",
+          "code": "T6",
           "label": {
             "fi": "Turvallinen käytös liikuntatunneilla"
           },
@@ -2680,7 +2680,7 @@
           "color": "#5cd6d6"
         },
         {
-          "code": "TI7",
+          "code": "T7",
           "label": {
             "fi": "Vuorovaikutuksen säätely liikunnassa"
           },
@@ -2691,7 +2691,7 @@
           "color": "#5c8dd6"
         },
         {
-          "code": "TI8",
+          "code": "T8",
           "label": {
             "fi": "Yhteistyötaitojen tukeminen"
           },
@@ -2702,7 +2702,7 @@
           "color": "#745cd6"
         },
         {
-          "code": "TI9",
+          "code": "T9",
           "label": {
             "fi": "Myönteisen minäkäsityksen vahvistaminen"
           },
@@ -2713,7 +2713,7 @@
           "color": "#be5cd6"
         },
         {
-          "code": "TI10",
+          "code": "T10",
           "label": {
             "fi": "Myönteiset liikuntakokemukset, toimintakyvyn kokeilu"
           },
@@ -2882,7 +2882,7 @@
           "color": "#d65c5c"
         },
         {
-          "code": "TI2",
+          "code": "T2",
           "label": {
             "fi": "Havaintomotoristen taitojen kehittäminen"
           },
@@ -2893,7 +2893,7 @@
           "color": "#d69f5c"
         },
         {
-          "code": "TI3",
+          "code": "T3",
           "label": {
             "fi": "Tasapaino-, liikkumistaitojen soveltaminen"
           },
@@ -2904,7 +2904,7 @@
           "color": "#cbd65c"
         },
         {
-          "code": "TI4",
+          "code": "T4",
           "label": {
             "fi": "Välineenkäsittelytaitojen soveltaminen"
           },
@@ -2915,7 +2915,7 @@
           "color": "#88d65c"
         },
         {
-          "code": "TI5",
+          "code": "T5",
           "label": {
             "fi": "Fyysisten ominaisuuksien kehittäminen"
           },
@@ -2926,7 +2926,7 @@
           "color": "#5cd672"
         },
         {
-          "code": "TI6",
+          "code": "T6",
           "label": {
             "fi": "Uimataidon opettaminen"
           },
@@ -2937,7 +2937,7 @@
           "color": "#5cd6b5"
         },
         {
-          "code": "TI7",
+          "code": "T7",
           "label": {
             "fi": "Turvallinen toiminta liikuntatunneilla"
           },
@@ -2948,7 +2948,7 @@
           "color": "#5cb5d6"
         },
         {
-          "code": "TI8",
+          "code": "T8",
           "label": {
             "fi": "Yhteistyö, toiset huomioon ottaminen"
           },
@@ -2959,7 +2959,7 @@
           "color": "#5c72d6"
         },
         {
-          "code": "TI9",
+          "code": "T9",
           "label": {
             "fi": "Reilun pelin periaate, vastuu"
           },
@@ -2970,7 +2970,7 @@
           "color": "#885cd6"
         },
         {
-          "code": "TI10",
+          "code": "T10",
           "label": {
             "fi": "Itsenäisyys, vastuullisuus"
           },
@@ -2981,7 +2981,7 @@
           "color": "#cb5cd6"
         },
         {
-          "code": "TI11",
+          "code": "T11",
           "label": {
             "fi": "Myönteiset kokemukset, kehon pätevyys"
           },
@@ -3193,7 +3193,7 @@
         "code": "LI_HS_MODULE_LI1",
         "learningObjectives": [
           {
-            "code": "TI1",
+            "code": "T1",
             "label": {
               "fi": "Liikuntataitojen ja -tietojen soveltaminen"
             },
