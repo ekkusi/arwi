@@ -24,7 +24,7 @@ describe("createDefaultCollection", () => {
     baseCollectionData = {
       date: formatDate(new Date(), "yyyy-MM-dd"),
       description: "Test Description",
-      typeId: group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)?.id!,
+      typeId: group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)?.id!,
     };
   });
 
@@ -110,7 +110,7 @@ describe("createDefaultCollection", () => {
   });
 
   it("should throw an error if the collection type is CLASS_PARTICIPATION type", async () => {
-    const classParticipationType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const classParticipationType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
 
     const collectionData = {
       ...baseCollectionData,

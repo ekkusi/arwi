@@ -24,7 +24,7 @@ describe("generateStudentFeedback", () => {
     teacher = await createTestUserAndLogin(graphqlRequest);
     group = await createTestGroup(teacher.id);
     [student] = group.students;
-    collection = await createTestEvaluationCollection(group.currentModuleId, group.collectionTypes[0].id);
+    collection = await createTestEvaluationCollection(group.currentModuleId, group.currentModule.collectionTypes[0].id);
   });
 
   beforeEach(async () => {

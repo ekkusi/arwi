@@ -21,10 +21,12 @@ const DefaultCollectionCreationProvider_GetGroup_Query = graphql(`
           }
         }
       }
-      collectionTypes {
-        id
-        name
-        category
+      currentModule {
+        collectionTypes {
+          id
+          name
+          category
+        }
       }
       ...CollectionGeneralInfoView_Group
     }
@@ -98,7 +100,7 @@ function DefaultCollectionCreationProvider({ children, groupId, collectionTypeId
         .map((student) => ({ student, wasPresent: true, rating: 7 }))
         .sort((a, b) => a.student.name.localeCompare(b.student.name));
 
-      const matchingCollectionType = queryData?.getGroup?.collectionTypes.find((it) => it.id === collectionTypeId);
+      const matchingCollectionType = queryData?.getGroup?.currentModule.collectionTypes.find((it) => it.id === collectionTypeId);
       if (!matchingCollectionType)
         throwCatchableError(new Error("Invalid collection type passed to collection creation, type not found in group's collection types"));
 

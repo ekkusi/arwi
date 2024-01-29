@@ -28,7 +28,7 @@ describe("updateClassParticipationEvaluation", () => {
   });
 
   beforeEach(async () => {
-    const collectionType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const collectionType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
     collection = await createTestEvaluationCollection(group.currentModuleId, collectionType.id);
     evaluation = await createTestEvaluation(collection.id, group.students[0].id);
   });
@@ -202,7 +202,7 @@ describe("updateClassParticipationEvaluation", () => {
 
   it("should throw error if attempting to update evaluation in a collection that is not of type CLASS_PARTICIPATION", async () => {
     // Create a collection that is not of type CLASS_PARTICIPATION
-    const collectionType = group.collectionTypes.find((ct) => ct.category !== CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const collectionType = group.currentModule.collectionTypes.find((ct) => ct.category !== CollectionTypeCategory.CLASS_PARTICIPATION)!;
     const defaultCollection = await createTestEvaluationCollection(group.currentModuleId, collectionType.id, {
       environmentCode: undefined,
       learningObjectiveCodes: [],

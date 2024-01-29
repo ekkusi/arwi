@@ -41,8 +41,11 @@ const DefaultEvaluationCollection_GetCollectionType_Query = graphql(`
           rating
         }
       }
-      group {
+      module {
         id
+        group {
+          id
+        }
       }
     }
   }
@@ -106,7 +109,7 @@ export default function DefaultEvaluationCollection({
             variant="filled"
             title={t("evaluate", "Arvioi")}
             onPress={() => {
-              navigation.navigate("default-collection-create", { groupId: type.group.id, collectionTypeId: type.id });
+              navigation.navigate("default-collection-create", { groupId: type.module.group.id, collectionTypeId: type.id });
             }}
           />
         )}

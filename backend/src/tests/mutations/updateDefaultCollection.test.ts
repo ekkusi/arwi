@@ -31,7 +31,7 @@ describe("updateDefaultCollection", () => {
   });
 
   beforeEach(async () => {
-    const collectionType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)!;
+    const collectionType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)!;
     collection = await createTestEvaluationCollection(group.currentModuleId, collectionType.id, {
       environmentCode: null,
       learningObjectiveCodes: [],
@@ -142,7 +142,7 @@ describe("updateDefaultCollection", () => {
   });
 
   it("should throw error for evaluations not belonging to the collection", async () => {
-    const newCollection = await createTestEvaluationCollection(group.currentModule.id, group.collectionTypes[0].id);
+    const newCollection = await createTestEvaluationCollection(group.currentModule.id, group.currentModule.collectionTypes[0].id);
     const unrelatedEvaluation = await createTestEvaluation(newCollection.id, group.students[0].id);
     const updateData: UpdateDefaultCollectionInput = {
       evaluations: [{ id: unrelatedEvaluation.id }],
@@ -184,7 +184,7 @@ describe("updateDefaultCollection", () => {
   });
 
   it("should throw error if attemping to update a CLASS_PARTICIPATION evaluation", async () => {
-    const classParticipationType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const classParticipationType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
     const classParticipationCollection = await createTestEvaluationCollection(group.currentModuleId, classParticipationType.id);
     const classParticipationEvaluation = await createTestEvaluation(classParticipationCollection.id, group.students[0].id);
     const updateData: UpdateDefaultCollectionInput = {

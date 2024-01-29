@@ -77,10 +77,13 @@ export async function deleteTestUser() {
 
 export const VALID_LI_ENV_CODE = "LI_ENV_TAL";
 
+export type TestModule = Module & {
+  collectionTypes: CollectionType[];
+};
+
 export type TestGroup = Group & {
   students: Student[];
-  collectionTypes: CollectionType[];
-  currentModule: Module;
+  currentModule: TestModule;
 };
 
 export async function createTestGroup(teacherId: string): Promise<TestGroup> {
@@ -93,22 +96,6 @@ export async function createTestGroup(teacherId: string): Promise<TestGroup> {
       subjectCode: "LI",
       currentModuleId: moduleId,
       teacherId,
-      collectionTypes: {
-        createMany: {
-          data: [
-            {
-              category: CollectionTypeCategory.EXAM,
-              name: "Midterm",
-              weight: 50,
-            },
-            {
-              category: CollectionTypeCategory.CLASS_PARTICIPATION,
-              name: "Participation",
-              weight: 50,
-            },
-          ],
-        },
-      },
     },
   });
   const moduleCreate = prisma.module.create({
@@ -129,17 +116,37 @@ export async function createTestGroup(teacherId: string): Promise<TestGroup> {
           },
         ],
       },
+      collectionTypes: {
+        createMany: {
+          data: [
+            {
+              category: CollectionTypeCategory.EXAM,
+              name: "Midterm",
+              weight: 50,
+            },
+            {
+              category: CollectionTypeCategory.CLASS_PARTICIPATION,
+              name: "Participation",
+              weight: 50,
+            },
+          ],
+        },
+      },
     },
   });
   await prisma.$transaction([groupCreate, moduleCreate]);
+
   return prisma.group.findFirstOrThrow({
     where: {
       id: groupId,
     },
     include: {
       students: true,
-      collectionTypes: true,
-      currentModule: true,
+      currentModule: {
+        include: {
+          collectionTypes: true,
+        },
+      },
     },
   });
 }

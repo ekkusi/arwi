@@ -157,6 +157,14 @@ describe("changeGroupModule", () => {
         subjectCode: "LI",
         currentModuleId: newModuleId,
         teacherId: teacher.id,
+      },
+    });
+    const moduleCreate = prisma.module.create({
+      data: {
+        id: newModuleId,
+        educationLevel: EducationLevel.HIGH_SCHOOL,
+        learningObjectiveGroupKey: "LI_HS_MODULE_LI1",
+        groupId,
         collectionTypes: {
           createMany: {
             data: [
@@ -168,14 +176,6 @@ describe("changeGroupModule", () => {
             ],
           },
         },
-      },
-    });
-    const moduleCreate = prisma.module.create({
-      data: {
-        id: newModuleId,
-        educationLevel: EducationLevel.HIGH_SCHOOL,
-        learningObjectiveGroupKey: "LI_HS_MODULE_LI1",
-        groupId,
       },
     });
     await prisma.$transaction([groupCreate, moduleCreate]);

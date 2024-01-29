@@ -29,11 +29,13 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
         currentModule {
           id
         }
-        collectionTypes {
-          id
-          category
-          name
-          weight
+        currentModule {
+          collectionTypes {
+            id
+            category
+            name
+            weight
+          }
         }
       }
       currentModuleEvaluations {
@@ -142,7 +144,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
 
   const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
 
-  const { collectionTypes } = student.group;
+  const { collectionTypes } = student.group.currentModule;
 
   if (student.group.archived)
     return (

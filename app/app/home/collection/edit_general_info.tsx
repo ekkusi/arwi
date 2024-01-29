@@ -51,10 +51,12 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
           subject {
             code
           }
-          collectionTypes {
-            id
-            name
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              category
+            }
           }
         }
       }

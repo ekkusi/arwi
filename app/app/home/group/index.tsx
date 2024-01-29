@@ -76,13 +76,16 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           }
         }
       }
-      collectionTypes {
+      currentModule {
         id
-        category
-        name
-        weight
-        defaultTypeCollection {
+        collectionTypes {
           id
+          category
+          name
+          weight
+          defaultTypeCollection {
+            id
+          }
         }
       }
     }

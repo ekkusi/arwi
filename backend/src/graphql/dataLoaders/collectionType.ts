@@ -3,20 +3,20 @@ import prisma from "../../prismaClient";
 import CustomDataLoader from "./CustomDataLoader";
 import NotFoundError from "../../errors/NotFoundError";
 
-export type ClearCollectionTypeLoadersArgs = Pick<CollectionType, "id" | "groupId">;
+export type ClearCollectionTypeLoadersArgs = Pick<CollectionType, "id" | "moduleId">;
 
 export const clearCollectionTypeLoaders = (args: ClearCollectionTypeLoadersArgs) => {
   collectionTypeLoader.clear(args.id);
-  collectionTypesByGroupLoader.clear(args.groupId);
+  collectionTypesByModuleLoader.clear(args.moduleId);
 };
 
-export const clearCollectionTypeLoadersByGroup = async (groupId: string) => {
-  const collectionTypes = await collectionTypesByGroupLoader.load(groupId);
+export const clearCollectionTypeLoadersByModule = async (moduleId: string) => {
+  const collectionTypes = await collectionTypesByModuleLoader.load(moduleId);
 
   for (const collectionType of collectionTypes) {
     collectionTypeLoader.clear(collectionType.id);
   }
-  collectionTypesByGroupLoader.clear(groupId);
+  collectionTypesByModuleLoader.clear(moduleId);
 };
 
 export const clearCollectionTypeLoadersById = async (collectionTypeId: string) => {
@@ -26,10 +26,10 @@ export const clearCollectionTypeLoadersById = async (collectionTypeId: string) =
   }
 };
 
-export const collectionTypesByGroupLoader = new CustomDataLoader<string, CollectionType[]>(async (groupIds) => {
+export const collectionTypesByModuleLoader = new CustomDataLoader<string, CollectionType[]>(async (groupIds) => {
   const collectionTypes = await prisma.collectionType.findMany({
     where: {
-      groupId: {
+      moduleId: {
         in: [...groupIds],
       },
     },
@@ -38,10 +38,10 @@ export const collectionTypesByGroupLoader = new CustomDataLoader<string, Collect
   const collectionTypesMap: Record<string, CollectionType[]> = {};
 
   for (const collectionType of collectionTypes) {
-    if (!collectionTypesMap[collectionType.groupId]) {
-      collectionTypesMap[collectionType.groupId] = [];
+    if (!collectionTypesMap[collectionType.moduleId]) {
+      collectionTypesMap[collectionType.moduleId] = [];
     }
-    collectionTypesMap[collectionType.groupId].push(collectionType);
+    collectionTypesMap[collectionType.moduleId].push(collectionType);
   }
 
   return groupIds.map((id) => collectionTypesMap[id] || []);
@@ -67,5 +67,5 @@ export const collectionTypeLoader = new CustomDataLoader<string, CollectionType>
 
 export default {
   collectionTypeLoader,
-  collectionTypesByGroupLoader,
+  collectionTypesByModuleLoader,
 };

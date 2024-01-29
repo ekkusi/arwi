@@ -16,13 +16,19 @@ const EditTypeWeightsView_UpdateGroup_Mutation = graphql(`
   mutation EditTypeWeightsView_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {
     updateGroup(groupId: $id, data: $input) {
       id
-      collectionTypes {
+      currentModule {
         id
-        category
-        weight
-        name
-        group {
+        collectionTypes {
           id
+          category
+          weight
+          name
+          module {
+            id
+            group {
+              id
+            }
+          }
         }
       }
     }

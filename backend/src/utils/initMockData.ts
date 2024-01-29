@@ -47,7 +47,7 @@ const initMockData = async () => {
   await prisma.$transaction([testGroup, classYear]);
   const collectionType = await prisma.collectionType.create({
     data: {
-      groupId,
+      moduleId,
       category: CollectionTypeCategory.CLASS_PARTICIPATION,
       weight: 100,
       name: "Tuntityöskentely",

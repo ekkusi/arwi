@@ -234,11 +234,6 @@ const resolvers: MutationResolvers<CustomContext> = {
         ...rest,
         id: groupId,
         currentModuleId: moduleId,
-        collectionTypes: {
-          createMany: {
-            data: collectionTypes,
-          },
-        },
       },
     });
     const moduleCreate = prisma.module.create({
@@ -247,6 +242,11 @@ const resolvers: MutationResolvers<CustomContext> = {
         educationLevel,
         learningObjectiveGroupKey,
         groupId,
+        collectionTypes: {
+          createMany: {
+            data: collectionTypes,
+          },
+        },
         students: {
           create: studentInputs.map((it) => ({
             groupId,
@@ -376,11 +376,11 @@ const resolvers: MutationResolvers<CustomContext> = {
   changeGroupModule: async (_, { data, groupId }, { prisma, dataLoaders, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
     await validateChangeGroupLevelInput(data, groupId);
-    let newYear = await prisma.module.findFirst({
+    let newModule = await prisma.module.findFirst({
       where: { groupId, educationLevel: data.newEducationLevel, learningObjectiveGroupKey: data.newLearningObjectiveGroupKey },
     });
     const group = await dataLoaders.groupLoader.load(groupId);
-    if (!newYear) {
+    if (!newModule) {
       // Copy students from current year to new year
       const currentYearStudents = await prisma.student.findMany({
         where: {
@@ -391,13 +391,25 @@ const resolvers: MutationResolvers<CustomContext> = {
           },
         },
       });
-      newYear = await createModule({
+      const currentYearCollectionTypes = await dataLoaders.collectionTypesByModuleLoader.load(group.currentModuleId);
+      newModule = await createModule({
         data: {
           educationLevel: data.newEducationLevel,
           learningObjectiveGroupKey: data.newLearningObjectiveGroupKey,
           groupId,
+          // Connect students from current year to new year
           students: {
             connect: currentYearStudents.map((it) => ({ id: it.id })),
+          },
+          // Copy collection types from current year to new year
+          collectionTypes: {
+            createMany: {
+              data: currentYearCollectionTypes.map((it) => ({
+                name: it.name,
+                category: it.category,
+                weight: it.weight,
+              })),
+            },
           },
         },
       });
@@ -406,7 +418,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       groupId,
       {
         data: {
-          currentModuleId: newYear.id,
+          currentModuleId: newModule.id,
         },
       },
       {}
