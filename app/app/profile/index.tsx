@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import * as SecureStore from "expo-secure-store";
 import { useMatomo } from "matomo-tracker-react-native";
 import { useState } from "react";
+import { Platform } from "react-native";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "../../gql";
 import { useAuth, useAuthenticatedUser } from "../../hooks-and-providers/AuthProvider";
@@ -216,7 +217,7 @@ export default function ProfileView() {
           )}
         </>
       )}
-      <CView style={{ flex: 1, width: "100%", justifyContent: "flex-end" }}>
+      <CView style={{ flex: 1, width: "100%", justifyContent: "flex-end", marginBottom: Platform.OS === "ios" ? "xl" : "md" }}>
         <CButton title={t("logout", "Kirjaudu ulos")} style={{ width: "100%" }} disabled={loading} onPress={handleLogout} />
       </CView>
     </CView>
