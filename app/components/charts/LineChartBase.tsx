@@ -10,6 +10,35 @@ export type DataType = {
   behaviour?: Maybe<number>;
 };
 
+// Group data by date
+export function parseData(data: DataType[]): DataType[] {
+  const groupedData: Record<string, { totalSkills: number; totalBehaviour: number; count: number }> = {};
+
+  // Grouping data by date and calculating total skills and behaviour
+  data.forEach(({ date, skills, behaviour }) => {
+    if (!groupedData[date]) {
+      groupedData[date] = { totalSkills: 0, totalBehaviour: 0, count: 0 };
+    }
+
+    if (skills != null) {
+      groupedData[date].totalSkills += skills;
+    }
+
+    if (behaviour != null) {
+      groupedData[date].totalBehaviour += behaviour;
+    }
+
+    groupedData[date].count += 1;
+  });
+
+  // Creating the final array, calculating averages
+  return Object.entries(groupedData).map(([date, { totalSkills, totalBehaviour, count }]) => ({
+    date,
+    skills: count > 0 ? totalSkills / count : null,
+    behaviour: count > 0 ? totalBehaviour / count : null,
+  }));
+}
+
 export type LineChartBaseProps = CViewProps & {
   data: DataType[];
   minItems?: number;
@@ -17,21 +46,23 @@ export type LineChartBaseProps = CViewProps & {
 export default function LineChartBase({ data, minItems = 2, ...rest }: LineChartBaseProps) {
   const { t } = useTranslation();
 
-  const hasEnoughData = data.length >= minItems;
+  const parsedData = parseData(data);
+
+  const hasEnoughData = parsedData.length >= minItems;
 
   return (
     <CView {...rest} style={{ position: "relative", backgroundColor: "white", ...rest.style }}>
       <VictoryChart padding={{ top: 20, bottom: 50, left: 40, right: 60 }} domain={{ y: [3.5, 10.5] }}>
         <VictoryLine
           interpolation="natural"
-          data={data}
+          data={parsedData}
           x="date"
           y="skills"
           style={{ data: { stroke: hasEnoughData ? COLORS.primary : "transparent", strokeWidth: 5 } }}
         />
         <VictoryLine
           interpolation="natural"
-          data={data}
+          data={parsedData}
           x="date"
           y="behaviour"
           style={{ data: { stroke: hasEnoughData ? COLORS.secondary : "transparent", strokeWidth: 5 } }}
@@ -65,7 +96,9 @@ export default function LineChartBase({ data, minItems = 2, ...rest }: LineChart
           }}
         >
           <CText style={{ fontSize: "sm", width: "50%", textAlign: "center" }}>
-            {t("components.lineChartBase.notEnoughData", "Kuvaajan näyttämiseen tarvitaan vähintään {{count}} arviointia", { count: minItems })}
+            {t("components.lineChartBase.notEnoughData", "Kuvaajan näyttämiseen tarvitaan vähintään {{count}} arviointia eri päiviltä", {
+              count: minItems,
+            })}
           </CText>
         </CView>
       )}
