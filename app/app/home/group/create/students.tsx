@@ -22,7 +22,6 @@ const CreateGroupPage_CreateGroup_Mutation = graphql(`
   mutation CreateGroupPage_CreateGroup($input: CreateGroupInput!) {
     createGroup(data: $input) {
       id
-      name
     }
   }
 `);

@@ -23,32 +23,9 @@ import LazyLoadView from "../../../../components/LazyLoadView";
 const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
   mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
     createClassParticipationCollection(data: $createCollectionInput, moduleId: $moduleId) {
-      id
-      date
-      description
-      learningObjectives {
-        code
-        label {
-          fi
-        }
-        description {
-          fi
-        }
-        type
-      }
-      environment {
-        label {
-          fi
-        }
-        code
-        color
-      }
+      ...ClassParticipationCollectionUpdate_GeneralInfoFull
       evaluations {
-        id
-        wasPresent
-        skillsRating
-        behaviourRating
-        notes
+        ...ClassParticipationEvaluationUpdate_Info
         student {
           id
           currentModuleEvaluations {

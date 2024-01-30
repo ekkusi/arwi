@@ -9,61 +9,12 @@ const AddNewStudent_CreateStudent_Mutation = graphql(`
   mutation AddNewStudent_CreateStudent($id: ID!, $input: CreateStudentInput!) {
     createStudent(moduleId: $id, data: $input) {
       id
-      name
       group {
         id
-        name
-        archived
-        updatedAt
-        subject {
-          label {
-            fi
-          }
-          code
-        }
         currentModule {
           id
-          info {
-            educationLevel
-            learningObjectiveGroupKey
-            label {
-              fi
-            }
-          }
           students {
             id
-            name
-            currentModuleEvaluations {
-              id
-              wasPresent
-            }
-          }
-          evaluationCollections {
-            id
-            date
-            evaluations {
-              id
-            }
-            __typename
-            ... on ClassParticipationCollection {
-              environment {
-                label {
-                  fi
-                }
-                code
-                color
-              }
-              learningObjectives {
-                code
-                label {
-                  fi
-                }
-                description {
-                  fi
-                }
-                type
-              }
-            }
           }
         }
       }

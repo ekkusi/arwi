@@ -23,8 +23,8 @@ const CollectionHeaderRightButton_DeleteCollection_Mutation = graphql(`
         }
         group {
           id
-          name
           currentModule {
+            id
             collectionTypes {
               id
               defaultTypeCollection {

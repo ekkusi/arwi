@@ -67,51 +67,23 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
 const EditGeneralDetails_UpdateCollection_Mutation = graphql(`
   mutation EditGeneralDetails_UpdateCollection($id: ID!, $input: UpdateClassParticipationCollectionInput!) {
     updateClassParticipationCollection(collectionId: $id, data: $input) {
-      id
-      date
-      description
-      environment {
-        label {
-          fi
-        }
-        code
-      }
+      ...ClassParticipationCollectionUpdate_GeneralInfoFull
       evaluations {
         id
         collection {
-          id
-          date
-          description
-          environment {
-            label {
-              fi
-            }
-            code
-          }
+          ...ClassParticipationCollectionUpdate_GeneralInfoMinimal
         }
       }
       module {
-        id
-        info {
-          educationLevel
-          learningObjectiveGroupKey
-        }
         group {
           id
-          subject {
-            code
+          currentModule {
+            id
+            evaluationCollections {
+              ...ClassParticipationCollectionUpdate_GeneralInfoMinimal
+            }
           }
         }
-      }
-      learningObjectives {
-        code
-        label {
-          fi
-        }
-        description {
-          fi
-        }
-        type
       }
     }
   }
