@@ -132,8 +132,10 @@ describe("mPassID", () => {
     // Fetch initial state from DataLoaders
     const teacherBeforeUpdate = await teacherLoader.load(existingMPassIDUser.id);
     const groupsBeforeUpdate = await groupsByTeacherLoader.load(existingMPassIDUser.id);
+    const nonMPassIDUserGroups = await groupsByTeacherLoader.load(nonMPassIDUser.id);
     expect(teacherBeforeUpdate).toBeDefined();
     expect(groupsBeforeUpdate).toContainEqual(expect.objectContaining({ id: group.id }));
+    expect(nonMPassIDUserGroups).toHaveLength(0);
 
     const response = await graphqlRequest(connectMPassIDQuery, { code: MOCK_VALID_CODE });
 
@@ -143,6 +145,7 @@ describe("mPassID", () => {
     await Promise.all([
       expect(teacherLoader.load(existingMPassIDUser.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
       expect(groupsByTeacherLoader.load(existingMPassIDUser.id)).resolves.not.toContainEqual(expect.objectContaining({ id: group.id })),
+      expect(groupsByTeacherLoader.load(nonMPassIDUser.id)).resolves.toContainEqual(expect.objectContaining({ id: group.id })),
     ]);
   });
 });

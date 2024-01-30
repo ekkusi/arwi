@@ -55,6 +55,7 @@ import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 import OpenIDError from "../../errors/OpenIDError";
+import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -124,6 +125,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     if (matchingUser) {
       // Update all groups where old user was teacher to new user
       await updateGroupMany(matchingUser.id, { data: { teacherId: currentUser.id } });
+
+      // The current user loaders arent cleared in the updateGroup
+      await clearGroupLoadersByTeacher(currentUser.id);
+
       // Delete old user
       await deleteTeacher(matchingUser.id);
     }
@@ -151,6 +156,8 @@ const resolvers: MutationResolvers<CustomContext> = {
     if (!isValidPassword) throw new ValidationError(`Annettu salasana oli väärä.`);
     // Update all groups where old user was teacher to new user
     await updateGroupMany(matchingTeacher.id, { data: { teacherId: currentUser.id } });
+    // The current user loaders arent cleared in the updateGroup
+    await clearGroupLoadersByTeacher(currentUser.id);
     // Delete local credentials user
     await deleteTeacher(matchingTeacher.id);
     // Update old user with new credentials

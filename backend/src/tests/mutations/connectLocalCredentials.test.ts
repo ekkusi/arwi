@@ -112,8 +112,10 @@ describe("connectLocalCredentials", () => {
     // Fetch initial state from DataLoaders
     const teacherBeforeUpdate = await teacherLoader.load(nonMPassIDUser.id);
     const groupsBeforeUpdate = await groupsByTeacherLoader.load(nonMPassIDUser.id);
+    const mPassIDUserGroups = await groupsByTeacherLoader.load(mPassIDUser.id);
     expect(teacherBeforeUpdate).toBeDefined();
     expect(groupsBeforeUpdate).toContainEqual(expect.objectContaining({ id: group.id }));
+    expect(mPassIDUserGroups).toHaveLength(0);
 
     const response = await graphqlRequest(connectLocalCredentialsQuery, { email: nonMPassIDUser.email, password: nonMPassIDUser.password });
 
@@ -123,6 +125,7 @@ describe("connectLocalCredentials", () => {
     await Promise.all([
       expect(teacherLoader.load(nonMPassIDUser.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
       expect(groupsByTeacherLoader.load(nonMPassIDUser.id)).resolves.not.toContainEqual(expect.objectContaining({ id: group.id })),
+      expect(groupsByTeacherLoader.load(mPassIDUser.id)).resolves.toContainEqual(expect.objectContaining({ id: group.id })),
     ]);
   });
 });
