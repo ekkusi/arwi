@@ -26,7 +26,7 @@ describe("createClassParticipationCollection", () => {
       environmentCode: VALID_LI_ENV_CODE,
       description: "Test Description",
       learningObjectiveCodes: ["T1", "T2"],
-      typeId: group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)?.id!,
+      typeId: group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)?.id!,
     };
   });
 
@@ -153,7 +153,7 @@ describe("createClassParticipationCollection", () => {
   });
 
   it("should throw error if type is not CLASS_PARTICIPATION", async () => {
-    const newType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)!;
+    const newType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)!;
 
     const collectionData = {
       ...baseCollectionData,

@@ -312,7 +312,6 @@ export type Group = {
   archived: Scalars['Boolean'];
   currentModule: Module;
   modules: Array<Module>;
-  collectionTypes: Array<CollectionType>;
 };
 
 export type CollectionType = {
@@ -321,7 +320,7 @@ export type CollectionType = {
   category: CollectionTypeCategory;
   name: Scalars['String'];
   weight: Scalars['Int'];
-  group: Group;
+  module: Module;
   defaultTypeCollection?: Maybe<DefaultCollection>;
 };
 
@@ -347,6 +346,7 @@ export type Module = {
   evaluationCollections: Array<EvaluationCollection>;
   students: Array<Student>;
   group: Group;
+  collectionTypes: Array<CollectionType>;
 };
 
 export type EvaluationCollection = {
@@ -838,7 +838,6 @@ export type GroupResolvers<ContextType = CustomContext, ParentType extends Resol
   archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   currentModule?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
   modules?: Resolver<Array<ResolversTypes['Module']>, ParentType, ContextType>;
-  collectionTypes?: Resolver<Array<ResolversTypes['CollectionType']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -847,7 +846,7 @@ export type CollectionTypeResolvers<ContextType = CustomContext, ParentType exte
   category?: Resolver<ResolversTypes['CollectionTypeCategory'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   weight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
   defaultTypeCollection?: Resolver<Maybe<ResolversTypes['DefaultCollection']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -865,6 +864,7 @@ export type ModuleResolvers<ContextType = CustomContext, ParentType extends Reso
   evaluationCollections?: Resolver<Array<ResolversTypes['EvaluationCollection']>, ParentType, ContextType>;
   students?: Resolver<Array<ResolversTypes['Student']>, ParentType, ContextType>;
   group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
+  collectionTypes?: Resolver<Array<ResolversTypes['CollectionType']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

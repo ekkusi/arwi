@@ -16,7 +16,7 @@ const resolvers: TypeResolvers = {
     },
   },
   Group: {
-    currentModule: ({ currentModuleId }, _, { dataLoaders }) => {
+    currentModule: async ({ currentModuleId }, _, { dataLoaders }) => {
       return dataLoaders.moduleLoader.load(currentModuleId);
     },
     modules: ({ id }, _, { dataLoaders }) => {
@@ -35,9 +35,6 @@ const resolvers: TypeResolvers = {
         code: matchingSubject.code,
         label: matchingSubject.label,
       };
-    },
-    collectionTypes: ({ id }, _, { dataLoaders }) => {
-      return dataLoaders.collectionTypesByGroupLoader.load(id);
     },
   },
   DefaultEvaluation: {
@@ -152,6 +149,11 @@ const resolvers: TypeResolvers = {
             },
           ],
         },
+        orderBy: {
+          evaluationCollection: {
+            date: "desc",
+          },
+        },
       });
       return evaluations;
     },
@@ -184,13 +186,19 @@ const resolvers: TypeResolvers = {
         where: {
           modules: { some: { id } },
         },
+        orderBy: {
+          name: "asc",
+        },
       });
       return students;
     },
+    collectionTypes: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.collectionTypesByModuleLoader.load(id);
+    },
   },
   CollectionType: {
-    group: ({ groupId }, _, { dataLoaders }) => {
-      return dataLoaders.groupLoader.load(groupId);
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
     },
     defaultTypeCollection: ({ id, category }, _, { prisma }) => {
       if (category === CollectionTypeCategory.CLASS_PARTICIPATION) return null;

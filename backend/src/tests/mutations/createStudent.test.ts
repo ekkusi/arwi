@@ -1,7 +1,7 @@
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin } from "../testHelpers";
+import { TestGroup, TestTeacher, createTestEvaluationCollection, createTestGroup, createTestUserAndLogin } from "../testHelpers";
 import { studentLoader, studentsByGroupLoader } from "../../graphql/dataLoaders/student";
 
 describe("CreateStudent", () => {
@@ -21,6 +21,8 @@ describe("CreateStudent", () => {
   });
 
   it("should successfully create a student", async () => {
+    const type = group.currentModule.collectionTypes.find((it) => it.category === "CLASS_PARTICIPATION")!;
+    const collection = await createTestEvaluationCollection(group.currentModuleId, type.id);
     const studentData = {
       name: "Test Student",
     };
@@ -33,6 +35,12 @@ describe("CreateStudent", () => {
           group {
             id
           }
+          currentModuleEvaluations {
+            id
+            collection {
+              id
+            }
+          }
         }
       }
     `);
@@ -42,6 +50,8 @@ describe("CreateStudent", () => {
     expect(response.data?.createStudent).toBeDefined();
     expect(response.data?.createStudent.name).toEqual(studentData.name);
     expect(response.data?.createStudent.group.id).toEqual(group.id);
+    // Check if the empty evaluations have been added
+    expect(response.data?.createStudent.currentModuleEvaluations).toContainEqual(expect.objectContaining({ collection: { id: collection.id } }));
   });
 
   it("should throw error for duplicate student name in the same group", async () => {

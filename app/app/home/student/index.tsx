@@ -49,13 +49,15 @@ const StudentPage_GetStudent_Query = graphql(`
             }
           }
         }
-        collectionTypes {
-          id
-          category
-          name
-          weight
-          defaultTypeCollection {
+        currentModule {
+          collectionTypes {
             id
+            category
+            name
+            weight
+            defaultTypeCollection {
+              id
+            }
           }
         }
       }
@@ -107,7 +109,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
 
-  const { collectionTypes } = student.group;
+  const { collectionTypes } = student.group.currentModule;
   const otherCollectionTypes = collectionTypes.filter((coll) => coll.category !== "CLASS_PARTICIPATION");
   const {
     absencesAmount,

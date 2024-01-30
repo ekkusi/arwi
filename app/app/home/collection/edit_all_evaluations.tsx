@@ -61,19 +61,7 @@ const CollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(`
     updateClassParticipationCollection(data: $updateCollectionInput, collectionId: $collectionId) {
       id
       evaluations {
-        id
-        wasPresent
-        skillsRating
-        behaviourRating
-        notes
-        student {
-          id
-          name
-          currentModuleEvaluations {
-            id
-            notes
-          }
-        }
+        ...ClassParticipationEvaluationUpdate_Info
       }
     }
   }

@@ -50,6 +50,7 @@ export type MovingAverageLineChartProps = Omit<LineChartBaseProps, "data" | "min
 
 export default function MovingAverageLineChart({ data, bandWidth = 2, containerProps, showInfo = true, ...rest }: MovingAverageLineChartProps) {
   const { t } = useTranslation();
+
   const movingAverageData = movingAverage(data, bandWidth);
   const minItems = bandWidth + 2; // At least bandWidth + 2 items are needed for the moving average to show other than straight line
 

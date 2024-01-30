@@ -8,10 +8,8 @@ import Layout from "../../../components/Layout";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
-import { UpdateClassParticipationEvaluationCard } from "../../../components/ClassParticipationEvaluationCard";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
-import { EvaluationDataToUpdate } from "../collection/edit_all_evaluations";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
 import { DefaultEvaluationDataToUpdate } from "../collection/edit_all_default_evaluations";
@@ -46,10 +44,7 @@ const DefaultEvaluationEditView_GetEvaluation_Query = graphql(`
 const DefaultEvaluationEditView_UpdateEvaluation_Mutation = graphql(`
   mutation DefaultEvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateDefaultEvaluationInput!) {
     updateDefaultEvaluation(input: $updateEvaluationInput) {
-      id
-      wasPresent
-      rating
-      notes
+      ...DefaultEvaluationUpdate_Info
     }
   }
 `);

@@ -24,14 +24,9 @@ type AuthorizeParams = {
 
 export const grantToken = async (client: OpenIDClient, code: string) => {
   const redirectUri = client.metadata.redirect_uris?.[0];
+
   if (!redirectUri) throw new Error("Something went wrong, redirect uri is missing");
-  let tokenSet;
-  try {
-    tokenSet = await client.callback(redirectUri, { code });
-  } catch (error) {
-    console.error(error);
-  }
-  // const tokenSet = await client.callback(redirectUri, { code });
+  const tokenSet = await client.callback(redirectUri, { code });
 
   if (!tokenSet?.access_token) throw new Error("Something went wrong, access_token not found from token set");
   const userInfo = await client.userinfo(tokenSet.access_token);

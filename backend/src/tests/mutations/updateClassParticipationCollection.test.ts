@@ -31,7 +31,7 @@ describe("updateClassParticipationCollection", () => {
   });
 
   beforeEach(async () => {
-    const collectionType = group.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const collectionType = group.currentModule.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
     collection = await createTestEvaluationCollection(group.currentModule.id, collectionType.id); // Assuming createTestCollection exists
     evaluation = await createTestEvaluation(collection.id, group.students[0].id); // Assuming createTestEvaluation exists
     notPresentEvaluation = await createTestEvaluation(collection.id, group.students[1].id, { wasPresent: false });
@@ -185,7 +185,7 @@ describe("updateClassParticipationCollection", () => {
   });
 
   it("should throw error for evaluations not belonging to the collection", async () => {
-    const newCollection = await createTestEvaluationCollection(group.currentModule.id, group.collectionTypes[0].id);
+    const newCollection = await createTestEvaluationCollection(group.currentModule.id, group.currentModule.collectionTypes[0].id);
     const unrelatedEvaluation = await createTestEvaluation(newCollection.id, group.students[0].id);
     const updateData: UpdateClassParticipationCollectionInput = {
       evaluations: [{ id: unrelatedEvaluation.id }],
@@ -228,7 +228,7 @@ describe("updateClassParticipationCollection", () => {
 
   it("should throw error if attempting to update an evaluation that is not CLASS_PARTICIPATION", async () => {
     // Create a collection that is not of type CLASS_PARTICIPATION
-    const collectionType = group.collectionTypes.find((ct) => ct.category !== CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const collectionType = group.currentModule.collectionTypes.find((ct) => ct.category !== CollectionTypeCategory.CLASS_PARTICIPATION)!;
     const defaultCollection = await createTestEvaluationCollection(group.currentModuleId, collectionType.id, {
       environmentCode: undefined,
       learningObjectiveCodes: [],

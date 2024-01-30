@@ -20,7 +20,7 @@ import {
 } from "../../types";
 import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject, isPrimaryEducationLevel } from "../../utils/subjectUtils";
 import { evaluationLoader } from "../dataLoaders/evaluation";
-import { collectionTypeLoader, collectionTypesByGroupLoader } from "../dataLoaders/collectionType";
+import { collectionTypeLoader, collectionTypesByModuleLoader } from "../dataLoaders/collectionType";
 import { collectionLoader } from "../dataLoaders/collection";
 import { moduleLoader } from "../dataLoaders/module";
 import { groupLoader } from "../dataLoaders/group";
@@ -327,7 +327,8 @@ export const validateUpdateGroupInput = async (input: UpdateGroupInput, groupId:
   }
 
   // Check for unmatched IDs
-  const oldCollectionTypes = await collectionTypesByGroupLoader.load(groupId);
+  const group = await groupLoader.load(groupId);
+  const oldCollectionTypes = await collectionTypesByModuleLoader.load(group.currentModuleId);
   const oldCollectionsMap = new Map(oldCollectionTypes.map((it) => [it.id, it]));
   const oldIdsSet = new Set(oldCollectionTypes.map((it) => it.id));
   const unmatchedIds = updatedOrDeletedIds.filter((id) => !oldIdsSet.has(id));

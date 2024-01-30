@@ -28,7 +28,7 @@ describe("updateDefaultEvaluation", () => {
   });
 
   beforeEach(async () => {
-    const collectionType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)!;
+    const collectionType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)!;
     collection = await createTestEvaluationCollection(group.currentModuleId, collectionType.id, {
       environmentCode: null,
       learningObjectiveCodes: [],
@@ -190,7 +190,7 @@ describe("updateDefaultEvaluation", () => {
 
   it("should throw error if trying to update CLASS_PARTICIPATION evaluation", async () => {
     // Create an evaluation with `wasPresent` set to false
-    const classParticipationType = group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const classParticipationType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
     const classParticipationCollection = await createTestEvaluationCollection(group.currentModuleId, classParticipationType.id);
     const classParticipationEvaluation = await createTestEvaluation(classParticipationCollection.id, group.students[0].id);
     const updateData: UpdateDefaultEvaluationInput = {

@@ -54,6 +54,8 @@ import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
+import OpenIDError from "../../errors/OpenIDError";
+import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -88,23 +90,34 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   mPassIDLogin: async (_, { code }, { req, OIDCClient }) => {
     if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
-    if (!OIDCClient) throw new Error("Something went wrong, OIDC client is not initialized");
+    if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
 
-    const { isNewUser, user } = await grantAndInitSession(OIDCClient, code, req);
-    return {
-      payload: {
-        userData: user,
-      },
-      newUserCreated: isNewUser,
-    };
+    try {
+      const { isNewUser, user } = await grantAndInitSession(OIDCClient, code, req);
+      return {
+        payload: {
+          userData: user,
+        },
+        newUserCreated: isNewUser,
+      };
+    } catch (error) {
+      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+    }
   },
   connectMPassID: async (_, { code }, { req, OIDCClient, user, prisma }) => {
     if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
     const currentUser = user!; // Safe cast after authenticated check
-    if (!OIDCClient) throw new Error("Something went wrong, OIDC client is not initialized");
+    if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
     if (currentUser.mPassID) throw new ValidationError("Tilisi on jo liitetty mpass-id tunnuksiin");
-    const { userInfo, tokenSet } = await grantToken(OIDCClient, code);
-    if (userInfo.mPassID) throw new Error("Something went wrong, mpass-id not found from user after grant");
+
+    let userInfo;
+    let tokenSet;
+    try {
+      ({ userInfo, tokenSet } = await grantToken(OIDCClient, code));
+    } catch (error) {
+      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+    }
+    if (userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
     const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.sub } });
     if (matchingUser?.email) throw new ValidationError("Kyseinen mpass-id on jo liitetty toiseen käyttäjään");
 
@@ -112,6 +125,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     if (matchingUser) {
       // Update all groups where old user was teacher to new user
       await updateGroupMany(matchingUser.id, { data: { teacherId: currentUser.id } });
+
+      // The current user loaders arent cleared in the updateGroup
+      await clearGroupLoadersByTeacher(currentUser.id);
+
       // Delete old user
       await deleteTeacher(matchingUser.id);
     }
@@ -139,6 +156,8 @@ const resolvers: MutationResolvers<CustomContext> = {
     if (!isValidPassword) throw new ValidationError(`Annettu salasana oli väärä.`);
     // Update all groups where old user was teacher to new user
     await updateGroupMany(matchingTeacher.id, { data: { teacherId: currentUser.id } });
+    // The current user loaders arent cleared in the updateGroup
+    await clearGroupLoadersByTeacher(currentUser.id);
     // Delete local credentials user
     await deleteTeacher(matchingTeacher.id);
     // Update old user with new credentials
@@ -234,11 +253,6 @@ const resolvers: MutationResolvers<CustomContext> = {
         ...rest,
         id: groupId,
         currentModuleId: moduleId,
-        collectionTypes: {
-          createMany: {
-            data: collectionTypes,
-          },
-        },
       },
     });
     const moduleCreate = prisma.module.create({
@@ -247,6 +261,11 @@ const resolvers: MutationResolvers<CustomContext> = {
         educationLevel,
         learningObjectiveGroupKey,
         groupId,
+        collectionTypes: {
+          createMany: {
+            data: collectionTypes,
+          },
+        },
         students: {
           create: studentInputs.map((it) => ({
             groupId,
@@ -376,11 +395,11 @@ const resolvers: MutationResolvers<CustomContext> = {
   changeGroupModule: async (_, { data, groupId }, { prisma, dataLoaders, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
     await validateChangeGroupLevelInput(data, groupId);
-    let newYear = await prisma.module.findFirst({
+    let newModule = await prisma.module.findFirst({
       where: { groupId, educationLevel: data.newEducationLevel, learningObjectiveGroupKey: data.newLearningObjectiveGroupKey },
     });
     const group = await dataLoaders.groupLoader.load(groupId);
-    if (!newYear) {
+    if (!newModule) {
       // Copy students from current year to new year
       const currentYearStudents = await prisma.student.findMany({
         where: {
@@ -391,13 +410,25 @@ const resolvers: MutationResolvers<CustomContext> = {
           },
         },
       });
-      newYear = await createModule({
+      const currentYearCollectionTypes = await dataLoaders.collectionTypesByModuleLoader.load(group.currentModuleId);
+      newModule = await createModule({
         data: {
           educationLevel: data.newEducationLevel,
           learningObjectiveGroupKey: data.newLearningObjectiveGroupKey,
           groupId,
+          // Connect students from current year to new year
           students: {
             connect: currentYearStudents.map((it) => ({ id: it.id })),
+          },
+          // Copy collection types from current year to new year
+          collectionTypes: {
+            createMany: {
+              data: currentYearCollectionTypes.map((it) => ({
+                name: it.name,
+                category: it.category,
+                weight: it.weight,
+              })),
+            },
           },
         },
       });
@@ -406,7 +437,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       groupId,
       {
         data: {
-          currentModuleId: newYear.id,
+          currentModuleId: newModule.id,
         },
       },
       {}

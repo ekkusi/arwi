@@ -50,18 +50,7 @@ const DefaultCollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphq
     updateDefaultCollection(data: $updateCollectionInput, collectionId: $collectionId) {
       id
       evaluations {
-        id
-        wasPresent
-        rating
-        notes
-        student {
-          id
-          name
-          currentModuleEvaluations {
-            id
-            notes
-          }
-        }
+        ...DefaultEvaluationUpdate_Info
       }
     }
   }

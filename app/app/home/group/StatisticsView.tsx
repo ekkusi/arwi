@@ -35,7 +35,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
   const otherCollections =
     evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "DefaultCollection">>(isDefaultCollection);
 
-  const otherSelectedTypes = group.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
+  const otherSelectedTypes = group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
 
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(() => {
     const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);

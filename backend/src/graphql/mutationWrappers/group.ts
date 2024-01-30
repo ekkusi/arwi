@@ -1,15 +1,19 @@
 import { Group, Prisma } from "@prisma/client";
 import { GetResult } from "@prisma/client/runtime/library";
 import prisma from "../../prismaClient";
-import { clearGroupLoaders, clearGroupLoadersById, clearGroupLoadersByTeacher } from "../dataLoaders/group";
-import { clearModuleLoaders } from "../dataLoaders/module";
+import { clearGroupLoaders, clearGroupLoadersById, clearGroupLoadersByTeacher, groupLoader } from "../dataLoaders/group";
+import { clearModuleLoaders, clearModuleLoadersById, moduleLoader } from "../dataLoaders/module";
 import { clearCollectionLoaders } from "../dataLoaders/collection";
 import { clearEvaluationLoaders } from "../dataLoaders/evaluation";
 import { clearStudentLoaders } from "../dataLoaders/student";
-import { clearCollectionTypeLoaders, clearCollectionTypeLoadersByGroup, collectionTypeLoader } from "../dataLoaders/collectionType";
+import { clearCollectionTypeLoaders, clearCollectionTypeLoadersByModule, collectionTypeLoader } from "../dataLoaders/collectionType";
 import { UpdateGroupInput } from "../../types";
 
 type UpdateGroupReturnType<T extends Prisma.GroupUpdateArgs> = GetResult<Prisma.$GroupPayload, T, "update">;
+
+function isArrayDefined(arr: any) {
+  return Array.isArray(arr) && arr.length > 0;
+}
 
 export async function updateGroup<T extends Prisma.GroupUpdateArgs>(
   id: string,
@@ -19,19 +23,31 @@ export async function updateGroup<T extends Prisma.GroupUpdateArgs>(
   const { data, ...rest } = args;
   const { createCollectionTypeInputs, updateCollectionTypeInputs, deleteCollectionTypeIds } = collectionTypeInputs;
 
+  let updateModule;
+
+  if (isArrayDefined(createCollectionTypeInputs) || isArrayDefined(deleteCollectionTypeIds) || isArrayDefined(updateCollectionTypeInputs)) {
+    const group = await groupLoader.load(id);
+    const currentModule = await moduleLoader.load(group.currentModuleId);
+    updateModule = prisma.module.update({
+      data: {
+        collectionTypes: {
+          update: updateCollectionTypeInputs?.map((it) => ({
+            where: { id: it.id },
+            data: {
+              name: it.name ? it.name : undefined,
+              weight: it.weight ? it.weight : undefined,
+            },
+          })),
+          delete: deleteCollectionTypeIds?.map((typeId) => ({ id: typeId })),
+          create: createCollectionTypeInputs?.map((it) => it),
+        },
+      },
+      where: { id: currentModule.id },
+    });
+  }
+
   const updateInput: Prisma.GroupUpdateInput = {
     ...data,
-    collectionTypes: {
-      update: updateCollectionTypeInputs?.map((it) => ({
-        where: { id: it.id },
-        data: {
-          name: it.name ? it.name : undefined,
-          weight: it.weight ? it.weight : undefined,
-        },
-      })),
-      delete: deleteCollectionTypeIds?.map((typeId) => ({ id: typeId })),
-      create: createCollectionTypeInputs?.map((it) => it),
-    },
   };
 
   // Get the collection types that will be deleted
@@ -45,7 +61,7 @@ export async function updateGroup<T extends Prisma.GroupUpdateArgs>(
           },
           select: {
             id: true,
-            groupId: true,
+            moduleId: true,
             collection: {
               select: {
                 id: true,
@@ -62,14 +78,26 @@ export async function updateGroup<T extends Prisma.GroupUpdateArgs>(
         })
       : [];
 
-  const updatedGroup = (await prisma.group.update({
+  const updateGroupArgs = {
     ...rest,
     data: updateInput,
     where: { id },
-  })) as UpdateGroupReturnType<T>;
+  };
+  let updatedGroup;
+  // If we are updating the module, do it in a transaction to ensure that the module is updated before the group
+  if (updateModule) {
+    const [updatedGroupResult] = await prisma.$transaction([prisma.group.update(updateGroupArgs), updateModule]);
+    updatedGroup = updatedGroupResult as UpdateGroupReturnType<T>;
+  } else {
+    updatedGroup = (await prisma.group.update(updateGroupArgs)) as UpdateGroupReturnType<T>;
+  }
 
   // Clear the DataLoader cache for this group
-  await Promise.all([clearGroupLoadersById(id), clearCollectionTypeLoadersByGroup(id)]);
+  await Promise.all([
+    clearGroupLoadersById(id),
+    clearModuleLoadersById(updatedGroup.currentModuleId),
+    clearCollectionTypeLoadersByModule(updatedGroup.currentModuleId),
+  ]);
 
   // Clear the DataLoader cache for the deleted collection types
   deletedCollectionTypes.forEach((collectionType) => {
@@ -152,12 +180,12 @@ export async function deleteGroup(id: string): Promise<Group> {
               },
             },
           },
-        },
-      },
-      collectionTypes: {
-        select: {
-          id: true,
-          groupId: true,
+          collectionTypes: {
+            select: {
+              id: true,
+              moduleId: true,
+            },
+          },
         },
       },
       students: {
@@ -173,6 +201,9 @@ export async function deleteGroup(id: string): Promise<Group> {
   clearGroupLoaders(deletedGroup);
   deletedGroup.modules.forEach((module) => {
     clearModuleLoaders(module);
+    module.collectionTypes.forEach((collectionType) => {
+      clearCollectionTypeLoaders(collectionType);
+    });
     module.evaluationCollections.forEach((collection) => {
       clearCollectionLoaders(collection);
       collection.evaluations.forEach((evaluation) => {
@@ -182,9 +213,6 @@ export async function deleteGroup(id: string): Promise<Group> {
   });
   deletedGroup.students.forEach((student) => {
     clearStudentLoaders(student);
-  });
-  deletedGroup.collectionTypes.forEach((collectionType) => {
-    clearCollectionTypeLoaders(collectionType);
   });
 
   return deletedGroup;

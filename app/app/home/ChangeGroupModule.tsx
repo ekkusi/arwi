@@ -36,46 +36,6 @@ const ChangeModule_ChangeModule_Mutation = graphql(`
       id
       currentModule {
         id
-        info {
-          educationLevel
-          learningObjectiveGroupKey
-          label {
-            fi
-          }
-        }
-        students {
-          id
-          name
-          currentModuleEvaluations {
-            id
-            wasPresent
-          }
-        }
-        evaluationCollections {
-          id
-          date
-          __typename
-          ... on ClassParticipationCollection {
-            environment {
-              label {
-                fi
-              }
-              code
-              color
-            }
-            learningObjectives {
-              code
-              label {
-                fi
-              }
-              description {
-                fi
-              }
-              type
-            }
-          }
-          ...CollectionsLineChart_EvaluationCollection
-        }
       }
     }
   }

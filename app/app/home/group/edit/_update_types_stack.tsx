@@ -14,11 +14,13 @@ const UpdateTypesProvider_GetGroup_Query = graphql(`
   query UpdateTypesProvider_GetGroup($groupId: ID!) {
     getGroup(id: $groupId) {
       id
-      collectionTypes {
-        id
-        category
-        name
-        weight
+      currentModule {
+        collectionTypes {
+          id
+          category
+          name
+          weight
+        }
       }
     }
   }
@@ -36,7 +38,7 @@ export default function UpdateTypesStack({ route }: NativeStackScreenProps<HomeS
   if (loading || !data) return <LoadingIndicator />;
 
   return (
-    <UpdateTypesProvider initialTypes={data.getGroup.collectionTypes}>
+    <UpdateTypesProvider initialTypes={data.getGroup.currentModule.collectionTypes}>
       <Navigator
         initialRouteName="group-edit-collection-types"
         screenOptions={() => ({
@@ -49,7 +51,7 @@ export default function UpdateTypesStack({ route }: NativeStackScreenProps<HomeS
         <Screen
           name="group-edit-collection-types"
           component={EditTypesView}
-          initialParams={{ groupId: data.getGroup.id, originalTypes: data.getGroup.collectionTypes }}
+          initialParams={{ groupId: data.getGroup.id, originalTypes: data.getGroup.currentModule.collectionTypes }}
         />
         <Screen name="group-edit-collection-types-weights" component={EditTypeWeightsView} />
       </Navigator>

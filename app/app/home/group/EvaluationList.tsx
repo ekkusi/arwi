@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import React from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import CView from "../../../components/primitives/CView";
@@ -22,7 +21,6 @@ export default function EvaluationList({ getGroup: group, navigation }: GroupOve
     evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "ClassParticipationCollection">>(
       isClassParticipationCollection
     );
-  const sortedCollections = classParticipationCollections.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const translateY = useSharedValue(0);
   const isScrolling = useSharedValue(false);
@@ -60,12 +58,12 @@ export default function EvaluationList({ getGroup: group, navigation }: GroupOve
 
   return (
     <CView style={{ flexGrow: 1, paddingHorizontal: "md" }}>
-      {sortedCollections.length > 0 ? (
+      {classParticipationCollections.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingVertical: SPACING.md }}
-          data={sortedCollections}
+          data={classParticipationCollections}
           renderItem={({ item }) => (
             <Card style={{ marginBottom: "md" }} key={item.id}>
               <CTouchableOpacity

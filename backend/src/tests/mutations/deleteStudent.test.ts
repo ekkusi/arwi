@@ -91,7 +91,7 @@ describe("deleteStudent", () => {
     // Create a collection and evaluation for the student
     const collection = await createTestEvaluationCollection(
       group.currentModuleId,
-      group.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!.id
+      group.currentModule.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!.id
     );
     const evaluation = await createTestEvaluation(collection.id, student.id);
 

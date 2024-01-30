@@ -1,6 +1,7 @@
 import { hash } from "bcryptjs";
 import { CollectionType, CollectionTypeCategory, EducationLevel, Group, Module, Prisma, Student, Teacher } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
+import { TokenSet, UserinfoResponse } from "openid-client";
 import prisma from "@/prismaClient";
 import { BRCRYPT_SALT_ROUNDS } from "../config";
 import { TestGraphQLRequest } from "./createTestServer";
@@ -16,7 +17,12 @@ export type TestTeacher = Omit<Teacher, "email"> & {
   email: string;
 };
 
-export async function testLogin(graphqlRequest: TestGraphQLRequest, userData: CreateUserInput = TEST_USER) {
+export async function testLogin(graphqlRequest: TestGraphQLRequest, user: CreateUserInput = TEST_USER) {
+  const userData = {
+    ...TEST_USER,
+    ...user,
+  };
+
   const query = graphql(`
     mutation Test_Login($email: String!, $password: String!) {
       login(email: $email, password: $password) {
@@ -41,17 +47,23 @@ export async function testLogout(graphqlRequest: TestGraphQLRequest) {
 }
 
 type CreateUserInput = {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
+  mPassID?: string | null;
 };
 
 // Create test user
-export async function createTestUser(userData: CreateUserInput = TEST_USER): Promise<TestTeacher> {
+export async function createTestUser(user: CreateUserInput = TEST_USER): Promise<TestTeacher> {
+  const userData = {
+    ...TEST_USER,
+    ...user,
+  };
   const passwordHash = await hash(userData.password, BRCRYPT_SALT_ROUNDS);
   const teacher = await prisma.teacher.create({
     data: {
       email: userData.email,
       passwordHash,
+      mPassID: userData.mPassID,
     },
   });
   return {
@@ -77,10 +89,13 @@ export async function deleteTestUser() {
 
 export const VALID_LI_ENV_CODE = "LI_ENV_TAL";
 
+export type TestModule = Module & {
+  collectionTypes: CollectionType[];
+};
+
 export type TestGroup = Group & {
   students: Student[];
-  collectionTypes: CollectionType[];
-  currentModule: Module;
+  currentModule: TestModule;
 };
 
 export async function createTestGroup(teacherId: string): Promise<TestGroup> {
@@ -93,22 +108,6 @@ export async function createTestGroup(teacherId: string): Promise<TestGroup> {
       subjectCode: "LI",
       currentModuleId: moduleId,
       teacherId,
-      collectionTypes: {
-        createMany: {
-          data: [
-            {
-              category: CollectionTypeCategory.EXAM,
-              name: "Midterm",
-              weight: 50,
-            },
-            {
-              category: CollectionTypeCategory.CLASS_PARTICIPATION,
-              name: "Participation",
-              weight: 50,
-            },
-          ],
-        },
-      },
     },
   });
   const moduleCreate = prisma.module.create({
@@ -129,17 +128,37 @@ export async function createTestGroup(teacherId: string): Promise<TestGroup> {
           },
         ],
       },
+      collectionTypes: {
+        createMany: {
+          data: [
+            {
+              category: CollectionTypeCategory.EXAM,
+              name: "Midterm",
+              weight: 50,
+            },
+            {
+              category: CollectionTypeCategory.CLASS_PARTICIPATION,
+              name: "Participation",
+              weight: 50,
+            },
+          ],
+        },
+      },
     },
   });
   await prisma.$transaction([groupCreate, moduleCreate]);
+
   return prisma.group.findFirstOrThrow({
     where: {
       id: groupId,
     },
     include: {
       students: true,
-      collectionTypes: true,
-      currentModule: true,
+      currentModule: {
+        include: {
+          collectionTypes: true,
+        },
+      },
     },
   });
 }
@@ -179,3 +198,21 @@ export const createTestEvaluation = async (
     },
   });
 };
+
+export const MOCK_TOKEN_SET: TokenSet = {
+  access_token: "mockAccessToken",
+  expired: () => false,
+  claims: () => ({
+    sub: "123456",
+    aud: "mockAudience",
+    exp: 123456789,
+    iat: 123456789,
+    iss: "mockIssuer",
+  }),
+};
+
+export const MOCK_USER_INFO_RESPONSE: UserinfoResponse = {
+  sub: "123456",
+};
+
+export const MOCK_VALID_CODE = "validCode";

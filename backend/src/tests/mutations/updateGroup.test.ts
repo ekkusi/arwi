@@ -5,6 +5,7 @@ import prisma from "@/prismaClient";
 import { CollectionTypeCategory, CreateCollectionTypeInput, UpdateCollectionTypeInput, UpdateGroupInput } from "../../types";
 import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
 import { groupLoader, groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
+import { collectionTypesByModuleLoader } from "../../graphql/dataLoaders/collectionType";
 
 describe("updateGroup", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -22,8 +23,8 @@ describe("updateGroup", () => {
   beforeEach(async () => {
     group = await createTestGroup(teacher.id);
     groupId = group.id;
-    classParticipationType = group.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
-    defaultCollectionType = group.collectionTypes.find((type) => type.category === CollectionTypeCategory.EXAM)!;
+    classParticipationType = group.currentModule.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    defaultCollectionType = group.currentModule.collectionTypes.find((type) => type.category === CollectionTypeCategory.EXAM)!;
   });
 
   afterEach(async () => {
@@ -108,13 +109,24 @@ describe("updateGroup", () => {
     // Fetch the initial state of the group from the DataLoaders
     const groupFromGroupLoaderBeforeUpdate = await groupLoader.load(groupId);
     const groupsFromTeacherLoaderBeforeUpdate = await groupsByTeacherLoader.load(teacher.id);
+    const collectionTypesByModuleBeforeUpdate = await collectionTypesByModuleLoader.load(groupFromGroupLoaderBeforeUpdate.currentModuleId);
     expect(group).toEqual(expect.objectContaining(groupFromGroupLoaderBeforeUpdate));
     expect(group).toEqual(expect.objectContaining(groupsFromTeacherLoaderBeforeUpdate[0]));
+    expect(group.currentModule.collectionTypes).toEqual(expect.arrayContaining(collectionTypesByModuleBeforeUpdate));
+
+    const createCollectionTypeInputs: CreateCollectionTypeInput[] = [{ name: "New Type 1", weight: 25, category: CollectionTypeCategory.EXAM }];
+    const updateCollectionTypeInputs: UpdateCollectionTypeInput[] = [{ id: classParticipationType.id, name: "Updated Type 1", weight: 25 }]; // Should be of weight 50 originally
 
     // Update the group
-    const updateData: UpdateGroupInput = {
+    const updateData = {
       name: "Updated Group Name",
       archived: false,
+    };
+
+    const fullUpdateData: UpdateGroupInput = {
+      ...updateData,
+      createCollectionTypeInputs,
+      updateCollectionTypeInputs,
     };
 
     const query = graphql(`
@@ -127,19 +139,18 @@ describe("updateGroup", () => {
       }
     `);
 
-    const response = await graphqlRequest(query, { data: updateData, groupId });
-    expect(response.data?.updateGroup).toBeDefined();
-    expect(response.data?.updateGroup.id).toEqual(groupId);
-    expect(response.data?.updateGroup.name).toEqual(updateData.name);
-    expect(response.data?.updateGroup.archived).toEqual(updateData.archived);
+    await graphqlRequest(query, { data: fullUpdateData, groupId });
 
     // Fetch the updated group from the DataLoaders
     const updatedGroupFromGroupLoader = await groupLoader.load(groupId);
     const updatedGroupsFromTeacherLoader = await groupsByTeacherLoader.load(teacher.id);
+    const collectionTypesByModuleAfterUpdate = await collectionTypesByModuleLoader.load(updatedGroupFromGroupLoader.currentModuleId);
 
     // Assert that the DataLoaders reflect the updated group information
     expect(updatedGroupFromGroupLoader).toEqual(expect.objectContaining(updateData));
     expect(updatedGroupsFromTeacherLoader).toContainEqual(expect.objectContaining(updateData));
+    expect(collectionTypesByModuleAfterUpdate).toContainEqual(expect.objectContaining(createCollectionTypeInputs[0]));
+    expect(collectionTypesByModuleAfterUpdate).toContainEqual(expect.objectContaining(updateCollectionTypeInputs[0]));
   });
 
   it("should successfully create, update, and delete collection types", async () => {
@@ -160,11 +171,13 @@ describe("updateGroup", () => {
       mutation UpdateGroupCollectionTypes($data: UpdateGroupInput!, $groupId: ID!) {
         updateGroup(data: $data, groupId: $groupId) {
           id
-          collectionTypes {
-            id
-            name
-            weight
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              weight
+              category
+            }
           }
         }
       }
@@ -173,10 +186,10 @@ describe("updateGroup", () => {
     const response = await graphqlRequest(query, { data: updateData, groupId });
 
     expect(response.data?.updateGroup).toBeDefined();
-    expect(response.data?.updateGroup.collectionTypes).toContainEqual(expect.objectContaining(updateCollectionTypeInputs[0]));
-    expect(response.data?.updateGroup.collectionTypes).toContainEqual(expect.objectContaining(createCollectionTypeInputs[0]));
-    expect(response.data?.updateGroup.collectionTypes).toContainEqual(expect.objectContaining(createCollectionTypeInputs[1]));
-    expect(response.data?.updateGroup.collectionTypes).not.toContainEqual({ id: defaultCollectionType.id });
+    expect(response.data?.updateGroup.currentModule.collectionTypes).toContainEqual(expect.objectContaining(updateCollectionTypeInputs[0]));
+    expect(response.data?.updateGroup.currentModule.collectionTypes).toContainEqual(expect.objectContaining(createCollectionTypeInputs[0]));
+    expect(response.data?.updateGroup.currentModule.collectionTypes).toContainEqual(expect.objectContaining(createCollectionTypeInputs[1]));
+    expect(response.data?.updateGroup.currentModule.collectionTypes).not.toContainEqual({ id: defaultCollectionType.id });
   });
 
   it("should throw an error if there are duplicate collection type ids in input", async () => {
@@ -192,11 +205,13 @@ describe("updateGroup", () => {
       mutation UpdateGroupCollectionTypesDuplicateIds($data: UpdateGroupInput!, $groupId: ID!) {
         updateGroup(data: $data, groupId: $groupId) {
           id
-          collectionTypes {
-            id
-            name
-            weight
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              weight
+              category
+            }
           }
         }
       }
@@ -223,11 +238,13 @@ describe("updateGroup", () => {
       mutation UpdateGroupCollectionTypesUnmatchedIds($data: UpdateGroupInput!, $groupId: ID!) {
         updateGroup(data: $data, groupId: $groupId) {
           id
-          collectionTypes {
-            id
-            name
-            weight
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              weight
+              category
+            }
           }
         }
       }
@@ -253,11 +270,13 @@ describe("updateGroup", () => {
       mutation UpdateGroupCollectionTypesInvalidCategoryChange($data: UpdateGroupInput!, $groupId: ID!) {
         updateGroup(data: $data, groupId: $groupId) {
           id
-          collectionTypes {
-            id
-            name
-            weight
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              weight
+              category
+            }
           }
         }
       }
@@ -283,11 +302,13 @@ describe("updateGroup", () => {
       mutation UpdateGroupCollectionTypesInvalidCategoryChange2($data: UpdateGroupInput!, $groupId: ID!) {
         updateGroup(data: $data, groupId: $groupId) {
           id
-          collectionTypes {
-            id
-            name
-            weight
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              weight
+              category
+            }
           }
         }
       }
@@ -311,11 +332,13 @@ describe("updateGroup", () => {
       mutation UpdateGroupCollectionTypesInvalidTotalWeight($data: UpdateGroupInput!, $groupId: ID!) {
         updateGroup(data: $data, groupId: $groupId) {
           id
-          collectionTypes {
-            id
-            name
-            weight
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              weight
+              category
+            }
           }
         }
       }
@@ -340,11 +363,13 @@ describe("updateGroup", () => {
       mutation UpdateGroupCollectionTypesInvalidCategoryCount($data: UpdateGroupInput!, $groupId: ID!) {
         updateGroup(data: $data, groupId: $groupId) {
           id
-          collectionTypes {
-            id
-            name
-            weight
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              weight
+              category
+            }
           }
         }
       }
@@ -368,11 +393,13 @@ describe("updateGroup", () => {
       mutation UpdateGroupCollectionTypesInvalidCategoryCount2($data: UpdateGroupInput!, $groupId: ID!) {
         updateGroup(data: $data, groupId: $groupId) {
           id
-          collectionTypes {
-            id
-            name
-            weight
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              weight
+              category
+            }
           }
         }
       }

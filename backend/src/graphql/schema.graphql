@@ -108,7 +108,6 @@ type Group {
   archived: Boolean!
   currentModule: Module!
   modules: [Module!]!
-  collectionTypes: [CollectionType!]!
 }
 
 type CollectionType {
@@ -116,7 +115,7 @@ type CollectionType {
   category:    CollectionTypeCategory!
   name:        String!
   weight:      Int!
-  group: Group!
+  module: Module!
   defaultTypeCollection: DefaultCollection
 }
 
@@ -140,6 +139,7 @@ type Module {
   evaluationCollections: [EvaluationCollection!]!
   students: [Student!]!
   group: Group!
+  collectionTypes: [CollectionType!]!
 }
 
 interface EvaluationCollection {

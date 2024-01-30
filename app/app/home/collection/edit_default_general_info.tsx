@@ -34,10 +34,12 @@ const EditDefaultGeneralDetails_GetCollection_Query = graphql(`
           subject {
             code
           }
-          collectionTypes {
-            id
-            name
-            category
+          currentModule {
+            collectionTypes {
+              id
+              name
+              category
+            }
           }
         }
       }
@@ -48,22 +50,7 @@ const EditDefaultGeneralDetails_GetCollection_Query = graphql(`
 const EditDefaultGeneralDetails_UpdateCollection_Mutation = graphql(`
   mutation EditDefaultGeneralDetails_UpdateCollection($id: ID!, $input: UpdateDefaultCollectionInput!) {
     updateDefaultCollection(collectionId: $id, data: $input) {
-      id
-      date
-      description
-      module {
-        id
-        info {
-          educationLevel
-          learningObjectiveGroupKey
-        }
-        group {
-          id
-          subject {
-            code
-          }
-        }
-      }
+      ...DefaultCollectionUpdate_Info
     }
   }
 `);

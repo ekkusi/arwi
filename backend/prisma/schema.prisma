@@ -24,7 +24,6 @@ model Group {
   id                    String                 @id @default(uuid())
   name                  String
   subjectCode           String
-  collectionTypes       CollectionType[]
   students              Student[]
   modules               Module[]               @relation(name: "GroupModules")
   currentModule         Module                 @relation(name: "GroupCurrentModule", fields: [currentModuleId], references: [id], onDelete: Cascade)
@@ -37,6 +36,7 @@ model Group {
 
 model Module {
   id                          String                 @id @default(uuid())
+  collectionTypes       CollectionType[]
   educationLevel              EducationLevel 
   learningObjectiveGroupKey   String
   currentGroups               Group[]                @relation(name: "GroupCurrentModule") // For prisma to be able to resolve the relation, not needed in practice
@@ -86,9 +86,9 @@ model CollectionType {
   category    CollectionTypeCategory
   name        String
   weight      Int
-  collection EvaluationCollection[]
-  group      Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId    String
+  collection  EvaluationCollection[]
+  module      Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  moduleId    String
 }
 
 enum CollectionTypeCategory {
