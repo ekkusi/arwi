@@ -54,6 +54,7 @@ import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
+import OpenIDError from "../../errors/OpenIDError";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -88,23 +89,34 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   mPassIDLogin: async (_, { code }, { req, OIDCClient }) => {
     if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
-    if (!OIDCClient) throw new Error("Something went wrong, OIDC client is not initialized");
+    if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
 
-    const { isNewUser, user } = await grantAndInitSession(OIDCClient, code, req);
-    return {
-      payload: {
-        userData: user,
-      },
-      newUserCreated: isNewUser,
-    };
+    try {
+      const { isNewUser, user } = await grantAndInitSession(OIDCClient, code, req);
+      return {
+        payload: {
+          userData: user,
+        },
+        newUserCreated: isNewUser,
+      };
+    } catch (error) {
+      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+    }
   },
   connectMPassID: async (_, { code }, { req, OIDCClient, user, prisma }) => {
     if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
     const currentUser = user!; // Safe cast after authenticated check
-    if (!OIDCClient) throw new Error("Something went wrong, OIDC client is not initialized");
+    if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
     if (currentUser.mPassID) throw new ValidationError("Tilisi on jo liitetty mpass-id tunnuksiin");
-    const { userInfo, tokenSet } = await grantToken(OIDCClient, code);
-    if (userInfo.mPassID) throw new Error("Something went wrong, mpass-id not found from user after grant");
+
+    let userInfo;
+    let tokenSet;
+    try {
+      ({ userInfo, tokenSet } = await grantToken(OIDCClient, code));
+    } catch (error) {
+      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+    }
+    if (userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
     const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.sub } });
     if (matchingUser?.email) throw new ValidationError("Kyseinen mpass-id on jo liitetty toiseen käyttäjään");
 

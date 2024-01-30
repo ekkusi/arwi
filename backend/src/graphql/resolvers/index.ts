@@ -9,6 +9,7 @@ import NotFoundError from "../../errors/NotFoundError";
 import AuthenticationError from "../../errors/AuthenticationError";
 import ValidationError from "../../errors/ValidationError";
 import MissingDataError from "../../errors/MissingDataError";
+import OpenIDError from "../../errors/OpenIDError";
 
 function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Resolver<{}, {}, CustomContext> {
   return async (parent, args, context, info) => {
@@ -33,6 +34,9 @@ function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Res
           break;
         case MissingDataError:
           type = "missing_data";
+          break;
+        case OpenIDError:
+          type = "openid";
           break;
         default:
           type = "unknown";
