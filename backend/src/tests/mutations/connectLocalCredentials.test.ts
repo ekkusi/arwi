@@ -47,6 +47,8 @@ describe("connectLocalCredentials", () => {
   beforeEach(async () => {
     nonMPassIDUser = await createTestUser();
     const response = await graphqlRequest(mPassIDLoginQuery, { code: MOCK_VALID_CODE });
+    console.log("Login response", response);
+
     mPassIDUser = (await prisma.teacher.findUnique({ where: { id: response.data?.mPassIDLogin.payload.userData.id } }))!;
     group = await createTestGroup(nonMPassIDUser.id);
   });
