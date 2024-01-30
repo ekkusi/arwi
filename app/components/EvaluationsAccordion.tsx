@@ -56,11 +56,8 @@ export default function EvaluationsAccordion({
   const evaluations = getFragmentData(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
 
   const sortedEvaluations = useMemo(() => {
-    return [...evaluations].sort((a, b) =>
-      type === "collection"
-        ? new Date(b.collection.date).getTime() - new Date(a.collection.date).getTime()
-        : a.student.name.localeCompare(b.student.name)
-    );
+    if (type === "collection") return evaluations;
+    return [...evaluations].sort((a, b) => a.student.name.localeCompare(b.student.name));
   }, [evaluations, type]);
 
   const formatStateText = (evaluation: (typeof evaluations)[0]) => {

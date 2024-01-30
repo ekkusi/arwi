@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { HomeStackParams } from "../types";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
@@ -68,6 +68,10 @@ export default function DefaultEvaluationCollection({
       navigation.setParams({ collectionId: collection.id });
     }
   }, [data, navigation, params.collectionId]);
+
+  const sortedEvaluations = useMemo(() => {
+    return [...(data?.getType.defaultTypeCollection?.evaluations || [])].sort((a, b) => a.student.name.localeCompare(b.student.name));
+  }, [data]);
 
   if (loading || !data) return <LoadingIndicator />;
 
@@ -136,52 +140,48 @@ export default function DefaultEvaluationCollection({
           {type.defaultTypeCollection && type.defaultTypeCollection.evaluations.length > 0 ? (
             <Accordion
               allowMultiple
-              data={[...type.defaultTypeCollection.evaluations]
-                .sort((a, b) => a.student.name.localeCompare(b.student.name))
-                .map((it) => ({
-                  key: it.id,
-                  title: it.student.name,
-                  date: formatDate(type.defaultTypeCollection!.date),
-                  stateText: it.rating ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu"),
-                  icons: it.wasPresent && !!it.notes && (
-                    <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />
-                  ),
-                  headerContentRight: (
-                    <CircledNumber decimals={0} size={48} valueString={it.wasPresent && it.rating ? parseFloatToGradeString(it.rating) : "-"} />
-                  ),
-                  content: (
-                    <>
-                      <CText style={{ fontSize: "sm", fontWeight: "500", color: it.wasPresent ? "green" : "red", paddingBottom: 10 }}>
-                        {it.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
+              data={sortedEvaluations.map((it) => ({
+                key: it.id,
+                title: it.student.name,
+                date: formatDate(type.defaultTypeCollection!.date),
+                stateText: it.rating ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu"),
+                icons: it.wasPresent && !!it.notes && <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />,
+                headerContentRight: (
+                  <CircledNumber decimals={0} size={48} valueString={it.wasPresent && it.rating ? parseFloatToGradeString(it.rating) : "-"} />
+                ),
+                content: (
+                  <>
+                    <CText style={{ fontSize: "sm", fontWeight: "500", color: it.wasPresent ? "green" : "red", paddingBottom: 10 }}>
+                      {it.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
+                    </CText>
+                    {it.wasPresent ? (
+                      <CView style={{ gap: 10 }}>
+                        {it.notes ? (
+                          <CView>
+                            <CText style={{ fontSize: "sm" }}>{it.notes}</CText>
+                          </CView>
+                        ) : (
+                          <CText style={{ fontSize: "sm" }}>
+                            {t("components.EvaluationsAccordion.verbalFeedbackNotGiven", "Sanallista palautetta ei annettu")}
+                          </CText>
+                        )}
+                      </CView>
+                    ) : (
+                      <CText style={{ fontSize: "sm" }}>
+                        {t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}
                       </CText>
-                      {it.wasPresent ? (
-                        <CView style={{ gap: 10 }}>
-                          {it.notes ? (
-                            <CView>
-                              <CText style={{ fontSize: "sm" }}>{it.notes}</CText>
-                            </CView>
-                          ) : (
-                            <CText style={{ fontSize: "sm" }}>
-                              {t("components.EvaluationsAccordion.verbalFeedbackNotGiven", "Sanallista palautetta ei annettu")}
-                            </CText>
-                          )}
-                        </CView>
-                      ) : (
-                        <CText style={{ fontSize: "sm" }}>
-                          {t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}
-                        </CText>
-                      )}
-                      <CButton
-                        size="small"
-                        title={t("edit", "Muokkaa")}
-                        style={{ marginTop: "md" }}
-                        onPress={() => {
-                          navigation.navigate("edit-default-evaluation", { evaluationId: it.id });
-                        }}
-                      />
-                    </>
-                  ),
-                }))}
+                    )}
+                    <CButton
+                      size="small"
+                      title={t("edit", "Muokkaa")}
+                      style={{ marginTop: "md" }}
+                      onPress={() => {
+                        navigation.navigate("edit-default-evaluation", { evaluationId: it.id });
+                      }}
+                    />
+                  </>
+                ),
+              }))}
             />
           ) : (
             <CText style={{ alignSelf: "center", marginTop: 50 }}>{t("no-evaluations", "Ei arviointeja")}</CText>

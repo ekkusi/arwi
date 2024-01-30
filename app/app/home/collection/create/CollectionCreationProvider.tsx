@@ -100,9 +100,7 @@ function CollectionCreationProvider({ children, groupId }: CollectionCreationPro
   useEffect(() => {
     if (queryData?.getGroup) {
       const { getGroup } = queryData;
-      const sortedEvaluations = getGroup.currentModule.students
-        .map((student) => ({ student, wasPresent: true }))
-        .sort((a, b) => a.student.name.localeCompare(b.student.name));
+      const mappedEvaluations = getGroup.currentModule.students.map((student) => ({ student, wasPresent: true }));
 
       const matchingCollectionType = queryData?.getGroup?.currentModule.collectionTypes.find(
         (it) => it.category === CollectionTypeCategory.CLASS_PARTICIPATION
@@ -110,7 +108,7 @@ function CollectionCreationProvider({ children, groupId }: CollectionCreationPro
       if (!matchingCollectionType)
         throwCatchableError(new Error("Invalid collection type passed to collection creation, type not found in group's collection types"));
 
-      setEvaluations(sortedEvaluations);
+      setEvaluations(mappedEvaluations);
       setCollectionType(matchingCollectionType);
     }
   }, [queryData, throwCatchableError]);

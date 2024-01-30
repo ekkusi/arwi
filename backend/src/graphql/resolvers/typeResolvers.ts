@@ -149,6 +149,11 @@ const resolvers: TypeResolvers = {
             },
           ],
         },
+        orderBy: {
+          evaluationCollection: {
+            date: "desc",
+          },
+        },
       });
       return evaluations;
     },
@@ -180,6 +185,9 @@ const resolvers: TypeResolvers = {
       const students = await prisma.student.findMany({
         where: {
           modules: { some: { id } },
+        },
+        orderBy: {
+          name: "asc",
         },
       });
       return students;

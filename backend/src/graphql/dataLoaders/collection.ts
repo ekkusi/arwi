@@ -33,6 +33,9 @@ export const collectionsByModuleLoader = new CustomDataLoader<string, Evaluation
         in: [...moduleIds],
       },
     },
+    orderBy: {
+      date: "desc",
+    },
   });
 
   const collectionsMap: Record<string, EvaluationCollection[]> = {};
