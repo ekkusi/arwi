@@ -25,7 +25,8 @@
     "setup": "yarn && cd backend && npx prisma migrate dev && cd ..",
     "test-with-setup": "yarn --cwd backend test-with-setup",
     "codegen:backend": "yarn --cwd backend codegen",
-    "codegen:app": "yarn --cwd app codegen"
+    "codegen:app": "yarn --cwd app codegen",
+    "run-github-tests": "act -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:js-latest -W ./.github/workflows/run-tests.yml --container-architecture linux/amd64"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.52.0",

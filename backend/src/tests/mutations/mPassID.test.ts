@@ -58,7 +58,6 @@ describe("mPassID", () => {
     await prisma.teacher.deleteMany();
 
     const response = await graphqlRequest(mPassIDLoginQuery, { code: MOCK_VALID_CODE });
-    console.log("Login response", response);
 
     expect(response.data?.mPassIDLogin).toBeDefined();
     expect(response.data?.mPassIDLogin.newUserCreated).toBe(true);
@@ -67,7 +66,6 @@ describe("mPassID", () => {
 
   it("should successfully login and create a session for existing user", async () => {
     const response = await graphqlRequest(mPassIDLoginQuery, { code: MOCK_VALID_CODE });
-    console.log("Login response", response);
 
     expect(response.data?.mPassIDLogin).toBeDefined();
     expect(response.data?.mPassIDLogin.newUserCreated).toBe(false);
@@ -76,14 +74,12 @@ describe("mPassID", () => {
 
   it("should throw an error if the code is invalid", async () => {
     const response = await graphqlRequest(mPassIDLoginQuery, { code: "invalidCode" });
-    console.log("Login response", response);
 
     expect(response.errors?.[0].message).toEqual("Invalid code");
   });
 
   it("should successfully connect mPassID for a user without an existing mPassID", async () => {
     const response = await graphqlRequest(connectMPassIDQuery, { code: MOCK_VALID_CODE });
-    console.log("Login response", response);
 
     expect(response.data?.connectMPassID).toBeDefined();
     expect(response.data?.connectMPassID.userData.id).toEqual(nonMPassIDUser.id);
@@ -101,7 +97,6 @@ describe("mPassID", () => {
     nonMPassIDUser = await createTestUserAndLogin(graphqlRequest, { mPassID: MOCK_USER_INFO_RESPONSE.sub });
 
     const response = await graphqlRequest(connectMPassIDQuery, { code: MOCK_VALID_CODE });
-    console.log("Login response", response);
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toEqual("Tilisi on jo liitetty mpass-id tunnuksiin");
