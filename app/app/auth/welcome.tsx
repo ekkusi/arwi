@@ -105,7 +105,9 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
                 onPress={handleMPassIDLogin}
               />
             </CView>
-            {mPassIDError && <CText style={{ color: "error", fontWeight: "600", fontSize: "md", textAlign: "center" }}>{mPassIDError}</CText>}
+            {mPassIDError && (
+              <CText style={{ color: "error", fontWeight: "500", fontSize: "md", textAlign: "center", marginTop: "md" }}>{mPassIDError}</CText>
+            )}
           </CView>
         )}
       </CView>

@@ -86,6 +86,11 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
                 shouldThrow = false;
                 break;
               }
+              // Don't throw generic error page from openid errors, these should be handled in whereever they occur.
+              case "OPENID_ERROR": {
+                shouldThrow = false;
+                break;
+              }
               default:
                 break;
             }
