@@ -40,6 +40,7 @@ const sessionClient =
     ? new Redis({
         password: env.REDIS_PASSWORD,
         host: env.REDIS_HOST,
+        db: env.REDIS_DB_INDEX ? +env.REDIS_DB_INDEX : 0,
       })
     : undefined;
 
