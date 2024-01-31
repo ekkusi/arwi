@@ -235,6 +235,7 @@ export type MutationFixTextGrammaticsArgs = {
 export type AppMetadata = {
   __typename?: 'AppMetadata';
   appVersion: Scalars['String'];
+  minimumSupportedAppVersion: Scalars['String'];
 };
 
 export type AuthPayload = {
@@ -768,6 +769,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
   appVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  minimumSupportedAppVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

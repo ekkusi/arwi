@@ -4,6 +4,9 @@ import { HelmetOptions } from "helmet";
 import Redis from "ioredis";
 
 const { env } = process;
+
+export const MINIMUM_SUPPORTED_APP_VERSION = "1.1.5";
+
 export const BRCRYPT_SALT_ROUNDS = 12;
 
 export const HELMET_OPTIONS: HelmetOptions = {
