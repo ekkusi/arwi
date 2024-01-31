@@ -82,6 +82,6 @@
   },
   "cli": {
     "promptToConfigurePushNotifications": false,
-    "appVersionControl": "remote"
+    "appVersionSource": "remote"
   }
 }
