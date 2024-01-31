@@ -7,6 +7,7 @@ import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
 
+const { APP_ENV } = process.env;
 if (!process.env.TS_NODE_DEV) moduleAlias.addAlias("@", path.join(__dirname, "..", "lib"));
 
 import createApp from "./app";
