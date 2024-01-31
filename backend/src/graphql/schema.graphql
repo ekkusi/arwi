@@ -40,6 +40,7 @@ type Mutation {
 
 type AppMetadata {
   appVersion: String!
+  minimumSupportedAppVersion: String!
 }
 
 type AuthPayload {

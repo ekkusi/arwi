@@ -4,6 +4,9 @@ import { HelmetOptions } from "helmet";
 import Redis from "ioredis";
 
 const { env } = process;
+
+export const MINIMUM_SUPPORTED_APP_VERSION = "1.1.5";
+
 export const BRCRYPT_SALT_ROUNDS = 12;
 
 export const HELMET_OPTIONS: HelmetOptions = {
@@ -37,6 +40,7 @@ const sessionClient =
     ? new Redis({
         password: env.REDIS_PASSWORD,
         host: env.REDIS_HOST,
+        db: env.REDIS_DB_INDEX ? +env.REDIS_DB_INDEX : 0,
       })
     : undefined;
 

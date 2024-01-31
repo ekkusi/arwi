@@ -19,13 +19,14 @@ import loaders from "./graphql/dataLoaders";
 const app = express();
 
 const ADVANCED_SENTRY_LOGGING = process.env.ADVANCED_SENTRY_LOGGING === "true";
+const APP_ENV = process.env.APP_ENV || "development";
 
 if (process.env.NODE_ENV === "production" && !process.env.SENTRY_URL) throw new Error("Missing SENTRY_URL env var");
 
 Sentry.init({
   dsn: process.env.SENTRY_URL,
   enabled: process.env.NODE_ENV === "production",
-  environment: process.env.NODE_ENV === "production" ? "production" : "development",
+  environment: APP_ENV,
   integrations: ADVANCED_SENTRY_LOGGING
     ? [
         // enable HTTP calls tracing

@@ -15,13 +15,14 @@ import ErrorView from "./app/ErrorView";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 
 const SENTRY_URL = process.env.EXPO_PUBLIC_SENTRY_URL;
+const ENV = process.env.EXPO_PUBLIC_ENV || "development";
 
 if (!SENTRY_URL) console.warn("EXPO_PUBLIC_SENTRY_URL not set, error reporting disabled");
 
 Sentry.init({
   dsn: SENTRY_URL,
   enabled: !__DEV__,
-  environment: __DEV__ ? "development" : "production",
+  environment: ENV,
 });
 
 // iOS dev build on iOS simulator causes the following warning: Overriding previous layout animation with new one before the first began...
