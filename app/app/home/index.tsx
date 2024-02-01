@@ -12,7 +12,6 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { graphql } from "../../gql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -110,20 +109,14 @@ function HomePageContent({
     return teacher.groups.filter((group) => !group.archived);
   }, [teacher.groups]);
 
-  const sortedGroups = useMemo(() => {
-    return [...notArchivedGroups].sort((a, b) => {
-      return a.updatedAt < b.updatedAt ? 1 : -1;
-    });
-  }, [notArchivedGroups]);
-
   return (
     <Layout style={{ paddingHorizontal: "sm" }}>
-      {sortedGroups.length > 0 ? (
+      {notArchivedGroups.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
           contentContainerStyle={{ paddingTop: 10 }}
           showsVerticalScrollIndicator={false}
-          data={sortedGroups}
+          data={notArchivedGroups}
           renderItem={({ item }) => (
             <GroupListItem
               enterAnimation={firstRender.current ? undefined : SlideInLeft}
