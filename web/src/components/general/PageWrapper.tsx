@@ -1,5 +1,4 @@
 import { Flex, BoxProps, Box } from "@chakra-ui/react";
-import Image from "next/image";
 import Footer, { FooterProps } from "./Footer";
 import Header, { HeaderProps } from "./Header";
 

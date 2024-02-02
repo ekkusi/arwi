@@ -2,16 +2,13 @@
 
 import { useMutation } from "@apollo/client";
 import { Button, Input, Text } from "@chakra-ui/react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { formatLocalizedPath, getPathFromRoute } from "@/utils/route";
-import { LocalizedPage } from "@/types/page";
 import PageWrapper from "@/components/general/PageWrapper";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../utils/errorUtils";
 import { useAuth } from "../../../hooks-and-providers/AuthProvider";
-import FormField from "../../../components/general/FormField";
 
 const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 

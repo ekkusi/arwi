@@ -5,7 +5,7 @@ import { Variants, motion } from "framer-motion";
 import { forwardRef, useMemo } from "react";
 import { LanguageOption } from "@/i18n/settings";
 import { useTranslation } from "@/i18n/client";
-import { getPathFromRoute } from "@/utils/route";
+import { RouteKey, getPathFromRoute } from "@/utils/route";
 import { MotionBox } from "../motion-chakra";
 
 const MotionLink = motion<Omit<BaseLinkProps, "transition">>(BaseLink);
@@ -57,7 +57,7 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
 
     let href = _href;
     if (!noTranslate) {
-      const localizedPath = getPathFromRoute(_href.toString(), locale);
+      const localizedPath = getPathFromRoute(_href.toString() as RouteKey, locale);
 
       if (!localizedPath) {
         // Show error of unfound route in development, redirect to original path in production

@@ -3,7 +3,7 @@ import _routes from "../routes.json";
 
 type TranslationLangOption = keyof typeof _routes;
 
-type RouteKey = keyof typeof _routes.fi | "/";
+export type RouteKey = keyof typeof _routes.fi | "/";
 
 const routes: { [key in TranslationLangOption]: { [key: string]: string } } = _routes;
 

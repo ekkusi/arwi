@@ -23,9 +23,3 @@ export const getIsAuthenticated = (): boolean => {
   const sessionID = cookies().get(SESSION_COOKIE_NAME);
   return !!sessionID;
 };
-
-export const removeSessionAndRedirect = (redirectUri = "/login") => {
-  cookies().delete(SESSION_COOKIE_NAME);
-  const lng = getLocaleServer();
-  return { redirect: "/login" };
-};

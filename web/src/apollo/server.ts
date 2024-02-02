@@ -49,8 +49,6 @@ function handleError(error: Error): never {
       for (const err of graphQLErrors) {
         switch (err.extensions.code) {
           case "UNAUTHENTICATED": {
-            console.log("UNAUTHENTICATED server apollo");
-
             const loginPath = getPathFromRoute("/login", getLocaleServer());
             if (!loginPath) throw new Error("No login path found");
             redirect(`${loginPath}?${new URLSearchParams({ from_unauthenticated: "true", redirect_uri: getPathnameServer() })}`);

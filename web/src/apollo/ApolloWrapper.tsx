@@ -10,7 +10,6 @@ import { useAuth } from "../hooks-and-providers/AuthProvider";
 import { getPathFromRoute } from "../utils/route";
 import { useTranslation } from "../i18n/client";
 import { LanguageOption } from "../i18n/settings";
-import { getPathnameServer } from "../utils/server";
 
 // you need to create a component to wrap your app in
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
@@ -26,8 +25,6 @@ export function ApolloWrapper({ children }: React.PropsWithChildren) {
           for (const err of graphQLErrors) {
             switch (err.extensions.code) {
               case "UNAUTHENTICATED": {
-                console.log("UNAUTHENTICATED client apollo");
-
                 setIsAuthenticated(false);
                 const loginPath = getPathFromRoute("/login", i18n.language as LanguageOption);
                 if (!loginPath) throw new Error("No login path found");
