@@ -98,6 +98,7 @@ services:
     environment:
         NEXT_PUBLIC_GRIDLY_API_KEY: ${GRIDLY_API_KEY}
         NEXT_PUBLIC_GRIDLY_VIEW_ID: ${GRIDLY_API_KEY}
+        NEXT_PUBLIC_BACKEND_URL: ${BACKEND_URL}
     ports:
       - "5000:3000"
     networks:

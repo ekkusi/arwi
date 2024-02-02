@@ -34,3 +34,4 @@ jobs:
           secrets: |
             "GRIDLY_API_KEY=${{ secrets.GRIDLY_API_KEY }}"
             "GRIDLY_VIEW_ID=${{ secrets.GRIDLY_WEB_VIEW_ID }}"
+            "BACKEND_URL=https://api.arwi.fi"

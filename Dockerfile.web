@@ -24,8 +24,10 @@ COPY web .
 
 RUN --mount=type=secret,id=GRIDLY_VIEW_ID  \
     --mount=type=secret,id=GRIDLY_API_KEY \
+    --mount=type=secret,id=BACKEND_URL \
     NEXT_PUBLIC_GRIDLY_API_KEY=$(cat /run/secrets/GRIDLY_API_KEY) \
     NEXT_PUBLIC_GRIDLY_VIEW_ID=$(cat /run/secrets/GRIDLY_VIEW_ID) \
+    NEXT_PUBLIC_BACKEND_URL=$(cat /run/secrets/BACKEND_URL) \
     yarn build
 
 # Production image, copy all the files and run next
