@@ -7,6 +7,7 @@ import { clearEvaluationLoaders } from "../dataLoaders/evaluation";
 import { clearCollectionLoaders } from "../dataLoaders/collection";
 import { clearModuleLoaders } from "../dataLoaders/module";
 import { clearGroupLoaders } from "../dataLoaders/group";
+import { clearCollectionTypeLoaders } from "../dataLoaders/collectionType";
 
 type CreateTeacherReturnType<T extends Prisma.TeacherCreateArgs> = Prisma.Prisma__TeacherClient<
   GetResult<Prisma.$TeacherPayload, T, "create">,
@@ -41,6 +42,12 @@ export async function deleteTeacher(id: string): Promise<Teacher> {
                   },
                 },
               },
+              collectionTypes: {
+                select: {
+                  id: true,
+                  moduleId: true,
+                },
+              },
             },
           },
           students: {
@@ -59,6 +66,9 @@ export async function deleteTeacher(id: string): Promise<Teacher> {
   deletedTeacher.groups.forEach((group) => {
     clearGroupLoaders(group);
     group.modules.forEach((module) => {
+      module.collectionTypes.forEach((collectionType) => {
+        clearCollectionTypeLoaders(collectionType);
+      });
       clearModuleLoaders(module);
       module.evaluationCollections.forEach((collection) => {
         clearCollectionLoaders(collection);
