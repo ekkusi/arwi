@@ -1,14 +1,25 @@
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { LanguageOption } from "@/i18n/settings";
 import { extractLocaleFromPath } from "./route";
 
-export const getLocaleServer = (): LanguageOption | undefined => {
+export const SESSION_COOKIE_NAME = "sid";
+
+export const getPathnameServer = (): string => {
   const headersList = headers();
   const domain = headersList.get("host") || "";
   const fullUrl = headersList.get("x-url") || "";
   const urlParts = fullUrl.split(domain);
-  const pathName = urlParts[urlParts.length - 1];
+  return urlParts[urlParts.length - 1];
+};
 
-  const lng = extractLocaleFromPath(pathName);
+export const getLocaleServer = (): LanguageOption => {
+  const pathName = getPathnameServer();
+
+  const lng = extractLocaleFromPath(pathName) || "fi";
   return lng;
+};
+
+export const getIsAuthenticated = (): boolean => {
+  const sessionID = cookies().get(SESSION_COOKIE_NAME);
+  return !!sessionID;
 };

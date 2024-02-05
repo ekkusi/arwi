@@ -92,6 +92,7 @@ export type Mutation = {
   updateClassParticipationEvaluation: ClassParticipationEvaluation;
   updateDefaultEvaluation: DefaultEvaluation;
   deleteStudent: Student;
+  deleteTeacher: Teacher;
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
   changeGroupModule: Group;
@@ -202,6 +203,11 @@ export type MutationUpdateDefaultEvaluationArgs = {
 
 export type MutationDeleteStudentArgs = {
   studentId: Scalars['ID'];
+};
+
+
+export type MutationDeleteTeacherArgs = {
+  teacherId: Scalars['ID'];
 };
 
 
@@ -760,6 +766,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   updateClassParticipationEvaluation?: Resolver<ResolversTypes['ClassParticipationEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateClassParticipationEvaluationArgs, 'input'>>;
   updateDefaultEvaluation?: Resolver<ResolversTypes['DefaultEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateDefaultEvaluationArgs, 'input'>>;
   deleteStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, 'studentId'>>;
+  deleteTeacher?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType, RequireFields<MutationDeleteTeacherArgs, 'teacherId'>>;
   deleteGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, 'groupId'>>;
   deleteCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<MutationDeleteCollectionArgs, 'collectionId'>>;
   changeGroupModule?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationChangeGroupModuleArgs, 'data' | 'groupId'>>;

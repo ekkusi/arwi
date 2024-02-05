@@ -1,67 +1,81 @@
 "use client";
 
-import { Button, Text } from "@chakra-ui/react";
-import { usePathname } from "next/navigation";
+import { useMutation } from "@apollo/client";
+import { Button, Input, Text } from "@chakra-ui/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import PageWrapper from "@/components/general/PageWrapper";
-import { LocalizedPage } from "@/types/page";
-import { formatLocalizedPath } from "@/utils/route";
-import Link from "@/components/primitives/Link";
+import { graphql } from "../../../gql";
+import { getErrorMessage } from "../../../utils/errorUtils";
+import { useAuth } from "../../../hooks-and-providers/AuthProvider";
 
-const BACKEND_API_URL = "http://localhost:4000";
+const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export default function LoginPage({ params }: LocalizedPage) {
-  const { lng } = params;
-  const pathname = usePathname();
-  const redirectUrl = `http://localhost:3000${formatLocalizedPath(pathname, lng)}`;
-
-  const handleTest = () => {
-    const some = fetch(`${BACKEND_API_URL}/test`, {
-      credentials: "include",
-    });
-  };
-
-  const errorTest = async () => {
-    try {
-      const errorResult = await fetch(`${BACKEND_API_URL}/error-test`);
-      console.log("Result", errorResult);
-      console.log("Result", await errorResult.json());
-    } catch (error) {
-      console.log("Error", error);
+const LoginPage_Login_Mutation = graphql(`
+  mutation LoginPage_Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      userData {
+        email
+        id
+        languagePreference
+        consentsAnalytics
+        isMPassIDConnected
+      }
     }
-  };
+  }
+`);
 
-  const timeOutTest = async () => {
+export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const searchParams = useSearchParams();
+  const { t } = useTranslation();
+  const { setIsAuthenticated } = useAuth();
+
+  const redirectUriLogin = searchParams.get("redirect_uri");
+  const redirectedFromUnauthenticated = searchParams.get("from_unauthenticated") === "true" || false;
+
+  // const redirectUriMPassID = `http://localhost:3000${formatLocalizedPath(pathname, lng)}`;
+
+  const [loginMutation, { loading: isLoginLoading }] = useMutation(LoginPage_Login_Mutation);
+
+  const login = async () => {
     try {
-      const errorResult = await fetch(`${BACKEND_API_URL}/timeout-test`, {
-        credentials: "include",
-      });
-      console.log("Result", errorResult);
-      console.log("Result", await errorResult.text());
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
+      const { data } = await loginMutation({ variables: { email, password } });
+      if (!data) return;
 
-  const logout = async () => {
-    const test = await fetch(`${BACKEND_API_URL}/auth/logout`, {
-      credentials: "include",
-    });
-    console.log(test);
+      setIsAuthenticated(true);
+
+      if (redirectUriLogin) {
+        router.push(redirectUriLogin);
+        router.refresh();
+      } else {
+        router.push("/");
+      }
+    } catch (err) {
+      setError(getErrorMessage(err));
+    }
   };
 
   return (
-    <PageWrapper py="5" maxWidth={{ base: "100%", md: "750px", xl: "1000px" }} mx="auto">
-      <Text as="h1">Login</Text>
-      <Button onClick={handleTest}>Test</Button>
-      <Button onClick={logout}>Logout</Button>
-      <Button onClick={errorTest}>Error Test</Button>
-      <Button onClick={timeOutTest}>Timeout Test</Button>
-      <Link noTranslate as="a" display="block" href={`${BACKEND_API_URL}/auth/logout`}>
-        Logout link
-      </Link>
-      <Link noTranslate as="a" display="block" href={`${BACKEND_API_URL}/auth/authorize?${new URLSearchParams({ redirect_uri: redirectUrl })}`}>
-        Login link
-      </Link>
+    <PageWrapper py="5">
+      {redirectedFromUnauthenticated && (
+        <Text fontStyle="italic">
+          {t("login.session-expired-login-again", "Kirjautumistietosi ovat vanhentuneet. Kirjaudu sovellukseen uudelleen.")}
+        </Text>
+      )}
+      <Text as="h1">{t("login", "Kirjaudu sisään")}</Text>
+      <Text>{t("name", "Nimi")}</Text>
+      <Input type="email" value={email} placeholder="teppo.testaaja@email.com" onChange={(e) => setEmail(e.target.value)} mb="4" />
+      <Text>{t("password", "Salasana")}</Text>
+      <Input type="password" value={password} placeholder="********" onChange={(e) => setPassword(e.target.value)} mb="6" />
+      {error && <Text color="red">{error}</Text>}
+      <Button onClick={login} isLoading={isLoginLoading}>
+        {t("login", "Kirjaudu sisään")}
+      </Button>
     </PageWrapper>
   );
 }

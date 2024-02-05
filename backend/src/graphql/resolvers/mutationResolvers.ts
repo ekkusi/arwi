@@ -40,6 +40,7 @@ import {
   checkAuthenticatedByEvaluation,
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
+  checkAuthenticatedByTeacher,
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
@@ -387,6 +388,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     await checkAuthenticatedByCollection(user, collectionId);
     const collection = await deleteCollection(collectionId);
     return collection;
+  },
+  deleteTeacher: async (_, { teacherId }, { user, req, res }) => {
+    await checkAuthenticatedByTeacher(user, teacherId);
+    const teacher = await deleteTeacher(teacherId);
+    await logOut(req, res);
+    return teacher;
   },
   // NOTE: This function is not used currently but is here for possible future use
   // deleteCollectionType: async (_, { id }, { user }) => {

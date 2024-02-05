@@ -3,9 +3,11 @@ import _routes from "../routes.json";
 
 type TranslationLangOption = keyof typeof _routes;
 
+export type RouteKey = keyof typeof _routes.fi | "/";
+
 const routes: { [key in TranslationLangOption]: { [key: string]: string } } = _routes;
 
-export const getPathFromRoute = (originalPath: string, locale: LanguageOption): string | undefined => {
+export const getPathFromRoute = (originalPath: RouteKey, locale: LanguageOption): string | undefined => {
   if (originalPath === "/") return locale === fallbackLng ? originalPath : `/${locale}`; // No need to translate root route
   if (locale === "en") return `/en${originalPath}`;
   // Get translated route for non-default locales
@@ -35,5 +37,5 @@ export const formatLocalizedPath = (oldPath: string, newLocale: LanguageOption):
 
   const fallbackPath = `/${newLocale}${pathWithoutLocale}`;
   if (!routeName) return fallbackPath;
-  return getPathFromRoute(routeName, newLocale) || fallbackPath;
+  return getPathFromRoute(routeName as RouteKey, newLocale) || fallbackPath;
 };
