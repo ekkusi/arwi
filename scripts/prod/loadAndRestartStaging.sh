@@ -15,7 +15,7 @@ fi
 git pull
 docker pull ekkusi/arwi-backend:$tagName
 docker stop arwi-backend-staging || true && docker rm arwi-backend-staging || true
-docker run --env-file .env.staging -e APP_ENV=staging -d --name arwi-backend-staging -p 4001:4000 ekkusi/arwi-backend:$tagName
+docker run --env-file .env.staging -e APP_ENV=staging -d --name arwi-backend-staging -p 4100:4000 ekkusi/arwi-backend:$tagName
 docker rmi $(docker images -f "dangling=true" -f "reference=arwi-backend-staging" -q --no-trunc)
 
 cd backend && DATABASE_URL=$DATABASE_URL npx --yes prisma migrate deploy && cd ..
