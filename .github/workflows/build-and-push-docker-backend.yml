@@ -7,6 +7,7 @@ on:
       - 'v*'
     paths:
       - 'backend/**'
+      - 'Dockerfile.backend'
 
 
 jobs:
