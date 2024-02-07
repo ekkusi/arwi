@@ -23,9 +23,10 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(newPath, req.url));
   }
 
-  // Add x-url header to request so that server components can access pathname through here when needed
+  // Add x-url and x-pathname headers to request so that server components can access pathname through here when needed
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set("x-url", req.url);
+  requestHeaders.set("x-pathname", pathname);
 
   const response = NextResponse.next({ headers: requestHeaders });
 
