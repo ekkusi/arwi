@@ -6,9 +6,9 @@ import cookieParser from "cookie-parser";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import * as Sentry from "@sentry/node";
-import { HELMET_OPTIONS, SESSION_OPTIONS } from "./config";
+import { HELMET_OPTIONS, SESSION_OPTIONS, getAllowedOrigins } from "./config";
 import initAuth from "./routes/auth";
-import { checkSessionTimeout, checkTokens } from "./middleware/auth";
+import { checkAuthHeaders, checkSessionTimeout, checkTokens } from "./middleware/auth";
 import graphqlServer from "./graphql/server";
 import { errorHandler, notFoundHandler } from "./middleware/errors";
 import "express-async-errors";
@@ -51,9 +51,9 @@ if (ADVANCED_SENTRY_LOGGING) {
 
 app.use(helmet(HELMET_OPTIONS));
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: getAllowedOrigins() }));
 
-// TODO: Configure redis (or other) session store
+app.use(checkAuthHeaders);
 app.use(session(SESSION_OPTIONS));
 app.use(checkSessionTimeout);
 

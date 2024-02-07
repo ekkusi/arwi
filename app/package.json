@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start-no-backend": "cross-env EXPO_PUBLIC_BACKEND_API_URL=https://staging-api.arwi.fi npx expo start",
+    "start-no-backend": "cross-env EXPO_PUBLIC_BACKEND_API_URL=https://staging-proxy-api.arwi.fi npx expo start",
     "start-mac": "EXPO_PUBLIC_BACKEND_API_URL=http://$(ipconfig getifaddr en0):4000 npx expo start",
     "start-win": "for /f \"tokens=2 delims=[]\" %a in ('ping -n 1 -4 \"%computername%\"') do set EXPO_PUBLIC_BACKEND_API_URL=http://%a:4000 && npx expo start",
     "android": "expo run:android",

@@ -15,7 +15,6 @@ const MPassID_Login_Mutation = graphql(`
           isMPassIDConnected
         }
       }
-      newUserCreated
     }
   }
 `);

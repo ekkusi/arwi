@@ -5,7 +5,26 @@ import Redis from "ioredis";
 
 const { env } = process;
 
+const APP_ENV = env.APP_ENV || "development";
+
 export const MINIMUM_SUPPORTED_APP_VERSION = "1.1.5";
+
+export const ALLOWED_ORIGINS_DEV = ["http://localhost:3000"];
+
+export const ALLOWED_ORIGINS_STAGING = [...ALLOWED_ORIGINS_DEV];
+
+export const ALLOWED_ORIGINS_PROD = ["https://arwi.fi"];
+
+export const getAllowedOrigins = () => {
+  switch (APP_ENV) {
+    case "production":
+      return ALLOWED_ORIGINS_PROD;
+    case "staging":
+      return ALLOWED_ORIGINS_STAGING;
+    default:
+      return ALLOWED_ORIGINS_DEV;
+  }
+};
 
 export const BRCRYPT_SALT_ROUNDS = 12;
 
@@ -26,6 +45,12 @@ export const HELMET_OPTIONS: HelmetOptions = {
 const ONE_DAY_MS = 1000 * 60 * 60 * 24;
 
 export const { SESSION_SECRET = "secret", SESSION_NAME = "sid", SESSION_IDLE_TIMEOUT_MS = ONE_DAY_MS * 7 } = env;
+
+export const SESSION_ID_HEADER_NAME = "x-session-id";
+
+export const SESSION_TYPE_HEADER_NAME = "x-session-type";
+
+export const API_TOKEN_HEADER_NAME = "x-api-token";
 
 export const SESSION_ABSOLUTE_TIMEOUT_MS = +(env.SESSION_ABSOLUTE_TIME || ONE_DAY_MS * 30);
 
@@ -49,13 +74,15 @@ export const SESSION_OPTIONS: SessionOptions = {
   store: sessionClient ? new RedisStore({ client: sessionClient }) : undefined,
   secret: SESSION_SECRET,
   name: SESSION_NAME,
+  headerName: SESSION_ID_HEADER_NAME,
+  typeHeaderName: SESSION_TYPE_HEADER_NAME,
   cookie: {
     maxAge: +SESSION_IDLE_TIMEOUT_MS,
     // secure: env.NODE_ENV === "production",
     // NOTE: Currently secure cookies break mobile app authentication as cookies are not being sent when it is set
     // See: https://github.com/facebook/react-native/issues/23185
     // TODO: Figure out how to make secure cookies work with mobile app
-    secure: false,
+    secure: env.NODE_ENV === "production",
     sameSite: "lax",
   },
   resave: false,

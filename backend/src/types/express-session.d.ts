@@ -1,4 +1,4 @@
-import "express-session";
+import { SessionOptions as ExpressSessionOptions } from "express-session";
 import { TokenSetParameters } from "openid-client";
 import { UserSessionInfo } from "./contextTypes";
 
@@ -13,5 +13,9 @@ declare module "express-session" {
       createdAt: number;
       amountsTried: number;
     };
+  }
+  export interface SessionOptions extends ExpressSessionOptions {
+    headerName?: string;
+    typeHeaderName?: string;
   }
 }
