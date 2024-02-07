@@ -38,8 +38,6 @@ export default function LoginPage() {
   const redirectUriLogin = searchParams.get("redirect_uri");
   const redirectedFromUnauthenticated = searchParams.get("from_unauthenticated") === "true" || false;
 
-  // const redirectUriMPassID = `http://localhost:3000${formatLocalizedPath(pathname, lng)}`;
-
   const [loginMutation, { loading: isLoginLoading }] = useMutation(LoginPage_Login_Mutation);
 
   const login = async () => {
