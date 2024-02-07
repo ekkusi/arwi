@@ -21,6 +21,7 @@
     "chakra-react-select": "^4.7.2",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
+    "graphql": "^16.8.1",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-gridly-backend": "^1.0.6",
