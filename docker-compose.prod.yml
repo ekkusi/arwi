@@ -84,6 +84,7 @@ services:
       MAIL_USER: ${MAIL_USER}
       MAIL_PASS: ${MAIL_PASS}
       SENTRY_URL: ${SENTRY_URL}
+      API_TOKENS: ${BACKEND_HEADER_AUTH_API_TOKENS}
       APP_ENV: production
     ports:
       - "4000:4000"
