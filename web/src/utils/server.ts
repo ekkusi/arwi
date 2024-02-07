@@ -6,10 +6,11 @@ export const SESSION_COOKIE_NAME = "sid";
 
 export const getPathnameServer = (): string => {
   const headersList = headers();
-  const domain = headersList.get("host") || "";
-  const fullUrl = headersList.get("x-url") || "";
-  const urlParts = fullUrl.split(domain);
-  return urlParts[urlParts.length - 1];
+  let pathname = headersList.get("x-pathname");
+  if (!pathname) pathname = headersList.get("next-url"); // Fallback
+  if (!pathname) throw new Error("No x-pathname found in headers");
+
+  return pathname;
 };
 
 export const getLocaleServer = (): LanguageOption => {
