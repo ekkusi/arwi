@@ -1,0 +1,170 @@
+diff --git a/node_modules/express-session/index.js b/node_modules/express-session/index.js
+index 40a442b..5684b1f 100644
+--- a/node_modules/express-session/index.js
++++ b/node_modules/express-session/index.js
+@@ -96,6 +96,12 @@ function session(options) {
+   // get the session cookie name
+   var name = opts.name || opts.key || 'connect.sid'
+ 
++  // get the session header name
++  var headerName = opts.headerName || 'x-session-id'
++
++  // get the session type header name
++  var typeHeaderName = opts.typeHeaderName || 'x-session-type'
++
+   // get the session store
+   var store = opts.store || new MemoryStore()
+ 
+@@ -213,8 +219,9 @@ function session(options) {
+     // expose store
+     req.sessionStore = store;
+ 
++    const mode = getSessionType();
+     // get the session ID from the cookie
+-    var cookieId = req.sessionID = getcookie(req, name, secrets);
++    var cookieId = req.sessionID = mode === "header" ? getSessionIdFromHeader(req, headerName, secrets) : getcookie(req, name, secrets);
+ 
+     // set-cookie
+     onHeaders(res, function(){
+@@ -224,6 +231,7 @@ function session(options) {
+       }
+ 
+       if (!shouldSetCookie(req)) {
++        console.log("should not set cookie");
+         return;
+       }
+ 
+@@ -239,8 +247,13 @@ function session(options) {
+         touched = true
+       }
+ 
++      const mode = getSessionType();
+       // set cookie
+-      setcookie(res, name, req.sessionID, secrets[0], req.session.cookie.data);
++      if (mode === "header") {
++        setIdHeader(res, headerName, req.sessionID, secrets[0]);
++      } else {
++        setcookie(res, name, req.sessionID, secrets[0], req.session.cookie.data);
++      }
+     });
+ 
+     // proxy end() to commit the session
+@@ -359,6 +372,10 @@ function session(options) {
+       return _end.call(res, chunk, encoding);
+     };
+     
++    function getSessionType() {
++      return req.get(typeHeaderName) || "cookie";
++    }
++
+     // generate the session
+     function generate() {
+       store.generate(req);
+@@ -519,6 +536,48 @@ function generateSessionId(sess) {
+   return uid(24);
+ }
+ 
++/**
++ * Unsign and parse a session ID string.
++ * 
++ * @param {String} signed id
++ * @param {Array} secrets
++ */
++
++function unsignId(rawId, secrets) {
++  var val;
++  if (rawId.substr(0, 2) === 's:') {
++    val = unsigncookie(rawId.slice(2), secrets);
++
++    if (val === false) {
++      debug('session id signature invalid');
++      val = undefined;
++    }
++  } else {
++    debug('session id unsigned')
++  }
++
++  return val;
++}
++
++/**
++ * Get the session ID from request header
++ *
++ * @return {string}
++ * @private
++ */
++
++function getSessionIdFromHeader(req, name, secrets) {
++  var raw = req.get(name);
++  var val;
++
++  // read from header
++  if (raw) {
++    val = unsignId(raw, secrets);
++  }
++
++  return val;
++}
++
+ /**
+  * Get the session ID cookie from request.
+  *
+@@ -538,16 +597,7 @@ function getcookie(req, name, secrets) {
+     raw = cookies[name];
+ 
+     if (raw) {
+-      if (raw.substr(0, 2) === 's:') {
+-        val = unsigncookie(raw.slice(2), secrets);
+-
+-        if (val === false) {
+-          debug('cookie signature invalid');
+-          val = undefined;
+-        }
+-      } else {
+-        debug('cookie unsigned')
+-      }
++      val = unsignId(raw, secrets);
+     }
+   }
+ 
+@@ -565,19 +615,9 @@ function getcookie(req, name, secrets) {
+     raw = req.cookies[name];
+ 
+     if (raw) {
+-      if (raw.substr(0, 2) === 's:') {
+-        val = unsigncookie(raw.slice(2), secrets);
+-
+-        if (val) {
+-          deprecate('cookie should be available in req.headers.cookie');
+-        }
+-
+-        if (val === false) {
+-          debug('cookie signature invalid');
+-          val = undefined;
+-        }
+-      } else {
+-        debug('cookie unsigned')
++      val = unsignId(raw, secrets);
++      if (val) {
++        deprecate('cookie should be available in req.headers.cookie');
+       }
+     }
+   }
+@@ -646,6 +686,17 @@ function issecure(req, trustProxy) {
+   return proto === 'https';
+ }
+ 
++/**
++ * Set id header on response.
++ * 
++ * @private
++ */
++
++function setIdHeader(res, name, val, secret) {
++  var signed = 's:' + signature.sign(val, secret);
++  res.setHeader(name, signed);
++}
++
+ /**
+  * Set cookie on response.
+  *
