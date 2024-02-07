@@ -7,6 +7,15 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PROXY_PORT || 4001;
+
+if (process.env.NODE_ENV === "production") {
+  if (!process.env.MAIN_API_URL) {
+    throw new Error("MAIN_API_URL environment variable is required in production");
+  }
+}
+if (!process.env.API_KEY) {
+  throw new Error("API_KEY environment variable is required to run the proxy server");
+}
 const mainApiUrl = process.env.MAIN_API_URL || "http://localhost:4000";
 
 // CORS configuration
