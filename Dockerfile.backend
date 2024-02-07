@@ -1,25 +1,20 @@
 FROM node:18-alpine AS base
 
-FROM base AS deps
-
-WORKDIR /app
-
-COPY backend/package.json  yarn.lock ./
-
-RUN yarn install --frozen-lockfile
-
 FROM base AS builder
 
 RUN apk update && apk add jq
 
 WORKDIR /app
 
-COPY --from=deps /app/node_modules ./node_modules
+COPY backend ./backend
+COPY package.json yarn.lock ./
 
-COPY backend /app/
+RUN yarn install --frozen-lockfile
 
-RUN yarn prisma:generate
-RUN yarn build
+RUN yarn --cwd backend prisma:generate
+RUN yarn --cwd backend build
+
+RUN yarn install --production --ignore-scripts --prefer-offline --frozen-lockfile
 
 RUN jq .version package.json -r > /root/version.txt
 
@@ -30,7 +25,7 @@ WORKDIR /app
 ENV NODE_ENV production
 
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/backend/lib ./lib
 COPY --from=builder /root/version.txt /root/version.txt
 
 EXPOSE 4000
