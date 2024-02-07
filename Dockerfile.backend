@@ -25,11 +25,12 @@ WORKDIR /app
 ENV NODE_ENV production
 
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/backend/lib ./lib
+COPY --from=builder /app/backend/node_modules ./backend/node_modules
+COPY --from=builder /app/backend/lib ./backend/lib
 COPY --from=builder /root/version.txt /root/version.txt
 
 EXPOSE 4000
 
 ENV PORT 4000
 
-CMD APP_VERSION=$(cat /root/version.txt) node lib/index.js
+CMD APP_VERSION=$(cat /root/version.txt) node backend/lib/index.js
