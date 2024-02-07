@@ -69,6 +69,17 @@ const sessionClient =
       })
     : undefined;
 
+const getCookieSameSite = () => {
+  switch (APP_ENV) {
+    case "production":
+      return "lax";
+    case "staging":
+      return "none";
+    default:
+      return "lax";
+  }
+};
+
 export const SESSION_OPTIONS: SessionOptions = {
   // Allow disabling redis session storage for testing with env var
   store: sessionClient ? new RedisStore({ client: sessionClient }) : undefined,
@@ -83,7 +94,7 @@ export const SESSION_OPTIONS: SessionOptions = {
     // See: https://github.com/facebook/react-native/issues/23185
     // TODO: Figure out how to make secure cookies work with mobile app
     secure: env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: getCookieSameSite(),
   },
   resave: false,
   saveUninitialized: true,
