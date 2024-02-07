@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'v*'
     paths:
       - 'web/**'
       - 'Dockerfile.web'
@@ -25,6 +26,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: |
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       -
         name: Build and push
         uses: docker/build-push-action@v4
@@ -32,7 +38,7 @@ jobs:
           context: .
           file: ./Dockerfile.web
           push: true
-          tags: ekkusi/arwi-web:latest
+          tags: ekkusi/arwi-web:${{ steps.extract_branch.outputs.branch == 'main' && 'latest' || steps.extract_branch.outputs.branch }}
           platforms: linux/amd64
           secrets: |
             "GRIDLY_API_KEY=${{ secrets.GRIDLY_API_KEY }}"
