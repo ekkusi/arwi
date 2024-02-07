@@ -1,5 +1,5 @@
 diff --git a/node_modules/express-session/index.js b/node_modules/express-session/index.js
-index 40a442b..5684b1f 100644
+index 40a442b..c3cfed8 100644
 --- a/node_modules/express-session/index.js
 +++ b/node_modules/express-session/index.js
 @@ -96,6 +96,12 @@ function session(options) {
@@ -26,15 +26,7 @@ index 40a442b..5684b1f 100644
  
      // set-cookie
      onHeaders(res, function(){
-@@ -224,6 +231,7 @@ function session(options) {
-       }
- 
-       if (!shouldSetCookie(req)) {
-+        console.log("should not set cookie");
-         return;
-       }
- 
-@@ -239,8 +247,13 @@ function session(options) {
+@@ -239,8 +246,13 @@ function session(options) {
          touched = true
        }
  
@@ -49,10 +41,10 @@ index 40a442b..5684b1f 100644
      });
  
      // proxy end() to commit the session
-@@ -359,6 +372,10 @@ function session(options) {
+@@ -359,6 +371,10 @@ function session(options) {
        return _end.call(res, chunk, encoding);
      };
-     
+ 
 +    function getSessionType() {
 +      return req.get(typeHeaderName) || "cookie";
 +    }
@@ -60,7 +52,7 @@ index 40a442b..5684b1f 100644
      // generate the session
      function generate() {
        store.generate(req);
-@@ -519,6 +536,48 @@ function generateSessionId(sess) {
+@@ -519,6 +535,48 @@ function generateSessionId(sess) {
    return uid(24);
  }
  
@@ -109,7 +101,7 @@ index 40a442b..5684b1f 100644
  /**
   * Get the session ID cookie from request.
   *
-@@ -538,16 +597,7 @@ function getcookie(req, name, secrets) {
+@@ -538,16 +596,7 @@ function getcookie(req, name, secrets) {
      raw = cookies[name];
  
      if (raw) {
@@ -127,7 +119,7 @@ index 40a442b..5684b1f 100644
      }
    }
  
-@@ -565,19 +615,9 @@ function getcookie(req, name, secrets) {
+@@ -565,19 +614,9 @@ function getcookie(req, name, secrets) {
      raw = req.cookies[name];
  
      if (raw) {
@@ -150,7 +142,7 @@ index 40a442b..5684b1f 100644
        }
      }
    }
-@@ -646,6 +686,17 @@ function issecure(req, trustProxy) {
+@@ -646,6 +685,17 @@ function issecure(req, trustProxy) {
    return proto === 'https';
  }
  

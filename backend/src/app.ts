@@ -49,6 +49,9 @@ if (ADVANCED_SENTRY_LOGGING) {
   app.use(Sentry.Handlers.tracingHandler());
 }
 
+// Trust the first proxy, necessary for express-session to work behind a reverse proxy
+app.set("trust proxy", 1);
+
 app.use(helmet(HELMET_OPTIONS));
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: getAllowedOrigins() }));
