@@ -11,7 +11,7 @@ export const MINIMUM_SUPPORTED_APP_VERSION = "1.1.5";
 
 export const ALLOWED_ORIGINS_DEV = ["http://localhost:3000"];
 
-export const ALLOWED_ORIGINS_STAGING = [...ALLOWED_ORIGINS_DEV];
+export const ALLOWED_ORIGINS_STAGING = [...ALLOWED_ORIGINS_DEV, "https://staging-website.arwi.fi"];
 
 export const ALLOWED_ORIGINS_PROD = ["https://arwi.fi"];
 
