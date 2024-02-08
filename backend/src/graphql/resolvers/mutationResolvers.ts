@@ -58,8 +58,6 @@ import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 import OpenIDError from "../../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 
-const { APP_ENV } = process.env;
-
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
     const { password } = data;
@@ -92,7 +90,6 @@ const resolvers: MutationResolvers<CustomContext> = {
     };
   },
   mPassIDLogin: async (_, { code }, { req, OIDCClient }) => {
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
 
     try {
@@ -108,7 +105,6 @@ const resolvers: MutationResolvers<CustomContext> = {
     }
   },
   connectMPassID: async (_, { code }, { req, OIDCClient, user, prisma }) => {
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     const currentUser = user!; // Safe cast after authenticated check
     if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
     if (currentUser.mPassID) throw new ValidationError("Tilisi on jo liitetty mpass-id tunnuksiin");
@@ -145,7 +141,6 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   connectLocalCredentials: async (_, { email: initialEmail, password }, { req, prisma, user }) => {
     const email = initialEmail.toLowerCase();
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     const currentUser = user!; // Safe cast after authenticated check
     if (currentUser.email) throw new ValidationError("Tilisi on jo liitetty lokaaleihin tunnuksiin");
     if (!currentUser.mPassID) throw new ValidationError("Sinun tulee olla kirjautunut mpass-id tunnuksilla liittääksesi lokaalit tunnukset");

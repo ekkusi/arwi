@@ -10,8 +10,8 @@ dotenv.config();
 
 const router = Router();
 
-const { MPASSID_CLIENT_SECRET, MPASSID_CLIENT_ID } = process.env;
-const MPASSID_ISSUER_URL = "https://mpass-proxy-test.csc.fi";
+const { MPASSID_CLIENT_SECRET, MPASSID_CLIENT_ID, NODE_ENV } = process.env;
+const MPASSID_ISSUER_URL = NODE_ENV === "production" ? "https://mpass-proxy.csc.fi" : "https://mpass-proxy-test.csc.fi";
 
 if (!MPASSID_CLIENT_SECRET || !MPASSID_CLIENT_ID) {
   if (APP_ENV === "production") throw new Error("MPASSID_CLIENT_SECRET or MPASSID_CLIENT_ID is missing from environment variables");
@@ -89,7 +89,6 @@ const initAuth = async () => {
   }
 
   router.use("/mpassid-callback", async (req, res) => {
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const params = client.callbackParams(req);
@@ -108,7 +107,6 @@ const initAuth = async () => {
   });
 
   router.use("/authorize", async (req, res) => {
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const { query } = req;
