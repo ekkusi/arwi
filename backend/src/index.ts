@@ -10,12 +10,12 @@ dotenv.config();
 if (!process.env.TS_NODE_DEV) moduleAlias.addAlias("@", path.join(__dirname, "..", "lib"));
 
 import createApp from "./app";
+import { APP_ENV } from "./config";
 
 if (!process.env.APP_VERSION)
   throw new Error("Something went wrong, APP_VERSION env var is not set. This should come automatically from package.json version.");
 
 const PORT = process.env.PORT || 4000;
-const APP_ENV = process.env.APP_ENV || "development";
 
 createApp().then((app) => {
   app.listen(PORT, () => {

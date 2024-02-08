@@ -1,11 +1,14 @@
 import { SessionOptions } from "express-session";
 import RedisStore from "connect-redis";
+import dotenv from "dotenv";
 import { HelmetOptions } from "helmet";
 import Redis from "ioredis";
 
+dotenv.config();
+
 const { env } = process;
 
-const APP_ENV = env.APP_ENV || "development";
+export const APP_ENV = env.APP_ENV || "development";
 
 export const MINIMUM_SUPPORTED_APP_VERSION = "1.1.5";
 
