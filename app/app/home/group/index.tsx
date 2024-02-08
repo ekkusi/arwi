@@ -76,13 +76,16 @@ const GroupOverviewPage_GetGroup_Query = graphql(`
           }
         }
       }
-      collectionTypes {
+      currentModule {
         id
-        category
-        name
-        weight
-        defaultTypeCollection {
+        collectionTypes {
           id
+          category
+          name
+          weight
+          defaultTypeCollection {
+            id
+          }
         }
       }
     }
@@ -161,7 +164,7 @@ export default function GroupView({ route: { params }, navigation }: NativeStack
       case "objectives":
         return <ObjectiveListMemoed {...data} navigation={navigation} />;
       case "statistics":
-        return <StatisticsView {...data} navigation={navigation} />;
+        return <StatisticsViewMemoed {...data} navigation={navigation} />;
       default:
         return null;
     }

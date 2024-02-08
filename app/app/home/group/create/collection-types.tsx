@@ -6,8 +6,7 @@ import { GroupCreationStackParams } from "./types";
 import GroupCreationBody from "./_body";
 import { dividePercentages } from "../../../../helpers/mathUtilts";
 import CollectionTypesBody from "./_collection_types_body";
-import { CollectionTypeInfo, CollectionTypeOption } from "./types_body";
-import { mapCollectionTypeInfo, mapCollectionTypeInfos } from "./helpers";
+import { mapCollectionTypeInfos } from "./helpers";
 
 export default function GroupCollectionTypesView({
   navigation,

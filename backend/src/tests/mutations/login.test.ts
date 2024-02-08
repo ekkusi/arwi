@@ -38,6 +38,27 @@ describe("Login", () => {
     expect(response.data?.login.userData.email).toEqual(loginData.email);
   });
 
+  it("should login user with email even in different case", async () => {
+    const loginData = {
+      email: existingTeacher.email.toUpperCase(),
+      password: existingTeacher.password,
+    };
+
+    const query = graphql(`
+      mutation LoginTest_ValidLoginInDifferentCase($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+          userData {
+            email
+          }
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, loginData);
+
+    expect(response.data?.login.userData.email).toEqual(loginData.email.toLowerCase());
+  });
+
   it("should throw an error for invalid login", async () => {
     const loginData = {
       email: existingTeacher.email,

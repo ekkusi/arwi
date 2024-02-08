@@ -2,6 +2,7 @@ import { CollectionTypeCategory } from "@prisma/client";
 import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../../utils/subjectUtils";
 import { EducationLevel, Resolvers } from "../../types";
 import MissingDataError from "../../errors/MissingDataError";
+import { mapModuleInfo } from "../utils/mappers";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
@@ -15,7 +16,7 @@ const resolvers: TypeResolvers = {
     },
   },
   Group: {
-    currentModule: ({ currentModuleId }, _, { dataLoaders }) => {
+    currentModule: async ({ currentModuleId }, _, { dataLoaders }) => {
       return dataLoaders.moduleLoader.load(currentModuleId);
     },
     modules: ({ id }, _, { dataLoaders }) => {
@@ -34,9 +35,6 @@ const resolvers: TypeResolvers = {
         code: matchingSubject.code,
         label: matchingSubject.label,
       };
-    },
-    collectionTypes: ({ id }, _, { dataLoaders }) => {
-      return dataLoaders.collectionTypesByGroupLoader.load(id);
     },
   },
   DefaultEvaluation: {
@@ -75,9 +73,10 @@ const resolvers: TypeResolvers = {
     },
   },
   ClassParticipationCollection: {
-    environment: ({ environmentCode }) => {
+    environment: async ({ environmentCode, moduleId }, _, { dataLoaders }) => {
       if (!environmentCode) throw new MissingDataError();
-      const environment = getEnvironment(environmentCode);
+      const module = await dataLoaders.moduleLoader.load(moduleId);
+      const environment = getEnvironment(environmentCode, mapModuleInfo(module));
       if (!environment) throw new MissingDataError(`Environment not found with code: ${environmentCode}`);
       return environment;
     },
@@ -150,6 +149,11 @@ const resolvers: TypeResolvers = {
             },
           ],
         },
+        orderBy: {
+          evaluationCollection: {
+            date: "desc",
+          },
+        },
       });
       return evaluations;
     },
@@ -182,13 +186,19 @@ const resolvers: TypeResolvers = {
         where: {
           modules: { some: { id } },
         },
+        orderBy: {
+          name: "asc",
+        },
       });
       return students;
     },
+    collectionTypes: ({ id }, _, { dataLoaders }) => {
+      return dataLoaders.collectionTypesByModuleLoader.load(id);
+    },
   },
   CollectionType: {
-    group: ({ groupId }, _, { dataLoaders }) => {
-      return dataLoaders.groupLoader.load(groupId);
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
     },
     defaultTypeCollection: ({ id, category }, _, { prisma }) => {
       if (category === CollectionTypeCategory.CLASS_PARTICIPATION) return null;

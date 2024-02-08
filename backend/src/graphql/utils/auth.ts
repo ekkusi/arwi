@@ -39,9 +39,11 @@ export const checkAuthenticatedByType = async (user: User, typeId: string) => {
 
   const matchingGroup = await prisma.group.findFirstOrThrow({
     where: {
-      collectionTypes: {
-        some: {
-          id: typeId,
+      currentModule: {
+        collectionTypes: {
+          some: {
+            id: typeId,
+          },
         },
       },
     },

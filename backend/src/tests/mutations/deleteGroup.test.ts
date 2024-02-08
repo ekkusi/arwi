@@ -16,7 +16,7 @@ import { evaluationLoader, evaluationsByCollectionLoader } from "../../graphql/d
 import { moduleLoader, modulesByGroupLoader } from "../../graphql/dataLoaders/module";
 import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
 import { studentLoader, studentsByGroupLoader } from "../../graphql/dataLoaders/student";
-import { collectionTypeLoader, collectionTypesByGroupLoader } from "../../graphql/dataLoaders/collectionType";
+import { collectionTypeLoader, collectionTypesByModuleLoader } from "../../graphql/dataLoaders/collectionType";
 
 describe("deleteGroup", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -93,7 +93,7 @@ describe("deleteGroup", () => {
 
   it("should update DataLoaders and throw errors after deleting a group and its related entities", async () => {
     // Create a collection and evaluation
-    const collectionType = group.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const collectionType = group.currentModule.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
     const collection = await createTestEvaluationCollection(group.currentModuleId, collectionType.id);
     const evaluation = await createTestEvaluation(collection.id, student.id);
 
@@ -102,6 +102,9 @@ describe("deleteGroup", () => {
     const groupsFromTeacherLoaderBeforeDelete = await groupsByTeacherLoader.load(teacher.id);
     expect(groupFromGroupLoaderBeforeDelete).toBeDefined();
     expect(groupsFromTeacherLoaderBeforeDelete).toContainEqual(expect.objectContaining({ id: group.id }));
+
+    const modules = await modulesByGroupLoader.load(group.id);
+    const collectionTypesByModulePromises = modules.map((module) => ({ types: collectionTypesByModuleLoader.load(module.id), moduleId: module.id }));
 
     // Fetch all related data DataLoaders before delete
     await Promise.all([
@@ -114,8 +117,8 @@ describe("deleteGroup", () => {
       studentLoader.load(student.id),
       studentsByGroupLoader.load(group.id),
       collectionTypeLoader.load(collectionType.id),
-      collectionTypesByGroupLoader.load(group.id),
     ]);
+    const collectionTypesByModules = await Promise.all(collectionTypesByModulePromises);
 
     // Delete the group
     const deleteGroupQuery = graphql(`
@@ -141,7 +144,13 @@ describe("deleteGroup", () => {
       expect(studentLoader.load(student.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
       expect(studentsByGroupLoader.load(group.id)).resolves.not.toContainEqual(expect.objectContaining({ id: student.id })),
       expect(collectionTypeLoader.load(collectionType.id)).rejects.toThrowError("Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."),
-      expect(collectionTypesByGroupLoader.load(group.id)).resolves.not.toContainEqual(expect.objectContaining({ id: collectionType.id })),
     ]);
+
+    // Assert DataLoader errors for deleted group and its related entities
+    await Promise.all(
+      collectionTypesByModules.map((data) =>
+        expect(collectionTypesByModuleLoader.load(data.moduleId)).not.toContainEqual(expect.objectContaining({ id: data.types }))
+      )
+    );
   });
 });

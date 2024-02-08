@@ -43,6 +43,9 @@ export const groupsByTeacherLoader = new CustomDataLoader<string, Group[]>(async
         in: [...teacherIds],
       },
     },
+    orderBy: {
+      updatedAt: "desc",
+    },
   });
 
   const groupsMap: Record<string, Group[]> = {};

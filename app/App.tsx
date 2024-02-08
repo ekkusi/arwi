@@ -1,10 +1,10 @@
 import { Suspense, useEffect } from "react";
-import { Logs } from "expo";
 // import ErrorBoundary from "react-native-error-boundary";
 import MatomoTracker, { MatomoProvider, useMatomo } from "matomo-tracker-react-native";
-import { LogBox, Platform, View, Text } from "react-native";
+import { LogBox, Platform } from "react-native";
 import ErrorBoundary from "react-native-error-boundary";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import * as Sentry from "@sentry/react-native";
 import Main from "./Main";
 import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
@@ -14,18 +14,29 @@ import LoadingIndicator from "./components/LoadingIndicator";
 import ErrorView from "./app/ErrorView";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 
-Logs.enableExpoCliLogging();
+const SENTRY_URL = process.env.EXPO_PUBLIC_SENTRY_URL;
+const ENV = process.env.EXPO_PUBLIC_ENV || "development";
+
+if (!SENTRY_URL) console.warn("EXPO_PUBLIC_SENTRY_URL not set, error reporting disabled");
+
+Sentry.init({
+  dsn: SENTRY_URL,
+  enabled: !__DEV__,
+  environment: ENV,
+});
 
 // iOS dev build on iOS simulator causes the following warning: Overriding previous layout animation with new one before the first began...
 // There seems to be no way to fix this as this comes simply from using KeyboardAvoidingView so logs are ignored.
 // Keep an eye on terminal logs for other relevant warnings.
 if (Platform.OS === "ios") LogBox.ignoreAllLogs();
+if (__DEV__ && process.env.EXPO_PUBLIC_IGNORE_LOGS === "true") LogBox.ignoreAllLogs();
 
 function AppContent() {
   const { trackAppStart } = useMatomo();
+
   const onError = (error: Error, componentStack: string) => {
+    Sentry.captureException(error);
     console.error(error, componentStack);
-    // TODO: Log error to error reporting service
   };
 
   useEffect(() => {
@@ -60,12 +71,7 @@ const instance =
     disabled: __DEV__,
   });
 
-export default function App() {
-  // return (
-  //   <View>
-  //     <Text>Test</Text>
-  //   </View>
-  // );
+function App() {
   return instance ? (
     <MatomoProvider instance={instance}>
       <AppContent />
@@ -74,3 +80,5 @@ export default function App() {
     <AppContent />
   );
 }
+
+export default Sentry.wrap(App);

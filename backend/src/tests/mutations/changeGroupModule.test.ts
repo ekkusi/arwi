@@ -1,7 +1,8 @@
+import { v4 as uuidv4 } from "uuid";
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { ChangeGroupModuleInput, EducationLevel } from "../../types";
+import { ChangeGroupModuleInput, CollectionTypeCategory, EducationLevel } from "../../types";
 import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
 import { modulesByGroupLoader } from "../../graphql/dataLoaders/module";
 import { groupLoader, groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
@@ -121,6 +122,83 @@ describe("changeGroupModule", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain("Annettu oppimistavoitteiden ryhmä ei ole sallittu kyseiselle koulutustasolle.");
+  });
+
+  it("should throw error when changing from primary school to other level", async () => {
+    const changeGroupModuleData: ChangeGroupModuleInput = {
+      newEducationLevel: EducationLevel.HIGH_SCHOOL,
+      newLearningObjectiveGroupKey: "LI_HS_MODULE_LI1",
+    };
+
+    const query = graphql(`
+      mutation ChangeGroupModuleInvalidEducationLevelFromPrimary($data: ChangeGroupModuleInput!, $groupId: ID!) {
+        changeGroupModule(data: $data, groupId: $groupId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: changeGroupModuleData, groupId });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(
+      "Annettu koulutustaso ei ole sallittu kyseiselle ryhmälle. Et voi vaihtaa ryhmää peruskouluasteesta toiselle asteelle"
+    );
+  });
+
+  it("should throw error when changing from other level to primary school", async () => {
+    // Create a new high school group and module
+    const newGroupId = uuidv4();
+    const newModuleId = uuidv4();
+    const groupCreate = prisma.group.create({
+      data: {
+        id: newGroupId,
+        name: "Test Group",
+        subjectCode: "LI",
+        currentModuleId: newModuleId,
+        teacherId: teacher.id,
+      },
+    });
+    const moduleCreate = prisma.module.create({
+      data: {
+        id: newModuleId,
+        educationLevel: EducationLevel.HIGH_SCHOOL,
+        learningObjectiveGroupKey: "LI_HS_MODULE_LI1",
+        groupId,
+        collectionTypes: {
+          createMany: {
+            data: [
+              {
+                category: CollectionTypeCategory.CLASS_PARTICIPATION,
+                name: "Participation",
+                weight: 100,
+              },
+            ],
+          },
+        },
+      },
+    });
+    await prisma.$transaction([groupCreate, moduleCreate]);
+
+    const changeGroupModuleData: ChangeGroupModuleInput = {
+      newEducationLevel: EducationLevel.PRIMARY_FOURTH,
+      newLearningObjectiveGroupKey: "three_to_six_years",
+    };
+
+    const query = graphql(`
+      mutation ChangeGroupModuleInvalidEducationLevelFromHighSchool($data: ChangeGroupModuleInput!, $groupId: ID!) {
+        changeGroupModule(data: $data, groupId: $groupId) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: changeGroupModuleData, groupId: newGroupId });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(
+      "Annettu koulutustaso ei ole sallittu kyseiselle ryhmälle. Et voi vaihtaa ryhmää toiselta asteelta muulle asteelle."
+    );
   });
 
   it("should reflect updates in DataLoader after changing group module", async () => {

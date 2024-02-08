@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { ModuleInfo } from "arwi-backend/src/types";
-import { getModuleInfos } from "arwi-backend/src/utils/subjectUtils";
+import { getModuleInfos, isPrimaryEducationLevel } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import SelectFormField from "../../components/form/SelectFormField";
 import LoadingIndicator from "../../components/LoadingIndicator";
@@ -36,46 +36,6 @@ const ChangeModule_ChangeModule_Mutation = graphql(`
       id
       currentModule {
         id
-        info {
-          educationLevel
-          learningObjectiveGroupKey
-          label {
-            fi
-          }
-        }
-        students {
-          id
-          name
-          currentModuleEvaluations {
-            id
-            wasPresent
-          }
-        }
-        evaluationCollections {
-          id
-          date
-          __typename
-          ... on ClassParticipationCollection {
-            environment {
-              label {
-                fi
-              }
-              code
-              color
-            }
-            learningObjectives {
-              code
-              label {
-                fi
-              }
-              description {
-                fi
-              }
-              type
-            }
-          }
-          ...CollectionsLineChart_EvaluationCollection
-        }
       }
     }
   }
@@ -122,13 +82,19 @@ export default function ChangeModule({ groupId, onCancel, onSaved }: ChangeModul
 
   if (!data) return <LoadingIndicator />;
 
+  const currentModuleLevel = data.getGroup.currentModule.info.educationLevel;
+  const isCurrentModulePrimaryLevel = isPrimaryEducationLevel(currentModuleLevel);
+
   const modules = getModuleInfos(data.getGroup.subject.code);
+  const educationLevelModules = modules.filter((m) =>
+    isCurrentModulePrimaryLevel ? isPrimaryEducationLevel(m.educationLevel) : m.educationLevel === currentModuleLevel
+  );
 
   return (
     <CView>
       <SelectFormField
         defaultValue={data.getGroup.currentModule.info}
-        options={modules}
+        options={educationLevelModules}
         onSelect={(item) => setSelectedModule(item)}
         getOptionValue={(item) => `${item.educationLevel}-${item.learningObjectiveGroupKey}`}
         formatLabel={(item) => item.label.fi}

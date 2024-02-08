@@ -83,10 +83,24 @@ services:
       MPASSID_CLIENT_ID: ${MPASSID_CLIENT_ID}
       MAIL_USER: ${MAIL_USER}
       MAIL_PASS: ${MAIL_PASS}
+      SENTRY_URL: ${SENTRY_URL}
+      API_TOKENS: ${BACKEND_HEADER_AUTH_API_TOKENS}
+      APP_ENV: production
     ports:
       - "4000:4000"
     depends_on:
       - postgres
+    networks:
+      - app-network
+
+  backend-proxy:
+    image: ekkusi/arwi-backend-proxy
+    restart: always
+    environment:
+      API_KEY: ${BACKEND_HEADER_AUTH_API_KEY}
+      MAIN_API_URL: ${MAIN_BACKEND_URL}
+    ports:
+      - "4001:4001"
     networks:
       - app-network
 
@@ -96,6 +110,7 @@ services:
     environment:
         NEXT_PUBLIC_GRIDLY_API_KEY: ${GRIDLY_API_KEY}
         NEXT_PUBLIC_GRIDLY_VIEW_ID: ${GRIDLY_API_KEY}
+        NEXT_PUBLIC_BACKEND_URL: ${MAIN_BACKEND_URL}
     ports:
       - "5000:3000"
     networks:

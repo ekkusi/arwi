@@ -1,12 +1,13 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../gql";
 import { formatDate } from "../helpers/dateHelpers";
 import { Accordion, AccordionProps } from "./Accordion";
 import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
-import { SPACING } from "../theme";
+import { COLORS, SPACING } from "../theme";
 import CircledNumber from "./CircledNumber";
 
 const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
@@ -38,14 +39,14 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
 
 type EvaluationsAccordionProps = Omit<AccordionProps, "data"> & {
   evaluations: FragmentType<typeof EvaluationsAccordion_Evaluation_Fragment>[];
-  titleFrom?: "student" | "collection";
+  type?: "student" | "collection";
   allowEditing?: boolean;
   onAccordionButtonPress?: (id: string) => void;
 };
 
 export default function EvaluationsAccordion({
   evaluations: evaluationFragments,
-  titleFrom = "collection",
+  type = "collection",
   allowMultiple = true,
   allowEditing = true,
   onAccordionButtonPress,
@@ -54,29 +55,52 @@ export default function EvaluationsAccordion({
   const { t } = useTranslation();
   const evaluations = getFragmentData(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
 
-  const sortedEvaluations = [...evaluations].sort((a, b) =>
-    titleFrom === "collection"
-      ? new Date(b.collection.date).getTime() - new Date(a.collection.date).getTime()
-      : a.student.name.localeCompare(b.student.name)
-  );
+  const sortedEvaluations = useMemo(() => {
+    if (type === "collection") return evaluations;
+    return [...evaluations].sort((a, b) => a.student.name.localeCompare(b.student.name));
+  }, [evaluations, type]);
+
+  const formatStateText = (evaluation: (typeof evaluations)[0]) => {
+    if (!evaluation.wasPresent) {
+      return t("not-present", "Ei paikalla");
+    }
+
+    if (!evaluation.behaviourRating || !evaluation.skillsRating) {
+      return t("evaluation-not-finished", "Arviointi kesken");
+    }
+
+    return t("evaluated", "Arvioitu");
+  };
+
+  const formatEvaluationColor = (evaluation: (typeof evaluations)[0]) => {
+    if (!evaluation.wasPresent) {
+      return COLORS.red;
+    }
+
+    if (!evaluation.behaviourRating || !evaluation.skillsRating) {
+      return COLORS.yellow;
+    }
+
+    return COLORS.green;
+  };
 
   return (
     <Accordion
       allowMultiple={allowMultiple}
       data={sortedEvaluations.map((it) => ({
-        title: titleFrom === "collection" ? `${it.collection.environment.label.fi}` : it.student.name,
+        key: it.id,
+        title: type === "collection" ? `${it.collection.environment.label.fi}` : it.student.name,
         date: formatDate(it.collection.date),
-        isEvaluated:
-          titleFrom === "student"
-            ? it.behaviourRating !== undefined && it.behaviourRating !== null && it.skillsRating !== undefined && it.skillsRating !== null
-            : undefined,
-        color: it.collection.environment.color,
+        stateText: formatStateText(it),
+        color: type === "student" ? formatEvaluationColor(it) : it.collection.environment.color,
         icons: it.wasPresent && !!it.notes && <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />,
         content: (
           <>
-            <CText style={{ fontSize: "sm", fontWeight: "500", color: it.wasPresent ? "green" : "red", paddingBottom: 10 }}>
-              {it.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
-            </CText>
+            {type === "collection" && (
+              <CText style={{ fontSize: "sm", fontWeight: "500", color: it.wasPresent ? "green" : "red", paddingBottom: 10 }}>
+                {it.wasPresent ? t("present", "Paikalla") : t("notPresent", "Poissa")}
+              </CText>
+            )}
             {it.wasPresent ? (
               <CView style={{ gap: 10 }}>
                 <CView style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>

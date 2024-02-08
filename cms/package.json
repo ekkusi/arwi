@@ -10,7 +10,7 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "export-and-convert": "npx sanity dataset export production ./export/data.tar.gz && cd export && tar -xzvf data.tar.gz && mv ./*/* ./ && ndjson-reduce < data.ndjson > data.json && find . ! -name 'data.json' -type f -exec rm -f {} + && yarn transform-export",
+    "export-and-convert": "npx sanity dataset export production ./export/data.tar.gz && cd export && tar -xzvf data.tar.gz && mv ./*/* ./ && ndjson-reduce < data.ndjson > data.json && find . ! -name 'data.json' -type f -exec rm -f {} + && find . -empty -type d -delete && yarn transform-export",
     "transform-export": "ts-node ./utils/transformExport.ts"
   },
   "keywords": [

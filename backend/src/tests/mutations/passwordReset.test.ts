@@ -22,14 +22,14 @@ describe("Password Reset Flow", () => {
   const mockCode = "123456";
   let request: supertest.SuperAgentTest;
 
-  const requestReset = async () => {
+  const requestReset = async (email?: string) => {
     const requestResetMutation = graphql(`
       mutation RequestPasswordResetValid($email: String!) {
         requestPasswordReset(email: $email)
       }
     `);
 
-    return graphqlRequest(requestResetMutation, { email: teacher.email });
+    return graphqlRequest(requestResetMutation, { email: email || teacher.email });
   };
 
   beforeAll(async () => {
@@ -80,6 +80,14 @@ describe("Password Reset Flow", () => {
     // Verify password was updated
     const updatedTeacher = await prisma.teacher.findUnique({ where: { id: teacher.id } });
     expect(await compare(newPassword, updatedTeacher?.passwordHash!)).toBeTruthy();
+  });
+
+  it("should send email even if the email is in different case", async () => {
+    const emailInDifferentCase = teacher.email.toUpperCase();
+    const resetResponse = await requestReset(emailInDifferentCase);
+
+    expect(resetResponse.data?.requestPasswordReset).toBeTruthy();
+    expect(sendMail).toHaveBeenCalledWith(emailInDifferentCase.toLowerCase(), "Salasanan palautus", expect.any(String));
   });
 
   it("should not send email for non-existing email", async () => {

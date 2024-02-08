@@ -7,12 +7,8 @@ import { CustomContext } from "../../types/contextTypes";
 import { SESSION_NAME } from "../../config";
 
 const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (resolve, parent, args, context, info) => {
-  // console.log("checkIsAuthenticated id", context.req.sessionID);
-  // console.log("session", context.req.session);
-
-  // console.log("checkIsauthenticated cookie", context.req.cookies[SESSION_NAME]);
-
   if (!context.req.session?.userInfo) {
+    context.res.clearCookie(SESSION_NAME);
     throw new AuthenticationError();
   }
 
@@ -21,6 +17,7 @@ const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (res
 
 const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = [
   "login",
+  "logout",
   "register",
   "mPassIDLogin",
   "verifyPasswordResetCode",

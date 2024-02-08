@@ -31,6 +31,7 @@ type Mutation {
   updateClassParticipationEvaluation(input: UpdateClassParticipationEvaluationInput!): ClassParticipationEvaluation!
   updateDefaultEvaluation(input: UpdateDefaultEvaluationInput!): DefaultEvaluation!
   deleteStudent(studentId: ID!): Student!
+  deleteTeacher(teacherId: ID!): Teacher!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
@@ -40,6 +41,7 @@ type Mutation {
 
 type AppMetadata {
   appVersion: String!
+  minimumSupportedAppVersion: String!
 }
 
 type AuthPayload {
@@ -82,6 +84,7 @@ type LearningObjective {
   label: TranslatedString!
   description: TranslatedString!
   type: LearningObjectiveType!
+  color: String!
 }
 
 type Subject {
@@ -107,7 +110,6 @@ type Group {
   archived: Boolean!
   currentModule: Module!
   modules: [Module!]!
-  collectionTypes: [CollectionType!]!
 }
 
 type CollectionType {
@@ -115,7 +117,7 @@ type CollectionType {
   category:    CollectionTypeCategory!
   name:        String!
   weight:      Int!
-  group: Group!
+  module: Module!
   defaultTypeCollection: DefaultCollection
 }
 
@@ -139,6 +141,7 @@ type Module {
   evaluationCollections: [EvaluationCollection!]!
   students: [Student!]!
   group: Group!
+  collectionTypes: [CollectionType!]!
 }
 
 interface EvaluationCollection {

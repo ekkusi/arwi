@@ -4,16 +4,17 @@ import { Issuer, Client as OpenIDClient } from "openid-client";
 import { initSession, logOut } from "../utils/auth";
 import prisma from "@/prismaClient";
 import BadRequestError from "../errors/BadRequestError";
+import { APP_ENV } from "../config";
 
 dotenv.config();
 
 const router = Router();
 
-const { MPASSID_CLIENT_SECRET, MPASSID_CLIENT_ID } = process.env;
-const MPASSID_ISSUER_URL = "https://mpass-proxy-test.csc.fi";
+const { MPASSID_CLIENT_SECRET, MPASSID_CLIENT_ID, NODE_ENV } = process.env;
+const MPASSID_ISSUER_URL = NODE_ENV === "production" ? "https://mpass-proxy.csc.fi" : "https://mpass-proxy-test.csc.fi";
 
 if (!MPASSID_CLIENT_SECRET || !MPASSID_CLIENT_ID) {
-  if (process.env.NODE_ENV === "production") throw new Error("MPASSID_CLIENT_SECRET or MPASSID_CLIENT_ID is missing from environment variables");
+  if (APP_ENV === "production") throw new Error("MPASSID_CLIENT_SECRET or MPASSID_CLIENT_ID is missing from environment variables");
   else console.warn("MPASSID_CLIENT_SECRET or MPASSID_CLIENT_ID is missing from environment variables, MPassID auth will not work");
 }
 
@@ -24,14 +25,9 @@ type AuthorizeParams = {
 
 export const grantToken = async (client: OpenIDClient, code: string) => {
   const redirectUri = client.metadata.redirect_uris?.[0];
+
   if (!redirectUri) throw new Error("Something went wrong, redirect uri is missing");
-  let tokenSet;
-  try {
-    tokenSet = await client.callback(redirectUri, { code });
-  } catch (error) {
-    console.error(error);
-  }
-  // const tokenSet = await client.callback(redirectUri, { code });
+  const tokenSet = await client.callback(redirectUri, { code });
 
   if (!tokenSet?.access_token) throw new Error("Something went wrong, access_token not found from token set");
   const userInfo = await client.userinfo(tokenSet.access_token);
@@ -65,6 +61,18 @@ export const grantAndInitSession = async (client: OpenIDClient, code: string, re
   };
 };
 
+const getRedirectUri = () => {
+  const redirectPath = "/auth/mpassid-callback";
+  switch (APP_ENV) {
+    case "production":
+      return `https://api.arwi.fi${redirectPath}`;
+    case "staging":
+      return `https://staging-api.arwi.fi${redirectPath}`;
+    default:
+      return `http://localhost:4000${redirectPath}`;
+  }
+};
+
 const initAuth = async () => {
   const mPassIDIssuer = await Issuer.discover(MPASSID_ISSUER_URL);
 
@@ -74,14 +82,13 @@ const initAuth = async () => {
     client = new mPassIDIssuer.Client({
       client_id: MPASSID_CLIENT_ID,
       client_secret: MPASSID_CLIENT_SECRET,
-      token_endpoint_auth_method: "client_secret_basic",
-      redirect_uris: ["http://localhost:4000/auth/mpassid-callback"],
+      token_endpoint_auth_method: "client_secret_post",
+      redirect_uris: [getRedirectUri()],
       response_types: ["code"],
     });
   }
 
   router.use("/mpassid-callback", async (req, res) => {
-    if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const params = client.callbackParams(req);
@@ -100,7 +107,6 @@ const initAuth = async () => {
   });
 
   router.use("/authorize", async (req, res) => {
-    if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const { query } = req;

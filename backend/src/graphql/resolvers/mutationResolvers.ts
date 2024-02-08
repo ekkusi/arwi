@@ -9,6 +9,7 @@ import {
   mapCreateClassParticipationEvaluationInput,
   mapCreateDefaultEvaluationInput,
   mapCreateTeacherInput,
+  mapModuleInfo,
   mapUpdateClassParticipationCollectionInput,
   mapUpdateClassParticipationEvaluationInput,
   mapUpdateDefaultCollectionInput,
@@ -39,6 +40,7 @@ import {
   checkAuthenticatedByEvaluation,
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
+  checkAuthenticatedByTeacher,
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
@@ -53,20 +55,27 @@ import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
+import OpenIDError from "../../errors/OpenIDError";
+import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
-    const { password, ...rest } = data;
-    await validateRegisterInput(data);
+    const { password } = data;
+    const mappedData = {
+      ...data,
+      email: data.email.toLowerCase(),
+    };
+    await validateRegisterInput(mappedData);
     const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
-    const teacher = await createTeacher({ data: mapCreateTeacherInput(rest, passwordHash) });
+    const teacher = await createTeacher({ data: mapCreateTeacherInput(mappedData, passwordHash) });
 
     initSession(req, { ...teacher, type: "local" });
     return {
       userData: teacher,
     };
   },
-  login: async (_, { email, password }, { prisma, req }) => {
+  login: async (_, { email: initialEmail, password }, { prisma, req }) => {
+    const email = initialEmail.toLowerCase();
     const matchingTeacher = await prisma.teacher.findFirst({
       where: { email },
     });
@@ -81,24 +90,33 @@ const resolvers: MutationResolvers<CustomContext> = {
     };
   },
   mPassIDLogin: async (_, { code }, { req, OIDCClient }) => {
-    if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
-    if (!OIDCClient) throw new Error("Something went wrong, OIDC client is not initialized");
+    if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
 
-    const { isNewUser, user } = await grantAndInitSession(OIDCClient, code, req);
-    return {
-      payload: {
-        userData: user,
-      },
-      newUserCreated: isNewUser,
-    };
+    try {
+      const { isNewUser, user } = await grantAndInitSession(OIDCClient, code, req);
+      return {
+        payload: {
+          userData: user,
+        },
+        newUserCreated: isNewUser,
+      };
+    } catch (error) {
+      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+    }
   },
   connectMPassID: async (_, { code }, { req, OIDCClient, user, prisma }) => {
-    if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
     const currentUser = user!; // Safe cast after authenticated check
-    if (!OIDCClient) throw new Error("Something went wrong, OIDC client is not initialized");
+    if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
     if (currentUser.mPassID) throw new ValidationError("Tilisi on jo liitetty mpass-id tunnuksiin");
-    const { userInfo, tokenSet } = await grantToken(OIDCClient, code);
-    if (userInfo.mPassID) throw new Error("Something went wrong, mpass-id not found from user after grant");
+
+    let userInfo;
+    let tokenSet;
+    try {
+      ({ userInfo, tokenSet } = await grantToken(OIDCClient, code));
+    } catch (error) {
+      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+    }
+    if (userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
     const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.sub } });
     if (matchingUser?.email) throw new ValidationError("Kyseinen mpass-id on jo liitetty toiseen käyttäjään");
 
@@ -106,6 +124,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     if (matchingUser) {
       // Update all groups where old user was teacher to new user
       await updateGroupMany(matchingUser.id, { data: { teacherId: currentUser.id } });
+
+      // The current user loaders arent cleared in the updateGroup
+      await clearGroupLoadersByTeacher(currentUser.id);
+
       // Delete old user
       await deleteTeacher(matchingUser.id);
     }
@@ -117,8 +139,8 @@ const resolvers: MutationResolvers<CustomContext> = {
       userData: updatedUser,
     };
   },
-  connectLocalCredentials: async (_, { email, password }, { req, prisma, user }) => {
-    if (process.env.NODE_ENV === "production") throw new Error("This endpoint is not available in production");
+  connectLocalCredentials: async (_, { email: initialEmail, password }, { req, prisma, user }) => {
+    const email = initialEmail.toLowerCase();
     const currentUser = user!; // Safe cast after authenticated check
     if (currentUser.email) throw new ValidationError("Tilisi on jo liitetty lokaaleihin tunnuksiin");
     if (!currentUser.mPassID) throw new ValidationError("Sinun tulee olla kirjautunut mpass-id tunnuksilla liittääksesi lokaalit tunnukset");
@@ -132,6 +154,8 @@ const resolvers: MutationResolvers<CustomContext> = {
     if (!isValidPassword) throw new ValidationError(`Annettu salasana oli väärä.`);
     // Update all groups where old user was teacher to new user
     await updateGroupMany(matchingTeacher.id, { data: { teacherId: currentUser.id } });
+    // The current user loaders arent cleared in the updateGroup
+    await clearGroupLoadersByTeacher(currentUser.id);
     // Delete local credentials user
     await deleteTeacher(matchingTeacher.id);
     // Update old user with new credentials
@@ -145,7 +169,8 @@ const resolvers: MutationResolvers<CustomContext> = {
     await logOut(req, res);
     return true;
   },
-  requestPasswordReset: async (_, { email }, { prisma, req }) => {
+  requestPasswordReset: async (_, { email: initialEmail }, { prisma, req }) => {
+    const email = initialEmail.toLowerCase();
     const code = generateCode(6);
     const matchingTeacher = await prisma.teacher.findFirst({
       where: { email },
@@ -176,19 +201,13 @@ const resolvers: MutationResolvers<CustomContext> = {
       // Validate request after update to make sure started at date is set correctly
       await validateRequestPasswordReset(updatedTeacher);
 
-      try {
-        await sendMail(
-          email,
-          "Salasanan palautus",
-          `Olet pyytänyt salasanan palautusta Arwi-sovellukseen. Käytä alla olevaa koodia salasanan palautukseen.
+      await sendMail(
+        email,
+        "Salasanan palautus",
+        `Olet pyytänyt salasanan palautusta Arwi-sovellukseen. Käytä alla olevaa koodia salasanan palautukseen.
          Sinulla on 5 minuuttia aikaa ennen kuin koodi umpeutuu. <br /><br /> Koodi: <b>${code}</b><br /><br />
          Jos sinä et tehnyt kyseistä pyyntöä salasanan palautuksesta, suosittelemme ottamaan yhteyttä järjestelmänvalvontaan info@arwi.fi.`
-        );
-      } catch (error) {
-        // TODO: Log error to logging service
-        console.error("Something went wrong with sending email:", error);
-        return false;
-      }
+      );
 
       matomo.trackEvent(MATOMO_EVENT_CATEGORIES.PASSWORD_RESET, "Request password reset", { userInfo: { uid: matchingTeacher.id } });
 
@@ -232,11 +251,6 @@ const resolvers: MutationResolvers<CustomContext> = {
         ...rest,
         id: groupId,
         currentModuleId: moduleId,
-        collectionTypes: {
-          createMany: {
-            data: collectionTypes,
-          },
-        },
       },
     });
     const moduleCreate = prisma.module.create({
@@ -245,6 +259,11 @@ const resolvers: MutationResolvers<CustomContext> = {
         educationLevel,
         learningObjectiveGroupKey,
         groupId,
+        collectionTypes: {
+          createMany: {
+            data: collectionTypes,
+          },
+        },
         students: {
           create: studentInputs.map((it) => ({
             groupId,
@@ -365,6 +384,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     const collection = await deleteCollection(collectionId);
     return collection;
   },
+  deleteTeacher: async (_, { teacherId }, { user, req, res }) => {
+    await checkAuthenticatedByTeacher(user, teacherId);
+    const teacher = await deleteTeacher(teacherId);
+    await logOut(req, res);
+    return teacher;
+  },
   // NOTE: This function is not used currently but is here for possible future use
   // deleteCollectionType: async (_, { id }, { user }) => {
   //   await checkAuthenticatedByType(user, id);
@@ -374,11 +399,11 @@ const resolvers: MutationResolvers<CustomContext> = {
   changeGroupModule: async (_, { data, groupId }, { prisma, dataLoaders, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
     await validateChangeGroupLevelInput(data, groupId);
-    let newYear = await prisma.module.findFirst({
+    let newModule = await prisma.module.findFirst({
       where: { groupId, educationLevel: data.newEducationLevel, learningObjectiveGroupKey: data.newLearningObjectiveGroupKey },
     });
     const group = await dataLoaders.groupLoader.load(groupId);
-    if (!newYear) {
+    if (!newModule) {
       // Copy students from current year to new year
       const currentYearStudents = await prisma.student.findMany({
         where: {
@@ -389,13 +414,25 @@ const resolvers: MutationResolvers<CustomContext> = {
           },
         },
       });
-      newYear = await createModule({
+      const currentYearCollectionTypes = await dataLoaders.collectionTypesByModuleLoader.load(group.currentModuleId);
+      newModule = await createModule({
         data: {
           educationLevel: data.newEducationLevel,
           learningObjectiveGroupKey: data.newLearningObjectiveGroupKey,
           groupId,
+          // Connect students from current year to new year
           students: {
             connect: currentYearStudents.map((it) => ({ id: it.id })),
+          },
+          // Copy collection types from current year to new year
+          collectionTypes: {
+            createMany: {
+              data: currentYearCollectionTypes.map((it) => ({
+                name: it.name,
+                category: it.category,
+                weight: it.weight,
+              })),
+            },
           },
         },
       });
@@ -404,7 +441,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       groupId,
       {
         data: {
-          currentModuleId: newYear.id,
+          currentModuleId: newModule.id,
         },
       },
       {}
@@ -445,14 +482,16 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
       select: {
         subjectCode: true,
+        currentModule: true,
       },
     });
     const [evaluations, group] = await Promise.all([evaluationsPromise, groupPromise]);
+    const { currentModule } = group;
     const mappedEvaluations = evaluations.map((it) => {
       const { environmentCode } = it.evaluationCollection;
       return environmentCode
         ? {
-            environmentLabel: getEnvironment(environmentCode)?.label.fi || "Ei ympäristöä",
+            environmentLabel: getEnvironment(environmentCode, mapModuleInfo(currentModule))?.label.fi || "Ei ympäristöä",
             date: it.evaluationCollection.date,
             skillsRating: it.skillsRating,
             behaviourRating: it.behaviourRating,

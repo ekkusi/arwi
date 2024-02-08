@@ -52,11 +52,13 @@ const EvaluationEditView_GetEvaluation_Query = graphql(`
 const EvaluationEditView_UpdateEvaluation_Mutation = graphql(`
   mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateClassParticipationEvaluationInput!) {
     updateClassParticipationEvaluation(input: $updateEvaluationInput) {
-      id
-      wasPresent
-      skillsRating
-      behaviourRating
-      notes
+      ...ClassParticipationEvaluationUpdate_Info
+      collection {
+        id
+        evaluations {
+          ...ClassParticipationEvaluationUpdate_Info
+        }
+      }
     }
   }
 `);

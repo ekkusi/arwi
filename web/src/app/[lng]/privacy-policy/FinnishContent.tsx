@@ -1,5 +1,6 @@
 import { ListItem, Text, UnorderedList } from "@chakra-ui/react";
 import Link from "@/components/primitives/Link";
+import { getPathFromRoute } from "../../../utils/route";
 
 export default function PrivacyPolicyContentFi() {
   return (
@@ -32,14 +33,15 @@ export default function PrivacyPolicyContentFi() {
         selvittämiseen.
       </Text>
       <Text>
-        Pseudonymisoituja henkilötietoja käytetään sovelluksen laadun varmistamiseen, sovelluksen käytön tilastolliseen seuraamiseen sekä
-        virhetilanteiden selvittämiseen ja korjaamiseen.
+        Pseudonymisoituja henkilötietoja ja anonymisoituja (ei-henkilötietoja sisältävät) tietoja sisältäviä tietoja käytetään sovelluksen laadun
+        varmistamiseen, sovelluksen käytön tilastolliseen seuraamiseen sekä virhetilanteiden selvittämiseen ja korjaamiseen.
       </Text>
       <Text>Henkilötietojen keräämisen oikeusperusteena on rekisteröidyn suostumus.</Text>
       <Text as="h2">5. Rekisterin tietosisältö</Text>
       <Text>Sovelluksen käyttäjä:</Text>
       <UnorderedList>
         <ListItem>Käyttäjän yhteystiedot</ListItem>
+        <ListItem>Käyttäjän keräämä arviointidata oppilaista</ListItem>
         <ListItem>Sovelluksen personointitiedot</ListItem>
         <ListItem>Maksujen kuittitiedot</ListItem>
         <ListItem>Muut käyttäjän suostumuksella kerätyt tiedot</ListItem>
@@ -47,9 +49,12 @@ export default function PrivacyPolicyContentFi() {
       <Text>Pseudonymisoitu tieto sovelluksen käyttäjästä:</Text>
       <UnorderedList>
         <ListItem>Tiedot sovelluksen käytöstä</ListItem>
-        <ListItem>Puhelinmallin ja käyttöjärjestelmän tiedot</ListItem>
         <ListItem>Sijainti tilastollisella tavalla</ListItem>
-        <ListItem>Käyttäjän keräämä arviointidata oppilaista</ListItem>
+      </UnorderedList>
+      <Text>Anonymisoidut (ei-henkilötietoja sisältävät) tiedot:</Text>
+      <UnorderedList>
+        <ListItem>Puhelinmallin ja käyttöjärjestelmän tiedot</ListItem>
+        <ListItem>Sovelluksen virhe- ja kaatumisraportit</ListItem>
         <ListItem>Tekniset lokitiedot</ListItem>
       </UnorderedList>
       <Text as="h2">6. Säännönmukaiset tietolähteet</Text>
@@ -64,16 +69,28 @@ export default function PrivacyPolicyContentFi() {
         johon pääsy on vain Arwin henkilöstöllä. Ainut poikkeus milloin henkilötietoja voidaan luovuttaa henkilöstön ulkopuolelle ovat lain pakottamat
         tilanteet.
       </Text>
+      <Text>
+        Anonymisoituja tietoja voidaan luovuttaa kolmannen osapuolien palveluiden palvelimille. Tämän tarkoituksena on sovelluksen virhetilanteiden
+        mahdollisimman nopea selvittäminen ja korjaaminen. Nämä tiedot eivät koskaan sisällä mitään henkilöä yksilöiviä tietoja.
+      </Text>
+      <Text>Anonymisoituja tietoja voidaan luovuttaa seuraavien palveluiden palvelimille:</Text>
+      <UnorderedList>
+        <ListItem>Sentry.io</ListItem>
+      </UnorderedList>
       <Text as="h2">8. Tietojen siirto EU:n tai ETA:n ulkopuolelle</Text>
       <Text>
-        Tietoja ei siirretä tavanomaisesti missään tilanteissa EU:n tai ETA:n ulkopuolelle. Ainut poikkeus tähän on edellisen kappaleen tapaisesti
-        lain pakottamat tilanteet.
+        Henkilötietoja ei siirretä tavanomaisesti missään tilanteissa EU:n tai ETA:n ulkopuolelle. Ainut poikkeus tähän on edellisen kappaleen
+        tapaisesti lain pakottamat tilanteet.
+      </Text>
+      <Text>
+        Anonymisoituja (ei-henkilötietoja sisältäviä) tietoja voidaan siirtää EU:n tai ETA:n ulkopuolelle kappaaleen 7. esittämän tavan mukaisesti.
       </Text>
       <Text as="h2">9. Henkilötietojen säilytysaika</Text>
       <Text>
         Henkilön yksilöiviä tietoja säilytetään ilman aikarajaa niin kauan kuin rekisteröity käyttää arwi-sovellusta. Henkilön katsotaan käyttävän
         sovellusta niin kauan kuin tällä on rekisteröitynyt käyttäjä sovelluksessa. Kaikki yksilöivät henkilötiedot poistetaan, kun henkilö poistaa
-        käyttäjänsä, tai erikseen pyydettäessä. Teknisiä lokitietoja säilytetään järjestelmän eheyden varmistamiseksi 12 kuukautta.
+        käyttäjänsä, tai erikseen pyydettäessä. Teknisiä lokitietoja ja muita anonymisoituja tietoja säilytetään järjestelmän eheyden varmistamiseksi
+        12 kuukautta.
       </Text>
       <Text>Pseudonymisoituja henkilön yksilöiviä tietoja säilytetään niiden tilastollisen luonteen vuoksi pysyvästi.</Text>
       <Text as="h2">10. Rekisterin suojauksen periaatteet</Text>
@@ -101,6 +118,11 @@ export default function PrivacyPolicyContentFi() {
           Oikeus tietojen poistamiseen
           <br />
           Rekisteröidyllä on oikeus pyytää häntä koskevien henkilötietojen poistamista.
+          <br />
+          Rekisteröity voi oma-aloitteisesti milloin vain halutessaan poistaa tietonsa sovelluksesta seuraavan osoitteen kautta:{" "}
+          <Link href="/account-delete" fontWeight="300">
+            {`https://arwi.fi${getPathFromRoute("/account-delete", "fi")}`}
+          </Link>
         </ListItem>
         <ListItem>
           Oikeus käsittelyn rajoittamiseen <br />

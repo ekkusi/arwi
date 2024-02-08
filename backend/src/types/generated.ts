@@ -92,9 +92,9 @@ export type Mutation = {
   updateClassParticipationEvaluation: ClassParticipationEvaluation;
   updateDefaultEvaluation: DefaultEvaluation;
   deleteStudent: Student;
+  deleteTeacher: Teacher;
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
-  deleteCollectionType: CollectionType;
   changeGroupModule: Group;
   generateStudentFeedback: Scalars['String'];
   fixTextGrammatics: Scalars['String'];
@@ -206,6 +206,11 @@ export type MutationDeleteStudentArgs = {
 };
 
 
+export type MutationDeleteTeacherArgs = {
+  teacherId: Scalars['ID'];
+};
+
+
 export type MutationDeleteGroupArgs = {
   groupId: Scalars['ID'];
 };
@@ -213,11 +218,6 @@ export type MutationDeleteGroupArgs = {
 
 export type MutationDeleteCollectionArgs = {
   collectionId: Scalars['ID'];
-};
-
-
-export type MutationDeleteCollectionTypeArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -241,6 +241,7 @@ export type MutationFixTextGrammaticsArgs = {
 export type AppMetadata = {
   __typename?: 'AppMetadata';
   appVersion: Scalars['String'];
+  minimumSupportedAppVersion: Scalars['String'];
 };
 
 export type AuthPayload = {
@@ -289,6 +290,7 @@ export type LearningObjective = {
   label: TranslatedString;
   description: TranslatedString;
   type: LearningObjectiveType;
+  color: Scalars['String'];
 };
 
 export type Subject = {
@@ -317,7 +319,6 @@ export type Group = {
   archived: Scalars['Boolean'];
   currentModule: Module;
   modules: Array<Module>;
-  collectionTypes: Array<CollectionType>;
 };
 
 export type CollectionType = {
@@ -326,7 +327,7 @@ export type CollectionType = {
   category: CollectionTypeCategory;
   name: Scalars['String'];
   weight: Scalars['Int'];
-  group: Group;
+  module: Module;
   defaultTypeCollection?: Maybe<DefaultCollection>;
 };
 
@@ -352,6 +353,7 @@ export type Module = {
   evaluationCollections: Array<EvaluationCollection>;
   students: Array<Student>;
   group: Group;
+  collectionTypes: Array<CollectionType>;
 };
 
 export type EvaluationCollection = {
@@ -764,9 +766,9 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   updateClassParticipationEvaluation?: Resolver<ResolversTypes['ClassParticipationEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateClassParticipationEvaluationArgs, 'input'>>;
   updateDefaultEvaluation?: Resolver<ResolversTypes['DefaultEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateDefaultEvaluationArgs, 'input'>>;
   deleteStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, 'studentId'>>;
+  deleteTeacher?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType, RequireFields<MutationDeleteTeacherArgs, 'teacherId'>>;
   deleteGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, 'groupId'>>;
   deleteCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<MutationDeleteCollectionArgs, 'collectionId'>>;
-  deleteCollectionType?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType, RequireFields<MutationDeleteCollectionTypeArgs, 'id'>>;
   changeGroupModule?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationChangeGroupModuleArgs, 'data' | 'groupId'>>;
   generateStudentFeedback?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationGenerateStudentFeedbackArgs, 'studentId' | 'moduleId'>>;
   fixTextGrammatics?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'studentId' | 'text'>>;
@@ -774,6 +776,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
   appVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  minimumSupportedAppVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -815,6 +818,7 @@ export type LearningObjectiveResolvers<ContextType = CustomContext, ParentType e
   label?: Resolver<ResolversTypes['TranslatedString'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['TranslatedString'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['LearningObjectiveType'], ParentType, ContextType>;
+  color?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -843,7 +847,6 @@ export type GroupResolvers<ContextType = CustomContext, ParentType extends Resol
   archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   currentModule?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
   modules?: Resolver<Array<ResolversTypes['Module']>, ParentType, ContextType>;
-  collectionTypes?: Resolver<Array<ResolversTypes['CollectionType']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -852,7 +855,7 @@ export type CollectionTypeResolvers<ContextType = CustomContext, ParentType exte
   category?: Resolver<ResolversTypes['CollectionTypeCategory'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   weight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
   defaultTypeCollection?: Resolver<Maybe<ResolversTypes['DefaultCollection']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -870,6 +873,7 @@ export type ModuleResolvers<ContextType = CustomContext, ParentType extends Reso
   evaluationCollections?: Resolver<Array<ResolversTypes['EvaluationCollection']>, ParentType, ContextType>;
   students?: Resolver<Array<ResolversTypes['Student']>, ParentType, ContextType>;
   group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
+  collectionTypes?: Resolver<Array<ResolversTypes['CollectionType']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

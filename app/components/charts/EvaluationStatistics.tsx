@@ -1,23 +1,56 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
 import { MinimalModuleInfo } from "arwi-backend/src/types";
-import { FragmentType, getFragmentData } from "../../gql";
+import { FragmentType, getFragmentData, graphql } from "../../gql";
 import CircledNumber from "../CircledNumber";
-import InfoButton from "../InfoButton";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
-import { EvaluationsLineChart_Evaluation_Fragment, mapEvaluationData } from "./EvaluationsLineChart";
-import { LineChartBaseProps } from "./LineChartBase";
-import MovingAverageLineChart from "./MovingAverageLineChart";
+import MovingAverageLineChart, { EvaluationDataType, MovingAverageLineChartProps } from "./MovingAverageLineChart";
 import StatisticsFilterMenu from "./StatisticsFilterMenu";
-import { getEnvironmentTranslation } from "../../helpers/translation";
+import { formatDate } from "../../helpers/dateHelpers";
+import { EvaluationStatistics_EvaluationFragment } from "../../gql/graphql";
 
-type EvaluationsLineChartProps = Omit<LineChartBaseProps, "data"> & {
+export const EvaluationStatistics_Evaluation_Fragment = graphql(`
+  fragment EvaluationStatistics_Evaluation on ClassParticipationEvaluation {
+    id
+    skillsRating
+    behaviourRating
+    wasPresent
+    collection {
+      date
+      environment {
+        label {
+          fi
+        }
+        code
+        color
+      }
+    }
+  }
+`);
+
+export const mapEvaluationData = (evaluations: EvaluationStatistics_EvaluationFragment[]) => {
+  const data: EvaluationDataType[] = [];
+  evaluations.forEach((ev) => {
+    const skillsRating = ev.skillsRating && ev.skillsRating;
+    const behaviourRating = ev.behaviourRating && ev.behaviourRating;
+    if (skillsRating && behaviourRating) {
+      data.push({
+        date: formatDate(ev.collection.date),
+        environment: ev.collection.environment,
+        skills: skillsRating,
+        behaviour: behaviourRating,
+      });
+    }
+  });
+  return data;
+};
+
+type EvaluationStatisticsProps = Omit<MovingAverageLineChartProps, "data"> & {
   title?: string;
   subjectCode: string;
   moduleInfo: MinimalModuleInfo;
-  evaluations: readonly FragmentType<typeof EvaluationsLineChart_Evaluation_Fragment>[];
+  evaluations: readonly FragmentType<typeof EvaluationStatistics_Evaluation_Fragment>[];
   showAvgThreshhold?: number;
 };
 
@@ -26,14 +59,14 @@ export default function EvaluationsStatistics({
   subjectCode,
   moduleInfo,
   evaluations: evaluationFragments,
-  minItems = 2,
+  bandWidth = 2,
   ...rest
-}: EvaluationsLineChartProps) {
+}: EvaluationStatisticsProps) {
   const { t } = useTranslation();
 
   const [filter, setFilter] = useState<string | undefined>(undefined);
 
-  const evaluations = getFragmentData(EvaluationsLineChart_Evaluation_Fragment, evaluationFragments);
+  const evaluations = getFragmentData(EvaluationStatistics_Evaluation_Fragment, evaluationFragments);
 
   const sortedEvaluations = [...evaluations]
     .sort((a, b) => new Date(a.collection.date).getTime() - new Date(b.collection.date).getTime())
@@ -70,27 +103,7 @@ export default function EvaluationsStatistics({
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}
       />
-      <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <CText>
-          <CText style={{ fontSize: "sm", fontWeight: "500" }}>{filteredData.length} </CText>
-          <CText style={{ fontSize: "sm", fontWeight: "300" }}>{t("evaluation", "arviointia", { count: filteredData.length })}</CText>
-        </CText>
-        <InfoButton
-          onPress={() =>
-            Alert.alert(
-              t("moving-average", "Liukuva keskiarvo"),
-              t(
-                "moving-average-info",
-                "Liukuva keskiarvo lasketaan jokaiselle havainnoille huomioiden N edellistä ja N seuraavaa havaintoa ajassa, ja laskemalla keskiarvo niiden yli. Tässä kuvaajassa esitetään liukuva keskiarvo oppilaan taidoille ja työskentelylle käyttäen kahta edellistä ja kahta seuraavaa havaintoa. Arvioinnit on myös mahdollista suodattaa {{of_environment_string}} mukaan. Liukuvan keskiarvon avulla voidaan helposti seurata oppilaan keskimääräisen taitotason kehitystä.",
-                {
-                  of_environment_string: getEnvironmentTranslation(t, "of-environment", subjectCode).toLocaleLowerCase(),
-                }
-              )
-            )
-          }
-        />
-      </CView>
-      <MovingAverageLineChart data={filteredData} minItems={minItems} {...rest} />
+      <MovingAverageLineChart data={filteredData} bandWidth={bandWidth} {...rest} />
       <CView style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
         <CircledNumber value={skillsMean} title={t("skills-mean", "Taitojen keskiarvo")} />
         <CircledNumber value={behaviourMean} title={t("behaviour-mean", "Työskentelyn keskiarvo")} />

@@ -127,16 +127,7 @@ const formatEnvironmentsField = (title: string, name: string, groupKey?: string)
       name: "environment",
       type: "object",
       ...requiredOptions,
-      fields: [
-        formatTranslationField("Nimi", "name"),
-        codeField,
-        {
-          title: "Väri",
-          name: "color",
-          type: "color",
-          ...requiredOptions,
-        },
-      ],
+      fields: [formatTranslationField("Nimi", "name"), codeField],
       preview: {
         select: {
           title: "name.fi",

@@ -33,6 +33,11 @@ export const evaluationsByCollectionLoader = new CustomDataLoader<string, Evalua
         in: [...collectionIds],
       },
     },
+    orderBy: {
+      evaluationCollection: {
+        date: "desc",
+      },
+    },
   });
 
   const evaluationsMap: Record<string, Evaluation[]> = {};

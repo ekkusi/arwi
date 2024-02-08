@@ -65,6 +65,7 @@ const colors = {
   text: "black",
   "light-text": themeOverrides.gray["700"],
   "secondary-bg": themeOverrides.blue["100"],
+  "dark-bg": "#404040",
   // "secondary-bg": baseTheme.colors.yellow["100"],
   "primary-bg": themeOverrides[DEFAULT_COLOR_SCHEME]["100"],
   primary: themeOverrides[DEFAULT_COLOR_SCHEME]["500"],

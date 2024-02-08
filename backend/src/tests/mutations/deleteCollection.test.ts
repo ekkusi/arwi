@@ -27,7 +27,7 @@ describe("deleteCollection", () => {
   beforeEach(async () => {
     const group = await createTestGroup(teacher.id); // Assuming createTestGroup exists
     [student] = group.students;
-    const typeId = group.collectionTypes[0].id;
+    const typeId = group.currentModule.collectionTypes[0].id;
     const collection = await createTestEvaluationCollection(group.currentModule.id, typeId); // Assuming createTestCollection exists
     collectionId = collection.id;
   });

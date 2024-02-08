@@ -1,8 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as WebBrowser from "expo-web-browser";
 import { useTranslation } from "react-i18next";
-import { useCallback, useEffect, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import * as Sentry from "@sentry/react-native";
+import { useMatomo } from "matomo-tracker-react-native";
 import CButton from "../../components/primitives/CButton";
 import CImage from "../../components/primitives/CImage";
 import CText from "../../components/primitives/CText";
@@ -11,8 +12,8 @@ import LandingComponent from "./LandingComponent";
 import { AuthStackParams } from "./types";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import { useMPassIDAuth } from "../../hooks-and-providers/mPassID";
-import { useThrowCatchableError } from "../../hooks-and-providers/error";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
 const BACKEND_API_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;
 if (!BACKEND_API_URL) throw new Error("Backend API URL not defined, define EXPO_PUBLIC_BACKEND_API_URL in .env");
@@ -20,10 +21,12 @@ if (!BACKEND_API_URL) throw new Error("Backend API URL not defined, define EXPO_
 const REDIRECT_URI = "arwi-app://auth";
 
 export default function LandingPage({ navigation }: NativeStackScreenProps<AuthStackParams, "welcome">) {
+  const { t } = useTranslation();
+  const { trackEvent } = useMatomo();
   const { login } = useMPassIDAuth(REDIRECT_URI);
   const { setUser } = useAuth();
   const [loading, setLoading] = useState(false);
-  const throwError = useThrowCatchableError();
+  const [mPassIDError, setMPassIDError] = useState<string | undefined>();
 
   useEffect(() => {
     WebBrowser.warmUpAsync();
@@ -34,17 +37,29 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
   }, []);
 
   const handleMPassIDLogin = async () => {
+    setMPassIDError(undefined);
     setLoading(true);
     try {
       const loginResult = await login();
-      if (loginResult) await setUser(loginResult.payload.userData);
+      if (loginResult) {
+        await setUser(loginResult.payload.userData);
+        trackEvent({
+          category: MATOMO_EVENT_CATEGORIES.AUTH,
+          action: "Login - MPassID",
+          userInfo: {
+            uid: loginResult.payload.userData.id,
+          },
+        });
+      }
     } catch (error) {
-      throwError(error);
+      setMPassIDError(
+        t("mPassID-login-error", "Jokin meni vikaan kirjautumisessa MPASSid:llä. Yritä uudelleen tai ota yhteyttä järjestelmänvalvontaan.")
+      );
+      Sentry.captureException(error);
     }
     setLoading(false);
   };
 
-  const { t } = useTranslation();
   return (
     <LandingComponent headerSize="big" headerPlacement="top" notWrappedChildren={loading ? <LoadingIndicator type="overlay" /> : undefined}>
       <CView
@@ -90,6 +105,9 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
                 onPress={handleMPassIDLogin}
               />
             </CView>
+            {mPassIDError && (
+              <CText style={{ color: "error", fontWeight: "500", fontSize: "md", textAlign: "center", marginTop: "md" }}>{mPassIDError}</CText>
+            )}
           </CView>
         )}
       </CView>

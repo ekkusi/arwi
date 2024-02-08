@@ -6,9 +6,10 @@ dotenv.config();
 
 const { MAIL_HOST = "mail.arwi.fi", MAIL_USER, MAIL_PASS } = process.env;
 const MAIL_PORT = Number(process.env.MAIL_PORT || "465");
+const { APP_ENV } = process.env;
 
 if (!MAIL_USER || !MAIL_PASS) {
-  if (process.env.NODE_ENV === "production") throw new Error("Missing mail credentials, define MAIL_USER and MAIL_PASS");
+  if (APP_ENV === "production") throw new Error("Missing mail credentials, define MAIL_USER and MAIL_PASS");
   else console.warn("Missing mail credentials, email sending wont be functioning. Define MAIL_USER and MAIL_PASS to make it work.");
 }
 

@@ -55,9 +55,11 @@ describe("CreateGroup", () => {
           students {
             name
           }
-          collectionTypes {
-            name
-            weight
+          currentModule {
+            collectionTypes {
+              name
+              weight
+            }
           }
         }
       }
@@ -70,7 +72,7 @@ describe("CreateGroup", () => {
     expect(response.data?.createGroup.teacher.id).toEqual(teacher.id);
     expect(response.data?.createGroup.subject.code).toEqual(validGroupData.subjectCode);
     expect(response.data?.createGroup.students.length).toEqual(validGroupData.students.length);
-    expect(response.data?.createGroup.collectionTypes.length).toEqual(validGroupData.collectionTypes.length);
+    expect(response.data?.createGroup.currentModule.collectionTypes.length).toEqual(validGroupData.collectionTypes.length);
   });
 
   it("should throw error for invalid subject code", async () => {

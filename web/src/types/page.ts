@@ -4,4 +4,5 @@ export type LocalizedPage = {
   params: {
     lng: LanguageOption;
   };
+  searchParams: Record<string, string>;
 };

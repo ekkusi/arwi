@@ -17,6 +17,7 @@ type Query {
   getGroups(teacherId: ID!): [Group!]!
   getGroup(id: ID!): Group!
   getCollection(id: ID!): EvaluationCollection!
+  getType(id: ID!): CollectionType!
   getStudent(id: ID!): Student!
   getEvaluation(id: ID!): Evaluation!
 }
@@ -32,17 +33,19 @@ type Mutation {
   connectLocalCredentials(email: String!, password: String!): AuthPayload!
   logout: Boolean!
   createGroup(data: CreateGroupInput!): Group!
-  createCollection(data: CreateCollectionInput!, moduleId: ID!): EvaluationCollection!
+  createClassParticipationCollection(data: CreateClassParticipationCollectionInput!, moduleId: ID!): ClassParticipationCollection!
+  createDefaultCollection(data: CreateDefaultCollectionInput!, moduleId: ID!): DefaultCollection!
   createStudent(data: CreateStudentInput!, moduleId: ID!): Student!
-  updateEvaluations(data: [UpdateEvaluationInput!]!, collectionId: ID!): Int!
-  updateCollection(data: UpdateCollectionInput!, collectionId: ID!): EvaluationCollection!
+  updateClassParticipationCollection(data: UpdateClassParticipationCollectionInput!, collectionId: ID!): ClassParticipationCollection!
+  updateDefaultCollection(data: UpdateDefaultCollectionInput!, collectionId: ID!): DefaultCollection!
   updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
-  updateEvaluation(data: UpdateEvaluationInput!): Evaluation!
+  updateClassParticipationEvaluation(input: UpdateClassParticipationEvaluationInput!): ClassParticipationEvaluation!
+  updateDefaultEvaluation(input: UpdateDefaultEvaluationInput!): DefaultEvaluation!
   deleteStudent(studentId: ID!): Student!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
-  changeGroupModule(data: ChangeGroupModuleInput!, groupId: String!): Group!
+  changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
   fixTextGrammatics(studentId: ID!, text: String!): String!
 }
@@ -91,6 +94,7 @@ type LearningObjective {
   label: TranslatedString!
   description: TranslatedString!
   type: LearningObjectiveType!
+  color: String!
 }
 
 type Subject {
@@ -116,7 +120,6 @@ type Group {
   archived: Boolean!
   currentModule: Module!
   modules: [Module!]!
-  collectionTypes: [CollectionType!]!
 }
 
 type CollectionType {
@@ -124,7 +127,8 @@ type CollectionType {
   category:    CollectionTypeCategory!
   name:        String!
   weight:      Int!
-  group: Group!
+  module: Module!
+  defaultTypeCollection: DefaultCollection
 }
 
 enum CollectionTypeCategory {
@@ -147,26 +151,63 @@ type Module {
   evaluationCollections: [EvaluationCollection!]!
   students: [Student!]!
   group: Group!
+  collectionTypes: [CollectionType!]!
 }
 
-type EvaluationCollection {
+interface EvaluationCollection {
   id: ID!
   date: Date!
   type: CollectionType!
-  environment: Environment!
   description: String
   evaluations: [Evaluation!]!
   module: Module!
+}
+
+type ClassParticipationCollection implements EvaluationCollection {
+  id: ID!
+  date: Date!
+  type: CollectionType!
+  description: String
+  evaluations: [ClassParticipationEvaluation!]!
+  module: Module!
+  environment: Environment!
   learningObjectives: [LearningObjective!]!
 }
 
-type Evaluation {
+type DefaultCollection implements EvaluationCollection {
+  id: ID!
+  date: Date!
+  type: CollectionType!
+  description: String
+  evaluations: [DefaultEvaluation!]!
+  module: Module!
+}
+
+interface Evaluation {
   id: ID!
   student: Student!
   wasPresent: Boolean!
+  notes: String
+  collection: EvaluationCollection!
+}
+
+type ClassParticipationEvaluation implements Evaluation {
+  id: ID!
+  student: Student!
+  wasPresent: Boolean!
+  notes: String
+  collection: ClassParticipationCollection!
   skillsRating: Int
   behaviourRating: Int
+}
+
+type DefaultEvaluation implements Evaluation {
+  id: ID!
+  student: Student!
+  wasPresent: Boolean!
   notes: String
+  collection: DefaultCollection!
+  rating: Float
 }
 
 type Student {
@@ -207,11 +248,6 @@ input CreateGroupInput {
   collectionTypes: [CreateCollectionTypeInput!]!
 }
 
-input UpdateGroupInput {
-  name: String
-  archived: Boolean
-}
-
 input CreateStudentInput {
   name: String!
 }
@@ -222,29 +258,42 @@ input CreateCollectionTypeInput {
   weight: Int!
 }
 
+input UpdateGroupInput {
+  name: String
+  archived: Boolean
+  updateCollectionTypeInputs: [UpdateCollectionTypeInput!]
+  deleteCollectionTypeIds: [ID!]
+  createCollectionTypeInputs: [CreateCollectionTypeInput!]
+}
+
+input UpdateCollectionTypeInput {
+  id: ID!
+  category: CollectionTypeCategory
+  name: String
+  weight: Int
+}
+
 input UpdateStudentInput {
   name: String
 }
 
-input CreateCollectionInput {
+input CreateClassParticipationCollectionInput {
   date: Date!
   typeId: ID!
   environmentCode: ID!
   description: String
   learningObjectiveCodes: [ID!]!
-  evaluations: [CreateEvaluationInput!]
+  evaluations: [CreateClassParticipationEvaluationInput!]
 }
 
-input UpdateCollectionInput {
-  date: Date
-  typeId: ID
-  environmentCode: ID
+input CreateDefaultCollectionInput {
+  date: Date!
+  typeId: ID!
   description: String
-  learningObjectiveCodes: [ID!]
-  evaluations: [UpdateEvaluationInput!]
+  evaluations: [CreateDefaultEvaluationInput!]
 }
 
-input CreateEvaluationInput {
+input CreateClassParticipationEvaluationInput {
   studentId: ID!
   wasPresent: Boolean!
   skillsRating: Int
@@ -252,11 +301,39 @@ input CreateEvaluationInput {
   notes: String
 }
 
-input UpdateEvaluationInput {
+input CreateDefaultEvaluationInput {
+  studentId: ID!
+  wasPresent: Boolean!
+  rating: Float
+  notes: String
+}
+
+input UpdateClassParticipationCollectionInput {
+  date: Date
+  environmentCode: ID
+  description: String
+  learningObjectiveCodes: [ID!]
+  evaluations: [UpdateClassParticipationEvaluationInput!]
+}
+
+input UpdateDefaultCollectionInput {
+  date: Date
+  description: String
+  evaluations: [UpdateDefaultEvaluationInput!]
+}
+
+input UpdateClassParticipationEvaluationInput {
   id: ID!
   wasPresent: Boolean
   skillsRating: Int
   behaviourRating: Int
+  notes: String
+}
+
+input UpdateDefaultEvaluationInput {
+  id: ID!
+  wasPresent: Boolean
+  rating: Float
   notes: String
 }
 
@@ -270,16 +347,19 @@ The createCollection test suite to be used as an example:
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { CollectionTypeCategory, CreateCollectionInput } from "../../types";
-import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin } from "../testHelpers";
+import { CollectionTypeCategory, CreateDefaultCollectionInput } from "../../types";
+import { TestGroup, TestTeacher, VALID_LI_ENV_CODE, createTestGroup, createTestUserAndLogin } from "../testHelpers";
 import { formatDate } from "../../utils/date";
+import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
+import { groupLoader } from "../../graphql/dataLoaders/group";
+import { isDefaultCollection } from "../../types/typeGuards";
 
-describe("CreateCollection", () => {
+describe("createDefaultCollection", () => {
   let graphqlRequest: TestGraphQLRequest;
   let teacher: TestTeacher;
   let group: TestGroup;
 
-  let baseCollectionData: CreateCollectionInput;
+  let baseCollectionData: CreateDefaultCollectionInput;
 
   beforeAll(async () => {
     ({ graphqlRequest } = await createServer());
@@ -289,10 +369,8 @@ describe("CreateCollection", () => {
 
     baseCollectionData = {
       date: formatDate(new Date(), "yyyy-MM-dd"),
-      environmentCode: "LI_ENV_TAL",
       description: "Test Description",
-      learningObjectiveCodes: ["T1", "T2"],
-      typeId: group.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)?.id!,
+      typeId: group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)?.id!,
     };
   });
 
@@ -307,34 +385,29 @@ describe("CreateCollection", () => {
         {
           studentId: group.students[0].id,
           wasPresent: true,
-          skillsRating: 7,
-          behaviourRating: 9,
+          rating: 7,
           notes: "Good performance",
         },
       ],
     };
 
     const query = graphql(`
-      mutation CreateCollection($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
+      mutation CreateDefaultCollection($data: CreateDefaultCollectionInput!, $moduleId: ID!) {
+        createDefaultCollection(data: $data, moduleId: $moduleId) {
           id
           date
           type {
             id
           }
-          environment {
-            code
-          }
+          __typename
           description
           evaluations {
             student {
               id
             }
-            skillsRating
-            behaviourRating
-          }
-          learningObjectives {
-            code
+            __typename
+            notes
+            rating
           }
         }
       }
@@ -342,25 +415,57 @@ describe("CreateCollection", () => {
 
     const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
 
-    expect(response.data?.createCollection).toBeDefined();
-    expect(response.data?.createCollection.date).toEqual(collectionData.date);
-    expect(response.data?.createCollection.environment.code).toEqual(collectionData.environmentCode);
-    expect(response.data?.createCollection.evaluations.length).toEqual(collectionData.evaluations.length);
-    expect(response.data?.createCollection.evaluations[0].behaviourRating).toEqual(collectionData.evaluations[0].behaviourRating);
-    expect(response.data?.createCollection.evaluations[0].skillsRating).toEqual(collectionData.evaluations[0].skillsRating);
-    expect(response.data?.createCollection.evaluations[0].student.id).toEqual(collectionData.evaluations[0].studentId);
-    expect(response.data?.createCollection.learningObjectives.map((lo) => lo.code)).toEqual(collectionData.learningObjectiveCodes);
+    expect(response.data?.createDefaultCollection).toBeDefined();
+    expect(response.data?.createDefaultCollection.date).toEqual(collectionData.date);
+    if (response.data && isDefaultCollection(response.data.createDefaultCollection)) {
+      expect(response.data?.createDefaultCollection.evaluations.length).toEqual(collectionData.evaluations.length);
+      expect(response.data?.createDefaultCollection.evaluations[0].rating).toEqual(collectionData.evaluations[0].rating);
+      expect(response.data?.createDefaultCollection.evaluations[0].student.id).toEqual(collectionData.evaluations[0].studentId);
+      expect(response.data?.createDefaultCollection.evaluations[0].notes).toEqual(collectionData.evaluations[0].notes);
+    }
   });
 
-  it("should throw error for invalid environment code", async () => {
+  it("should throw an error if a collection with the type already exists", async () => {
     const collectionData = {
       ...baseCollectionData,
-      environmentCode: "InvalidEnvironmentCode",
+      evaluations: [
+        {
+          studentId: group.students[0].id,
+          wasPresent: true,
+          rating: 7,
+          notes: "Good performance",
+        },
+      ],
     };
 
     const query = graphql(`
-      mutation CreateCollectionInvalidEnvironment($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
+      mutation CreateDefaultCollectionDuplicate($data: CreateDefaultCollectionInput!, $moduleId: ID!) {
+        createDefaultCollection(data: $data, moduleId: $moduleId) {
+          id
+        }
+      }
+    `);
+
+    await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors![0].message).toEqual(
+      `Arviointikokoelma tällä arviointityypillä on jo olemassa ja kyseisellä tyypillä niitä ei voi olla yhtä enempää.`
+    );
+  });
+
+  it("should throw an error if the collection type is CLASS_PARTICIPATION type", async () => {
+    const classParticipationType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+
+    const collectionData = {
+      ...baseCollectionData,
+      typeId: classParticipationType.id,
+    };
+
+    const query = graphql(`
+      mutation CreateDefaultCollectionInvalidType($data: CreateDefaultCollectionInput!, $moduleId: ID!) {
+        createDefaultCollection(data: $data, moduleId: $moduleId) {
           id
         }
       }
@@ -369,49 +474,66 @@ describe("CreateCollection", () => {
     const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
 
     expect(response.errors).toBeDefined();
-    expect(response.errors?.[0].message).toContain(`Ympäristöä koodilla '${collectionData.environmentCode}' ei ole olemassa`);
+    expect(response.errors![0].message).toEqual(`Syötetty arviointikokoelman tyyppi on väärä. Se ei saa olla 'CLASS_PARTICIPATION'.`);
   });
 
-  it("should throw error for invalid learning objectives", async () => {
+  it("should update DataLoaders after creating a collection", async () => {
+    // Initial state: Load collections for a module and check initial state
+    const initialCollectionsByModule = await collectionsByModuleLoader.load(group.currentModule.id);
+    expect(initialCollectionsByModule).toEqual([]);
+
+    // Load group to cache
+    const initialGroupFromLoader = await groupLoader.load(group.id);
+
+    // Create a collection
     const collectionData = {
       ...baseCollectionData,
-      learningObjectiveCodes: ["InvalidObjective1", "InvalidObjective2"],
+      evaluations: [
+        {
+          studentId: group.students[0].id,
+          wasPresent: true,
+          rating: 7,
+          notes: "Good performance",
+        },
+      ],
     };
 
+    // Wait 2 seconds to make sure updatedAt is different
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    });
+
     const query = graphql(`
-      mutation CreateCollectionInvalidLearningObjectives($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
+      mutation CreateDefaultCollectionDataLoaderCheck($data: CreateDefaultCollectionInput!, $moduleId: ID!) {
+        createDefaultCollection(data: $data, moduleId: $moduleId) {
           id
+          date
         }
       }
     `);
 
-    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+    const createDefaultCollectionResponse = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
+    const newCollection = createDefaultCollectionResponse.data?.createDefaultCollection!;
+    expect(newCollection).toBeDefined();
 
-    expect(response.errors).toBeDefined();
-    expect(response.errors?.[0].message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia`);
-  });
+    // Check if the collection is correctly loaded in collectionLoader
+    const newCollectionFromLoader = await collectionLoader.load(newCollection.id);
+    expect(newCollectionFromLoader).toEqual(expect.objectContaining({ id: newCollection.id }));
 
-  it("should throw error if learning objectives are NOT_EVALUATED type", async () => {
-    const collectionData = {
-      ...baseCollectionData,
-      learningObjectiveCodes: ["T1", "T11"], // T11 is NOT_EVALUATED type in LI subject's 7-9 years
-    };
+    // Check if the collectionsByModuleLoader is updated
+    const updatedCollectionsByModule = await collectionsByModuleLoader.load(group.currentModule.id);
+    expect(updatedCollectionsByModule.length).toEqual(1);
+    expect(updatedCollectionsByModule[0]).toEqual(expect.objectContaining({ id: newCollection.id }));
 
-    const query = graphql(`
-      mutation CreateCollectionNotEvaluatedLearningObjectives($data: CreateCollectionInput!, $moduleId: ID!) {
-        createCollection(data: $data, moduleId: $moduleId) {
-          id
-        }
-      }
-    `);
+    // Check if the groupLoader is updated
+    const updatedGroupFromLoader = await groupLoader.load(group.id);
 
-    const response = await graphqlRequest(query, { data: collectionData, moduleId: group.currentModule.id });
-
-    expect(response.errors).toBeDefined();
-    expect(response.errors?.[0].message).toContain(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia`);
+    expect(formatDate(updatedGroupFromLoader.updatedAt, "dd.MM.yyyy HH:mm:ss")).not.toEqual(
+      formatDate(initialGroupFromLoader.updatedAt, "dd.MM.yyyy HH:mm:ss")
+    );
   });
 });
+
 
 Keep these things in mind:
 - query/mutation names have to be unique (see sample test suite)

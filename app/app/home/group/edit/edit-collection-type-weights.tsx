@@ -15,16 +15,7 @@ import { useToast } from "../../../../hooks-and-providers/ToastProvider";
 const EditTypeWeightsView_UpdateGroup_Mutation = graphql(`
   mutation EditTypeWeightsView_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {
     updateGroup(groupId: $id, data: $input) {
-      id
-      collectionTypes {
-        id
-        category
-        weight
-        name
-        group {
-          id
-        }
-      }
+      ...GroupCollectionTypesUpdate
     }
   }
 `);

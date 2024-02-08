@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
@@ -21,8 +20,7 @@ import GradeSuggestionView from "../../../components/GradeSuggestionView";
 import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogram";
 import Layout from "../../../components/Layout";
 import CButton from "../../../components/primitives/CButton";
-import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
-import Card from "../../../components/Card";
+import { getEnvironmentTranslation } from "../../../helpers/translation";
 import { Accordion } from "../../../components/Accordion";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { SPACING } from "../../../theme";
@@ -51,13 +49,15 @@ const StudentPage_GetStudent_Query = graphql(`
             }
           }
         }
-        collectionTypes {
-          id
-          category
-          name
-          weight
-          defaultTypeCollection {
+        currentModule {
+          collectionTypes {
             id
+            category
+            name
+            weight
+            defaultTypeCollection {
+              id
+            }
           }
         }
       }
@@ -77,7 +77,7 @@ const StudentPage_GetStudent_Query = graphql(`
               }
             }
           }
-          ...EvaluationsLineChart_Evaluation
+          ...EvaluationStatistics_Evaluation
           ...EvaluationsBarChart_Evaluation
           ...EvaluationsHistogram_Evaluation
           ...EvaluationsAccordion_Evaluation
@@ -109,7 +109,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
 
-  const { collectionTypes } = student.group;
+  const { collectionTypes } = student.group.currentModule;
   const otherCollectionTypes = collectionTypes.filter((coll) => coll.category !== "CLASS_PARTICIPATION");
   const {
     absencesAmount,
@@ -124,14 +124,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     behaviourMeanByEnvironments,
   } = analyzeEvaluations([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
-
-  const evaluate = () => {
-    Alert.alert("Evaluate");
-  };
-
-  const editEvaluation = () => {
-    Alert.alert("Edit evaluation");
-  };
 
   return (
     <Layout>
@@ -165,9 +157,11 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                       ? otherEvaluations.find((ev) => ev.collection.id === type.defaultTypeCollection!.id)
                       : undefined;
                     return {
+                      key: type.id,
                       title: type.name,
                       date: collectionEvaluation ? formatDate(collectionEvaluation.collection.date) : undefined,
-                      isEvaluated: collectionEvaluation?.rating != null,
+                      stateText:
+                        collectionEvaluation?.rating !== null ? t("is-evaluated", "Arviointi tehty") : t("is-not-evaluated", "Arviointi puuttuu"),
                       icons: collectionEvaluation?.wasPresent && !!collectionEvaluation.notes && (
                         <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />
                       ),

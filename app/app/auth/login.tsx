@@ -72,6 +72,11 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
       });
     } catch (error) {
       const msg = getErrorMessage(error);
+      trackEvent({
+        category: MATOMO_EVENT_CATEGORIES.AUTH,
+        action: "Login - Custom - Error",
+        name: `Login attempt failed for email: ${email} with error: ${msg}`,
+      });
 
       setGeneralError(msg);
     }

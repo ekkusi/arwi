@@ -74,6 +74,23 @@ export default function StudentList({ getGroup: group, navigation }: GroupOvervi
   const [searchText, setSearchText] = useState("");
   const filteredStudents = group.currentModule.students.filter((student) => student.name.includes(searchText));
 
+  const renderItem = ({ item }: { item: (typeof filteredStudents)[0] }) => {
+    const presentClasses = item.currentModuleEvaluations.reduce((prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal), 0);
+    const allClasses = group.currentModule.evaluationCollections.length;
+    return (
+      <Card style={{ marginBottom: "md" }} key={item.id}>
+        <CTouchableOpacity onPress={() => navigation.navigate("student", { id: item.id, name: item.name, archived: group.archived })}>
+          <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
+          <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <CText style={{ fontSize: "sm", color: "gray" }}>
+              {t("present", "Paikalla")} {presentClasses}/{allClasses}
+            </CText>
+          </CView>
+        </CTouchableOpacity>
+      </Card>
+    );
+  };
+
   return (
     <CView style={{ flex: 1 }}>
       {group.currentModule.students.length > 0 ? (
@@ -84,25 +101,7 @@ export default function StudentList({ getGroup: group, navigation }: GroupOvervi
               contentContainerStyle={{ paddingTop: SPACING.md * 2, paddingBottom: 50, paddingHorizontal: SPACING.md }}
               showsVerticalScrollIndicator={false}
               data={filteredStudents}
-              renderItem={({ item }) => {
-                const presentClasses = item.currentModuleEvaluations.reduce(
-                  (prevVal, evaluation) => (evaluation.wasPresent ? prevVal + 1 : prevVal),
-                  0
-                );
-                const allClasses = group.currentModule.evaluationCollections.length;
-                return (
-                  <Card style={{ marginBottom: "md" }} key={item.id}>
-                    <CTouchableOpacity onPress={() => navigation.navigate("student", { id: item.id, name: item.name, archived: group.archived })}>
-                      <CText style={{ fontSize: "md", fontWeight: "500" }}>{item.name}</CText>
-                      <CView style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                        <CText style={{ fontSize: "sm", color: "gray" }}>
-                          {t("present", "Paikalla")} {presentClasses}/{allClasses}
-                        </CText>
-                      </CView>
-                    </CTouchableOpacity>
-                  </Card>
-                );
-              }}
+              renderItem={renderItem}
             />
           </Animated.View>
           <Animated.View

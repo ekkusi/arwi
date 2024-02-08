@@ -11,6 +11,6 @@ export type SubjectInfo = Omit<(typeof subjects)[number], "name"> & {
 };
 export type SubjectMinimal = Pick<SubjectInfo, "code" | "label">;
 
-export type EnvironmentInfo = Omit<SubjectInfo["environments"][number], "name"> & {
+export type EnvironmentInfo = Omit<SubjectInfo["elementarySchool"]["environments_1_to_2"][number], "name"> & {
   label: TranslatedString;
 };

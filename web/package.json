@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "roots": "next-roots"
+    "roots": "next-roots",
+    "codegen": "graphql-codegen && node ./scripts/prepend-eslint-disable.js"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.2",
+    "@apollo/experimental-nextjs-app-support": "^0.8.0",
     "@chakra-ui/next-js": "^2.1.5",
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
@@ -18,6 +21,7 @@
     "chakra-react-select": "^4.7.2",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
+    "graphql": "^16.8.1",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-gridly-backend": "^1.0.6",
@@ -26,9 +30,13 @@
     "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.2.2",
-    "react-icons": "^4.11.0"
+    "react-icons": "^4.11.0",
+    "sharp": "^0.33.2"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "^5.0.0",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
     "@types/node": "^20.7.0",
     "@types/react": "^18.2.22",
     "@types/react-dom": "^18.2.7",

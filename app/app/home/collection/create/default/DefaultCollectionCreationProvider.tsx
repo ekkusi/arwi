@@ -21,10 +21,12 @@ const DefaultCollectionCreationProvider_GetGroup_Query = graphql(`
           }
         }
       }
-      collectionTypes {
-        id
-        name
-        category
+      currentModule {
+        collectionTypes {
+          id
+          name
+          category
+        }
       }
       ...CollectionGeneralInfoView_Group
     }
@@ -94,15 +96,13 @@ function DefaultCollectionCreationProvider({ children, groupId, collectionTypeId
   useEffect(() => {
     if (queryData?.getGroup) {
       const { getGroup } = queryData;
-      const sortedEvaluations = getGroup.currentModule.students
-        .map((student) => ({ student, wasPresent: true, rating: 7 }))
-        .sort((a, b) => a.student.name.localeCompare(b.student.name));
+      const mappedEvaluations = getGroup.currentModule.students.map((student) => ({ student, wasPresent: true, rating: 7 }));
 
-      const matchingCollectionType = queryData?.getGroup?.collectionTypes.find((it) => it.id === collectionTypeId);
+      const matchingCollectionType = queryData?.getGroup?.currentModule.collectionTypes.find((it) => it.id === collectionTypeId);
       if (!matchingCollectionType)
         throwCatchableError(new Error("Invalid collection type passed to collection creation, type not found in group's collection types"));
 
-      setEvaluations(sortedEvaluations);
+      setEvaluations(mappedEvaluations);
       setCollectionType(matchingCollectionType);
     }
   }, [collectionTypeId, queryData, throwCatchableError]);

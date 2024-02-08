@@ -1,9 +1,12 @@
 import { ApolloClient, ApolloLink, ApolloProvider as ApolloProviderBase, createHttpLink, InMemoryCache } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
+import { setContext } from "@apollo/client/link/context";
 import { useMemo } from "react";
-import { ACCESS_TOKEN_KEY, useAuth } from "./AuthProvider";
+import { asyncMap } from "@apollo/client/utilities";
+import { useAuth } from "./AuthProvider";
 import { getErrorMessage, getGraphqlErrorMessage } from "../helpers/errorUtils";
 import { useThrowCatchableError } from "./error";
+import { getSessionId, setSessionId } from "../helpers/session";
 
 const BACKEND_API_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;
 if (!BACKEND_API_URL) throw new Error("Backend API URL not defined, define EXPO_PUBLIC_BACKEND_API_URL in .env");
@@ -16,6 +19,32 @@ const GRAPHQL_API_URL = `${BACKEND_API_URL}/graphql`;
 const httpLink = createHttpLink({
   uri: GRAPHQL_API_URL,
   credentials: "include",
+});
+
+const asyncAuthLink = setContext(async (_, { headers = {} }) => {
+  const sessionId = await getSessionId();
+  return {
+    headers: {
+      ...headers,
+      "x-session-id": sessionId,
+      "x-session-type": "header",
+    },
+  };
+});
+
+const authAfterWareLink = new ApolloLink((operation, forward) => {
+  return asyncMap(forward(operation), async (response) => {
+    const context = operation.getContext();
+    const {
+      response: { headers },
+    } = context;
+    const sessionId = headers.get("x-session-id");
+    if (sessionId) {
+      await setSessionId(sessionId);
+    }
+
+    return response;
+  });
 });
 
 const cache = new InMemoryCache({
@@ -86,6 +115,11 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
                 shouldThrow = false;
                 break;
               }
+              // Don't throw generic error page from openid errors, these should be handled in whereever they occur.
+              case "OPENID_ERROR": {
+                shouldThrow = false;
+                break;
+              }
               default:
                 break;
             }
@@ -104,7 +138,7 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
     () =>
       new ApolloClient({
         uri: GRAPHQL_API_URL,
-        link: ApolloLink.from([errorLink, httpLink]),
+        link: ApolloLink.from([asyncAuthLink, errorLink, authAfterWareLink, httpLink]),
         cache,
       }),
     [errorLink]

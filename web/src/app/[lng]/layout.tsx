@@ -7,6 +7,7 @@ import theme from "@/theme";
 import { LocalizedPage } from "@/types/page";
 import { LanguageOption, languages } from "@/i18n/settings";
 import Providers from "@/app/[lng]/Providers";
+import { getIsAuthenticated } from "../../utils/server";
 
 const aileron = localFont({
   src: [
@@ -74,6 +75,8 @@ export default function RootLayout({ children, params: { lng } }: { children: JS
 
   if (!isValidLocale) notFound();
 
+  const isAuthenticated = getIsAuthenticated();
+
   return (
     <html lang={lng} dir={dir(lng)} className={aileron.variable}>
       <head>
@@ -85,8 +88,8 @@ export default function RootLayout({ children, params: { lng } }: { children: JS
         <meta name="msapplication-TileColor" content="#65af53" />
         <meta name="theme-color" content="#65af53" />
       </head>
-      <body>
-        <Providers lng={lng} theme={theme}>
+      <body suppressHydrationWarning>
+        <Providers lng={lng} theme={theme} initialIsAuthenticated={isAuthenticated}>
           {children}
         </Providers>
       </body>

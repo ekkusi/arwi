@@ -51,6 +51,9 @@ export const studentsByGroupLoader = new CustomDataLoader<string, Student[]>(asy
         in: [...groupIds],
       },
     },
+    orderBy: {
+      name: "desc",
+    },
   });
 
   const studentsMap: Record<string, Student[]> = {};

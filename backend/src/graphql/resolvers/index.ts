@@ -1,19 +1,56 @@
 import { Prisma } from "@prisma/client";
+import * as Sentry from "@sentry/node";
 import { Resolver, ResolverFn, Resolvers } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
 import mutationResolvers from "./mutationResolvers";
 import queryResolvers from "./queryResolvers";
 import typeResolvers from "./typeResolvers";
 import NotFoundError from "../../errors/NotFoundError";
+import AuthenticationError from "../../errors/AuthenticationError";
+import ValidationError from "../../errors/ValidationError";
+import MissingDataError from "../../errors/MissingDataError";
+import OpenIDError from "../../errors/OpenIDError";
 
-function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Resolver<CustomContext> {
+function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Resolver<{}, {}, CustomContext> {
   return async (parent, args, context, info) => {
     try {
       return await resolver(parent, args, context, info);
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-        throw new NotFoundError();
+    } catch (initialError) {
+      let error = initialError;
+      let type = "unknown";
+      let level: Sentry.SeverityLevel = "error";
+      switch (error?.constructor) {
+        case NotFoundError:
+          type = "not_found";
+          level = "warning";
+          break;
+        case AuthenticationError:
+          type = "authentication";
+          level = "warning";
+          break;
+        case ValidationError:
+          type = "validation";
+          level = "warning";
+          break;
+        case MissingDataError:
+          type = "missing_data";
+          break;
+        case OpenIDError:
+          type = "openid";
+          break;
+        default:
+          type = "unknown";
       }
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+        error = new NotFoundError();
+        type = "not_found";
+        level = "warning";
+      }
+      Sentry.withScope((scope) => {
+        scope.setTag("type", type);
+        scope.setLevel(level);
+        Sentry.captureException(initialError, { mechanism: { handled: type !== "unknown" } });
+      });
       throw error;
     }
   };
