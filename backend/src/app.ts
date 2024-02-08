@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import * as Sentry from "@sentry/node";
-import { HELMET_OPTIONS, SESSION_OPTIONS, getAllowedOrigins } from "./config";
+import { APP_ENV, HELMET_OPTIONS, SESSION_OPTIONS, getAllowedOrigins } from "./config";
 import initAuth from "./routes/auth";
 import { checkAuthHeaders, checkSessionTimeout, checkTokens } from "./middleware/auth";
 import graphqlServer from "./graphql/server";
@@ -19,7 +19,6 @@ import loaders from "./graphql/dataLoaders";
 const app = express();
 
 const ADVANCED_SENTRY_LOGGING = process.env.ADVANCED_SENTRY_LOGGING === "true";
-const APP_ENV = process.env.APP_ENV || "development";
 
 if (process.env.NODE_ENV === "production" && !process.env.SENTRY_URL) throw new Error("Missing SENTRY_URL env var");
 

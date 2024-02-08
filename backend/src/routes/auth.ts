@@ -4,12 +4,13 @@ import { Issuer, Client as OpenIDClient } from "openid-client";
 import { initSession, logOut } from "../utils/auth";
 import prisma from "@/prismaClient";
 import BadRequestError from "../errors/BadRequestError";
+import { APP_ENV } from "../config";
 
 dotenv.config();
 
 const router = Router();
 
-const { MPASSID_CLIENT_SECRET, MPASSID_CLIENT_ID, APP_ENV } = process.env;
+const { MPASSID_CLIENT_SECRET, MPASSID_CLIENT_ID } = process.env;
 const MPASSID_ISSUER_URL = "https://mpass-proxy-test.csc.fi";
 
 if (!MPASSID_CLIENT_SECRET || !MPASSID_CLIENT_ID) {
@@ -60,6 +61,18 @@ export const grantAndInitSession = async (client: OpenIDClient, code: string, re
   };
 };
 
+const getRedirectUri = () => {
+  const redirectPath = "/auth/mpassid-callback";
+  switch (APP_ENV) {
+    case "production":
+      return `https://api.arwi.fi${redirectPath}`;
+    case "staging":
+      return `https://staging-api.arwi.fi${redirectPath}`;
+    default:
+      return `http://localhost:4000${redirectPath}`;
+  }
+};
+
 const initAuth = async () => {
   const mPassIDIssuer = await Issuer.discover(MPASSID_ISSUER_URL);
 
@@ -70,7 +83,7 @@ const initAuth = async () => {
       client_id: MPASSID_CLIENT_ID,
       client_secret: MPASSID_CLIENT_SECRET,
       token_endpoint_auth_method: "client_secret_post",
-      redirect_uris: ["http://localhost:4000/auth/mpassid-callback"],
+      redirect_uris: [getRedirectUri()],
       response_types: ["code"],
     });
   }
