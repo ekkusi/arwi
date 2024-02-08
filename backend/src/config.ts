@@ -80,6 +80,8 @@ const getCookieSameSite = () => {
   }
 };
 
+const PROD_DOMAIN = env.PROD_DOMAIN || "arwi.fi";
+
 export const SESSION_OPTIONS: SessionOptions = {
   // Allow disabling redis session storage for testing with env var
   store: sessionClient ? new RedisStore({ client: sessionClient }) : undefined,
@@ -89,11 +91,8 @@ export const SESSION_OPTIONS: SessionOptions = {
   typeHeaderName: SESSION_TYPE_HEADER_NAME,
   cookie: {
     maxAge: +SESSION_IDLE_TIMEOUT_MS,
-    // secure: env.NODE_ENV === "production",
-    // NOTE: Currently secure cookies break mobile app authentication as cookies are not being sent when it is set
-    // See: https://github.com/facebook/react-native/issues/23185
-    // TODO: Figure out how to make secure cookies work with mobile app
     secure: env.NODE_ENV === "production",
+    domain: env.NODE_ENV === "production" ? `.${PROD_DOMAIN}` : undefined,
     sameSite: getCookieSameSite(),
   },
   resave: false,
