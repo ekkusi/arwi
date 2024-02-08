@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { TokenSetParameters } from "openid-client";
-import { SESSION_ID_HEADER_NAME, SESSION_NAME } from "../config";
+import { COOKIE_DOMAIN, SESSION_ID_HEADER_NAME, SESSION_NAME } from "../config";
 import { UserSessionInfo } from "../types/contextTypes";
 
 export const logOut = (req: Request, res: Response): Promise<void> => {
@@ -8,7 +8,7 @@ export const logOut = (req: Request, res: Response): Promise<void> => {
     req.session.destroy((err) => {
       if (err) reject(err);
 
-      res.clearCookie(SESSION_NAME);
+      res.clearCookie(SESSION_NAME, { domain: COOKIE_DOMAIN });
       resolve();
     });
   });

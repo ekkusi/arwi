@@ -81,6 +81,7 @@ const getCookieSameSite = () => {
 };
 
 const PROD_DOMAIN = env.PROD_DOMAIN || "arwi.fi";
+export const COOKIE_DOMAIN = APP_ENV === "staging" ? `.${PROD_DOMAIN}` : undefined;
 
 export const SESSION_OPTIONS: SessionOptions = {
   // Allow disabling redis session storage for testing with env var
@@ -92,7 +93,7 @@ export const SESSION_OPTIONS: SessionOptions = {
   cookie: {
     maxAge: +SESSION_IDLE_TIMEOUT_MS,
     secure: env.NODE_ENV === "production",
-    domain: env.NODE_ENV === "production" ? `.${PROD_DOMAIN}` : undefined,
+    domain: COOKIE_DOMAIN,
     sameSite: getCookieSameSite(),
   },
   resave: false,
