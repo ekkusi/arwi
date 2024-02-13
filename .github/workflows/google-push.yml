@@ -23,7 +23,11 @@ jobs:
         workload_identity_provider: 'projects/264096740042/locations/global/workloadIdentityPools/arwi-pool/providers/arwi-provider'
         service_account: 'arwi-test@appspot.gserviceaccount.com'
         project_id: 'arwi-test'
-
+    - name: get-npm-version
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@v1.3.1
+      with:
+        path: backend/package.json
     - id: 'deploy'
       uses: 'google-github-actions/deploy-appengine@v1'
       with:
@@ -32,7 +36,13 @@ jobs:
           DATABASE_URL=${{ secrets.TEST_DATABASE_URL }}
           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           OPENAI_ORGANIZATION=${{ secrets.OPENAI_ORGANIZATION }}
+          NO_REDIS_SESSION=true
+          NODE_ENV=test
+          APP_VERSION={{ steps.package-version.outputs.current-version }}
         env_vars: |-
           DATABASE_URL=${{ secrets.TEST_DATABASE_URL }}
           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           OPENAI_ORGANIZATION=${{ secrets.OPENAI_ORGANIZATION }}
+          NO_REDIS_SESSION=true
+          NODE_ENV=test
+          APP_VERSION={{ steps.package-version.outputs.current-version }}

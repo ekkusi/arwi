@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from "react";
-import { KeyboardAvoidingView, TextInput, TextInputProps } from "react-native";
+import { TextInput, TextInputProps } from "react-native";
 import { COLORS, FONT_SIZES } from "../../theme";
 import { CTextStyle } from "../../theme/types";
 import { createStyles, createTextStyles } from "../../theme/utils";
@@ -9,11 +9,12 @@ export type CTextInputProps = Omit<TextInputProps, "style"> & {
   errorStyle?: CTextStyle;
   lightTheme?: boolean;
   style?: CTextStyle;
+  isDisabled?: boolean;
   as?: "input" | "textarea";
 };
 
 export default forwardRef<TextInput, CTextInputProps>((props, ref) => {
-  const { error: hasError = false, errorStyle, lightTheme = false, style, as = "input", ...rest } = props;
+  const { error: hasError = false, errorStyle, isDisabled = false, lightTheme = false, style, as = "input", ...rest } = props;
   const allStyles = useMemo(() => {
     const error = {
       ...styles.errorInputStyle,
@@ -24,15 +25,17 @@ export default forwardRef<TextInput, CTextInputProps>((props, ref) => {
       ...(hasError ? error : {}),
       ...(as === "textarea" ? styles.textAreaStyle : {}),
       ...(lightTheme ? styles.lightThemeStyle : {}),
+      ...(isDisabled ? styles.disabledInputStyle : {}),
       ...style,
     });
-  }, [errorStyle, style, hasError, as, lightTheme]);
+  }, [errorStyle, hasError, as, lightTheme, isDisabled, style]);
   return (
     <TextInput
       multiline={as === "textarea"}
       ref={ref}
       style={allStyles}
       placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray}
+      pointerEvents={isDisabled ? "none" : "auto"}
       {...rest}
     />
   );
@@ -56,8 +59,8 @@ const styles = createStyles({
     textAlignVertical: "top",
     paddingVertical: "sm",
     paddingHorizontal: "lg",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    // justifyContent: "flex-start",
+    // alignItems: "flex-start",
   },
   lightThemeStyle: {
     color: "white",
@@ -71,5 +74,9 @@ const styles = createStyles({
   errorInputStyle: {
     borderBottomWidth: 2,
     borderColor: "error",
+  },
+  disabledInputStyle: {
+    borderBottomWidth: 1,
+    opacity: 0.7,
   },
 });

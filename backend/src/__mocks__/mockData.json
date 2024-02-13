@@ -4,7 +4,7 @@
       "id": 1,
       "date": "2023-04-11T00:00:00.000Z",
       "description": "Sählyn pelailua sisällä salissa. Ensin harjoiteltiin pallon käsittelyä ja sitten pelattiin peliä. Peli oli 3 vs 3 ja pelattiin 2 x 10 minuuttia",
-      "environmentCode": "LI_PALLO",
+      "environmentCode": "LI_ENV_PAL",
       "learningObjectives": [
         "T1",
         "T3",
@@ -16,7 +16,7 @@
       "id": 2,
       "date": "2023-04-10T14:00:00.000Z",
       "description": "Luonnonkauniilla polulla lenkkeilyä. Polku oli mäkinen, mutta maisemat olivat upeat. Lenkin kesto oli noin 45 minuuttia.",
-      "environmentCode": "LI_LUONTO",
+      "environmentCode": "LI_ENV_LUO",
       "learningObjectives": [
         "T1",
         "T2",
@@ -32,7 +32,7 @@
       "id": 3,
       "date": "2023-04-09T09:00:00.000Z",
       "description": "Tanssitunti tanssikoululla. Harjoittelimme uutta koreografiaa ja se oli haastavaa, mutta myös hauskaa. Tunnin kesto oli 60 minuuttia.",
-      "environmentCode": "LI_TANSSI",
+      "environmentCode": "LI_ENV_TAN",
       "learningObjectives": [
         "T2",
         "T6"
@@ -42,7 +42,7 @@
       "id": 4,
       "date": "2023-04-08T16:30:00.000Z",
       "description": "Kuntosali treeniä. Treenasimme erityisesti keskivartalon lihaksia ja käytimme myös kuntopyöriä. Treenin kesto oli noin 90 minuuttia.",
-      "environmentCode": "LI_KUNTO",
+      "environmentCode": "LI_ENV_KUN",
       "learningObjectives": [
         "T1",
         "T2",
@@ -55,7 +55,7 @@
       "id": 5,
       "date": "2023-04-07T11:00:00.000Z",
       "description": "Pallopeliä hiekkakentällä. Pelasimme beach volleyn sijaan beach tennistä, joka oli hieman erilaista ja haastavaa. Peliaika oli 2 x 15 minuuttia.",
-      "environmentCode": "LI_PALLO",
+      "environmentCode": "LI_ENV_PAL",
       "learningObjectives": [
         "T1",
         "T3",
@@ -67,7 +67,7 @@
       "id": 6,
       "date": "2023-04-06T18:00:00.000Z",
       "description": "Luontojooga ulkona puistossa. Jooga oli rentouttavaa ja samalla nautimme raikkaasta ulkoilmasta. Joogan kesto oli 60 minuuttia.",
-      "environmentCode": "LI_LUONTO",
+      "environmentCode": "LI_ENV_LUO",
       "learningObjectives": [
         "T1",
         "T2",
@@ -83,7 +83,7 @@
       "id": 7,
       "date": "2023-04-05T15:00:00.000Z",
       "description": "Perusvoimistelutreeniä voimistelusalilla. Treenasimme erilaisia liikkeitä ja hyppyjä. Treenin kesto oli 90 minuuttia.",
-      "environmentCode": "LI_PERUS",
+      "environmentCode": "LI_ENV_PER",
       "learningObjectives": [
         "T1",
         "T2",
@@ -99,7 +99,7 @@
       "id": 8,
       "date": "2023-04-04T19:00:00.000Z",
       "description": "Uintitreeniä uimahallissa.",
-      "environmentCode": "LI_VESI",
+      "environmentCode": "LI_ENV_VES",
       "learningObjectives": [
         "T1",
         "T2",
@@ -115,7 +115,7 @@
       "id": 9,
       "date": "2023-04-03T13:30:00.000Z",
       "description": "Pallopeliä koulun pihalla. Pelasimme jalkapalloa kavereiden kanssa. Peli oli tasainen ja lopulta päättyi 2-2.",
-      "environmentCode": "LI_PALLO",
+      "environmentCode": "LI_ENV_PAL",
       "learningObjectives": [
         "T1",
         "T3",
@@ -128,7 +128,7 @@
       "id": 10,
       "date": "2023-04-02T10:00:00.000Z",
       "description": "Retkeilyä metsässä. Kävelimme noin 10 kilometrin lenkin metsäpolkuja pitkin ja ihastelimme kaunista luontoa.",
-      "environmentCode": "LI_LUONTO",
+      "environmentCode": "LI_ENV_LUO",
       "learningObjectives": [
         "T1",
         "T2",
@@ -144,7 +144,7 @@
       "id": 11,
       "date": "2023-04-01T16:00:00.000Z",
       "description": "Vesijumppaa uimahallissa. Tunnin aikana treenasimme erilaisia liikkeitä vedessä, jotka oli suunniteltu erityisesti kunnon kohottamiseen.",
-      "environmentCode": "LI_VESI",
+      "environmentCode": "LI_ENV_VES",
       "learningObjectives": [
         "T2",
         "T3",
@@ -158,7 +158,7 @@
       "id": 12,
       "date": "2023-03-31T11:00:00.000Z",
       "description": "Peruskestävyystreeniä juoksuradalla. Juoksimme noin 5 kilometrin lenkin, joka sisälsi myös muutamia mäkiä.",
-      "environmentCode": "LI_PERUS",
+      "environmentCode": "LI_ENV_PER",
       "learningObjectives": [
         "T3",
         "T5",
@@ -170,7 +170,7 @@
       "id": 13,
       "date": "2023-03-30T15:30:00.000Z",
       "description": "Tanssitunti tanssikoululla. Tällä kertaa harjoittelimme latinalaistansseja, kuten salsaa ja cha chaa. Tunnin kesto oli 60 minuuttia.",
-      "environmentCode": "LI_TANSSI",
+      "environmentCode": "LI_ENV_TAN",
       "learningObjectives": [
         "T1",
         "T3",
@@ -183,7 +183,7 @@
       "id": 14,
       "date": "2023-03-29T09:30:00.000Z",
       "description": "Kuntoilua puistossa. Teimme erilaisia lihaskunto- ja venyttelyliikkeitä puiston penkeillä ja portailla.",
-      "environmentCode": "LI_KUNTO",
+      "environmentCode": "LI_ENV_KUN",
       "learningObjectives": [
         "T2",
         "T4",
@@ -195,7 +195,7 @@
       "id": 15,
       "date": "2023-03-28T14:00:00.000Z",
       "description": "Pallopeliä salissa. Pelasimme sählyä ja ottelu oli tiukka. Peli päättyi lopulta 4-3.",
-      "environmentCode": "LI_PALLO",
+      "environmentCode": "LI_ENV_PAL",
       "learningObjectives": [
         "T1",
         "T4",
@@ -207,14 +207,14 @@
       "id": 16,
       "date": "2023-03-27T17:00:00.000Z",
       "description": "Luontojoogaa rannalla. Joogasimme rannalla auringonlaskun aikaan ja tunnelma oli upea. Joogan kesto oli 60 minuuttia.",
-      "environmentCode": "LI_LUONTO",
+      "environmentCode": "LI_ENV_LUO",
       "learningObjectives": []
     },
     {
       "id": 17,
       "date": "2023-03-26T12:00:00.000Z",
       "description": "Voimistelutreeniä salilla. Treenasimme erilaisia hyppyjä ja liikkeitä, jotka vaativat hyvää tasapainoa.",
-      "environmentCode": "LI_VOIM",
+      "environmentCode": "LI_ENV_VOI",
       "learningObjectives": [
         "T1",
         "T2",
@@ -227,7 +227,7 @@
       "id": 18,
       "date": "2023-03-25T16:30:00.000Z",
       "description": "Uintitreeniä avovesialtaassa. Uinti oli hieman haastavaa, sillä vesi oli vielä melko kylmää, mutta keli oli kaunis ja aurinkoinen.",
-      "environmentCode": "LI_VESI",
+      "environmentCode": "LI_ENV_VES",
       "learningObjectives": [
         "T4",
         "T8"
@@ -237,7 +237,7 @@
       "id": 19,
       "date": "2023-03-24T19:00:00.000Z",
       "description": "Kuntosali treeniä. Treenasimme erityisesti ylävartalon lihaksia ja käytimme painoja ja kuntopyöriä.",
-      "environmentCode": "LI_KUNTO",
+      "environmentCode": "LI_ENV_KUN",
       "learningObjectives": [
         "T1",
         "T3",
@@ -250,7 +250,7 @@
       "id": 20,
       "date": "2023-03-23T10:30:00.000Z",
       "description": "Pallopeliä ulkokentällä. Pelasimme tennistä kavereiden kanssa. Peli oli tasainen ja lopulta päättyi 6-4.",
-      "environmentCode": "LI_PALLO",
+      "environmentCode": "LI_ENV_PAL",
       "learningObjectives": [
         "T3",
         "T4",
@@ -263,7 +263,7 @@
       "id": 21,
       "date": "2023-03-22T13:00:00.000Z",
       "description": "Retkeilyä kansallispuistossa. Kävelimme noin 15 kilometrin lenkin ja ihastelimme upeita maisemia.",
-      "environmentCode": "LI_LUONTO",
+      "environmentCode": "LI_ENV_LUO",
       "learningObjectives": [
         "T1",
         "T2",
@@ -436,16 +436,14 @@
           "skillsRating": 8,
           "behaviourRating": 10,
           "notes": "Liisa nautti lenkkeilystä luonnonkauniilla polulla ja jakoi mielenkiintoisia havaintojaan maisemista muiden kanssa. Hän oli hyvässä kunnossa koko lenkin ajan.",
-          "collectionId": 2,
-          "isStellar": true
+          "collectionId": 2
         },
         {
           "wasPresent": true,
           "skillsRating": 10,
           "behaviourRating": 9,
           "notes": "Liisa harjoitteli tanssin koreografiaa erittäin hyvin ja osasi seurata rytmiä. Hän auttoi muita oppimaan haastavat liikkeet ja piti tunnelman kevyenä.",
-          "collectionId": 3,
-          "isStellar": true
+          "collectionId": 3
         },
         {
           "wasPresent": false,
@@ -472,8 +470,7 @@
           "skillsRating": 7,
           "behaviourRating": 8,
           "notes": "Liisa treenasi perusvoimistelutreeniä ahkerasti, mutta tarvitsi apua muutamissa liikkeissä. Hän kuunteli ohjeita ja pyrki parantamaan suoritustaan.",
-          "collectionId": 7,
-          "isStellar": true
+          "collectionId": 7
         },
         {
           "wasPresent": true,
@@ -493,8 +490,7 @@
           "skillsRating": 9,
           "behaviourRating": 9,
           "notes": "Liisa nautti retkeilystä metsässä ja käveli reippaasti koko 10 kilometrin lenkin. Hän ihasteli luontoa ja otti valokuvia matkan varrella.",
-          "collectionId": 10,
-          "isStellar": true
+          "collectionId": 10
         },
         {
           "wasPresent": true,
@@ -515,16 +511,14 @@
           "skillsRating": 10,
           "behaviourRating": 9,
           "notes": "Liisa harjoitteli latinalaistansseja tanssitunnilla ja oppi nopeasti uudet askeleet. Hän auttoi muita oppimaan ja piti tunnelman kevyenä.",
-          "collectionId": 13,
-          "isStellar": true
+          "collectionId": 13
         },
         {
           "wasPresent": true,
           "skillsRating": 8,
           "behaviourRating": 7,
           "notes": "Liisa teki kuntoiluharjoituksia puistossa, mutta keskittyminen herpaantui ajoittain. Hän suoritti liikkeet oikein, mutta olisi voinut olla tarkkaavaisempi.",
-          "collectionId": 14,
-          "isStellar": true
+          "collectionId": 14
         },
         {
           "wasPresent": true,
@@ -545,16 +539,14 @@
           "skillsRating": 8,
           "behaviourRating": 8,
           "notes": "Liisa harjoitteli voimistelutreeniä salilla ja teki hyviä hyppyjä ja liikkeitä. Hän tarvitsi apua tasapainossa, mutta oli motivoitunut ja kuunteli ohjeita.",
-          "collectionId": 17,
-          "isStellar": true
+          "collectionId": 17
         },
         {
           "wasPresent": true,
           "skillsRating": 7,
           "behaviourRating": 9,
           "notes": "Liisa osallistui uintitreeniin ja yritti parantaa tekniikkaansa. Vaikka hän ei ollut nopein uimari, hän pysyi positiivisena ja kannusti muita osallistujia.",
-          "collectionId": 18,
-          "isStellar": true
+          "collectionId": 18
         },
         {
           "wasPresent": true,

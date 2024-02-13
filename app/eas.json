@@ -6,7 +6,9 @@
       },
       "env": {
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
-        "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
+        "EXPO_PUBLIC_BACKEND_API_URL": "https://staging-proxy-api.arwi.fi",
+        "EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY": "https://staging-api.arwi.fi",
+        "EXPO_PUBLIC_SENTRY_URL": "https://60ba84d6e99bfe2d726019012e419f6f@o4506580827045888.ingest.sentry.io/4506581701623808",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
         "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz"
       },
@@ -18,7 +20,8 @@
       },
       "env": {
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
-        "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
+        "EXPO_PUBLIC_BACKEND_API_URL": "https://staging-proxy-api.arwi.fi",
+        "EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY": "https://staging-api.arwi.fi",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
         "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz"
       },
@@ -28,7 +31,8 @@
     "dev": {
       "env": {
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
-        "EXPO_PUBLIC_BACKEND_API_URL": "https://arwi-test.lm.r.appspot.com",
+        "EXPO_PUBLIC_BACKEND_API_URL": "https://staging-proxy-api.arwi.fi",
+        "EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY": "https://staging-api.arwi.fi",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
         "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz"
       },
@@ -42,11 +46,29 @@
     "production": {
       "env": {
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
-        "EXPO_PUBLIC_BACKEND_API_URL": "https://api.arwi.fi",
+        "EXPO_PUBLIC_BACKEND_API_URL": "https://proxy-api.arwi.fi",
+        "EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY": "https://api.arwi.fi",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
-        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz"
+        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",
+        "EXPO_PUBLIC_MATOMO_BASE_URL": "https://analytics.arwi.fi",
+        "EXPO_PUBLIC_SENTRY_URL": "https://60ba84d6e99bfe2d726019012e419f6f@o4506580827045888.ingest.sentry.io/4506581701623808",
+        "EXPO_PUBLIC_ENV": "production"
       },
-      "channel": "production"
+      "channel": "production",
+      "autoIncrement": true
+    },
+    "staging": {
+      "env": {
+        "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
+        "EXPO_PUBLIC_BACKEND_API_URL": "https://staging-proxy-api.arwi.fi",
+        "EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY": "https://staging-api.arwi.fi",
+        "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
+        "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz",
+        "EXPO_PUBLIC_SENTRY_URL": "https://60ba84d6e99bfe2d726019012e419f6f@o4506580827045888.ingest.sentry.io/4506581701623808",
+        "EXPO_PUBLIC_ENV": "staging"
+      },
+      "channel": "staging",
+      "autoIncrement": true
     }
   },
   "submit": {
@@ -64,6 +86,7 @@
     }
   },
   "cli": {
-    "promptToConfigurePushNotifications": false
+    "promptToConfigurePushNotifications": false,
+    "appVersionSource": "remote"
   }
 }

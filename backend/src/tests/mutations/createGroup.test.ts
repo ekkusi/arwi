@@ -1,158 +1,172 @@
-import { graphql } from "@/gql";
-import ValidationError from "@/graphql-server/errors/ValidationError";
-import prisma from "@/graphql-server/prismaClient";
-import { ClassYearCode } from "@/graphql-server/types";
-import serverRequest from "@/utils/serverRequest";
+import { graphql } from "../gql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import prisma from "@/prismaClient";
+import { CollectionTypeCategory, EducationLevel } from "../../types";
+import { TestTeacher, createTestUserAndLogin, deleteTestUser } from "../testHelpers";
+import { modulesByGroupLoader } from "../../graphql/dataLoaders/module";
+import { groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
 
-describe("ServerRequest - createGroup", () => {
-  let teacherId: string;
+const groupData = {
+  name: "Test Group",
+  subjectCode: "LI",
+  educationLevel: EducationLevel.PRIMARY_FIRST,
+  learningObjectiveGroupKey: "one_to_two_years",
+  students: [{ name: "Student A" }, { name: "Student B" }],
+  collectionTypes: [
+    { category: CollectionTypeCategory.EXAM, name: "Midterm", weight: 50 },
+    { category: CollectionTypeCategory.CLASS_PARTICIPATION, name: "Participation", weight: 50 },
+  ],
+};
+
+describe("CreateGroup", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let teacher: TestTeacher;
 
   beforeAll(async () => {
-    const teacher = await prisma.teacher.create({
-      data: {
-        email: "testteacher@example.com",
-        passwordHash: "hashed-password",
-      },
-    });
-    teacherId = teacher.id;
+    ({ graphqlRequest } = await createServer());
+
+    teacher = await createTestUserAndLogin(graphqlRequest);
   });
 
   afterAll(async () => {
+    await deleteTestUser();
+  });
+
+  afterEach(async () => {
     await prisma.group.deleteMany();
-    await prisma.teacher.deleteMany();
   });
 
-  it("should create a group without students", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        name: "Test Group",
-        teacherId,
-        subjectCode: "LI",
-        yearCode: ClassYearCode.PRIMARY_FIRST,
-        students: [],
-      },
+  it("should successfully create a group", async () => {
+    const validGroupData = {
+      ...groupData,
+      teacherId: teacher.id,
     };
     const query = graphql(`
-      mutation CreateGroupWithoutStudents($data: CreateGroupInput!) {
+      mutation CreateGroup($data: CreateGroupInput!) {
         createGroup(data: $data) {
           id
           name
           teacher {
             id
           }
-          currentClassYear {
-            info {
-              code
-            }
+          subject {
+            code
           }
           students {
-            id
-          }
-        }
-      }
-    `);
-
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
-
-    // Assert
-    expect(result.createGroup).toEqual({
-      id: expect.any(String),
-      name: variables.data.name,
-      currentClassYear: {
-        info: {
-          code: variables.data.yearCode,
-        },
-      },
-      teacher: {
-        id: teacherId,
-      },
-      students: [],
-    });
-  });
-
-  it("should create a group with students", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        name: "Test Group with Students",
-        teacherId,
-        subjectCode: "LI",
-        yearCode: ClassYearCode.PRIMARY_FIRST,
-        students: [
-          {
-            name: "Student 1",
-          },
-          {
-            name: "Student 2",
-          },
-        ],
-      },
-    };
-    const query = graphql(`
-      mutation CreateGroupWithStudents($data: CreateGroupInput!) {
-        createGroup(data: $data) {
-          id
-          name
-          teacher {
-            id
-          }
-          students {
-            id
             name
           }
+          currentModule {
+            collectionTypes {
+              name
+              weight
+            }
+          }
         }
       }
     `);
 
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+    const response = await graphqlRequest(query, { data: validGroupData });
 
-    // Assert
-    expect(result.createGroup).toEqual({
-      id: expect.any(String),
-      name: variables.data.name,
-      teacher: {
-        id: teacherId,
-      },
-      students: [
-        {
-          id: expect.any(String),
-          name: "Student 1",
-        },
-        {
-          id: expect.any(String),
-          name: "Student 2",
-        },
-      ],
-    });
+    expect(response.data?.createGroup).toBeDefined();
+    expect(response.data?.createGroup.name).toEqual(validGroupData.name);
+    expect(response.data?.createGroup.teacher.id).toEqual(teacher.id);
+    expect(response.data?.createGroup.subject.code).toEqual(validGroupData.subjectCode);
+    expect(response.data?.createGroup.students.length).toEqual(validGroupData.students.length);
+    expect(response.data?.createGroup.currentModule.collectionTypes.length).toEqual(validGroupData.collectionTypes.length);
   });
 
-  it("should throw an error when invalid subjectCode is provided", async () => {
-    // Arrange
-    const invalidSubjectCode = "INVALID_CODE";
-    const variables = {
-      data: {
-        name: "Test Group with Invalid Subject Code",
-        teacherId,
-        subjectCode: invalidSubjectCode,
-        yearCode: ClassYearCode.PRIMARY_FIRST,
-        students: [],
-      },
+  it("should throw error for invalid subject code", async () => {
+    const invalidSubjectCodeGroupData = {
+      ...groupData,
+      teacherId: teacher.id,
+      subjectCode: "InvalidCode",
     };
+
     const query = graphql(`
-      mutation CreateGroupWithInvalidSubjectCode($data: CreateGroupInput!) {
+      mutation CreateGroupInvalidSubject($data: CreateGroupInput!) {
         createGroup(data: $data) {
           id
         }
       }
     `);
 
-    // Act
-    const result = serverRequest({ document: query, prismaOverride: prisma }, variables).catch((e) => e);
+    const response = await graphqlRequest(query, { data: invalidSubjectCodeGroupData });
 
-    // Assert
-    await expect(result).resolves.toThrow(new ValidationError(`Aihetta koodilla '${invalidSubjectCode}' ei ole olemassa.`));
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Aihetta koodilla 'InvalidCode' ei ole olemassa");
+  });
+
+  it("should throw error for empty collection types", async () => {
+    const emptyCollectionTypesGroupData = {
+      ...groupData,
+      teacherId: teacher.id,
+      collectionTypes: [],
+    };
+
+    const query = graphql(`
+      mutation CreateGroupEmptyCollections($data: CreateGroupInput!) {
+        createGroup(data: $data) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: emptyCollectionTypesGroupData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Arviointityyppejä on oltava vähintään yksi");
+  });
+
+  it("should throw error for invalid collection type weights", async () => {
+    const invalidWeightsGroupData = {
+      ...groupData,
+      teacherId: teacher.id,
+      collectionTypes: [
+        { category: CollectionTypeCategory.EXAM, name: "Midterm", weight: 30 },
+        { category: CollectionTypeCategory.CLASS_PARTICIPATION, name: "Participation", weight: 30 },
+      ], // Total weight does not sum up to 100
+    };
+
+    const query = graphql(`
+      mutation CreateGroupInvalidWeights($data: CreateGroupInput!) {
+        createGroup(data: $data) {
+          id
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: invalidWeightsGroupData });
+
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Arviointityyppien painotusten summan on oltava 100");
+  });
+
+  it("should update DataLoaders after creating a group", async () => {
+    const groupsByTeacher = await groupsByTeacherLoader.load(teacher.id);
+    expect(groupsByTeacher).toEqual([]);
+
+    // Create a group
+    const validGroupData = { ...groupData, teacherId: teacher.id };
+    const query = graphql(`
+      mutation CreateGroupDataLoadersCheck($data: CreateGroupInput!) {
+        createGroup(data: $data) {
+          id
+          name
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, { data: validGroupData });
+
+    const newGroupId = response.data?.createGroup.id;
+    // Check if the modules are correctly loaded in modulesByGroupLoader
+    const updatedModulesByGroup = await modulesByGroupLoader.load(newGroupId!);
+    expect(updatedModulesByGroup.length).toEqual(1);
+    expect(updatedModulesByGroup[0].groupId).toEqual(newGroupId!);
+
+    // Check if the group is correctly loaded in groupsByTeacherLoader
+    const groupsFromTeacherLoader = await groupsByTeacherLoader.load(teacher.id);
+    const createdGroupFromTeacherLoader = groupsFromTeacherLoader.find((group) => group.id === newGroupId);
+    expect(createdGroupFromTeacherLoader).toEqual(expect.objectContaining({ id: newGroupId, name: validGroupData.name }));
   });
 });

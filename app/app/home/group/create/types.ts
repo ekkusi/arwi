@@ -1,5 +1,7 @@
 export type GroupCreationStackParams = {
-  "general-info": undefined;
-  subject: undefined;
-  students: undefined;
+  "group-create-general-info": undefined;
+  "group-create-subject": undefined;
+  "group-create-students": undefined;
+  "group-create-collection-types": undefined;
+  "group-create-collection-type-weights": undefined;
 };

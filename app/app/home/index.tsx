@@ -12,6 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { graphql } from "../../gql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -33,6 +34,14 @@ const MainPage_GetCurrentUser_Query = graphql(`
         name
         archived
         updatedAt
+        currentModule {
+          collectionTypes {
+            id
+            category
+            name
+            weight
+          }
+        }
         subject {
           label {
             fi
@@ -52,7 +61,7 @@ function HomePageContent({
   navigation,
 }: {
   data: MainPage_GetCurrentUserQuery;
-  navigation: NativeStackNavigationProp<HomeStackParams, "index">;
+  navigation: NativeStackNavigationProp<HomeStackParams, "home">;
 }) {
   const { t } = useTranslation();
   const firstRender = useRef(true);
@@ -147,7 +156,7 @@ function HomePageContent({
     </Layout>
   );
 }
-export default function HomePage({ navigation }: NativeStackScreenProps<HomeStackParams, "index">) {
+export default function HomePage({ navigation }: NativeStackScreenProps<HomeStackParams, "home">) {
   const { data, loading } = useQuery(MainPage_GetCurrentUser_Query);
 
   if (loading || !data) return <LoadingIndicator />;

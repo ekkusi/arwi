@@ -1,26 +1,24 @@
 import React, { createContext, useCallback, useState } from "react";
-import * as SecureStore from "expo-secure-store";
-import { UserInfo } from "arwi-backend/src/types/contextTypes";
+import { Teacher } from "arwi-backend/src/types";
+import { removeSessionId } from "../helpers/session";
+
+type UserInfo = Omit<Teacher, "passwordHash" | "groups">;
 
 type AuthState = {
-  accessToken: string | null;
   authenticated: boolean;
-  user: UserInfo | null;
+  user?: UserInfo;
 };
 
 const initialState: AuthState = {
-  accessToken: null,
   authenticated: false,
-  user: null,
+  user: undefined,
 };
 
 type AuthContextType = {
   authState: AuthState;
-  setUser: (token: string, user: UserInfo) => Promise<void>;
+  setUser: (user: UserInfo) => void;
   logout: () => void;
 };
-
-export const ACCESS_TOKEN_KEY = "accessToken";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 const { Provider } = AuthContext;
@@ -47,18 +45,15 @@ function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
   // Need to use useCallback to prevent infinite render loops in components that depend on these (ApolloProvider at least).
   const logout = useCallback(async () => {
-    await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
+    await removeSessionId();
     setAuthState({
-      accessToken: null,
       authenticated: false,
-      user: null,
+      user: undefined,
     });
   }, []);
 
-  const setUser = useCallback(async (token: string, user: UserInfo) => {
-    await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, token);
+  const setUser = useCallback((user: UserInfo) => {
     setAuthState({
-      accessToken: token,
       user,
       authenticated: true,
     });

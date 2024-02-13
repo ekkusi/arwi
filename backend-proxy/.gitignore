@@ -1,0 +1,11 @@
+# dependencies
+/node_modules
+
+# production
+/lib
+
+# local env files
+.env*.local
+.env
+.env.production
+.env.test

@@ -1,0 +1,333 @@
+type Query {
+  getAppMetadata: AppMetadata!
+  getCurrentUser: Teacher!
+  getTeacher(id: ID!): Teacher!
+  getGroups(teacherId: ID!): [Group!]!
+  getGroup(id: ID!): Group!
+  getCollection(id: ID!): EvaluationCollection!
+  getType(id: ID!): CollectionType!
+  getStudent(id: ID!): Student!
+  getEvaluation(id: ID!): Evaluation!
+}
+
+type Mutation {
+  register(data: CreateTeacherInput!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  mPassIDLogin(code: String!): MPassIDAuthPayload!
+  requestPasswordReset(email: String!): Boolean!
+  verifyPasswordResetCode(code: String!): Boolean!
+  updatePassword(recoveryCode: String!, newPassword: String!): Boolean!
+  connectMPassID(code: String!): AuthPayload!
+  connectLocalCredentials(email: String!, password: String!): AuthPayload!
+  logout: Boolean!
+  createGroup(data: CreateGroupInput!): Group!
+  createClassParticipationCollection(data: CreateClassParticipationCollectionInput!, moduleId: ID!): ClassParticipationCollection!
+  createDefaultCollection(data: CreateDefaultCollectionInput!, moduleId: ID!): DefaultCollection!
+  createStudent(data: CreateStudentInput!, moduleId: ID!): Student!
+  updateClassParticipationCollection(data: UpdateClassParticipationCollectionInput!, collectionId: ID!): ClassParticipationCollection!
+  updateDefaultCollection(data: UpdateDefaultCollectionInput!, collectionId: ID!): DefaultCollection!
+  updateStudent(data: UpdateStudentInput!, studentId: ID!): Student!
+  updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
+  updateClassParticipationEvaluation(input: UpdateClassParticipationEvaluationInput!): ClassParticipationEvaluation!
+  updateDefaultEvaluation(input: UpdateDefaultEvaluationInput!): DefaultEvaluation!
+  deleteStudent(studentId: ID!): Student!
+  deleteTeacher(teacherId: ID!): Teacher!
+  deleteGroup(groupId: ID!): Group!
+  deleteCollection(collectionId: ID!): EvaluationCollection!
+  changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
+  generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
+  fixTextGrammatics(studentId: ID!, text: String!): String!
+}
+
+type AppMetadata {
+  appVersion: String!
+  minimumSupportedAppVersion: String!
+}
+
+type AuthPayload {
+  userData: Teacher!
+}
+
+type MPassIDAuthPayload {
+  payload: AuthPayload!
+  newUserCreated: Boolean!
+}
+
+type Teacher {
+  id: ID!
+  email: EmailAddress
+  groups: [Group!]!
+  languagePreference: String!
+  consentsAnalytics: Boolean!
+  isMPassIDConnected: Boolean!
+}
+
+type LoginResult {
+  userData: Teacher!
+}
+
+type TranslatedString {
+  fi: String!
+  en: String
+  se: String
+}
+
+enum LearningObjectiveType {
+  BEHAVIOUR
+  SKILLS
+  SKILLS_AND_BEHAVIOUR
+  NOT_EVALUATED
+}
+
+type LearningObjective {
+  code: ID!
+  label: TranslatedString!
+  description: TranslatedString!
+  type: LearningObjectiveType!
+  color: String!
+}
+
+type Subject {
+  code: ID!
+  label: TranslatedString!
+  environments: [Environment!]!
+}
+
+type Environment {
+  code: ID!
+  color: String!
+  label: TranslatedString!
+  subject: Subject!
+}
+
+type Group {
+  id: ID!
+  name: String!
+  students: [Student!]!
+  subject: Subject!
+  teacher: Teacher!
+  updatedAt: DateTime!
+  archived: Boolean!
+  currentModule: Module!
+  modules: [Module!]!
+}
+
+type CollectionType {
+  id: ID!
+  category:    CollectionTypeCategory!
+  name:        String!
+  weight:      Int!
+  module: Module!
+  defaultTypeCollection: DefaultCollection
+}
+
+enum CollectionTypeCategory {
+  CLASS_PARTICIPATION
+  EXAM
+  WRITTEN_WORK
+  GROUP_WORK
+  OTHER
+}
+
+type ModuleInfo {
+  educationLevel: EducationLevel!
+  learningObjectiveGroupKey: String!
+  label: TranslatedString!
+}
+
+type Module {
+  id: ID!
+  info: ModuleInfo!
+  evaluationCollections: [EvaluationCollection!]!
+  students: [Student!]!
+  group: Group!
+  collectionTypes: [CollectionType!]!
+}
+
+interface EvaluationCollection {
+  id: ID!
+  date: Date!
+  type: CollectionType!
+  description: String
+  evaluations: [Evaluation!]!
+  module: Module!
+}
+
+type ClassParticipationCollection implements EvaluationCollection {
+  id: ID!
+  date: Date!
+  type: CollectionType!
+  description: String
+  evaluations: [ClassParticipationEvaluation!]!
+  module: Module!
+  environment: Environment!
+  learningObjectives: [LearningObjective!]!
+}
+
+type DefaultCollection implements EvaluationCollection {
+  id: ID!
+  date: Date!
+  type: CollectionType!
+  description: String
+  evaluations: [DefaultEvaluation!]!
+  module: Module!
+}
+
+interface Evaluation {
+  id: ID!
+  student: Student!
+  wasPresent: Boolean!
+  notes: String
+  collection: EvaluationCollection!
+}
+
+type ClassParticipationEvaluation implements Evaluation {
+  id: ID!
+  student: Student!
+  wasPresent: Boolean!
+  notes: String
+  collection: ClassParticipationCollection!
+  skillsRating: Int
+  behaviourRating: Int
+}
+
+type DefaultEvaluation implements Evaluation {
+  id: ID!
+  student: Student!
+  wasPresent: Boolean!
+  notes: String
+  collection: DefaultCollection!
+  rating: Float
+}
+
+type Student {
+  id: ID!
+  name: String!
+  group: Group!
+  currentModuleEvaluations: [Evaluation!]!
+}
+
+enum EducationLevel {
+  PRIMARY_FIRST
+  PRIMARY_SECOND
+  PRIMARY_THIRD
+  PRIMARY_FOURTH
+  PRIMARY_FIFTH
+  PRIMARY_SIXTH
+  PRIMARY_SEVENTH
+  PRIMARY_EIGHTH
+  PRIMARY_NINTH
+  HIGH_SCHOOL
+  VOCATIONAL
+}
+
+input CreateTeacherInput {
+  email: EmailAddress!
+  password: String!
+  languagePreference: String
+  consentsAnalytics: Boolean
+}
+
+input CreateGroupInput {
+  name: String!
+  teacherId: ID!
+  subjectCode: ID!
+  educationLevel: EducationLevel!
+  learningObjectiveGroupKey: String!
+  students: [CreateStudentInput!]!
+  collectionTypes: [CreateCollectionTypeInput!]!
+}
+
+input CreateStudentInput {
+  name: String!
+}
+
+input CreateCollectionTypeInput {
+  category: CollectionTypeCategory!
+  name: String!
+  weight: Int!
+}
+
+input UpdateGroupInput {
+  name: String
+  archived: Boolean
+  updateCollectionTypeInputs: [UpdateCollectionTypeInput!]
+  deleteCollectionTypeIds: [ID!]
+  createCollectionTypeInputs: [CreateCollectionTypeInput!]
+}
+
+input UpdateCollectionTypeInput {
+  id: ID!
+  category: CollectionTypeCategory
+  name: String
+  weight: Int
+}
+
+input UpdateStudentInput {
+  name: String
+}
+
+input CreateClassParticipationCollectionInput {
+  date: Date!
+  typeId: ID!
+  environmentCode: ID!
+  description: String
+  learningObjectiveCodes: [ID!]!
+  evaluations: [CreateClassParticipationEvaluationInput!]
+}
+
+input CreateDefaultCollectionInput {
+  date: Date!
+  typeId: ID!
+  description: String
+  evaluations: [CreateDefaultEvaluationInput!]
+}
+
+input CreateClassParticipationEvaluationInput {
+  studentId: ID!
+  wasPresent: Boolean!
+  skillsRating: Int
+  behaviourRating: Int
+  notes: String
+}
+
+input CreateDefaultEvaluationInput {
+  studentId: ID!
+  wasPresent: Boolean!
+  rating: Float
+  notes: String
+}
+
+input UpdateClassParticipationCollectionInput {
+  date: Date
+  environmentCode: ID
+  description: String
+  learningObjectiveCodes: [ID!]
+  evaluations: [UpdateClassParticipationEvaluationInput!]
+}
+
+input UpdateDefaultCollectionInput {
+  date: Date
+  description: String
+  evaluations: [UpdateDefaultEvaluationInput!]
+}
+
+input UpdateClassParticipationEvaluationInput {
+  id: ID!
+  wasPresent: Boolean
+  skillsRating: Int
+  behaviourRating: Int
+  notes: String
+}
+
+input UpdateDefaultEvaluationInput {
+  id: ID!
+  wasPresent: Boolean
+  rating: Float
+  notes: String
+}
+
+input ChangeGroupModuleInput {
+  newEducationLevel: EducationLevel!
+  newLearningObjectiveGroupKey: String!
+}

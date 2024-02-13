@@ -1,75 +1,119 @@
-import { graphql } from "@/gql";
-import { assertIsError } from "@/utils/errorUtils";
-import prisma from "@/graphql-server/prismaClient";
-import serverRequest from "@/utils/serverRequest";
+import { hash } from "bcryptjs";
+import { BRCRYPT_SALT_ROUNDS } from "../../config";
+import { graphql } from "../gql";
+import { RegisterTest_RegisterMutationVariables } from "../gql/graphql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import { TestTeacher, createTestUser } from "../testHelpers";
+import prisma from "../../prismaClient";
 
-describe("ServerRequest - register", () => {
+describe("Register", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let existingTeacher: TestTeacher;
+
+  beforeAll(async () => {
+    ({ graphqlRequest } = await createServer());
+  });
+
+  beforeEach(async () => {
+    existingTeacher = await createTestUser();
+  });
+
   afterEach(async () => {
     await prisma.teacher.deleteMany();
   });
 
   it("should register a new teacher", async () => {
-    // Arrange
-    const variables = {
+    const password = "password";
+    const teacherData: RegisterTest_RegisterMutationVariables = {
       data: {
-        email: "register@example.com",
-        password: "testpassword",
+        email: "test@example.com",
+        password,
       },
     };
+
     const query = graphql(`
-      mutation Register($data: CreateTeacherInput!) {
+      mutation RegisterTest_Register($data: CreateTeacherInput!) {
         register(data: $data) {
-          id
-          email
+          userData {
+            email
+          }
         }
       }
     `);
 
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+    const response = await graphqlRequest(query, teacherData);
 
-    // Assert
-    const savedTeacher = await prisma.teacher.findFirst({
-      where: { email: "register@example.com" },
-    });
-    expect(savedTeacher).toBeTruthy();
-    expect(result.register).toEqual({
-      id: savedTeacher?.id,
-      email: "register@example.com",
-    });
+    expect(response.data?.register.userData.email).toEqual(teacherData.data.email);
   });
 
-  it("should throw an error with the specified message if email already exists", async () => {
-    // Arrange
-    await prisma.teacher.create({
+  it("should throw an error if email is already in use", async () => {
+    const userData = {
       data: {
-        email: "existing@example.com",
-        passwordHash: "hashedpassword",
-      },
-    });
-
-    const variables = {
-      data: {
-        email: "existing@example.com",
-        password: "testpassword",
+        email: existingTeacher.email,
+        password: "password",
       },
     };
+
     const query = graphql(`
-      mutation Register($data: CreateTeacherInput!) {
+      mutation RegisterTest_RegisterExistingEmail($data: CreateTeacherInput!) {
         register(data: $data) {
-          id
-          email
+          userData {
+            email
+          }
         }
       }
     `);
 
-    // Act
-    try {
-      await serverRequest({ document: query, prismaOverride: prisma }, variables);
-    } catch (error) {
-      assertIsError(error);
-      // Assert
-      expect(error.message).toEqual(`Sähköposti '${variables.data.email}' on jo käytössä`);
-    }
+    const response = await graphqlRequest(query, userData);
+
+    expect(response.errors?.[0].message).toEqual(`Sähköposti '${userData.data.email}' on jo käytössä`);
+  });
+
+  it("should register email in lowercase", async () => {
+    const userData = {
+      data: {
+        email: "Test-user@email.com",
+        password: "password",
+      },
+    };
+
+    const query = graphql(`
+      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {
+        register(data: $data) {
+          userData {
+            email
+          }
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, userData);
+
+    expect(response.data?.register.userData.email).toEqual(userData.data.email.toLowerCase());
+  });
+
+  it("should throw an error if language preference is invalid", async () => {
+    const password = "password";
+    const userData = {
+      data: {
+        email: "test@example.com",
+        password,
+        languagePreference: "invalid_language",
+      },
+    };
+
+    const query = graphql(`
+      mutation RegisterTest_RegisterInvalidLanguage($data: CreateTeacherInput!) {
+        register(data: $data) {
+          userData {
+            email
+          }
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, userData);
+
+    expect(response.errors?.[0].message).toEqual(`Kielikoodi '${userData.data.languagePreference}' ei ole sallittu`);
   });
 });

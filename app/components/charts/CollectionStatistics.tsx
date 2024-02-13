@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { FragmentType, getFragmentData, graphql } from "../../gql";
-import { CollectionsLineChart_EvaluationCollectionFragment, EvaluationsLineChart_EvaluationFragment } from "../../gql/graphql";
+import { CollectionStatistics_EvaluationCollectionFragment } from "../../gql/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
 import { analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
 import CircledNumber from "../CircledNumber";
@@ -11,8 +12,8 @@ import { LineChartBaseProps } from "./LineChartBase";
 import MovingAverageLineChart, { EvaluationDataType } from "./MovingAverageLineChart";
 import StatisticsFilterMenu from "./StatisticsFilterMenu";
 
-const CollectionsLineChart_Collection_Fragment = graphql(`
-  fragment CollectionsLineChart_EvaluationCollection on EvaluationCollection {
+const CollectionStatistics_Collection_Fragment = graphql(`
+  fragment CollectionStatistics_EvaluationCollection on ClassParticipationCollection {
     id
     date
     environment {
@@ -25,12 +26,11 @@ const CollectionsLineChart_Collection_Fragment = graphql(`
       skillsRating
       behaviourRating
       wasPresent
-      isStellar
     }
   }
 `);
 
-const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[]) => {
+const mapData = (collections: CollectionStatistics_EvaluationCollectionFragment[]) => {
   const data: EvaluationDataType[] = [];
   let currentSkillsSum = 0;
   let notNullSkillsCount = 0;
@@ -50,7 +50,7 @@ const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[
       date: formatDate(it.date),
       skills: skillsAverage > 0 ? Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100 : null,
       behaviour: behaviourAverage > 0 ? Math.round((currentBehaviourSum / notNullBehaviourCount) * 100) / 100 : null,
-      environment: it.environment.label,
+      environment: it.environment,
     });
   });
   return data;
@@ -59,29 +59,36 @@ const mapData = (collections: CollectionsLineChart_EvaluationCollectionFragment[
 type CollectionsChartProps = Omit<LineChartBaseProps, "data"> & {
   title?: string;
   subjectCode: string;
-  collections: readonly FragmentType<typeof CollectionsLineChart_Collection_Fragment>[];
+  moduleInfo: MinimalModuleInfo;
+  collections: readonly FragmentType<typeof CollectionStatistics_Collection_Fragment>[];
 };
 
-export default function CollectionStatistics({ title, subjectCode, collections: collectionFragments, ...rest }: CollectionsChartProps) {
+export default function CollectionStatistics({ title, subjectCode, moduleInfo, collections: collectionFragments, ...rest }: CollectionsChartProps) {
   const { t } = useTranslation();
   const [filter, setFilter] = useState<string | undefined>(undefined);
 
-  const collections = getFragmentData(CollectionsLineChart_Collection_Fragment, collectionFragments);
+  const collections = getFragmentData(CollectionStatistics_Collection_Fragment, collectionFragments);
 
   const sortedCollections = useMemo(() => [...collections].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()), [collections]);
   const evaluationData = useMemo(() => mapData(sortedCollections), [sortedCollections]);
 
-  const filteredData = filter ? evaluationData.filter((coll) => coll.environment === filter) : evaluationData;
+  const filteredData = filter ? evaluationData.filter((coll) => coll.environment.code === filter) : evaluationData;
 
-  const evaluationsWithSkills = useMemo(() => filteredData.filter((obj) => obj.skills !== undefined), [filteredData]);
+  const evaluationsWithSkills = useMemo(
+    () => filteredData.filter((obj) => !!obj.skills) as WithRequiredNonNull<EvaluationDataType, "skills">[],
+    [filteredData]
+  );
   const skillsMean = useMemo(
-    () => evaluationsWithSkills.reduce((prev, evaluation) => prev + (evaluation.skills || 0), 0) / evaluationsWithSkills.length,
+    () => evaluationsWithSkills.reduce((prev, evaluation) => prev + evaluation.skills, 0) / evaluationsWithSkills.length,
     [evaluationsWithSkills]
   );
 
-  const evaluationsWithBehaviour = useMemo(() => filteredData.filter((obj) => obj.behaviour !== undefined), [filteredData]);
+  const evaluationsWithBehaviour = useMemo(
+    () => filteredData.filter((obj) => !!obj.behaviour) as WithRequiredNonNull<EvaluationDataType, "behaviour">[],
+    [filteredData]
+  );
   const behaviourMean = useMemo(
-    () => evaluationsWithBehaviour.reduce((prev, evaluation) => prev + (evaluation.behaviour || 0), 0) / evaluationsWithBehaviour.length,
+    () => evaluationsWithBehaviour.reduce((prev, evaluation) => prev + evaluation.behaviour, 0) / evaluationsWithBehaviour.length,
     [evaluationsWithBehaviour]
   );
   return (
@@ -89,7 +96,8 @@ export default function CollectionStatistics({ title, subjectCode, collections: 
       {title && <CText style={{ fontSize: "title", fontWeight: "500" }}>{title}</CText>}
       <StatisticsFilterMenu
         subjectCode={subjectCode}
-        title={t("group.evaluations-over-time", "Arvointien keskiarvojen kehitys")}
+        moduleInfo={moduleInfo}
+        title={t("group.evaluations-over-time", "Arviointien keskiarvojen kehitys")}
         filter={filter}
         setFilter={(newFilter) => setFilter(newFilter)}
       />

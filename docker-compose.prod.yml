@@ -1,0 +1,139 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: arwi
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - app-network
+    ports:
+      - 5432:5432
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4:7.7
+    container_name: pgadmin4
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_ADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5050:80"
+    networks:
+      - app-network
+    restart: always
+
+  mariadb:
+    image: mariadb:10.11
+    command: --max-allowed-packet=64MB
+    restart: always
+    volumes:
+      - ~/docker/mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MARIADB_AUTO_UPGRADE: 1
+      MARIADB_DISABLE_UPGRADE_BACKUP: 1
+      MARIADB_INITDB_SKIP_TZINFO: 1
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: arwi-analytics
+      MYSQL_USER: ${DB_USER}
+    networks:
+      - app-network
+    ports:
+      - 3306:3306
+
+  matomo:
+    image: matomo:4.15.1
+    restart: always
+    links:
+      - mariadb:db
+    volumes:
+      - ~/docker/matomo:/var/www/html
+    environment:
+      MATOMO_DATABASE_HOST: mariadb
+      MATOMO_DATABASE_ADAPTER: mysql
+      MATOMO_DATABASE_USERNAME: ${DB_USER}
+      MATOMO_DATABASE_PASSWORD: ${DB_PASSWORD}
+      MATOMO_DATABASE_DBNAME: arwi-analytics
+      PHP_MEMORY_LIMIT: 2048M
+    networks:
+      - app-network
+    ports:
+      - 9000:80
+
+  backend:
+    image: ekkusi/arwi-backend
+    restart: always
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_ORGANIZATION: ${OPENAI_ORGANIZATION}
+      JWT_ACCESS_TOKEN_SECRET_KEY: ${JWT_ACCESS_TOKEN_SECRET_KEY}
+      JWT_REFRESH_TOKEN_SECRET_KEY: ${JWT_REFRESH_TOKEN_SECRET_KEY}
+      MATOMO_BASE_URL: ${MATOMO_BASE_URL}
+      MATOMO_SITE_ID: ${MATOMO_SITE_ID}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      MPASSID_CLIENT_SECRET: ${MPASSID_CLIENT_SECRET}
+      MPASSID_CLIENT_ID: ${MPASSID_CLIENT_ID}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
+      SENTRY_URL: ${SENTRY_URL}
+      API_TOKENS: ${BACKEND_HEADER_AUTH_API_TOKENS}
+      APP_ENV: production
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  backend-proxy:
+    image: ekkusi/arwi-backend-proxy
+    restart: always
+    environment:
+      API_KEY: ${BACKEND_HEADER_AUTH_API_KEY}
+      MAIN_API_URL: ${MAIN_BACKEND_URL}
+    ports:
+      - "4001:4001"
+    networks:
+      - app-network
+
+  web:
+    image: ekkusi/arwi-web
+    restart: always
+    environment:
+        NEXT_PUBLIC_GRIDLY_API_KEY: ${GRIDLY_API_KEY}
+        NEXT_PUBLIC_GRIDLY_VIEW_ID: ${GRIDLY_API_KEY}
+        NEXT_PUBLIC_BACKEND_URL: ${MAIN_BACKEND_URL}
+    ports:
+      - "5000:3000"
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7.2.3-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/root/redis
+    command: redis-server --requirepass ${REDIS_PASSWORD} 
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+  
+  
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  postgres_data:
+  pgadmin:
+  redis_data:

@@ -1,9 +1,12 @@
 import CKeyboardAvoidingView, { CKeyboardAvoidingViewProps } from "./primitives/CKeyboardAvoidingView";
+import CView from "./primitives/CView";
 
-export type LayoutProps = CKeyboardAvoidingViewProps;
+export type LayoutProps = CKeyboardAvoidingViewProps & {
+  avoidKeyboard?: boolean;
+};
 
-function Layout({ style, ...props }: LayoutProps) {
-  return <CKeyboardAvoidingView style={{ flex: 1, ...style }} {...props} />;
+function Layout({ style, avoidKeyboard = true, ...props }: LayoutProps) {
+  return <CKeyboardAvoidingView style={{ flex: 1, ...style }} behavior={avoidKeyboard ? "padding" : undefined} {...props} />;
 }
 
 export default Layout;

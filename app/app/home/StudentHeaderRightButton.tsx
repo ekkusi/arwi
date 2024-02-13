@@ -17,54 +17,17 @@ const StudentHeaderRightButton_DeleteStudent_Mutation = graphql(`
   mutation StudentHeaderRightButton_DeleteStudent($id: ID!) {
     deleteStudent(studentId: $id) {
       id
-      name
       group {
         id
-        name
-        archived
-        updatedAt
-        subject {
-          label {
-            fi
-          }
-          code
-        }
         currentModule {
           id
-          info {
-            educationLevel
-            learningObjectiveGroupKey
-            label {
-              fi
-            }
-          }
           students {
             id
-            name
-            currentModuleEvaluations {
-              id
-              wasPresent
-            }
           }
           evaluationCollections {
             id
-            date
-            environment {
-              label {
-                fi
-              }
-              code
-              color
-            }
-            learningObjectives {
-              code
-              label {
-                fi
-              }
-              description {
-                fi
-              }
-              type
+            evaluations {
+              id
             }
           }
         }

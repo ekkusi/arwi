@@ -111,7 +111,7 @@ export default function GroupListItem({ group, onListItemPress, onEvaluateIconPr
             </CView>
           </CView>
         </CView>
-        <CView style={{ flex: 1 }}>
+        <CView style={{ flex: 1, justifyContent: "center", alignItems: "flex-end", paddingRight: "lg" }}>
           {!group.archived && (
             <CTouchableOpacity onPress={onEvaluateIconPress} style={{ width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
               <MaterialCommunityIcon name="pencil-plus-outline" color={COLORS.primary} size={25} />

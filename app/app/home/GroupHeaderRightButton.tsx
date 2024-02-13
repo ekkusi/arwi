@@ -81,7 +81,7 @@ export default function GroupHeaderRightButton({
                   navigation.navigate("collection-create", { groupId: id });
                 }}
               >
-                <CText>{t("new-evaluation", "Uusi arviointi")}</CText>
+                <CText>{t("new-class-evaluation", "Uusi tuntiarviointi")}</CText>
               </MenuOption>
               <MenuOption
                 onSelect={() => {
@@ -92,6 +92,13 @@ export default function GroupHeaderRightButton({
                 }}
               >
                 <CText>{t("change-class-year", "Vaihda vuosiluokka")}</CText>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  navigation.navigate("edit-evaluation-types", { groupId: id });
+                }}
+              >
+                <CText>{t("edit-evaluation-types", "Muokkaa arviointisisältöjä")}</CText>
               </MenuOption>
               <MenuOption
                 onSelect={() => {

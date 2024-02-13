@@ -41,7 +41,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
 
   const openToast = (content: string, props?: OpenToastProps) => {
     setToastContent(content);
-    setToastProps(props || null);
+    setToastProps(props || {});
     closeTimer.current = setTimeout(() => {
       closeToast();
     }, props?.closeTimeout || DEFAULT_CLOSE_TIMEOUT_MS);
@@ -97,7 +97,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
       {children}
       {/* Wrapper View is needed to make exit animation work in iOS */}
       <CView style={{ position: "absolute", bottom: 0, right: 0, left: 0, top: 0 }} pointerEvents="box-none">
-        {toastContent && (
+        {toastContent && toastProps && (
           <CAnimatedView
             entering={enterAnimation}
             exiting={exitAnimation}
@@ -107,7 +107,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
               left: "md",
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: type === "success" ? "light-green" : "error",
+              backgroundColor: type === "success" ? "green" : "error",
               padding: "lg",
               borderRadius: 10,
               ...placementStyles,

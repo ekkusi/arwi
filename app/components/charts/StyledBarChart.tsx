@@ -59,7 +59,7 @@ export default function StyledBarChart({
             width={gradeAxis || countAxis ? size.width - leftPadding : size.width}
             height={size.height}
             barWidth={barWidth}
-            domain={countAxis ? { y: [0, yDomainMax] } : undefined}
+            domain={{ y: [0, yDomainMax] }}
             containerComponent={
               <VictoryVoronoiContainer style={{ borderBottomColor: COLORS.darkgray, borderBottomWidth: 1 }} width={size.width} height={size.height} />
             }

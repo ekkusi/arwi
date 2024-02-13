@@ -1,14 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
-import { Modal, ModalProps, TouchableWithoutFeedback } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Animated, Modal, ModalProps, StatusBar, TouchableWithoutFeedback } from "react-native";
 import {
   BaseAnimationBuilder,
   FadeIn,
   FadeOut,
+  interpolateColor,
   runOnJS,
   SlideInDown,
+  SlideInLeft,
   SlideInUp,
   SlideOutDown,
   SlideOutUp,
+  useAnimatedProps,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
   ZoomIn,
   ZoomOut,
 } from "react-native-reanimated";
@@ -18,19 +25,22 @@ import CAnimatedView from "./primitives/CAnimatedView";
 import CButton from "./primitives/CButton";
 import CText from "./primitives/CText";
 import CView, { CViewProps } from "./primitives/CView";
+import { blendColors, hexToRgbA, rgbaToString } from "../helpers/color";
+import { COLORS } from "../theme";
 
 export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   isOpen: boolean;
   placement?: "top" | "bottom" | "center";
   outerViewStyles?: CViewStyle;
   innerViewStyles?: CViewStyle;
+  headerStyles?: CViewStyle;
   title?: string | JSX.Element;
   closeButton?: boolean | JSX.Element;
   closeOnBackgroundPress?: boolean;
   animated?: boolean;
   onClose?: () => void;
-  exitingAnimation?: BaseAnimationBuilder | typeof BaseAnimationBuilder;
-  enteringAnimation?: BaseAnimationBuilder | typeof BaseAnimationBuilder;
+  exitingAnimation?: typeof BaseAnimationBuilder;
+  enteringAnimation?: typeof BaseAnimationBuilder;
   animationDuration?: number;
 };
 
@@ -51,7 +61,10 @@ const innerViewStyle: CViewStyle = {
   paddingTop: "md",
   paddingBottom: "lg",
   backgroundColor: "white",
+  overflow: "hidden",
 };
+
+const AnimatedStatusBar = Animated.createAnimatedComponent(StatusBar);
 
 export default function CModal({
   animated = true,
@@ -65,6 +78,7 @@ export default function CModal({
   closeOnBackgroundPress = true,
   outerViewStyles: _outerViewStyles,
   innerViewStyles: _innerViewStyles,
+  headerStyles,
   animationDuration = 300,
   isOpen,
   onClose,
@@ -168,7 +182,8 @@ export default function CModal({
               flexDirection: "row",
               justifyContent: title ? "space-between" : "flex-end",
               alignItems: "center",
-              marginBottom: title ? "md" : 0,
+              // marginBottom: title ? "md" : 0,
+              ...headerStyles,
             }}
           >
             {typeof title === "string" ? <CText style={{ flex: 1, color: "darkgray", fontWeight: "bold" }}>{title}</CText> : title}
@@ -184,7 +199,7 @@ export default function CModal({
         {children}
       </>
     );
-  }, [children, closeButton, onClose, title]);
+  }, [children, closeButton, headerStyles, onClose, title]);
 
   const views = useMemo(() => {
     return animated ? (
@@ -204,14 +219,14 @@ export default function CModal({
     );
   }, [animated, animationDuration, body, enterAnimation, exitAnimationWithCallback, innerViewProps, outerViewStyles]);
 
+  const bgRgba = hexToRgbA(COLORS.green);
+  const targetBgColor = rgbaToString(blendColors("rgba(0,0,0,0.6)", bgRgba));
+
+  const barColor = isOpen ? targetBgColor : bgRgba;
+
   return (
-    <Modal
-      statusBarTranslucent={statusBarTranslucent}
-      transparent={transparent}
-      visible={isOpen || !exitAnimationFinished}
-      onRequestClose={onClose}
-      {...rest}
-    >
+    <Modal statusBarTranslucent={false} transparent={transparent} visible={isOpen || !exitAnimationFinished} onRequestClose={onClose} {...rest}>
+      {statusBarTranslucent && <StatusBar backgroundColor={barColor} animated />}
       {isOpen && (closeOnBackgroundPress ? <TouchableWithoutFeedback onPress={onClose}>{views}</TouchableWithoutFeedback> : views)}
     </Modal>
   );

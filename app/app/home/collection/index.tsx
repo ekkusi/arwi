@@ -2,10 +2,11 @@ import { useQuery } from "@apollo/client";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
-import SingleEvaluationHistogram from "../../../components/charts/SingleEvaluationHistogram";
+import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
 import Layout from "../../../components/Layout";
 import LoadingIndicator from "../../../components/LoadingIndicator";
+import SingleEvaluationHistogram from "../../../components/charts/SingleEvaluationHistogram";
 import CButton from "../../../components/primitives/CButton";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
@@ -19,23 +20,26 @@ const CollectionPage_GetCollection_Query = graphql(`
       id
       date
       description
-      environment {
-        label {
-          fi
+      __typename
+      ... on ClassParticipationCollection {
+        environment {
+          label {
+            fi
+          }
+          code
+          color
         }
-        code
-        color
+        learningObjectives {
+          code
+          label {
+            fi
+          }
+        }
       }
       module {
         group {
           name
           id
-        }
-      }
-      learningObjectives {
-        code
-        label {
-          fi
         }
       }
       evaluations {
@@ -65,21 +69,27 @@ export default function CollectionView({ route: { params }, navigation }: Native
         showsVerticalScrollIndicator={false}
       >
         <CView>
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{collection.environment.label.fi}</CText>
+          {isClassParticipationCollection<WithTypename<typeof collection, "ClassParticipationCollection">>(collection) && (
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{collection.environment.label.fi}</CText>
+          )}
           <CText style={{ fontSize: "md", fontWeight: "300" }}>{formatDate(collection.date)}</CText>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>{collection.module.group.name}</CText>
           <CText style={{ fontSize: "md", fontWeight: "300" }}>
             {t("evaluation-count", "{{count}} arviointia", { count: collection.evaluations.length })}
           </CText>
-          <CText style={{ paddingTop: "md", fontSize: "md", fontWeight: "500" }}>{t("learning-objectives", "Oppimistavoitteet:")}</CText>
-          {collection.learningObjectives.map((obj) => {
-            return (
-              <CText key={obj.code}>
-                <CText style={{ fontSize: "sm", fontWeight: "500" }}>{obj.code}: </CText>
-                <CText style={{ fontSize: "sm", fontWeight: "300" }}>{obj.label.fi}</CText>
-              </CText>
-            );
-          })}
+          {isClassParticipationCollection<WithTypename<typeof collection, "ClassParticipationCollection">>(collection) && (
+            <>
+              <CText style={{ paddingTop: "md", fontSize: "md", fontWeight: "500" }}>{t("learning-objectives", "Oppimistavoitteet:")}</CText>
+              {collection.learningObjectives.map((obj) => {
+                return (
+                  <CText key={obj.code}>
+                    <CText style={{ fontSize: "sm", fontWeight: "500" }}>{obj.code}: </CText>
+                    <CText style={{ fontSize: "sm", fontWeight: "300" }}>{obj.label.fi}</CText>
+                  </CText>
+                );
+              })}
+            </>
+          )}
           {collection.description && (
             <CView>
               <CText style={{ paddingTop: "md", fontSize: "md", fontWeight: "500" }}>{t("additional-infos", "Lisätiedot: ")}</CText>
@@ -104,12 +114,14 @@ export default function CollectionView({ route: { params }, navigation }: Native
               />
             )}
           </CView>
-          <EvaluationsAccordion
-            allowEditing={!params.archived}
-            evaluations={collection.evaluations}
-            titleFrom="student"
-            onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
-          />
+          {isClassParticipationCollection<WithTypename<typeof collection, "ClassParticipationCollection">>(collection) && (
+            <EvaluationsAccordion
+              allowEditing={!params.archived}
+              evaluations={collection.evaluations}
+              type="student"
+              onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
+            />
+          )}
         </CView>
       </ScrollView>
     </Layout>

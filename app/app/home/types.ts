@@ -1,7 +1,7 @@
-import { TranslatedString } from "arwi-backend/src/types";
+import { CollectionTypeCategory, TranslatedString } from "arwi-backend/src/types";
 
 export type HomeStackParams = {
-  index: undefined;
+  home: undefined;
   group: {
     id: string;
     classYearId: string;
@@ -18,20 +18,39 @@ export type HomeStackParams = {
     id: string;
     name: string;
   };
+  "default-evaluation-collection": {
+    id: string;
+    collectionId?: string;
+    name: string;
+    archived: boolean;
+  };
   collection: {
     id: string;
     date: string;
     environmentLabel: TranslatedString;
     archived: boolean;
   };
+  "edit-evaluation-types": {
+    groupId: string;
+  };
   "collection-edit": {
     collectionId: string;
     onSaved?: (newEnvironmentLabel: TranslatedString, newDate: string) => void;
   };
+  "default-collection-edit": {
+    collectionId: string;
+  };
   "collection-create": {
     groupId: string;
   };
+  "default-collection-create": {
+    groupId: string;
+    collectionTypeId: string;
+  };
   "edit-evaluation": {
+    evaluationId: string;
+  };
+  "edit-default-evaluation": {
     evaluationId: string;
   };
   "edit-students": {
@@ -45,6 +64,9 @@ export type HomeStackParams = {
     type: string;
   };
   "edit-all-evaluations": {
+    collectionId: string;
+  };
+  "edit-all-default-evaluations": {
     collectionId: string;
   };
   archive: undefined;

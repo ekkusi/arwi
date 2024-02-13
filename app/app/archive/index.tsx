@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SlideInLeft, SlideOutRight } from "react-native-reanimated";
 import { FlatList } from "react-native";
+import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { graphql } from "../../gql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
@@ -11,7 +12,6 @@ import GroupListItem from "../../components/GroupListItem";
 import { ArchivePage_GetCurrentUserQuery, MainPage_GetCurrentUserQuery } from "../../gql/graphql";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { HomeStackParams } from "../home/types";
-import CButton from "../../components/primitives/CButton";
 import Layout from "../../components/Layout";
 
 const ArchivePage_GetCurrentUser_Query = graphql(`

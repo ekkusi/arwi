@@ -1,6 +1,6 @@
-import { TranslatedString } from "arwi-backend/src/types/subject";
-import { Evaluation as BaseEvaluation } from "../gql/graphql";
+import { TranslatedString } from "arwi-backend/src/types";
 import { median, mode, stdev } from "./mathUtilts";
+import { ClassParticipationEvaluation } from "../gql/graphql";
 
 type EvaluationResultSimple = {
   skillsAverage: number;
@@ -24,7 +24,7 @@ type EvaluationResult = EvaluationResultSimple & {
   behaviourMeanByEnvironments: number;
 };
 
-type EvaluationSimple = Pick<BaseEvaluation, "skillsRating" | "behaviourRating" | "wasPresent" | "isStellar">;
+type EvaluationSimple = Pick<ClassParticipationEvaluation, "skillsRating" | "behaviourRating" | "wasPresent">;
 
 type Evaluation = EvaluationSimple & {
   collection: {
@@ -62,9 +62,6 @@ export const analyzeEvaluationsSimple = (evaluations: EvaluationSimple[]) => {
     } else {
       result.absencesAmount += 1;
     }
-    if (evaluation.isStellar) {
-      result.isStellarCount += 1;
-    }
   });
   result.skillsAverage /= skillsArray.length;
   result.behaviourAverage /= behaviourArray.length;
@@ -72,6 +69,22 @@ export const analyzeEvaluationsSimple = (evaluations: EvaluationSimple[]) => {
   if (result.behaviourAverage > 0 && result.skillsAverage > 0)
     result.gradeSuggestion = Math.round((result.behaviourAverage + result.skillsAverage) / 2);
   return result;
+};
+
+export const parseFloatToGradeString = (number: number) => {
+  "worklet";
+
+  const base = Math.floor(number + 0.25);
+  const remainder = number - base;
+  let suffix = "";
+  if (remainder < 0) {
+    suffix = "-";
+  } else if (remainder > 0 && remainder < 0.5) {
+    suffix = "+";
+  } else if (remainder >= 0.5 && remainder < 0.75) {
+    suffix = "½";
+  }
+  return `${base.toString()}${suffix}`;
 };
 
 export const analyzeEvaluations = (evaluations: Evaluation[]) => {

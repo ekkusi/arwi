@@ -1,81 +1,126 @@
-import { graphql } from "@/gql";
-import prisma from "@/graphql-server/prismaClient";
-import serverRequest from "@/utils/serverRequest";
-import { ClassYearCode } from "@prisma/client";
+import { graphql } from "../gql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import prisma from "@/prismaClient";
+import { TestGroup, TestTeacher, createTestEvaluationCollection, createTestGroup, createTestUserAndLogin } from "../testHelpers";
+import { studentLoader, studentsByGroupLoader } from "../../graphql/dataLoaders/student";
 
-describe("ServerRequest - createStudent", () => {
-  let classYearId: string;
-  let groupId: string;
+describe("CreateStudent", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let teacher: TestTeacher;
+  let group: TestGroup;
 
   beforeAll(async () => {
-    const teacher = await prisma.teacher.create({
-      data: {
-        email: "testteacher@example.com",
-        passwordHash: "hashed-password",
-      },
-    });
-    const group = await prisma.group.create({
-      data: {
-        name: "Test Group",
-        subjectCode: "LI",
-        teacherId: teacher.id,
-        currentYearCode: ClassYearCode.PRIMARY_FIRST,
-      },
-    });
-    const classYear = await prisma.classYear.create({
-      data: {
-        code: ClassYearCode.PRIMARY_FIRST,
-        groupId: group.id,
-      },
-    });
-    classYearId = classYear.id;
-    groupId = group.id;
+    ({ graphqlRequest } = await createServer());
+
+    teacher = await createTestUserAndLogin(graphqlRequest);
+    group = await createTestGroup(teacher.id);
   });
 
-  afterAll(async () => {
-    await prisma.teacher.deleteMany();
+  afterEach(async () => {
     await prisma.student.deleteMany();
-    await prisma.group.deleteMany();
   });
 
-  it("should create a student", async () => {
-    // Arrange
-    const variables = {
-      data: {
-        name: "Test Student",
-      },
-      classYearId,
+  it("should successfully create a student", async () => {
+    const type = group.currentModule.collectionTypes.find((it) => it.category === "CLASS_PARTICIPATION")!;
+    const collection = await createTestEvaluationCollection(group.currentModuleId, type.id);
+    const studentData = {
+      name: "Test Student",
     };
-    const query = graphql(
-      `
-        mutation CreateStudent($data: CreateStudentInput!, $classYearId: ID!) {
-          createStudent(data: $data, classYearId: $classYearId) {
+
+    const query = graphql(`
+      mutation CreateStudent($data: CreateStudentInput!, $moduleId: ID!) {
+        createStudent(data: $data, moduleId: $moduleId) {
+          id
+          name
+          group {
             id
-            name
-            group {
+          }
+          currentModuleEvaluations {
+            id
+            collection {
               id
             }
           }
         }
-      `
-    );
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+      }
+    `);
 
-    // Assert
-    expect(result.createStudent).toEqual({
-      id: expect.any(String),
-      name: variables.data.name,
-      group: {
-        id: groupId,
+    const response = await graphqlRequest(query, { data: studentData, moduleId: group.currentModule.id });
+
+    expect(response.data?.createStudent).toBeDefined();
+    expect(response.data?.createStudent.name).toEqual(studentData.name);
+    expect(response.data?.createStudent.group.id).toEqual(group.id);
+    // Check if the empty evaluations have been added
+    expect(response.data?.createStudent.currentModuleEvaluations).toContainEqual(expect.objectContaining({ collection: { id: collection.id } }));
+  });
+
+  it("should throw error for duplicate student name in the same group", async () => {
+    // First, create a student with a specific name
+    const initialStudentData = {
+      name: "Duplicate Student",
+    };
+    await prisma.student.create({
+      data: {
+        ...initialStudentData,
+        groupId: group.id,
+        modules: {
+          connect: {
+            id: group.currentModule.id,
+          },
+        },
       },
     });
 
-    // Check that student-classyear connection gets added properly
-    const classYearStudents = await prisma.student.findMany({
-      where: { classYears: { some: { id: classYearId } } },
-    });
+    // Then, attempt to create another student with the same name in the same group
+    const duplicateStudentData = {
+      name: "Duplicate Student",
+    };
 
-    expect(classYearStudents).toHaveLength(1);
+    const response = await graphqlRequest(
+      graphql(`
+        mutation CreateDuplicateStudent($data: CreateStudentInput!, $moduleId: ID!) {
+          createStudent(data: $data, moduleId: $moduleId) {
+            id
+          }
+        }
+      `),
+      { data: duplicateStudentData, moduleId: group.currentModule.id }
+    );
+
+    // Check for the expected error
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(`Vuosiluokassa on jo '${duplicateStudentData.name}' niminen oppilas`);
+  });
+
+  it("should update DataLoaders after creating a student", async () => {
+    // Initial DataLoader state
+    const initialStudentsByGroup = await studentsByGroupLoader.load(group.id);
+    expect(initialStudentsByGroup).toEqual([]);
+
+    // Create a student
+    const studentData = {
+      name: "New Student",
+    };
+
+    const query = graphql(`
+      mutation CreateStudentDataLoaderCheck($data: CreateStudentInput!, $moduleId: ID!) {
+        createStudent(data: $data, moduleId: $moduleId) {
+          id
+          name
+        }
+      }
+    `);
+
+    const createStudentResponse = await graphqlRequest(query, { data: studentData, moduleId: group.currentModule.id });
+    const newStudentId = createStudentResponse.data?.createStudent.id;
+    expect(newStudentId).toBeDefined();
+
+    // Check if the student is correctly loaded in studentLoader
+    const newStudent = await studentLoader.load(newStudentId!);
+    expect(newStudent).toEqual(expect.objectContaining({ id: newStudentId, name: studentData.name }));
+
+    // Check if the studentsByGroupLoader is updated
+    const updatedStudentsByGroup = await studentsByGroupLoader.load(group.id);
+    expect(updatedStudentsByGroup).toContainEqual(expect.objectContaining({ id: newStudentId, name: studentData.name }));
   });
 });

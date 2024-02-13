@@ -1,102 +1,112 @@
-import { hash } from "bcryptjs";
-import { assertIsError } from "../../utils/errorUtils";
-import prisma from "../../prismaClient";
+import { graphql } from "../gql";
+import createServer, { TestGraphQLRequest } from "../createTestServer";
+import prisma from "@/prismaClient";
+import { TestTeacher, createTestUser, deleteTestUser } from "../testHelpers";
 
-describe("ServerRequest - login", () => {
-  const existingTeacher = {
-    email: "login@example.com",
-    passwordHash: "",
-  };
+describe("Login", () => {
+  let graphqlRequest: TestGraphQLRequest;
+  let existingTeacher: TestTeacher;
 
   beforeAll(async () => {
-    existingTeacher.passwordHash = await hash("testpassword", 10);
-    await prisma.teacher.create({
-      data: existingTeacher,
-    });
+    ({ graphqlRequest } = await createServer());
+
+    existingTeacher = await createTestUser();
   });
 
   afterAll(async () => {
-    await prisma.teacher.deleteMany();
+    await deleteTestUser();
   });
 
-  it("should log in a teacher with correct email and password", async () => {
-    // Arrange
-    const variables = {
+  it("should login an existing teacher", async () => {
+    const loginData = {
       email: existingTeacher.email,
-      password: "testpassword",
+      password: existingTeacher.password,
     };
+
     const query = graphql(`
-      mutation Login($email: String!, $password: String!) {
+      mutation LoginTest_ValidLogin($email: String!, $password: String!) {
         login(email: $email, password: $password) {
-          teacher {
-            id
+          userData {
             email
           }
         }
       }
     `);
 
-    // Act
-    const result = await serverRequest({ document: query, prismaOverride: prisma }, variables);
+    const response = await graphqlRequest(query, loginData);
 
-    // Assert
-    expect(result.login.teacher).toEqual({
-      id: expect.any(String),
-      email: existingTeacher.email,
-    });
+    expect(response.data?.login.userData.email).toEqual(loginData.email);
   });
 
-  it("should throw an error with the specified message if email is not found", async () => {
-    // Arrange
-    const variables = {
-      email: "nonexistent@example.com",
-      password: "testpassword",
+  it("should login user with email even in different case", async () => {
+    const loginData = {
+      email: existingTeacher.email.toUpperCase(),
+      password: existingTeacher.password,
     };
+
     const query = graphql(`
-      mutation Login($email: String!, $password: String!) {
+      mutation LoginTest_ValidLoginInDifferentCase($email: String!, $password: String!) {
         login(email: $email, password: $password) {
-          teacher {
-            id
+          userData {
             email
           }
         }
       }
     `);
 
-    // Act
-    try {
-      await serverRequest({ document: query, prismaOverride: prisma }, variables);
-    } catch (error) {
-      assertIsError(error);
-      // Assert
-      expect(error.message).toEqual(`Käyttäjää ei löytynyt sähköpostilla '${variables.email}'`);
-    }
+    const response = await graphqlRequest(query, loginData);
+
+    expect(response.data?.login.userData.email).toEqual(loginData.email.toLowerCase());
   });
 
-  it("should throw an error with the specified message if password is incorrect", async () => {
-    // Arrange
-    const variables = {
+  it("should throw an error for invalid login", async () => {
+    const loginData = {
       email: existingTeacher.email,
       password: "wrongpassword",
     };
+
     const query = graphql(`
-      mutation Login($email: String!, $password: String!) {
+      mutation LoginTest_InvalidLogin($email: String!, $password: String!) {
         login(email: $email, password: $password) {
-          teacher {
-            id
+          userData {
             email
           }
         }
       }
     `);
 
-    // Act
-    try {
-      await serverRequest({ document: query, prismaOverride: prisma }, variables);
-    } catch (error) {
-      assertIsError(error);
-      // Assert
-      expect(error.message).toEqual("Annettu salasana oli väärä.");
-    }
+    const response = await graphqlRequest(query, loginData);
+
+    expect(response.errors?.[0].message).toEqual(`Annettu sähköposti tai salasana oli virheellinen.`);
+  });
+
+  it("should throw an error if the teacher does not have local login enabled", async () => {
+    const teacherWithoutEmailLogin = {
+      email: "noemaillogin@example.com",
+      passwordHash: null,
+    };
+
+    await prisma.teacher.create({
+      data: teacherWithoutEmailLogin,
+    });
+
+    const loginData = {
+      email: teacherWithoutEmailLogin.email,
+      password: "password",
+    };
+
+    const query = graphql(`
+      mutation LoginTest_NoEmailLogin($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+          userData {
+            email
+          }
+        }
+      }
+    `);
+
+    const response = await graphqlRequest(query, loginData);
+
+    expect(response.errors?.[0].message).toEqual(`Käyttäjällä ei ole sähköpostikirjautumista käytössä.`);
   });
 });

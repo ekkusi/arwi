@@ -21,22 +21,20 @@ const CollectionParticipationsView_Group_Fragment = graphql(`
   }
 `);
 
-function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "participations">) {
+function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-participations">) {
   const { evaluations, setEvaluations } = useCollectionCreationContext();
   const { t } = useTranslation();
 
   return (
     <CView style={{ padding: "md", justifyContent: "space-between", flex: 1, backgroundColor: "white" }}>
-      <CView style={{ flexGrow: 1, gap: "lg" }}>
+      <CView style={{ flexGrow: 1, gap: "lg", paddingBottom: 60 }}>
         <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("CollectionParticipationsView.participations", "Paikallaolot")}</CText>
-        <CView style={{ flexGrow: 1 }}>
-          <StudentParticipationList
-            initialParticipations={evaluations}
-            onChange={(participations) => {
-              setEvaluations(participations);
-            }}
-          />
-        </CView>
+        <StudentParticipationList
+          initialParticipations={evaluations}
+          onChange={(participations) => {
+            setEvaluations(participations);
+          }}
+        />
       </CView>
       <CView
         style={{
@@ -53,7 +51,7 @@ function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<
         <CButton onPress={() => navigation.goBack()}>
           <MaterialCommunityIcon name="arrow-left" size={25} color={COLORS.white} />
         </CButton>
-        <CButton onPress={() => navigation.navigate("evaluations")}>
+        <CButton onPress={() => navigation.navigate("collection-create-evaluations")}>
           <MaterialCommunityIcon name="arrow-right" size={25} color={COLORS.white} />
         </CButton>
       </CView>
@@ -61,7 +59,9 @@ function CollectionParticipationsContent({ navigation }: NativeStackScreenProps<
   );
 }
 
-export default function CollectionParticipationsView(props: NativeStackScreenProps<CollectionCreationStackParams, "participations">) {
+export default function CollectionParticipationsView(
+  props: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-participations">
+) {
   return (
     <CollectionCreationLayout>
       <CollectionParticipationsContent {...props} />
