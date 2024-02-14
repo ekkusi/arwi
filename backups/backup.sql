@@ -14713,6 +14713,22 @@ f9df7466-6692-43fa-9440-80162d83d32e	84dba835-3e02-4fa5-b434-1b3a4e81c5f7		fa858
 1b682070-fee8-4187-bee0-39346894d86e	bd7f68b1-8e50-459c-ae55-24fb3bb0bb2c		fa858009-98e4-419a-be5a-c821f0b9107f	t	8	7	\N
 59f788f3-31ff-462a-b472-762c6d0c74c0	f78fad4b-aef9-4890-a479-71b16a82844c	\N	fa858009-98e4-419a-be5a-c821f0b9107f	f	\N	\N	\N
 05c66b69-552b-42a6-8e7c-e7f0530777f5	793f322a-d9c6-4b4e-a7b1-07b525af25ee	\N	fa858009-98e4-419a-be5a-c821f0b9107f	f	\N	\N	\N
+9f5b71fb-184e-4388-921d-5c5c3a3de8cd	0d0c3bdf-96a7-46c0-a981-e9614660bd07	Lisää rohkeutta vielä painonsiirtoon! Hienosti teit parhaasi tunnilla!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	8	9	\N
+6240199b-0ec4-4ab4-8b15-bc43ea9454b5	60057f95-4dbd-49b8-8b83-bf6146c45f21	Lisää rohkeutta painonsiirtoon! Hienon aktiivisesti työskentelit	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	8	9	\N
+b9c5b5e9-e8bc-4838-b213-426637e9f023	290cd4d5-7c8d-4ce5-b477-46c74daf1b80	\N	cbfc066d-a0b1-44e8-bf52-95b56793369e	f	\N	\N	\N
+083e41f2-c6c0-45bd-9942-afd6baefd524	04b53170-a29f-4141-bb5b-40d721234074	Hienoa aktiivista työskentelyä ja itsensä haastamista myös! Askeleet hyvin hallussa	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	9	10	\N
+bd43006d-72a9-43b3-b940-f87b082d1fff	acbf058e-937f-473c-8442-f4c01d291583	Hienoa aktiivista työskentelyä ja askeleet oli hyvin hallussa!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	9	10	\N
+161fcee9-f770-4ab8-a695-1d85bbdf2c92	a5ed00a2-a946-459a-bcf8-58175de8bac8	Lisää heittäytymistä vielä! Askeleet kyllä osaat	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	8	9	\N
+c2e1724b-7214-42e6-95db-d6cab1966e34	6cb277e0-ffa3-4492-ae44-68c3f2e64faa	\N	cbfc066d-a0b1-44e8-bf52-95b56793369e	f	\N	\N	\N
+dff7f3af-64b0-4c8f-96fc-38e608119153	798d39a1-e426-449c-a81d-afbb7bd464ba	Hienoa aktiivista työskentelyä ja hienosti osasit askeleet!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	9	9	\N
+8fa8648f-5b80-4bc1-a518-db7d6fdf8d43	a14489cd-62d3-49b6-9ab4-a7524ee16d3c	\N	cbfc066d-a0b1-44e8-bf52-95b56793369e	f	\N	\N	\N
+693d35b9-d056-4bd8-bf83-687be9383be6	deac0664-d9ac-4152-b5eb-c06d6ce54ad2	Painonsiirtoon askeleissa voit vielä keskittyä, hienoa aktiivista työskentelyä!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	8	9	\N
+77e50313-15aa-4738-82b3-f806f3a2fea9	3af2607a-cd9f-49da-af4f-587b53780b34	Hienoa aktiivista työskentelyä!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	9	9	\N
+87c40168-f9d4-47e0-9f9a-e4c018154991	b812f153-65b5-499e-950d-1770d29d11ce	Lisää rohkeutta painonsiirtoon!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	8	9	\N
+08e3e93c-07cd-4d30-a0af-39100899a49b	d56c804e-49f4-4fff-986d-669ec9b1e2a0	Askeleet hyvin hallussa ja aktiivisesti olit mukana!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	9	9	\N
+18dbc7b0-90f0-4cd5-9e97-78f90ce25667	82d4a68a-9f28-4ece-8ccf-7e2fea437edd	Hienosti osasit askeleet!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	9	9	\N
+479e256a-27cc-4176-b952-ce21122b9c2c	a833c5b2-d6c2-41e9-a4e2-61ca3b49e551	Lisää rohkeutta vielä ilmaisuun!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	9	9	\N
+097e5aca-b113-4614-a060-d32b8f887f11	149649e9-0a7f-4685-a8e7-f469176f06fb	Askeleet hyvin hallussa ja osasit soveltaakin!	cbfc066d-a0b1-44e8-bf52-95b56793369e	t	9	9	\N
 \.
 
 
@@ -14796,6 +14812,7 @@ bfea429a-3092-4f88-81a0-a70a0d9b82ff	2023-11-07 00:00:00	Norsupallo, kickball, k
 46ac7c46-c1a3-482c-88ad-d34f2969413a	2023-11-10 00:00:00	Spikeball	LI_ENV_PAL	b437a136-3ee7-4978-b76e-c5a1cfa2ae9d	{T1,T2}	71309e9b-11f2-44cf-98a0-517a40e66eea
 7b28f9fd-4ecb-4da4-80d8-827355d10caf	2023-04-21 00:00:00	Jalkapallo ja soikkis /tytöt	LI_ENV_PAL	72d704a8-e209-4255-a595-40d96c4d42ad	{}	07bf2304-32c9-4e68-bbbd-191848ac3159
 3ca2f6e3-1bcc-4ab3-ba64-1440cdaf8019	2023-07-29 00:00:00	\N	LI_ENV_VOI	1cc91b32-fe7b-4efe-8b2e-d9cc852d7600	{T3}	607ce1f1-eee8-4e7d-b3ee-36e6fd7893b0
+cbfc066d-a0b1-44e8-bf52-95b56793369e	2024-02-13 00:00:00	Yhteistanssi foksi ja salsa, tavotteena askeleiden opettelu ja yhteistyö	LI_ENV_TAN	ff174794-b9b6-4f1c-ad34-bc2098ee29fd	{T3,T8}	24f105a9-3bf2-4210-922b-b0505b056c58
 3b03d707-2a3a-4ed2-892d-730db32d9ba0	2023-12-18 00:00:00		LI_ENV_VOI	4d3b5bcb-2031-4c92-9b19-00f8027bcf7d	{T3,T1}	896470ba-ecd5-48fc-adbd-994ca0361086
 07e61cf0-c78b-412c-9ca3-43385fb2ce2c	2024-01-11 00:00:00	Teränkäyttö, jääkiekko, mustekkala	LI_ENV_TAL	999be80c-ff15-4515-ba2d-3f330319b986	{T3}	e8b1f864-163b-420b-b692-7f31c83b3d72
 820ac157-cbfc-4b95-a1f6-c1a94d2b49fb	2024-01-03 00:00:00		TE_ENV_TER	5d64b64a-9450-4a75-b2b9-784eb94c3948	{T1}	47ac8fcb-4d66-4ae2-aa9f-a42ebadc346e
@@ -15780,7 +15797,6 @@ bd3283bf-999e-4688-97f5-bb12d8b4380c	9D	4f38a727-897b-40d0-a974-cf8a7d2efda1	202
 d16c4466-8375-4f11-a07f-6f8eadfa99bd	8B	4f38a727-897b-40d0-a974-cf8a7d2efda1	2024-01-08 17:25:50.23	TE	f	a560374d-ea2d-4fc9-ab24-26ea0ca79c34
 195323ca-b388-4ef3-a116-05600872ed92	8a	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2024-01-10 13:21:31.246	TE	t	12a53900-d32c-4fbd-9a4d-f3db91d02a9d
 271708bc-6852-4bd2-a25b-627957c42650	8 A liikka	786d367e-855b-4ac6-8e28-d5fdec21efcd	2024-01-17 09:33:06.905	LI	t	6cda7d96-f69f-4b37-bd44-f31e43e5fe5f
-9eb12c4e-2e2a-472b-8f3e-0d58d54480c7	Liikka 9lk	3386ad42-5f46-49ab-ab12-fa11bb8723a5	2024-02-07 10:56:47.82	LI	f	ff174794-b9b6-4f1c-ad34-bc2098ee29fd
 5724940e-e239-47f2-9dc2-605a34c29bcd	4C	b8c1d55b-baa8-4000-b739-945b93b5425f	2024-02-08 20:46:41.996	MA	f	457edafd-d233-4823-98da-c640d8277a4e
 b29d7fe8-564a-4b59-a8b8-7c0910874c87	Rocky	91cc73a8-a415-4379-a1f5-332a6a36e273	2024-01-23 13:12:07.954	FY	f	fb7cef19-4ee5-487b-992a-25e09ff3eee0
 0a3f4809-c914-491f-ae92-9519ffbfffde	Te 8b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2024-01-11 11:19:42.802	TE	f	5d64b64a-9450-4a75-b2b9-784eb94c3948
@@ -15810,6 +15826,7 @@ fa3bc0a2-e49a-4629-a42d-80e9340c0b01	8 luokka normi Pe 	786d367e-855b-4ac6-8e28-
 de8e14b6-632a-46f4-8b47-b282bfe637aa	8 luokka lyhyt	786d367e-855b-4ac6-8e28-d5fdec21efcd	2024-02-07 07:16:25.923	LI	f	83874b21-90c2-430e-8790-1a5563eaf72b
 7ce75e30-7087-46e4-9d78-5b1f3cedc17d	9 luokka normi	786d367e-855b-4ac6-8e28-d5fdec21efcd	2024-01-22 11:07:17.151	LI	f	d49a8e7f-8665-4c58-84ef-d3056f21ef51
 495e9cc5-76d3-4fdf-93dc-bbd1c2116797	Viitaniemen koulun 7F	a7bcc47a-e782-473a-aeb1-d8b9b72578f9	2024-02-08 10:21:10.142	LI	f	67fdb4d3-c51f-4e67-a0f9-4d7579fbb5c1
+9eb12c4e-2e2a-472b-8f3e-0d58d54480c7	Liikka 9lk	3386ad42-5f46-49ab-ab12-fa11bb8723a5	2024-02-13 12:19:08.695	LI	f	ff174794-b9b6-4f1c-ad34-bc2098ee29fd
 d5a059ec-3fb1-430b-9ce7-5be3d4255b27	Uusi Terkka	483e736f-00a6-46d1-a1c3-3099eb626012	2024-02-10 11:12:07.922	TE	f	e540ba02-f2c2-4f61-a269-d1ffb67a6171
 0d91b599-1324-4c29-922b-d7da3b8bed84	Testiryhmä	0c6c4bed-7226-4172-ad01-80ee0988bdf4	2024-01-23 10:03:07.863	LI	f	7bea0fcb-3b20-42bf-9525-109de3c042e2
 455f8546-5462-4759-8dc9-625a3b9dbb82	7 luokka lyhyt valinnainen	786d367e-855b-4ac6-8e28-d5fdec21efcd	2024-02-08 11:10:59.809	LI	f	7434eab0-bbd6-4080-9f03-3788a6e323c1
