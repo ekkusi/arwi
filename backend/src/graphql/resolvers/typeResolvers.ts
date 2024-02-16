@@ -1,7 +1,7 @@
 import { CollectionTypeCategory } from "@prisma/client";
 import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../../utils/subjectUtils";
 import { EducationLevel, Resolvers } from "../../types";
-import MissingDataError from "../../errors/MissingDataError";
+import MissingDataError from "../errors/MissingDataError";
 import { mapModuleInfo } from "../utils/mappers";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;

@@ -1,5 +1,5 @@
 import { MINIMUM_SUPPORTED_APP_VERSION } from "../../config";
-import AuthenticationError from "../../errors/AuthenticationError";
+import AuthenticationError from "../errors/AuthenticationError";
 import { QueryResolvers } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
 import {

@@ -2,7 +2,7 @@ import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { getEnvironment } from "../../utils/subjectUtils";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
-import ValidationError from "../../errors/ValidationError";
+import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
 import {
@@ -55,7 +55,7 @@ import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
-import OpenIDError from "../../errors/OpenIDError";
+import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 
 const resolvers: MutationResolvers<CustomContext> = {

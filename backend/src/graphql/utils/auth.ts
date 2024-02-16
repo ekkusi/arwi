@@ -1,4 +1,4 @@
-import AuthenticationError from "../../errors/AuthenticationError";
+import AuthenticationError from "../errors/AuthenticationError";
 import prisma from "@/prismaClient";
 import { CustomContext } from "../../types/contextTypes";
 import { groupLoader } from "../dataLoaders/group";
