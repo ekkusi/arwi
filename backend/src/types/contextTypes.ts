@@ -5,7 +5,7 @@ import loaders from "../graphql/dataLoaders";
 
 export type UserInfo = Omit<Teacher, "passwordHash">;
 export type UserSessionInfo = UserInfo & {
-  type?: "mpass-id" | "local";
+  type: "mpass-id" | "local";
 };
 
 export type CustomContext = {

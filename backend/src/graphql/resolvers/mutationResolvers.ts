@@ -57,6 +57,7 @@ import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
+import AuthorizationError from "@/errors/AuthorizationError";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -101,7 +102,11 @@ const resolvers: MutationResolvers<CustomContext> = {
         newUserCreated: isNewUser,
       };
     } catch (error) {
-      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+      if (error instanceof AuthorizationError) {
+        throw new ValidationError(error.message);
+      } else {
+        throw new OpenIDError(error instanceof Error ? error.message : undefined);
+      }
     }
   },
   connectMPassID: async (_, { code }, { req, OIDCClient, user, prisma }) => {
@@ -117,7 +122,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       throw new OpenIDError(error instanceof Error ? error.message : undefined);
     }
     if (userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
-    const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.sub } });
+    const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.mPassID } });
     if (matchingUser?.email) throw new ValidationError("Kyseinen mpass-id on jo liitetty toiseen käyttäjään");
 
     // If there is already an existing user with the mpass-id, merge it to the current user
@@ -132,8 +137,11 @@ const resolvers: MutationResolvers<CustomContext> = {
       await deleteTeacher(matchingUser.id);
     }
 
-    const updatedUser = await updateTeacher(currentUser.id, { data: { mPassID: userInfo.sub } });
-    req.session.userInfo = updatedUser;
+    const updatedUser = await updateTeacher(currentUser.id, { data: { mPassID: userInfo.mPassID } });
+    req.session.userInfo = {
+      ...updatedUser,
+      type: "mpass-id",
+    };
     req.session.tokenSet = tokenSet;
     return {
       userData: updatedUser,
@@ -160,7 +168,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     await deleteTeacher(matchingTeacher.id);
     // Update old user with new credentials
     const updatedUser = await updateTeacher(currentUser.id, { data: { email: matchingTeacher.email, passwordHash: matchingTeacher.passwordHash } });
-    req.session.userInfo = updatedUser;
+    req.session.userInfo = {
+      ...updatedUser,
+      type: "mpass-id",
+    };
     return {
       userData: updatedUser,
     };

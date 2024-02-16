@@ -1,5 +1,5 @@
 import { defineField, defineType, Rule, SchemaValidationValue } from "sanity";
-import AgreementInfoSelect from "../components/SearchAndSelectOrg";
+import AgreementInfoSelect from "../components/AgreementInfoSelect";
 
 const requiredOptions: {
   validation: SchemaValidationValue;
@@ -300,7 +300,7 @@ export const schemaTypes = [
   }),
   defineType({
     type: "document",
-    name: "mpassid_agreements",
+    name: "mpassid_agreement",
     title: "MPassID sopimukset",
     fields: [
       {
@@ -315,14 +315,14 @@ export const schemaTypes = [
             ...requiredOptions,
           },
           {
-            name: "city_mpassid",
-            title: "Kaupungin MPassID",
+            name: "city_oid",
+            title: "Kaupungin OID",
             type: "string",
             ...requiredOptions,
           },
           {
-            name: "mpassid",
-            title: "MPassID",
+            name: "oid",
+            title: "OID",
             type: "string",
             ...requiredOptions,
           },

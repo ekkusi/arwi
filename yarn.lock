@@ -5464,6 +5464,16 @@
     golden-fleece "^1.0.9"
     pkg-dir "^5.0.0"
 
+"@sanity/client@^6.13.3":
+  version "6.13.3"
+  resolved "https://registry.yarnpkg.com/@sanity/client/-/client-6.13.3.tgz#d20325c74b793c2c4f9555697416feda1014ef5b"
+  integrity sha512-oOkce0xovPe0cwiEQeNPlrZugG69GHB+Dn16IlcnlyOp2GEsTD+Hgk29Z/cOhLbxqxGv9URpd0iuR9cTyEM4AQ==
+  dependencies:
+    "@sanity/eventsource" "^5.0.0"
+    "@vercel/stega" "0.1.0"
+    get-it "^8.4.6"
+    rxjs "^7.0.0"
+
 "@sanity/client@^6.4.9":
   version "6.4.12"
   resolved "https://registry.npmjs.org/@sanity/client/-/client-6.4.12.tgz"
@@ -6728,6 +6738,11 @@
   dependencies:
     "@urql/core" ">=2.3.1"
     wonka "^4.0.14"
+
+"@vercel/stega@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@vercel/stega/-/stega-0.1.0.tgz#2eadbbc9eb0eaab26d28b0c443a922d78c23b6e3"
+  integrity sha512-5b0PkOJsFBX5alChuIO3qpkt5vIZBevzLPhUQ1UP8UzVjL3F1VllnZxp/thfD8R5ol7D7WHkgZHIjdUBX4tDpQ==
 
 "@vitejs/plugin-react@^4.0.0":
   version "4.1.0"
@@ -10600,7 +10615,7 @@ focus-lock@^0.11.6:
   dependencies:
     tslib "^2.0.3"
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.15.4:
   version "1.15.5"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
   integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
@@ -10867,6 +10882,22 @@ get-it@^8.4.3:
     debug "^4.3.4"
     decompress-response "^7.0.0"
     follow-redirects "^1.15.2"
+    into-stream "^6.0.0"
+    is-plain-object "^5.0.0"
+    is-retry-allowed "^2.2.0"
+    is-stream "^2.0.1"
+    parse-headers "^2.0.5"
+    progress-stream "^2.0.0"
+    tunnel-agent "^0.6.0"
+
+get-it@^8.4.6:
+  version "8.4.6"
+  resolved "https://registry.yarnpkg.com/get-it/-/get-it-8.4.6.tgz#37af61bd72027364c73ec10ed3f1c45ccb28241a"
+  integrity sha512-omefjdbyRb2rRt0tnrZlbeWx9oZJm66o88K8JlYn13xELn+0+d6mJZOQHrJAdC3vxeJ4t/NHa4wh7Wlh+nvEJA==
+  dependencies:
+    debug "^4.3.4"
+    decompress-response "^7.0.0"
+    follow-redirects "^1.15.4"
     into-stream "^6.0.0"
     is-plain-object "^5.0.0"
     is-retry-allowed "^2.2.0"

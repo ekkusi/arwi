@@ -12,16 +12,10 @@ interface Option {
 
 type AgreementInfo = {
   type: "city" | "school";
-  city_mpassid: string;
+  city_oid: string;
   name: string;
-  mpassid: string;
+  oid: string;
 };
-
-const MOCK_OPTIONS = [
-  { title: "Option 1", value: "option1" },
-  { title: "Option 2", value: "option2" },
-  { title: "Option 3", value: "option3" },
-];
 
 const organizationOptions = organizations.map((org) => ({
   label: org.name,
@@ -33,12 +27,12 @@ export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>
 
   const { value = {}, onChange } = props;
 
-  const { type, city_mpassid } = value;
+  const { type, city_oid } = value;
 
   const loadSchoolOptions = async () => {
-    if (!city_mpassid) throw new Error("City mpassid is missing");
+    if (!city_oid) throw new Error("City oid is missing");
     // Fetch organizations with proper CORS options
-    const response = await fetch(`https://virkailija.opintopolku.fi/organisaatio-service/api/${city_mpassid}/children?includeImage=false`, {
+    const response = await fetch(`https://virkailija.opintopolku.fi/organisaatio-service/api/${city_oid}/children?includeImage=false`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +51,6 @@ export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>
     setIsLoading(true);
     const cityOptions = await loadSchoolOptions();
     setIsLoading(false);
-    console.log("City options", cityOptions);
   };
 
   const changeType = (newType: "city" | "school") => {
@@ -67,10 +60,10 @@ export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>
   const changeCity = (newCity: SingleValue<Option>) => {
     const newValue = {
       ...value,
-      city_mpassid: newCity?.value,
+      city_oid: newCity?.value,
     };
     if (type === "city") {
-      newValue.mpassid = newCity?.value;
+      newValue.oid = newCity?.value;
       newValue.name = newCity?.label;
     }
     onChange(PatchEvent.from(set(newValue)));
@@ -91,10 +84,10 @@ export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>
         <Select
           options={organizationOptions}
           onChange={changeCity}
-          defaultValue={city_mpassid ? organizationOptions.find((it) => it.value === city_mpassid) : undefined}
+          defaultValue={city_oid ? organizationOptions.find((it) => it.value === city_oid) : undefined}
         />
       </FormField>
-      <FormField title="Koulu" hidden={type === "city" || !city_mpassid}>
+      <FormField title="Koulu" hidden={type === "city" || !city_oid}>
         <button type="button" onClick={printCityOptions}>
           Hae koulut
         </button>
