@@ -4,6 +4,7 @@ import path from "path";
 import json from "../export/data.json";
 
 const data: any = json;
+const subjectsData = data.filter((it: any) => it._type === "subject");
 
 const deleteKeyAndType = (arr: any[]) => {
   for (let i = 0; i < arr.length; i += 1) {
@@ -77,8 +78,8 @@ const formatLearningObjecives = (objectives: any[]) => {
   }
 };
 
-for (let i = 0; i < data.length; i += 1) {
-  const subject = data[i];
+for (let i = 0; i < subjectsData.length; i += 1) {
+  const subject = subjectsData[i];
   subject.code = subject.code.current;
   const commonEnvironments = subject.environments || [];
   delete subject.environments;
@@ -134,4 +135,4 @@ for (let i = 0; i < data.length; i += 1) {
 }
 
 // eslint-disable-next-line no-console
-fs.writeFile(path.join(__dirname, "../export/data.json"), JSON.stringify(data, null, 2), () => console.log("Transform done!"));
+fs.writeFile(path.join(__dirname, "../export/data.json"), JSON.stringify(subjectsData, null, 2), () => console.log("Transform done!"));
