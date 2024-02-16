@@ -54,11 +54,14 @@ export const grantToken = async (client: OpenIDClient, code: string) => {
   const mPassID = userInfo["urn:oid:1.3.6.1.4.1.16161.1.1.27"];
   const organizationID = parseOrganizationId(userInfo);
   if (!mPassID || !organizationID) throw new Error("Something went wrong, mPassID or organizationID is missing from MPassID response");
-  const isAuthorized = await checkIsAuthorized(organizationID);
-  if (!isAuthorized)
-    throw new UnauthorizedError(
-      "Koulullasi tai kunnallasi ei ole vielä sopimusta Arwin kanssa MPassID-palvelun käytöstä, joten sen kautta kirjautuminen ei valitettavasti vielä ole tunnuksillasi mahdollista. Mikäli haluaisit MPassID-kirjautumisen käyttöön, voit kehottaa koulusi tai kuntasi vastaavan olemaan yhteydessä meihin info@arwi.fi@arwi.fi. \n\nSillä välin voit luoda omat tunnukset ja käyttää Arwia normaalisesti. Voit myöhemmin linkittää tilisi ja tietosi MPassID:n tunnuksiin, kun MPassID-kirjautuminen on saatavilla koulullesi."
-    );
+  // Skip authorization check in development
+  if (NODE_ENV !== "development") {
+    const isAuthorized = await checkIsAuthorized(organizationID);
+    if (!isAuthorized)
+      throw new UnauthorizedError(
+        "Koulullasi tai kunnallasi ei ole vielä sopimusta Arwin kanssa MPassID-palvelun käytöstä, joten sen kautta kirjautuminen ei valitettavasti vielä ole tunnuksillasi mahdollista. Mikäli haluaisit MPassID-kirjautumisen käyttöön, voit kehottaa koulusi tai kuntasi vastaavan olemaan yhteydessä meihin info@arwi.fi@arwi.fi. \n\nSillä välin voit luoda omat tunnukset ja käyttää Arwia normaalisesti. Voit myöhemmin linkittää tilisi ja tietosi MPassID:n tunnuksiin, kun MPassID-kirjautuminen on saatavilla koulullesi."
+      );
+  }
 
   return {
     tokenSet,

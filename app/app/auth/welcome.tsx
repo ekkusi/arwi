@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/react-native";
 import { useMatomo } from "matomo-tracker-react-native";
-import { GraphQLError, graphql } from "graphql";
 import { ApolloError } from "@apollo/client";
 import CButton from "../../components/primitives/CButton";
 import CImage from "../../components/primitives/CImage";
@@ -16,7 +15,7 @@ import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import { useMPassIDAuth } from "../../hooks-and-providers/mPassID";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
-import { getErrorMessage, getGraphqlErrorMessage } from "../../helpers/errorUtils";
+import { getErrorMessage } from "../../helpers/errorUtils";
 import CModal from "../../components/CModal";
 
 const BACKEND_API_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;

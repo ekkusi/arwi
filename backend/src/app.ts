@@ -15,8 +15,6 @@ import "express-async-errors";
 import { CustomContext } from "./types/contextTypes";
 import prisma from "@/prismaClient";
 import loaders from "./graphql/dataLoaders";
-import { getAgreements, hasAgreement } from "./utils/sanity";
-import { fetchParentOids } from "./utils/organizationApi";
 
 const app = express();
 
@@ -30,11 +28,11 @@ Sentry.init({
   environment: APP_ENV,
   integrations: ADVANCED_SENTRY_LOGGING
     ? [
-        // enable HTTP calls tracing
-        new Sentry.Integrations.Http({ tracing: true }),
-        // enable Express.js middleware tracing
-        new Sentry.Integrations.Express({ app }),
-      ]
+      // enable HTTP calls tracing
+      new Sentry.Integrations.Http({ tracing: true }),
+      // enable Express.js middleware tracing
+      new Sentry.Integrations.Express({ app }),
+    ]
     : undefined,
   // Performance Monitoring
   tracesSampleRate: ADVANCED_SENTRY_LOGGING ? 1.0 : undefined, //  Capture 100% of the transactions
