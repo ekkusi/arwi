@@ -28,7 +28,7 @@
     "codegen:test": "graphql-codegen --config ./codegen.test.ts",
     "codegen:watch": "graphql-codegen --watch",
     "version": "echo $npm_package_version",
-    "postinstall": "patch-package"
+    "patch-package": "patch-package"
   },
   "author": "Ekku Sipilä <ekku.eki@gmail.com>",
   "license": "MIT",

@@ -14,7 +14,7 @@
   "author": "Ekku Sipilä <ekku.eki@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "yarn --cwd backend prisma:generate",
+    "postinstall": "yarn --cwd backend prisma:generate && yarn --cwd backend patch-package",
     "start": "yarn --cwd backend start",
     "start-win": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-win\"",
     "start-mac": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-mac\"",
