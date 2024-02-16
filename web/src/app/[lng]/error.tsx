@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Text } from "@chakra-ui/react";
-import PageWrapper from "@/components/general/PageWrapper";
+import PageWrapper from "../../components/general/PageWrapper";
 
 export default function ErrorPage({ children }: React.ComponentProps<"div">) {
   return (

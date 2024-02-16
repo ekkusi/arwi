@@ -45,9 +45,9 @@ export default function ModalTemplate({
     <Modal closeOnEsc={isClosable} closeOnOverlayClick={isClosable} {...rest} {...disclosureProps}>
       <ModalOverlay />
       <ModalContent mx="5">
-        {isClosable && <ModalCloseButton />}
+        {isClosable && <ModalCloseButton top="3" />}
         {headerLabel && (
-          <ModalHeader px={5} pb={1} {...headerProps}>
+          <ModalHeader px={5} pb={4} {...headerProps}>
             {headerLabel}
           </ModalHeader>
         )}

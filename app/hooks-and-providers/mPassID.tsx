@@ -15,13 +15,13 @@ const MPassID_Login_Mutation = graphql(`
           isMPassIDConnected
         }
       }
-      newUserCreated
     }
   }
 `);
 
-const BACKEND_API_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;
-if (!BACKEND_API_URL) throw new Error("Backend API URL not defined, define EXPO_PUBLIC_BACKEND_API_URL in .env");
+const BACKEND_API_URL_NO_PROXY = process.env.EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY || process.env.EXPO_PUBLIC_BACKEND_API_URL;
+if (!BACKEND_API_URL_NO_PROXY)
+  throw new Error("No proxy Backend API URL not defined, define EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY and/or EXPO_PUBLIC_BACKEND_API_URL in .env");
 
 export const useMPassIDAuth = (redirectUri: string) => {
   const [mPassIdLogin] = useMutation(MPassID_Login_Mutation);
@@ -33,7 +33,7 @@ export const useMPassIDAuth = (redirectUri: string) => {
   }, []);
 
   const grantCode = async () => {
-    const authUrl = `${BACKEND_API_URL}/auth/authorize?${new URLSearchParams({ redirect_uri: redirectUri, type: "code_only" })}`;
+    const authUrl = `${BACKEND_API_URL_NO_PROXY}/auth/authorize?${new URLSearchParams({ redirect_uri: redirectUri, type: "code_only" })}`;
 
     const authResult = (await WebBrowser.openAuthSessionAsync(authUrl, redirectUri)) as WebBrowser.WebBrowserRedirectResult;
 
@@ -46,6 +46,7 @@ export const useMPassIDAuth = (redirectUri: string) => {
   const login = async () => {
     const code = await grantCode();
     if (!code) return null;
+
     const result = await mPassIdLogin({ variables: { code } });
 
     if (!result.data) throw new Error("Unexpected error, no user data");

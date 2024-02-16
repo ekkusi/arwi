@@ -1,6 +1,6 @@
 import { IMiddleware, IMiddlewareFunction } from "graphql-middleware";
 import queryResolvers from "../resolvers/queryResolvers";
-import AuthenticationError from "../../errors/AuthenticationError";
+import AuthenticationError from "../errors/AuthenticationError";
 import mutationResolvers from "../resolvers/mutationResolvers";
 import { Mutation, Query } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
@@ -8,6 +8,7 @@ import { SESSION_NAME } from "../../config";
 
 const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (resolve, parent, args, context, info) => {
   if (!context.req.session?.userInfo) {
+    context.res.clearCookie(SESSION_NAME);
     throw new AuthenticationError();
   }
 
@@ -16,6 +17,7 @@ const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (res
 
 const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = [
   "login",
+  "logout",
   "register",
   "mPassIDLogin",
   "verifyPasswordResetCode",

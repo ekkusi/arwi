@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useState } from "react";
 import { Teacher } from "arwi-backend/src/types";
+import { removeSessionId } from "../helpers/session";
 
 type UserInfo = Omit<Teacher, "passwordHash" | "groups">;
 
@@ -18,8 +19,6 @@ type AuthContextType = {
   setUser: (user: UserInfo) => void;
   logout: () => void;
 };
-
-export const ACCESS_TOKEN_KEY = "accessToken";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 const { Provider } = AuthContext;
@@ -45,7 +44,8 @@ function AuthProvider({ children }: React.PropsWithChildren<{}>) {
   const [authState, setAuthState] = useState<AuthState>(initialState);
 
   // Need to use useCallback to prevent infinite render loops in components that depend on these (ApolloProvider at least).
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await removeSessionId();
     setAuthState({
       authenticated: false,
       user: undefined,

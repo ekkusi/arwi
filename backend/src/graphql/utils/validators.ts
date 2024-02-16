@@ -1,7 +1,7 @@
 import { SessionData } from "express-session";
 import { compare } from "bcryptjs";
 import { CollectionTypeCategory, Teacher } from "@prisma/client";
-import ValidationError from "../../errors/ValidationError";
+import ValidationError from "../errors/ValidationError";
 import prisma from "@/prismaClient";
 import {
   ChangeGroupModuleInput,

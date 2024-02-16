@@ -6,20 +6,21 @@ import cookieParser from "cookie-parser";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import * as Sentry from "@sentry/node";
-import { HELMET_OPTIONS, SESSION_OPTIONS } from "./config";
+import { APP_ENV, HELMET_OPTIONS, SESSION_OPTIONS, getAllowedOrigins } from "./config";
 import initAuth from "./routes/auth";
-import { checkSessionTimeout, checkTokens } from "./middleware/auth";
+import { checkAuthHeaders, checkSessionTimeout, checkTokens } from "./middleware/auth";
 import graphqlServer from "./graphql/server";
 import { errorHandler, notFoundHandler } from "./middleware/errors";
 import "express-async-errors";
 import { CustomContext } from "./types/contextTypes";
 import prisma from "@/prismaClient";
 import loaders from "./graphql/dataLoaders";
+import { getAgreements, hasAgreement } from "./utils/sanity";
+import { fetchParentOids } from "./utils/organizationApi";
 
 const app = express();
 
 const ADVANCED_SENTRY_LOGGING = process.env.ADVANCED_SENTRY_LOGGING === "true";
-const APP_ENV = process.env.APP_ENV || "development";
 
 if (process.env.NODE_ENV === "production" && !process.env.SENTRY_URL) throw new Error("Missing SENTRY_URL env var");
 
@@ -49,11 +50,14 @@ if (ADVANCED_SENTRY_LOGGING) {
   app.use(Sentry.Handlers.tracingHandler());
 }
 
+// Trust the first proxy, necessary for express-session to work behind a reverse proxy
+app.set("trust proxy", 1);
+
 app.use(helmet(HELMET_OPTIONS));
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: getAllowedOrigins() }));
 
-// TODO: Configure redis (or other) session store
+app.use(checkAuthHeaders);
 app.use(session(SESSION_OPTIONS));
 app.use(checkSessionTimeout);
 

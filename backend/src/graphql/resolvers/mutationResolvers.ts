@@ -2,7 +2,7 @@ import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { getEnvironment } from "../../utils/subjectUtils";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
-import ValidationError from "../../errors/ValidationError";
+import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
 import {
@@ -40,6 +40,7 @@ import {
   checkAuthenticatedByEvaluation,
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
+  checkAuthenticatedByTeacher,
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
@@ -54,10 +55,9 @@ import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
-import OpenIDError from "../../errors/OpenIDError";
+import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
-
-const { APP_ENV } = process.env;
+import AuthorizationError from "@/errors/AuthorizationError";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -91,7 +91,6 @@ const resolvers: MutationResolvers<CustomContext> = {
     };
   },
   mPassIDLogin: async (_, { code }, { req, OIDCClient }) => {
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
 
     try {
@@ -103,11 +102,14 @@ const resolvers: MutationResolvers<CustomContext> = {
         newUserCreated: isNewUser,
       };
     } catch (error) {
-      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+      if (error instanceof AuthorizationError) {
+        throw new ValidationError(error.message);
+      } else {
+        throw new OpenIDError(error instanceof Error ? error.message : undefined);
+      }
     }
   },
   connectMPassID: async (_, { code }, { req, OIDCClient, user, prisma }) => {
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     const currentUser = user!; // Safe cast after authenticated check
     if (!OIDCClient) throw new OpenIDError("Something went wrong, OIDC client is not initialized");
     if (currentUser.mPassID) throw new ValidationError("Tilisi on jo liitetty mpass-id tunnuksiin");
@@ -120,7 +122,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       throw new OpenIDError(error instanceof Error ? error.message : undefined);
     }
     if (userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
-    const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.sub } });
+    const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.mPassID } });
     if (matchingUser?.email) throw new ValidationError("Kyseinen mpass-id on jo liitetty toiseen käyttäjään");
 
     // If there is already an existing user with the mpass-id, merge it to the current user
@@ -135,8 +137,11 @@ const resolvers: MutationResolvers<CustomContext> = {
       await deleteTeacher(matchingUser.id);
     }
 
-    const updatedUser = await updateTeacher(currentUser.id, { data: { mPassID: userInfo.sub } });
-    req.session.userInfo = updatedUser;
+    const updatedUser = await updateTeacher(currentUser.id, { data: { mPassID: userInfo.mPassID } });
+    req.session.userInfo = {
+      ...updatedUser,
+      type: "mpass-id",
+    };
     req.session.tokenSet = tokenSet;
     return {
       userData: updatedUser,
@@ -144,7 +149,6 @@ const resolvers: MutationResolvers<CustomContext> = {
   },
   connectLocalCredentials: async (_, { email: initialEmail, password }, { req, prisma, user }) => {
     const email = initialEmail.toLowerCase();
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     const currentUser = user!; // Safe cast after authenticated check
     if (currentUser.email) throw new ValidationError("Tilisi on jo liitetty lokaaleihin tunnuksiin");
     if (!currentUser.mPassID) throw new ValidationError("Sinun tulee olla kirjautunut mpass-id tunnuksilla liittääksesi lokaalit tunnukset");
@@ -164,7 +168,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     await deleteTeacher(matchingTeacher.id);
     // Update old user with new credentials
     const updatedUser = await updateTeacher(currentUser.id, { data: { email: matchingTeacher.email, passwordHash: matchingTeacher.passwordHash } });
-    req.session.userInfo = updatedUser;
+    req.session.userInfo = {
+      ...updatedUser,
+      type: "mpass-id",
+    };
     return {
       userData: updatedUser,
     };
@@ -387,6 +394,12 @@ const resolvers: MutationResolvers<CustomContext> = {
     await checkAuthenticatedByCollection(user, collectionId);
     const collection = await deleteCollection(collectionId);
     return collection;
+  },
+  deleteTeacher: async (_, { teacherId }, { user, req, res }) => {
+    await checkAuthenticatedByTeacher(user, teacherId);
+    const teacher = await deleteTeacher(teacherId);
+    await logOut(req, res);
+    return teacher;
   },
   // NOTE: This function is not used currently but is here for possible future use
   // deleteCollectionType: async (_, { id }, { user }) => {

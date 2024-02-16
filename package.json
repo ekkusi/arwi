@@ -4,7 +4,8 @@
     "app",
     "backend",
     "cms",
-    "web"
+    "web",
+    "backend-proxy"
   ],
   "version": "1.0.0",
   "private": true,
@@ -14,7 +15,7 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
-    "postinstall": "yarn --cwd backend prisma:generate",
+    "postinstall": "yarn --cwd backend prisma:generate && yarn --cwd backend postinstall",
     "start": "yarn --cwd backend start",
     "start-win": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-win\"",
     "start-mac": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-mac\"",

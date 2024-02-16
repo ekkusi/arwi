@@ -1,5 +1,6 @@
 import { ListItem, Text, UnorderedList } from "@chakra-ui/react";
 import Link from "@/components/primitives/Link";
+import { getPathFromRoute } from "../../../utils/route";
 
 export default function PrivacyPolicyContentFi() {
   return (
@@ -117,6 +118,11 @@ export default function PrivacyPolicyContentFi() {
           Oikeus tietojen poistamiseen
           <br />
           Rekisteröidyllä on oikeus pyytää häntä koskevien henkilötietojen poistamista.
+          <br />
+          Rekisteröity voi oma-aloitteisesti milloin vain halutessaan poistaa tietonsa sovelluksesta seuraavan osoitteen kautta:{" "}
+          <Link href="/account-delete" fontWeight="300">
+            {`https://arwi.fi${getPathFromRoute("/account-delete", "fi")}`}
+          </Link>
         </ListItem>
         <ListItem>
           Oikeus käsittelyn rajoittamiseen <br />

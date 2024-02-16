@@ -1,16 +1,20 @@
 import { Request, Router } from "express";
 import dotenv from "dotenv";
-import { Issuer, Client as OpenIDClient } from "openid-client";
+import { Issuer, Client as OpenIDClient, UserinfoResponse } from "openid-client";
 import { initSession, logOut } from "../utils/auth";
 import prisma from "@/prismaClient";
 import BadRequestError from "../errors/BadRequestError";
+import { APP_ENV } from "../config";
+import { hasAgreement } from "@/utils/sanity";
+import { fetchParentOids } from "@/utils/organizationApi";
+import UnauthorizedError from "@/errors/AuthorizationError";
 
 dotenv.config();
 
 const router = Router();
 
-const { MPASSID_CLIENT_SECRET, MPASSID_CLIENT_ID, APP_ENV } = process.env;
-const MPASSID_ISSUER_URL = "https://mpass-proxy-test.csc.fi";
+const { MPASSID_CLIENT_SECRET, MPASSID_CLIENT_ID, NODE_ENV } = process.env;
+const MPASSID_ISSUER_URL = NODE_ENV === "production" ? "https://mpass-proxy.csc.fi" : "https://mpass-proxy-test.csc.fi";
 
 if (!MPASSID_CLIENT_SECRET || !MPASSID_CLIENT_ID) {
   if (APP_ENV === "production") throw new Error("MPASSID_CLIENT_SECRET or MPASSID_CLIENT_ID is missing from environment variables");
@@ -22,6 +26,22 @@ type AuthorizeParams = {
   type?: "code_only" | "full_auth";
 };
 
+type MPassIDResponseFields = {
+  "urn:oid:1.3.6.1.4.1.16161.1.1.27"?: string;
+  "urn:mpass.id:schoolInfo"?: string[];
+};
+
+type MpassIDUserInfo = UserinfoResponse<{
+  "urn:oid:1.3.6.1.4.1.16161.1.1.27"?: string;
+  "urn:mpass.id:schoolInfo"?: string[];
+}>;
+
+const parseOrganizationId = (userInfo: MpassIDUserInfo) => {
+  const organizationString = userInfo?.["urn:mpass.id:schoolInfo"]?.[1];
+  const oid = organizationString?.split(";")[0];
+  return oid;
+};
+
 export const grantToken = async (client: OpenIDClient, code: string) => {
   const redirectUri = client.metadata.redirect_uris?.[0];
 
@@ -29,35 +49,68 @@ export const grantToken = async (client: OpenIDClient, code: string) => {
   const tokenSet = await client.callback(redirectUri, { code });
 
   if (!tokenSet?.access_token) throw new Error("Something went wrong, access_token not found from token set");
-  const userInfo = await client.userinfo(tokenSet.access_token);
+  const userInfo = await client.userinfo<MPassIDResponseFields>(tokenSet.access_token);
+
+  const mPassID = userInfo["urn:oid:1.3.6.1.4.1.16161.1.1.27"];
+  const organizationID = parseOrganizationId(userInfo);
+  if (!mPassID || !organizationID) throw new Error("Something went wrong, mPassID or organizationID is missing from MPassID response");
+  const isAuthorized = await checkIsAuthorized(organizationID);
+  if (!isAuthorized)
+    throw new UnauthorizedError(
+      "Koulullasi tai kunnallasi ei ole vielä sopimusta Arwin kanssa MPassID-palvelun käytöstä, joten sen kautta kirjautuminen ei valitettavasti vielä ole tunnuksillasi mahdollista. Mikäli haluaisit MPassID-kirjautumisen käyttöön, voit kehottaa koulusi tai kuntasi vastaavan olemaan yhteydessä meihin info@arwi.fi@arwi.fi. \n\nSillä välin voit luoda omat tunnukset ja käyttää Arwia normaalisesti. Voit myöhemmin linkittää tilisi ja tietosi MPassID:n tunnuksiin, kun MPassID-kirjautuminen on saatavilla koulullesi."
+    );
 
   return {
     tokenSet,
-    userInfo,
+    userInfo: {
+      ...userInfo,
+      mPassID,
+      organizationID,
+    },
   };
+};
+
+export const checkIsAuthorized = async (oid: string) => {
+  const parentOids = await fetchParentOids(oid);
+  const isAuthorized = await hasAgreement(parentOids);
+  return isAuthorized;
 };
 
 export const grantAndInitSession = async (client: OpenIDClient, code: string, req: Request) => {
   const { tokenSet, userInfo } = await grantToken(client, code);
   let user = await prisma.teacher.findFirst({
     where: {
-      mPassID: userInfo.sub,
+      mPassID: userInfo.mPassID,
     },
   });
   const isNewUser = !user;
   if (!user) {
     user = await prisma.teacher.create({
       data: {
-        mPassID: userInfo.sub,
+        mPassID: userInfo.mPassID,
       },
     });
   }
+
   initSession(req, { ...user, type: "mpass-id" }, tokenSet);
+
   return {
     isNewUser,
     tokenSet,
     user,
   };
+};
+
+const getRedirectUri = () => {
+  const redirectPath = "/auth/mpassid-callback";
+  switch (APP_ENV) {
+    case "production":
+      return `https://api.arwi.fi${redirectPath}`;
+    case "staging":
+      return `https://staging-api.arwi.fi${redirectPath}`;
+    default:
+      return `http://localhost:4000${redirectPath}`;
+  }
 };
 
 const initAuth = async () => {
@@ -70,13 +123,12 @@ const initAuth = async () => {
       client_id: MPASSID_CLIENT_ID,
       client_secret: MPASSID_CLIENT_SECRET,
       token_endpoint_auth_method: "client_secret_post",
-      redirect_uris: ["http://localhost:4000/auth/mpassid-callback"],
+      redirect_uris: [getRedirectUri()],
       response_types: ["code"],
     });
   }
 
   router.use("/mpassid-callback", async (req, res) => {
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const params = client.callbackParams(req);
@@ -95,7 +147,6 @@ const initAuth = async () => {
   });
 
   router.use("/authorize", async (req, res) => {
-    if (APP_ENV === "production") throw new Error("This endpoint is not available in production");
     if (!client) throw new Error("Something went wrong, OIDC client is not initialized");
 
     const { query } = req;

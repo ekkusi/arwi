@@ -1,10 +1,14 @@
 {
   "fi": {
     "/terms-and-conditions": "/kayttoehdot",
-    "/privacy-policy": "/tietosuojaseloste"
+    "/privacy-policy": "/tietosuojaseloste",
+    "/account-delete": "/tilin-poisto",
+    "/login": "/kirjaudu"
   },
   "se": {
     "/terms-and-conditions": "/anvandarvillkoren",
-    "/privacy-policy": "/integritetspolicy"
+    "/privacy-policy": "/integritetspolicy",
+    "/account-delete": "/radera-konto",
+    "/login": "/logga-in"
   }
 }

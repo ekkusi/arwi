@@ -1,3 +1,4 @@
+import { ApolloError } from "@apollo/client";
 import { GraphQLError } from "graphql";
 
 type GenericError = Error & {

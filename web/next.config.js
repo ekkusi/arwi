@@ -31,6 +31,9 @@ const nextConfig = {
       locale: false,
     },
   ],
+  experimental: {
+    serverActions: true,
+  },
 };
 
 module.exports = nextConfig;

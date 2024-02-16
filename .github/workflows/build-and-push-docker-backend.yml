@@ -5,6 +5,9 @@ on:
     branches:
       - 'main'
       - 'v*'
+    paths:
+      - 'backend/**'
+      - 'Dockerfile.backend'
 
 
 jobs:
