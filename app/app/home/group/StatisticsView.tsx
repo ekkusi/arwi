@@ -258,8 +258,8 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             <StyledBarChart data={learningObjectivesAndCounts} style={{ height: 200 }} />
             <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
               {learningObjectivesAndCounts.map((objAndCount, idx) => (
-                <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "100%", paddingRight: 30 }}>
-                  <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
+                <CView key={idx} style={{ justifyContent: "space-between", width: "100%", flexDirection: "row", paddingRight: 20 }}>
+                  <CView style={{ flexDirection: "row", flex: 0.9, justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
                     <CView style={{ width: 10, height: 10, backgroundColor: objAndCount.color }} />
                     <CText style={{ fontSize: "xs" }}>{objAndCount.x}</CText>
                   </CView>
