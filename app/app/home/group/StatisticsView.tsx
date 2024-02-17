@@ -1,10 +1,11 @@
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { getEnvironmentsByLevel, getEvaluableLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { isClassParticipationCollection, isDefaultCollection } from "arwi-backend/src/types/typeGuards";
+import { ActivityIndicator } from "react-native";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { subjectToIcon } from "../../../helpers/dataMappers";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
@@ -18,9 +19,17 @@ import { GroupNavigationProps } from "./types";
 import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
 import Card from "../../../components/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
+import { useModal } from "../../../hooks-and-providers/ModalProvider";
+import { useToast } from "../../../hooks-and-providers/ToastProvider";
+
+const FEEDBACK_PROGRESS_HEIGHT = 50;
 
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
   const { t } = useTranslation();
+  const { openModal, closeModal } = useModal();
+  const [generatingFinalEvaluation, setGeneratingFinalEvaluation] = useState(false);
+  const [finalFeedbackGenerated, setFinalFeedbackGenerated] = useState(false);
+  const { openToast } = useToast();
 
   const moduleInfo = group.currentModule.info;
   // const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
@@ -36,6 +45,10 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
     evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "DefaultCollection">>(isDefaultCollection);
 
   const otherSelectedTypes = group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
+  const otherSelectedTypeEvaluations = otherSelectedTypes.map((type) => {
+    const evaluation = otherCollections.find((coll) => coll.type.id === type.id);
+    return evaluation;
+  });
 
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(() => {
     const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
@@ -97,6 +110,39 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
       isScrolling.value = false;
     },
   });
+
+  const feedbackProgressTranslateY = useSharedValue(FEEDBACK_PROGRESS_HEIGHT);
+
+  const feedbackProgressAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: feedbackProgressTranslateY.value }],
+    };
+  });
+
+  React.useEffect(() => {
+    if (generatingFinalEvaluation) {
+      feedbackProgressTranslateY.value = withTiming(0, { duration: 200 });
+    } else {
+      feedbackProgressTranslateY.value = withTiming(FEEDBACK_PROGRESS_HEIGHT, { duration: 200 });
+    }
+  }, [generatingFinalEvaluation, feedbackProgressTranslateY]);
+
+  const generateFinalFeedback = () => {
+    setGeneratingFinalEvaluation(true);
+    group.currentModule.students.forEach(() => {
+      setTimeout(() => {
+        setGeneratingFinalEvaluation(false);
+        setFinalFeedbackGenerated(true);
+        openToast(
+          t("final-feedback-finished", "Loppupalaute generoitu ryhmälle {{groupName}}", { groupName: group.name }),
+          { closeTimeout: 10000 },
+          () => navigation.navigate("final-feedback-collection", { groupId: group.id }),
+          t("inspect", "Tarkastele")
+        );
+      }, 5000);
+    });
+    closeModal();
+  };
 
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
@@ -160,8 +206,8 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           <CView style={{ gap: 20 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arviointikohteet")}</CText>
             <CView style={{ gap: 5 }}>
-              {otherSelectedTypes.map((type) => {
-                const evaluation = otherCollections.find((coll) => coll.type.id === type.id);
+              {otherSelectedTypes.map((type, i) => {
+                const evaluation = otherSelectedTypeEvaluations[i];
                 return (
                   <Card
                     style={{
@@ -218,7 +264,48 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             </CView>
           </CView>
         )}
-
+        <CView style={{ gap: 20 }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("final-feedback", "Loppuarviointi")}</CText>
+          <CButton
+            title={t("final-feedback-group", "Siirry loppuarviointiin")}
+            onPress={() => {
+              if (finalFeedbackGenerated) navigation.navigate("final-feedback-collection", { groupId: group.id });
+              else
+                openModal({
+                  title: t("final-feedback", "Loppuarviointi"),
+                  children: (
+                    <CView style={{ gap: 10 }}>
+                      <CText style={{ fontSize: "sm", fontWeight: "300" }}>
+                        {t(
+                          "group-final-feedback-info",
+                          "Generoi loppupalaute koko ryhmälle perustuen antamiisi numeerisiin ja sanallisiin palautteisiin. Palautteen generointi tapahtuu taustalla, voit liikkua sovelluksessa vapaasti tai sulkea sovelluksen generoinnin ajaksi."
+                        )}
+                      </CText>
+                      {otherSelectedTypeEvaluations.filter((ev) => ev).length < otherSelectedTypes.length && (
+                        <CView style={{ gap: 5 }}>
+                          <CText style={{ fontSize: "sm", fontWeight: "500" }}>
+                            {t("other-type-evaluations-missing", "HUOM! Seuraavat arviointikohteet ovat arvioimatta:")}
+                          </CText>
+                          <CView>
+                            {otherSelectedTypes
+                              .filter((_, i) => !otherSelectedTypeEvaluations[i])
+                              .map((type) => {
+                                return (
+                                  <CText key={type.id} style={{ fontSize: "sm", fontWeight: "500" }}>
+                                    {type.name}
+                                  </CText>
+                                );
+                              })}
+                          </CView>
+                        </CView>
+                      )}
+                      <CButton title={t("generate", "Generoi")} size="small" onPress={generateFinalFeedback} />
+                    </CView>
+                  ),
+                });
+            }}
+          />
+        </CView>
         <CView style={{ gap: 10 }}>
           <CView style={{ gap: 5 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
@@ -270,6 +357,31 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           </CView>
         )}
       </Animated.ScrollView>
+      {!group.archived && (
+        <Animated.View
+          style={[
+            {
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              paddingLeft: 10,
+              gap: 5,
+              height: FEEDBACK_PROGRESS_HEIGHT,
+              flexDirection: "row",
+              backgroundColor: COLORS.primary,
+              borderTopRightRadius: 10,
+              borderTopLeftRadius: 10,
+              justifyContent: "flex-start",
+              alignItems: "center",
+            },
+            feedbackProgressAnimatedStyle,
+          ]}
+        >
+          <ActivityIndicator color={COLORS.white} size="large" />
+          <CText style={{ color: "white" }}>{t("generating-final-feedback", "Loppupalautetta generoidaan...")}</CText>
+        </Animated.View>
+      )}
       {!group.archived && (
         <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
           <CButton

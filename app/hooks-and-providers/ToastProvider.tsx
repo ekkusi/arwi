@@ -2,6 +2,7 @@ import React, { createContext, useMemo, useState } from "react";
 import { Platform } from "react-native";
 import { SlideInDown, SlideInUp, SlideOutDown, SlideOutUp } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useTranslation } from "react-i18next";
 import CAnimatedView from "../components/primitives/CAnimatedView";
 import CButton from "../components/primitives/CButton";
 import CText from "../components/primitives/CText";
@@ -16,7 +17,7 @@ type OpenToastProps = {
 };
 
 type ToastContextType = {
-  openToast: (content: string, props?: OpenToastProps) => void;
+  openToast: (content: string, props?: OpenToastProps, action?: () => void, actionText?: string) => void;
   closeToast: () => void;
 };
 
@@ -37,11 +38,17 @@ const DEFAULT_CLOSE_TIMEOUT_MS = 5000;
 export default function ToastProvider({ children }: React.PropsWithChildren) {
   const [toastProps, setToastProps] = useState<OpenToastProps | null>(null);
   const [toastContent, setToastContent] = useState<string | null>(null);
+  const [toastAction, setToastAction] = useState<(() => void) | null>(null);
+  const [toastActionText, setToastActionText] = useState<string | null>(null);
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const openToast = (content: string, props?: OpenToastProps) => {
+  const { t } = useTranslation();
+
+  const openToast = (content: string, props?: OpenToastProps, action?: () => void, actionText?: string) => {
     setToastContent(content);
     setToastProps(props || {});
+    setToastAction(action ? () => action : null);
+    setToastActionText(actionText || null);
     closeTimer.current = setTimeout(() => {
       closeToast();
     }, props?.closeTimeout || DEFAULT_CLOSE_TIMEOUT_MS);
@@ -105,7 +112,6 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
               position: "absolute",
               right: "md",
               left: "md",
-              flexDirection: "row",
               alignItems: "center",
               backgroundColor: type === "success" ? "green" : "error",
               padding: "lg",
@@ -113,16 +119,24 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
               ...placementStyles,
             }}
           >
-            <MaterialCommunityIcon
-              name={type === "success" ? "check" : "exclamation"}
-              size={25}
-              color={COLORS.white}
-              style={{ marginRight: SPACING.md }}
-            />
-            <CText style={{ color: "white", flex: 1, marginRight: "2xl" }}>{toastContent}</CText>
-            <CButton variant="empty" onPress={closeToast} style={{ position: "absolute", right: "lg", top: 0 }}>
-              <MaterialCommunityIcon name="close" size={20} color={COLORS.white} />
-            </CButton>
+            <CView
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcon
+                name={type === "success" ? "check" : "exclamation"}
+                size={25}
+                color={COLORS.white}
+                style={{ marginRight: SPACING.md }}
+              />
+              <CText style={{ color: "white", flex: 1, marginRight: "2xl" }}>{toastContent}</CText>
+              <CButton variant="empty" onPress={closeToast} style={{ position: "absolute", right: "lg", top: 0 }}>
+                <MaterialCommunityIcon name="close" size={20} color={COLORS.white} />
+              </CButton>
+            </CView>
+            {toastAction && <CButton size="small" colorScheme="gray" title={toastActionText || t("ok", "OK")} onPress={() => toastAction()} />}
           </CAnimatedView>
         )}
       </CView>
