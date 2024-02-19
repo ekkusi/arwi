@@ -103,12 +103,16 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
     () =>
       onError(({ graphQLErrors, networkError, operation, forward }) => {
         if (graphQLErrors) {
-          let shouldThrow = true;
+          let shouldThrow = false;
           for (const err of graphQLErrors) {
             switch (err.extensions.code) {
               case "UNAUTHENTICATED": {
                 logout();
                 return forward(operation);
+              }
+              case "UNAUTHORIZED": {
+                shouldThrow = true;
+                break;
               }
               // Don't throw generic error page from validation errors, these should be handled in whereever they occur.
               case "VALIDATION_ERROR": {
