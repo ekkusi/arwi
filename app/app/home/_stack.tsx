@@ -29,6 +29,7 @@ import DefaultCollectionEditAllEvaluationsView from "./collection/edit_all_defau
 import EditDefaultCollectionGeneralInfoView from "./collection/edit_default_general_info";
 import DefaultEvaluationEditView from "./evaluation/edit_default_evaluation";
 import UpdateTypesStack from "./group/edit/_update_types_stack";
+import FinalFeedback from "./final-feedback/FinalFeedback";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -152,6 +153,11 @@ export default function HomeStack() {
         options={{ title: t("edit", "Muokkaa") }}
       />
       <HomeStackNavigator.Screen name="archive" component={ArchivePage} options={{ title: t("archive", "Arkisto") }} />
+      <HomeStackNavigator.Screen
+        name="final-feedback-collection"
+        component={FinalFeedback}
+        options={{ title: t("final-feedback", "Loppupalaute") }}
+      />
       <HomeStackNavigator.Screen
         name="default-evaluation-collection"
         component={DefaultEvaluationCollection}
