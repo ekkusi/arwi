@@ -1,6 +1,7 @@
 type Query {
   getAppMetadata: AppMetadata!
   getCurrentUser: Teacher!
+  getCurrentUserUsageData: TeacherUsageData!
   getTeacher(id: ID!): Teacher!
   getGroups(teacherId: ID!): [Group!]!
   getGroup(id: ID!): Group!
@@ -35,13 +36,21 @@ type Mutation {
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
-  generateStudentFeedback(studentId: ID!, moduleId: ID!): String!
-  fixTextGrammatics(studentId: ID!, text: String!): String!
+  generateStudentFeedback(studentId: ID!, moduleId: ID!): OpenAIGenerationResult!
+  startGenerateGroupFeedbacks(groupId: ID!): TeacherUsageData!
+  fixTextGrammatics(studentId: ID!, text: String!): OpenAIGenerationResult!
+}
+
+type Subscription {
+  feedbacksGenerated: String!
 }
 
 type AppMetadata {
   appVersion: String!
   minimumSupportedAppVersion: String!
+  monthlyTokenUseLimit: Int!
+  feedbackGenerationTokenCost: Int!
+  textFixTokenCost: Int!
 }
 
 type AuthPayload {
@@ -60,6 +69,17 @@ type Teacher {
   languagePreference: String!
   consentsAnalytics: Boolean!
   isMPassIDConnected: Boolean!
+}
+
+type TeacherUsageData {
+  id: ID!
+  monthlyTokensUsed: Int!
+}
+
+type OpenAIGenerationResult {
+  result: String!
+  tokensUsed: Int!
+  usageData: TeacherUsageData!
 }
 
 type LoginResult {
@@ -114,9 +134,9 @@ type Group {
 
 type CollectionType {
   id: ID!
-  category:    CollectionTypeCategory!
-  name:        String!
-  weight:      Int!
+  category: CollectionTypeCategory!
+  name: String!
+  weight: Int!
   module: Module!
   defaultTypeCollection: DefaultCollection
 }
@@ -205,6 +225,15 @@ type Student {
   name: String!
   group: Group!
   currentModuleEvaluations: [Evaluation!]!
+  latestFeedback: Feedback
+  feedbacks: [Feedback!]!
+}
+
+type Feedback {
+  id: ID!
+  student: Student!
+  text: String!
+  createdAt: DateTime!
 }
 
 enum EducationLevel {

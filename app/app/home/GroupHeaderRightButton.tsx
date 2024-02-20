@@ -11,6 +11,7 @@ import AddNewStudent from "./AddNewStudent";
 import ChangeGroupModule from "./ChangeGroupModule";
 import ChangeArchiveStatus from "./ChangeArchiveStatus";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
+import { useGenerateFeedback } from "../../hooks-and-providers/GenerateFeedbacksProvider";
 
 export default function GroupHeaderRightButton({
   id,
@@ -28,6 +29,16 @@ export default function GroupHeaderRightButton({
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   const { openToast } = useToast();
+  const { generateFeedbacks } = useGenerateFeedback(id);
+
+  const handleGenerateFeedbacks = async () => {
+    try {
+      await generateFeedbacks();
+      console.log("Feedbacks generated");
+    } catch (err) {
+      console.error("Feedbacks generate error", err);
+    }
+  };
   return (
     <Menu>
       <MenuTrigger>
@@ -56,6 +67,9 @@ export default function GroupHeaderRightButton({
                 }}
               >
                 <CText>{t("edit-name", "Muokkaa nimeä")}</CText>
+              </MenuOption>
+              <MenuOption onSelect={handleGenerateFeedbacks}>
+                <CText>Generoi palautteet</CText>
               </MenuOption>
               <MenuOption
                 onSelect={() => {

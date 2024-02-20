@@ -61,9 +61,15 @@ type DefaultEvaluationCardProps = {
   isActive?: boolean;
 };
 
-const ClassParticipationEvaluationCard_FixTextGrammatics_Mutation = graphql(`
-  mutation ClassParticipationEvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
-    fixTextGrammatics(studentId: $studentId, text: $text)
+const DefaultEvaluationCard_FixTextGrammatics_Mutation = graphql(`
+  mutation DefaultEvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
+    fixTextGrammatics(studentId: $studentId, text: $text) {
+      result
+      usageData {
+        id
+        monthlyTokensUsed
+      }
+    }
   }
 `);
 
@@ -90,7 +96,7 @@ function DefaultEvaluationCard({
   const [newSpeechObtained, setNewSpeechObtained] = useState(false);
   const [data, setData] = useState<Omit<DefaultEvaluation | DefaultEvaluationToUpdate, "notes">>(evaluation);
 
-  const [fixTextGrammatics, { loading: isFixingText }] = useMutation(ClassParticipationEvaluationCard_FixTextGrammatics_Mutation);
+  const [fixTextGrammatics, { loading: isFixingText }] = useMutation(DefaultEvaluationCard_FixTextGrammatics_Mutation);
 
   const speechRef = useRef<SpeechToTextInputHandle>(null);
   const inputRef = useRef<TextInput>(null);
@@ -166,7 +172,7 @@ function DefaultEvaluationCard({
 
       if (!result.data?.fixTextGrammatics) throw new Error("Text rephrasing failed");
       setPreviousNotes(notes);
-      const resultText = result.data?.fixTextGrammatics;
+      const resultText = result.data?.fixTextGrammatics.result;
       setNotes(resultText);
       onChanged("notes", resultText);
       setNewSpeechObtained(false);

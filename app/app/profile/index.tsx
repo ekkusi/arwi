@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import * as SecureStore from "expo-secure-store";
 import { useMatomo } from "matomo-tracker-react-native";
@@ -18,6 +18,18 @@ import CModal from "../../components/CModal";
 import TextFormField from "../../components/form/TextFormField";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
+import { useMetadata } from "../../hooks-and-providers/MetadataProvider";
+import { formatDate, getFirstDayOfNextMonth } from "../../helpers/dateHelpers";
+import LoadingIndicator from "../../components/LoadingIndicator";
+
+const ProfileView_GetCurrentUserUsageData_Query = graphql(`
+  query ProfileView_GetCurrentUserUsageData {
+    getCurrentUserUsageData {
+      id
+      monthlyTokensUsed
+    }
+  }
+`);
 
 const ProfileView_Logout_Mutation = graphql(`
   mutation ProfileView_Logout {
@@ -64,6 +76,7 @@ export default function ProfileView() {
   const { trackEvent } = useMatomo();
   const { openToast } = useToast();
   const { grantCode } = useMPassIDAuth(REDIRECT_URI);
+  const { monthlyTokenUseLimit } = useMetadata();
 
   const [isLocalLoginModalOpen, setIsLocalLoginModalOpen] = useState(false);
   const [localLoginError, setLocalLoginError] = useState<string | undefined>();
@@ -71,11 +84,15 @@ export default function ProfileView() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const { data: usageData, error: userDataErro } = useQuery(ProfileView_GetCurrentUserUsageData_Query);
+
   const [logoutMutation, { loading, client }] = useMutation(ProfileView_Logout_Mutation);
   const [connectMPassID, { loading: connectMPassIDLoading }] = useMutation(ProfileView_ConnectMPassID_Mutation);
   const [connectLocalCredentials, { loading: connectLocalLoading }] = useMutation(ProfileView_ConnectLocalCredentials_Mutation);
 
   const { t, i18n } = useTranslation();
+
+  const firstDayOfNextMonth = formatDate(getFirstDayOfNextMonth());
 
   const handleLogout = async () => {
     await logoutMutation();
@@ -152,7 +169,7 @@ export default function ProfileView() {
 
   return (
     <CView style={{ flex: 1, alignItems: "center", padding: "lg" }}>
-      <CText style={{ fontSize: "lg", fontWeight: "500", width: "100%" }}>{t("profile-view.language", "Kieli")}</CText>
+      <CText style={{ fontSize: "lg", fontWeight: "500", width: "100%" }}>{t("language", "Kieli")}</CText>
       <SingleSelect
         defaultValue={languages.find((lang) => lang.value === i18n.language)}
         options={languages}
@@ -160,6 +177,17 @@ export default function ProfileView() {
         onSelect={(item) => changeLanguage(item.value)}
         getOptionValue={(item) => item.value}
       />
+      <CView style={{ width: "100%" }}>
+        <CText style={{ fontSize: "lg", fontWeight: "500", marginTop: "3xl" }}>{t("monthly-ai-token-use", "Kuukauden AI-tokenien käyttö")}</CText>
+        <CText style={{ fontSize: "sm", marginTop: "sm" }}>Uusiutuu: {firstDayOfNextMonth}</CText>
+        {usageData ? (
+          <CText style={{ textAlign: "center", marginTop: "lg" }}>
+            {usageData.getCurrentUserUsageData.monthlyTokensUsed || 0} / {monthlyTokenUseLimit}
+          </CText>
+        ) : (
+          <LoadingIndicator type="inline" />
+        )}
+      </CView>
 
       {__DEV__ && (
         <>
@@ -197,7 +225,7 @@ export default function ProfileView() {
           {!user.isMPassIDConnected && (
             <>
               <CButton
-                style={{ marginTop: "3xl" }}
+                style={{ marginTop: "4xl" }}
                 leftIcon={<CImage variant="fixed" source={require("../../assets/mpassid-minimal-white.png")} width={25} height={25} />}
                 title={t("connect-mpassid", "Liitä MPassID-tili")}
                 loading={connectMPassIDLoading}

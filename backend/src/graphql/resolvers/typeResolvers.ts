@@ -157,6 +157,15 @@ const resolvers: TypeResolvers = {
       });
       return evaluations;
     },
+    latestFeedback: async ({ id, groupId }, _, { dataLoaders }) => {
+      const group = await dataLoaders.groupLoader.load(groupId);
+      const feedbacks = await dataLoaders.feedbacksLoader.load({ studentId: id, moduleId: group.currentModuleId });
+      return feedbacks[0];
+    },
+    feedbacks: async ({ id, groupId }, _, { dataLoaders }) => {
+      const group = await dataLoaders.groupLoader.load(groupId);
+      return dataLoaders.feedbacksLoader.load({ studentId: id, moduleId: group.currentModuleId });
+    },
   },
   Subject: {
     environments: ({ code }) => {

@@ -96,7 +96,7 @@ export async function generateStudentSummary(
 
   prompt += defaultEvaluationNotes.join("\n\n");
   prompt +=
-    "\n\nKirjoita edellä annetun datan pohjalta noin 50 sanan pituinen palautte oppilaalle sinuttelevassa muodossa ja hampurilaismallin mukaisesti.";
+    "\n\nKirjoita edellä annetun datan pohjalta noin 100 sanan pituinen palautte oppilaalle sinuttelevassa muodossa ja hampurilaismallin mukaisesti.";
 
   const tokenCountFallback = prompt.length / CHARACTERS_PER_TOKEN;
 
@@ -116,8 +116,10 @@ export async function generateStudentSummary(
           token_count: tokenCount,
         },
       });
+
       return completion.choices[0].message.content;
     }
+
     throw new Error(`Error with generateSumamry: no message found from result`);
   } catch (error: any) {
     console.error("error", error?.response?.data || error);

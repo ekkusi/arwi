@@ -3,6 +3,8 @@ import prisma from "@/prismaClient";
 import { CustomContext } from "../../types/contextTypes";
 import { groupLoader } from "../dataLoaders/group";
 import AuthorizationError from "../errors/AuthorizationError";
+import { MONTHLY_TOKEN_USE_LIMIT } from "@/config";
+import { teacherLoader } from "../dataLoaders/teacher";
 
 type User = CustomContext["user"];
 
@@ -97,4 +99,12 @@ export const checkAuthenticatedByEvaluation = async (user: User, evaluationId: s
 export const checkAuthenticatedByTeacher = (user: User, teacherId: string) => {
   if (!user) throw new AuthenticationError();
   if (user.id !== teacherId) throw new AuthorizationError("Et voi hakea muiden opettajien tietoja kuin omiasi");
+};
+
+export const checkMonthlyTokenUse = async (user: User, currentActionTokenCost: number) => {
+  if (!user) throw new AuthenticationError();
+  const matchingTeacher = await teacherLoader.load(user.id);
+  if (matchingTeacher.monthlyTokensUsed + currentActionTokenCost > MONTHLY_TOKEN_USE_LIMIT) {
+    throw new AuthorizationError("Kuukausittainen toimintojen määrä on ylittynyt");
+  }
 };

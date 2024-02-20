@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { addMonths, format, startOfMonth } from "date-fns";
 
 export function timeSince(date: string) {
   const dateNumber = Date.parse(date);
@@ -34,4 +34,11 @@ export type DateFormat = "yyyy-MM-dd" | "dd.MM.yyyy";
 export const formatDate = (_date: Date | string, dateFormat: DateFormat = "dd.MM.yyyy"): string => {
   const date = typeof _date === "string" ? new Date(_date) : _date;
   return format(date, dateFormat);
+};
+
+export const getFirstDayOfNextMonth = (initialDate?: Date): Date => {
+  const date = initialDate || new Date();
+  const nextMonth = addMonths(date, 1);
+  const firstDayOfNextMonth = startOfMonth(nextMonth);
+  return firstDayOfNextMonth;
 };

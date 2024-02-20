@@ -1,4 +1,4 @@
-import { Module, Prisma } from "@prisma/client";
+import { CollectionType, Evaluation, EvaluationCollection, Module, Prisma } from "@prisma/client";
 import {
   CreateClassParticipationEvaluationInput,
   CreateDefaultEvaluationInput,
@@ -12,6 +12,8 @@ import {
   UpdateGroupInput,
   UpdateStudentInput,
 } from "../../types";
+import { ClassParticipationEvaluationData, DefaultEvaluationData } from "@/utils/openAI";
+import { getEnvironment } from "@/utils/subjectUtils";
 
 export const mapUpdateStudentInput = (data: UpdateStudentInput): Prisma.StudentUpdateInput => {
   return {
@@ -98,4 +100,28 @@ export const mapModuleInfo = (module: Module): MinimalModuleInfo => {
     ...module,
     educationLevel: module.educationLevel as EducationLevel,
   };
+};
+
+type CollectionTypeData = Pick<CollectionType, "name">;
+type EvaluationWithCollection = Evaluation & {
+  evaluationCollection: Pick<EvaluationCollection, "environmentCode" | "date"> & { type: CollectionTypeData };
+};
+
+export const mapEvaluationFeedbackData = (
+  evaluation: EvaluationWithCollection,
+  module: Module
+): ClassParticipationEvaluationData | DefaultEvaluationData => {
+  const { environmentCode } = evaluation.evaluationCollection;
+  return environmentCode
+    ? {
+        environmentLabel: getEnvironment(environmentCode, mapModuleInfo(module))?.label.fi || "Ei ympäristöä",
+        date: evaluation.evaluationCollection.date,
+        skillsRating: evaluation.skillsRating,
+        behaviourRating: evaluation.behaviourRating,
+      }
+    : {
+        date: evaluation.evaluationCollection.date,
+        generalRating: evaluation.generalRating,
+        collectionTypeName: evaluation.evaluationCollection.type.name,
+      };
 };

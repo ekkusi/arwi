@@ -4,7 +4,8 @@ import studentLoaders from "./student";
 import evaluationLoaders from "./evaluation";
 import teacherLoaders from "./teacher";
 import moduleLoaders from "./module";
-import collectionType from "./collectionType";
+import collectionTypeLoaders from "./collectionType";
+import feedbackLoaders from "./feedback";
 
 const loaders = {
   ...groupLoaders,
@@ -13,7 +14,8 @@ const loaders = {
   ...evaluationLoaders,
   ...teacherLoaders,
   ...moduleLoaders,
-  ...collectionType,
+  ...collectionTypeLoaders,
+  ...feedbackLoaders,
 };
 
 export default loaders;

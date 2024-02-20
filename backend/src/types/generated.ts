@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { UserInfo as UserInfoPrisma, CustomContext } from './contextTypes';
-import { EvaluationCollection as EvaluationCollectionPrisma, Evaluation as EvaluationPrisma, Group as GroupPrisma, Student as StudentPrisma, Module as ModulePrisma, CollectionType as CollectionTypePrisma } from '@prisma/client';
+import { EvaluationCollection as EvaluationCollectionPrisma, Evaluation as EvaluationPrisma, Group as GroupPrisma, Student as StudentPrisma, Module as ModulePrisma, CollectionType as CollectionTypePrisma, Feedback as FeedbackPrisma } from '@prisma/client';
 import { SubjectMinimal as SubjectMinimalPrisma, EnvironmentInfo as EnvironmentInfoPrisma } from './codegenOverrides';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -26,6 +26,7 @@ export type Query = {
   __typename?: 'Query';
   getAppMetadata: AppMetadata;
   getCurrentUser: Teacher;
+  getCurrentUserUsageData: TeacherUsageData;
   getTeacher: Teacher;
   getGroups: Array<Group>;
   getGroup: Group;
@@ -96,8 +97,9 @@ export type Mutation = {
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
   changeGroupModule: Group;
-  generateStudentFeedback: Scalars['String'];
-  fixTextGrammatics: Scalars['String'];
+  generateStudentFeedback: OpenAiGenerationResult;
+  startGenerateGroupFeedbacks: TeacherUsageData;
+  fixTextGrammatics: OpenAiGenerationResult;
 };
 
 
@@ -233,15 +235,28 @@ export type MutationGenerateStudentFeedbackArgs = {
 };
 
 
+export type MutationStartGenerateGroupFeedbacksArgs = {
+  groupId: Scalars['ID'];
+};
+
+
 export type MutationFixTextGrammaticsArgs = {
   studentId: Scalars['ID'];
   text: Scalars['String'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  feedbacksGenerated: Scalars['String'];
 };
 
 export type AppMetadata = {
   __typename?: 'AppMetadata';
   appVersion: Scalars['String'];
   minimumSupportedAppVersion: Scalars['String'];
+  monthlyTokenUseLimit: Scalars['Int'];
+  feedbackGenerationTokenCost: Scalars['Int'];
+  textFixTokenCost: Scalars['Int'];
 };
 
 export type AuthPayload = {
@@ -263,6 +278,19 @@ export type Teacher = {
   languagePreference: Scalars['String'];
   consentsAnalytics: Scalars['Boolean'];
   isMPassIDConnected: Scalars['Boolean'];
+};
+
+export type TeacherUsageData = {
+  __typename?: 'TeacherUsageData';
+  id: Scalars['ID'];
+  monthlyTokensUsed: Scalars['Int'];
+};
+
+export type OpenAiGenerationResult = {
+  __typename?: 'OpenAIGenerationResult';
+  result: Scalars['String'];
+  tokensUsed: Scalars['Int'];
+  usageData: TeacherUsageData;
 };
 
 export type LoginResult = {
@@ -422,6 +450,16 @@ export type Student = {
   name: Scalars['String'];
   group: Group;
   currentModuleEvaluations: Array<Evaluation>;
+  latestFeedback?: Maybe<Feedback>;
+  feedbacks: Array<Feedback>;
+};
+
+export type Feedback = {
+  __typename?: 'Feedback';
+  id: Scalars['ID'];
+  student: Student;
+  text: Scalars['String'];
+  createdAt: Scalars['DateTime'];
 };
 
 export enum EducationLevel {
@@ -628,10 +666,14 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Subscription: ResolverTypeWrapper<{}>;
   AppMetadata: ResolverTypeWrapper<AppMetadata>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   MPassIDAuthPayload: ResolverTypeWrapper<Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversTypes['AuthPayload'] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
+  TeacherUsageData: ResolverTypeWrapper<TeacherUsageData>;
+  OpenAIGenerationResult: ResolverTypeWrapper<OpenAiGenerationResult>;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   TranslatedString: ResolverTypeWrapper<TranslatedString>;
   LearningObjectiveType: LearningObjectiveType;
@@ -640,7 +682,6 @@ export type ResolversTypes = {
   Environment: ResolverTypeWrapper<EnvironmentInfoPrisma>;
   Group: ResolverTypeWrapper<GroupPrisma>;
   CollectionType: ResolverTypeWrapper<CollectionTypePrisma>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   CollectionTypeCategory: CollectionTypeCategory;
   ModuleInfo: ResolverTypeWrapper<ModuleInfo>;
   Module: ResolverTypeWrapper<ModulePrisma>;
@@ -652,6 +693,7 @@ export type ResolversTypes = {
   DefaultEvaluation: ResolverTypeWrapper<EvaluationPrisma>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Student: ResolverTypeWrapper<StudentPrisma>;
+  Feedback: ResolverTypeWrapper<FeedbackPrisma>;
   EducationLevel: EducationLevel;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
@@ -681,10 +723,14 @@ export type ResolversParentTypes = {
   Mutation: {};
   String: Scalars['String'];
   Boolean: Scalars['Boolean'];
+  Subscription: {};
   AppMetadata: AppMetadata;
+  Int: Scalars['Int'];
   AuthPayload: Omit<AuthPayload, 'userData'> & { userData: ResolversParentTypes['Teacher'] };
   MPassIDAuthPayload: Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversParentTypes['AuthPayload'] };
   Teacher: UserInfoPrisma;
+  TeacherUsageData: TeacherUsageData;
+  OpenAIGenerationResult: OpenAiGenerationResult;
   LoginResult: Omit<LoginResult, 'userData'> & { userData: ResolversParentTypes['Teacher'] };
   TranslatedString: TranslatedString;
   LearningObjective: LearningObjective;
@@ -692,7 +738,6 @@ export type ResolversParentTypes = {
   Environment: EnvironmentInfoPrisma;
   Group: GroupPrisma;
   CollectionType: CollectionTypePrisma;
-  Int: Scalars['Int'];
   ModuleInfo: ModuleInfo;
   Module: ModulePrisma;
   EvaluationCollection: EvaluationCollectionPrisma;
@@ -703,6 +748,7 @@ export type ResolversParentTypes = {
   DefaultEvaluation: EvaluationPrisma;
   Float: Scalars['Float'];
   Student: StudentPrisma;
+  Feedback: FeedbackPrisma;
   CreateTeacherInput: CreateTeacherInput;
   CreateGroupInput: CreateGroupInput;
   CreateStudentInput: CreateStudentInput;
@@ -736,6 +782,7 @@ export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<Resolv
 export type QueryResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getAppMetadata?: Resolver<ResolversTypes['AppMetadata'], ParentType, ContextType>;
   getCurrentUser?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType>;
+  getCurrentUserUsageData?: Resolver<ResolversTypes['TeacherUsageData'], ParentType, ContextType>;
   getTeacher?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType, RequireFields<QueryGetTeacherArgs, 'id'>>;
   getGroups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType, RequireFields<QueryGetGroupsArgs, 'teacherId'>>;
   getGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<QueryGetGroupArgs, 'id'>>;
@@ -770,13 +817,21 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   deleteGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, 'groupId'>>;
   deleteCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<MutationDeleteCollectionArgs, 'collectionId'>>;
   changeGroupModule?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationChangeGroupModuleArgs, 'data' | 'groupId'>>;
-  generateStudentFeedback?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationGenerateStudentFeedbackArgs, 'studentId' | 'moduleId'>>;
-  fixTextGrammatics?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'studentId' | 'text'>>;
+  generateStudentFeedback?: Resolver<ResolversTypes['OpenAIGenerationResult'], ParentType, ContextType, RequireFields<MutationGenerateStudentFeedbackArgs, 'studentId' | 'moduleId'>>;
+  startGenerateGroupFeedbacks?: Resolver<ResolversTypes['TeacherUsageData'], ParentType, ContextType, RequireFields<MutationStartGenerateGroupFeedbacksArgs, 'groupId'>>;
+  fixTextGrammatics?: Resolver<ResolversTypes['OpenAIGenerationResult'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'studentId' | 'text'>>;
+};
+
+export type SubscriptionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  feedbacksGenerated?: SubscriptionResolver<ResolversTypes['String'], "feedbacksGenerated", ParentType, ContextType>;
 };
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
   appVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   minimumSupportedAppVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  monthlyTokenUseLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  feedbackGenerationTokenCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  textFixTokenCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -798,6 +853,19 @@ export type TeacherResolvers<ContextType = CustomContext, ParentType extends Res
   languagePreference?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   consentsAnalytics?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isMPassIDConnected?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TeacherUsageDataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['TeacherUsageData'] = ResolversParentTypes['TeacherUsageData']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  monthlyTokensUsed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OpenAiGenerationResultResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['OpenAIGenerationResult'] = ResolversParentTypes['OpenAIGenerationResult']> = {
+  result?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tokensUsed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  usageData?: Resolver<ResolversTypes['TeacherUsageData'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -944,6 +1012,16 @@ export type StudentResolvers<ContextType = CustomContext, ParentType extends Res
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
   currentModuleEvaluations?: Resolver<Array<ResolversTypes['Evaluation']>, ParentType, ContextType>;
+  latestFeedback?: Resolver<Maybe<ResolversTypes['Feedback']>, ParentType, ContextType>;
+  feedbacks?: Resolver<Array<ResolversTypes['Feedback']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Feedback'] = ResolversParentTypes['Feedback']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
+  text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -953,10 +1031,13 @@ export type Resolvers<ContextType = CustomContext> = {
   EmailAddress?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   AppMetadata?: AppMetadataResolvers<ContextType>;
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   MPassIDAuthPayload?: MPassIdAuthPayloadResolvers<ContextType>;
   Teacher?: TeacherResolvers<ContextType>;
+  TeacherUsageData?: TeacherUsageDataResolvers<ContextType>;
+  OpenAIGenerationResult?: OpenAiGenerationResultResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
   TranslatedString?: TranslatedStringResolvers<ContextType>;
   LearningObjective?: LearningObjectiveResolvers<ContextType>;
@@ -973,5 +1054,6 @@ export type Resolvers<ContextType = CustomContext> = {
   ClassParticipationEvaluation?: ClassParticipationEvaluationResolvers<ContextType>;
   DefaultEvaluation?: DefaultEvaluationResolvers<ContextType>;
   Student?: StudentResolvers<ContextType>;
+  Feedback?: FeedbackResolvers<ContextType>;
 };
 
