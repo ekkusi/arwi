@@ -71,7 +71,13 @@ type ClassParticipationEvaluationCardProps = {
 
 const ClassParticipationEvaluationCard_FixTextGrammatics_Mutation = graphql(`
   mutation ClassParticipationEvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
-    fixTextGrammatics(studentId: $studentId, text: $text)
+    fixTextGrammatics(studentId: $studentId, text: $text) {
+      result
+      usageData {
+        id
+        monthlyTokensUsed
+      }
+    }
   }
 `);
 

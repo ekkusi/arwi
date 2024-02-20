@@ -26,12 +26,12 @@ type AuthorizeParams = {
   type?: "code_only" | "full_auth";
 };
 
-type MPassIDResponseFields = {
+export type MPassIDResponseFields = {
   "urn:oid:1.3.6.1.4.1.16161.1.1.27"?: string;
   "urn:mpass.id:schoolInfo"?: string[];
 };
 
-type MpassIDUserInfo = UserinfoResponse<{
+export type MpassIDUserInfo = UserinfoResponse<{
   "urn:oid:1.3.6.1.4.1.16161.1.1.27"?: string;
   "urn:mpass.id:schoolInfo"?: string[];
 }>;

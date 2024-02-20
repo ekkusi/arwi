@@ -38,14 +38,16 @@ describe("generateStudentFeedback", () => {
   it("should successfully generate student feedback", async () => {
     const query = graphql(`
       mutation GenerateStudentFeedbackValid($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
+        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
+          result
+        }
       }
     `);
 
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
     expect(response.data?.generateStudentFeedback).toBeDefined();
-    expect(response.data?.generateStudentFeedback).toContain("Mock response from OpenAI");
+    expect(response.data?.generateStudentFeedback.result).toContain("Mock response from OpenAI");
   });
 
   it("should throw error if user is not authorized for the student", async () => {
@@ -56,7 +58,9 @@ describe("generateStudentFeedback", () => {
 
     const query = graphql(`
       mutation GenerateStudentFeedbackUnAuthorized($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
+        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
+          result
+        }
       }
     `);
 
@@ -75,7 +79,9 @@ describe("generateStudentFeedback", () => {
 
     const query = graphql(`
       mutation GenerateStudentFeedbackStudentDoesntExist($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
+        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
+          result
+        }
       }
     `);
 
@@ -90,7 +96,9 @@ describe("generateStudentFeedback", () => {
 
     const query = graphql(`
       mutation GenerateStudentFeedbackNoEvaluation($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
+        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
+          result
+        }
       }
     `);
 

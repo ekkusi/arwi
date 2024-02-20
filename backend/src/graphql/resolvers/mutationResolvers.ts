@@ -121,7 +121,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     } catch (error) {
       throw new OpenIDError(error instanceof Error ? error.message : undefined);
     }
-    if (userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
+    if (!userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
     const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.mPassID } });
     if (matchingUser?.email) throw new ValidationError("Kyseinen mpass-id on jo liitetty toiseen käyttäjään");
 
@@ -535,7 +535,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       usageData: updatedTeacher,
     };
   },
-  startGenerateGroupFeedbacks: async (_, { groupId }, { dataLoaders, prisma, user }) => {
+  generateGroupFeedback: async (_, { groupId }, { dataLoaders, prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
 
     const groupPromise = dataLoaders.groupLoader.load(groupId);

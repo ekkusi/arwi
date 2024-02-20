@@ -37,7 +37,7 @@ type Mutation {
   deleteCollection(collectionId: ID!): EvaluationCollection!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): OpenAIGenerationResult!
-  startGenerateGroupFeedbacks(groupId: ID!): TeacherUsageData!
+  generateGroupFeedback(groupId: ID!): TeacherUsageData!
   fixTextGrammatics(studentId: ID!, text: String!): OpenAIGenerationResult!
 }
 

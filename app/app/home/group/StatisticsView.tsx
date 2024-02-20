@@ -21,18 +21,18 @@ import Card from "../../../components/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import { useModal } from "../../../hooks-and-providers/ModalProvider";
 import { useToast } from "../../../hooks-and-providers/ToastProvider";
+import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
 
 const FEEDBACK_PROGRESS_HEIGHT = 50;
 
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
-  const [generatingFinalEvaluation, setGeneratingFinalEvaluation] = useState(false);
+  const { isGenerating: isGeneratingFeedbacks, generateFeedbacks } = useGenerateFeedback(group.id);
   const [finalFeedbackGenerated, setFinalFeedbackGenerated] = useState(false);
   const { openToast } = useToast();
 
   const moduleInfo = group.currentModule.info;
-  // const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
   const objectives = getEvaluableLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
@@ -120,26 +120,21 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
   });
 
   React.useEffect(() => {
-    if (generatingFinalEvaluation) {
+    if (isGeneratingFeedbacks) {
       feedbackProgressTranslateY.value = withTiming(0, { duration: 200 });
     } else {
       feedbackProgressTranslateY.value = withTiming(FEEDBACK_PROGRESS_HEIGHT, { duration: 200 });
     }
-  }, [generatingFinalEvaluation, feedbackProgressTranslateY]);
+  }, [isGeneratingFeedbacks, feedbackProgressTranslateY]);
 
   const generateFinalFeedback = () => {
-    setGeneratingFinalEvaluation(true);
-    group.currentModule.students.forEach(() => {
-      setTimeout(() => {
-        setGeneratingFinalEvaluation(false);
-        setFinalFeedbackGenerated(true);
-        openToast(
-          t("final-feedback-finished", "Loppupalaute generoitu ryhmälle {{groupName}}", { groupName: group.name }),
-          { closeTimeout: 10000 },
-          () => navigation.navigate("final-feedback-collection", { groupId: group.id }),
-          t("inspect", "Tarkastele")
-        );
-      }, 5000);
+    generateFeedbacks(() => {
+      openToast(
+        t("final-feedback-finished", "Loppupalaute generoitu ryhmälle {{groupName}}", { groupName: group.name }),
+        { closeTimeout: 10000 },
+        () => navigation.navigate("final-feedback-collection", { groupId: group.id }),
+        t("inspect", "Tarkastele")
+      );
     });
     closeModal();
   };

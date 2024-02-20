@@ -1,10 +1,12 @@
 import React, { createContext, useState } from "react";
-import { useMutation } from "@apollo/client";
+import { ApolloError, FetchResult, useMutation } from "@apollo/client";
 import { graphql } from "../gql";
+import { GenerateFeedbacks_UseGeneratedFeedbacks_MutationMutation } from "../gql/graphql";
+import { useThrowCatchableError } from "./error";
 
 const GenerateFeedbacks_useGeneratedFeedbacks_Mutation = graphql(`
   mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!) {
-    startGenerateGroupFeedbacks(groupId: $groupId) {
+    generateGroupFeedback(groupId: $groupId) {
       id
       monthlyTokensUsed
     }
@@ -23,6 +25,7 @@ const { Provider } = GenerateFeedbacksContext;
 
 export function useGenerateFeedback(groupId: string) {
   const context = React.useContext(GenerateFeedbacksContext);
+  const throwCatchableError = useThrowCatchableError();
 
   const [generateFeedbacks] = useMutation(GenerateFeedbacks_useGeneratedFeedbacks_Mutation, {
     variables: { groupId },
@@ -36,12 +39,27 @@ export function useGenerateFeedback(groupId: string) {
 
   const isGenerating = context?.generatingGroupIds.includes(groupId);
 
-  const startGenerateFeedbacks = () => {
+  const startGenerateFeedbacks = async (
+    onSuccess?: (result: FetchResult<GenerateFeedbacks_UseGeneratedFeedbacks_MutationMutation>) => void,
+    onError?: (err: Error) => void
+  ) => {
     if (isGenerating) {
-      return;
+      throw new Error("Already generating feedbacks for this group");
     }
     context?.addGeneratingGroupId(groupId);
-    return generateFeedbacks();
+    try {
+      const result = await generateFeedbacks();
+      onSuccess?.(result);
+    } catch (err) {
+      if (err instanceof ApolloError) {
+        const graphqlError = err.graphQLErrors[0];
+        if (graphqlError && graphqlError.extensions?.code === "UNAUTHORIZED") {
+          onError?.(err);
+          return;
+        }
+      }
+      throwCatchableError(err);
+    }
   };
 
   if (!context) {

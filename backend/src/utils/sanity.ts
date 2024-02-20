@@ -19,6 +19,8 @@ export const getAgreements = async (): Promise<Agreement[]> => {
 };
 
 export const hasAgreement = async (oids: string[]): Promise<boolean> => {
+  console.log("hasAgreement real called");
+
   const query = `*[_type == "mpassid_agreement" && info.oid in $oids]`;
   const agreement = await client.fetch(query, { oids });
   return agreement.length > 0;

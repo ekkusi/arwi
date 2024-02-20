@@ -1,5 +1,5 @@
 import { CallbackParamsType } from "openid-client";
-import { MOCK_TOKEN_SET, MOCK_USER_INFO_RESPONSE, MOCK_VALID_CODE } from "../tests/testHelpers";
+import { MOCK_PARENT_ORGANIZATION_ID, MOCK_TOKEN_SET, MOCK_USER_INFO_RESPONSE, MOCK_VALID_CODE } from "../tests/testHelpers";
 
 jest.mock("@/prismaClient");
 
@@ -15,6 +15,14 @@ jest.mock("@/openAIClient", () => ({
 
 jest.mock("@/utils/mail", () => ({
   sendMail: jest.fn(),
+}));
+
+jest.mock("@/utils/sanity", () => ({
+  hasAgreement: jest.fn().mockImplementation((ids: string[]) => Promise.resolve(ids.includes(MOCK_PARENT_ORGANIZATION_ID))),
+}));
+
+jest.mock("@/utils/organizationApi", () => ({
+  fetchParentOids: jest.fn().mockResolvedValue([MOCK_PARENT_ORGANIZATION_ID]),
 }));
 
 jest.mock("openid-client", () => {
