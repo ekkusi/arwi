@@ -501,7 +501,14 @@ const resolvers: MutationResolvers<CustomContext> = {
     const { currentModule } = group;
     const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, currentModule));
     if (mappedEvaluations.length === 0) throw new ValidationError("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
-    const summaryPromise = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode); // Safe cast after authenticated check
+    const summary = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode); // Safe cast after authenticated check
+    const feedbackCreatePromise = prisma.feedback.create({
+      data: {
+        studentId: student.id,
+        text: summary,
+        moduleId: module.id,
+      },
+    });
     const updateTeacherPromise = updateTeacher(user!.id, {
       data: {
         monthlyTokensUsed: {
@@ -509,9 +516,9 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-    const [summary, updatedTeacher] = await Promise.all([summaryPromise, updateTeacherPromise]);
+    const [updatedTeacher, feedback] = await Promise.all([updateTeacherPromise, feedbackCreatePromise]);
     return {
-      result: summary,
+      feedback,
       tokensUsed: FEEDBACK_GENERATION_TOKEN_COST,
       usageData: updatedTeacher,
     };
@@ -590,9 +597,13 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-    const [updatedTeacher] = await Promise.all([updateTeacherPromise, ...generationPromises]);
+    const [updatedTeacher, ...feedbacks] = await Promise.all([updateTeacherPromise, ...generationPromises]);
 
-    return updatedTeacher;
+    return {
+      feedbacks,
+      tokensUsed: tokenCost,
+      usageData: updatedTeacher,
+    };
   },
 };
 

@@ -218,6 +218,14 @@ const resolvers: TypeResolvers = {
       });
     },
   },
+  Feedback: {
+    student: ({ studentId }, _, { dataLoaders }) => {
+      return dataLoaders.studentLoader.load(studentId);
+    },
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
+    },
+  },
 };
 
 export default resolvers;

@@ -9,8 +9,10 @@ import { updateTeacher } from "@/graphql/mutationWrappers/teacher";
 const query = graphql(`
   mutation GenerateGroupFeedbackTest($groupId: ID!) {
     generateGroupFeedback(groupId: $groupId) {
-      id
-      monthlyTokensUsed
+      usageData {
+        id
+        monthlyTokensUsed
+      }
     }
   }
 `);
@@ -37,7 +39,7 @@ describe("generateGroupFeedback", () => {
 
     // Assertions to ensure correct functionality
     expect(response.data?.generateGroupFeedback).toBeDefined();
-    expect(response.data?.generateGroupFeedback.monthlyTokensUsed).toEqual(group.students.length * FEEDBACK_GENERATION_TOKEN_COST);
+    expect(response.data?.generateGroupFeedback.usageData.monthlyTokensUsed).toEqual(group.students.length * FEEDBACK_GENERATION_TOKEN_COST);
 
     const students = await prisma.student.findMany({ where: { groupId: group.id }, include: { feedbacks: true } });
     students.forEach((student) => {

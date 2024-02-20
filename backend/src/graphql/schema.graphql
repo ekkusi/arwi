@@ -36,13 +36,9 @@ type Mutation {
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
-  generateStudentFeedback(studentId: ID!, moduleId: ID!): OpenAIGenerationResult!
-  generateGroupFeedback(groupId: ID!): TeacherUsageData!
-  fixTextGrammatics(studentId: ID!, text: String!): OpenAIGenerationResult!
-}
-
-type Subscription {
-  feedbacksGenerated: String!
+  generateStudentFeedback(studentId: ID!, moduleId: ID!): GenerateStudentFeedbackResult!
+  generateGroupFeedback(groupId: ID!): GenerateGroupFeedbackResult!
+  fixTextGrammatics(studentId: ID!, text: String!): FixTextGrammaticsResult!
 }
 
 type AppMetadata {
@@ -76,7 +72,19 @@ type TeacherUsageData {
   monthlyTokensUsed: Int!
 }
 
-type OpenAIGenerationResult {
+type GenerateStudentFeedbackResult {
+  feedback: Feedback!
+  tokensUsed: Int!
+  usageData: TeacherUsageData!
+}
+
+type GenerateGroupFeedbackResult {
+  feedbacks: [Feedback!]!
+  tokensUsed: Int!
+  usageData: TeacherUsageData!
+}
+
+type FixTextGrammaticsResult {
   result: String!
   tokensUsed: Int!
   usageData: TeacherUsageData!
@@ -232,6 +240,7 @@ type Student {
 type Feedback {
   id: ID!
   student: Student!
+  module: Module!
   text: String!
   createdAt: DateTime!
 }

@@ -12,6 +12,17 @@ import {
   testLogin,
 } from "../testHelpers";
 
+const query = graphql(`
+  mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {
+    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
+      feedback {
+        id
+        text
+      }
+    }
+  }
+`);
+
 describe("generateStudentFeedback", () => {
   let graphqlRequest: TestGraphQLRequest;
   let teacher: TestTeacher;
@@ -36,18 +47,10 @@ describe("generateStudentFeedback", () => {
   });
 
   it("should successfully generate student feedback", async () => {
-    const query = graphql(`
-      mutation GenerateStudentFeedbackValid($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
-          result
-        }
-      }
-    `);
-
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
     expect(response.data?.generateStudentFeedback).toBeDefined();
-    expect(response.data?.generateStudentFeedback.result).toContain("Mock response from OpenAI");
+    expect(response.data?.generateStudentFeedback.feedback.text).toContain("Mock response from OpenAI");
   });
 
   it("should throw error if user is not authorized for the student", async () => {
@@ -55,14 +58,6 @@ describe("generateStudentFeedback", () => {
       email: "unauthorized@example.com",
       password: "password",
     });
-
-    const query = graphql(`
-      mutation GenerateStudentFeedbackUnAuthorized($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
-          result
-        }
-      }
-    `);
 
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
@@ -77,14 +72,6 @@ describe("generateStudentFeedback", () => {
   it("should throw error if student does not exist", async () => {
     const invalidStudentId = "nonexistent_student_id";
 
-    const query = graphql(`
-      mutation GenerateStudentFeedbackStudentDoesntExist($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
-          result
-        }
-      }
-    `);
-
     const response = await graphqlRequest(query, { studentId: invalidStudentId, moduleId: group.currentModuleId });
 
     expect(response.errors).toBeDefined();
@@ -93,14 +80,6 @@ describe("generateStudentFeedback", () => {
 
   it("should handle no evaluations case gracefully", async () => {
     await prisma.evaluation.deleteMany();
-
-    const query = graphql(`
-      mutation GenerateStudentFeedbackNoEvaluation($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
-          result
-        }
-      }
-    `);
 
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
