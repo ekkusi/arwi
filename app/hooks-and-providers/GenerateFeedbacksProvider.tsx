@@ -34,12 +34,6 @@ export function useGenerateFeedback(groupId: string) {
 
   const [generateFeedbacks] = useMutation(GenerateFeedbacks_useGeneratedFeedbacks_Mutation, {
     variables: { groupId },
-    // onCompleted: () => {
-    //   context?.removeGeneratingGroupId(groupId);
-    // },
-    // onError: () => {
-    //   context?.removeGeneratingGroupId(groupId);
-    // },
   });
 
   const isGenerating = context?.generatingGroupIds.includes(groupId);

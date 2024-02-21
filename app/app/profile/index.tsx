@@ -21,6 +21,8 @@ import { MATOMO_EVENT_CATEGORIES } from "../../config";
 import { useMetadata } from "../../hooks-and-providers/MetadataProvider";
 import { formatDate, getFirstDayOfNextMonth } from "../../helpers/dateHelpers";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import InfoButton from "../../components/InfoButton";
+import { useModal } from "../../hooks-and-providers/ModalProvider";
 
 const ProfileView_GetCurrentUserUsageData_Query = graphql(`
   query ProfileView_GetCurrentUserUsageData {
@@ -75,8 +77,9 @@ export default function ProfileView() {
   const user = useAuthenticatedUser();
   const { trackEvent } = useMatomo();
   const { openToast } = useToast();
+  const { openModal } = useModal();
   const { grantCode } = useMPassIDAuth(REDIRECT_URI);
-  const { monthlyTokenUseLimit } = useMetadata();
+  const { monthlyTokenUseLimit, feedbackGenerationTokenCost, textFixTokenCost } = useMetadata();
 
   const [isLocalLoginModalOpen, setIsLocalLoginModalOpen] = useState(false);
   const [localLoginError, setLocalLoginError] = useState<string | undefined>();
@@ -84,7 +87,7 @@ export default function ProfileView() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { data: usageData, error: userDataErro } = useQuery(ProfileView_GetCurrentUserUsageData_Query);
+  const { data: usageData } = useQuery(ProfileView_GetCurrentUserUsageData_Query);
 
   const [logoutMutation, { loading, client }] = useMutation(ProfileView_Logout_Mutation);
   const [connectMPassID, { loading: connectMPassIDLoading }] = useMutation(ProfileView_ConnectMPassID_Mutation);
@@ -178,8 +181,53 @@ export default function ProfileView() {
         getOptionValue={(item) => item.value}
       />
       <CView style={{ width: "100%" }}>
-        <CText style={{ fontSize: "lg", fontWeight: "500", marginTop: "3xl" }}>{t("monthly-ai-token-use", "Kuukauden AI-tokenien käyttö")}</CText>
-        <CText style={{ fontSize: "sm", marginTop: "sm" }}>Uusiutuu: {firstDayOfNextMonth}</CText>
+        <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: "3xl" }}>
+          <CText style={{ fontSize: "lg", fontWeight: "500" }}>{t("monthly-ai-token-use", "Kuukauden AI-tokenien käyttö")}</CText>
+          <InfoButton
+            onPress={() =>
+              openModal({
+                title: t("monthly-ai-tokens-info.title", "Kuukausittaiset AI-tokenit"),
+                children: (
+                  <CView>
+                    <CText style={{ marginBottom: "md" }}>
+                      {t(
+                        "monthly-ai-tokens-info.first-description",
+                        "Jokainen Arwin käyttäjä saa käyttöönsä {{monthlyTokenUseLimit}} AI-tokenia kuukausittain. Nämä tokenit kuluvat sovelluksen tekoälyominaisuuksien käytössä. Tokeneita kuluu seuraavasti:",
+                        { monthlyTokenUseLimit }
+                      )}
+                    </CText>
+                    <CText>{`\u2022 ${t("monthly-ai-tokens-info.final-feedback-generation", "Loppuarvioinnin generointi")}: ${t(
+                      "monthly-ai-tokens-info.tokens",
+                      "{{count}} tokenia",
+                      { count: feedbackGenerationTokenCost }
+                    )}`}</CText>
+                    <CText>{`\u2022 ${t("monthly-ai-tokens-info.oral-feedback-fix", "Sanallisen palautteen korjaus")}: ${t(
+                      "monthly-ai-tokens-info.tokens",
+                      "{{count}} tokenia",
+                      { count: textFixTokenCost }
+                    )}`}</CText>
+                    <CText style={{ fontWeight: "500", marginVertical: "md" }}>{t("monthly-ai-tokens-info.why-limits", "Miksi rajoitukset?")}</CText>
+                    <CText style={{ marginBottom: "md" }}>
+                      {t(
+                        "monthly-ai-tokens-info.why-description-first",
+                        "Rajoituksen tarkoitus on estää sovelluksemme resurssien tahallinen ylikulutus. Normaalissa käytössä kuukausittaisen rajan ei kuitenkaan pitäisi ylittyä kuukaudessa."
+                      )}
+                    </CText>
+                    <CText>
+                      {t(
+                        "monthly-ai-tokens-info.why-description-second",
+                        "Mikäli tokenisi pääsevät siltikin loppumaan kesken kuukauden, voit pyytää lisää lähettämällä sähköpostia osoitteeseen info@arwi.fi. Kerro viestissä käyttäjätunnuksesi ja syy lisätokenien tarpeeseen."
+                      )}
+                    </CText>
+                  </CView>
+                ),
+              })
+            }
+          />
+        </CView>
+        <CText style={{ fontSize: "sm" }}>
+          {t("next-renew", "Seuraava nollaus")}: {firstDayOfNextMonth}
+        </CText>
         {usageData ? (
           <CText style={{ textAlign: "center", marginTop: "lg" }}>
             {usageData.getCurrentUserUsageData.monthlyTokensUsed || 0} / {monthlyTokenUseLimit}
