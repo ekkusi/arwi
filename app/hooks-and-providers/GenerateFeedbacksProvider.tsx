@@ -34,12 +34,12 @@ export function useGenerateFeedback(groupId: string) {
 
   const [generateFeedbacks] = useMutation(GenerateFeedbacks_useGeneratedFeedbacks_Mutation, {
     variables: { groupId },
-    onCompleted: () => {
-      context?.removeGeneratingGroupId(groupId);
-    },
-    onError: () => {
-      context?.removeGeneratingGroupId(groupId);
-    },
+    // onCompleted: () => {
+    //   context?.removeGeneratingGroupId(groupId);
+    // },
+    // onError: () => {
+    //   context?.removeGeneratingGroupId(groupId);
+    // },
   });
 
   const isGenerating = context?.generatingGroupIds.includes(groupId);
@@ -54,9 +54,11 @@ export function useGenerateFeedback(groupId: string) {
     context?.addGeneratingGroupId(groupId);
     try {
       const result = await generateFeedbacks();
+      context?.removeGeneratingGroupId(groupId);
       onSuccess?.(result);
       return result;
     } catch (err) {
+      context?.removeGeneratingGroupId(groupId);
       if (err instanceof ApolloError) {
         const graphqlError = err.graphQLErrors[0];
         if (graphqlError && graphqlError.extensions?.code === "UNAUTHORIZED") {

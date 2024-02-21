@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { hasRequiredField } from "arwi-backend/src/types/typeGuards";
-import { Alert } from "react-native";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import { HomeStackParams } from "../types";
@@ -54,17 +53,6 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
     variables: { groupId },
   });
 
-  const openToasetti = () => {
-    openToast(
-      "Terve tässä jotakin sisältöä toastille. Katotaan mitä tapahtuu kun tämä on vielä vähän pitempi ja menee useammalle riville.",
-      { closeTimeout: 100000 },
-      {
-        action: () => Alert.alert("Moi moi moi"),
-        label: "Tarkastele",
-      }
-    );
-  };
-
   if (isGenerating)
     return (
       <LoadingIndicator style={{ paddingHorizontal: "lg" }}>
@@ -102,9 +90,16 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         );
       },
       (err) => {
-        openToast(t("final-feedback-generation-failed", "Loppupalautteen generointi epäonnistui: {{error}}", { error: err.message }), {
-          type: "error",
-        });
+        openToast(
+          t("final-feedback-generation-failed", "Loppupalautteen generointi epäonnistui: {{error}}", { error: err.message }),
+          {
+            type: "error",
+          },
+          {
+            action: () => navigation.navigate("profile"),
+            label: t("inspect-in-profile", "Tarkastele profiilissa"),
+          }
+        );
       }
     );
   };

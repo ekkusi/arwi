@@ -111,7 +111,7 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
                 return forward(operation);
               }
               case "UNAUTHORIZED": {
-                shouldThrow = true;
+                shouldThrow = false;
                 break;
               }
               // Don't throw generic error page from validation errors, these should be handled in whereever they occur.
