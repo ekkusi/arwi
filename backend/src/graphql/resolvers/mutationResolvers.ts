@@ -507,7 +507,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       data: {
         studentId: student.id,
         text: summary,
-        moduleId: module.id,
+        moduleId,
       },
     });
     const updateTeacherPromise = updateTeacher(user!.id, {
