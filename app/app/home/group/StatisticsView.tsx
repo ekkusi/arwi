@@ -1,11 +1,10 @@
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { getEnvironmentsByLevel, getEvaluableLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { isClassParticipationCollection, isDefaultCollection } from "arwi-backend/src/types/typeGuards";
-import { ActivityIndicator } from "react-native";
 import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { subjectToIcon } from "../../../helpers/dataMappers";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
@@ -19,18 +18,12 @@ import { GroupNavigationProps } from "./types";
 import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
 import Card from "../../../components/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
-import { useModal } from "../../../hooks-and-providers/ModalProvider";
-import { useToast } from "../../../hooks-and-providers/ToastProvider";
 import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
-
-const FEEDBACK_PROGRESS_HEIGHT = 50;
+import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
   const { t } = useTranslation();
-  const { openModal, closeModal } = useModal();
-  const { isGenerating: isGeneratingFeedbacks, generateFeedbacks } = useGenerateFeedback(group.id);
-  const [finalFeedbackGenerated, setFinalFeedbackGenerated] = useState(false);
-  const { openToast } = useToast();
+  const { isGenerating: isGeneratingFeedbacks } = useGenerateFeedback(group.id);
 
   const moduleInfo = group.currentModule.info;
 
@@ -111,34 +104,6 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
     },
   });
 
-  const feedbackProgressTranslateY = useSharedValue(FEEDBACK_PROGRESS_HEIGHT);
-
-  const feedbackProgressAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: feedbackProgressTranslateY.value }],
-    };
-  });
-
-  React.useEffect(() => {
-    if (isGeneratingFeedbacks) {
-      feedbackProgressTranslateY.value = withTiming(0, { duration: 200 });
-    } else {
-      feedbackProgressTranslateY.value = withTiming(FEEDBACK_PROGRESS_HEIGHT, { duration: 200 });
-    }
-  }, [isGeneratingFeedbacks, feedbackProgressTranslateY]);
-
-  const generateFinalFeedback = () => {
-    generateFeedbacks(() => {
-      openToast(
-        t("final-feedback-finished", "Loppupalaute generoitu ryhmälle {{groupName}}", { groupName: group.name }),
-        { closeTimeout: 10000 },
-        () => navigation.navigate("final-feedback-collection", { groupId: group.id }),
-        t("inspect", "Tarkastele")
-      );
-    });
-    closeModal();
-  };
-
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
       <Animated.ScrollView
@@ -147,6 +112,23 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }}
         showsVerticalScrollIndicator={false}
       >
+        {isGeneratingFeedbacks && (
+          <LoadingIndicator
+            type="inline"
+            color={COLORS.white}
+            style={{
+              paddingVertical: "md",
+              gap: 5,
+              flexDirection: "row",
+              backgroundColor: COLORS.primary,
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CText style={{ color: "white" }}>{t("generating-final-feedback", "Loppupalautetta generoidaan...")}</CText>
+          </LoadingIndicator>
+        )}
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
           <CView>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name}</CText>
@@ -264,40 +246,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           <CButton
             title={t("final-feedback-group", "Siirry loppuarviointiin")}
             onPress={() => {
-              if (finalFeedbackGenerated) navigation.navigate("final-feedback-collection", { groupId: group.id });
-              else
-                openModal({
-                  title: t("final-feedback", "Loppuarviointi"),
-                  children: (
-                    <CView style={{ gap: 10 }}>
-                      <CText style={{ fontSize: "sm", fontWeight: "300" }}>
-                        {t(
-                          "group-final-feedback-info",
-                          "Generoi loppupalaute koko ryhmälle perustuen antamiisi numeerisiin ja sanallisiin palautteisiin. Palautteen generointi tapahtuu taustalla, voit liikkua sovelluksessa vapaasti tai sulkea sovelluksen generoinnin ajaksi."
-                        )}
-                      </CText>
-                      {otherSelectedTypeEvaluations.filter((ev) => ev).length < otherSelectedTypes.length && (
-                        <CView style={{ gap: 5 }}>
-                          <CText style={{ fontSize: "sm", fontWeight: "500" }}>
-                            {t("other-type-evaluations-missing", "HUOM! Seuraavat arviointikohteet ovat arvioimatta:")}
-                          </CText>
-                          <CView>
-                            {otherSelectedTypes
-                              .filter((_, i) => !otherSelectedTypeEvaluations[i])
-                              .map((type) => {
-                                return (
-                                  <CText key={type.id} style={{ fontSize: "sm", fontWeight: "500" }}>
-                                    {type.name}
-                                  </CText>
-                                );
-                              })}
-                          </CView>
-                        </CView>
-                      )}
-                      <CButton title={t("generate", "Generoi")} size="small" onPress={generateFinalFeedback} />
-                    </CView>
-                  ),
-                });
+              navigation.navigate("final-feedback-collection", { groupId: group.id });
             }}
           />
         </CView>
@@ -352,31 +301,6 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           </CView>
         )}
       </Animated.ScrollView>
-      {!group.archived && (
-        <Animated.View
-          style={[
-            {
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              paddingLeft: 10,
-              gap: 5,
-              height: FEEDBACK_PROGRESS_HEIGHT,
-              flexDirection: "row",
-              backgroundColor: COLORS.primary,
-              borderTopRightRadius: 10,
-              borderTopLeftRadius: 10,
-              justifyContent: "flex-start",
-              alignItems: "center",
-            },
-            feedbackProgressAnimatedStyle,
-          ]}
-        >
-          <ActivityIndicator color={COLORS.white} size="large" />
-          <CText style={{ color: "white" }}>{t("generating-final-feedback", "Loppupalautetta generoidaan...")}</CText>
-        </Animated.View>
-      )}
       {!group.archived && (
         <Animated.View style={[{ position: "absolute", bottom: 20, right: 15 }, newEvaluationButtonStyle]}>
           <CButton

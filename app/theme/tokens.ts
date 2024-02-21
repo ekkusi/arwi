@@ -61,6 +61,7 @@ export const COLORS = {
   "light-green": "#86c078",
   green: "#65AF53",
   primary: "#65AF53",
+  darkgreen: COLOR_PALETTE.green[800],
   // primary: "#008775",
   // secondary: "#33414C",
   secondary: "#35352A",

@@ -97,3 +97,20 @@ export const GroupCollectionTypesUpdate_Fragment = graphql(`
     }
   }
 `);
+
+export const FeedbackCacheUpdate_Fragment = graphql(`
+  fragment FeedbackCacheUpdate on Feedback {
+    id
+    text
+    createdAt
+    student {
+      id
+      latestFeedback {
+        id
+      }
+      feedbacks {
+        id
+      }
+    }
+  }
+`);

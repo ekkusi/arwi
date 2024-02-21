@@ -7,8 +7,13 @@ import { useThrowCatchableError } from "./error";
 const GenerateFeedbacks_useGeneratedFeedbacks_Mutation = graphql(`
   mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!) {
     generateGroupFeedback(groupId: $groupId) {
-      id
-      monthlyTokensUsed
+      feedbacks {
+        ...FeedbackCacheUpdate
+      }
+      usageData {
+        id
+        monthlyTokensUsed
+      }
     }
   }
 `);
@@ -50,6 +55,7 @@ export function useGenerateFeedback(groupId: string) {
     try {
       const result = await generateFeedbacks();
       onSuccess?.(result);
+      return result;
     } catch (err) {
       if (err instanceof ApolloError) {
         const graphqlError = err.graphQLErrors[0];

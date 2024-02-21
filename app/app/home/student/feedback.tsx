@@ -71,7 +71,10 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
 const StudentFeedbackView_GenerateFeedback_Mutation = graphql(`
   mutation StudentFeedbackView_GenerateFeedback($studentId: ID!, $moduleId: ID!) {
     generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
-      result
+      feedback {
+        text
+        ...FeedbackCacheUpdate
+      }
       usageData {
         id
         monthlyTokensUsed
@@ -121,7 +124,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       });
 
       if (!result.data?.generateStudentFeedback) throw new Error("Summary generation failed");
-      setSummary(result.data?.generateStudentFeedback.result);
+      setSummary(result.data?.generateStudentFeedback.feedback.text);
     } catch (e) {
       console.error(e);
       setError(

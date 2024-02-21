@@ -8,10 +8,18 @@ import { CViewStyle } from "../theme/types";
 
 type LoadingIndicatorProps = CViewProps & {
   type?: "inline" | "cover" | "overlay";
+  color?: string;
   overlayOpacity?: number;
 };
 
-export default function LoadingIndicator({ style, children, type = "cover", overlayOpacity = 0.6, ...rest }: LoadingIndicatorProps) {
+export default function LoadingIndicator({
+  style,
+  children,
+  type = "cover",
+  overlayOpacity = 0.6,
+  color: indicatorColor,
+  ...rest
+}: LoadingIndicatorProps) {
   const { backgroundColor, ...restStyle } = style ?? {};
 
   const bgColor = useMemo(() => {
@@ -55,7 +63,7 @@ export default function LoadingIndicator({ style, children, type = "cover", over
       }}
       {...rest}
     >
-      <ActivityIndicator size="large" color={COLORS.primary} />
+      <ActivityIndicator size="large" color={indicatorColor || COLORS.primary} />
       {children}
     </CView>
   );
