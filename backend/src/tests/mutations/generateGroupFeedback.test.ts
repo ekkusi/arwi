@@ -5,6 +5,7 @@ import { TestGroup, TestTeacher, createTestUserAndLogin, createTestGroup, create
 import { FEEDBACK_GENERATION_TOKEN_COST, MONTHLY_TOKEN_USE_LIMIT } from "@/config";
 import { teacherLoader } from "@/graphql/dataLoaders/teacher";
 import { updateTeacher } from "@/graphql/mutationWrappers/teacher";
+import { feedbacksLoader } from "@/graphql/dataLoaders/feedback";
 
 const query = graphql(`
   mutation GenerateGroupFeedbackTest($groupId: ID!) {
@@ -88,18 +89,22 @@ describe("generateGroupFeedback", () => {
   it("should update the DataLoader caches after generating feedback", async () => {
     // Fetch the initial state of the student from the DataLoaders
     const teacherFromLoader = await teacherLoader.load(teacher.id);
+    const feedbacksFromLoader = await feedbacksLoader.load({ studentId: group.students[0].id, moduleId: group.currentModuleId });
     expect(teacherFromLoader).toBeDefined();
     expect(teacherFromLoader.monthlyTokensUsed).toBe(0);
+    expect(feedbacksFromLoader).toEqual([]);
 
     // Execute the request
     await graphqlRequest(query, { groupId: group.id });
 
     // Fetch the updated state of the teacher from the DataLoaders
     const updatedTeacherFromLoader = await teacherLoader.load(teacher.id);
+    const updatedFeedbacksFromLoader = await feedbacksLoader.load({ studentId: group.students[0].id, moduleId: group.currentModuleId });
 
     // Check that the teacher's token usage has been updated correctly
     expect(updatedTeacherFromLoader).toBeDefined();
     expect(updatedTeacherFromLoader.monthlyTokensUsed).toEqual(group.students.length * FEEDBACK_GENERATION_TOKEN_COST);
+    expect(updatedFeedbacksFromLoader[0]).toEqual(expect.objectContaining({ text: "Mock response from OpenAI" }));
   });
 
   it("should throw an error if the group ID does not exist", async () => {

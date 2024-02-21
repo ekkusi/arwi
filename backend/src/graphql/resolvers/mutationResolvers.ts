@@ -58,6 +58,7 @@ import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 import AuthorizationError from "@/errors/AuthorizationError";
+import { createFeedback } from "../mutationWrappers/feedback";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -502,7 +503,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, currentModule));
     if (mappedEvaluations.length === 0) throw new ValidationError("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
     const summary = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode); // Safe cast after authenticated check
-    const feedbackCreatePromise = prisma.feedback.create({
+    const feedbackCreatePromise = createFeedback({
       data: {
         studentId: student.id,
         text: summary,
@@ -580,7 +581,7 @@ const resolvers: MutationResolvers<CustomContext> = {
 
       const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, module));
       const feedback = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode);
-      const feedbackCreatePromise = prisma.feedback.create({
+      const feedbackCreatePromise = createFeedback({
         data: {
           studentId: student.id,
           text: feedback,

@@ -11,6 +11,7 @@ import {
   createTestUserAndLogin,
   testLogin,
 } from "../testHelpers";
+import { feedbacksLoader } from "@/graphql/dataLoaders/feedback";
 
 const query = graphql(`
   mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {
@@ -85,5 +86,20 @@ describe("generateStudentFeedback", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
+  });
+
+  it("should update the DataLoader caches after generating feedback", async () => {
+    // Fetch the initial state of the student from the DataLoaders
+    const feedbacksFromLoader = await feedbacksLoader.load({ studentId: student.id, moduleId: group.currentModuleId });
+    expect(feedbacksFromLoader).toEqual([]);
+
+    // Execute the request
+    await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
+
+    // Fetch the updated state of the student from the DataLoaders
+    const updatedFeedbacksFromLoader = await feedbacksLoader.load({ studentId: student.id, moduleId: group.currentModuleId });
+
+    // Check that the student's latest feedback has been updated correctly
+    expect(updatedFeedbacksFromLoader[0]).toEqual(expect.objectContaining({ text: "Mock response from OpenAI" }));
   });
 });
