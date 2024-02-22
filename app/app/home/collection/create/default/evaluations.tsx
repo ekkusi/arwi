@@ -34,14 +34,7 @@ const DefaultCollectionEvaluationsView_CreateCollection_Mutation = graphql(`
         }
       }
       module {
-        id
-        evaluationCollections {
-          id
-        }
-        group {
-          id
-          updatedAt
-        }
+        ...CollectionModuleCacheUpdate
       }
     }
   }

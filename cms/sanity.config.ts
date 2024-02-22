@@ -20,15 +20,13 @@ export default defineConfig({
     visionTool(),
     colorInput(),
   ],
-  document: {
-    actions: (prev, context) => {
-      return context.schemaType === "subject"
-        ? prev.map((originalAction) =>
-            originalAction.action === "publish" ? createAsyncSubjectPublishAction(originalAction, context) : originalAction
-          )
-        : prev;
-    },
-  },
+  // document: {
+  //   actions: (prev, context) => {
+  //     return context.schemaType === "subject"
+  //       ? prev.map((originalAction) => (originalAction.action === "publish" ? createAsyncSubjectPublishAction(originalAction) : originalAction))
+  //       : prev;
+  //   },
+  // },
   schema: {
     types: schemaTypes,
   },

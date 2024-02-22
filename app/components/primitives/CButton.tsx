@@ -91,6 +91,7 @@ export default function CButton({
       case "outline":
         return {
           color: colorScheme,
+          fontWeight: "700",
         };
       case "empty":
         return {

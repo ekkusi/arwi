@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "bash ./scripts/kill-process.sh && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,6 +13,9 @@
   "dependencies": {
     "@apollo/client": "^3.9.2",
     "@apollo/experimental-nextjs-app-support": "^0.8.0",
+    "@builder.io/dev-tools": "^0.2.16",
+    "@builder.io/react": "^3.2.4",
+    "@builder.io/sdk": "^2.2.2",
     "@chakra-ui/next-js": "^2.1.5",
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",

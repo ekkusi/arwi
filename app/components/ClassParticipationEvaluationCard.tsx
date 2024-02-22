@@ -19,6 +19,7 @@ import CustomTextInputView from "../app/home/CustomTextInputView";
 import { graphql } from "../gql";
 import { useToast } from "../hooks-and-providers/ToastProvider";
 import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";
+import { useToggleTokenUseWarning } from "../hooks-and-providers/monthlyTokenUseWarning";
 
 export type Evaluation = Omit<CreateClassParticipationEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
@@ -71,7 +72,17 @@ type ClassParticipationEvaluationCardProps = {
 
 const ClassParticipationEvaluationCard_FixTextGrammatics_Mutation = graphql(`
   mutation ClassParticipationEvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
-    fixTextGrammatics(studentId: $studentId, text: $text)
+    fixTextGrammatics(studentId: $studentId, text: $text) {
+      result
+      usageData {
+        id
+        monthlyTokensUsed
+        warning {
+          warning
+          threshhold
+        }
+      }
+    }
   }
 `);
 
@@ -95,6 +106,7 @@ function ClassParticipationEvaluationCard({
   height = "auto",
   isActive = true,
 }: ClassParticipationEvaluationCardProps) {
+  const toggleTokenUseWarning = useToggleTokenUseWarning();
   const [notes, setNotes] = useState(() => evaluation.notes || "");
   const [previousNotes, setPreviousNotes] = useState<string | undefined>(undefined);
   const [newSpeechObtained, setNewSpeechObtained] = useState(false);
@@ -176,11 +188,14 @@ function ClassParticipationEvaluationCard({
 
       if (!result.data?.fixTextGrammatics) throw new Error("Text rephrasing failed");
       setPreviousNotes(notes);
-      const resultText = result.data?.fixTextGrammatics;
+      const resultText = result.data?.fixTextGrammatics.result;
       setNotes(resultText);
       onChanged("notes", resultText);
       setNewSpeechObtained(false);
       openToast(t("ai-fix-completed", "Oppilaan {{studentName}} arvioinnin korjaus suoritettu.", { studentName: evaluation.student.name }));
+
+      const tokenUseWarning = result.data?.fixTextGrammatics.usageData.warning;
+      if (tokenUseWarning) toggleTokenUseWarning(tokenUseWarning);
     } catch (e) {
       console.error(e);
       Alert.alert(t("text-fix-error", "Tekstin korjaamisessa tapahtui virhe."));

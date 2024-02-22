@@ -6,11 +6,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PageWrapper from "@/components/general/PageWrapper";
+import Section from "@/components/general/Section";
 import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../utils/errorUtils";
 import { useAuth } from "../../../hooks-and-providers/AuthProvider";
-
-const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const LoginPage_Login_Mutation = graphql(`
   mutation LoginPage_Login($email: String!, $password: String!) {
@@ -60,20 +59,22 @@ export default function LoginPage() {
 
   return (
     <PageWrapper py="5">
-      {redirectedFromUnauthenticated && (
-        <Text fontStyle="italic">
-          {t("login.session-expired-login-again", "Kirjautumistietosi ovat vanhentuneet. Kirjaudu sovellukseen uudelleen.")}
-        </Text>
-      )}
-      <Text as="h1">{t("login", "Kirjaudu sisään")}</Text>
-      <Text>{t("name", "Nimi")}</Text>
-      <Input type="email" value={email} placeholder="teppo.testaaja@email.com" onChange={(e) => setEmail(e.target.value)} mb="4" />
-      <Text>{t("password", "Salasana")}</Text>
-      <Input type="password" value={password} placeholder="********" onChange={(e) => setPassword(e.target.value)} mb="6" />
-      {error && <Text color="red">{error}</Text>}
-      <Button onClick={login} isLoading={isLoginLoading}>
-        {t("login", "Kirjaudu sisään")}
-      </Button>
+      <Section mt={{ base: "8", xl: "20" }}>
+        {redirectedFromUnauthenticated && (
+          <Text fontStyle="italic">
+            {t("login.session-expired-login-again", "Kirjautumistietosi ovat vanhentuneet. Kirjaudu sovellukseen uudelleen.")}
+          </Text>
+        )}
+        <Text as="h1">{t("login", "Kirjaudu sisään")}</Text>
+        <Text>{t("name", "Nimi")}</Text>
+        <Input type="email" value={email} placeholder="teppo.testaaja@email.com" onChange={(e) => setEmail(e.target.value)} mb="4" />
+        <Text>{t("password", "Salasana")}</Text>
+        <Input type="password" value={password} placeholder="********" onChange={(e) => setPassword(e.target.value)} mb="6" />
+        {error && <Text color="red">{error}</Text>}
+        <Button onClick={login} isLoading={isLoginLoading}>
+          {t("login", "Kirjaudu sisään")}
+        </Button>
+      </Section>
     </PageWrapper>
   );
 }

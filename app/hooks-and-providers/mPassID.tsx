@@ -46,6 +46,7 @@ export const useMPassIDAuth = (redirectUri: string) => {
   const login = async () => {
     const code = await grantCode();
     if (!code) return null;
+
     const result = await mPassIdLogin({ variables: { code } });
 
     if (!result.data) throw new Error("Unexpected error, no user data");

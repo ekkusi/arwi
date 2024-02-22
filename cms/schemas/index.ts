@@ -1,4 +1,5 @@
 import { defineField, defineType, Rule, SchemaValidationValue } from "sanity";
+import AgreementInfoSelect from "../components/AgreementInfoSelect";
 
 const requiredOptions: {
   validation: SchemaValidationValue;
@@ -294,6 +295,66 @@ export const schemaTypes = [
       select: {
         title: "name.fi",
         subtitle: "description",
+      },
+    },
+  }),
+  defineType({
+    type: "document",
+    name: "mpassid_agreement",
+    title: "MPassID sopimukset",
+    fields: [
+      {
+        name: "info",
+        title: "Sopimustiedot",
+        type: "object",
+        fields: [
+          {
+            name: "name",
+            title: "Nimi",
+            type: "string",
+            ...requiredOptions,
+          },
+          {
+            name: "city_oid",
+            title: "Kaupungin OID",
+            type: "string",
+            ...requiredOptions,
+          },
+          {
+            name: "oid",
+            title: "OID",
+            type: "string",
+            ...requiredOptions,
+          },
+          {
+            name: "type",
+            title: "Tyyppi",
+            type: "string",
+            initialValue: "city",
+            ...requiredOptions,
+            options: {
+              list: [
+                {
+                  title: "Kunta",
+                  value: "city",
+                },
+                {
+                  title: "Koulu",
+                  value: "school",
+                },
+              ],
+            },
+          },
+        ],
+
+        components: {
+          input: AgreementInfoSelect,
+        },
+      },
+    ],
+    preview: {
+      select: {
+        title: "info.name",
       },
     },
   }),

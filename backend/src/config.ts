@@ -3,6 +3,7 @@ import RedisStore from "connect-redis";
 import dotenv from "dotenv";
 import { HelmetOptions } from "helmet";
 import Redis from "ioredis";
+import { TokenUseWarning } from "./types";
 
 dotenv.config();
 
@@ -11,6 +12,17 @@ const { env } = process;
 export const APP_ENV = env.APP_ENV || "development";
 
 export const MINIMUM_SUPPORTED_APP_VERSION = "1.1.5";
+
+export const MONTHLY_TOKEN_USE_LIMIT = 10000;
+
+export const FEEDBACK_GENERATION_TOKEN_COST = 10;
+
+export const TEXT_FIX_TOKEN_COST = 1;
+
+export const MONTHLY_TOKEN_USE_WARNING_THRESHOLDS: { [key in TokenUseWarning]: number } = {
+  FIRST_WARNING: 0.5,
+  SECOND_WARNING: 0.9,
+};
 
 export const ALLOWED_ORIGINS_DEV = ["http://localhost:3000"];
 

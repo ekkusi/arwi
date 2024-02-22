@@ -1,10 +1,13 @@
 import { Request, Router } from "express";
 import dotenv from "dotenv";
-import { Issuer, Client as OpenIDClient } from "openid-client";
+import { Issuer, Client as OpenIDClient, UserinfoResponse } from "openid-client";
 import { initSession, logOut } from "../utils/auth";
 import prisma from "@/prismaClient";
 import BadRequestError from "../errors/BadRequestError";
 import { APP_ENV } from "../config";
+import { hasAgreement } from "@/utils/sanity";
+import { fetchParentOids } from "@/utils/organizationApi";
+import UnauthorizedError from "@/errors/AuthorizationError";
 
 dotenv.config();
 
@@ -23,6 +26,22 @@ type AuthorizeParams = {
   type?: "code_only" | "full_auth";
 };
 
+export type MPassIDResponseFields = {
+  "urn:oid:1.3.6.1.4.1.16161.1.1.27"?: string;
+  "urn:mpass.id:schoolInfo"?: string[];
+};
+
+export type MpassIDUserInfo = UserinfoResponse<{
+  "urn:oid:1.3.6.1.4.1.16161.1.1.27"?: string;
+  "urn:mpass.id:schoolInfo"?: string[];
+}>;
+
+const parseOrganizationId = (userInfo: MpassIDUserInfo) => {
+  const organizationString = userInfo?.["urn:mpass.id:schoolInfo"]?.[1];
+  const oid = organizationString?.split(";")[0];
+  return oid;
+};
+
 export const grantToken = async (client: OpenIDClient, code: string) => {
   const redirectUri = client.metadata.redirect_uris?.[0];
 
@@ -30,30 +49,54 @@ export const grantToken = async (client: OpenIDClient, code: string) => {
   const tokenSet = await client.callback(redirectUri, { code });
 
   if (!tokenSet?.access_token) throw new Error("Something went wrong, access_token not found from token set");
-  const userInfo = await client.userinfo(tokenSet.access_token);
+  const userInfo = await client.userinfo<MPassIDResponseFields>(tokenSet.access_token);
+
+  const mPassID = userInfo["urn:oid:1.3.6.1.4.1.16161.1.1.27"];
+  const organizationID = parseOrganizationId(userInfo);
+  if (!mPassID || !organizationID) throw new Error("Something went wrong, mPassID or organizationID is missing from MPassID response");
+  // Skip authorization check in development
+  if (NODE_ENV !== "development") {
+    const isAuthorized = await checkIsAuthorized(organizationID);
+    if (!isAuthorized)
+      throw new UnauthorizedError(
+        "Koulullasi tai kunnallasi ei ole vielä sopimusta Arwin kanssa MPassID-palvelun käytöstä, joten sen kautta kirjautuminen ei valitettavasti vielä ole tunnuksillasi mahdollista. Mikäli haluaisit MPassID-kirjautumisen käyttöön, voit kehottaa koulusi tai kuntasi vastaavan olemaan yhteydessä meihin info@arwi.fi@arwi.fi. \n\nSillä välin voit luoda omat tunnukset ja käyttää Arwia normaalisesti. Voit myöhemmin linkittää tilisi ja tietosi MPassID:n tunnuksiin, kun MPassID-kirjautuminen on saatavilla koulullesi."
+      );
+  }
 
   return {
     tokenSet,
-    userInfo,
+    userInfo: {
+      ...userInfo,
+      mPassID,
+      organizationID,
+    },
   };
+};
+
+export const checkIsAuthorized = async (oid: string) => {
+  const parentOids = await fetchParentOids(oid);
+  const isAuthorized = await hasAgreement(parentOids);
+  return isAuthorized;
 };
 
 export const grantAndInitSession = async (client: OpenIDClient, code: string, req: Request) => {
   const { tokenSet, userInfo } = await grantToken(client, code);
   let user = await prisma.teacher.findFirst({
     where: {
-      mPassID: userInfo.sub,
+      mPassID: userInfo.mPassID,
     },
   });
   const isNewUser = !user;
   if (!user) {
     user = await prisma.teacher.create({
       data: {
-        mPassID: userInfo.sub,
+        mPassID: userInfo.mPassID,
       },
     });
   }
+
   initSession(req, { ...user, type: "mpass-id" }, tokenSet);
+
   return {
     isNewUser,
     tokenSet,

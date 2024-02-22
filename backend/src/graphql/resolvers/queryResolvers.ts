@@ -1,5 +1,5 @@
-import { MINIMUM_SUPPORTED_APP_VERSION } from "../../config";
-import AuthenticationError from "../../errors/AuthenticationError";
+import { FEEDBACK_GENERATION_TOKEN_COST, MINIMUM_SUPPORTED_APP_VERSION, MONTHLY_TOKEN_USE_LIMIT, TEXT_FIX_TOKEN_COST } from "../../config";
+import AuthenticationError from "../errors/AuthenticationError";
 import { QueryResolvers } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
 import {
@@ -18,12 +18,20 @@ const resolvers: QueryResolvers<CustomContext> = {
     return {
       appVersion: process.env.APP_VERSION,
       minimumSupportedAppVersion: MINIMUM_SUPPORTED_APP_VERSION,
+      monthlyTokenUseLimit: MONTHLY_TOKEN_USE_LIMIT,
+      feedbackGenerationTokenCost: FEEDBACK_GENERATION_TOKEN_COST,
+      textFixTokenCost: TEXT_FIX_TOKEN_COST,
     };
   },
   getCurrentUser: async (_, __, { user }) => {
-    if (!user) throw new AuthenticationError("Not authenticated");
+    if (!user) throw new AuthenticationError();
 
     return user;
+  },
+  getCurrentUserUsageData: async (_, __, { user, dataLoaders }) => {
+    if (!user) throw new AuthenticationError();
+
+    return dataLoaders.teacherLoader.load(user.id);
   },
   getTeacher: (_, { id }, { user, dataLoaders }) => {
     checkAuthenticatedByTeacher(user, id);

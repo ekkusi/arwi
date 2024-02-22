@@ -1,17 +1,23 @@
-import { Module, Prisma } from "@prisma/client";
+import { CollectionType, Evaluation, EvaluationCollection, Module, Prisma, Teacher } from "@prisma/client";
 import {
   CreateClassParticipationEvaluationInput,
   CreateDefaultEvaluationInput,
   CreateTeacherInput,
   EducationLevel,
   MinimalModuleInfo,
+  TeacherUsageData,
+  TokenUseWarning,
   UpdateClassParticipationCollectionInput,
   UpdateClassParticipationEvaluationInput,
   UpdateDefaultCollectionInput,
   UpdateDefaultEvaluationInput,
   UpdateGroupInput,
   UpdateStudentInput,
+  WarningInfo,
 } from "../../types";
+import { ClassParticipationEvaluationData, DefaultEvaluationData } from "@/utils/openAI";
+import { getEnvironment } from "@/utils/subjectUtils";
+import { MONTHLY_TOKEN_USE_LIMIT, MONTHLY_TOKEN_USE_WARNING_THRESHOLDS } from "@/config";
 
 export const mapUpdateStudentInput = (data: UpdateStudentInput): Prisma.StudentUpdateInput => {
   return {
@@ -97,5 +103,65 @@ export const mapModuleInfo = (module: Module): MinimalModuleInfo => {
   return {
     ...module,
     educationLevel: module.educationLevel as EducationLevel,
+  };
+};
+
+type CollectionTypeData = Pick<CollectionType, "name">;
+type EvaluationWithCollection = Evaluation & {
+  evaluationCollection: Pick<EvaluationCollection, "environmentCode" | "date"> & { type: CollectionTypeData };
+};
+
+export const mapEvaluationFeedbackData = (
+  evaluation: EvaluationWithCollection,
+  module: Module
+): ClassParticipationEvaluationData | DefaultEvaluationData => {
+  const { environmentCode } = evaluation.evaluationCollection;
+  return environmentCode
+    ? {
+        environmentLabel: getEnvironment(environmentCode, mapModuleInfo(module))?.label.fi || "Ei ympäristöä",
+        date: evaluation.evaluationCollection.date,
+        skillsRating: evaluation.skillsRating,
+        behaviourRating: evaluation.behaviourRating,
+      }
+    : {
+        date: evaluation.evaluationCollection.date,
+        generalRating: evaluation.generalRating,
+        collectionTypeName: evaluation.evaluationCollection.type.name,
+      };
+};
+
+export const mapWarningSeenUpdateData = (warning: TokenUseWarning): Prisma.TeacherUpdateInput => {
+  switch (warning) {
+    case TokenUseWarning.FIRST_WARNING:
+      return { hasSeenFirstMonthlyTokenWarning: true };
+    case TokenUseWarning.SECOND_WARNING:
+    default:
+      return {};
+  }
+};
+
+export const mapTeacherUsageData = (teacher: Teacher): TeacherUsageData => {
+  let warningData: WarningInfo | undefined;
+  // Check if teacher has reached the first or second warning threshold and set warning data accordingly
+  const monthlyTokensUtilizationRate = teacher.monthlyTokensUsed / MONTHLY_TOKEN_USE_LIMIT;
+  if (monthlyTokensUtilizationRate > MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.SECOND_WARNING && !teacher.hasSeenSecondMonthlyTokenWarning) {
+    warningData = {
+      warning: TokenUseWarning.SECOND_WARNING,
+      threshhold: MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.SECOND_WARNING,
+    };
+  } else if (
+    monthlyTokensUtilizationRate > MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.FIRST_WARNING &&
+    !teacher.hasSeenFirstMonthlyTokenWarning &&
+    !teacher.hasSeenSecondMonthlyTokenWarning
+  ) {
+    warningData = {
+      warning: TokenUseWarning.FIRST_WARNING,
+      threshhold: MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.FIRST_WARNING,
+    };
+  }
+  return {
+    id: teacher.id,
+    monthlyTokensUsed: teacher.monthlyTokensUsed,
+    warning: warningData,
   };
 };

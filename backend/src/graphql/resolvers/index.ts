@@ -6,10 +6,11 @@ import mutationResolvers from "./mutationResolvers";
 import queryResolvers from "./queryResolvers";
 import typeResolvers from "./typeResolvers";
 import NotFoundError from "../../errors/NotFoundError";
-import AuthenticationError from "../../errors/AuthenticationError";
-import ValidationError from "../../errors/ValidationError";
-import MissingDataError from "../../errors/MissingDataError";
-import OpenIDError from "../../errors/OpenIDError";
+import AuthenticationError from "../errors/AuthenticationError";
+import ValidationError from "../errors/ValidationError";
+import MissingDataError from "../errors/MissingDataError";
+import OpenIDError from "../errors/OpenIDError";
+import AuthorizationError from "../errors/AuthorizationError";
 
 function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Resolver<{}, {}, CustomContext> {
   return async (parent, args, context, info) => {
@@ -26,6 +27,10 @@ function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Res
           break;
         case AuthenticationError:
           type = "authentication";
+          level = "warning";
+          break;
+        case AuthorizationError:
+          type = "authorization";
           level = "warning";
           break;
         case ValidationError:

@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { CreateClassParticipationCollectionInput, CreateDefaultCollectionInput } from "../../types";
 import { createCollection } from "../mutationWrappers/collection";
 import { updateGroupByModule } from "../mutationWrappers/group";
+import { updateTeacher } from "../mutationWrappers/teacher";
 
 // Data validations should be done before calling this function
 export async function createCollectionAndUpdateGroup(

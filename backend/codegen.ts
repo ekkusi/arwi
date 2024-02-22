@@ -44,6 +44,7 @@ const config: CodegenConfig = {
           Subject: "./codegenOverrides#SubjectMinimal",
           Environment: "./codegenOverrides#EnvironmentInfo",
           CollectionType: "@prisma/client#CollectionType",
+          Feedback: "@prisma/client#Feedback",
         },
         contextType: "./contextTypes#CustomContext",
       },

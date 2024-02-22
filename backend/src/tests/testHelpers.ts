@@ -6,6 +6,7 @@ import prisma from "@/prismaClient";
 import { BRCRYPT_SALT_ROUNDS } from "../config";
 import { TestGraphQLRequest } from "./createTestServer";
 import { graphql } from "./gql";
+import { MpassIDUserInfo } from "@/routes/auth";
 
 export const TEST_USER = {
   email: "test@email.com",
@@ -211,8 +212,14 @@ export const MOCK_TOKEN_SET: TokenSet = {
   }),
 };
 
-export const MOCK_USER_INFO_RESPONSE: UserinfoResponse = {
+export const MOCK_PARENT_ORGANIZATION_ID = "mock-parent-organization-id";
+
+// Mocked response that contains the needed info that MPassID would normally send.
+// The MPassID model can be found at https://wiki.eduuni.fi/pages/viewpage.action?pageId=313150371
+export const MOCK_USER_INFO_RESPONSE: MpassIDUserInfo = {
   sub: "123456",
+  "urn:oid:1.3.6.1.4.1.16161.1.1.27": "123456",
+  "urn:mpass.id:schoolInfo": ["00000;Mansikkalan testi peruskoulu", "1.2.246.562.99.00000000002;Mansikkalan testi peruskoulu"], // Values copied from the sample of the previously given url
 };
 
 export const MOCK_VALID_CODE = "validCode";

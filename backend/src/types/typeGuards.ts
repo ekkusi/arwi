@@ -23,3 +23,7 @@ export function isDefaultEvaluation<T extends EvaluationOnlyTypename>(evaluation
   // eslint-disable-next-line no-underscore-dangle
   return evaluation.__typename === "DefaultEvaluation";
 }
+
+export function hasRequiredField<T, K extends keyof T>(obj: T, field: K): obj is T & Required<Pick<T, K>> {
+  return obj[field] !== undefined && obj[field] !== null;
+}

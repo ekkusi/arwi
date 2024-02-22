@@ -1,0 +1,30 @@
+name: Reset Monthly Tokens
+
+on:
+  schedule:
+    - cron: "0 0 1 * *" # Runs at 00:00 on the first day of every month
+  workflow_dispatch:
+
+jobs:
+  reset-monthly-tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+
+      - name: Reset monthlyTokensUsed in Teacher Table
+        env:
+          DB_HOST: ${{ secrets.PROD_DB_HOST }}
+          DB_PORT: ${{ secrets.PROD_DB_PORT }}
+          DB_NAME: ${{ secrets.PROD_DB_NAME }}
+          DB_USER: ${{ secrets.PROD_DB_USER }}
+          DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+        run: |
+          # Export the PGPASSWORD for non-interactive authentication
+          export PGPASSWORD=$DB_PASSWORD
+
+          # Execute the SQL command to reset the monthlyTokensUsed field
+          psql -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "UPDATE \"Teacher\" SET monthlyTokensUsed = 0, hasSeenFirstMonthlyTokenWarning = false, hasSeenSecondMonthlyTokenWarning = false"

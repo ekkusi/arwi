@@ -48,6 +48,26 @@ export const ClassParticipationEvaluationUpdate_Info_Fragment = graphql(`
   }
 `);
 
+export const CollectionModuleCacheUpdate_Fragment = graphql(`
+  fragment CollectionModuleCacheUpdate on Module {
+    id
+    evaluationCollections {
+      id
+    }
+    group {
+      id
+      updatedAt
+      teacher {
+        id
+        groups {
+          id
+          updatedAt
+        }
+      }
+    }
+  }
+`);
+
 export const DefaultEvaluationUpdate_Info_Fragment = graphql(`
   fragment DefaultEvaluationUpdate_Info on DefaultEvaluation {
     id
@@ -73,6 +93,23 @@ export const GroupCollectionTypesUpdate_Fragment = graphql(`
       id
       collectionTypes {
         ...GroupCollectionTypesUpdate_TypeInfo
+      }
+    }
+  }
+`);
+
+export const FeedbackCacheUpdate_Fragment = graphql(`
+  fragment FeedbackCacheUpdate on Feedback {
+    id
+    text
+    createdAt
+    student {
+      id
+      latestFeedback {
+        id
+      }
+      feedbacks {
+        id
       }
     }
   }

@@ -18,12 +18,14 @@ import { GroupNavigationProps } from "./types";
 import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
 import Card from "../../../components/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
+import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
+import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
   const { t } = useTranslation();
+  const { isGenerating: isGeneratingFeedbacks } = useGenerateFeedback(group.id);
 
   const moduleInfo = group.currentModule.info;
-  // const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
   const objectives = getEvaluableLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
 
@@ -36,6 +38,10 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
     evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "DefaultCollection">>(isDefaultCollection);
 
   const otherSelectedTypes = group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
+  const otherSelectedTypeEvaluations = otherSelectedTypes.map((type) => {
+    const evaluation = otherCollections.find((coll) => coll.type.id === type.id);
+    return evaluation;
+  });
 
   const environmentsAndCounts: StyledBarChartDataType[] = useMemo(() => {
     const environments = getEnvironmentsByLevel(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
@@ -106,6 +112,23 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }}
         showsVerticalScrollIndicator={false}
       >
+        {isGeneratingFeedbacks && (
+          <LoadingIndicator
+            type="inline"
+            color={COLORS.white}
+            style={{
+              paddingVertical: "md",
+              gap: 5,
+              flexDirection: "row",
+              backgroundColor: COLORS.primary,
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CText style={{ color: "white" }}>{t("generating-final-feedback", "Loppupalautetta generoidaan...")}</CText>
+          </LoadingIndicator>
+        )}
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
           <CView>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name}</CText>
@@ -160,8 +183,8 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           <CView style={{ gap: 20 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arviointikohteet")}</CText>
             <CView style={{ gap: 5 }}>
-              {otherSelectedTypes.map((type) => {
-                const evaluation = otherCollections.find((coll) => coll.type.id === type.id);
+              {otherSelectedTypes.map((type, i) => {
+                const evaluation = otherSelectedTypeEvaluations[i];
                 return (
                   <Card
                     style={{
@@ -218,7 +241,15 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             </CView>
           </CView>
         )}
-
+        <CView style={{ gap: 20 }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("final-feedback", "Loppuarviointi")}</CText>
+          <CButton
+            title={t("final-feedback-group", "Siirry loppuarviointiin")}
+            onPress={() => {
+              navigation.navigate("final-feedback-collection", { groupId: group.id });
+            }}
+          />
+        </CView>
         <CView style={{ gap: 10 }}>
           <CView style={{ gap: 5 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
@@ -258,8 +289,8 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             <StyledBarChart data={learningObjectivesAndCounts} style={{ height: 200 }} />
             <CView style={{ gap: 2, alignItems: "flex-start", width: "100%" }}>
               {learningObjectivesAndCounts.map((objAndCount, idx) => (
-                <CView key={idx} style={{ justifyContent: "space-between", flexDirection: "row", width: "100%", paddingRight: 30 }}>
-                  <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
+                <CView key={idx} style={{ justifyContent: "space-between", width: "100%", flexDirection: "row", paddingRight: 20 }}>
+                  <CView style={{ flexDirection: "row", flex: 0.9, justifyContent: "flex-start", alignItems: "center", gap: 3 }}>
                     <CView style={{ width: 10, height: 10, backgroundColor: objAndCount.color }} />
                     <CText style={{ fontSize: "xs" }}>{objAndCount.x}</CText>
                   </CView>

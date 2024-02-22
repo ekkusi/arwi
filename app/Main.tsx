@@ -22,6 +22,8 @@ import PopupProvider from "./hooks-and-providers/ToastProvider";
 import { isVersionSmaller } from "./helpers/versionUtils";
 import NewUpdateAvailableModal from "./components/NewUpdateAvailableModal";
 import { useThrowCatchableError } from "./hooks-and-providers/error";
+import GenerateFeedbacksProvider from "./hooks-and-providers/GenerateFeedbacksProvider";
+import MetadataProvider from "./hooks-and-providers/MetadataProvider";
 
 const Main_GetCurrentUser_Query = graphql(`
   query Main_GetCurrentUser {
@@ -40,6 +42,9 @@ const Main_GetAppMetadata_Query = graphql(`
     getAppMetadata {
       appVersion
       minimumSupportedAppVersion
+      monthlyTokenUseLimit
+      feedbackGenerationTokenCost
+      textFixTokenCost
     }
   }
 `);
@@ -65,19 +70,16 @@ export default function Main() {
     (err: Error) => {
       SplashScreen.hideAsync();
       throwError(err);
+      return null;
     },
     [throwError]
   );
 
-  const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query, {
-    onError: (err) => {
-      console.error(err);
-    },
-  });
+  const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query);
 
   const [getUser] = useLazyQuery(Main_GetCurrentUser_Query);
 
-  const minimumAppVersion = appMetadataResult?.getAppMetadata?.minimumSupportedAppVersion || null;
+  const minimumAppVersion = appMetadataResult?.getAppMetadata.minimumSupportedAppVersion || null;
 
   const appReady = !loading && fontsLoaded && i18nReady && !loadingAppMetadata;
 
@@ -86,7 +88,7 @@ export default function Main() {
     const { data, error } = await getUser();
 
     if (data) {
-      await setUser(data.getCurrentUser);
+      setUser(data.getCurrentUser);
       trackAppStart({
         userInfo: {
           uid: data.getCurrentUser.id,
@@ -132,6 +134,7 @@ export default function Main() {
   };
 
   if (!appReady) return null;
+  if (!appMetadataResult) return throwErrorAndHideSplash(new Error("App metadata not found"));
 
   return (
     <SafeAreaView style={{ flex: 1 }} onLayout={onRootLayout}>
@@ -141,9 +144,13 @@ export default function Main() {
         <MenuProvider>
           <ModalProvider>
             <PopupProvider>
-              <NavigationContainer ref={navigationRef} onStateChange={onNavigationStateChange}>
-                {authState.authenticated ? <HomeStack /> : <AuthStack />}
-              </NavigationContainer>
+              <GenerateFeedbacksProvider>
+                <MetadataProvider {...appMetadataResult.getAppMetadata}>
+                  <NavigationContainer ref={navigationRef} onStateChange={onNavigationStateChange}>
+                    {authState.authenticated ? <HomeStack /> : <AuthStack />}
+                  </NavigationContainer>
+                </MetadataProvider>
+              </GenerateFeedbacksProvider>
             </PopupProvider>
           </ModalProvider>
         </MenuProvider>
