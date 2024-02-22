@@ -13,6 +13,7 @@ import { useToast } from "../../../hooks-and-providers/ToastProvider";
 import CFlatList from "../../../components/primitives/CFlatList";
 import Card from "../../../components/Card";
 import Layout from "../../../components/Layout";
+import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 
 const FinalFeedback_GetGroup_Query = graphql(`
   query FinalFeedback_GetGroup($groupId: ID!) {
@@ -46,6 +47,7 @@ const FinalFeedback_GetGroup_Query = graphql(`
 export default function FinalFeedback({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback-collection">) {
   const { groupId } = route.params;
   const { isGenerating, generateFeedbacks } = useGenerateFeedback(groupId);
+  const toggleTokenUseWarning = useToggleTokenUseWarning();
   const { t } = useTranslation();
   const { openToast } = useToast();
 
@@ -79,7 +81,9 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
 
   const generateFinalFeedback = () => {
     generateFeedbacks(
-      () => {
+      (res) => {
+        const warning = res.data?.generateGroupFeedback.usageData?.warning;
+        if (warning) toggleTokenUseWarning(warning);
         openToast(
           t("final-feedback-finished", "Loppupalaute generoitu ryhmälle {{groupName}}", { groupName: group.name }),
           { closeTimeout: 10000 },

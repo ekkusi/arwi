@@ -13,6 +13,10 @@ const GenerateFeedbacks_useGeneratedFeedbacks_Mutation = graphql(`
       usageData {
         id
         monthlyTokensUsed
+        warning {
+          warning
+          threshhold
+        }
       }
     }
   }

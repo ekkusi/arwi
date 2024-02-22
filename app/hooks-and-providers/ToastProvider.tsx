@@ -149,10 +149,10 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
 
   const getToastIcon = (type: OpenToastProps["type"]) => {
     switch (type) {
-      case "error":
-        return "exclamation";
-      default:
+      case "success":
         return "check";
+      default:
+        return "exclamation";
     }
   };
 

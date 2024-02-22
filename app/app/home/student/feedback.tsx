@@ -18,6 +18,7 @@ import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import { graphql } from "../../../gql";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { useAuthenticatedUser } from "../../../hooks-and-providers/AuthProvider";
+import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 
 const StudentFeedbackView_GetStudent_Query = graphql(`
   query StudentFeedbackView_GetStudent($id: ID!) {
@@ -78,6 +79,10 @@ const StudentFeedbackView_GenerateFeedback_Mutation = graphql(`
       usageData {
         id
         monthlyTokensUsed
+        warning {
+          warning
+          threshhold
+        }
       }
     }
   }
@@ -87,11 +92,11 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
   const { t } = useTranslation();
   const { id, name } = route.params;
   const { trackAction } = useMatomo();
+  const toggleTokenUseWarning = useToggleTokenUseWarning();
   const user = useAuthenticatedUser();
 
   const [summary, setSummary] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
-  // const [isGeneratingSummary, setIsGeneratingSumamry] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const { data } = useQuery(StudentFeedbackView_GetStudent_Query, {
@@ -115,6 +120,8 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
           moduleId,
         },
       });
+      const tokenUseWarning = result.data?.generateStudentFeedback.usageData.warning;
+      if (tokenUseWarning) toggleTokenUseWarning(tokenUseWarning);
 
       trackAction({
         name: "Generate student feedback",

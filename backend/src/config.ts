@@ -3,6 +3,7 @@ import RedisStore from "connect-redis";
 import dotenv from "dotenv";
 import { HelmetOptions } from "helmet";
 import Redis from "ioredis";
+import { TokenUseWarning } from "./types";
 
 dotenv.config();
 
@@ -17,6 +18,11 @@ export const MONTHLY_TOKEN_USE_LIMIT = 10000;
 export const FEEDBACK_GENERATION_TOKEN_COST = 10;
 
 export const TEXT_FIX_TOKEN_COST = 1;
+
+export const MONTHLY_TOKEN_USE_WARNING_THRESHOLDS: { [key in TokenUseWarning]: number } = {
+  FIRST_WARNING: 0.5,
+  SECOND_WARNING: 0.9,
+};
 
 export const ALLOWED_ORIGINS_DEV = ["http://localhost:3000"];
 
@@ -41,13 +47,13 @@ export const HELMET_OPTIONS: HelmetOptions = {
   contentSecurityPolicy:
     env.NODE_ENV !== "production"
       ? {
-        directives: {
-          imgSrc: [`'self'`, "data:", "apollo-server-landing-page.cdn.apollographql.com"],
-          scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
-          manifestSrc: [`'self'`, "apollo-server-landing-page.cdn.apollographql.com"],
-          frameSrc: [`'self'`, "sandbox.embed.apollographql.com"],
-        },
-      }
+          directives: {
+            imgSrc: [`'self'`, "data:", "apollo-server-landing-page.cdn.apollographql.com"],
+            scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+            manifestSrc: [`'self'`, "apollo-server-landing-page.cdn.apollographql.com"],
+            frameSrc: [`'self'`, "sandbox.embed.apollographql.com"],
+          },
+        }
       : undefined,
 };
 
@@ -72,10 +78,10 @@ if (env.NODE_ENV === "production" && env.NO_REDIS_SESSION === "true") throw new 
 const sessionClient =
   env.NO_REDIS_SESSION !== "true"
     ? new Redis({
-      password: env.REDIS_PASSWORD,
-      host: env.REDIS_HOST,
-      db: env.REDIS_DB_INDEX ? +env.REDIS_DB_INDEX : 0,
-    })
+        password: env.REDIS_PASSWORD,
+        host: env.REDIS_HOST,
+        db: env.REDIS_DB_INDEX ? +env.REDIS_DB_INDEX : 0,
+      })
     : undefined;
 
 const getCookieSameSite = () => {

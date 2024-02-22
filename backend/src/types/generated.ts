@@ -100,6 +100,7 @@ export type Mutation = {
   generateStudentFeedback: GenerateStudentFeedbackResult;
   generateGroupFeedback: GenerateGroupFeedbackResult;
   fixTextGrammatics: FixTextGrammaticsResult;
+  setTokenUseWarningSeen: Scalars['Boolean'];
 };
 
 
@@ -245,6 +246,11 @@ export type MutationFixTextGrammaticsArgs = {
   text: Scalars['String'];
 };
 
+
+export type MutationSetTokenUseWarningSeenArgs = {
+  warning: TokenUseWarning;
+};
+
 export type AppMetadata = {
   __typename?: 'AppMetadata';
   appVersion: Scalars['String'];
@@ -275,10 +281,17 @@ export type Teacher = {
   isMPassIDConnected: Scalars['Boolean'];
 };
 
+export type WarningInfo = {
+  __typename?: 'WarningInfo';
+  warning: TokenUseWarning;
+  threshhold: Scalars['Float'];
+};
+
 export type TeacherUsageData = {
   __typename?: 'TeacherUsageData';
   id: Scalars['ID'];
   monthlyTokensUsed: Scalars['Int'];
+  warning?: Maybe<WarningInfo>;
 };
 
 export type GenerateStudentFeedbackResult = {
@@ -313,6 +326,11 @@ export type TranslatedString = {
   en?: Maybe<Scalars['String']>;
   se?: Maybe<Scalars['String']>;
 };
+
+export enum TokenUseWarning {
+  FIRST_WARNING = 'FIRST_WARNING',
+  SECOND_WARNING = 'SECOND_WARNING'
+}
 
 export enum LearningObjectiveType {
   BEHAVIOUR = 'BEHAVIOUR',
@@ -681,12 +699,15 @@ export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   MPassIDAuthPayload: ResolverTypeWrapper<Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversTypes['AuthPayload'] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
+  WarningInfo: ResolverTypeWrapper<WarningInfo>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   TeacherUsageData: ResolverTypeWrapper<TeacherUsageData>;
   GenerateStudentFeedbackResult: ResolverTypeWrapper<Omit<GenerateStudentFeedbackResult, 'feedback'> & { feedback: ResolversTypes['Feedback'] }>;
   GenerateGroupFeedbackResult: ResolverTypeWrapper<Omit<GenerateGroupFeedbackResult, 'feedbacks'> & { feedbacks: Array<ResolversTypes['Feedback']> }>;
   FixTextGrammaticsResult: ResolverTypeWrapper<FixTextGrammaticsResult>;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   TranslatedString: ResolverTypeWrapper<TranslatedString>;
+  TokenUseWarning: TokenUseWarning;
   LearningObjectiveType: LearningObjectiveType;
   LearningObjective: ResolverTypeWrapper<LearningObjective>;
   Subject: ResolverTypeWrapper<SubjectMinimalPrisma>;
@@ -702,7 +723,6 @@ export type ResolversTypes = {
   Evaluation: ResolverTypeWrapper<EvaluationPrisma>;
   ClassParticipationEvaluation: ResolverTypeWrapper<EvaluationPrisma>;
   DefaultEvaluation: ResolverTypeWrapper<EvaluationPrisma>;
-  Float: ResolverTypeWrapper<Scalars['Float']>;
   Student: ResolverTypeWrapper<StudentPrisma>;
   Feedback: ResolverTypeWrapper<FeedbackPrisma>;
   EducationLevel: EducationLevel;
@@ -739,6 +759,8 @@ export type ResolversParentTypes = {
   AuthPayload: Omit<AuthPayload, 'userData'> & { userData: ResolversParentTypes['Teacher'] };
   MPassIDAuthPayload: Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversParentTypes['AuthPayload'] };
   Teacher: UserInfoPrisma;
+  WarningInfo: WarningInfo;
+  Float: Scalars['Float'];
   TeacherUsageData: TeacherUsageData;
   GenerateStudentFeedbackResult: Omit<GenerateStudentFeedbackResult, 'feedback'> & { feedback: ResolversParentTypes['Feedback'] };
   GenerateGroupFeedbackResult: Omit<GenerateGroupFeedbackResult, 'feedbacks'> & { feedbacks: Array<ResolversParentTypes['Feedback']> };
@@ -758,7 +780,6 @@ export type ResolversParentTypes = {
   Evaluation: EvaluationPrisma;
   ClassParticipationEvaluation: EvaluationPrisma;
   DefaultEvaluation: EvaluationPrisma;
-  Float: Scalars['Float'];
   Student: StudentPrisma;
   Feedback: FeedbackPrisma;
   CreateTeacherInput: CreateTeacherInput;
@@ -832,6 +853,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   generateStudentFeedback?: Resolver<ResolversTypes['GenerateStudentFeedbackResult'], ParentType, ContextType, RequireFields<MutationGenerateStudentFeedbackArgs, 'studentId' | 'moduleId'>>;
   generateGroupFeedback?: Resolver<ResolversTypes['GenerateGroupFeedbackResult'], ParentType, ContextType, RequireFields<MutationGenerateGroupFeedbackArgs, 'groupId'>>;
   fixTextGrammatics?: Resolver<ResolversTypes['FixTextGrammaticsResult'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'studentId' | 'text'>>;
+  setTokenUseWarningSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetTokenUseWarningSeenArgs, 'warning'>>;
 };
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
@@ -864,9 +886,16 @@ export type TeacherResolvers<ContextType = CustomContext, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type WarningInfoResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['WarningInfo'] = ResolversParentTypes['WarningInfo']> = {
+  warning?: Resolver<ResolversTypes['TokenUseWarning'], ParentType, ContextType>;
+  threshhold?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TeacherUsageDataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['TeacherUsageData'] = ResolversParentTypes['TeacherUsageData']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   monthlyTokensUsed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  warning?: Resolver<Maybe<ResolversTypes['WarningInfo']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1058,6 +1087,7 @@ export type Resolvers<ContextType = CustomContext> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   MPassIDAuthPayload?: MPassIdAuthPayloadResolvers<ContextType>;
   Teacher?: TeacherResolvers<ContextType>;
+  WarningInfo?: WarningInfoResolvers<ContextType>;
   TeacherUsageData?: TeacherUsageDataResolvers<ContextType>;
   GenerateStudentFeedbackResult?: GenerateStudentFeedbackResultResolvers<ContextType>;
   GenerateGroupFeedbackResult?: GenerateGroupFeedbackResultResolvers<ContextType>;

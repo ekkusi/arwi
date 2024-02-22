@@ -9,12 +9,14 @@ import {
   mapCreateDefaultEvaluationInput,
   mapCreateTeacherInput,
   mapEvaluationFeedbackData,
+  mapTeacherUsageData,
   mapUpdateClassParticipationCollectionInput,
   mapUpdateClassParticipationEvaluationInput,
   mapUpdateDefaultCollectionInput,
   mapUpdateDefaultEvaluationInput,
   mapUpdateGroupInput,
   mapUpdateStudentInput,
+  mapWarningSeenUpdateData,
 } from "../utils/mappers";
 import {
   REQUEST_PASSWORD_RESET_EXPIRY_IN_MS,
@@ -518,10 +520,11 @@ const resolvers: MutationResolvers<CustomContext> = {
       },
     });
     const [updatedTeacher, feedback] = await Promise.all([updateTeacherPromise, feedbackCreatePromise]);
+
     return {
       feedback,
       tokensUsed: FEEDBACK_GENERATION_TOKEN_COST,
-      usageData: updatedTeacher,
+      usageData: mapTeacherUsageData(updatedTeacher),
     };
   },
   fixTextGrammatics: async (_, { studentId, text }, { user }) => {
@@ -540,7 +543,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     return {
       result: fixedText,
       tokensUsed: TEXT_FIX_TOKEN_COST,
-      usageData: updatedTeacher,
+      usageData: mapTeacherUsageData(updatedTeacher),
     };
   },
   generateGroupFeedback: async (_, { groupId }, { dataLoaders, prisma, user }) => {
@@ -603,8 +606,14 @@ const resolvers: MutationResolvers<CustomContext> = {
     return {
       feedbacks,
       tokensUsed: tokenCost,
-      usageData: updatedTeacher,
+      usageData: mapTeacherUsageData(updatedTeacher),
     };
+  },
+  setTokenUseWarningSeen: async (_, { warning }, { user }) => {
+    await updateTeacher(user!.id, {
+      data: mapWarningSeenUpdateData(warning),
+    });
+    return true;
   },
 };
 

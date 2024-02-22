@@ -39,6 +39,7 @@ type Mutation {
   generateStudentFeedback(studentId: ID!, moduleId: ID!): GenerateStudentFeedbackResult!
   generateGroupFeedback(groupId: ID!): GenerateGroupFeedbackResult!
   fixTextGrammatics(studentId: ID!, text: String!): FixTextGrammaticsResult!
+  setTokenUseWarningSeen(warning: TokenUseWarning!): Boolean!
 }
 
 type AppMetadata {
@@ -67,9 +68,15 @@ type Teacher {
   isMPassIDConnected: Boolean!
 }
 
+type WarningInfo {
+  warning: TokenUseWarning!
+  threshhold: Float!
+}
+
 type TeacherUsageData {
   id: ID!
   monthlyTokensUsed: Int!
+  warning: WarningInfo
 }
 
 type GenerateStudentFeedbackResult {
@@ -98,6 +105,11 @@ type TranslatedString {
   fi: String!
   en: String
   se: String
+}
+
+enum TokenUseWarning {
+  FIRST_WARNING
+  SECOND_WARNING
 }
 
 enum LearningObjectiveType {

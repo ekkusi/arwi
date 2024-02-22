@@ -19,6 +19,7 @@ import { graphql } from "../gql";
 import { useToast } from "../hooks-and-providers/ToastProvider";
 import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";
 import SliderWithScale from "./SliderWithScale";
+import { useToggleTokenUseWarning } from "../hooks-and-providers/monthlyTokenUseWarning";
 
 export type DefaultEvaluation = Omit<CreateDefaultEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
@@ -68,6 +69,10 @@ const DefaultEvaluationCard_FixTextGrammatics_Mutation = graphql(`
       usageData {
         id
         monthlyTokensUsed
+        warning {
+          warning
+          threshhold
+        }
       }
     }
   }
@@ -91,6 +96,7 @@ function DefaultEvaluationCard({
   height = "auto",
   isActive = true,
 }: DefaultEvaluationCardProps) {
+  const toggleTokenUseWarning = useToggleTokenUseWarning();
   const [notes, setNotes] = useState(() => evaluation.notes || "");
   const [previousNotes, setPreviousNotes] = useState<string | undefined>(undefined);
   const [newSpeechObtained, setNewSpeechObtained] = useState(false);
@@ -177,6 +183,9 @@ function DefaultEvaluationCard({
       onChanged("notes", resultText);
       setNewSpeechObtained(false);
       openToast(t("ai-fix-completed", "Oppilaan {{studentName}} arvioinnin korjaus suoritettu.", { studentName: evaluation.student.name }));
+
+      const tokenUseWarning = result.data?.fixTextGrammatics.usageData.warning;
+      if (tokenUseWarning) toggleTokenUseWarning(tokenUseWarning);
     } catch (e) {
       console.error(e);
       Alert.alert(t("text-fix-error", "Tekstin korjaamisessa tapahtui virhe."));
