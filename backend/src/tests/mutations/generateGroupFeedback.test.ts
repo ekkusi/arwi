@@ -73,7 +73,7 @@ describe("generateGroupFeedback", () => {
 
     // Assert the expected AuthorizationError is thrown
     expect(response.errors).toBeDefined();
-    expect(response.errors?.[0].message).toContain("Kuukausittainen toimintojen määrä on ylittynyt");
+    expect(response.errors?.[0].message).toContain("Kuukausittainen AI-toimintojen määrä on ylittynyt");
   });
 
   it("should update teacher's token usage correctly after feedback generation", async () => {

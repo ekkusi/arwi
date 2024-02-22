@@ -45,6 +45,7 @@ describe("generateStudentFeedback", () => {
 
   afterEach(async () => {
     await prisma.evaluation.deleteMany();
+    await prisma.feedback.deleteMany();
   });
 
   it("should successfully generate student feedback", async () => {
