@@ -27,4 +27,4 @@ jobs:
           export PGPASSWORD=$DB_PASSWORD
 
           # Execute the SQL command to reset the monthlyTokensUsed field
-          psql -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "UPDATE \"Teacher\" SET monthlyTokensUsed = 0, hasSeenFirstMonthlyTokenWarning = false, hasSeenSecondMonthlyTokenWarning = false"
+          psql -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "UPDATE \"Teacher\" SET \"monthlyTokensUsed\" = 0, \"hasSeenFirstMonthlyTokenWarning\" = false, \"hasSeenSecondMonthlyTokenWarning\" = false"
