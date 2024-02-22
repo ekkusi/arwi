@@ -237,7 +237,7 @@ export default function ProfileView() {
         )}
       </CView>
 
-      {__DEV__ && (
+      {
         <>
           <CModal
             isOpen={isLocalLoginModalOpen}
@@ -292,7 +292,7 @@ export default function ProfileView() {
             />
           )}
         </>
-      )}
+      }
       <CView style={{ flex: 1, width: "100%", justifyContent: "flex-end", marginBottom: Platform.OS === "ios" ? "xl" : "md" }}>
         <CButton title={t("logout", "Kirjaudu ulos")} style={{ width: "100%" }} disabled={loading} onPress={handleLogout} />
       </CView>
