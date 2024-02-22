@@ -1,4 +1,5 @@
 import { Button, Text } from "@chakra-ui/react";
+import Section from "@/components/general/Section";
 import PageWrapper from "../../../components/general/PageWrapper";
 import { graphql } from "../../../gql";
 import { serverQuery } from "../../../apollo/server";
@@ -20,6 +21,7 @@ const AccountDeletePage_GetCurrentUser_Query = graphql(`
 
 export default async function Page({ params, searchParams }: LocalizedPage) {
   const { lng } = params;
+
   const { t } = await getTranslation(lng);
   const deleteSuccess = searchParams.delete_success === "true";
   const isAuthenticated = getIsAuthenticated();
@@ -65,9 +67,11 @@ export default async function Page({ params, searchParams }: LocalizedPage) {
 
   return (
     <PageWrapper>
-      {deleteSuccess && <Text color="primary">{t("account-delete.delete-successful", "Käyttäjä poistettu onnistuneesti!")}</Text>}
-      <Text as="h1">{t("account-delete.account-deletion", "Käyttäjän poisto")}</Text>
-      {renderAuthContent()}
+      <Section mt={{ base: "8", xl: "20" }}>
+        {deleteSuccess && <Text color="primary">{t("account-delete.delete-successful", "Käyttäjä poistettu onnistuneesti!")}</Text>}
+        <Text as="h1">{t("account-delete.account-deletion", "Käyttäjän poisto")}</Text>
+        {renderAuthContent()}
+      </Section>
     </PageWrapper>
   );
 }
