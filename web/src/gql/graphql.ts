@@ -26,6 +26,7 @@ export type Query = {
   __typename?: 'Query';
   getAppMetadata: AppMetadata;
   getCurrentUser: Teacher;
+  getCurrentUserUsageData: TeacherUsageData;
   getTeacher: Teacher;
   getGroups: Array<Group>;
   getGroup: Group;
@@ -96,8 +97,10 @@ export type Mutation = {
   deleteGroup: Group;
   deleteCollection: EvaluationCollection;
   changeGroupModule: Group;
-  generateStudentFeedback: Scalars['String']['output'];
-  fixTextGrammatics: Scalars['String']['output'];
+  generateStudentFeedback: GenerateStudentFeedbackResult;
+  generateGroupFeedback: GenerateGroupFeedbackResult;
+  fixTextGrammatics: FixTextGrammaticsResult;
+  setTokenUseWarningSeen: Scalars['Boolean']['output'];
 };
 
 
@@ -233,15 +236,28 @@ export type MutationGenerateStudentFeedbackArgs = {
 };
 
 
+export type MutationGenerateGroupFeedbackArgs = {
+  groupId: Scalars['ID']['input'];
+};
+
+
 export type MutationFixTextGrammaticsArgs = {
   studentId: Scalars['ID']['input'];
   text: Scalars['String']['input'];
+};
+
+
+export type MutationSetTokenUseWarningSeenArgs = {
+  warning: TokenUseWarning;
 };
 
 export type AppMetadata = {
   __typename?: 'AppMetadata';
   appVersion: Scalars['String']['output'];
   minimumSupportedAppVersion: Scalars['String']['output'];
+  monthlyTokenUseLimit: Scalars['Int']['output'];
+  feedbackGenerationTokenCost: Scalars['Int']['output'];
+  textFixTokenCost: Scalars['Int']['output'];
 };
 
 export type AuthPayload = {
@@ -265,6 +281,40 @@ export type Teacher = {
   isMPassIDConnected: Scalars['Boolean']['output'];
 };
 
+export type WarningInfo = {
+  __typename?: 'WarningInfo';
+  warning: TokenUseWarning;
+  threshhold: Scalars['Float']['output'];
+};
+
+export type TeacherUsageData = {
+  __typename?: 'TeacherUsageData';
+  id: Scalars['ID']['output'];
+  monthlyTokensUsed: Scalars['Int']['output'];
+  warning?: Maybe<WarningInfo>;
+};
+
+export type GenerateStudentFeedbackResult = {
+  __typename?: 'GenerateStudentFeedbackResult';
+  feedback: Feedback;
+  tokensUsed: Scalars['Int']['output'];
+  usageData: TeacherUsageData;
+};
+
+export type GenerateGroupFeedbackResult = {
+  __typename?: 'GenerateGroupFeedbackResult';
+  feedbacks: Array<Feedback>;
+  tokensUsed: Scalars['Int']['output'];
+  usageData: TeacherUsageData;
+};
+
+export type FixTextGrammaticsResult = {
+  __typename?: 'FixTextGrammaticsResult';
+  result: Scalars['String']['output'];
+  tokensUsed: Scalars['Int']['output'];
+  usageData: TeacherUsageData;
+};
+
 export type LoginResult = {
   __typename?: 'LoginResult';
   userData: Teacher;
@@ -276,6 +326,11 @@ export type TranslatedString = {
   en?: Maybe<Scalars['String']['output']>;
   se?: Maybe<Scalars['String']['output']>;
 };
+
+export enum TokenUseWarning {
+  FIRST_WARNING = 'FIRST_WARNING',
+  SECOND_WARNING = 'SECOND_WARNING'
+}
 
 export enum LearningObjectiveType {
   BEHAVIOUR = 'BEHAVIOUR',
@@ -422,6 +477,17 @@ export type Student = {
   name: Scalars['String']['output'];
   group: Group;
   currentModuleEvaluations: Array<Evaluation>;
+  latestFeedback?: Maybe<Feedback>;
+  feedbacks: Array<Feedback>;
+};
+
+export type Feedback = {
+  __typename?: 'Feedback';
+  id: Scalars['ID']['output'];
+  student: Student;
+  module: Module;
+  text: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
 };
 
 export enum EducationLevel {
@@ -549,10 +615,27 @@ export type ChangeGroupModuleInput = {
   newLearningObjectiveGroupKey: Scalars['String']['input'];
 };
 
+export type GetIsAuthenticated_GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetIsAuthenticated_GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'Teacher', id: string } };
+
 export type Header_LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type Header_LogoutMutation = { __typename?: 'Mutation', logout: boolean };
+
+export type DeleteUserAndModalButton_DeleteTeacherMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteUserAndModalButton_DeleteTeacherMutation = { __typename?: 'Mutation', deleteTeacher: { __typename?: 'Teacher', id: string } };
+
+export type AccountDeletePage_GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AccountDeletePage_GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'Teacher', email?: string | null, id: string } };
 
 export type LoginPage_LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -562,20 +645,15 @@ export type LoginPage_LoginMutationVariables = Exact<{
 
 export type LoginPage_LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', userData: { __typename?: 'Teacher', email?: string | null, id: string, languagePreference: string, consentsAnalytics: boolean, isMPassIDConnected: boolean } } };
 
-export type AccountDeletePage_GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type AccountDeletePage_GetCurrentUser2QueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AccountDeletePage_GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'Teacher', email?: string | null, id: string } };
-
-export type DeleteUserAndModalButton_DeleteTeacherMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
+export type AccountDeletePage_GetCurrentUser2Query = { __typename?: 'Query', getCurrentUser: { __typename?: 'Teacher', email?: string | null, id: string } };
 
 
-export type DeleteUserAndModalButton_DeleteTeacherMutation = { __typename?: 'Mutation', deleteTeacher: { __typename?: 'Teacher', id: string } };
-
-
+export const GetIsAuthenticated_GetCurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetIsAuthenticated_GetCurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetIsAuthenticated_GetCurrentUserQuery, GetIsAuthenticated_GetCurrentUserQueryVariables>;
 export const Header_LogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Header_Logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logout"}}]}}]} as unknown as DocumentNode<Header_LogoutMutation, Header_LogoutMutationVariables>;
-export const LoginPage_LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LoginPage_Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"languagePreference"}},{"kind":"Field","name":{"kind":"Name","value":"consentsAnalytics"}},{"kind":"Field","name":{"kind":"Name","value":"isMPassIDConnected"}}]}}]}}]}}]} as unknown as DocumentNode<LoginPage_LoginMutation, LoginPage_LoginMutationVariables>;
-export const AccountDeletePage_GetCurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AccountDeletePage_GetCurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AccountDeletePage_GetCurrentUserQuery, AccountDeletePage_GetCurrentUserQueryVariables>;
 export const DeleteUserAndModalButton_DeleteTeacherDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteUserAndModalButton_DeleteTeacher"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteTeacher"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"teacherId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteUserAndModalButton_DeleteTeacherMutation, DeleteUserAndModalButton_DeleteTeacherMutationVariables>;
+export const AccountDeletePage_GetCurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AccountDeletePage_GetCurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AccountDeletePage_GetCurrentUserQuery, AccountDeletePage_GetCurrentUserQueryVariables>;
+export const LoginPage_LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LoginPage_Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"languagePreference"}},{"kind":"Field","name":{"kind":"Name","value":"consentsAnalytics"}},{"kind":"Field","name":{"kind":"Name","value":"isMPassIDConnected"}}]}}]}}]}}]} as unknown as DocumentNode<LoginPage_LoginMutation, LoginPage_LoginMutationVariables>;
+export const AccountDeletePage_GetCurrentUser2Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AccountDeletePage_GetCurrentUser2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AccountDeletePage_GetCurrentUser2Query, AccountDeletePage_GetCurrentUser2QueryVariables>;

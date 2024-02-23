@@ -7,7 +7,7 @@ import theme from "@/theme";
 import { LocalizedPage } from "@/types/page";
 import { LanguageOption, languages } from "@/i18n/settings";
 import Providers from "@/app/[lng]/Providers";
-import { getIsAuthenticated } from "../../utils/server";
+import { getIsAuthenticated } from "../../utils/auth";
 
 const aileron = localFont({
   src: [
@@ -70,12 +70,12 @@ export const metadata: Metadata = {
   description: "Arwi - opettajan paras ystävä",
 };
 
-export default function RootLayout({ children, params: { lng } }: { children: JSX.Element } & LocalizedPage) {
+export default async function RootLayout({ children, params: { lng } }: { children: JSX.Element } & LocalizedPage) {
   const isValidLocale = languages.some((it) => it === lng);
 
   if (!isValidLocale) notFound();
 
-  const isAuthenticated = getIsAuthenticated();
+  const isAuthenticated = await getIsAuthenticated();
 
   return (
     <html lang={lng} dir={dir(lng)} className={aileron.variable}>

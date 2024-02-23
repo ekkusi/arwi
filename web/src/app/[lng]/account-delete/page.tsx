@@ -1,12 +1,13 @@
 import { Button, Text } from "@chakra-ui/react";
 import Section from "@/components/general/Section";
+import { getIsAuthenticated } from "@/utils/auth";
 import PageWrapper from "../../../components/general/PageWrapper";
 import { graphql } from "../../../gql";
 import { serverQuery } from "../../../apollo/server";
 import Link from "../../../components/primitives/Link";
 import { LocalizedPage } from "../../../types/page";
 import { getTranslation } from "../../../i18n";
-import { getIsAuthenticated, getPathnameServer } from "../../../utils/server";
+import { getPathnameServer } from "../../../utils/server";
 import DeleteUserModalAndButton from "./DeleteUserModalAndButton";
 import { AccountDeletePage_GetCurrentUserQuery } from "../../../gql/graphql";
 
@@ -24,8 +25,7 @@ export default async function Page({ params, searchParams }: LocalizedPage) {
 
   const { t } = await getTranslation(lng);
   const deleteSuccess = searchParams.delete_success === "true";
-  const isAuthenticated = getIsAuthenticated();
-
+  const isAuthenticated = await getIsAuthenticated();
   let userData: AccountDeletePage_GetCurrentUserQuery["getCurrentUser"] | undefined;
   if (isAuthenticated) {
     const userResult = await serverQuery({ query: AccountDeletePage_GetCurrentUser_Query });
