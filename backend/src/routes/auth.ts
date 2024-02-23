@@ -125,7 +125,7 @@ const initAuth = async () => {
     client = new mPassIDIssuer.Client({
       client_id: MPASSID_CLIENT_ID,
       client_secret: MPASSID_CLIENT_SECRET,
-      token_endpoint_auth_method: "client_secret_post",
+      token_endpoint_auth_method: NODE_ENV === "production" ? "client_secret_basic" : "client_secret_post",
       redirect_uris: [getRedirectUri()],
       response_types: ["code"],
     });
