@@ -75,6 +75,12 @@ export async function serverQuery<T = any, TVariables extends OperationVariables
   }
 }
 
+export function serverQueryWithoutErrorHandling<T = any, TVariables extends OperationVariables = OperationVariables>(
+  options: QueryOptions<TVariables, T>
+): Promise<ApolloQueryResult<T>> {
+  return client.query(options);
+}
+
 export async function serverMutate<
   TData = any,
   TVariables extends OperationVariables = OperationVariables,
