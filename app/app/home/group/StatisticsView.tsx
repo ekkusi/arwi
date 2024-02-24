@@ -35,6 +35,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
   const otherCollections =
     evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "DefaultCollection">>(isDefaultCollection);
 
+  const classEvaluationType = group.currentModule.collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
   const otherSelectedTypes = group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
   const otherSelectedTypeEvaluations = otherSelectedTypes.map((type) => {
     const evaluation = otherCollections.find((coll) => coll.type.id === type.id);
@@ -137,6 +138,9 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
               {t("class-evaluation-count", "{{count}} tuntiarviointia", {
                 count: group.currentModule.evaluationCollections.filter((ev) => ev.type.category === "CLASS_PARTICIPATION").length,
               })}
+            </CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>
+              {t("class-evaluation-weight", "Tuntityöskentelyn painoarvo")}: {classEvaluationType?.weight}%
             </CText>
           </CView>
           <CView style={{ gap: 10, alignItems: "flex-end", justifyContent: "center", width: "30%" }}>

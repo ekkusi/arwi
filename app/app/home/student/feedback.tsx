@@ -137,7 +137,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       setError(
         t(
           "StudentView.summaryGenerationError",
-          "Palautteen generoinnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
+          "Palautteen luonnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
         )
       );
     }
@@ -179,7 +179,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
     return (
       <Layout style={{ alignItems: "center", justifyContent: "center" }}>
         <LoadingIndicator style={{ marginBottom: "4xl" }}>
-          <CText style={{ marginTop: "lg", color: "primary" }}>{t("generating-summary", "Loppuarviointia generoidaan...")}</CText>
+          <CText style={{ marginTop: "lg", color: "primary" }}>{t("generating-final-feedback", "Loppuarviointia generoidaan...")}</CText>
         </LoadingIndicator>
       </Layout>
     );

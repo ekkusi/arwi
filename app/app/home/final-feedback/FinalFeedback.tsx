@@ -17,6 +17,7 @@ import Layout from "../../../components/Layout";
 import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 import EvaluationTargetCard from "../group/components/EvaluationTargetCard";
 import { COLORS } from "../../../theme";
+import FinalFeedbackItem from "./FinalFeedbackItem";
 
 const FinalFeedback_GetGroup_Query = graphql(`
   query FinalFeedback_GetGroup($groupId: ID!) {
@@ -26,10 +27,8 @@ const FinalFeedback_GetGroup_Query = graphql(`
       archived
       students {
         id
-        name
         latestFeedback {
           id
-          text
         }
         currentModuleEvaluations {
           id
@@ -74,7 +73,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
     return (
       <LoadingIndicator style={{ paddingHorizontal: "lg" }}>
         <CText style={{ color: "primary", marginBottom: "3xl" }}>
-          {t("generating-feedbacks-loading-text", "Palautteita generoidaan. Tämä voi kestää hetken. Voit poistua tältä sivulta halutessasi.")}
+          {t("generating-feedbacks-loading-text", "Palautteita luodaan. Tämä voi kestää hetken. Voit poistua tältä sivulta halutessasi.")}
         </CText>
       </LoadingIndicator>
     );
@@ -97,7 +96,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         const warning = res.data?.generateGroupFeedback.usageData?.warning;
         if (warning) toggleTokenUseWarning(warning);
         openToast(
-          t("final-feedback-finished", "Loppupalaute generoitu ryhmälle {{groupName}}", { groupName: group.name }),
+          t("final-feedback-finished", "Loppupalaute on luontu ryhmälle {{groupName}}", { groupName: group.name }),
           { closeTimeout: 10000 },
           {
             action: () => navigation.navigate("final-feedback-collection", { groupId: group.id }),
@@ -107,7 +106,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
       },
       (err) => {
         openToast(
-          t("final-feedback-generation-failed", "Loppupalautteen generointi epäonnistui: {{error}}", { error: err.message }),
+          t("final-feedback-generation-failed", "Loppupalautteen luonti epäonnistui: {{error}}", { error: err.message }),
           {
             type: "error",
           },
@@ -129,22 +128,22 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   const allStudentsHaveThreeEvaluations = !(studentsWithLessThanThreeEvaluations.length > 0);
   const allStudentsHaveThreeVerbalFeedback = !(studentsWithLessThanThreeVerbalFeedback.length > 0);
 
+  let bottomText = t("all-set-for-generation", "Kaikki valmiina loppupalautteen luontiin!");
+  if (!allOtherCollectionTypesEvaluated)
+    bottomText = t("fix-errors-before-generation", "Korjaa punaisella merkatut kohdat ennen loppupalautteen luontia.");
+  else if (!allStudentsHaveThreeEvaluations || !allStudentsHaveThreeVerbalFeedback)
+    bottomText = t("see-warnings-before-generation", "Huomioi keltaisella merkatut kohdat. Voit kuitenkin jatkaa loppupalautteen luontiin.");
+
   return (
     <Layout style={{ paddingHorizontal: "md", paddingVertical: "lg", backgroundColor: "white", gap: "lg" }}>
-      <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name} - Loppupalaute</CText>
+      <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name} - Loppuarviointi</CText>
       {studentsWithFeedback.length === 0 ? (
-        <CView style={{ gap: "xl" }}>
-          <CText>
-            <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
-              Palaute generoidaan perustuen antamiisi numeerisiin ja sanallisiin palautteisiin. Olet tehnyt ryhmälle yhteensä{" "}
-            </CText>
-            <CText style={{ fontSize: "sm2", fontWeight: "500" }}>
-              {t("class-evaluation-count", "{{count}} tuntiarviointia", {
-                count: group.currentModule.evaluationCollections.filter((ev) => ev.type.category === "CLASS_PARTICIPATION").length,
-              })}{" "}
-            </CText>
-            <CText style={{ fontSize: "sm2", fontWeight: "300" }}>ja antanut sanallista palautetta keskimäärin </CText>
-            <CText style={{ fontSize: "sm2", fontWeight: "500" }}>0 kertaa per oppilas.</CText>
+        <CView style={{ gap: "2xl" }}>
+          <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+            {t(
+              "feedback-generation-info1",
+              "Sanallinen palaute luodaan tekoälyä hyödyntäen antamiesi numeeristen ja sanallisten arviointien perusteella."
+            )}
           </CText>
           <CView style={{ gap: "xl" }}>
             <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
@@ -155,8 +154,12 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               />
               <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
                 {allOtherCollectionTypesEvaluated
-                  ? "Kaikki arvioitavat sisällöt on arvioitu!"
-                  : `Ryhmällä on ${nonEvaluatedOtherCollectionTypes.length} arvioitava sisältö arvioimatta. Arvioi sisältö ennen palautteen generointia.`}
+                  ? t("all-types-evaluated", "Kaikki arvioitavat sisällöt on arvioitu!")
+                  : t(
+                      "all-types-not-evaluated",
+                      `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
+                      { count: nonEvaluatedOtherCollectionTypes.length }
+                    )}
               </CText>
             </CView>
             <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
@@ -167,8 +170,12 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               />
               <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
                 {allStudentsHaveThreeEvaluations
-                  ? "Kaikilla ryhmän oppilailla on riittävästi arviointeja!"
-                  : `Ryhmässä on ${studentsWithLessThanThreeEvaluations.length} oppilasta, joilla on alle 3 arviointia. Kyseisille oppilaille ei ole mahdollista generoida sanallista palautetta.`}
+                  ? t("all-students-evaluated", "Kaikilla ryhmän oppilailla on riittävästi arviointeja!")
+                  : t(
+                      "all-students-not-evaluated",
+                      `Ryhmässä on {{count}} oppilasta, joilla on alle 3 arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
+                      { count: studentsWithLessThanThreeEvaluations.length }
+                    )}
               </CText>
             </CView>
             <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
@@ -179,32 +186,37 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               />
               <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
                 {allStudentsHaveThreeVerbalFeedback
-                  ? "Kaikille ryhmän oppilaille on annettu riittävästi sanallista palautetta!"
-                  : `Ryhmässä on ${studentsWithLessThanThreeVerbalFeedback.length} oppilasta, joille on annettu alle 3 sanallista palautetta. Antamalla sanallista palautetta yksilöllisempien palautteiden generointi on mahdollista.`}
+                  ? t("all-students-have-verbal-feedback", "Kaikille ryhmän oppilaille on annettu riittävästi sanallista palautetta!")
+                  : t(
+                      "all-students-have-not-verbal-feedback",
+                      `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
+                      { count: studentsWithLessThanThreeVerbalFeedback.length }
+                    )}
               </CText>
             </CView>
-            <CView style={{ gap: "md" }}>
-              <CText style={{ fontSize: "sm2", fontWeight: "500" }}>Kaikki valmiina loppupalautteen generoimiseksi!</CText>
-            </CView>
-            <CView style={{ gap: "sm" }}>
-              <CButton title={t("generate", "Generoi")} onPress={generateFinalFeedback} disabled={!allOtherCollectionTypesEvaluated} />
-              <CText style={{ fontSize: "sm", fontWeight: "300" }}>
-                Palautteen generointi tapahtuu taustalla, voit liikkua sovelluksessa vapaasti tai sulkea sovelluksen generoinnin ajaksi.
-              </CText>
-            </CView>
+          </CView>
+          <CView style={{ gap: "md" }}>
+            <CText style={{ fontSize: "sm2", fontWeight: "500" }}>{bottomText}</CText>
+          </CView>
+          <CView style={{ gap: "sm" }}>
+            <CButton
+              title={t("generate-final-feedback", "Luo loppupalaute")}
+              onPress={generateFinalFeedback}
+              disabled={!allOtherCollectionTypesEvaluated}
+            />
+            <CText style={{ fontSize: "sm", fontWeight: "300" }}>
+              {t(
+                "feedback-generation-info2",
+                "Loppuarviointien luonti tapahtuu taustalla. Voit liikkua sovelluksessa vapaasti tai sulkea sovelluksen luonnin ajaksi."
+              )}
+            </CText>
           </CView>
         </CView>
       ) : (
         <CFlatList
           data={studentsWithFeedback}
           renderItem={({ item }) => {
-            return (
-              <Card key={item.id} style={{ justifyContent: "space-between", paddingVertical: "lg" }}>
-                <CText style={{ marginBottom: "md", textAlign: "center", fontWeight: "500" }}>{item.name}</CText>
-                <CText style={{ marginBottom: "sm", fontStyle: "italic" }}>{t("feedback", "Palaute")}:</CText>
-                <CText>{item.latestFeedback.text}</CText>
-              </Card>
-            );
+            return <FinalFeedbackItem studentId={item.id} />;
           }}
         />
       )}
