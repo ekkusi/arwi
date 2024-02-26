@@ -327,17 +327,15 @@ export type TranslatedString = {
   se?: Maybe<Scalars['String']>;
 };
 
-export enum TokenUseWarning {
-  FIRST_WARNING = 'FIRST_WARNING',
-  SECOND_WARNING = 'SECOND_WARNING'
-}
+export type TokenUseWarning =
+  | 'FIRST_WARNING'
+  | 'SECOND_WARNING';
 
-export enum LearningObjectiveType {
-  BEHAVIOUR = 'BEHAVIOUR',
-  SKILLS = 'SKILLS',
-  SKILLS_AND_BEHAVIOUR = 'SKILLS_AND_BEHAVIOUR',
-  NOT_EVALUATED = 'NOT_EVALUATED'
-}
+export type LearningObjectiveType =
+  | 'BEHAVIOUR'
+  | 'SKILLS'
+  | 'SKILLS_AND_BEHAVIOUR'
+  | 'NOT_EVALUATED';
 
 export type LearningObjective = {
   __typename?: 'LearningObjective';
@@ -386,13 +384,12 @@ export type CollectionType = {
   defaultTypeCollection?: Maybe<DefaultCollection>;
 };
 
-export enum CollectionTypeCategory {
-  CLASS_PARTICIPATION = 'CLASS_PARTICIPATION',
-  EXAM = 'EXAM',
-  WRITTEN_WORK = 'WRITTEN_WORK',
-  GROUP_WORK = 'GROUP_WORK',
-  OTHER = 'OTHER'
-}
+export type CollectionTypeCategory =
+  | 'CLASS_PARTICIPATION'
+  | 'EXAM'
+  | 'WRITTEN_WORK'
+  | 'GROUP_WORK'
+  | 'OTHER';
 
 export type ModuleInfo = {
   __typename?: 'ModuleInfo';
@@ -490,19 +487,18 @@ export type Feedback = {
   createdAt: Scalars['DateTime'];
 };
 
-export enum EducationLevel {
-  PRIMARY_FIRST = 'PRIMARY_FIRST',
-  PRIMARY_SECOND = 'PRIMARY_SECOND',
-  PRIMARY_THIRD = 'PRIMARY_THIRD',
-  PRIMARY_FOURTH = 'PRIMARY_FOURTH',
-  PRIMARY_FIFTH = 'PRIMARY_FIFTH',
-  PRIMARY_SIXTH = 'PRIMARY_SIXTH',
-  PRIMARY_SEVENTH = 'PRIMARY_SEVENTH',
-  PRIMARY_EIGHTH = 'PRIMARY_EIGHTH',
-  PRIMARY_NINTH = 'PRIMARY_NINTH',
-  HIGH_SCHOOL = 'HIGH_SCHOOL',
-  VOCATIONAL = 'VOCATIONAL'
-}
+export type EducationLevel =
+  | 'PRIMARY_FIRST'
+  | 'PRIMARY_SECOND'
+  | 'PRIMARY_THIRD'
+  | 'PRIMARY_FOURTH'
+  | 'PRIMARY_FIFTH'
+  | 'PRIMARY_SIXTH'
+  | 'PRIMARY_SEVENTH'
+  | 'PRIMARY_EIGHTH'
+  | 'PRIMARY_NINTH'
+  | 'HIGH_SCHOOL'
+  | 'VOCATIONAL';
 
 export type CreateTeacherInput = {
   email: Scalars['EmailAddress'];

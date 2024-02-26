@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { ChangeGroupModuleInput, CollectionTypeCategory, EducationLevel } from "../../types";
+import { ChangeGroupModuleInput } from "../../types";
 import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
 import { modulesByGroupLoader } from "../../graphql/dataLoaders/module";
 import { groupLoader, groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
@@ -29,7 +29,7 @@ describe("changeGroupModule", () => {
 
   it("should successfully change the group module", async () => {
     const changeGroupModuleData: ChangeGroupModuleInput = {
-      newEducationLevel: EducationLevel.PRIMARY_FOURTH,
+      newEducationLevel: "PRIMARY_FOURTH",
       newLearningObjectiveGroupKey: "three_to_six_years",
     };
 
@@ -61,7 +61,7 @@ describe("changeGroupModule", () => {
     const anotherTeacher = await createTestUserAndLogin(graphqlRequest, { email: "new-user@email.com", password: "password" });
 
     const changeGroupModuleData: ChangeGroupModuleInput = {
-      newEducationLevel: EducationLevel.PRIMARY_FOURTH,
+      newEducationLevel: "PRIMARY_FOURTH",
       newLearningObjectiveGroupKey: "three_to_six_years",
     };
 
@@ -86,7 +86,7 @@ describe("changeGroupModule", () => {
   it("should throw error for invalid group ID", async () => {
     const invalidGroupId = "invalid-group-id";
     const changeGroupModuleData: ChangeGroupModuleInput = {
-      newEducationLevel: EducationLevel.PRIMARY_FOURTH,
+      newEducationLevel: "PRIMARY_FOURTH",
       newLearningObjectiveGroupKey: "three_to_six_years",
     };
 
@@ -106,7 +106,7 @@ describe("changeGroupModule", () => {
 
   it("should throw error for invalid learning objective group key", async () => {
     const changeGroupModuleData: ChangeGroupModuleInput = {
-      newEducationLevel: EducationLevel.PRIMARY_FOURTH,
+      newEducationLevel: "PRIMARY_FOURTH",
       newLearningObjectiveGroupKey: "invalid-key",
     };
 
@@ -126,7 +126,7 @@ describe("changeGroupModule", () => {
 
   it("should throw error when changing from primary school to other level", async () => {
     const changeGroupModuleData: ChangeGroupModuleInput = {
-      newEducationLevel: EducationLevel.HIGH_SCHOOL,
+      newEducationLevel: "HIGH_SCHOOL",
       newLearningObjectiveGroupKey: "LI_HS_MODULE_LI1",
     };
 
@@ -162,14 +162,14 @@ describe("changeGroupModule", () => {
     const moduleCreate = prisma.module.create({
       data: {
         id: newModuleId,
-        educationLevel: EducationLevel.HIGH_SCHOOL,
+        educationLevel: "HIGH_SCHOOL",
         learningObjectiveGroupKey: "LI_HS_MODULE_LI1",
         groupId,
         collectionTypes: {
           createMany: {
             data: [
               {
-                category: CollectionTypeCategory.CLASS_PARTICIPATION,
+                category: "CLASS_PARTICIPATION",
                 name: "Participation",
                 weight: 100,
               },
@@ -181,7 +181,7 @@ describe("changeGroupModule", () => {
     await prisma.$transaction([groupCreate, moduleCreate]);
 
     const changeGroupModuleData: ChangeGroupModuleInput = {
-      newEducationLevel: EducationLevel.PRIMARY_FOURTH,
+      newEducationLevel: "PRIMARY_FOURTH",
       newLearningObjectiveGroupKey: "three_to_six_years",
     };
 
@@ -203,7 +203,7 @@ describe("changeGroupModule", () => {
 
   it("should reflect updates in DataLoader after changing group module", async () => {
     const changeGroupModuleData: ChangeGroupModuleInput = {
-      newEducationLevel: EducationLevel.PRIMARY_FOURTH,
+      newEducationLevel: "PRIMARY_FOURTH",
       newLearningObjectiveGroupKey: "three_to_six_years",
     };
 

@@ -1,20 +1,20 @@
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { CollectionTypeCategory, EducationLevel } from "../../types";
 import { TestTeacher, createTestUserAndLogin, deleteTestUser } from "../testHelpers";
 import { modulesByGroupLoader } from "../../graphql/dataLoaders/module";
 import { groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
+import { CreateGroupInput } from "@/types";
 
-const groupData = {
+const groupData: Omit<CreateGroupInput, "teacherId"> = {
   name: "Test Group",
   subjectCode: "LI",
-  educationLevel: EducationLevel.PRIMARY_FIRST,
+  educationLevel: "PRIMARY_FIRST",
   learningObjectiveGroupKey: "one_to_two_years",
   students: [{ name: "Student A" }, { name: "Student B" }],
   collectionTypes: [
-    { category: CollectionTypeCategory.EXAM, name: "Midterm", weight: 50 },
-    { category: CollectionTypeCategory.CLASS_PARTICIPATION, name: "Participation", weight: 50 },
+    { category: "EXAM", name: "Midterm", weight: 50 },
+    { category: "CLASS_PARTICIPATION", name: "Participation", weight: 50 },
   ],
 };
 
@@ -118,12 +118,12 @@ describe("CreateGroup", () => {
   });
 
   it("should throw error for invalid collection type weights", async () => {
-    const invalidWeightsGroupData = {
+    const invalidWeightsGroupData: CreateGroupInput = {
       ...groupData,
       teacherId: teacher.id,
       collectionTypes: [
-        { category: CollectionTypeCategory.EXAM, name: "Midterm", weight: 30 },
-        { category: CollectionTypeCategory.CLASS_PARTICIPATION, name: "Participation", weight: 30 },
+        { category: "EXAM", name: "Midterm", weight: 30 },
+        { category: "CLASS_PARTICIPATION", name: "Participation", weight: 30 },
       ], // Total weight does not sum up to 100
     };
 

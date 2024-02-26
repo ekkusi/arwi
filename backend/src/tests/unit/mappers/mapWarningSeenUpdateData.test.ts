@@ -1,6 +1,5 @@
 import { Teacher } from "@prisma/client";
 import { mapTeacherUsageData } from "@/graphql/utils/mappers";
-import { TokenUseWarning } from "@/types";
 import { MONTHLY_TOKEN_USE_LIMIT, MONTHLY_TOKEN_USE_WARNING_THRESHOLDS } from "@/config";
 
 const baseTeacherData: Teacher = {
@@ -32,7 +31,7 @@ describe("mapTeacherUsageData", () => {
 
     const result = mapTeacherUsageData(teacher);
     expect(result.warning).toEqual({
-      warning: TokenUseWarning.FIRST_WARNING,
+      warning: "FIRST_WARNING",
       threshhold: MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.FIRST_WARNING,
     });
   });
@@ -45,7 +44,7 @@ describe("mapTeacherUsageData", () => {
 
     const result = mapTeacherUsageData(teacher);
     expect(result.warning).toEqual({
-      warning: TokenUseWarning.SECOND_WARNING,
+      warning: "SECOND_WARNING",
       threshhold: MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.SECOND_WARNING,
     });
   });
@@ -70,7 +69,7 @@ describe("mapTeacherUsageData", () => {
 
     const result = mapTeacherUsageData(teacher);
     expect(result.warning).not.toEqual({
-      warning: TokenUseWarning.FIRST_WARNING,
+      warning: "FIRST_WARNING",
       threshhold: MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.FIRST_WARNING,
     });
   });

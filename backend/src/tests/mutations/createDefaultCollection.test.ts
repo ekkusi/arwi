@@ -1,8 +1,8 @@
 import { graphql } from "../gql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { CollectionTypeCategory, CreateDefaultCollectionInput } from "../../types";
-import { TestGroup, TestTeacher, VALID_LI_ENV_CODE, createTestGroup, createTestUserAndLogin } from "../testHelpers";
+import { CreateDefaultCollectionInput } from "../../types";
+import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin } from "../testHelpers";
 import { formatDate } from "../../utils/date";
 import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
 import { groupLoader } from "../../graphql/dataLoaders/group";
@@ -24,7 +24,7 @@ describe("createDefaultCollection", () => {
     baseCollectionData = {
       date: formatDate(new Date(), "yyyy-MM-dd"),
       description: "Test Description",
-      typeId: group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.EXAM)?.id!,
+      typeId: group.currentModule.collectionTypes.find((ct) => ct.category === "EXAM")?.id!,
     };
   });
 
@@ -110,7 +110,7 @@ describe("createDefaultCollection", () => {
   });
 
   it("should throw an error if the collection type is CLASS_PARTICIPATION type", async () => {
-    const classParticipationType = group.currentModule.collectionTypes.find((ct) => ct.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
+    const classParticipationType = group.currentModule.collectionTypes.find((ct) => ct.category === "CLASS_PARTICIPATION")!;
 
     const collectionData = {
       ...baseCollectionData,

@@ -13,6 +13,7 @@
     "kill": "bash ./scripts/kill-process.sh",
     "start": "APP_VERSION=$npm_package_version node lib/index.js",
     "build": "tsc -p tsconfig.prod.json && copyfiles -u 1 \"src/**/*.graphql\" \"src/**/*.json\" lib",
+    "type-check": "tsc --noEmit",
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
     "prisma:deploy-prod": "dotenv -e ../.env.production -- npx prisma migrate deploy",

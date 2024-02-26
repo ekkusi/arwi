@@ -13,6 +13,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  ": types.Test_LoginDocument,
+    "\n    mutation Test_Logout {\n      logout\n    }\n  ": types.Test_LogoutDocument,
+    "\n  mutation ConnectLocalCredentials($email: String!, $password: String!) {\n    connectLocalCredentials(email: $email, password: $password) {\n      userData {\n        id\n        email\n        groups {\n          id\n        }\n      }\n    }\n  }\n": types.ConnectLocalCredentialsDocument,
+    "\n  mutation ConnectLocalCredentials_MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n": types.ConnectLocalCredentials_MPassIdLoginDocument,
     "\n      mutation ChangeGroupModuleValidInput($data: ChangeGroupModuleInput!, $groupId: ID!) {\n        changeGroupModule(data: $data, groupId: $groupId) {\n          id\n          currentModule {\n            id\n            info {\n              educationLevel\n              learningObjectiveGroupKey\n            }\n          }\n        }\n      }\n    ": types.ChangeGroupModuleValidInputDocument,
     "\n      mutation ChangeGroupModuleUnAuthorized($data: ChangeGroupModuleInput!, $groupId: ID!) {\n        changeGroupModule(data: $data, groupId: $groupId) {\n          id\n        }\n      }\n    ": types.ChangeGroupModuleUnAuthorizedDocument,
     "\n      mutation ChangeGroupModuleInvalidID($data: ChangeGroupModuleInput!, $groupId: ID!) {\n        changeGroupModule(data: $data, groupId: $groupId) {\n          id\n        }\n      }\n    ": types.ChangeGroupModuleInvalidIdDocument,
@@ -30,8 +34,6 @@ const documents = {
     "\n      mutation CreateDefaultCollectionDuplicate($data: CreateDefaultCollectionInput!, $moduleId: ID!) {\n        createDefaultCollection(data: $data, moduleId: $moduleId) {\n          id\n        }\n      }\n    ": types.CreateDefaultCollectionDuplicateDocument,
     "\n      mutation CreateDefaultCollectionInvalidType($data: CreateDefaultCollectionInput!, $moduleId: ID!) {\n        createDefaultCollection(data: $data, moduleId: $moduleId) {\n          id\n        }\n      }\n    ": types.CreateDefaultCollectionInvalidTypeDocument,
     "\n      mutation CreateDefaultCollectionDataLoaderCheck($data: CreateDefaultCollectionInput!, $moduleId: ID!) {\n        createDefaultCollection(data: $data, moduleId: $moduleId) {\n          id\n          date\n        }\n      }\n    ": types.CreateDefaultCollectionDataLoaderCheckDocument,
-    "\n  mutation ConnectLocalCredentials($email: String!, $password: String!) {\n    connectLocalCredentials(email: $email, password: $password) {\n      userData {\n        id\n        email\n        groups {\n          id\n        }\n      }\n    }\n  }\n": types.ConnectLocalCredentialsDocument,
-    "\n  mutation ConnectLocalCredentials_MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n": types.ConnectLocalCredentials_MPassIdLoginDocument,
     "\n      mutation CreateGroup($data: CreateGroupInput!) {\n        createGroup(data: $data) {\n          id\n          name\n          teacher {\n            id\n          }\n          subject {\n            code\n          }\n          students {\n            name\n          }\n          currentModule {\n            collectionTypes {\n              name\n              weight\n            }\n          }\n        }\n      }\n    ": types.CreateGroupDocument,
     "\n      mutation CreateGroupInvalidSubject($data: CreateGroupInput!) {\n        createGroup(data: $data) {\n          id\n        }\n      }\n    ": types.CreateGroupInvalidSubjectDocument,
     "\n      mutation CreateGroupEmptyCollections($data: CreateGroupInput!) {\n        createGroup(data: $data) {\n          id\n        }\n      }\n    ": types.CreateGroupEmptyCollectionsDocument,
@@ -40,22 +42,18 @@ const documents = {
     "\n      mutation CreateStudent($data: CreateStudentInput!, $moduleId: ID!) {\n        createStudent(data: $data, moduleId: $moduleId) {\n          id\n          name\n          group {\n            id\n          }\n          currentModuleEvaluations {\n            id\n            collection {\n              id\n            }\n          }\n        }\n      }\n    ": types.CreateStudentDocument,
     "\n        mutation CreateDuplicateStudent($data: CreateStudentInput!, $moduleId: ID!) {\n          createStudent(data: $data, moduleId: $moduleId) {\n            id\n          }\n        }\n      ": types.CreateDuplicateStudentDocument,
     "\n      mutation CreateStudentDataLoaderCheck($data: CreateStudentInput!, $moduleId: ID!) {\n        createStudent(data: $data, moduleId: $moduleId) {\n          id\n          name\n        }\n      }\n    ": types.CreateStudentDataLoaderCheckDocument,
-    "\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  ": types.Test_LoginDocument,
-    "\n    mutation Test_Logout {\n      logout\n    }\n  ": types.Test_LogoutDocument,
     "\n      mutation DeleteCollection($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.DeleteCollectionDocument,
     "\n      mutation DeleteCollectionUnauthorized($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n          description\n        }\n      }\n    ": types.DeleteCollectionUnauthorizedDocument,
     "\n      mutation DeleteCollectionInvalidID($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.DeleteCollectionInvalidIdDocument,
     "\n      mutation DeleteCollectionDataLoaderCheck($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.DeleteCollectionDataLoaderCheckDocument,
-    "\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentDocument,
-    "\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentUnauthorizedDocument,
-    "\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentInvalidIdDocument,
-    "\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentDataLoaderCheckDocument,
-    "\n  mutation GenerateGroupFeedbackTest($groupId: ID!) {\n    generateGroupFeedback(groupId: $groupId) {\n      usageData {\n        id\n        monthlyTokensUsed\n      }\n    }\n  }\n": types.GenerateGroupFeedbackTestDocument,
-    "\n  mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {\n    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {\n      feedback {\n        id\n        text\n      }\n    }\n  }\n": types.GenerateStudentFeedbackTestDocument,
     "\n      mutation DeleteGroup($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    ": types.DeleteGroupDocument,
     "\n      mutation DeleteGroupUnauthorized($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    ": types.DeleteGroupUnauthorizedDocument,
     "\n      mutation DeleteGroupInvalidID($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    ": types.DeleteGroupInvalidIdDocument,
     "\n      mutation DeleteGroupDataLoaderCheck($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    ": types.DeleteGroupDataLoaderCheckDocument,
+    "\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentDocument,
+    "\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentUnauthorizedDocument,
+    "\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentInvalidIdDocument,
+    "\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    ": types.DeleteStudentDataLoaderCheckDocument,
     "\n      mutation DeleteTeacher($teacherId: ID!) {\n        deleteTeacher(teacherId: $teacherId) {\n          id\n        }\n      }\n    ": types.DeleteTeacherDocument,
     "\n      mutation DeleteTeacherUnauthorized($teacherId: ID!) {\n        deleteTeacher(teacherId: $teacherId) {\n          id\n        }\n      }\n    ": types.DeleteTeacherUnauthorizedDocument,
     "\n      mutation DeleteTeacherDataLoaderCheck($teacherId: ID!) {\n        deleteTeacher(teacherId: $teacherId) {\n          id\n        }\n      }\n    ": types.DeleteTeacherDataLoaderCheckDocument,
@@ -63,14 +61,38 @@ const documents = {
     "\n      mutation FixTextGrammaticsUnauthorized($studentId: ID!, $text: String!) {\n        fixTextGrammatics(studentId: $studentId, text: $text) {\n          result\n        }\n      }\n    ": types.FixTextGrammaticsUnauthorizedDocument,
     "\n      mutation FixTextGrammaticsInvalidStudent($studentId: ID!, $text: String!) {\n        fixTextGrammatics(studentId: $studentId, text: $text) {\n          result\n        }\n      }\n    ": types.FixTextGrammaticsInvalidStudentDocument,
     "\n      mutation FixTextGrammaticsEmptyText($studentId: ID!, $text: String!) {\n        fixTextGrammatics(studentId: $studentId, text: $text) {\n          result\n        }\n      }\n    ": types.FixTextGrammaticsEmptyTextDocument,
-    "\n  mutation MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n": types.MPassIdLoginDocument,
-    "\n  mutation ConnectMPassID($code: String!) {\n    connectMPassID(code: $code) {\n      userData {\n        id\n        isMPassIDConnected\n        groups {\n          id\n        }\n      }\n    }\n  }\n": types.ConnectMPassIdDocument,
+    "\n  mutation GenerateGroupFeedbackTest($groupId: ID!) {\n    generateGroupFeedback(groupId: $groupId) {\n      usageData {\n        id\n        monthlyTokensUsed\n      }\n    }\n  }\n": types.GenerateGroupFeedbackTestDocument,
     "\n      mutation LoginTest_ValidLogin($email: String!, $password: String!) {\n        login(email: $email, password: $password) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.LoginTest_ValidLoginDocument,
     "\n      mutation LoginTest_ValidLoginInDifferentCase($email: String!, $password: String!) {\n        login(email: $email, password: $password) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.LoginTest_ValidLoginInDifferentCaseDocument,
     "\n      mutation LoginTest_InvalidLogin($email: String!, $password: String!) {\n        login(email: $email, password: $password) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.LoginTest_InvalidLoginDocument,
     "\n      mutation LoginTest_NoEmailLogin($email: String!, $password: String!) {\n        login(email: $email, password: $password) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.LoginTest_NoEmailLoginDocument,
+    "\n  mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {\n    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {\n      feedback {\n        id\n        text\n      }\n    }\n  }\n": types.GenerateStudentFeedbackTestDocument,
+    "\n  mutation MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n": types.MPassIdLoginDocument,
+    "\n  mutation ConnectMPassID($code: String!) {\n    connectMPassID(code: $code) {\n      userData {\n        id\n        isMPassIDConnected\n        groups {\n          id\n        }\n      }\n    }\n  }\n": types.ConnectMPassIdDocument,
+    "\n      mutation RequestPasswordResetValid($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    ": types.RequestPasswordResetValidDocument,
+    "\n      mutation VerifyPasswordResetCodeValid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    ": types.VerifyPasswordResetCodeValidDocument,
+    "\n      mutation UpdatePasswordValid($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    ": types.UpdatePasswordValidDocument,
+    "\n      mutation RequestPasswordResetInvalidEmail($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    ": types.RequestPasswordResetInvalidEmailDocument,
+    "\n      mutation RequestPasswordResetExceedTries($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    ": types.RequestPasswordResetExceedTriesDocument,
+    "\n      mutation VerifyPasswordResetCodeInvalid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    ": types.VerifyPasswordResetCodeInvalidDocument,
+    "\n      mutation VerifyPasswordResetCodeExpired($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    ": types.VerifyPasswordResetCodeExpiredDocument,
+    "\n      mutation VerifyPasswordResetCodeExceedTries($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    ": types.VerifyPasswordResetCodeExceedTriesDocument,
+    "\n      mutation UpdatePasswordDataLoaders($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    ": types.UpdatePasswordDataLoadersDocument,
+    "\n      mutation RegisterTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.RegisterTest_RegisterDocument,
+    "\n      mutation RegisterTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.RegisterTest_RegisterExistingEmailDocument,
+    "\n      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.RegisterTest_RegisterEmailInLowerCaseDocument,
+    "\n      mutation RegisterTest_RegisterInvalidLanguage($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.RegisterTest_RegisterInvalidLanguageDocument,
     "\n      mutation SampleTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.SampleTest_RegisterDocument,
     "\n      mutation SampleTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.SampleTest_RegisterExistingEmailDocument,
+    "\n      mutation UpdateClassParticipationCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n          date\n          type {\n            id\n          }\n          environment {\n            code\n          }\n          description\n          evaluations {\n            id\n            skillsRating\n            behaviourRating\n            notes\n            wasPresent\n          }\n          learningObjectives {\n            code\n          }\n        }\n      }\n    ": types.UpdateClassParticipationCollectionDocument,
+    "\n      mutation UpdateClassParticipationCollectionUnauthorized($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionUnauthorizedDocument,
+    "\n      mutation UpdateClassParticipationCollectionInvalidID($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidIdDocument,
+    "\n      mutation UpdateClassParticipationCollectionInvalidEnvironment($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidEnvironmentDocument,
+    "\n      mutation UpdateClassParticipationCollectionInvalidLearningObjectives($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidLearningObjectivesDocument,
+    "\n      mutation UpdateClassParticipationCollectionEvaluationsNotInCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionEvaluationsNotInCollectionDocument,
+    "\n      mutation UpdateClassParticipationCollectionInvalidStudentPresence($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidStudentPresenceDocument,
+    "\n      mutation UpdateClassParticipationCollectionInvalidEvaluationType($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidEvaluationTypeDocument,
+    "\n      mutation UpdateClassParticipationCollectionDataLoaderCheck($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionDataLoaderCheckDocument,
     "\n      mutation UpdateClassParticipationEvaluation($input: UpdateClassParticipationEvaluationInput!) {\n        updateClassParticipationEvaluation(input: $input) {\n          id\n          skillsRating\n          behaviourRating\n          notes\n        }\n      }\n    ": types.UpdateClassParticipationEvaluationDocument,
     "\n      mutation UpdateClassParticipationEvaluationBehaviourRatingLow($input: UpdateClassParticipationEvaluationInput!) {\n        updateClassParticipationEvaluation(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationEvaluationBehaviourRatingLowDocument,
     "\n      mutation UpdateClassParticipationEvaluationBehaviourRatingHigh($input: UpdateClassParticipationEvaluationInput!) {\n        updateClassParticipationEvaluation(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationEvaluationBehaviourRatingHighDocument,
@@ -88,15 +110,6 @@ const documents = {
     "\n      mutation UpdateDefaultCollectionInvalidStudentPresence($data: UpdateDefaultCollectionInput!, $collectionId: ID!) {\n        updateDefaultCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateDefaultCollectionInvalidStudentPresenceDocument,
     "\n      mutation UpdateDefaultCollectionInvalidEvaluationType($data: UpdateDefaultCollectionInput!, $collectionId: ID!) {\n        updateDefaultCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateDefaultCollectionInvalidEvaluationTypeDocument,
     "\n      mutation UpdateDefaultCollectionDataLoaderCheck($data: UpdateDefaultCollectionInput!, $collectionId: ID!) {\n        updateDefaultCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateDefaultCollectionDataLoaderCheckDocument,
-    "\n      mutation UpdateClassParticipationCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n          date\n          type {\n            id\n          }\n          environment {\n            code\n          }\n          description\n          evaluations {\n            id\n            skillsRating\n            behaviourRating\n            notes\n            wasPresent\n          }\n          learningObjectives {\n            code\n          }\n        }\n      }\n    ": types.UpdateClassParticipationCollectionDocument,
-    "\n      mutation UpdateClassParticipationCollectionUnauthorized($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionUnauthorizedDocument,
-    "\n      mutation UpdateClassParticipationCollectionInvalidID($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidIdDocument,
-    "\n      mutation UpdateClassParticipationCollectionInvalidEnvironment($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidEnvironmentDocument,
-    "\n      mutation UpdateClassParticipationCollectionInvalidLearningObjectives($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidLearningObjectivesDocument,
-    "\n      mutation UpdateClassParticipationCollectionEvaluationsNotInCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionEvaluationsNotInCollectionDocument,
-    "\n      mutation UpdateClassParticipationCollectionInvalidStudentPresence($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidStudentPresenceDocument,
-    "\n      mutation UpdateClassParticipationCollectionInvalidEvaluationType($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionInvalidEvaluationTypeDocument,
-    "\n      mutation UpdateClassParticipationCollectionDataLoaderCheck($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    ": types.UpdateClassParticipationCollectionDataLoaderCheckDocument,
     "\n      mutation UpdateDefaultEvaluation($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n          rating\n          notes\n        }\n      }\n    ": types.UpdateDefaultEvaluationDocument,
     "\n      mutation UpdateDefaultEvaluationRatingLow($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateDefaultEvaluationRatingLowDocument,
     "\n      mutation UpdateDefaultEvaluationRatingInvalidInterval($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateDefaultEvaluationRatingInvalidIntervalDocument,
@@ -106,19 +119,6 @@ const documents = {
     "\n      mutation UpdateDefaultEvaluationNotPresent($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateDefaultEvaluationNotPresentDocument,
     "\n      mutation UpdateDefaultEvaluationClassParticipationUpdate($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateDefaultEvaluationClassParticipationUpdateDocument,
     "\n      mutation UpdateDefaultEvaluationDataLoaderCheck($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n          rating\n          notes\n        }\n      }\n    ": types.UpdateDefaultEvaluationDataLoaderCheckDocument,
-    "\n      mutation RequestPasswordResetValid($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    ": types.RequestPasswordResetValidDocument,
-    "\n      mutation VerifyPasswordResetCodeValid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    ": types.VerifyPasswordResetCodeValidDocument,
-    "\n      mutation UpdatePasswordValid($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    ": types.UpdatePasswordValidDocument,
-    "\n      mutation RequestPasswordResetInvalidEmail($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    ": types.RequestPasswordResetInvalidEmailDocument,
-    "\n      mutation RequestPasswordResetExceedTries($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    ": types.RequestPasswordResetExceedTriesDocument,
-    "\n      mutation VerifyPasswordResetCodeInvalid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    ": types.VerifyPasswordResetCodeInvalidDocument,
-    "\n      mutation VerifyPasswordResetCodeExpired($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    ": types.VerifyPasswordResetCodeExpiredDocument,
-    "\n      mutation VerifyPasswordResetCodeExceedTries($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    ": types.VerifyPasswordResetCodeExceedTriesDocument,
-    "\n      mutation UpdatePasswordDataLoaders($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    ": types.UpdatePasswordDataLoadersDocument,
-    "\n      mutation RegisterTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.RegisterTest_RegisterDocument,
-    "\n      mutation RegisterTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.RegisterTest_RegisterExistingEmailDocument,
-    "\n      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.RegisterTest_RegisterEmailInLowerCaseDocument,
-    "\n      mutation RegisterTest_RegisterInvalidLanguage($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    ": types.RegisterTest_RegisterInvalidLanguageDocument,
     "\n      mutation UpdateGroup($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          name\n          archived\n        }\n      }\n    ": types.UpdateGroupDocument,
     "\n      mutation UpdateGroupUnauthorized($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          name\n          archived\n        }\n      }\n    ": types.UpdateGroupUnauthorizedDocument,
     "\n      mutation UpdateGroupInvalidID($data: UpdateGroupInput!, $groupId: ID!) {\n        updateGroup(data: $data, groupId: $groupId) {\n          id\n          name\n          archived\n        }\n      }\n    ": types.UpdateGroupInvalidIdDocument,
@@ -152,6 +152,22 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  "): (typeof documents)["\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation Test_Logout {\n      logout\n    }\n  "): (typeof documents)["\n    mutation Test_Logout {\n      logout\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ConnectLocalCredentials($email: String!, $password: String!) {\n    connectLocalCredentials(email: $email, password: $password) {\n      userData {\n        id\n        email\n        groups {\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ConnectLocalCredentials($email: String!, $password: String!) {\n    connectLocalCredentials(email: $email, password: $password) {\n      userData {\n        id\n        email\n        groups {\n          id\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ConnectLocalCredentials_MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n"): (typeof documents)["\n  mutation ConnectLocalCredentials_MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -223,14 +239,6 @@ export function graphql(source: "\n      mutation CreateDefaultCollectionDataLoa
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation ConnectLocalCredentials($email: String!, $password: String!) {\n    connectLocalCredentials(email: $email, password: $password) {\n      userData {\n        id\n        email\n        groups {\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ConnectLocalCredentials($email: String!, $password: String!) {\n    connectLocalCredentials(email: $email, password: $password) {\n      userData {\n        id\n        email\n        groups {\n          id\n        }\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation ConnectLocalCredentials_MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n"): (typeof documents)["\n  mutation ConnectLocalCredentials_MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n      mutation CreateGroup($data: CreateGroupInput!) {\n        createGroup(data: $data) {\n          id\n          name\n          teacher {\n            id\n          }\n          subject {\n            code\n          }\n          students {\n            name\n          }\n          currentModule {\n            collectionTypes {\n              name\n              weight\n            }\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation CreateGroup($data: CreateGroupInput!) {\n        createGroup(data: $data) {\n          id\n          name\n          teacher {\n            id\n          }\n          subject {\n            code\n          }\n          students {\n            name\n          }\n          currentModule {\n            collectionTypes {\n              name\n              weight\n            }\n          }\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -263,14 +271,6 @@ export function graphql(source: "\n      mutation CreateStudentDataLoaderCheck($
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  "): (typeof documents)["\n    mutation Test_Login($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        userData {\n          email\n        }\n      }\n    }\n  "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    mutation Test_Logout {\n      logout\n    }\n  "): (typeof documents)["\n    mutation Test_Logout {\n      logout\n    }\n  "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n      mutation DeleteCollection($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteCollection($collectionId: ID!) {\n        deleteCollection(collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -287,30 +287,6 @@ export function graphql(source: "\n      mutation DeleteCollectionDataLoaderChec
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation GenerateGroupFeedbackTest($groupId: ID!) {\n    generateGroupFeedback(groupId: $groupId) {\n      usageData {\n        id\n        monthlyTokensUsed\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation GenerateGroupFeedbackTest($groupId: ID!) {\n    generateGroupFeedback(groupId: $groupId) {\n      usageData {\n        id\n        monthlyTokensUsed\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {\n    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {\n      feedback {\n        id\n        text\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {\n    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {\n      feedback {\n        id\n        text\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n      mutation DeleteGroup($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteGroup($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -324,6 +300,22 @@ export function graphql(source: "\n      mutation DeleteGroupInvalidID($groupId:
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      mutation DeleteGroupDataLoaderCheck($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteGroupDataLoaderCheck($groupId: ID!) {\n        deleteGroup(groupId: $groupId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudent($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentUnauthorized($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentInvalidID($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteStudentDataLoaderCheck($studentId: ID!) {\n        deleteStudent(studentId: $studentId) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -355,11 +347,7 @@ export function graphql(source: "\n      mutation FixTextGrammaticsEmptyText($st
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n"): (typeof documents)["\n  mutation MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation ConnectMPassID($code: String!) {\n    connectMPassID(code: $code) {\n      userData {\n        id\n        isMPassIDConnected\n        groups {\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ConnectMPassID($code: String!) {\n    connectMPassID(code: $code) {\n      userData {\n        id\n        isMPassIDConnected\n        groups {\n          id\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  mutation GenerateGroupFeedbackTest($groupId: ID!) {\n    generateGroupFeedback(groupId: $groupId) {\n      usageData {\n        id\n        monthlyTokensUsed\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation GenerateGroupFeedbackTest($groupId: ID!) {\n    generateGroupFeedback(groupId: $groupId) {\n      usageData {\n        id\n        monthlyTokensUsed\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -379,11 +367,111 @@ export function graphql(source: "\n      mutation LoginTest_NoEmailLogin($email:
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {\n    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {\n      feedback {\n        id\n        text\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {\n    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {\n      feedback {\n        id\n        text\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n"): (typeof documents)["\n  mutation MPassIDLogin($code: String!) {\n    mPassIDLogin(code: $code) {\n      payload {\n        userData {\n          id\n          isMPassIDConnected\n        }\n      }\n      newUserCreated\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ConnectMPassID($code: String!) {\n    connectMPassID(code: $code) {\n      userData {\n        id\n        isMPassIDConnected\n        groups {\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ConnectMPassID($code: String!) {\n    connectMPassID(code: $code) {\n      userData {\n        id\n        isMPassIDConnected\n        groups {\n          id\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation RequestPasswordResetValid($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "): (typeof documents)["\n      mutation RequestPasswordResetValid($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation VerifyPasswordResetCodeValid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "): (typeof documents)["\n      mutation VerifyPasswordResetCodeValid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdatePasswordValid($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    "): (typeof documents)["\n      mutation UpdatePasswordValid($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation RequestPasswordResetInvalidEmail($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "): (typeof documents)["\n      mutation RequestPasswordResetInvalidEmail($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation RequestPasswordResetExceedTries($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "): (typeof documents)["\n      mutation RequestPasswordResetExceedTries($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation VerifyPasswordResetCodeInvalid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "): (typeof documents)["\n      mutation VerifyPasswordResetCodeInvalid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation VerifyPasswordResetCodeExpired($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "): (typeof documents)["\n      mutation VerifyPasswordResetCodeExpired($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation VerifyPasswordResetCodeExceedTries($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "): (typeof documents)["\n      mutation VerifyPasswordResetCodeExceedTries($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdatePasswordDataLoaders($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    "): (typeof documents)["\n      mutation UpdatePasswordDataLoaders($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation RegisterTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation RegisterTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation RegisterTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation RegisterTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation RegisterTest_RegisterInvalidLanguage($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation RegisterTest_RegisterInvalidLanguage($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n      mutation SampleTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation SampleTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      mutation SampleTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation SampleTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n          date\n          type {\n            id\n          }\n          environment {\n            code\n          }\n          description\n          evaluations {\n            id\n            skillsRating\n            behaviourRating\n            notes\n            wasPresent\n          }\n          learningObjectives {\n            code\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n          date\n          type {\n            id\n          }\n          environment {\n            code\n          }\n          description\n          evaluations {\n            id\n            skillsRating\n            behaviourRating\n            notes\n            wasPresent\n          }\n          learningObjectives {\n            code\n          }\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollectionUnauthorized($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionUnauthorized($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidID($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidID($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidEnvironment($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidEnvironment($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidLearningObjectives($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidLearningObjectives($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollectionEvaluationsNotInCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionEvaluationsNotInCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidStudentPresence($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidStudentPresence($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidEvaluationType($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidEvaluationType($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateClassParticipationCollectionDataLoaderCheck($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionDataLoaderCheck($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -455,42 +543,6 @@ export function graphql(source: "\n      mutation UpdateDefaultCollectionDataLoa
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n          date\n          type {\n            id\n          }\n          environment {\n            code\n          }\n          description\n          evaluations {\n            id\n            skillsRating\n            behaviourRating\n            notes\n            wasPresent\n          }\n          learningObjectives {\n            code\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n          date\n          type {\n            id\n          }\n          environment {\n            code\n          }\n          description\n          evaluations {\n            id\n            skillsRating\n            behaviourRating\n            notes\n            wasPresent\n          }\n          learningObjectives {\n            code\n          }\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollectionUnauthorized($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionUnauthorized($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidID($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidID($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidEnvironment($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidEnvironment($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidLearningObjectives($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidLearningObjectives($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollectionEvaluationsNotInCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionEvaluationsNotInCollection($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidStudentPresence($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidStudentPresence($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollectionInvalidEvaluationType($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionInvalidEvaluationType($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdateClassParticipationCollectionDataLoaderCheck($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateClassParticipationCollectionDataLoaderCheck($data: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {\n        updateClassParticipationCollection(data: $data, collectionId: $collectionId) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n      mutation UpdateDefaultEvaluation($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n          rating\n          notes\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateDefaultEvaluation($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n          rating\n          notes\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -524,58 +576,6 @@ export function graphql(source: "\n      mutation UpdateDefaultEvaluationClassPa
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      mutation UpdateDefaultEvaluationDataLoaderCheck($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n          rating\n          notes\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateDefaultEvaluationDataLoaderCheck($input: UpdateDefaultEvaluationInput!) {\n        updateDefaultEvaluation(input: $input) {\n          id\n          rating\n          notes\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation RequestPasswordResetValid($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "): (typeof documents)["\n      mutation RequestPasswordResetValid($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation VerifyPasswordResetCodeValid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "): (typeof documents)["\n      mutation VerifyPasswordResetCodeValid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdatePasswordValid($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    "): (typeof documents)["\n      mutation UpdatePasswordValid($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation RequestPasswordResetInvalidEmail($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "): (typeof documents)["\n      mutation RequestPasswordResetInvalidEmail($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation RequestPasswordResetExceedTries($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "): (typeof documents)["\n      mutation RequestPasswordResetExceedTries($email: String!) {\n        requestPasswordReset(email: $email)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation VerifyPasswordResetCodeInvalid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "): (typeof documents)["\n      mutation VerifyPasswordResetCodeInvalid($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation VerifyPasswordResetCodeExpired($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "): (typeof documents)["\n      mutation VerifyPasswordResetCodeExpired($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation VerifyPasswordResetCodeExceedTries($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "): (typeof documents)["\n      mutation VerifyPasswordResetCodeExceedTries($code: String!) {\n        verifyPasswordResetCode(code: $code)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation UpdatePasswordDataLoaders($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    "): (typeof documents)["\n      mutation UpdatePasswordDataLoaders($newPassword: String!, $recoveryCode: String!) {\n        updatePassword(newPassword: $newPassword, recoveryCode: $recoveryCode)\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation RegisterTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation RegisterTest_Register($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation RegisterTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation RegisterTest_RegisterExistingEmail($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n      mutation RegisterTest_RegisterInvalidLanguage($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation RegisterTest_RegisterInvalidLanguage($data: CreateTeacherInput!) {\n        register(data: $data) {\n          userData {\n            email\n          }\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

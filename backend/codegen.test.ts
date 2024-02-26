@@ -11,6 +11,7 @@ const config: CodegenConfig = {
   ignoreNoDocuments: true,
   config: {
     sort: false, // Disable sorting so enums will be in same order as in schema (applies to others than enums as well as side effect)
+    enumsAsTypes: true,
     namingConvention: {
       enumValues: "change-case#upperCase",
     },
@@ -31,8 +32,8 @@ const config: CodegenConfig = {
       config: {
         scalars: customScalars,
       },
-    }
-  }
+    },
+  },
 };
 
 export default config;
