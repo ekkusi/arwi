@@ -1,21 +1,20 @@
 import { Button, Text } from "@chakra-ui/react";
 import Section from "@/components/general/Section";
 import { getIsAuthenticated } from "@/utils/auth";
+import { ResultOf, graphql } from "@/graphql";
 import PageWrapper from "../../../components/general/PageWrapper";
-import { graphql } from "../../../gql";
 import { serverQuery } from "../../../apollo/server";
 import Link from "../../../components/primitives/Link";
 import { LocalizedPage } from "../../../types/page";
 import { getTranslation } from "../../../i18n";
 import { getPathnameServer } from "../../../utils/server";
 import DeleteUserModalAndButton from "./DeleteUserModalAndButton";
-import { AccountDeletePage_GetCurrentUserQuery } from "../../../gql/graphql";
 
-const AccountDeletePage_GetCurrentUser_Query = graphql(`
+const SomeQuery = graphql(`
   query AccountDeletePage_GetCurrentUser {
     getCurrentUser {
-      email
       id
+      email
     }
   }
 `);
@@ -26,11 +25,13 @@ export default async function Page({ params, searchParams }: LocalizedPage) {
   const { t } = await getTranslation(lng);
   const deleteSuccess = searchParams.delete_success === "true";
   const isAuthenticated = await getIsAuthenticated();
-  let userData: AccountDeletePage_GetCurrentUserQuery["getCurrentUser"] | undefined;
+  let userData: ResultOf<typeof SomeQuery>["getCurrentUser"];
   if (isAuthenticated) {
-    const userResult = await serverQuery({ query: AccountDeletePage_GetCurrentUser_Query });
+    const userResult = await serverQuery({ query: SomeQuery });
     userData = userResult?.data.getCurrentUser;
   }
+  //   const result = await serverQuery({ query: SomeQuery });
+  // const userData = result?.data.getCurrentUser;
 
   const renderAuthContent = () => {
     if (isAuthenticated && userData) {
@@ -43,7 +44,7 @@ export default async function Page({ params, searchParams }: LocalizedPage) {
                 "Voit poistaa käyttäjäsi ja kaikki siihen liittyvät tiedot klikkaamaalla alta sekä varmistamalla poisto."
               )}
             </Text>
-            <DeleteUserModalAndButton user={{ email: userData.email!, id: userData.id }} />
+            <DeleteUserModalAndButton user={{ email: userData.email, id: userData.id }} />
           </>
         );
       return (

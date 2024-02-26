@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PageWrapper from "@/components/general/PageWrapper";
 import Section from "@/components/general/Section";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../utils/errorUtils";
 import { useAuth } from "../../../hooks-and-providers/AuthProvider";
 

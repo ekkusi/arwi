@@ -6,7 +6,7 @@ import PageWrapper from "./components/general/PageWrapper";
 import Section from "./components/general/Section";
 import Link from "./components/primitives/Link";
 import LinkButton from "./components/primitives/LinkButton";
-import { withChakraOptions, withChakraProps } from "./utils/builder";
+import { withChakraOptions, withChakraProps } from "./utils/builderUtils";
 import ChakraIcon, { ICON_KEYS } from "./components/primitives/ChakraIcon";
 
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
