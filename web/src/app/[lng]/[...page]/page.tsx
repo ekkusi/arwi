@@ -35,6 +35,7 @@ export default async function Page(props: LocalizedPage & PageProps) {
     // If the page locale does not match the URL locale, redirect to the correct locale
     redirect(`/${pageLocale}/${urlPath}`);
   }
+  console.log(content);
 
   return (
     <>

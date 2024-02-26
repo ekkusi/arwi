@@ -13,7 +13,7 @@ export default function PageWrapper({ children, footerProps, headerProps, outerP
   return (
     <Flex flexDirection="column" bg="light-gray" minHeight="100vh" width="100%" position="relative" {...outerProps}>
       <Header {...headerProps} />
-      <Box as="main" flex={1} px="4" width="100%" {...layoutProps} {...rest}>
+      <Box as="main" flex={1} width="100%" {...layoutProps} {...rest}>
         {children}
       </Box>
       <Footer {...footerProps} />
