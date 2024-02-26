@@ -1,6 +1,6 @@
 "use client";
 
-import { Link as BaseLink, LinkProps as BaseLinkProps } from "@chakra-ui/next-js";
+import { Link as BaseLink } from "@chakra-ui/next-js";
 import { Variants, motion } from "framer-motion";
 import { forwardRef, useMemo } from "react";
 import { LanguageOption } from "@/i18n/settings";
@@ -8,39 +8,16 @@ import { useTranslation } from "@/i18n/client";
 import { RouteKey, getPathFromRoute } from "@/utils/route";
 import { MotionBox } from "../motion-chakra";
 
-const MotionLink = motion<Omit<BaseLinkProps, "transition">>(BaseLink);
-
-export type LinkProps = Omit<React.ComponentProps<typeof MotionLink>, "ref"> & {
+type AdditionalLinkProps = {
   noTranslate?: boolean;
-  hoverStyle?: "underline" | "none" | "opacity";
+  hoverStyle?: "opacity" | "none";
   queryParams?: Record<string, string>;
-  underLineSize?: string | number;
 };
 
-const underLineMotion: Variants = {
-  rest: {
-    width: "0",
-  },
-  hover: {
-    width: "100%",
-  },
-};
+export type LinkProps = Omit<React.ComponentProps<typeof BaseLink>, "ref"> & AdditionalLinkProps;
 
-export default forwardRef<HTMLAnchorElement, LinkProps>(
-  (
-    {
-      href: _href,
-      children,
-      noTranslate = false,
-      color = "primary",
-      hoverStyle = "opacity",
-      underLineSize = "1px",
-      fontSize,
-      queryParams: _queryParams,
-      ...rest
-    },
-    ref
-  ) => {
+const Link = forwardRef<HTMLAnchorElement, LinkProps>(
+  ({ href: _href, children, noTranslate = false, hoverStyle = "opacity", fontSize, queryParams: _queryParams, ...rest }, ref) => {
     const { i18n } = useTranslation();
     const locale = i18n.language as LanguageOption;
 
@@ -67,42 +44,49 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
 
     const hoverStyles = useMemo(() => {
       switch (hoverStyle) {
-        case "opacity":
-          return undefined;
-        // In underline or none, override the default opacity hover style
-        default:
+        case "none":
           return {
             _hover: {
               opacity: 1,
             },
           };
+        default:
+          return {};
       }
     }, [hoverStyle]);
 
     return (
-      <MotionLink
-        ref={ref}
-        href={href}
-        initial="rest"
-        whileHover="hover"
-        position="relative"
-        color={color}
-        fontSize={fontSize}
-        {...hoverStyles}
-        {...rest}
-      >
+      <BaseLink ref={ref} href={href} position="relative" fontSize={fontSize} {...hoverStyles} {...rest}>
         {children}
-        {hoverStyle === "underline" && (
-          <MotionBox
-            variants={underLineMotion}
-            position="absolute"
-            bottom="-1"
-            left=" 0"
-            backgroundColor={color}
-            width="100%"
-            height={underLineSize}
-          />
-        )}
+      </BaseLink>
+    );
+  }
+);
+
+export default Link;
+
+const underLineMotion: Variants = {
+  rest: {
+    width: "0",
+  },
+  hover: {
+    width: "100%",
+  },
+};
+
+const MotionLink = motion<Omit<LinkProps, "transition">>(Link);
+
+export type UnderlineLinkProps = Omit<React.ComponentProps<typeof MotionLink>, "ref"> &
+  AdditionalLinkProps & {
+    underLineSize?: string;
+  };
+
+export const UnderlineLink = forwardRef<HTMLAnchorElement, UnderlineLinkProps>(
+  ({ children, color = "primary", underLineSize = "1px", ...rest }, ref) => {
+    return (
+      <MotionLink as={Link} hoverStyle="none" {...rest} initial="rest" whileHover="hover" ref={ref}>
+        {children}
+        <MotionBox variants={underLineMotion} position="absolute" bottom="-1" left="0" backgroundColor={color} width="100%" height={underLineSize} />
       </MotionLink>
     );
   }

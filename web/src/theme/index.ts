@@ -136,6 +136,10 @@ const theme = extendTheme(
         },
         a: {
           color: `${DEFAULT_COLOR_SCHEME}.500`,
+          transition: "opacity 0.3s",
+          "&:hover": {
+            opacity: 0.7,
+          },
         },
         "p, ol, ul": {
           mb: 3,

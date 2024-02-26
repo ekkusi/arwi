@@ -8,7 +8,8 @@ export default function Section({ isFullWidth = false, ...rest }: SectionProps) 
   return (
     <Box
       as="section"
-      my="20"
+      py="20"
+      px="4"
       mx={isFullWidth ? rest.mx : "auto"}
       width={isFullWidth ? "100%" : { base: "100%", md: "750px", xl: "1000px" }}
       maxWidth="100%"
