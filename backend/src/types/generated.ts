@@ -1,16 +1,8 @@
 /* eslint-disable */
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql";
-import { UserInfo as UserInfoPrisma, CustomContext } from "./contextTypes";
-import {
-  EvaluationCollection as EvaluationCollectionPrisma,
-  Evaluation as EvaluationPrisma,
-  Group as GroupPrisma,
-  Student as StudentPrisma,
-  Module as ModulePrisma,
-  CollectionType as CollectionTypePrisma,
-  Feedback as FeedbackPrisma,
-} from "@prisma/client";
-import { SubjectMinimal as SubjectMinimalPrisma, EnvironmentInfo as EnvironmentInfoPrisma } from "./codegenOverrides";
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { UserInfo as UserInfoPrisma, CustomContext } from './contextTypes';
+import { EvaluationCollection as EvaluationCollectionPrisma, Evaluation as EvaluationPrisma, Group as GroupPrisma, Student as StudentPrisma, Module as ModulePrisma, CollectionType as CollectionTypePrisma, Feedback as FeedbackPrisma } from '@prisma/client';
+import { SubjectMinimal as SubjectMinimalPrisma, EnvironmentInfo as EnvironmentInfoPrisma } from './codegenOverrides';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -31,7 +23,7 @@ export type Scalars = {
 };
 
 export type Query = {
-  __typename?: "Query";
+  __typename?: 'Query';
   getAppMetadata: AppMetadata;
   getCurrentUser: Teacher;
   getCurrentUserUsageData: TeacherUsageData;
@@ -42,47 +34,60 @@ export type Query = {
   getType: CollectionType;
   getStudent: Student;
   getEvaluation: Evaluation;
+  getMPassIDOrganizations: Array<MPassIdOrganization>;
 };
+
 
 export type QueryGetTeacherArgs = {
-  id: Scalars["ID"];
+  id: Scalars['ID'];
 };
+
 
 export type QueryGetGroupsArgs = {
-  teacherId: Scalars["ID"];
+  teacherId: Scalars['ID'];
 };
+
 
 export type QueryGetGroupArgs = {
-  id: Scalars["ID"];
+  id: Scalars['ID'];
 };
+
 
 export type QueryGetCollectionArgs = {
-  id: Scalars["ID"];
+  id: Scalars['ID'];
 };
+
 
 export type QueryGetTypeArgs = {
-  id: Scalars["ID"];
+  id: Scalars['ID'];
 };
+
 
 export type QueryGetStudentArgs = {
-  id: Scalars["ID"];
+  id: Scalars['ID'];
 };
 
+
 export type QueryGetEvaluationArgs = {
-  id: Scalars["ID"];
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetMPassIdOrganizationsArgs = {
+  parentOid: Scalars['String'];
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   register: AuthPayload;
   login: AuthPayload;
   mPassIDLogin: MPassIdAuthPayload;
-  requestPasswordReset: Scalars["Boolean"];
-  verifyPasswordResetCode: Scalars["Boolean"];
-  updatePassword: Scalars["Boolean"];
+  requestPasswordReset: Scalars['Boolean'];
+  verifyPasswordResetCode: Scalars['Boolean'];
+  updatePassword: Scalars['Boolean'];
   connectMPassID: AuthPayload;
   connectLocalCredentials: AuthPayload;
-  logout: Scalars["Boolean"];
+  logout: Scalars['Boolean'];
   createGroup: Group;
   createClassParticipationCollection: ClassParticipationCollection;
   createDefaultCollection: DefaultCollection;
@@ -101,269 +106,313 @@ export type Mutation = {
   generateStudentFeedback: GenerateStudentFeedbackResult;
   generateGroupFeedback: GenerateGroupFeedbackResult;
   fixTextGrammatics: FixTextGrammaticsResult;
-  setTokenUseWarningSeen: Scalars["Boolean"];
+  setTokenUseWarningSeen: Scalars['Boolean'];
 };
+
 
 export type MutationRegisterArgs = {
   data: CreateTeacherInput;
 };
 
+
 export type MutationLoginArgs = {
-  email: Scalars["String"];
-  password: Scalars["String"];
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
+
 
 export type MutationMPassIdLoginArgs = {
-  code: Scalars["String"];
+  code: Scalars['String'];
 };
+
 
 export type MutationRequestPasswordResetArgs = {
-  email: Scalars["String"];
+  email: Scalars['String'];
 };
+
 
 export type MutationVerifyPasswordResetCodeArgs = {
-  code: Scalars["String"];
+  code: Scalars['String'];
 };
+
 
 export type MutationUpdatePasswordArgs = {
-  recoveryCode: Scalars["String"];
-  newPassword: Scalars["String"];
+  recoveryCode: Scalars['String'];
+  newPassword: Scalars['String'];
 };
+
 
 export type MutationConnectMPassIdArgs = {
-  code: Scalars["String"];
+  code: Scalars['String'];
 };
 
+
 export type MutationConnectLocalCredentialsArgs = {
-  email: Scalars["String"];
-  password: Scalars["String"];
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
+
 
 export type MutationCreateGroupArgs = {
   data: CreateGroupInput;
 };
 
+
 export type MutationCreateClassParticipationCollectionArgs = {
   data: CreateClassParticipationCollectionInput;
-  moduleId: Scalars["ID"];
+  moduleId: Scalars['ID'];
 };
+
 
 export type MutationCreateDefaultCollectionArgs = {
   data: CreateDefaultCollectionInput;
-  moduleId: Scalars["ID"];
+  moduleId: Scalars['ID'];
 };
+
 
 export type MutationCreateStudentArgs = {
   data: CreateStudentInput;
-  moduleId: Scalars["ID"];
+  moduleId: Scalars['ID'];
 };
+
 
 export type MutationUpdateClassParticipationCollectionArgs = {
   data: UpdateClassParticipationCollectionInput;
-  collectionId: Scalars["ID"];
+  collectionId: Scalars['ID'];
 };
+
 
 export type MutationUpdateDefaultCollectionArgs = {
   data: UpdateDefaultCollectionInput;
-  collectionId: Scalars["ID"];
+  collectionId: Scalars['ID'];
 };
+
 
 export type MutationUpdateStudentArgs = {
   data: UpdateStudentInput;
-  studentId: Scalars["ID"];
+  studentId: Scalars['ID'];
 };
+
 
 export type MutationUpdateGroupArgs = {
   data: UpdateGroupInput;
-  groupId: Scalars["ID"];
+  groupId: Scalars['ID'];
 };
+
 
 export type MutationUpdateClassParticipationEvaluationArgs = {
   input: UpdateClassParticipationEvaluationInput;
 };
 
+
 export type MutationUpdateDefaultEvaluationArgs = {
   input: UpdateDefaultEvaluationInput;
 };
 
+
 export type MutationDeleteStudentArgs = {
-  studentId: Scalars["ID"];
+  studentId: Scalars['ID'];
 };
+
 
 export type MutationDeleteTeacherArgs = {
-  teacherId: Scalars["ID"];
+  teacherId: Scalars['ID'];
 };
+
 
 export type MutationDeleteGroupArgs = {
-  groupId: Scalars["ID"];
+  groupId: Scalars['ID'];
 };
 
+
 export type MutationDeleteCollectionArgs = {
-  collectionId: Scalars["ID"];
+  collectionId: Scalars['ID'];
 };
+
 
 export type MutationChangeGroupModuleArgs = {
   data: ChangeGroupModuleInput;
-  groupId: Scalars["ID"];
+  groupId: Scalars['ID'];
 };
+
 
 export type MutationGenerateStudentFeedbackArgs = {
-  studentId: Scalars["ID"];
-  moduleId: Scalars["ID"];
+  studentId: Scalars['ID'];
+  moduleId: Scalars['ID'];
 };
+
 
 export type MutationGenerateGroupFeedbackArgs = {
-  groupId: Scalars["ID"];
+  groupId: Scalars['ID'];
 };
 
+
 export type MutationFixTextGrammaticsArgs = {
-  studentId: Scalars["ID"];
-  text: Scalars["String"];
+  studentId: Scalars['ID'];
+  text: Scalars['String'];
 };
+
 
 export type MutationSetTokenUseWarningSeenArgs = {
   warning: TokenUseWarning;
 };
 
 export type AppMetadata = {
-  __typename?: "AppMetadata";
-  appVersion: Scalars["String"];
-  minimumSupportedAppVersion: Scalars["String"];
-  monthlyTokenUseLimit: Scalars["Int"];
-  feedbackGenerationTokenCost: Scalars["Int"];
-  textFixTokenCost: Scalars["Int"];
+  __typename?: 'AppMetadata';
+  appVersion: Scalars['String'];
+  minimumSupportedAppVersion: Scalars['String'];
+  monthlyTokenUseLimit: Scalars['Int'];
+  feedbackGenerationTokenCost: Scalars['Int'];
+  textFixTokenCost: Scalars['Int'];
 };
 
 export type AuthPayload = {
-  __typename?: "AuthPayload";
+  __typename?: 'AuthPayload';
   userData: Teacher;
 };
 
 export type MPassIdAuthPayload = {
-  __typename?: "MPassIDAuthPayload";
+  __typename?: 'MPassIDAuthPayload';
   payload: AuthPayload;
-  newUserCreated: Scalars["Boolean"];
+  newUserCreated: Scalars['Boolean'];
 };
 
 export type Teacher = {
-  __typename?: "Teacher";
-  id: Scalars["ID"];
-  email?: Maybe<Scalars["EmailAddress"]>;
+  __typename?: 'Teacher';
+  id: Scalars['ID'];
+  email?: Maybe<Scalars['EmailAddress']>;
   groups: Array<Group>;
-  languagePreference: Scalars["String"];
-  consentsAnalytics: Scalars["Boolean"];
-  isMPassIDConnected: Scalars["Boolean"];
+  languagePreference: Scalars['String'];
+  consentsAnalytics: Scalars['Boolean'];
+  isMPassIDConnected: Scalars['Boolean'];
 };
 
 export type WarningInfo = {
-  __typename?: "WarningInfo";
+  __typename?: 'WarningInfo';
   warning: TokenUseWarning;
-  threshhold: Scalars["Float"];
+  threshhold: Scalars['Float'];
 };
 
 export type TeacherUsageData = {
-  __typename?: "TeacherUsageData";
-  id: Scalars["ID"];
-  monthlyTokensUsed: Scalars["Int"];
+  __typename?: 'TeacherUsageData';
+  id: Scalars['ID'];
+  monthlyTokensUsed: Scalars['Int'];
   warning?: Maybe<WarningInfo>;
 };
 
 export type GenerateStudentFeedbackResult = {
-  __typename?: "GenerateStudentFeedbackResult";
+  __typename?: 'GenerateStudentFeedbackResult';
   feedback: Feedback;
-  tokensUsed: Scalars["Int"];
+  tokensUsed: Scalars['Int'];
   usageData: TeacherUsageData;
 };
 
 export type GenerateGroupFeedbackResult = {
-  __typename?: "GenerateGroupFeedbackResult";
+  __typename?: 'GenerateGroupFeedbackResult';
   feedbacks: Array<Feedback>;
-  tokensUsed: Scalars["Int"];
+  tokensUsed: Scalars['Int'];
   usageData: TeacherUsageData;
 };
 
 export type FixTextGrammaticsResult = {
-  __typename?: "FixTextGrammaticsResult";
-  result: Scalars["String"];
-  tokensUsed: Scalars["Int"];
+  __typename?: 'FixTextGrammaticsResult';
+  result: Scalars['String'];
+  tokensUsed: Scalars['Int'];
   usageData: TeacherUsageData;
 };
 
 export type LoginResult = {
-  __typename?: "LoginResult";
+  __typename?: 'LoginResult';
   userData: Teacher;
 };
 
 export type TranslatedString = {
-  __typename?: "TranslatedString";
-  fi: Scalars["String"];
-  en?: Maybe<Scalars["String"]>;
-  se?: Maybe<Scalars["String"]>;
+  __typename?: 'TranslatedString';
+  fi: Scalars['String'];
+  en?: Maybe<Scalars['String']>;
+  se?: Maybe<Scalars['String']>;
 };
 
-export type TokenUseWarning = "FIRST_WARNING" | "SECOND_WARNING";
+export type TokenUseWarning =
+  | 'FIRST_WARNING'
+  | 'SECOND_WARNING';
 
-export type LearningObjectiveType = "BEHAVIOUR" | "SKILLS" | "SKILLS_AND_BEHAVIOUR" | "NOT_EVALUATED";
+export type LearningObjectiveType =
+  | 'BEHAVIOUR'
+  | 'SKILLS'
+  | 'SKILLS_AND_BEHAVIOUR'
+  | 'NOT_EVALUATED';
+
+export type MPassIdOrganization = {
+  __typename?: 'MPassIDOrganization';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
 
 export type LearningObjective = {
-  __typename?: "LearningObjective";
-  code: Scalars["ID"];
+  __typename?: 'LearningObjective';
+  code: Scalars['ID'];
   label: TranslatedString;
   description: TranslatedString;
   type: LearningObjectiveType;
-  color: Scalars["String"];
+  color: Scalars['String'];
 };
 
 export type Subject = {
-  __typename?: "Subject";
-  code: Scalars["ID"];
+  __typename?: 'Subject';
+  code: Scalars['ID'];
   label: TranslatedString;
   environments: Array<Environment>;
 };
 
 export type Environment = {
-  __typename?: "Environment";
-  code: Scalars["ID"];
-  color: Scalars["String"];
+  __typename?: 'Environment';
+  code: Scalars['ID'];
+  color: Scalars['String'];
   label: TranslatedString;
   subject: Subject;
 };
 
 export type Group = {
-  __typename?: "Group";
-  id: Scalars["ID"];
-  name: Scalars["String"];
+  __typename?: 'Group';
+  id: Scalars['ID'];
+  name: Scalars['String'];
   students: Array<Student>;
   subject: Subject;
   teacher: Teacher;
-  updatedAt: Scalars["DateTime"];
-  archived: Scalars["Boolean"];
+  updatedAt: Scalars['DateTime'];
+  archived: Scalars['Boolean'];
   currentModule: Module;
   modules: Array<Module>;
 };
 
 export type CollectionType = {
-  __typename?: "CollectionType";
-  id: Scalars["ID"];
+  __typename?: 'CollectionType';
+  id: Scalars['ID'];
   category: CollectionTypeCategory;
-  name: Scalars["String"];
-  weight: Scalars["Int"];
+  name: Scalars['String'];
+  weight: Scalars['Int'];
   module: Module;
   defaultTypeCollection?: Maybe<DefaultCollection>;
 };
 
-export type CollectionTypeCategory = "CLASS_PARTICIPATION" | "EXAM" | "WRITTEN_WORK" | "GROUP_WORK" | "OTHER";
+export type CollectionTypeCategory =
+  | 'CLASS_PARTICIPATION'
+  | 'EXAM'
+  | 'WRITTEN_WORK'
+  | 'GROUP_WORK'
+  | 'OTHER';
 
 export type ModuleInfo = {
-  __typename?: "ModuleInfo";
+  __typename?: 'ModuleInfo';
   educationLevel: EducationLevel;
-  learningObjectiveGroupKey: Scalars["String"];
+  learningObjectiveGroupKey: Scalars['String'];
   label: TranslatedString;
 };
 
 export type Module = {
-  __typename?: "Module";
-  id: Scalars["ID"];
+  __typename?: 'Module';
+  id: Scalars['ID'];
   info: ModuleInfo;
   evaluationCollections: Array<EvaluationCollection>;
   students: Array<Student>;
@@ -372,20 +421,20 @@ export type Module = {
 };
 
 export type EvaluationCollection = {
-  id: Scalars["ID"];
-  date: Scalars["Date"];
+  id: Scalars['ID'];
+  date: Scalars['Date'];
   type: CollectionType;
-  description?: Maybe<Scalars["String"]>;
+  description?: Maybe<Scalars['String']>;
   evaluations: Array<Evaluation>;
   module: Module;
 };
 
 export type ClassParticipationCollection = EvaluationCollection & {
-  __typename?: "ClassParticipationCollection";
-  id: Scalars["ID"];
-  date: Scalars["Date"];
+  __typename?: 'ClassParticipationCollection';
+  id: Scalars['ID'];
+  date: Scalars['Date'];
   type: CollectionType;
-  description?: Maybe<Scalars["String"]>;
+  description?: Maybe<Scalars['String']>;
   evaluations: Array<ClassParticipationEvaluation>;
   module: Module;
   environment: Environment;
@@ -393,48 +442,48 @@ export type ClassParticipationCollection = EvaluationCollection & {
 };
 
 export type DefaultCollection = EvaluationCollection & {
-  __typename?: "DefaultCollection";
-  id: Scalars["ID"];
-  date: Scalars["Date"];
+  __typename?: 'DefaultCollection';
+  id: Scalars['ID'];
+  date: Scalars['Date'];
   type: CollectionType;
-  description?: Maybe<Scalars["String"]>;
+  description?: Maybe<Scalars['String']>;
   evaluations: Array<DefaultEvaluation>;
   module: Module;
 };
 
 export type Evaluation = {
-  id: Scalars["ID"];
+  id: Scalars['ID'];
   student: Student;
-  wasPresent: Scalars["Boolean"];
-  notes?: Maybe<Scalars["String"]>;
+  wasPresent: Scalars['Boolean'];
+  notes?: Maybe<Scalars['String']>;
   collection: EvaluationCollection;
 };
 
 export type ClassParticipationEvaluation = Evaluation & {
-  __typename?: "ClassParticipationEvaluation";
-  id: Scalars["ID"];
+  __typename?: 'ClassParticipationEvaluation';
+  id: Scalars['ID'];
   student: Student;
-  wasPresent: Scalars["Boolean"];
-  notes?: Maybe<Scalars["String"]>;
+  wasPresent: Scalars['Boolean'];
+  notes?: Maybe<Scalars['String']>;
   collection: ClassParticipationCollection;
-  skillsRating?: Maybe<Scalars["Int"]>;
-  behaviourRating?: Maybe<Scalars["Int"]>;
+  skillsRating?: Maybe<Scalars['Int']>;
+  behaviourRating?: Maybe<Scalars['Int']>;
 };
 
 export type DefaultEvaluation = Evaluation & {
-  __typename?: "DefaultEvaluation";
-  id: Scalars["ID"];
+  __typename?: 'DefaultEvaluation';
+  id: Scalars['ID'];
   student: Student;
-  wasPresent: Scalars["Boolean"];
-  notes?: Maybe<Scalars["String"]>;
+  wasPresent: Scalars['Boolean'];
+  notes?: Maybe<Scalars['String']>;
   collection: DefaultCollection;
-  rating?: Maybe<Scalars["Float"]>;
+  rating?: Maybe<Scalars['Float']>;
 };
 
 export type Student = {
-  __typename?: "Student";
-  id: Scalars["ID"];
-  name: Scalars["String"];
+  __typename?: 'Student';
+  id: Scalars['ID'];
+  name: Scalars['String'];
   group: Group;
   currentModuleEvaluations: Array<Evaluation>;
   latestFeedback?: Maybe<Feedback>;
@@ -442,146 +491,147 @@ export type Student = {
 };
 
 export type Feedback = {
-  __typename?: "Feedback";
-  id: Scalars["ID"];
+  __typename?: 'Feedback';
+  id: Scalars['ID'];
   student: Student;
   module: Module;
-  text: Scalars["String"];
-  createdAt: Scalars["DateTime"];
+  text: Scalars['String'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type EducationLevel =
-  | "PRIMARY_FIRST"
-  | "PRIMARY_SECOND"
-  | "PRIMARY_THIRD"
-  | "PRIMARY_FOURTH"
-  | "PRIMARY_FIFTH"
-  | "PRIMARY_SIXTH"
-  | "PRIMARY_SEVENTH"
-  | "PRIMARY_EIGHTH"
-  | "PRIMARY_NINTH"
-  | "HIGH_SCHOOL"
-  | "VOCATIONAL";
+  | 'PRIMARY_FIRST'
+  | 'PRIMARY_SECOND'
+  | 'PRIMARY_THIRD'
+  | 'PRIMARY_FOURTH'
+  | 'PRIMARY_FIFTH'
+  | 'PRIMARY_SIXTH'
+  | 'PRIMARY_SEVENTH'
+  | 'PRIMARY_EIGHTH'
+  | 'PRIMARY_NINTH'
+  | 'HIGH_SCHOOL'
+  | 'VOCATIONAL';
 
 export type CreateTeacherInput = {
-  email: Scalars["EmailAddress"];
-  password: Scalars["String"];
-  languagePreference?: InputMaybe<Scalars["String"]>;
-  consentsAnalytics?: InputMaybe<Scalars["Boolean"]>;
+  email: Scalars['EmailAddress'];
+  password: Scalars['String'];
+  languagePreference?: InputMaybe<Scalars['String']>;
+  consentsAnalytics?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CreateGroupInput = {
-  name: Scalars["String"];
-  teacherId: Scalars["ID"];
-  subjectCode: Scalars["ID"];
+  name: Scalars['String'];
+  teacherId: Scalars['ID'];
+  subjectCode: Scalars['ID'];
   educationLevel: EducationLevel;
-  learningObjectiveGroupKey: Scalars["String"];
+  learningObjectiveGroupKey: Scalars['String'];
   students: Array<CreateStudentInput>;
   collectionTypes: Array<CreateCollectionTypeInput>;
 };
 
 export type CreateStudentInput = {
-  name: Scalars["String"];
+  name: Scalars['String'];
 };
 
 export type CreateCollectionTypeInput = {
   category: CollectionTypeCategory;
-  name: Scalars["String"];
-  weight: Scalars["Int"];
+  name: Scalars['String'];
+  weight: Scalars['Int'];
 };
 
 export type UpdateGroupInput = {
-  name?: InputMaybe<Scalars["String"]>;
-  archived?: InputMaybe<Scalars["Boolean"]>;
+  name?: InputMaybe<Scalars['String']>;
+  archived?: InputMaybe<Scalars['Boolean']>;
   updateCollectionTypeInputs?: InputMaybe<Array<UpdateCollectionTypeInput>>;
-  deleteCollectionTypeIds?: InputMaybe<Array<Scalars["ID"]>>;
+  deleteCollectionTypeIds?: InputMaybe<Array<Scalars['ID']>>;
   createCollectionTypeInputs?: InputMaybe<Array<CreateCollectionTypeInput>>;
 };
 
 export type UpdateCollectionTypeInput = {
-  id: Scalars["ID"];
+  id: Scalars['ID'];
   category?: InputMaybe<CollectionTypeCategory>;
-  name?: InputMaybe<Scalars["String"]>;
-  weight?: InputMaybe<Scalars["Int"]>;
+  name?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateStudentInput = {
-  name?: InputMaybe<Scalars["String"]>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateClassParticipationCollectionInput = {
-  date: Scalars["Date"];
-  typeId: Scalars["ID"];
-  environmentCode: Scalars["ID"];
-  description?: InputMaybe<Scalars["String"]>;
-  learningObjectiveCodes: Array<Scalars["ID"]>;
+  date: Scalars['Date'];
+  typeId: Scalars['ID'];
+  environmentCode: Scalars['ID'];
+  description?: InputMaybe<Scalars['String']>;
+  learningObjectiveCodes: Array<Scalars['ID']>;
   evaluations?: InputMaybe<Array<CreateClassParticipationEvaluationInput>>;
 };
 
 export type CreateDefaultCollectionInput = {
-  date: Scalars["Date"];
-  typeId: Scalars["ID"];
-  description?: InputMaybe<Scalars["String"]>;
+  date: Scalars['Date'];
+  typeId: Scalars['ID'];
+  description?: InputMaybe<Scalars['String']>;
   evaluations?: InputMaybe<Array<CreateDefaultEvaluationInput>>;
 };
 
 export type CreateClassParticipationEvaluationInput = {
-  studentId: Scalars["ID"];
-  wasPresent: Scalars["Boolean"];
-  skillsRating?: InputMaybe<Scalars["Int"]>;
-  behaviourRating?: InputMaybe<Scalars["Int"]>;
-  notes?: InputMaybe<Scalars["String"]>;
+  studentId: Scalars['ID'];
+  wasPresent: Scalars['Boolean'];
+  skillsRating?: InputMaybe<Scalars['Int']>;
+  behaviourRating?: InputMaybe<Scalars['Int']>;
+  notes?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateDefaultEvaluationInput = {
-  studentId: Scalars["ID"];
-  wasPresent: Scalars["Boolean"];
-  rating?: InputMaybe<Scalars["Float"]>;
-  notes?: InputMaybe<Scalars["String"]>;
+  studentId: Scalars['ID'];
+  wasPresent: Scalars['Boolean'];
+  rating?: InputMaybe<Scalars['Float']>;
+  notes?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateClassParticipationCollectionInput = {
-  date?: InputMaybe<Scalars["Date"]>;
-  environmentCode?: InputMaybe<Scalars["ID"]>;
-  description?: InputMaybe<Scalars["String"]>;
-  learningObjectiveCodes?: InputMaybe<Array<Scalars["ID"]>>;
+  date?: InputMaybe<Scalars['Date']>;
+  environmentCode?: InputMaybe<Scalars['ID']>;
+  description?: InputMaybe<Scalars['String']>;
+  learningObjectiveCodes?: InputMaybe<Array<Scalars['ID']>>;
   evaluations?: InputMaybe<Array<UpdateClassParticipationEvaluationInput>>;
 };
 
 export type UpdateDefaultCollectionInput = {
-  date?: InputMaybe<Scalars["Date"]>;
-  description?: InputMaybe<Scalars["String"]>;
+  date?: InputMaybe<Scalars['Date']>;
+  description?: InputMaybe<Scalars['String']>;
   evaluations?: InputMaybe<Array<UpdateDefaultEvaluationInput>>;
 };
 
 export type UpdateClassParticipationEvaluationInput = {
-  id: Scalars["ID"];
-  wasPresent?: InputMaybe<Scalars["Boolean"]>;
-  skillsRating?: InputMaybe<Scalars["Int"]>;
-  behaviourRating?: InputMaybe<Scalars["Int"]>;
-  notes?: InputMaybe<Scalars["String"]>;
+  id: Scalars['ID'];
+  wasPresent?: InputMaybe<Scalars['Boolean']>;
+  skillsRating?: InputMaybe<Scalars['Int']>;
+  behaviourRating?: InputMaybe<Scalars['Int']>;
+  notes?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateDefaultEvaluationInput = {
-  id: Scalars["ID"];
-  wasPresent?: InputMaybe<Scalars["Boolean"]>;
-  rating?: InputMaybe<Scalars["Float"]>;
-  notes?: InputMaybe<Scalars["String"]>;
+  id: Scalars['ID'];
+  wasPresent?: InputMaybe<Scalars['Boolean']>;
+  rating?: InputMaybe<Scalars['Float']>;
+  notes?: InputMaybe<Scalars['String']>;
 };
 
 export type ChangeGroupModuleInput = {
   newEducationLevel: EducationLevel;
-  newLearningObjectiveGroupKey: Scalars["String"];
+  newLearningObjectiveGroupKey: Scalars['String'];
 };
 
+
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
+
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
-  | ResolverFn<TResult, TParent, TContext, TArgs>
-  | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -640,31 +690,34 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Date: ResolverTypeWrapper<Scalars["Date"]>;
-  DateTime: ResolverTypeWrapper<Scalars["DateTime"]>;
-  EmailAddress: ResolverTypeWrapper<Scalars["EmailAddress"]>;
+  Date: ResolverTypeWrapper<Scalars['Date']>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+  EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
   Query: ResolverTypeWrapper<{}>;
-  ID: ResolverTypeWrapper<Scalars["ID"]>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   Mutation: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars["String"]>;
-  Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AppMetadata: ResolverTypeWrapper<AppMetadata>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
-  AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, "userData"> & { userData: ResolversTypes["Teacher"] }>;
-  MPassIDAuthPayload: ResolverTypeWrapper<Omit<MPassIdAuthPayload, "payload"> & { payload: ResolversTypes["AuthPayload"] }>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
+  MPassIDAuthPayload: ResolverTypeWrapper<Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversTypes['AuthPayload'] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
   WarningInfo: ResolverTypeWrapper<WarningInfo>;
-  Float: ResolverTypeWrapper<Scalars["Float"]>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   TeacherUsageData: ResolverTypeWrapper<TeacherUsageData>;
-  GenerateStudentFeedbackResult: ResolverTypeWrapper<Omit<GenerateStudentFeedbackResult, "feedback"> & { feedback: ResolversTypes["Feedback"] }>;
-  GenerateGroupFeedbackResult: ResolverTypeWrapper<Omit<GenerateGroupFeedbackResult, "feedbacks"> & { feedbacks: Array<ResolversTypes["Feedback"]> }>;
+  GenerateStudentFeedbackResult: ResolverTypeWrapper<Omit<GenerateStudentFeedbackResult, 'feedback'> & { feedback: ResolversTypes['Feedback'] }>;
+  GenerateGroupFeedbackResult: ResolverTypeWrapper<Omit<GenerateGroupFeedbackResult, 'feedbacks'> & { feedbacks: Array<ResolversTypes['Feedback']> }>;
   FixTextGrammaticsResult: ResolverTypeWrapper<FixTextGrammaticsResult>;
-  LoginResult: ResolverTypeWrapper<Omit<LoginResult, "userData"> & { userData: ResolversTypes["Teacher"] }>;
+  LoginResult: ResolverTypeWrapper<Omit<LoginResult, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   TranslatedString: ResolverTypeWrapper<TranslatedString>;
   TokenUseWarning: TokenUseWarning;
   LearningObjectiveType: LearningObjectiveType;
+  MPassIDOrganization: ResolverTypeWrapper<MPassIdOrganization>;
   LearningObjective: ResolverTypeWrapper<LearningObjective>;
   Subject: ResolverTypeWrapper<SubjectMinimalPrisma>;
   Environment: ResolverTypeWrapper<EnvironmentInfoPrisma>;
@@ -702,27 +755,28 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Date: Scalars["Date"];
-  DateTime: Scalars["DateTime"];
-  EmailAddress: Scalars["EmailAddress"];
+  Date: Scalars['Date'];
+  DateTime: Scalars['DateTime'];
+  EmailAddress: Scalars['EmailAddress'];
   Query: {};
-  ID: Scalars["ID"];
+  ID: Scalars['ID'];
+  String: Scalars['String'];
   Mutation: {};
-  String: Scalars["String"];
-  Boolean: Scalars["Boolean"];
+  Boolean: Scalars['Boolean'];
   AppMetadata: AppMetadata;
-  Int: Scalars["Int"];
-  AuthPayload: Omit<AuthPayload, "userData"> & { userData: ResolversParentTypes["Teacher"] };
-  MPassIDAuthPayload: Omit<MPassIdAuthPayload, "payload"> & { payload: ResolversParentTypes["AuthPayload"] };
+  Int: Scalars['Int'];
+  AuthPayload: Omit<AuthPayload, 'userData'> & { userData: ResolversParentTypes['Teacher'] };
+  MPassIDAuthPayload: Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversParentTypes['AuthPayload'] };
   Teacher: UserInfoPrisma;
   WarningInfo: WarningInfo;
-  Float: Scalars["Float"];
+  Float: Scalars['Float'];
   TeacherUsageData: TeacherUsageData;
-  GenerateStudentFeedbackResult: Omit<GenerateStudentFeedbackResult, "feedback"> & { feedback: ResolversParentTypes["Feedback"] };
-  GenerateGroupFeedbackResult: Omit<GenerateGroupFeedbackResult, "feedbacks"> & { feedbacks: Array<ResolversParentTypes["Feedback"]> };
+  GenerateStudentFeedbackResult: Omit<GenerateStudentFeedbackResult, 'feedback'> & { feedback: ResolversParentTypes['Feedback'] };
+  GenerateGroupFeedbackResult: Omit<GenerateGroupFeedbackResult, 'feedbacks'> & { feedbacks: Array<ResolversParentTypes['Feedback']> };
   FixTextGrammaticsResult: FixTextGrammaticsResult;
-  LoginResult: Omit<LoginResult, "userData"> & { userData: ResolversParentTypes["Teacher"] };
+  LoginResult: Omit<LoginResult, 'userData'> & { userData: ResolversParentTypes['Teacher'] };
   TranslatedString: TranslatedString;
+  MPassIDOrganization: MPassIdOrganization;
   LearningObjective: LearningObjective;
   Subject: SubjectMinimalPrisma;
   Environment: EnvironmentInfoPrisma;
@@ -756,400 +810,287 @@ export type ResolversParentTypes = {
   ChangeGroupModuleInput: ChangeGroupModuleInput;
 };
 
-export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
-  name: "Date";
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
 }
 
-export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["DateTime"], any> {
-  name: "DateTime";
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
 }
 
-export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["EmailAddress"], any> {
-  name: "EmailAddress";
+export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['EmailAddress'], any> {
+  name: 'EmailAddress';
 }
 
-export type QueryResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]> = {
-  getAppMetadata?: Resolver<ResolversTypes["AppMetadata"], ParentType, ContextType>;
-  getCurrentUser?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
-  getCurrentUserUsageData?: Resolver<ResolversTypes["TeacherUsageData"], ParentType, ContextType>;
-  getTeacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType, RequireFields<QueryGetTeacherArgs, "id">>;
-  getGroups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType, RequireFields<QueryGetGroupsArgs, "teacherId">>;
-  getGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<QueryGetGroupArgs, "id">>;
-  getCollection?: Resolver<ResolversTypes["EvaluationCollection"], ParentType, ContextType, RequireFields<QueryGetCollectionArgs, "id">>;
-  getType?: Resolver<ResolversTypes["CollectionType"], ParentType, ContextType, RequireFields<QueryGetTypeArgs, "id">>;
-  getStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<QueryGetStudentArgs, "id">>;
-  getEvaluation?: Resolver<ResolversTypes["Evaluation"], ParentType, ContextType, RequireFields<QueryGetEvaluationArgs, "id">>;
+export type QueryResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getAppMetadata?: Resolver<ResolversTypes['AppMetadata'], ParentType, ContextType>;
+  getCurrentUser?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType>;
+  getCurrentUserUsageData?: Resolver<ResolversTypes['TeacherUsageData'], ParentType, ContextType>;
+  getTeacher?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType, RequireFields<QueryGetTeacherArgs, 'id'>>;
+  getGroups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType, RequireFields<QueryGetGroupsArgs, 'teacherId'>>;
+  getGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<QueryGetGroupArgs, 'id'>>;
+  getCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<QueryGetCollectionArgs, 'id'>>;
+  getType?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType, RequireFields<QueryGetTypeArgs, 'id'>>;
+  getStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<QueryGetStudentArgs, 'id'>>;
+  getEvaluation?: Resolver<ResolversTypes['Evaluation'], ParentType, ContextType, RequireFields<QueryGetEvaluationArgs, 'id'>>;
+  getMPassIDOrganizations?: Resolver<Array<ResolversTypes['MPassIDOrganization']>, ParentType, ContextType, RequireFields<QueryGetMPassIdOrganizationsArgs, 'parentOid'>>;
 };
 
-export type MutationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]> = {
-  register?: Resolver<ResolversTypes["AuthPayload"], ParentType, ContextType, RequireFields<MutationRegisterArgs, "data">>;
-  login?: Resolver<ResolversTypes["AuthPayload"], ParentType, ContextType, RequireFields<MutationLoginArgs, "email" | "password">>;
-  mPassIDLogin?: Resolver<ResolversTypes["MPassIDAuthPayload"], ParentType, ContextType, RequireFields<MutationMPassIdLoginArgs, "code">>;
-  requestPasswordReset?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationRequestPasswordResetArgs, "email">>;
-  verifyPasswordResetCode?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationVerifyPasswordResetCodeArgs, "code">>;
-  updatePassword?: Resolver<
-    ResolversTypes["Boolean"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdatePasswordArgs, "recoveryCode" | "newPassword">
-  >;
-  connectMPassID?: Resolver<ResolversTypes["AuthPayload"], ParentType, ContextType, RequireFields<MutationConnectMPassIdArgs, "code">>;
-  connectLocalCredentials?: Resolver<
-    ResolversTypes["AuthPayload"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationConnectLocalCredentialsArgs, "email" | "password">
-  >;
-  logout?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  createGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationCreateGroupArgs, "data">>;
-  createClassParticipationCollection?: Resolver<
-    ResolversTypes["ClassParticipationCollection"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateClassParticipationCollectionArgs, "data" | "moduleId">
-  >;
-  createDefaultCollection?: Resolver<
-    ResolversTypes["DefaultCollection"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateDefaultCollectionArgs, "data" | "moduleId">
-  >;
-  createStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationCreateStudentArgs, "data" | "moduleId">>;
-  updateClassParticipationCollection?: Resolver<
-    ResolversTypes["ClassParticipationCollection"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateClassParticipationCollectionArgs, "data" | "collectionId">
-  >;
-  updateDefaultCollection?: Resolver<
-    ResolversTypes["DefaultCollection"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateDefaultCollectionArgs, "data" | "collectionId">
-  >;
-  updateStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationUpdateStudentArgs, "data" | "studentId">>;
-  updateGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, "data" | "groupId">>;
-  updateClassParticipationEvaluation?: Resolver<
-    ResolversTypes["ClassParticipationEvaluation"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateClassParticipationEvaluationArgs, "input">
-  >;
-  updateDefaultEvaluation?: Resolver<
-    ResolversTypes["DefaultEvaluation"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateDefaultEvaluationArgs, "input">
-  >;
-  deleteStudent?: Resolver<ResolversTypes["Student"], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, "studentId">>;
-  deleteTeacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType, RequireFields<MutationDeleteTeacherArgs, "teacherId">>;
-  deleteGroup?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, "groupId">>;
-  deleteCollection?: Resolver<
-    ResolversTypes["EvaluationCollection"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteCollectionArgs, "collectionId">
-  >;
-  changeGroupModule?: Resolver<ResolversTypes["Group"], ParentType, ContextType, RequireFields<MutationChangeGroupModuleArgs, "data" | "groupId">>;
-  generateStudentFeedback?: Resolver<
-    ResolversTypes["GenerateStudentFeedbackResult"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationGenerateStudentFeedbackArgs, "studentId" | "moduleId">
-  >;
-  generateGroupFeedback?: Resolver<
-    ResolversTypes["GenerateGroupFeedbackResult"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationGenerateGroupFeedbackArgs, "groupId">
-  >;
-  fixTextGrammatics?: Resolver<
-    ResolversTypes["FixTextGrammaticsResult"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationFixTextGrammaticsArgs, "studentId" | "text">
-  >;
-  setTokenUseWarningSeen?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType, RequireFields<MutationSetTokenUseWarningSeenArgs, "warning">>;
+export type MutationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  register?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'data'>>;
+  login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  mPassIDLogin?: Resolver<ResolversTypes['MPassIDAuthPayload'], ParentType, ContextType, RequireFields<MutationMPassIdLoginArgs, 'code'>>;
+  requestPasswordReset?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRequestPasswordResetArgs, 'email'>>;
+  verifyPasswordResetCode?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationVerifyPasswordResetCodeArgs, 'code'>>;
+  updatePassword?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'recoveryCode' | 'newPassword'>>;
+  connectMPassID?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationConnectMPassIdArgs, 'code'>>;
+  connectLocalCredentials?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationConnectLocalCredentialsArgs, 'email' | 'password'>>;
+  logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationCreateGroupArgs, 'data'>>;
+  createClassParticipationCollection?: Resolver<ResolversTypes['ClassParticipationCollection'], ParentType, ContextType, RequireFields<MutationCreateClassParticipationCollectionArgs, 'data' | 'moduleId'>>;
+  createDefaultCollection?: Resolver<ResolversTypes['DefaultCollection'], ParentType, ContextType, RequireFields<MutationCreateDefaultCollectionArgs, 'data' | 'moduleId'>>;
+  createStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationCreateStudentArgs, 'data' | 'moduleId'>>;
+  updateClassParticipationCollection?: Resolver<ResolversTypes['ClassParticipationCollection'], ParentType, ContextType, RequireFields<MutationUpdateClassParticipationCollectionArgs, 'data' | 'collectionId'>>;
+  updateDefaultCollection?: Resolver<ResolversTypes['DefaultCollection'], ParentType, ContextType, RequireFields<MutationUpdateDefaultCollectionArgs, 'data' | 'collectionId'>>;
+  updateStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationUpdateStudentArgs, 'data' | 'studentId'>>;
+  updateGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, 'data' | 'groupId'>>;
+  updateClassParticipationEvaluation?: Resolver<ResolversTypes['ClassParticipationEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateClassParticipationEvaluationArgs, 'input'>>;
+  updateDefaultEvaluation?: Resolver<ResolversTypes['DefaultEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateDefaultEvaluationArgs, 'input'>>;
+  deleteStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, 'studentId'>>;
+  deleteTeacher?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType, RequireFields<MutationDeleteTeacherArgs, 'teacherId'>>;
+  deleteGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, 'groupId'>>;
+  deleteCollection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType, RequireFields<MutationDeleteCollectionArgs, 'collectionId'>>;
+  changeGroupModule?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationChangeGroupModuleArgs, 'data' | 'groupId'>>;
+  generateStudentFeedback?: Resolver<ResolversTypes['GenerateStudentFeedbackResult'], ParentType, ContextType, RequireFields<MutationGenerateStudentFeedbackArgs, 'studentId' | 'moduleId'>>;
+  generateGroupFeedback?: Resolver<ResolversTypes['GenerateGroupFeedbackResult'], ParentType, ContextType, RequireFields<MutationGenerateGroupFeedbackArgs, 'groupId'>>;
+  fixTextGrammatics?: Resolver<ResolversTypes['FixTextGrammaticsResult'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'studentId' | 'text'>>;
+  setTokenUseWarningSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetTokenUseWarningSeenArgs, 'warning'>>;
 };
 
-export type AppMetadataResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["AppMetadata"] = ResolversParentTypes["AppMetadata"]
-> = {
-  appVersion?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  minimumSupportedAppVersion?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  monthlyTokenUseLimit?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  feedbackGenerationTokenCost?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  textFixTokenCost?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
+  appVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  minimumSupportedAppVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  monthlyTokenUseLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  feedbackGenerationTokenCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  textFixTokenCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AuthPayloadResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["AuthPayload"] = ResolversParentTypes["AuthPayload"]
-> = {
-  userData?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
+export type AuthPayloadResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
+  userData?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MPassIdAuthPayloadResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["MPassIDAuthPayload"] = ResolversParentTypes["MPassIDAuthPayload"]
-> = {
-  payload?: Resolver<ResolversTypes["AuthPayload"], ParentType, ContextType>;
-  newUserCreated?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+export type MPassIdAuthPayloadResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['MPassIDAuthPayload'] = ResolversParentTypes['MPassIDAuthPayload']> = {
+  payload?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType>;
+  newUserCreated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TeacherResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Teacher"] = ResolversParentTypes["Teacher"]> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  email?: Resolver<Maybe<ResolversTypes["EmailAddress"]>, ParentType, ContextType>;
-  groups?: Resolver<Array<ResolversTypes["Group"]>, ParentType, ContextType>;
-  languagePreference?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  consentsAnalytics?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  isMPassIDConnected?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+export type TeacherResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Teacher'] = ResolversParentTypes['Teacher']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['EmailAddress']>, ParentType, ContextType>;
+  groups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType>;
+  languagePreference?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  consentsAnalytics?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isMPassIDConnected?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type WarningInfoResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["WarningInfo"] = ResolversParentTypes["WarningInfo"]
-> = {
-  warning?: Resolver<ResolversTypes["TokenUseWarning"], ParentType, ContextType>;
-  threshhold?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+export type WarningInfoResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['WarningInfo'] = ResolversParentTypes['WarningInfo']> = {
+  warning?: Resolver<ResolversTypes['TokenUseWarning'], ParentType, ContextType>;
+  threshhold?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TeacherUsageDataResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["TeacherUsageData"] = ResolversParentTypes["TeacherUsageData"]
-> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  monthlyTokensUsed?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  warning?: Resolver<Maybe<ResolversTypes["WarningInfo"]>, ParentType, ContextType>;
+export type TeacherUsageDataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['TeacherUsageData'] = ResolversParentTypes['TeacherUsageData']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  monthlyTokensUsed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  warning?: Resolver<Maybe<ResolversTypes['WarningInfo']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GenerateStudentFeedbackResultResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["GenerateStudentFeedbackResult"] = ResolversParentTypes["GenerateStudentFeedbackResult"]
-> = {
-  feedback?: Resolver<ResolversTypes["Feedback"], ParentType, ContextType>;
-  tokensUsed?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  usageData?: Resolver<ResolversTypes["TeacherUsageData"], ParentType, ContextType>;
+export type GenerateStudentFeedbackResultResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['GenerateStudentFeedbackResult'] = ResolversParentTypes['GenerateStudentFeedbackResult']> = {
+  feedback?: Resolver<ResolversTypes['Feedback'], ParentType, ContextType>;
+  tokensUsed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  usageData?: Resolver<ResolversTypes['TeacherUsageData'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GenerateGroupFeedbackResultResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["GenerateGroupFeedbackResult"] = ResolversParentTypes["GenerateGroupFeedbackResult"]
-> = {
-  feedbacks?: Resolver<Array<ResolversTypes["Feedback"]>, ParentType, ContextType>;
-  tokensUsed?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  usageData?: Resolver<ResolversTypes["TeacherUsageData"], ParentType, ContextType>;
+export type GenerateGroupFeedbackResultResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['GenerateGroupFeedbackResult'] = ResolversParentTypes['GenerateGroupFeedbackResult']> = {
+  feedbacks?: Resolver<Array<ResolversTypes['Feedback']>, ParentType, ContextType>;
+  tokensUsed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  usageData?: Resolver<ResolversTypes['TeacherUsageData'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FixTextGrammaticsResultResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["FixTextGrammaticsResult"] = ResolversParentTypes["FixTextGrammaticsResult"]
-> = {
-  result?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  tokensUsed?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  usageData?: Resolver<ResolversTypes["TeacherUsageData"], ParentType, ContextType>;
+export type FixTextGrammaticsResultResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['FixTextGrammaticsResult'] = ResolversParentTypes['FixTextGrammaticsResult']> = {
+  result?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tokensUsed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  usageData?: Resolver<ResolversTypes['TeacherUsageData'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LoginResultResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["LoginResult"] = ResolversParentTypes["LoginResult"]
-> = {
-  userData?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
+export type LoginResultResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']> = {
+  userData?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TranslatedStringResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["TranslatedString"] = ResolversParentTypes["TranslatedString"]
-> = {
-  fi?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  en?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  se?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+export type TranslatedStringResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['TranslatedString'] = ResolversParentTypes['TranslatedString']> = {
+  fi?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  en?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  se?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LearningObjectiveResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["LearningObjective"] = ResolversParentTypes["LearningObjective"]
-> = {
-  code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes["LearningObjectiveType"], ParentType, ContextType>;
-  color?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+export type MPassIdOrganizationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['MPassIDOrganization'] = ResolversParentTypes['MPassIDOrganization']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SubjectResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Subject"] = ResolversParentTypes["Subject"]> = {
-  code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
-  environments?: Resolver<Array<ResolversTypes["Environment"]>, ParentType, ContextType>;
+export type LearningObjectiveResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['LearningObjective'] = ResolversParentTypes['LearningObjective']> = {
+  code?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['TranslatedString'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['TranslatedString'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['LearningObjectiveType'], ParentType, ContextType>;
+  color?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EnvironmentResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Environment"] = ResolversParentTypes["Environment"]
-> = {
-  code?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  color?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
-  subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
+export type SubjectResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Subject'] = ResolversParentTypes['Subject']> = {
+  code?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['TranslatedString'], ParentType, ContextType>;
+  environments?: Resolver<Array<ResolversTypes['Environment']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GroupResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Group"] = ResolversParentTypes["Group"]> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  students?: Resolver<Array<ResolversTypes["Student"]>, ParentType, ContextType>;
-  subject?: Resolver<ResolversTypes["Subject"], ParentType, ContextType>;
-  teacher?: Resolver<ResolversTypes["Teacher"], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
-  archived?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  currentModule?: Resolver<ResolversTypes["Module"], ParentType, ContextType>;
-  modules?: Resolver<Array<ResolversTypes["Module"]>, ParentType, ContextType>;
+export type EnvironmentResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Environment'] = ResolversParentTypes['Environment']> = {
+  code?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  color?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['TranslatedString'], ParentType, ContextType>;
+  subject?: Resolver<ResolversTypes['Subject'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CollectionTypeResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["CollectionType"] = ResolversParentTypes["CollectionType"]
-> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  category?: Resolver<ResolversTypes["CollectionTypeCategory"], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  weight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  module?: Resolver<ResolversTypes["Module"], ParentType, ContextType>;
-  defaultTypeCollection?: Resolver<Maybe<ResolversTypes["DefaultCollection"]>, ParentType, ContextType>;
+export type GroupResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Group'] = ResolversParentTypes['Group']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  students?: Resolver<Array<ResolversTypes['Student']>, ParentType, ContextType>;
+  subject?: Resolver<ResolversTypes['Subject'], ParentType, ContextType>;
+  teacher?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  currentModule?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
+  modules?: Resolver<Array<ResolversTypes['Module']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ModuleInfoResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["ModuleInfo"] = ResolversParentTypes["ModuleInfo"]
-> = {
-  educationLevel?: Resolver<ResolversTypes["EducationLevel"], ParentType, ContextType>;
-  learningObjectiveGroupKey?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes["TranslatedString"], ParentType, ContextType>;
+export type CollectionTypeResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['CollectionType'] = ResolversParentTypes['CollectionType']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  category?: Resolver<ResolversTypes['CollectionTypeCategory'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  weight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
+  defaultTypeCollection?: Resolver<Maybe<ResolversTypes['DefaultCollection']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ModuleResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Module"] = ResolversParentTypes["Module"]> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  info?: Resolver<ResolversTypes["ModuleInfo"], ParentType, ContextType>;
-  evaluationCollections?: Resolver<Array<ResolversTypes["EvaluationCollection"]>, ParentType, ContextType>;
-  students?: Resolver<Array<ResolversTypes["Student"]>, ParentType, ContextType>;
-  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
-  collectionTypes?: Resolver<Array<ResolversTypes["CollectionType"]>, ParentType, ContextType>;
+export type ModuleInfoResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['ModuleInfo'] = ResolversParentTypes['ModuleInfo']> = {
+  educationLevel?: Resolver<ResolversTypes['EducationLevel'], ParentType, ContextType>;
+  learningObjectiveGroupKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['TranslatedString'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EvaluationCollectionResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["EvaluationCollection"] = ResolversParentTypes["EvaluationCollection"]
-> = {
-  __resolveType: TypeResolveFn<"ClassParticipationCollection" | "DefaultCollection", ParentType, ContextType>;
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  date?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes["CollectionType"], ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  evaluations?: Resolver<Array<ResolversTypes["Evaluation"]>, ParentType, ContextType>;
-  module?: Resolver<ResolversTypes["Module"], ParentType, ContextType>;
-};
-
-export type ClassParticipationCollectionResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["ClassParticipationCollection"] = ResolversParentTypes["ClassParticipationCollection"]
-> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  date?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes["CollectionType"], ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  evaluations?: Resolver<Array<ResolversTypes["ClassParticipationEvaluation"]>, ParentType, ContextType>;
-  module?: Resolver<ResolversTypes["Module"], ParentType, ContextType>;
-  environment?: Resolver<ResolversTypes["Environment"], ParentType, ContextType>;
-  learningObjectives?: Resolver<Array<ResolversTypes["LearningObjective"]>, ParentType, ContextType>;
+export type ModuleResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Module'] = ResolversParentTypes['Module']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  info?: Resolver<ResolversTypes['ModuleInfo'], ParentType, ContextType>;
+  evaluationCollections?: Resolver<Array<ResolversTypes['EvaluationCollection']>, ParentType, ContextType>;
+  students?: Resolver<Array<ResolversTypes['Student']>, ParentType, ContextType>;
+  group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
+  collectionTypes?: Resolver<Array<ResolversTypes['CollectionType']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type DefaultCollectionResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["DefaultCollection"] = ResolversParentTypes["DefaultCollection"]
-> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  date?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes["CollectionType"], ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  evaluations?: Resolver<Array<ResolversTypes["DefaultEvaluation"]>, ParentType, ContextType>;
-  module?: Resolver<ResolversTypes["Module"], ParentType, ContextType>;
+export type EvaluationCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['EvaluationCollection'] = ResolversParentTypes['EvaluationCollection']> = {
+  __resolveType: TypeResolveFn<'ClassParticipationCollection' | 'DefaultCollection', ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  evaluations?: Resolver<Array<ResolversTypes['Evaluation']>, ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
+};
+
+export type ClassParticipationCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['ClassParticipationCollection'] = ResolversParentTypes['ClassParticipationCollection']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  evaluations?: Resolver<Array<ResolversTypes['ClassParticipationEvaluation']>, ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
+  environment?: Resolver<ResolversTypes['Environment'], ParentType, ContextType>;
+  learningObjectives?: Resolver<Array<ResolversTypes['LearningObjective']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EvaluationResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["Evaluation"] = ResolversParentTypes["Evaluation"]
-> = {
-  __resolveType: TypeResolveFn<"ClassParticipationEvaluation" | "DefaultEvaluation", ParentType, ContextType>;
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  student?: Resolver<ResolversTypes["Student"], ParentType, ContextType>;
-  wasPresent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  collection?: Resolver<ResolversTypes["EvaluationCollection"], ParentType, ContextType>;
-};
-
-export type ClassParticipationEvaluationResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["ClassParticipationEvaluation"] = ResolversParentTypes["ClassParticipationEvaluation"]
-> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  student?: Resolver<ResolversTypes["Student"], ParentType, ContextType>;
-  wasPresent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  collection?: Resolver<ResolversTypes["ClassParticipationCollection"], ParentType, ContextType>;
-  skillsRating?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
-  behaviourRating?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+export type DefaultCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['DefaultCollection'] = ResolversParentTypes['DefaultCollection']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  evaluations?: Resolver<Array<ResolversTypes['DefaultEvaluation']>, ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type DefaultEvaluationResolvers<
-  ContextType = CustomContext,
-  ParentType extends ResolversParentTypes["DefaultEvaluation"] = ResolversParentTypes["DefaultEvaluation"]
-> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  student?: Resolver<ResolversTypes["Student"], ParentType, ContextType>;
-  wasPresent?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-  notes?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  collection?: Resolver<ResolversTypes["DefaultCollection"], ParentType, ContextType>;
-  rating?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+export type EvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Evaluation'] = ResolversParentTypes['Evaluation']> = {
+  __resolveType: TypeResolveFn<'ClassParticipationEvaluation' | 'DefaultEvaluation', ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
+  wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collection?: Resolver<ResolversTypes['EvaluationCollection'], ParentType, ContextType>;
+};
+
+export type ClassParticipationEvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['ClassParticipationEvaluation'] = ResolversParentTypes['ClassParticipationEvaluation']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
+  wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collection?: Resolver<ResolversTypes['ClassParticipationCollection'], ParentType, ContextType>;
+  skillsRating?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  behaviourRating?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type StudentResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Student"] = ResolversParentTypes["Student"]> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  group?: Resolver<ResolversTypes["Group"], ParentType, ContextType>;
-  currentModuleEvaluations?: Resolver<Array<ResolversTypes["Evaluation"]>, ParentType, ContextType>;
-  latestFeedback?: Resolver<Maybe<ResolversTypes["Feedback"]>, ParentType, ContextType>;
-  feedbacks?: Resolver<Array<ResolversTypes["Feedback"]>, ParentType, ContextType>;
+export type DefaultEvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['DefaultEvaluation'] = ResolversParentTypes['DefaultEvaluation']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
+  wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collection?: Resolver<ResolversTypes['DefaultCollection'], ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FeedbackResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes["Feedback"] = ResolversParentTypes["Feedback"]> = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  student?: Resolver<ResolversTypes["Student"], ParentType, ContextType>;
-  module?: Resolver<ResolversTypes["Module"], ParentType, ContextType>;
-  text?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+export type StudentResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Student'] = ResolversParentTypes['Student']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
+  currentModuleEvaluations?: Resolver<Array<ResolversTypes['Evaluation']>, ParentType, ContextType>;
+  latestFeedback?: Resolver<Maybe<ResolversTypes['Feedback']>, ParentType, ContextType>;
+  feedbacks?: Resolver<Array<ResolversTypes['Feedback']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FeedbackResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Feedback'] = ResolversParentTypes['Feedback']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
+  module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
+  text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1170,6 +1111,7 @@ export type Resolvers<ContextType = CustomContext> = {
   FixTextGrammaticsResult?: FixTextGrammaticsResultResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
   TranslatedString?: TranslatedStringResolvers<ContextType>;
+  MPassIDOrganization?: MPassIdOrganizationResolvers<ContextType>;
   LearningObjective?: LearningObjectiveResolvers<ContextType>;
   Subject?: SubjectResolvers<ContextType>;
   Environment?: EnvironmentResolvers<ContextType>;
@@ -1186,3 +1128,4 @@ export type Resolvers<ContextType = CustomContext> = {
   Student?: StudentResolvers<ContextType>;
   Feedback?: FeedbackResolvers<ContextType>;
 };
+

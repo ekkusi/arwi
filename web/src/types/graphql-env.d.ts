@@ -244,6 +244,36 @@ export type introspection = {
                 }
               }
             ]
+          },
+          {
+            "name": "getMPassIDOrganizations",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "MPassIDOrganization",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "args": [
+              {
+                "name": "searchString",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              }
+            ]
           }
         ],
         "interfaces": []
@@ -251,6 +281,10 @@ export type introspection = {
       {
         "kind": "SCALAR",
         "name": "ID"
+      },
+      {
+        "kind": "SCALAR",
+        "name": "String"
       },
       {
         "kind": "OBJECT",
@@ -1064,10 +1098,6 @@ export type introspection = {
       },
       {
         "kind": "SCALAR",
-        "name": "String"
-      },
-      {
-        "kind": "SCALAR",
         "name": "Boolean"
       },
       {
@@ -1568,6 +1598,49 @@ export type introspection = {
             "name": "NOT_EVALUATED"
           }
         ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "MPassIDOrganization",
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "name",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "code",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
       },
       {
         "kind": "OBJECT",

@@ -9,6 +9,7 @@ type Query {
   getType(id: ID!): CollectionType!
   getStudent(id: ID!): Student!
   getEvaluation(id: ID!): Evaluation!
+  getMPassIDOrganizations(parentOid: String!): [MPassIDOrganization!]!
 }
 
 type Mutation {
@@ -117,6 +118,11 @@ enum LearningObjectiveType {
   SKILLS
   SKILLS_AND_BEHAVIOUR
   NOT_EVALUATED
+}
+
+type MPassIDOrganization {
+  id: ID!
+  name: String!
 }
 
 type LearningObjective {

@@ -1,743 +1,8 @@
 [
   {
-    "id": "1.2.246.562.10.90008375488",
-    "name": "Espoon kaupunki",
-    "yTunnus": "0101263-6"
-  },
-  {
-    "id": "1.2.246.562.10.61339874754",
-    "name": "Hangon kaupunki",
-    "yTunnus": "0103166-9"
-  },
-  {
-    "id": "1.2.246.562.10.494695390410",
-    "name": "Vantaan kaupunki",
-    "yTunnus": "0124610-9"
-  },
-  {
-    "id": "1.2.246.562.10.93032730884",
-    "name": "Hyvinkään kaupunki",
-    "yTunnus": "0125866-0"
-  },
-  {
-    "id": "1.2.246.562.10.93263719523",
-    "name": "Inkoon kunta",
-    "yTunnus": "0126293-4"
-  },
-  {
-    "id": "1.2.246.562.10.73948983488",
-    "name": "Järvenpään kaupunki",
-    "yTunnus": "0126541-4"
-  },
-  {
-    "id": "1.2.246.562.10.17061224014",
-    "name": "Karkkilan kaupunki",
-    "yTunnus": "0127046-7"
-  },
-  {
-    "id": "1.2.246.562.10.94791481685",
-    "name": "Keravan kaupunki",
-    "yTunnus": "0127485-5"
-  },
-  {
-    "id": "1.2.246.562.10.10609607295",
-    "name": "Mäntsälän kunta",
-    "yTunnus": "0129261-5"
-  },
-  {
-    "id": "1.2.246.562.10.95739261709",
-    "name": "Orimattilan kaupunki",
-    "yTunnus": "0129920-0"
-  },
-  {
-    "id": "1.2.246.562.10.66173287591",
-    "name": "Pornaisten kunta",
-    "yTunnus": "0130095-3"
-  },
-  {
-    "id": "1.2.246.562.10.96098984634",
-    "name": "Pukkilan kunta",
-    "yTunnus": "0130729-0"
-  },
-  {
-    "id": "1.2.246.562.10.865068769110",
-    "name": "Siuntion kunta",
-    "yTunnus": "0131156-4"
-  },
-  {
-    "id": "1.2.246.562.10.90658086633",
-    "name": "Raaseporin kaupunki",
-    "yTunnus": "0131297-0"
-  },
-  {
-    "id": "1.2.246.562.10.31167956643",
-    "name": "Tuusulan kunta",
-    "yTunnus": "0131661-3"
-  },
-  {
-    "id": "1.2.246.562.10.52022343165",
-    "name": "Vihdin kunta",
-    "yTunnus": "0131905-6"
-  },
-  {
-    "id": "1.2.246.562.10.99547974701",
-    "name": "Auran kunta",
-    "yTunnus": "0132103-3"
-  },
-  {
-    "id": "1.2.246.562.10.41791878048",
-    "name": "Euran kunta",
-    "yTunnus": "0132239-4"
-  },
-  {
-    "id": "1.2.246.562.10.86262425969",
-    "name": "Eurajoen kunta",
-    "yTunnus": "0132322-3"
-  },
-  {
-    "id": "1.2.246.562.10.22832732543",
-    "name": "Harjavallan kaupunki",
-    "yTunnus": "0132585-1"
-  },
-  {
-    "id": "1.2.246.562.10.599832688110",
-    "name": "Honkajoen kunta",
-    "yTunnus": "0132697-7"
-  },
-  {
-    "id": "1.2.246.562.10.64495287985",
-    "name": "Hämeenkyrön kunta",
-    "yTunnus": "0132947-3"
-  },
-  {
-    "id": "1.2.246.562.10.82724739725",
-    "name": "Jämijärven kunta",
-    "yTunnus": "0133127-4"
-  },
-  {
-    "id": "1.2.246.562.10.83037752777",
-    "name": "Kaarinan kaupunki",
-    "yTunnus": "0133226-9"
-  },
-  {
-    "id": "1.2.246.562.10.52429530125",
-    "name": "Kankaanpään kaupunki",
-    "yTunnus": "0133596-1"
-  },
-  {
-    "id": "1.2.246.562.10.79559056522",
-    "name": "Karvian kunta",
-    "yTunnus": "0133735-0"
-  },
-  {
-    "id": "1.2.246.562.10.29125481084",
-    "name": "Kemiönsaaren kunta",
-    "yTunnus": "0133833-7"
-  },
-  {
-    "id": "1.2.246.562.10.29028188414",
-    "name": "Kihniön kunta",
-    "yTunnus": "0133862-8"
-  },
-  {
-    "id": "1.2.246.562.10.25837481214",
-    "name": "Kustavin kunta",
-    "yTunnus": "0134349-4"
-  },
-  {
-    "id": "1.2.246.562.10.29095929146",
-    "name": "KÖYLIÖN KUNTA",
-    "yTunnus": "0134416-3"
-  },
-  {
-    "id": "1.2.246.562.10.45754497167",
-    "name": "Laitilan kaupunki",
-    "yTunnus": "0134480-9"
-  },
-  {
-    "id": "1.2.246.562.10.48836293729",
-    "name": "Liedon kaupunki",
-    "yTunnus": "0134698-6"
-  },
-  {
-    "id": "1.2.246.562.10.46744805683",
-    "name": "Luvian kunta",
-    "yTunnus": "0135032-8"
-  },
-  {
-    "id": "1.2.246.562.10.44830339303",
-    "name": "Marttilan kunta",
-    "yTunnus": "0135086-2"
-  },
-  {
-    "id": "1.2.246.562.10.984936049410",
-    "name": "Merikarvian kunta",
-    "yTunnus": "0135202-4"
-  },
-  {
-    "id": "1.2.246.562.10.94718574216",
-    "name": "Naantalin kaupunki",
-    "yTunnus": "0135457-2"
-  },
-  {
-    "id": "1.2.246.562.10.70991205496",
-    "name": "Nakkilan kunta",
-    "yTunnus": "0135662-3"
-  },
-  {
-    "id": "1.2.246.562.10.73157741437",
-    "name": "Nousiaisten kunta",
-    "yTunnus": "0135821-5"
-  },
-  {
-    "id": "1.2.246.562.10.872068409910",
-    "name": "Oripään kunta",
-    "yTunnus": "0135869-6"
-  },
-  {
-    "id": "1.2.246.562.10.14920881407",
-    "name": "Paraisten kaupunki",
-    "yTunnus": "0136082-5"
-  },
-  {
-    "id": "1.2.246.562.10.97280283009",
-    "name": "Paimion kaupunki",
-    "yTunnus": "0136169-2"
-  },
-  {
-    "id": "1.2.246.562.10.89405728554",
-    "name": "Parkanon kaupunki",
-    "yTunnus": "0136311-0"
-  },
-  {
-    "id": "1.2.246.562.10.40889771776",
-    "name": "Pomarkun kunta",
-    "yTunnus": "0136610-0"
-  },
-  {
-    "id": "1.2.246.562.10.33969312488",
-    "name": "Porin kaupunki",
-    "yTunnus": "0137323-9"
-  },
-  {
-    "id": "1.2.246.562.10.36782028892",
-    "name": "Punkalaitumen kunta",
-    "yTunnus": "0138037-5"
-  },
-  {
-    "id": "1.2.246.562.10.55100459001",
-    "name": "Rauman kaupunki",
-    "yTunnus": "0138780-9"
-  },
-  {
-    "id": "1.2.246.562.10.98501788818",
-    "name": "Salon kaupunki",
-    "yTunnus": "0139533-1"
-  },
-  {
-    "id": "1.2.246.562.10.51824957248",
-    "name": "Siikaisten kunta",
-    "yTunnus": "0139842-8"
-  },
-  {
-    "id": "1.2.246.562.10.28930522645",
-    "name": "Säkylän kunta",
-    "yTunnus": "0139937-5"
-  },
-  {
-    "id": "1.2.246.562.10.46853766502",
-    "name": "Taivassalon kunta",
-    "yTunnus": "0139991-4"
-  },
-  {
-    "id": "1.2.246.562.10.75467811917",
-    "name": "Uudenkaupungin kaupunki",
-    "yTunnus": "0144036-6"
-  },
-  {
-    "id": "1.2.246.562.10.78370733186",
-    "name": "Sastamalan kaupunki",
-    "yTunnus": "0144411-3"
-  },
-  {
-    "id": "1.2.246.562.10.34482399333",
-    "name": "Vehmaan kunta",
-    "yTunnus": "0144561-8"
-  },
-  {
-    "id": "1.2.246.562.10.79578149696",
-    "name": "Eckerö kommun",
-    "yTunnus": "0144682-1"
-  },
-  {
-    "id": "1.2.246.562.10.24530054949",
-    "name": "Asikkalan kunta",
-    "yTunnus": "0145208-4"
-  },
-  {
-    "id": "1.2.246.562.10.65347978267",
-    "name": "Forssan kaupunki",
-    "yTunnus": "0145626-1"
-  },
-  {
-    "id": "1.2.246.562.10.23652556442",
-    "name": "Hattulan kunta",
-    "yTunnus": "0145801-3"
-  },
-  {
-    "id": "1.2.246.562.10.10421700658",
-    "name": "Hausjärven kunta",
-    "yTunnus": "0145997-2"
-  },
-  {
-    "id": "1.2.246.562.10.15738250156",
-    "name": "Hollolan kunta",
-    "yTunnus": "0146248-5"
-  },
-  {
-    "id": "1.2.246.562.10.83043996699",
-    "name": "Humppilan kunta",
-    "yTunnus": "0146456-0"
-  },
-  {
-    "id": "1.2.246.562.10.37294919826",
-    "name": "Hämeenlinnan kaupunki",
-    "yTunnus": "0146921-4"
-  },
-  {
-    "id": "1.2.246.562.10.57762983609",
-    "name": "Janakkalan kunta",
-    "yTunnus": "0147510-4"
-  },
-  {
-    "id": "1.2.246.562.10.13451568789",
-    "name": "Jokioisten kunta",
-    "yTunnus": "0147645-7"
-  },
-  {
-    "id": "1.2.246.562.10.71641004123",
-    "name": "Juupajoen kunta",
-    "yTunnus": "0147705-4"
-  },
-  {
-    "id": "1.2.246.562.10.95467913869",
-    "name": "Kärkölän kunta",
-    "yTunnus": "0148268-9"
-  },
-  {
-    "id": "1.2.246.562.10.35653563805",
-    "name": "Lahden kaupunki",
-    "yTunnus": "0149669-3"
-  },
-  {
-    "id": "1.2.246.562.10.74484103937",
-    "name": "Lempäälän kunta",
-    "yTunnus": "0150783-1"
-  },
-  {
-    "id": "1.2.246.562.10.895479029510",
-    "name": "Lopen kunta",
-    "yTunnus": "0150919-1"
-  },
-  {
-    "id": "1.2.246.562.10.16668617695",
-    "name": "NASTOLAN KUNTA",
-    "yTunnus": "0151364-1"
-  },
-  {
-    "id": "1.2.246.562.10.74499914872",
-    "name": "Oriveden kaupunki",
-    "yTunnus": "0151789-6"
-  },
-  {
-    "id": "1.2.246.562.10.78354624187",
-    "name": "Padasjoen kunta",
-    "yTunnus": "0151924-2"
-  },
-  {
-    "id": "1.2.246.562.10.64435881079",
-    "name": "Pirkkalan kunta",
-    "yTunnus": "0152084-1"
-  },
-  {
-    "id": "1.2.246.562.10.77340924875",
-    "name": "Riihimäen kaupunki",
-    "yTunnus": "0152563-4"
-  },
-  {
-    "id": "1.2.246.562.10.50618575976",
-    "name": "Ruoveden kunta",
-    "yTunnus": "0152842-1"
-  },
-  {
-    "id": "1.2.246.562.10.21867246585",
-    "name": "Someron kaupunki",
-    "yTunnus": "0153082-0"
-  },
-  {
-    "id": "1.2.246.562.10.30436593583",
-    "name": "Tammelan kunta",
-    "yTunnus": "0153179-4"
-  },
-  {
-    "id": "1.2.246.562.10.535555943810",
-    "name": "Urjalan kunta",
-    "yTunnus": "0157323-0"
-  },
-  {
-    "id": "1.2.246.562.10.55820127391",
-    "name": "Valkeakosken kaupunki",
-    "yTunnus": "0157568-2"
-  },
-  {
-    "id": "1.2.246.562.10.81321154148",
-    "name": "Vesilahden kunta",
-    "yTunnus": "0157711-9"
-  },
-  {
-    "id": "1.2.246.562.10.54585363101",
-    "name": "Mänttä-Vilppulan kaupunki",
-    "yTunnus": "0157867-2"
-  },
-  {
-    "id": "1.2.246.562.10.722837895010",
-    "name": "Ylöjärven kaupunki",
-    "yTunnus": "0158221-7"
-  },
-  {
-    "id": "1.2.246.562.10.52482552628",
-    "name": "Ypäjän kunta",
-    "yTunnus": "0158301-7"
-  },
-  {
-    "id": "1.2.246.562.10.29649375564",
-    "name": "Iitin kunta",
-    "yTunnus": "0158766-7"
-  },
-  {
-    "id": "1.2.246.562.10.62818926438",
-    "name": "Imatran kaupunki",
-    "yTunnus": "0159216-7"
-  },
-  {
-    "id": "1.2.246.562.10.48349941889",
-    "name": "Kotkan kaupunki",
-    "yTunnus": "0160225-7"
-  },
-  {
-    "id": "1.2.246.562.10.16568914952",
-    "name": "Kouvolan kaupunki",
-    "yTunnus": "0161075-9"
-  },
-  {
-    "id": "1.2.246.562.10.74476197939",
-    "name": "Lappeenrannan kaupunki",
-    "yTunnus": "0162193-3"
-  },
-  {
-    "id": "1.2.246.562.10.14921103447",
-    "name": "Lemin kunta",
-    "yTunnus": "0162576-6"
-  },
-  {
-    "id": "1.2.246.562.10.36026576342",
-    "name": "Luumäen kunta",
-    "yTunnus": "0162631-2"
-  },
-  {
-    "id": "1.2.246.562.10.72963804215",
-    "name": "Miehikkälän kunta",
-    "yTunnus": "0162675-0"
-  },
-  {
-    "id": "1.2.246.562.10.69417312936",
-    "name": "Pyhtään kunta",
-    "yTunnus": "0162798-0"
-  },
-  {
-    "id": "1.2.246.562.10.61604535619",
-    "name": "Ruokolahden kunta",
-    "yTunnus": "0163013-5"
-  },
-  {
-    "id": "1.2.246.562.10.598076637910",
-    "name": "Savitaipaleen kunta",
-    "yTunnus": "0163109-0"
-  },
-  {
-    "id": "1.2.246.562.10.730164316010",
-    "name": "Taipalsaaren kunta",
-    "yTunnus": "0163320-5"
-  },
-  {
-    "id": "1.2.246.562.10.29215078881",
-    "name": "Enonkosken kunta",
-    "yTunnus": "0163687-9"
-  },
-  {
-    "id": "1.2.246.562.10.57825579634",
-    "name": "Hartolan kunta",
-    "yTunnus": "0163734-5"
-  },
-  {
-    "id": "1.2.246.562.10.20841697285",
-    "name": "Heinäveden kunta",
-    "yTunnus": "0164308-3"
-  },
-  {
-    "id": "1.2.246.562.10.81302392022",
-    "name": "Hirvensalmen kunta",
-    "yTunnus": "0164384-1"
-  },
-  {
-    "id": "1.2.246.562.10.39178483366",
-    "name": "Juvan kunta",
-    "yTunnus": "0164551-3"
-  },
-  {
-    "id": "1.2.246.562.10.31374072721",
-    "name": "Kangasniemen kunta",
-    "yTunnus": "0164690-3"
-  },
-  {
-    "id": "1.2.246.562.10.21531172977",
-    "name": "Mikkelin kaupunki",
-    "yTunnus": "0165116-3"
-  },
-  {
-    "id": "1.2.246.562.10.56081906382",
-    "name": "Mäntyharjun kunta",
-    "yTunnus": "0165761-0"
-  },
-  {
-    "id": "1.2.246.562.10.71873433412",
-    "name": "Pertunmaan kunta",
-    "yTunnus": "0165867-2"
-  },
-  {
-    "id": "1.2.246.562.10.94081735717",
-    "name": "Puumalan kunta",
-    "yTunnus": "0166400-1"
-  },
-  {
-    "id": "1.2.246.562.10.31723701897",
-    "name": "Rantasalmen kunta",
-    "yTunnus": "0166507-1"
-  },
-  {
-    "id": "1.2.246.562.10.66964696893",
-    "name": "Savonlinnan kaupunki",
-    "yTunnus": "0166906-4"
-  },
-  {
-    "id": "1.2.246.562.10.37301194892",
-    "name": "Sulkavan kunta",
-    "yTunnus": "0167265-0"
-  },
-  {
-    "id": "1.2.246.562.10.61302864733",
-    "name": "Sysmän kunta",
-    "yTunnus": "0167352-2"
-  },
-  {
-    "id": "1.2.246.562.10.85996043247",
-    "name": "Ilomantsin kunta",
-    "yTunnus": "0167589-4"
-  },
-  {
-    "id": "1.2.246.562.10.74086792103",
-    "name": "Juuan kunta",
-    "yTunnus": "0168654-2"
-  },
-  {
-    "id": "1.2.246.562.10.82930282486",
-    "name": "Kiteen kaupunki",
-    "yTunnus": "0168900-6"
-  },
-  {
-    "id": "1.2.246.562.10.97767653039",
-    "name": "Kontiolahden kunta",
-    "yTunnus": "0169048-8"
-  },
-  {
-    "id": "1.2.246.562.10.63676305269",
-    "name": "Lieksan kaupunki",
-    "yTunnus": "0169321-6"
-  },
-  {
-    "id": "1.2.246.562.10.65272201065",
-    "name": "Liperin kunta",
-    "yTunnus": "0169583-6"
-  },
-  {
-    "id": "1.2.246.562.10.42080013198",
-    "name": "Polvijärven kunta",
-    "yTunnus": "0169823-6"
-  },
-  {
-    "id": "1.2.246.562.10.90815921417",
-    "name": "Rääkkylän kunta",
-    "yTunnus": "0169967-7"
-  },
-  {
-    "id": "1.2.246.562.10.391702899110",
-    "name": "Juankosken kaupunki",
-    "yTunnus": "0170606-4"
-  },
-  {
-    "id": "1.2.246.562.10.87099865385",
-    "name": "Kaavin kunta",
-    "yTunnus": "0170664-6"
-  },
-  {
-    "id": "1.2.246.562.10.35139763102",
-    "name": "Keiteleen kunta",
-    "yTunnus": "0170773-7"
-  },
-  {
-    "id": "1.2.246.562.10.76561655879",
-    "name": "Kiuruveden kaupunki",
-    "yTunnus": "0170843-0"
-  },
-  {
-    "id": "1.2.246.562.10.59286753021",
-    "name": "Kuopion kaupunki",
-    "yTunnus": "0171450-7"
-  },
-  {
-    "id": "1.2.246.562.10.91868792887",
-    "name": "Lapinlahden kunta",
-    "yTunnus": "0172127-2"
-  },
-  {
-    "id": "1.2.246.562.10.62362820896",
-    "name": "Leppävirran kunta",
-    "yTunnus": "0172231-2"
-  },
-  {
-    "id": "1.2.246.562.10.43281989293",
-    "name": "Pielaveden kunta",
-    "yTunnus": "0172446-5"
-  },
-  {
-    "id": "1.2.246.562.10.97046002305",
-    "name": "Rautalammin kunta",
-    "yTunnus": "0172586-3"
-  },
-  {
-    "id": "1.2.246.562.10.96844643021",
-    "name": "Rautavaaran kunta",
-    "yTunnus": "0172646-0"
-  },
-  {
-    "id": "1.2.246.562.10.18493647723",
-    "name": "Siilinjärven kunta",
-    "yTunnus": "0172718-0"
-  },
-  {
-    "id": "1.2.246.562.10.38289846321",
-    "name": "Tervon kunta",
-    "yTunnus": "0173081-4"
-  },
-  {
-    "id": "1.2.246.562.10.55981449824",
-    "name": "Tuusniemen kunta",
-    "yTunnus": "0173128-6"
-  },
-  {
-    "id": "1.2.246.562.10.19292590627",
-    "name": "Varkauden kaupunki",
-    "yTunnus": "0173416-1"
-  },
-  {
-    "id": "1.2.246.562.10.33536687966",
-    "name": "Vesannon kunta",
-    "yTunnus": "0173787-2"
-  },
-  {
-    "id": "1.2.246.562.10.61375893973",
-    "name": "Vieremän kunta",
-    "yTunnus": "0173835-7"
-  },
-  {
-    "id": "1.2.246.562.10.33304449151",
-    "name": "Hankasalmen kunta",
-    "yTunnus": "0174035-0"
-  },
-  {
-    "id": "1.2.246.562.10.74658092437",
-    "name": "Joutsan kunta",
-    "yTunnus": "0174108-9"
-  },
-  {
-    "id": "1.2.246.562.10.81269623245",
-    "name": "Jyväskylän kaupunki",
-    "yTunnus": "0174666-4"
-  },
-  {
-    "id": "1.2.246.562.10.63862156526",
-    "name": "Jämsän kaupunki",
-    "yTunnus": "0175622-1"
-  },
-  {
-    "id": "1.2.246.562.10.16264501384",
-    "name": "Kannonkosken kunta",
-    "yTunnus": "0175798-8"
-  },
-  {
-    "id": "1.2.246.562.10.64202244238",
-    "name": "Kivijärven kunta",
-    "yTunnus": "0176150-6"
-  },
-  {
-    "id": "1.2.246.562.10.31089514694",
-    "name": "Konneveden kunta",
-    "yTunnus": "0176227-7"
-  },
-  {
-    "id": "1.2.246.562.10.83118127493",
-    "name": "Kuhmoisten kunta",
-    "yTunnus": "0176357-9"
-  },
-  {
-    "id": "1.2.246.562.10.72933310632",
-    "name": "Kyyjärven kunta",
-    "yTunnus": "0176410-9"
-  },
-  {
-    "id": "1.2.246.562.10.52816074638",
-    "name": "Laukaan kunta",
-    "yTunnus": "0176478-2"
-  },
-  {
-    "id": "1.2.246.562.10.60597986037",
-    "name": "Luhangan kunta",
-    "yTunnus": "0176592-9"
-  },
-  {
-    "id": "1.2.246.562.10.47010230846",
-    "name": "Muuramen kunta",
-    "yTunnus": "0176699-9"
-  },
-  {
-    "id": "1.2.246.562.10.28690502241",
-    "name": "Petäjäveden kunta",
-    "yTunnus": "0176769-2"
-  },
-  {
-    "id": "1.2.246.562.10.83164221026",
-    "name": "Saarijärven kaupunki",
-    "yTunnus": "0176975-1"
-  },
-  {
-    "id": "1.2.246.562.10.30765733321",
-    "name": "Toivakan kunta",
-    "yTunnus": "0177201-0"
-  },
-  {
-    "id": "1.2.246.562.10.97078294945",
-    "name": "Uuraisten kunta",
-    "yTunnus": "0177224-8"
+    "id": "1.2.246.562.10.35005580424",
+    "name": "Akaan kaupunki",
+    "yTunnus": "2050864-5"
   },
   {
     "id": "1.2.246.562.10.40384720658",
@@ -745,9 +10,64 @@
     "yTunnus": "0177619-3"
   },
   {
+    "id": "1.2.246.562.10.78057488765",
+    "name": "Alavieskan kunta",
+    "yTunnus": "0184674-5"
+  },
+  {
     "id": "1.2.246.562.10.23511028237",
     "name": "Alavuden kaupunki",
     "yTunnus": "0177736-4"
+  },
+  {
+    "id": "1.2.246.562.10.24530054949",
+    "name": "Asikkalan kunta",
+    "yTunnus": "0145208-4"
+  },
+  {
+    "id": "1.2.246.562.10.20516711478",
+    "name": "Askolan kunta",
+    "yTunnus": "9000162-0"
+  },
+  {
+    "id": "1.2.246.562.10.99547974701",
+    "name": "Auran kunta",
+    "yTunnus": "0132103-3"
+  },
+  {
+    "id": "1.2.246.562.10.36945691909",
+    "name": "Brändö Kommun",
+    "yTunnus": "0204999-1"
+  },
+  {
+    "id": "1.2.246.562.10.65218245689",
+    "name": "ENONTEKIÖN KUNTA",
+    "yTunnus": "0190662-1"
+  },
+  {
+    "id": "1.2.246.562.10.79578149696",
+    "name": "Eckerö kommun",
+    "yTunnus": "0144682-1"
+  },
+  {
+    "id": "1.2.246.562.10.29215078881",
+    "name": "Enonkosken kunta",
+    "yTunnus": "0163687-9"
+  },
+  {
+    "id": "1.2.246.562.10.90008375488",
+    "name": "Espoon kaupunki",
+    "yTunnus": "0101263-6"
+  },
+  {
+    "id": "1.2.246.562.10.86262425969",
+    "name": "Eurajoen kunta",
+    "yTunnus": "0132322-3"
+  },
+  {
+    "id": "1.2.246.562.10.41791878048",
+    "name": "Euran kunta",
+    "yTunnus": "0132239-4"
   },
   {
     "id": "1.2.246.562.10.56050751785",
@@ -755,144 +75,24 @@
     "yTunnus": "0177804-1"
   },
   {
-    "id": "1.2.246.562.10.77043054657",
-    "name": "Halsuan kunta",
-    "yTunnus": "0177826-0"
+    "id": "1.2.246.562.10.64894289699",
+    "name": "Finströms kommun",
+    "yTunnus": "0205003-6"
   },
   {
-    "id": "1.2.246.562.10.579477489510",
-    "name": "Ilmajoen kunta",
-    "yTunnus": "0178008-8"
+    "id": "1.2.246.562.10.65347978267",
+    "name": "Forssan kaupunki",
+    "yTunnus": "0145626-1"
   },
   {
-    "id": "1.2.246.562.10.18819210842",
-    "name": "Isojoen kunta",
-    "yTunnus": "0178071-5"
+    "id": "1.2.246.562.10.24581779048",
+    "name": "Geta kommun",
+    "yTunnus": "0205012-4"
   },
   {
-    "id": "1.2.246.562.10.53296533424",
-    "name": "Isonkyrön kunta",
-    "yTunnus": "0178131-2"
-  },
-  {
-    "id": "1.2.246.562.10.79420912739",
-    "name": "Kannuksen kaupunki",
-    "yTunnus": "0178455-6"
-  },
-  {
-    "id": "1.2.246.562.10.69530636864",
-    "name": "Karijoen kunta",
-    "yTunnus": "0178498-6"
-  },
-  {
-    "id": "1.2.246.562.10.30971154908",
-    "name": "Kauhajoen kaupunki",
-    "yTunnus": "0178718-3"
-  },
-  {
-    "id": "1.2.246.562.10.37521062804",
-    "name": "Kaustisen kunta",
-    "yTunnus": "0178981-6"
-  },
-  {
-    "id": "1.2.246.562.10.99816488243",
-    "name": "Kokkolan kaupunki",
-    "yTunnus": "0179377-8"
-  },
-  {
-    "id": "1.2.246.562.10.97036773279",
-    "name": "Korsnäs kommun",
-    "yTunnus": "0179699-5"
-  },
-  {
-    "id": "1.2.246.562.10.49813969182",
-    "name": "Kruunupyyn kunta",
-    "yTunnus": "0180065-9"
-  },
-  {
-    "id": "1.2.246.562.10.99711793432",
-    "name": "Kuortaneen kunta",
-    "yTunnus": "0180117-6"
-  },
-  {
-    "id": "1.2.246.562.10.35911951099",
-    "name": "Laihian kunta",
-    "yTunnus": "0180451-0"
-  },
-  {
-    "id": "1.2.246.562.10.758017749210",
-    "name": "Lappajärven kunta",
-    "yTunnus": "0180516-9"
-  },
-  {
-    "id": "1.2.246.562.10.28896655868",
-    "name": "Lestijärven kunta",
-    "yTunnus": "0180774-6"
-  },
-  {
-    "id": "1.2.246.562.10.133057821810",
-    "name": "Luodon kunta",
-    "yTunnus": "0180857-0"
-  },
-  {
-    "id": "1.2.246.562.10.28655667336",
-    "name": "Maalahden kunta",
-    "yTunnus": "0180948-5"
-  },
-  {
-    "id": "1.2.246.562.10.68513112042",
-    "name": "Mustasaaren kunta",
-    "yTunnus": "0181101-6"
-  },
-  {
-    "id": "1.2.246.562.10.37631700087",
-    "name": "Närpiön kaupunki",
-    "yTunnus": "0181367-9"
-  },
-  {
-    "id": "1.2.246.562.10.60868389325",
-    "name": "Perhon kunta",
-    "yTunnus": "0181464-7"
-  },
-  {
-    "id": "1.2.246.562.10.73481747332",
-    "name": "Soinin kunta",
-    "yTunnus": "0182637-3"
-  },
-  {
-    "id": "1.2.246.562.10.25306436798",
-    "name": "Teuvan kunta",
-    "yTunnus": "0182734-1"
-  },
-  {
-    "id": "1.2.246.562.10.66376752763",
-    "name": "Toholammin kunta",
-    "yTunnus": "0182779-8"
-  },
-  {
-    "id": "1.2.246.562.10.777203741710",
-    "name": "Uusikaarlepyyn kunta",
-    "yTunnus": "0183077-8"
-  },
-  {
-    "id": "1.2.246.562.10.81449413046",
-    "name": "Vetelin kunta",
-    "yTunnus": "0184278-7"
-  },
-  {
-    "id": "1.2.246.562.10.71600741632",
-    "name": "Vimpelin kunta",
-    "yTunnus": "0184318-1"
-  },
-  {
-    "id": "1.2.246.562.10.83943803144",
-    "name": "Ähtärin kaupunki",
-    "yTunnus": "0184622-7"
-  },
-  {
-    "id": "1.2.246.562.10.78057488765",
-    "name": "Alavieskan kunta",
-    "yTunnus": "0184674-5"
+    "id": "1.2.246.562.10.741151646710",
+    "name": "Haapajärven kaupunki",
+    "yTunnus": "0209756-3"
   },
   {
     "id": "1.2.246.562.10.74848655804",
@@ -905,329 +105,14 @@
     "yTunnus": "0184918-8"
   },
   {
-    "id": "1.2.246.562.10.94187242253",
-    "name": "Hyrynsalmen kunta",
-    "yTunnus": "0185075-2"
+    "id": "1.2.246.562.10.77043054657",
+    "name": "Halsuan kunta",
+    "yTunnus": "0177826-0"
   },
   {
-    "id": "1.2.246.562.10.501459103410",
-    "name": "Kalajoen kaupunki",
-    "yTunnus": "0185924-7"
-  },
-  {
-    "id": "1.2.246.562.10.63478199944",
-    "name": "Kempeleen kunta",
-    "yTunnus": "0186002-9"
-  },
-  {
-    "id": "1.2.246.562.10.33453628472",
-    "name": "Kuhmon kaupunki",
-    "yTunnus": "0186204-0"
-  },
-  {
-    "id": "1.2.246.562.10.96884533488",
-    "name": "Kuusamon kaupunki",
-    "yTunnus": "0186418-5"
-  },
-  {
-    "id": "1.2.246.562.10.170868645710",
-    "name": "Kärsämäen kunta",
-    "yTunnus": "0186511-0"
-  },
-  {
-    "id": "1.2.246.562.10.90602482102",
-    "name": "Limingan kunta",
-    "yTunnus": "0186553-2"
-  },
-  {
-    "id": "1.2.246.562.10.16618958322",
-    "name": "Lumijoen kunta",
-    "yTunnus": "0186580-7"
-  },
-  {
-    "id": "1.2.246.562.10.54714231948",
-    "name": "Merijärven kunta",
-    "yTunnus": "0186588-2"
-  },
-  {
-    "id": "1.2.246.562.10.67757437511",
-    "name": "Muhoksen kunta",
-    "yTunnus": "0186646-3"
-  },
-  {
-    "id": "1.2.246.562.10.68169639371",
-    "name": "Nivalan kaupunki",
-    "yTunnus": "0186757-0"
-  },
-  {
-    "id": "1.2.246.562.10.92574153364",
-    "name": "Oulaisten kaupunki",
-    "yTunnus": "0186852-2"
-  },
-  {
-    "id": "1.2.246.562.10.80381044462",
-    "name": "Oulun kaupunki",
-    "yTunnus": "0187690-1"
-  },
-  {
-    "id": "1.2.246.562.10.37266906215",
-    "name": "Paltamon kunta",
-    "yTunnus": "0188808-0"
-  },
-  {
-    "id": "1.2.246.562.10.25511125012",
-    "name": "Pudasjärven kaupunki",
-    "yTunnus": "0188962-2"
-  },
-  {
-    "id": "1.2.246.562.10.68032303478",
-    "name": "Siikalatvan kunta",
-    "yTunnus": "0189019-9"
-  },
-  {
-    "id": "1.2.246.562.10.28625552006",
-    "name": "Puolangan kunta",
-    "yTunnus": "0189081-8"
-  },
-  {
-    "id": "1.2.246.562.10.90285872595",
-    "name": "Pyhäjoen kunta",
-    "yTunnus": "0189127-1"
-  },
-  {
-    "id": "1.2.246.562.10.895016448210",
-    "name": "Pyhännän kunta",
-    "yTunnus": "0189226-6"
-  },
-  {
-    "id": "1.2.246.562.10.70146972248",
-    "name": "Reisjärven kunta",
-    "yTunnus": "0189548-3"
-  },
-  {
-    "id": "1.2.246.562.10.89190050412",
-    "name": "Ristijärven kunta",
-    "yTunnus": "0189576-6"
-  },
-  {
-    "id": "1.2.246.562.10.17226014128",
-    "name": "Sievin kunta",
-    "yTunnus": "0189615-2"
-  },
-  {
-    "id": "1.2.246.562.10.92937879366",
-    "name": "Sotkamon kunta",
-    "yTunnus": "0189766-5"
-  },
-  {
-    "id": "1.2.246.562.10.32595826036",
-    "name": "Suomussalmen kunta",
-    "yTunnus": "0189925-7"
-  },
-  {
-    "id": "1.2.246.562.10.28324836593",
-    "name": "Vaalan kunta",
-    "yTunnus": "0190027-0"
-  },
-  {
-    "id": "1.2.246.562.10.17131065538",
-    "name": "Taivalkosken kunta",
-    "yTunnus": "0190100-3"
-  },
-  {
-    "id": "1.2.246.562.10.32554715246",
-    "name": "Tyrnävän kunta",
-    "yTunnus": "0190140-9"
-  },
-  {
-    "id": "1.2.246.562.10.83385931197",
-    "name": "Utajärven kunta",
-    "yTunnus": "0190224-1"
-  },
-  {
-    "id": "1.2.246.562.10.61320174057",
-    "name": "Ylivieskan kaupunki",
-    "yTunnus": "0190557-3"
-  },
-  {
-    "id": "1.2.246.562.10.65218245689",
-    "name": "ENONTEKIÖN KUNTA",
-    "yTunnus": "0190662-1"
-  },
-  {
-    "id": "1.2.246.562.10.563374916510",
-    "name": "Inarin kunta",
-    "yTunnus": "0190758-7"
-  },
-  {
-    "id": "1.2.246.562.10.16982961803",
-    "name": "Kittilän kunta",
-    "yTunnus": "0191406-6"
-  },
-  {
-    "id": "1.2.246.562.10.22840212959",
-    "name": "Kolarin kunta",
-    "yTunnus": "0191528-8"
-  },
-  {
-    "id": "1.2.246.562.10.90505033903",
-    "name": "Kemijärven kaupunki",
-    "yTunnus": "0191717-9"
-  },
-  {
-    "id": "1.2.246.562.10.65030953759",
-    "name": "Muonion kunta",
-    "yTunnus": "0191824-3"
-  },
-  {
-    "id": "1.2.246.562.10.414627898710",
-    "name": "Pelkosenniemen kunta",
-    "yTunnus": "0191866-5"
-  },
-  {
-    "id": "1.2.246.562.10.74216650791",
-    "name": "Posion kunta",
-    "yTunnus": "0191908-6"
-  },
-  {
-    "id": "1.2.246.562.10.89906837417",
-    "name": "Ranuan kunta",
-    "yTunnus": "0191974-8"
-  },
-  {
-    "id": "1.2.246.562.10.16710959665",
-    "name": "Sallan kunta",
-    "yTunnus": "0192936-4"
-  },
-  {
-    "id": "1.2.246.562.10.52339583966",
-    "name": "Simon kunta",
-    "yTunnus": "0193015-4"
-  },
-  {
-    "id": "1.2.246.562.10.802378234410",
-    "name": "Sodankylän kunta",
-    "yTunnus": "0193169-1"
-  },
-  {
-    "id": "1.2.246.562.10.76999795016",
-    "name": "Tervolan kunta",
-    "yTunnus": "0193249-1"
-  },
-  {
-    "id": "1.2.246.562.10.25412665926",
-    "name": "Tornion kaupunki",
-    "yTunnus": "0193524-6"
-  },
-  {
-    "id": "1.2.246.562.10.41915091064",
-    "name": "Pellon kunta",
-    "yTunnus": "0193729-2"
-  },
-  {
-    "id": "1.2.246.562.10.38262856784",
-    "name": "HÄMEENKOSKEN KUNTA",
-    "yTunnus": "0194494-3"
-  },
-  {
-    "id": "1.2.246.562.10.94205660312",
-    "name": "Pedersöre kommun",
-    "yTunnus": "0198517-1"
-  },
-  {
-    "id": "1.2.246.562.10.346830761110",
-    "name": "Helsingin kaupunki",
-    "yTunnus": "0201256-6"
-  },
-  {
-    "id": "1.2.246.562.10.98343673038",
-    "name": "Kauniaisten kaupunki",
-    "yTunnus": "0203026-2"
-  },
-  {
-    "id": "1.2.246.562.10.48736596585",
-    "name": "Kirkkonummen kunta",
-    "yTunnus": "0203107-0"
-  },
-  {
-    "id": "1.2.246.562.10.29177766721",
-    "name": "Lapinjärven kunta",
-    "yTunnus": "0203135-3"
-  },
-  {
-    "id": "1.2.246.562.10.61276451822",
-    "name": "Loviisan kaupunki",
-    "yTunnus": "0203263-9"
-  },
-  {
-    "id": "1.2.246.562.10.95642610208",
-    "name": "Myrskylän kunta",
-    "yTunnus": "0203282-3"
-  },
-  {
-    "id": "1.2.246.562.10.377431328810",
-    "name": "Sipoon kunta",
-    "yTunnus": "0203533-8"
-  },
-  {
-    "id": "1.2.246.562.10.67610565649",
-    "name": "Huittisten kaupunki",
-    "yTunnus": "0203762-4"
-  },
-  {
-    "id": "1.2.246.562.10.52111966223",
-    "name": "Ikaalisten kaupunki",
-    "yTunnus": "0203797-4"
-  },
-  {
-    "id": "1.2.246.562.10.91998925431",
-    "name": "Kokemäen kaupunki",
-    "yTunnus": "0203925-9"
-  },
-  {
-    "id": "1.2.246.562.10.75068280785",
-    "name": "Maskun kunta",
-    "yTunnus": "0204064-7"
-  },
-  {
-    "id": "1.2.246.562.10.351559823710",
-    "name": "Pyhärannan kunta",
-    "yTunnus": "0204403-1"
-  },
-  {
-    "id": "1.2.246.562.10.52181390338",
-    "name": "Raision kaupunki",
-    "yTunnus": "0204428-5"
-  },
-  {
-    "id": "1.2.246.562.10.79856662832",
-    "name": "Ruskon kunta",
-    "yTunnus": "0204524-5"
-  },
-  {
-    "id": "1.2.246.562.10.56820737825",
-    "name": "Turun kaupunki",
-    "yTunnus": "0204819-8"
-  },
-  {
-    "id": "1.2.246.562.10.47172297039",
-    "name": "Ulvilan kaupunki",
-    "yTunnus": "0204910-7"
-  },
-  {
-    "id": "1.2.246.562.10.36945691909",
-    "name": "Brändö Kommun",
-    "yTunnus": "0204999-1"
-  },
-  {
-    "id": "1.2.246.562.10.64894289699",
-    "name": "Finströms kommun",
-    "yTunnus": "0205003-6"
-  },
-  {
-    "id": "1.2.246.562.10.24581779048",
-    "name": "Geta kommun",
-    "yTunnus": "0205012-4"
+    "id": "1.2.246.562.10.31717716703",
+    "name": "Haminan kaupunki",
+    "yTunnus": "0242496-6"
   },
   {
     "id": "1.2.246.562.10.91325018744",
@@ -1235,114 +120,154 @@
     "yTunnus": "0205014-0"
   },
   {
-    "id": "1.2.246.562.10.38204034102",
-    "name": "Jomala kommun",
-    "yTunnus": "0205023-9"
+    "id": "1.2.246.562.10.61339874754",
+    "name": "Hangon kaupunki",
+    "yTunnus": "0103166-9"
   },
   {
-    "id": "1.2.246.562.10.83479379683",
-    "name": "Kumlinge kommun",
-    "yTunnus": "0205030-0"
+    "id": "1.2.246.562.10.33304449151",
+    "name": "Hankasalmen kunta",
+    "yTunnus": "0174035-0"
   },
   {
-    "id": "1.2.246.562.10.455737691510",
-    "name": "Kökar kommun",
-    "yTunnus": "0205032-7"
+    "id": "1.2.246.562.10.22832732543",
+    "name": "Harjavallan kaupunki",
+    "yTunnus": "0132585-1"
   },
   {
-    "id": "1.2.246.562.10.79616524397",
-    "name": "Lemlands kommun",
-    "yTunnus": "0205034-3"
+    "id": "1.2.246.562.10.57825579634",
+    "name": "Hartolan kunta",
+    "yTunnus": "0163734-5"
   },
   {
-    "id": "1.2.246.562.10.43615490125",
-    "name": "Lumparlands kommun",
-    "yTunnus": "0205038-6"
+    "id": "1.2.246.562.10.23652556442",
+    "name": "Hattulan kunta",
+    "yTunnus": "0145801-3"
   },
   {
-    "id": "1.2.246.562.10.58591019367",
-    "name": "Mariehamns stad",
-    "yTunnus": "0205071-4"
+    "id": "1.2.246.562.10.10421700658",
+    "name": "Hausjärven kunta",
+    "yTunnus": "0145997-2"
   },
   {
-    "id": "1.2.246.562.10.19824497051",
-    "name": "Saltviks kommun",
-    "yTunnus": "0205119-4"
+    "id": "1.2.246.562.10.763120342010",
+    "name": "Heinolan kaupunki",
+    "yTunnus": "1068892-9"
   },
   {
-    "id": "1.2.246.562.10.72952395035",
-    "name": "Sottunga Kommun",
-    "yTunnus": "0205121-5"
+    "id": "1.2.246.562.10.20841697285",
+    "name": "Heinäveden kunta",
+    "yTunnus": "0164308-3"
   },
   {
-    "id": "1.2.246.562.10.84756895037",
-    "name": "Sunds kommun",
-    "yTunnus": "0205125-8"
+    "id": "1.2.246.562.10.346830761110",
+    "name": "Helsingin kaupunki",
+    "yTunnus": "0201256-6"
   },
   {
-    "id": "1.2.246.562.10.58825554007",
-    "name": "Vårdö kommun",
-    "yTunnus": "0205126-6"
+    "id": "1.2.246.562.10.81302392022",
+    "name": "Hirvensalmen kunta",
+    "yTunnus": "0164384-1"
   },
   {
-    "id": "1.2.246.562.10.95000650127",
-    "name": "Nokian kaupunki",
-    "yTunnus": "0205717-4"
+    "id": "1.2.246.562.10.15738250156",
+    "name": "Hollolan kunta",
+    "yTunnus": "0146248-5"
   },
   {
-    "id": "1.2.246.562.10.62317555787",
-    "name": "Virtain kaupunki",
-    "yTunnus": "0206333-9"
+    "id": "1.2.246.562.10.599832688110",
+    "name": "Honkajoen kunta",
+    "yTunnus": "0132697-7"
   },
   {
-    "id": "1.2.246.562.10.29397001933",
-    "name": "Rautjärven kunta",
-    "yTunnus": "0206951-1"
+    "id": "1.2.246.562.10.67610565649",
+    "name": "Huittisten kaupunki",
+    "yTunnus": "0203762-4"
   },
   {
-    "id": "1.2.246.562.10.63182395085",
-    "name": "Virolahden kunta",
-    "yTunnus": "0207033-6"
+    "id": "1.2.246.562.10.83043996699",
+    "name": "Humppilan kunta",
+    "yTunnus": "0146456-0"
   },
   {
-    "id": "1.2.246.562.10.54874899088",
-    "name": "Joroisten kunta",
-    "yTunnus": "0207112-8"
+    "id": "1.2.246.562.10.94187242253",
+    "name": "Hyrynsalmen kunta",
+    "yTunnus": "0185075-2"
   },
   {
-    "id": "1.2.246.562.10.60147184919",
-    "name": "Outokummun kaupunki",
-    "yTunnus": "0207604-1"
+    "id": "1.2.246.562.10.93032730884",
+    "name": "Hyvinkään kaupunki",
+    "yTunnus": "0125866-0"
   },
   {
-    "id": "1.2.246.562.10.25988879703",
-    "name": "Nurmeksen kaupunki",
-    "yTunnus": "0207669-0"
+    "id": "1.2.246.562.10.38262856784",
+    "name": "HÄMEENKOSKEN KUNTA",
+    "yTunnus": "0194494-3"
   },
   {
-    "id": "1.2.246.562.10.20528516584",
-    "name": "Valtimon kunta",
-    "yTunnus": "0207709-5"
+    "id": "1.2.246.562.10.64495287985",
+    "name": "Hämeenkyrön kunta",
+    "yTunnus": "0132947-3"
   },
   {
-    "id": "1.2.246.562.10.10338723355",
-    "name": "Suonenjoen kaupunki",
-    "yTunnus": "0208061-4"
+    "id": "1.2.246.562.10.37294919826",
+    "name": "Hämeenlinnan kaupunki",
+    "yTunnus": "0146921-4"
   },
   {
-    "id": "1.2.246.562.10.59676978782",
-    "name": "Keuruun kaupunki",
-    "yTunnus": "0208388-2"
+    "id": "1.2.246.562.10.10063814452",
+    "name": "Iin kunta",
+    "yTunnus": "2054621-1"
   },
   {
-    "id": "1.2.246.562.10.67342493599",
-    "name": "Multian kunta",
-    "yTunnus": "0208471-1"
+    "id": "1.2.246.562.10.32446460803",
+    "name": "Iisalmen kaupunki",
+    "yTunnus": "9086071-6"
   },
   {
-    "id": "1.2.246.562.10.60144737602",
-    "name": "Viitasaaren kaupunki",
-    "yTunnus": "0208573-0"
+    "id": "1.2.246.562.10.29649375564",
+    "name": "Iitin kunta",
+    "yTunnus": "0158766-7"
+  },
+  {
+    "id": "1.2.246.562.10.52111966223",
+    "name": "Ikaalisten kaupunki",
+    "yTunnus": "0203797-4"
+  },
+  {
+    "id": "1.2.246.562.10.579477489510",
+    "name": "Ilmajoen kunta",
+    "yTunnus": "0178008-8"
+  },
+  {
+    "id": "1.2.246.562.10.85996043247",
+    "name": "Ilomantsin kunta",
+    "yTunnus": "0167589-4"
+  },
+  {
+    "id": "1.2.246.562.10.62818926438",
+    "name": "Imatran kaupunki",
+    "yTunnus": "0159216-7"
+  },
+  {
+    "id": "1.2.246.562.10.563374916510",
+    "name": "Inarin kunta",
+    "yTunnus": "0190758-7"
+  },
+  {
+    "id": "1.2.246.562.10.93263719523",
+    "name": "Inkoon kunta",
+    "yTunnus": "0126293-4"
+  },
+  {
+    "id": "1.2.246.562.10.18819210842",
+    "name": "Isojoen kunta",
+    "yTunnus": "0178071-5"
+  },
+  {
+    "id": "1.2.246.562.10.53296533424",
+    "name": "Isonkyrön kunta",
+    "yTunnus": "0178131-2"
   },
   {
     "id": "1.2.246.562.10.52023939078",
@@ -1350,9 +275,149 @@
     "yTunnus": "0208733-0"
   },
   {
+    "id": "1.2.246.562.10.57762983609",
+    "name": "Janakkalan kunta",
+    "yTunnus": "0147510-4"
+  },
+  {
+    "id": "1.2.246.562.10.28817355796",
+    "name": "Joensuun kaupunki",
+    "yTunnus": "0242746-2"
+  },
+  {
+    "id": "1.2.246.562.10.13451568789",
+    "name": "Jokioisten kunta",
+    "yTunnus": "0147645-7"
+  },
+  {
+    "id": "1.2.246.562.10.38204034102",
+    "name": "Jomala kommun",
+    "yTunnus": "0205023-9"
+  },
+  {
+    "id": "1.2.246.562.10.54874899088",
+    "name": "Joroisten kunta",
+    "yTunnus": "0207112-8"
+  },
+  {
+    "id": "1.2.246.562.10.74658092437",
+    "name": "Joutsan kunta",
+    "yTunnus": "0174108-9"
+  },
+  {
+    "id": "1.2.246.562.10.391702899110",
+    "name": "Juankosken kaupunki",
+    "yTunnus": "0170606-4"
+  },
+  {
+    "id": "1.2.246.562.10.74086792103",
+    "name": "Juuan kunta",
+    "yTunnus": "0168654-2"
+  },
+  {
+    "id": "1.2.246.562.10.71641004123",
+    "name": "Juupajoen kunta",
+    "yTunnus": "0147705-4"
+  },
+  {
+    "id": "1.2.246.562.10.39178483366",
+    "name": "Juvan kunta",
+    "yTunnus": "0164551-3"
+  },
+  {
+    "id": "1.2.246.562.10.81269623245",
+    "name": "Jyväskylän kaupunki",
+    "yTunnus": "0174666-4"
+  },
+  {
+    "id": "1.2.246.562.10.82724739725",
+    "name": "Jämijärven kunta",
+    "yTunnus": "0133127-4"
+  },
+  {
+    "id": "1.2.246.562.10.63862156526",
+    "name": "Jämsän kaupunki",
+    "yTunnus": "0175622-1"
+  },
+  {
+    "id": "1.2.246.562.10.73948983488",
+    "name": "Järvenpään kaupunki",
+    "yTunnus": "0126541-4"
+  },
+  {
+    "id": "1.2.246.562.10.83037752777",
+    "name": "Kaarinan kaupunki",
+    "yTunnus": "0133226-9"
+  },
+  {
+    "id": "1.2.246.562.10.87099865385",
+    "name": "Kaavin kunta",
+    "yTunnus": "0170664-6"
+  },
+  {
+    "id": "1.2.246.562.10.67019405611",
+    "name": "Kajaanin kaupunki",
+    "yTunnus": "0214958-9"
+  },
+  {
+    "id": "1.2.246.562.10.501459103410",
+    "name": "Kalajoen kaupunki",
+    "yTunnus": "0185924-7"
+  },
+  {
+    "id": "1.2.246.562.10.77047788581",
+    "name": "Kangasalan Kaupunki",
+    "yTunnus": "1923299-5"
+  },
+  {
+    "id": "1.2.246.562.10.31374072721",
+    "name": "Kangasniemen kunta",
+    "yTunnus": "0164690-3"
+  },
+  {
+    "id": "1.2.246.562.10.52429530125",
+    "name": "Kankaanpään kaupunki",
+    "yTunnus": "0133596-1"
+  },
+  {
+    "id": "1.2.246.562.10.16264501384",
+    "name": "Kannonkosken kunta",
+    "yTunnus": "0175798-8"
+  },
+  {
+    "id": "1.2.246.562.10.79420912739",
+    "name": "Kannuksen kaupunki",
+    "yTunnus": "0178455-6"
+  },
+  {
+    "id": "1.2.246.562.10.69530636864",
+    "name": "Karijoen kunta",
+    "yTunnus": "0178498-6"
+  },
+  {
+    "id": "1.2.246.562.10.17061224014",
+    "name": "Karkkilan kaupunki",
+    "yTunnus": "0127046-7"
+  },
+  {
+    "id": "1.2.246.562.10.88465313521",
+    "name": "Karstulan kunta",
+    "yTunnus": "9094917-1"
+  },
+  {
+    "id": "1.2.246.562.10.79559056522",
+    "name": "Karvian kunta",
+    "yTunnus": "0133735-0"
+  },
+  {
     "id": "1.2.246.562.10.72521357425",
     "name": "Kaskisten kaupunki Kaskö stad",
     "yTunnus": "0208787-5"
+  },
+  {
+    "id": "1.2.246.562.10.30971154908",
+    "name": "Kauhajoen kaupunki",
+    "yTunnus": "0178718-3"
   },
   {
     "id": "1.2.246.562.10.17889054155",
@@ -1360,34 +425,24 @@
     "yTunnus": "0208852-8"
   },
   {
-    "id": "1.2.246.562.10.56897525871",
-    "name": "Kurikan kaupunki",
-    "yTunnus": "0209046-8"
+    "id": "1.2.246.562.10.98343673038",
+    "name": "Kauniaisten kaupunki",
+    "yTunnus": "0203026-2"
   },
   {
-    "id": "1.2.246.562.10.42620593402",
-    "name": "Lapuan kaupunki",
-    "yTunnus": "0209113-7"
+    "id": "1.2.246.562.10.37521062804",
+    "name": "Kaustisen kunta",
+    "yTunnus": "0178981-6"
   },
   {
-    "id": "1.2.246.562.10.57993240753",
-    "name": "Pietarsaari",
-    "yTunnus": "0209242-0"
+    "id": "1.2.246.562.10.35139763102",
+    "name": "Keiteleen kunta",
+    "yTunnus": "0170773-7"
   },
   {
-    "id": "1.2.246.562.10.50945318033",
-    "name": "Vaasan kaupunki",
-    "yTunnus": "0209602-6"
-  },
-  {
-    "id": "1.2.246.562.10.741151646710",
-    "name": "Haapajärven kaupunki",
-    "yTunnus": "0209756-3"
-  },
-  {
-    "id": "1.2.246.562.10.61313333637",
-    "name": "Pyhäjärven kaupunki",
-    "yTunnus": "0210261-7"
+    "id": "1.2.246.562.10.90505033903",
+    "name": "Kemijärven kaupunki",
+    "yTunnus": "0191717-9"
   },
   {
     "id": "1.2.246.562.10.71948887212",
@@ -1400,44 +455,29 @@
     "yTunnus": "0210469-8"
   },
   {
-    "id": "1.2.246.562.10.89884984132",
-    "name": "Savukosken kunta",
-    "yTunnus": "0210704-7"
+    "id": "1.2.246.562.10.29125481084",
+    "name": "Kemiönsaaren kunta",
+    "yTunnus": "0133833-7"
   },
   {
-    "id": "1.2.246.562.10.90045721975",
-    "name": "Ylitornion kunta",
-    "yTunnus": "0210826-9"
+    "id": "1.2.246.562.10.63478199944",
+    "name": "Kempeleen kunta",
+    "yTunnus": "0186002-9"
   },
   {
-    "id": "1.2.246.562.10.79499343246",
-    "name": "Tampereen kaupunki",
-    "yTunnus": "0211675-2"
+    "id": "1.2.246.562.10.94791481685",
+    "name": "Keravan kaupunki",
+    "yTunnus": "0127485-5"
   },
   {
-    "id": "1.2.246.562.10.55414194963",
-    "name": "Kosken Tl kunta",
-    "yTunnus": "0213007-9"
+    "id": "1.2.246.562.10.59676978782",
+    "name": "Keuruun kaupunki",
+    "yTunnus": "0208388-2"
   },
   {
-    "id": "1.2.246.562.10.67019405611",
-    "name": "Kajaanin kaupunki",
-    "yTunnus": "0214958-9"
-  },
-  {
-    "id": "1.2.246.562.10.48894802817",
-    "name": "Kristiinankaupunki",
-    "yTunnus": "0216509-5"
-  },
-  {
-    "id": "1.2.246.562.10.31717716703",
-    "name": "Haminan kaupunki",
-    "yTunnus": "0242496-6"
-  },
-  {
-    "id": "1.2.246.562.10.28817355796",
-    "name": "Joensuun kaupunki",
-    "yTunnus": "0242746-2"
+    "id": "1.2.246.562.10.29028188414",
+    "name": "Kihniön kunta",
+    "yTunnus": "0133862-8"
   },
   {
     "id": "1.2.246.562.10.38794231886",
@@ -1445,9 +485,44 @@
     "yTunnus": "0242816-6"
   },
   {
-    "id": "1.2.246.562.10.95463799635",
-    "name": "Pihtiputaan kunta",
-    "yTunnus": "0243027-4"
+    "id": "1.2.246.562.10.48736596585",
+    "name": "Kirkkonummen kunta",
+    "yTunnus": "0203107-0"
+  },
+  {
+    "id": "1.2.246.562.10.82930282486",
+    "name": "Kiteen kaupunki",
+    "yTunnus": "0168900-6"
+  },
+  {
+    "id": "1.2.246.562.10.16982961803",
+    "name": "Kittilän kunta",
+    "yTunnus": "0191406-6"
+  },
+  {
+    "id": "1.2.246.562.10.76561655879",
+    "name": "Kiuruveden kaupunki",
+    "yTunnus": "0170843-0"
+  },
+  {
+    "id": "1.2.246.562.10.64202244238",
+    "name": "Kivijärven kunta",
+    "yTunnus": "0176150-6"
+  },
+  {
+    "id": "1.2.246.562.10.91998925431",
+    "name": "Kokemäen kaupunki",
+    "yTunnus": "0203925-9"
+  },
+  {
+    "id": "1.2.246.562.10.99816488243",
+    "name": "Kokkolan kaupunki",
+    "yTunnus": "0179377-8"
+  },
+  {
+    "id": "1.2.246.562.10.22840212959",
+    "name": "Kolarin kunta",
+    "yTunnus": "0191528-8"
   },
   {
     "id": "1.2.246.562.10.42096071495",
@@ -1455,9 +530,199 @@
     "yTunnus": "0282394-0"
   },
   {
-    "id": "1.2.246.562.10.67094744702",
-    "name": "Porvoon kaupunki",
-    "yTunnus": "1061512-1"
+    "id": "1.2.246.562.10.31089514694",
+    "name": "Konneveden kunta",
+    "yTunnus": "0176227-7"
+  },
+  {
+    "id": "1.2.246.562.10.97767653039",
+    "name": "Kontiolahden kunta",
+    "yTunnus": "0169048-8"
+  },
+  {
+    "id": "1.2.246.562.10.97036773279",
+    "name": "Korsnäs kommun",
+    "yTunnus": "0179699-5"
+  },
+  {
+    "id": "1.2.246.562.10.55414194963",
+    "name": "Kosken Tl kunta",
+    "yTunnus": "0213007-9"
+  },
+  {
+    "id": "1.2.246.562.10.48349941889",
+    "name": "Kotkan kaupunki",
+    "yTunnus": "0160225-7"
+  },
+  {
+    "id": "1.2.246.562.10.16568914952",
+    "name": "Kouvolan kaupunki",
+    "yTunnus": "0161075-9"
+  },
+  {
+    "id": "1.2.246.562.10.48894802817",
+    "name": "Kristiinankaupunki",
+    "yTunnus": "0216509-5"
+  },
+  {
+    "id": "1.2.246.562.10.49813969182",
+    "name": "Kruunupyyn kunta",
+    "yTunnus": "0180065-9"
+  },
+  {
+    "id": "1.2.246.562.10.83118127493",
+    "name": "Kuhmoisten kunta",
+    "yTunnus": "0176357-9"
+  },
+  {
+    "id": "1.2.246.562.10.33453628472",
+    "name": "Kuhmon kaupunki",
+    "yTunnus": "0186204-0"
+  },
+  {
+    "id": "1.2.246.562.10.83479379683",
+    "name": "Kumlinge kommun",
+    "yTunnus": "0205030-0"
+  },
+  {
+    "id": "1.2.246.562.10.59286753021",
+    "name": "Kuopion kaupunki",
+    "yTunnus": "0171450-7"
+  },
+  {
+    "id": "1.2.246.562.10.99711793432",
+    "name": "Kuortaneen kunta",
+    "yTunnus": "0180117-6"
+  },
+  {
+    "id": "1.2.246.562.10.56897525871",
+    "name": "Kurikan kaupunki",
+    "yTunnus": "0209046-8"
+  },
+  {
+    "id": "1.2.246.562.10.25837481214",
+    "name": "Kustavin kunta",
+    "yTunnus": "0134349-4"
+  },
+  {
+    "id": "1.2.246.562.10.96884533488",
+    "name": "Kuusamon kaupunki",
+    "yTunnus": "0186418-5"
+  },
+  {
+    "id": "1.2.246.562.10.72933310632",
+    "name": "Kyyjärven kunta",
+    "yTunnus": "0176410-9"
+  },
+  {
+    "id": "1.2.246.562.10.29095929146",
+    "name": "KÖYLIÖN KUNTA",
+    "yTunnus": "0134416-3"
+  },
+  {
+    "id": "1.2.246.562.10.95467913869",
+    "name": "Kärkölän kunta",
+    "yTunnus": "0148268-9"
+  },
+  {
+    "id": "1.2.246.562.10.170868645710",
+    "name": "Kärsämäen kunta",
+    "yTunnus": "0186511-0"
+  },
+  {
+    "id": "1.2.246.562.10.455737691510",
+    "name": "Kökar kommun",
+    "yTunnus": "0205032-7"
+  },
+  {
+    "id": "1.2.246.562.10.35653563805",
+    "name": "Lahden kaupunki",
+    "yTunnus": "0149669-3"
+  },
+  {
+    "id": "1.2.246.562.10.35911951099",
+    "name": "Laihian kunta",
+    "yTunnus": "0180451-0"
+  },
+  {
+    "id": "1.2.246.562.10.45754497167",
+    "name": "Laitilan kaupunki",
+    "yTunnus": "0134480-9"
+  },
+  {
+    "id": "1.2.246.562.10.29177766721",
+    "name": "Lapinjärven kunta",
+    "yTunnus": "0203135-3"
+  },
+  {
+    "id": "1.2.246.562.10.91868792887",
+    "name": "Lapinlahden kunta",
+    "yTunnus": "0172127-2"
+  },
+  {
+    "id": "1.2.246.562.10.758017749210",
+    "name": "Lappajärven kunta",
+    "yTunnus": "0180516-9"
+  },
+  {
+    "id": "1.2.246.562.10.74476197939",
+    "name": "Lappeenrannan kaupunki",
+    "yTunnus": "0162193-3"
+  },
+  {
+    "id": "1.2.246.562.10.42620593402",
+    "name": "Lapuan kaupunki",
+    "yTunnus": "0209113-7"
+  },
+  {
+    "id": "1.2.246.562.10.52816074638",
+    "name": "Laukaan kunta",
+    "yTunnus": "0176478-2"
+  },
+  {
+    "id": "1.2.246.562.10.14921103447",
+    "name": "Lemin kunta",
+    "yTunnus": "0162576-6"
+  },
+  {
+    "id": "1.2.246.562.10.79616524397",
+    "name": "Lemlands kommun",
+    "yTunnus": "0205034-3"
+  },
+  {
+    "id": "1.2.246.562.10.74484103937",
+    "name": "Lempäälän kunta",
+    "yTunnus": "0150783-1"
+  },
+  {
+    "id": "1.2.246.562.10.62362820896",
+    "name": "Leppävirran kunta",
+    "yTunnus": "0172231-2"
+  },
+  {
+    "id": "1.2.246.562.10.28896655868",
+    "name": "Lestijärven kunta",
+    "yTunnus": "0180774-6"
+  },
+  {
+    "id": "1.2.246.562.10.48836293729",
+    "name": "Liedon kaupunki",
+    "yTunnus": "0134698-6"
+  },
+  {
+    "id": "1.2.246.562.10.63676305269",
+    "name": "Lieksan kaupunki",
+    "yTunnus": "0169321-6"
+  },
+  {
+    "id": "1.2.246.562.10.90602482102",
+    "name": "Limingan kunta",
+    "yTunnus": "0186553-2"
+  },
+  {
+    "id": "1.2.246.562.10.65272201065",
+    "name": "Liperin kunta",
+    "yTunnus": "0169583-6"
   },
   {
     "id": "1.2.246.562.10.97598980593",
@@ -1465,54 +730,114 @@
     "yTunnus": "1068322-0"
   },
   {
-    "id": "1.2.246.562.10.763120342010",
-    "name": "Heinolan kaupunki",
-    "yTunnus": "1068892-9"
-  },
-  {
-    "id": "1.2.246.562.10.27580498759",
-    "name": "PARIKKALAN KUNTA",
-    "yTunnus": "1913642-6"
-  },
-  {
-    "id": "1.2.246.562.10.97762552632",
-    "name": "Tohmajärven kunta",
-    "yTunnus": "1919717-3"
-  },
-  {
-    "id": "1.2.246.562.10.77047788581",
-    "name": "Kangasalan Kaupunki",
-    "yTunnus": "1923299-5"
-  },
-  {
     "id": "1.2.246.562.10.92542277485",
     "name": "Loimaan kaupunki",
     "yTunnus": "1927453-8"
   },
   {
-    "id": "1.2.246.562.10.59347432821",
-    "name": "Seinäjoen kaupunki",
-    "yTunnus": "1928736-3"
+    "id": "1.2.246.562.10.895479029510",
+    "name": "Lopen kunta",
+    "yTunnus": "0150919-1"
   },
   {
-    "id": "1.2.246.562.10.76839260437",
-    "name": "Pöytyän kunta",
-    "yTunnus": "1929519-5"
+    "id": "1.2.246.562.10.61276451822",
+    "name": "Loviisan kaupunki",
+    "yTunnus": "0203263-9"
   },
   {
-    "id": "1.2.246.562.10.991564988110",
-    "name": "Rovaniemen kaupunki",
-    "yTunnus": "1978283-1"
+    "id": "1.2.246.562.10.60597986037",
+    "name": "Luhangan kunta",
+    "yTunnus": "0176592-9"
   },
   {
-    "id": "1.2.246.562.10.41953359605",
-    "name": "Äänekosken kaupunki",
-    "yTunnus": "2045520-5"
+    "id": "1.2.246.562.10.16618958322",
+    "name": "Lumijoen kunta",
+    "yTunnus": "0186580-7"
   },
   {
-    "id": "1.2.246.562.10.28805886679",
-    "name": "Siikajoen kunta",
-    "yTunnus": "2047359-3"
+    "id": "1.2.246.562.10.43615490125",
+    "name": "Lumparlands kommun",
+    "yTunnus": "0205038-6"
+  },
+  {
+    "id": "1.2.246.562.10.133057821810",
+    "name": "Luodon kunta",
+    "yTunnus": "0180857-0"
+  },
+  {
+    "id": "1.2.246.562.10.36026576342",
+    "name": "Luumäen kunta",
+    "yTunnus": "0162631-2"
+  },
+  {
+    "id": "1.2.246.562.10.46744805683",
+    "name": "Luvian kunta",
+    "yTunnus": "0135032-8"
+  },
+  {
+    "id": "1.2.246.562.10.28655667336",
+    "name": "Maalahden kunta",
+    "yTunnus": "0180948-5"
+  },
+  {
+    "id": "1.2.246.562.10.58591019367",
+    "name": "Mariehamns stad",
+    "yTunnus": "0205071-4"
+  },
+  {
+    "id": "1.2.246.562.10.44830339303",
+    "name": "Marttilan kunta",
+    "yTunnus": "0135086-2"
+  },
+  {
+    "id": "1.2.246.562.10.75068280785",
+    "name": "Maskun kunta",
+    "yTunnus": "0204064-7"
+  },
+  {
+    "id": "1.2.246.562.10.54714231948",
+    "name": "Merijärven kunta",
+    "yTunnus": "0186588-2"
+  },
+  {
+    "id": "1.2.246.562.10.984936049410",
+    "name": "Merikarvian kunta",
+    "yTunnus": "0135202-4"
+  },
+  {
+    "id": "1.2.246.562.10.72963804215",
+    "name": "Miehikkälän kunta",
+    "yTunnus": "0162675-0"
+  },
+  {
+    "id": "1.2.246.562.10.21531172977",
+    "name": "Mikkelin kaupunki",
+    "yTunnus": "0165116-3"
+  },
+  {
+    "id": "1.2.246.562.10.67757437511",
+    "name": "Muhoksen kunta",
+    "yTunnus": "0186646-3"
+  },
+  {
+    "id": "1.2.246.562.10.67342493599",
+    "name": "Multian kunta",
+    "yTunnus": "0208471-1"
+  },
+  {
+    "id": "1.2.246.562.10.65030953759",
+    "name": "Muonion kunta",
+    "yTunnus": "0191824-3"
+  },
+  {
+    "id": "1.2.246.562.10.68513112042",
+    "name": "Mustasaaren kunta",
+    "yTunnus": "0181101-6"
+  },
+  {
+    "id": "1.2.246.562.10.47010230846",
+    "name": "Muuramen kunta",
+    "yTunnus": "0176699-9"
   },
   {
     "id": "1.2.246.562.10.72694583476",
@@ -1520,29 +845,59 @@
     "yTunnus": "2048364-4"
   },
   {
-    "id": "1.2.246.562.10.99616449197",
-    "name": "Vöyrin kunta",
-    "yTunnus": "2050514-5"
+    "id": "1.2.246.562.10.95642610208",
+    "name": "Myrskylän kunta",
+    "yTunnus": "0203282-3"
   },
   {
-    "id": "1.2.246.562.10.35005580424",
-    "name": "Akaan kaupunki",
-    "yTunnus": "2050864-5"
+    "id": "1.2.246.562.10.10609607295",
+    "name": "Mäntsälän kunta",
+    "yTunnus": "0129261-5"
   },
   {
-    "id": "1.2.246.562.10.196450131610",
-    "name": "Pälkäneen kunta",
-    "yTunnus": "2050961-3"
+    "id": "1.2.246.562.10.54585363101",
+    "name": "Mänttä-Vilppulan kaupunki",
+    "yTunnus": "0157867-2"
   },
   {
-    "id": "1.2.246.562.10.10063814452",
-    "name": "Iin kunta",
-    "yTunnus": "2054621-1"
+    "id": "1.2.246.562.10.56081906382",
+    "name": "Mäntyharjun kunta",
+    "yTunnus": "0165761-0"
   },
   {
-    "id": "1.2.246.562.10.20516711478",
-    "name": "Askolan kunta",
-    "yTunnus": "9000162-0"
+    "id": "1.2.246.562.10.16668617695",
+    "name": "NASTOLAN KUNTA",
+    "yTunnus": "0151364-1"
+  },
+  {
+    "id": "1.2.246.562.10.94718574216",
+    "name": "Naantalin kaupunki",
+    "yTunnus": "0135457-2"
+  },
+  {
+    "id": "1.2.246.562.10.70991205496",
+    "name": "Nakkilan kunta",
+    "yTunnus": "0135662-3"
+  },
+  {
+    "id": "1.2.246.562.10.68169639371",
+    "name": "Nivalan kaupunki",
+    "yTunnus": "0186757-0"
+  },
+  {
+    "id": "1.2.246.562.10.95000650127",
+    "name": "Nokian kaupunki",
+    "yTunnus": "0205717-4"
+  },
+  {
+    "id": "1.2.246.562.10.73157741437",
+    "name": "Nousiaisten kunta",
+    "yTunnus": "0135821-5"
+  },
+  {
+    "id": "1.2.246.562.10.25988879703",
+    "name": "Nurmeksen kaupunki",
+    "yTunnus": "0207669-0"
   },
   {
     "id": "1.2.246.562.10.98788281925",
@@ -1550,29 +905,214 @@
     "yTunnus": "9014643-2"
   },
   {
-    "id": "1.2.246.562.10.81877746867",
-    "name": "Sauvon kunta",
-    "yTunnus": "9038213-6"
+    "id": "1.2.246.562.10.37631700087",
+    "name": "Närpiön kaupunki",
+    "yTunnus": "0181367-9"
   },
   {
-    "id": "1.2.246.562.10.32446460803",
-    "name": "Iisalmen kaupunki",
-    "yTunnus": "9086071-6"
+    "id": "1.2.246.562.10.95739261709",
+    "name": "Orimattilan kaupunki",
+    "yTunnus": "0129920-0"
   },
   {
-    "id": "1.2.246.562.10.556561431410",
-    "name": "Sonkajärven kunta",
-    "yTunnus": "9090160-2"
+    "id": "1.2.246.562.10.872068409910",
+    "name": "Oripään kunta",
+    "yTunnus": "0135869-6"
   },
   {
-    "id": "1.2.246.562.10.88465313521",
-    "name": "Karstulan kunta",
-    "yTunnus": "9094917-1"
+    "id": "1.2.246.562.10.74499914872",
+    "name": "Oriveden kaupunki",
+    "yTunnus": "0151789-6"
   },
   {
-    "id": "1.2.246.562.10.111870344810",
-    "name": "Utsjoen kunta",
-    "yTunnus": "9129466-4"
+    "id": "1.2.246.562.10.92574153364",
+    "name": "Oulaisten kaupunki",
+    "yTunnus": "0186852-2"
+  },
+  {
+    "id": "1.2.246.562.10.80381044462",
+    "name": "Oulun kaupunki",
+    "yTunnus": "0187690-1"
+  },
+  {
+    "id": "1.2.246.562.10.60147184919",
+    "name": "Outokummun kaupunki",
+    "yTunnus": "0207604-1"
+  },
+  {
+    "id": "1.2.246.562.10.27580498759",
+    "name": "PARIKKALAN KUNTA",
+    "yTunnus": "1913642-6"
+  },
+  {
+    "id": "1.2.246.562.10.78354624187",
+    "name": "Padasjoen kunta",
+    "yTunnus": "0151924-2"
+  },
+  {
+    "id": "1.2.246.562.10.97280283009",
+    "name": "Paimion kaupunki",
+    "yTunnus": "0136169-2"
+  },
+  {
+    "id": "1.2.246.562.10.37266906215",
+    "name": "Paltamon kunta",
+    "yTunnus": "0188808-0"
+  },
+  {
+    "id": "1.2.246.562.10.14920881407",
+    "name": "Paraisten kaupunki",
+    "yTunnus": "0136082-5"
+  },
+  {
+    "id": "1.2.246.562.10.89405728554",
+    "name": "Parkanon kaupunki",
+    "yTunnus": "0136311-0"
+  },
+  {
+    "id": "1.2.246.562.10.94205660312",
+    "name": "Pedersöre kommun",
+    "yTunnus": "0198517-1"
+  },
+  {
+    "id": "1.2.246.562.10.414627898710",
+    "name": "Pelkosenniemen kunta",
+    "yTunnus": "0191866-5"
+  },
+  {
+    "id": "1.2.246.562.10.41915091064",
+    "name": "Pellon kunta",
+    "yTunnus": "0193729-2"
+  },
+  {
+    "id": "1.2.246.562.10.60868389325",
+    "name": "Perhon kunta",
+    "yTunnus": "0181464-7"
+  },
+  {
+    "id": "1.2.246.562.10.71873433412",
+    "name": "Pertunmaan kunta",
+    "yTunnus": "0165867-2"
+  },
+  {
+    "id": "1.2.246.562.10.28690502241",
+    "name": "Petäjäveden kunta",
+    "yTunnus": "0176769-2"
+  },
+  {
+    "id": "1.2.246.562.10.91246271840",
+    "name": "Pieksämäen kaupunki",
+    "yTunnus": "2048903-4"
+  },
+  {
+    "id": "1.2.246.562.10.43281989293",
+    "name": "Pielaveden kunta",
+    "yTunnus": "0172446-5"
+  },
+  {
+    "id": "1.2.246.562.10.57993240753",
+    "name": "Pietarsaari",
+    "yTunnus": "0209242-0"
+  },
+  {
+    "id": "1.2.246.562.10.95463799635",
+    "name": "Pihtiputaan kunta",
+    "yTunnus": "0243027-4"
+  },
+  {
+    "id": "1.2.246.562.10.64435881079",
+    "name": "Pirkkalan kunta",
+    "yTunnus": "0152084-1"
+  },
+  {
+    "id": "1.2.246.562.10.42080013198",
+    "name": "Polvijärven kunta",
+    "yTunnus": "0169823-6"
+  },
+  {
+    "id": "1.2.246.562.10.40889771776",
+    "name": "Pomarkun kunta",
+    "yTunnus": "0136610-0"
+  },
+  {
+    "id": "1.2.246.562.10.33969312488",
+    "name": "Porin kaupunki",
+    "yTunnus": "0137323-9"
+  },
+  {
+    "id": "1.2.246.562.10.66173287591",
+    "name": "Pornaisten kunta",
+    "yTunnus": "0130095-3"
+  },
+  {
+    "id": "1.2.246.562.10.67094744702",
+    "name": "Porvoon kaupunki",
+    "yTunnus": "1061512-1"
+  },
+  {
+    "id": "1.2.246.562.10.74216650791",
+    "name": "Posion kunta",
+    "yTunnus": "0191908-6"
+  },
+  {
+    "id": "1.2.246.562.10.25511125012",
+    "name": "Pudasjärven kaupunki",
+    "yTunnus": "0188962-2"
+  },
+  {
+    "id": "1.2.246.562.10.96098984634",
+    "name": "Pukkilan kunta",
+    "yTunnus": "0130729-0"
+  },
+  {
+    "id": "1.2.246.562.10.36782028892",
+    "name": "Punkalaitumen kunta",
+    "yTunnus": "0138037-5"
+  },
+  {
+    "id": "1.2.246.562.10.28625552006",
+    "name": "Puolangan kunta",
+    "yTunnus": "0189081-8"
+  },
+  {
+    "id": "1.2.246.562.10.94081735717",
+    "name": "Puumalan kunta",
+    "yTunnus": "0166400-1"
+  },
+  {
+    "id": "1.2.246.562.10.69417312936",
+    "name": "Pyhtään kunta",
+    "yTunnus": "0162798-0"
+  },
+  {
+    "id": "1.2.246.562.10.90285872595",
+    "name": "Pyhäjoen kunta",
+    "yTunnus": "0189127-1"
+  },
+  {
+    "id": "1.2.246.562.10.61313333637",
+    "name": "Pyhäjärven kaupunki",
+    "yTunnus": "0210261-7"
+  },
+  {
+    "id": "1.2.246.562.10.895016448210",
+    "name": "Pyhännän kunta",
+    "yTunnus": "0189226-6"
+  },
+  {
+    "id": "1.2.246.562.10.351559823710",
+    "name": "Pyhärannan kunta",
+    "yTunnus": "0204403-1"
+  },
+  {
+    "id": "1.2.246.562.10.196450131610",
+    "name": "Pälkäneen kunta",
+    "yTunnus": "2050961-3"
+  },
+  {
+    "id": "1.2.246.562.10.76839260437",
+    "name": "Pöytyän kunta",
+    "yTunnus": "1929519-5"
   },
   {
     "id": "1.2.246.562.10.83077639582",
@@ -1580,8 +1120,468 @@
     "yTunnus": "1791817-6"
   },
   {
-    "id": "1.2.246.562.10.91246271840",
-    "name": "Pieksämäen kaupunki",
-    "yTunnus": "2048903-4"
+    "id": "1.2.246.562.10.90658086633",
+    "name": "Raaseporin kaupunki",
+    "yTunnus": "0131297-0"
+  },
+  {
+    "id": "1.2.246.562.10.52181390338",
+    "name": "Raision kaupunki",
+    "yTunnus": "0204428-5"
+  },
+  {
+    "id": "1.2.246.562.10.31723701897",
+    "name": "Rantasalmen kunta",
+    "yTunnus": "0166507-1"
+  },
+  {
+    "id": "1.2.246.562.10.89906837417",
+    "name": "Ranuan kunta",
+    "yTunnus": "0191974-8"
+  },
+  {
+    "id": "1.2.246.562.10.55100459001",
+    "name": "Rauman kaupunki",
+    "yTunnus": "0138780-9"
+  },
+  {
+    "id": "1.2.246.562.10.97046002305",
+    "name": "Rautalammin kunta",
+    "yTunnus": "0172586-3"
+  },
+  {
+    "id": "1.2.246.562.10.96844643021",
+    "name": "Rautavaaran kunta",
+    "yTunnus": "0172646-0"
+  },
+  {
+    "id": "1.2.246.562.10.29397001933",
+    "name": "Rautjärven kunta",
+    "yTunnus": "0206951-1"
+  },
+  {
+    "id": "1.2.246.562.10.70146972248",
+    "name": "Reisjärven kunta",
+    "yTunnus": "0189548-3"
+  },
+  {
+    "id": "1.2.246.562.10.77340924875",
+    "name": "Riihimäen kaupunki",
+    "yTunnus": "0152563-4"
+  },
+  {
+    "id": "1.2.246.562.10.89190050412",
+    "name": "Ristijärven kunta",
+    "yTunnus": "0189576-6"
+  },
+  {
+    "id": "1.2.246.562.10.991564988110",
+    "name": "Rovaniemen kaupunki",
+    "yTunnus": "1978283-1"
+  },
+  {
+    "id": "1.2.246.562.10.61604535619",
+    "name": "Ruokolahden kunta",
+    "yTunnus": "0163013-5"
+  },
+  {
+    "id": "1.2.246.562.10.50618575976",
+    "name": "Ruoveden kunta",
+    "yTunnus": "0152842-1"
+  },
+  {
+    "id": "1.2.246.562.10.79856662832",
+    "name": "Ruskon kunta",
+    "yTunnus": "0204524-5"
+  },
+  {
+    "id": "1.2.246.562.10.90815921417",
+    "name": "Rääkkylän kunta",
+    "yTunnus": "0169967-7"
+  },
+  {
+    "id": "1.2.246.562.10.83164221026",
+    "name": "Saarijärven kaupunki",
+    "yTunnus": "0176975-1"
+  },
+  {
+    "id": "1.2.246.562.10.16710959665",
+    "name": "Sallan kunta",
+    "yTunnus": "0192936-4"
+  },
+  {
+    "id": "1.2.246.562.10.98501788818",
+    "name": "Salon kaupunki",
+    "yTunnus": "0139533-1"
+  },
+  {
+    "id": "1.2.246.562.10.19824497051",
+    "name": "Saltviks kommun",
+    "yTunnus": "0205119-4"
+  },
+  {
+    "id": "1.2.246.562.10.78370733186",
+    "name": "Sastamalan kaupunki",
+    "yTunnus": "0144411-3"
+  },
+  {
+    "id": "1.2.246.562.10.81877746867",
+    "name": "Sauvon kunta",
+    "yTunnus": "9038213-6"
+  },
+  {
+    "id": "1.2.246.562.10.598076637910",
+    "name": "Savitaipaleen kunta",
+    "yTunnus": "0163109-0"
+  },
+  {
+    "id": "1.2.246.562.10.66964696893",
+    "name": "Savonlinnan kaupunki",
+    "yTunnus": "0166906-4"
+  },
+  {
+    "id": "1.2.246.562.10.89884984132",
+    "name": "Savukosken kunta",
+    "yTunnus": "0210704-7"
+  },
+  {
+    "id": "1.2.246.562.10.59347432821",
+    "name": "Seinäjoen kaupunki",
+    "yTunnus": "1928736-3"
+  },
+  {
+    "id": "1.2.246.562.10.17226014128",
+    "name": "Sievin kunta",
+    "yTunnus": "0189615-2"
+  },
+  {
+    "id": "1.2.246.562.10.51824957248",
+    "name": "Siikaisten kunta",
+    "yTunnus": "0139842-8"
+  },
+  {
+    "id": "1.2.246.562.10.28805886679",
+    "name": "Siikajoen kunta",
+    "yTunnus": "2047359-3"
+  },
+  {
+    "id": "1.2.246.562.10.68032303478",
+    "name": "Siikalatvan kunta",
+    "yTunnus": "0189019-9"
+  },
+  {
+    "id": "1.2.246.562.10.18493647723",
+    "name": "Siilinjärven kunta",
+    "yTunnus": "0172718-0"
+  },
+  {
+    "id": "1.2.246.562.10.52339583966",
+    "name": "Simon kunta",
+    "yTunnus": "0193015-4"
+  },
+  {
+    "id": "1.2.246.562.10.377431328810",
+    "name": "Sipoon kunta",
+    "yTunnus": "0203533-8"
+  },
+  {
+    "id": "1.2.246.562.10.865068769110",
+    "name": "Siuntion kunta",
+    "yTunnus": "0131156-4"
+  },
+  {
+    "id": "1.2.246.562.10.802378234410",
+    "name": "Sodankylän kunta",
+    "yTunnus": "0193169-1"
+  },
+  {
+    "id": "1.2.246.562.10.73481747332",
+    "name": "Soinin kunta",
+    "yTunnus": "0182637-3"
+  },
+  {
+    "id": "1.2.246.562.10.21867246585",
+    "name": "Someron kaupunki",
+    "yTunnus": "0153082-0"
+  },
+  {
+    "id": "1.2.246.562.10.556561431410",
+    "name": "Sonkajärven kunta",
+    "yTunnus": "9090160-2"
+  },
+  {
+    "id": "1.2.246.562.10.92937879366",
+    "name": "Sotkamon kunta",
+    "yTunnus": "0189766-5"
+  },
+  {
+    "id": "1.2.246.562.10.72952395035",
+    "name": "Sottunga Kommun",
+    "yTunnus": "0205121-5"
+  },
+  {
+    "id": "1.2.246.562.10.37301194892",
+    "name": "Sulkavan kunta",
+    "yTunnus": "0167265-0"
+  },
+  {
+    "id": "1.2.246.562.10.84756895037",
+    "name": "Sunds kommun",
+    "yTunnus": "0205125-8"
+  },
+  {
+    "id": "1.2.246.562.10.32595826036",
+    "name": "Suomussalmen kunta",
+    "yTunnus": "0189925-7"
+  },
+  {
+    "id": "1.2.246.562.10.10338723355",
+    "name": "Suonenjoen kaupunki",
+    "yTunnus": "0208061-4"
+  },
+  {
+    "id": "1.2.246.562.10.61302864733",
+    "name": "Sysmän kunta",
+    "yTunnus": "0167352-2"
+  },
+  {
+    "id": "1.2.246.562.10.28930522645",
+    "name": "Säkylän kunta",
+    "yTunnus": "0139937-5"
+  },
+  {
+    "id": "1.2.246.562.10.730164316010",
+    "name": "Taipalsaaren kunta",
+    "yTunnus": "0163320-5"
+  },
+  {
+    "id": "1.2.246.562.10.17131065538",
+    "name": "Taivalkosken kunta",
+    "yTunnus": "0190100-3"
+  },
+  {
+    "id": "1.2.246.562.10.46853766502",
+    "name": "Taivassalon kunta",
+    "yTunnus": "0139991-4"
+  },
+  {
+    "id": "1.2.246.562.10.30436593583",
+    "name": "Tammelan kunta",
+    "yTunnus": "0153179-4"
+  },
+  {
+    "id": "1.2.246.562.10.79499343246",
+    "name": "Tampereen kaupunki",
+    "yTunnus": "0211675-2"
+  },
+  {
+    "id": "1.2.246.562.10.76999795016",
+    "name": "Tervolan kunta",
+    "yTunnus": "0193249-1"
+  },
+  {
+    "id": "1.2.246.562.10.38289846321",
+    "name": "Tervon kunta",
+    "yTunnus": "0173081-4"
+  },
+  {
+    "id": "1.2.246.562.10.25306436798",
+    "name": "Teuvan kunta",
+    "yTunnus": "0182734-1"
+  },
+  {
+    "id": "1.2.246.562.10.97762552632",
+    "name": "Tohmajärven kunta",
+    "yTunnus": "1919717-3"
+  },
+  {
+    "id": "1.2.246.562.10.66376752763",
+    "name": "Toholammin kunta",
+    "yTunnus": "0182779-8"
+  },
+  {
+    "id": "1.2.246.562.10.30765733321",
+    "name": "Toivakan kunta",
+    "yTunnus": "0177201-0"
+  },
+  {
+    "id": "1.2.246.562.10.25412665926",
+    "name": "Tornion kaupunki",
+    "yTunnus": "0193524-6"
+  },
+  {
+    "id": "1.2.246.562.10.56820737825",
+    "name": "Turun kaupunki",
+    "yTunnus": "0204819-8"
+  },
+  {
+    "id": "1.2.246.562.10.55981449824",
+    "name": "Tuusniemen kunta",
+    "yTunnus": "0173128-6"
+  },
+  {
+    "id": "1.2.246.562.10.31167956643",
+    "name": "Tuusulan kunta",
+    "yTunnus": "0131661-3"
+  },
+  {
+    "id": "1.2.246.562.10.32554715246",
+    "name": "Tyrnävän kunta",
+    "yTunnus": "0190140-9"
+  },
+  {
+    "id": "1.2.246.562.10.47172297039",
+    "name": "Ulvilan kaupunki",
+    "yTunnus": "0204910-7"
+  },
+  {
+    "id": "1.2.246.562.10.535555943810",
+    "name": "Urjalan kunta",
+    "yTunnus": "0157323-0"
+  },
+  {
+    "id": "1.2.246.562.10.83385931197",
+    "name": "Utajärven kunta",
+    "yTunnus": "0190224-1"
+  },
+  {
+    "id": "1.2.246.562.10.111870344810",
+    "name": "Utsjoen kunta",
+    "yTunnus": "9129466-4"
+  },
+  {
+    "id": "1.2.246.562.10.75467811917",
+    "name": "Uudenkaupungin kaupunki",
+    "yTunnus": "0144036-6"
+  },
+  {
+    "id": "1.2.246.562.10.97078294945",
+    "name": "Uuraisten kunta",
+    "yTunnus": "0177224-8"
+  },
+  {
+    "id": "1.2.246.562.10.777203741710",
+    "name": "Uusikaarlepyyn kunta",
+    "yTunnus": "0183077-8"
+  },
+  {
+    "id": "1.2.246.562.10.28324836593",
+    "name": "Vaalan kunta",
+    "yTunnus": "0190027-0"
+  },
+  {
+    "id": "1.2.246.562.10.50945318033",
+    "name": "Vaasan kaupunki",
+    "yTunnus": "0209602-6"
+  },
+  {
+    "id": "1.2.246.562.10.55820127391",
+    "name": "Valkeakosken kaupunki",
+    "yTunnus": "0157568-2"
+  },
+  {
+    "id": "1.2.246.562.10.20528516584",
+    "name": "Valtimon kunta",
+    "yTunnus": "0207709-5"
+  },
+  {
+    "id": "1.2.246.562.10.494695390410",
+    "name": "Vantaan kaupunki",
+    "yTunnus": "0124610-9"
+  },
+  {
+    "id": "1.2.246.562.10.19292590627",
+    "name": "Varkauden kaupunki",
+    "yTunnus": "0173416-1"
+  },
+  {
+    "id": "1.2.246.562.10.34482399333",
+    "name": "Vehmaan kunta",
+    "yTunnus": "0144561-8"
+  },
+  {
+    "id": "1.2.246.562.10.33536687966",
+    "name": "Vesannon kunta",
+    "yTunnus": "0173787-2"
+  },
+  {
+    "id": "1.2.246.562.10.81321154148",
+    "name": "Vesilahden kunta",
+    "yTunnus": "0157711-9"
+  },
+  {
+    "id": "1.2.246.562.10.81449413046",
+    "name": "Vetelin kunta",
+    "yTunnus": "0184278-7"
+  },
+  {
+    "id": "1.2.246.562.10.61375893973",
+    "name": "Vieremän kunta",
+    "yTunnus": "0173835-7"
+  },
+  {
+    "id": "1.2.246.562.10.52022343165",
+    "name": "Vihdin kunta",
+    "yTunnus": "0131905-6"
+  },
+  {
+    "id": "1.2.246.562.10.60144737602",
+    "name": "Viitasaaren kaupunki",
+    "yTunnus": "0208573-0"
+  },
+  {
+    "id": "1.2.246.562.10.71600741632",
+    "name": "Vimpelin kunta",
+    "yTunnus": "0184318-1"
+  },
+  {
+    "id": "1.2.246.562.10.63182395085",
+    "name": "Virolahden kunta",
+    "yTunnus": "0207033-6"
+  },
+  {
+    "id": "1.2.246.562.10.62317555787",
+    "name": "Virtain kaupunki",
+    "yTunnus": "0206333-9"
+  },
+  {
+    "id": "1.2.246.562.10.58825554007",
+    "name": "Vårdö kommun",
+    "yTunnus": "0205126-6"
+  },
+  {
+    "id": "1.2.246.562.10.99616449197",
+    "name": "Vöyrin kunta",
+    "yTunnus": "2050514-5"
+  },
+  {
+    "id": "1.2.246.562.10.90045721975",
+    "name": "Ylitornion kunta",
+    "yTunnus": "0210826-9"
+  },
+  {
+    "id": "1.2.246.562.10.61320174057",
+    "name": "Ylivieskan kaupunki",
+    "yTunnus": "0190557-3"
+  },
+  {
+    "id": "1.2.246.562.10.722837895010",
+    "name": "Ylöjärven kaupunki",
+    "yTunnus": "0158221-7"
+  },
+  {
+    "id": "1.2.246.562.10.52482552628",
+    "name": "Ypäjän kunta",
+    "yTunnus": "0158301-7"
+  },
+  {
+    "id": "1.2.246.562.10.83943803144",
+    "name": "Ähtärin kaupunki",
+    "yTunnus": "0184622-7"
+  },
+  {
+    "id": "1.2.246.562.10.41953359605",
+    "name": "Äänekosken kaupunki",
+    "yTunnus": "2045520-5"
   }
 ]

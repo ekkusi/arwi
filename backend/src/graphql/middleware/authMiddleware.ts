@@ -24,7 +24,7 @@ const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = [
   "updatePassword",
   "requestPasswordReset",
 ];
-const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata"];
+const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata", "getMPassIDOrganizations"];
 
 const mutationResolverKeys: (keyof Mutation)[] = Object.keys(mutationResolvers) as (keyof Mutation)[];
 

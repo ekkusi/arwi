@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { set, PatchEvent, FormField } from "sanity";
 import { Box, Inline, Text, Radio } from "@sanity/ui";
 import Select, { SingleValue } from "react-select";
+import { useQuery } from "urql";
 import organizations from "../mpassid-organizations.json";
 import { ComponentProps } from "../types/component";
+import { graphql } from "../graphql";
 
 interface Option {
   label: string;
@@ -22,39 +24,44 @@ const organizationOptions = organizations.map((org) => ({
   value: org.id,
 }));
 
-export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+const GetOrganizationsQuery = graphql(`
+  query GetOrganizations($parentOrganizationId: String!) {
+    getMPassIDOrganizations(parentOid: $parentOrganizationId) {
+      id
+      name
+    }
+  }
+`);
 
+export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>) {
   const { value = {}, onChange } = props;
 
-  const { type, city_oid } = value;
+  const { type, city_oid, oid } = value;
 
-  const loadSchoolOptions = async () => {
-    if (!city_oid) throw new Error("City oid is missing");
-    // Fetch organizations with proper CORS options
-    const response = await fetch(`https://virkailija.opintopolku.fi/organisaatio-service/api/${city_oid}/children?includeImage=false`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-    const data = await response.json();
-    const transformedOptions = data.map((item: any) => ({
-      title: item?.nimi?.fi,
-      value: item.oid, // Adjust according to your data structure
-    }));
-    return transformedOptions;
-  };
+  const [{ data, error, fetching }] = useQuery({
+    query: GetOrganizationsQuery,
+    pause: !city_oid,
+    variables: { parentOrganizationId: city_oid! },
+  });
 
-  const printCityOptions = async () => {
-    setIsLoading(true);
-    const cityOptions = await loadSchoolOptions();
-    setIsLoading(false);
-  };
+  const organizationChildrenOptions = useMemo(() => {
+    if (data) {
+      return data.getMPassIDOrganizations.map((org) => ({ label: org.name, value: org.id }));
+    }
+    return [];
+  }, [data]);
 
   const changeType = (newType: "city" | "school") => {
-    onChange(PatchEvent.from(set({ ...value, type: newType })));
+    const newValue = { ...value, type: newType };
+    if (type && newType === "city") {
+      // onChange(PatchEvent.from(set({ ...value, oid: undefined, name: undefined })));
+      const selectedCity = organizationOptions.find((it) => it.value === city_oid);
+      if (selectedCity) {
+        newValue.oid = selectedCity.value;
+        newValue.name = selectedCity.label;
+      }
+    }
+    onChange(PatchEvent.from(set(newValue)));
   };
 
   const changeCity = (newCity: SingleValue<Option>) => {
@@ -65,8 +72,20 @@ export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>
     if (type === "city") {
       newValue.oid = newCity?.value;
       newValue.name = newCity?.label;
+    } else {
+      newValue.oid = undefined;
+      newValue.name = undefined;
     }
     onChange(PatchEvent.from(set(newValue)));
+  };
+
+  const selectedSchool = useMemo(
+    () => (oid ? organizationChildrenOptions.find((it) => it.value === oid) || null : null),
+    [oid, organizationChildrenOptions]
+  );
+
+  const changeSchool = (newSchool: SingleValue<Option>) => {
+    onChange(PatchEvent.from(set({ ...value, oid: newSchool?.value, name: newSchool?.label })));
   };
 
   return (
@@ -78,20 +97,32 @@ export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>
             Kunta
           </Text>
         </Inline>
+        <Inline space={2} style={{ marginBottom: "10px" }}>
+          <Radio checked={type === "school"} name="school" onChange={() => changeType("school")} value="school" />
+          <Text size={1} weight="medium">
+            Koulu
+          </Text>
+        </Inline>
       </FormField>
 
       <FormField title="Kaupunki" hidden={!type}>
         <Select
           options={organizationOptions}
           onChange={changeCity}
-          defaultValue={city_oid ? organizationOptions.find((it) => it.value === city_oid) : undefined}
+          defaultValue={city_oid ? organizationOptions.find((it) => it.value === city_oid) : null}
         />
       </FormField>
       <FormField title="Koulu" hidden={type === "city" || !city_oid}>
-        <button type="button" onClick={printCityOptions}>
-          Hae koulut
-        </button>
-        {isLoading && <p>Loading...</p>}
+        <Select
+          isLoading={fetching}
+          isDisabled={!data || fetching}
+          options={organizationChildrenOptions}
+          isClearable
+          placeholder="Valitse koulu"
+          onChange={changeSchool}
+          value={selectedSchool}
+        />
+        {error && <p style={{ color: "red" }}>{error.message}</p>}
       </FormField>
     </Box>
   );
