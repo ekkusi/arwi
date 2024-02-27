@@ -35,7 +35,7 @@ export const useMPassIDAuth = (redirectUri: string) => {
   const grantCode = async () => {
     const authUrl = `${BACKEND_API_URL_NO_PROXY}/auth/authorize?${new URLSearchParams({ redirect_uri: redirectUri, type: "code_only" })}`;
 
-    const authResult = (await WebBrowser.openAuthSessionAsync(authUrl, redirectUri)) as WebBrowser.WebBrowserRedirectResult;
+    const authResult = (await WebBrowser.openAuthSessionAsync(authUrl, redirectUri, { showInRecents: true })) as WebBrowser.WebBrowserRedirectResult;
 
     if (!authResult.url) return null;
     const code = authResult.url.split("code=")[1];
