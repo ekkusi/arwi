@@ -110,9 +110,12 @@ export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>
           options={organizationOptions}
           onChange={changeCity}
           defaultValue={city_oid ? organizationOptions.find((it) => it.value === city_oid) : null}
+          styles={{
+            container: (provided) => ({ ...provided, color: "black" }),
+          }}
         />
       </FormField>
-      <FormField title="Koulu" hidden={type === "city" || !city_oid}>
+      <FormField title="Koulu" hidden={type === "city" || !city_oid} style={{ color: "black" }}>
         <Select
           isLoading={fetching}
           isDisabled={!data || fetching}
@@ -121,6 +124,9 @@ export default function AgreementInfoSelect(props: ComponentProps<AgreementInfo>
           placeholder="Valitse koulu"
           onChange={changeSchool}
           value={selectedSchool}
+          styles={{
+            container: (provided) => ({ ...provided, color: "black" }),
+          }}
         />
         {error && <p style={{ color: "red" }}>{error.message}</p>}
       </FormField>
