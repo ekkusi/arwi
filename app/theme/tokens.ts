@@ -84,6 +84,7 @@ export const COLORS = {
 export const FONT_SIZES = {
   xs: 12,
   sm: 14,
+  sm2: 16,
   md: 18,
   lg: 22,
   title: 24,
