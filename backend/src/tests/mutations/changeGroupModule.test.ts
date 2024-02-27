@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { graphql } from "../gql";
+import { graphql } from "@/tests/graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { ChangeGroupModuleInput } from "../../types";

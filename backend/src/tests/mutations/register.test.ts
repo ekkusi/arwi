@@ -1,7 +1,4 @@
-import { hash } from "bcryptjs";
-import { BRCRYPT_SALT_ROUNDS } from "../../config";
-import { graphql } from "../gql";
-import { RegisterTest_RegisterMutationVariables } from "../gql/graphql";
+import { graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import { TestTeacher, createTestUser } from "../testHelpers";
 import prisma from "../../prismaClient";
@@ -24,7 +21,7 @@ describe("Register", () => {
 
   it("should register a new teacher", async () => {
     const password = "password";
-    const teacherData: RegisterTest_RegisterMutationVariables = {
+    const teacherData = {
       data: {
         email: "test@example.com",
         password,

@@ -1,4 +1,4 @@
-import { graphql } from "../gql";
+import { graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { TestGroup, TestTeacher, createTestUserAndLogin, createTestGroup, createTestUser } from "../testHelpers";

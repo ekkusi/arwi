@@ -25,7 +25,15 @@
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "http://localhost:4000/graphql",
+        "tadaOutputLocation": "./src/tests/types/graphql-env.d.ts",
+        "trackFieldUsage": false
+      }
+    ]
   },
   "include": ["src"],
   "exclude": ["node_modules", "lib"]

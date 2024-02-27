@@ -344,7 +344,7 @@ input ChangeGroupModuleInput {
 
 The createDefaultCollection test suite to be used as an example:
 
-import { graphql } from "../gql";
+import { graphql } from "@/tests/graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { CollectionTypeCategory, CreateDefaultCollectionInput } from "../../types";
