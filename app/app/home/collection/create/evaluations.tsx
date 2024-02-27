@@ -9,7 +9,7 @@ import PagerView, { PagerViewOnPageSelectedEvent } from "react-native-pager-view
 import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { CARD_HEIGHT, CreateClassParticipationEvaluationCardMemoed, Evaluation } from "../../../../components/ClassParticipationEvaluationCard";
-import { graphql } from "../../../../gql";
+import { graphql } from "@/graphql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
@@ -19,26 +19,38 @@ import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import { CollectionCreationStackParams } from "./types";
 import CollectionCreationLayout from "./_layout";
 import LazyLoadView from "../../../../components/LazyLoadView";
+import {
+  ClassParticipationCollectionUpdate_GeneralInfoFull_Fragment,
+  ClassParticipationEvaluationUpdate_Info_Fragment,
+  CollectionModuleCacheUpdate_Fragment,
+} from "@/helpers/graphql/fragments";
 
-const CollectionEvaluationsView_CreateCollection_Mutation = graphql(`
-  mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
-    createClassParticipationCollection(data: $createCollectionInput, moduleId: $moduleId) {
-      ...ClassParticipationCollectionUpdate_GeneralInfoFull
-      evaluations {
-        ...ClassParticipationEvaluationUpdate_Info
-        student {
-          id
-          currentModuleEvaluations {
+const CollectionEvaluationsView_CreateCollection_Mutation = graphql(
+  `
+    mutation CollectionEvaluationsView_CreateCollection($createCollectionInput: CreateClassParticipationCollectionInput!, $moduleId: ID!) {
+      createClassParticipationCollection(data: $createCollectionInput, moduleId: $moduleId) {
+        ...ClassParticipationCollectionUpdate_GeneralInfoFull
+        evaluations {
+          ...ClassParticipationEvaluationUpdate_Info
+          student {
             id
+            currentModuleEvaluations {
+              id
+            }
           }
         }
-      }
-      module {
-        ...CollectionModuleCacheUpdate
+        module {
+          ...CollectionModuleCacheUpdate
+        }
       }
     }
-  }
-`);
+  `,
+  [
+    ClassParticipationCollectionUpdate_GeneralInfoFull_Fragment,
+    CollectionModuleCacheUpdate_Fragment,
+    ClassParticipationEvaluationUpdate_Info_Fragment,
+  ]
+);
 
 function CollectionEvaluationsContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-evaluations">) {
   const { t } = useTranslation();

@@ -1,20 +1,14 @@
-import { LearningObjectiveMinimal, MinimalModuleInfo } from "arwi-backend/src/types/general";
-import { getEnvironmentsByLevel, getEvaluableLearningObjectivesMinimal } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { EnvironmentInfo } from "arwi-backend/src/types";
 import CDateTimePicker from "../../../components/form/CDateTimePicker";
 import FormField from "../../../components/form/FormField";
-import MultiSelectFormField from "../../../components/form/MultiSelectFormField";
-import SelectFormField from "../../../components/form/SelectFormField";
 import TextFormField from "../../../components/form/TextFormField";
 import CButton from "../../../components/primitives/CButton";
 import CTextInput from "../../../components/primitives/CTextInput";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CView from "../../../components/primitives/CView";
 import { formatDate } from "../../../helpers/dateHelpers";
-import { getEnvironmentTranslation } from "../../../helpers/translation";
 
 export type DefaultGeneralInfoData = {
   date: Date;

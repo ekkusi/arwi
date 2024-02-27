@@ -1,7 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeStackParams } from "../types";
-import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
+import { ResultOf } from "@/graphql";
+import { GroupOverviewPage_GetGroup_Query } from "./graphql";
 
-export type GroupNavigationProps = {
+type GroupNavigationProps = {
   navigation: NativeStackScreenProps<HomeStackParams, "group">["navigation"];
 };
+
+export type GroupOverviewProps = ResultOf<typeof GroupOverviewPage_GetGroup_Query> & GroupNavigationProps;

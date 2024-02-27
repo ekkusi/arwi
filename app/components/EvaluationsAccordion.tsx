@@ -1,7 +1,6 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import { FragmentType, getFragmentData, graphql } from "../gql";
 import { formatDate } from "../helpers/dateHelpers";
 import { Accordion, AccordionProps } from "./Accordion";
 import CButton from "./primitives/CButton";
@@ -9,8 +8,9 @@ import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 import { COLORS, SPACING } from "../theme";
 import CircledNumber from "./CircledNumber";
+import { FragmentOf, graphql, readFragment } from "@/graphql";
 
-const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
+export const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
   fragment EvaluationsAccordion_Evaluation on ClassParticipationEvaluation {
     id
     notes
@@ -38,7 +38,7 @@ const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `
 `);
 
 type EvaluationsAccordionProps = Omit<AccordionProps, "data"> & {
-  evaluations: FragmentType<typeof EvaluationsAccordion_Evaluation_Fragment>[];
+  evaluations: FragmentOf<typeof EvaluationsAccordion_Evaluation_Fragment>[];
   type?: "student" | "collection";
   allowEditing?: boolean;
   onAccordionButtonPress?: (id: string) => void;
@@ -53,7 +53,7 @@ export default function EvaluationsAccordion({
   ...rest
 }: EvaluationsAccordionProps) {
   const { t } = useTranslation();
-  const evaluations = getFragmentData(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
+  const evaluations = readFragment(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
 
   const sortedEvaluations = useMemo(() => {
     if (type === "collection") return evaluations;

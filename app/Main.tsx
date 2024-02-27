@@ -14,7 +14,7 @@ import { useFonts } from "expo-font";
 import { useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
-import { graphql } from "./gql";
+import { graphql } from "@/graphql";
 import ModalProvider from "./hooks-and-providers/ModalProvider";
 import HomeStack from "./app/home/_stack";
 import { isValidLanguage, STORAGE_LANG_KEY } from "./i18n";

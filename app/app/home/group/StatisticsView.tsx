@@ -5,7 +5,6 @@ import React, { useMemo } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { isClassParticipationCollection, isDefaultCollection } from "arwi-backend/src/types/typeGuards";
-import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { subjectToIcon } from "../../../helpers/dataMappers";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
 import CView from "../../../components/primitives/CView";
@@ -14,14 +13,14 @@ import CImage from "../../../components/primitives/CImage";
 import CollectionStatistics from "../../../components/charts/CollectionStatistics";
 import CButton from "../../../components/primitives/CButton";
 import { COLORS } from "../../../theme";
-import { GroupNavigationProps } from "./types";
 import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
 import Card from "../../../components/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
 import LoadingIndicator from "../../../components/LoadingIndicator";
+import { GroupOverviewProps } from "./types";
 
-export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
+export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewProps) {
   const { t } = useTranslation();
   const { isGenerating: isGeneratingFeedbacks } = useGenerateFeedback(group.id);
 

@@ -3,8 +3,6 @@ import { t } from "i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { getEnvironmentsByLevel } from "arwi-backend/src/utils/subjectUtils";
 import { MinimalModuleInfo } from "arwi-backend/src/types";
-import { FragmentType, getFragmentData, graphql } from "../../gql";
-import { EvaluationsBarChart_EvaluationFragment, EvaluationsHistogram_EvaluationFragment } from "../../gql/graphql";
 import { getColorForGrade } from "../../helpers/dataMappers";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
@@ -13,8 +11,9 @@ import CButton from "../primitives/CButton";
 import { COLORS } from "../../theme";
 import CModal from "../CModal";
 import { getEnvironmentTranslation } from "../../helpers/translation";
+import { FragmentOf, ResultOf, graphql, readFragment } from "@/graphql";
 
-const EvaluationsHistogram_Evaluation_Fragment = graphql(`
+export const EvaluationsHistogram_Evaluation_Fragment = graphql(`
   fragment EvaluationsHistogram_Evaluation on ClassParticipationEvaluation {
     id
     skillsRating
@@ -39,9 +38,7 @@ type TempDataType = {
 };
 type TempDataHash = { [grade: number]: { [environment: string]: TempDataType } };
 
-const INCLUDE_ENVIRONMENT_COUNT_THRESHHOLD = 0;
-
-const mapDataToTempData = (evaluations: EvaluationsHistogram_EvaluationFragment[], environments: string[]) => {
+const mapDataToTempData = (evaluations: ResultOf<typeof EvaluationsHistogram_Evaluation_Fragment>[], environments: string[]) => {
   const tempData: TempDataHash = {};
   [4, 5, 6, 7, 8, 9, 10].forEach((grade) => {
     tempData[grade] = {};
@@ -96,7 +93,7 @@ const filterTempDataToChartData = (data: TempDataHash, typeFilter: string, envir
 };
 
 type EvaluationsHistogramProps = CViewProps & {
-  evaluations: readonly FragmentType<typeof EvaluationsHistogram_Evaluation_Fragment>[];
+  evaluations: readonly FragmentOf<typeof EvaluationsHistogram_Evaluation_Fragment>[];
   subjectCode: string;
   moduleInfo: MinimalModuleInfo;
 };
@@ -109,7 +106,7 @@ export default function EvaluationsHistogram({ evaluations: evaluationFragments,
   const environments = getEnvironmentsByLevel(subjectCode, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const environmentLabels = environments.map((env) => env.label.fi);
 
-  const evaluations = getFragmentData(EvaluationsHistogram_Evaluation_Fragment, evaluationFragments);
+  const evaluations = readFragment(EvaluationsHistogram_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
 
   const data = useMemo(() => mapDataToTempData(filteredEvaluations, environmentLabels), [filteredEvaluations, environmentLabels]);

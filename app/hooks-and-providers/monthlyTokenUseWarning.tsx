@@ -2,7 +2,7 @@ import { WarningInfo } from "arwi-backend/src/types";
 import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { useToast } from "./ToastProvider";
-import { graphql } from "../gql";
+import { graphql } from "@/graphql";
 
 const MonthlyTokenUseWarning_SetTokenUseWarningSeen_Mutation = graphql(`
   mutation MonthlyTokenUseWarning_SetTokenUseWarningSeen($warning: TokenUseWarning!) {

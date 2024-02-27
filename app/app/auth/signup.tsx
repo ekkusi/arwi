@@ -6,7 +6,7 @@ import WebView from "react-native-webview";
 import { useMatomo } from "matomo-tracker-react-native";
 import Checkbox from "expo-checkbox";
 import CButton from "../../components/primitives/CButton";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";

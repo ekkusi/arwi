@@ -1,7 +1,7 @@
 import * as WebBrowser from "expo-web-browser";
 import { useMutation } from "@apollo/client";
 import { useEffect } from "react";
-import { graphql } from "../gql";
+import { graphql } from "@/graphql";
 
 const MPassID_Login_Mutation = graphql(`
   mutation MPassID_Login($code: String!) {

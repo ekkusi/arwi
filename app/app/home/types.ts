@@ -1,4 +1,4 @@
-import { CollectionTypeCategory, TranslatedString } from "arwi-backend/src/types";
+import { TranslatedString } from "arwi-backend/src/types";
 
 export type HomeStackParams = {
   home: undefined;

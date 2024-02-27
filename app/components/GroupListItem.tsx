@@ -1,9 +1,8 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { graphql } from "../gql";
-import { GroupListItemFragment } from "../gql/graphql";
-import { COLORS, FONT_SIZES } from "../theme";
+import { FragmentOf, graphql, readFragment } from "@/graphql";
+import { COLORS } from "../theme";
 import Card, { CardProps } from "./Card";
 import { timeSince } from "../helpers/dateHelpers";
 import CText from "./primitives/CText";
@@ -50,12 +49,13 @@ const translationDefaultForKey = (key: string) => {
 };
 
 type GroupListItemProps = CardProps & {
-  group: GroupListItemFragment;
+  group: FragmentOf<typeof GroupListItem_Fragment>;
   onListItemPress: () => void;
   onEvaluateIconPress: () => void;
 };
-export default function GroupListItem({ group, onListItemPress, onEvaluateIconPress, ...rest }: GroupListItemProps) {
+export default function GroupListItem({ group: someGroup, onListItemPress, onEvaluateIconPress, ...rest }: GroupListItemProps) {
   const { t } = useTranslation();
+  const group = readFragment(GroupListItem_Fragment, someGroup);
 
   const [{ count, key, updatedAt }, setTimeSince] = useState(() => ({ ...timeSince(group.updatedAt), updatedAt: group.updatedAt }));
 

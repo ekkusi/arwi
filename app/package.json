@@ -13,6 +13,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint:fix": "eslint --fix .",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit",
     "codegen": "graphql-codegen",
     "codegen:watch": "graphql-codegen --watch"
   },
@@ -43,6 +45,7 @@
     "expo-status-bar": "~1.11.1",
     "expo-updates": "~0.24.8",
     "expo-web-browser": "~12.8.2",
+    "gql.tada": "^1.2.1",
     "graphql": "^16.6.0",
     "i18next": "^22.5.0",
     "i18next-gridly-backend": "^1.0.6",
@@ -72,10 +75,8 @@
     "victory-native": "^36.6.10"
   },
   "devDependencies": {
+    "@0no-co/graphqlsp": "^1.4.1",
     "@babel/core": "^7.20.0",
-    "@graphql-codegen/add": "^4.0.1",
-    "@graphql-codegen/cli": "^3.3.1",
-    "@graphql-codegen/client-preset": "^3.0.1",
     "@types/lodash.debounce": "^4.0.7",
     "@types/matomo-tracker-react-native": "^0.3.2",
     "@types/react": "~18.2.14",

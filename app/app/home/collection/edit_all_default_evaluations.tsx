@@ -10,7 +10,7 @@ import PagerView, { PagerViewOnPageSelectedEvent } from "react-native-pager-view
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../hooks-and-providers/keyboard";
 import { COLORS } from "../../../theme";
@@ -18,10 +18,12 @@ import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
 import { CARD_HEIGHT, DefaultEvaluationToUpdate, UpdateDefaultEvaluationCardMemoed } from "../../../components/DefaultEvaluationCard";
 import LazyLoadView from "../../../components/LazyLoadView";
+import { DefaultEvaluationUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const DefaultCollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
   query DefaultCollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {
     getCollection(id: $collectionId) {
+      __typename
       id
       date
       evaluations {
@@ -45,16 +47,19 @@ const DefaultCollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
   }
 `);
 
-const DefaultCollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(`
-  mutation DefaultCollectionEditAllEvaluationsView_UpdateCollection($updateCollectionInput: UpdateDefaultCollectionInput!, $collectionId: ID!) {
-    updateDefaultCollection(data: $updateCollectionInput, collectionId: $collectionId) {
-      id
-      evaluations {
-        ...DefaultEvaluationUpdate_Info
+const DefaultCollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(
+  `
+    mutation DefaultCollectionEditAllEvaluationsView_UpdateCollection($updateCollectionInput: UpdateDefaultCollectionInput!, $collectionId: ID!) {
+      updateDefaultCollection(data: $updateCollectionInput, collectionId: $collectionId) {
+        id
+        evaluations {
+          ...DefaultEvaluationUpdate_Info
+        }
       }
     }
-  }
-`);
+  `,
+  [DefaultEvaluationUpdate_Info_Fragment]
+);
 
 export type DefaultEvaluationDataToUpdate = Omit<DefaultEvaluationToUpdate, "student"> & {
   student: { id: string; name: string } & DefaultEvaluationToUpdate["student"];
@@ -203,9 +208,17 @@ export default function DefaultCollectionEditAllEvaluationsView(props: NativeSta
 
   if (loading || !data) return <LoadingIndicator />;
 
-  return isDefaultCollection<WithTypename<typeof data.getCollection, "DefaultCollection">>(data.getCollection) ? (
-    <DefaultCollectionEditAllEvaluationsContent defaultEvaluations={data.getCollection.evaluations} date={data.getCollection.date} {...props} />
+  const collection = data?.getCollection;
+
+  return isDefaultCollection<WithTypename<typeof collection, "DefaultCollection">>(collection) ? (
+    <DefaultCollectionEditAllEvaluationsContent
+      defaultEvaluations={collection.evaluations as WithTypename<(typeof collection.evaluations)[number], "DefaultEvaluation">[]}
+      date={collection.date}
+      {...props}
+    />
   ) : (
-    <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
+    <CText>
+      {t("you-should-not-end-up-here", "Sinun ei kuuluisi päätyä tälle näkymälle. Jos viitsit, niin ilmoita asiasta kehittäjille info@arwi.fi.")}
+    </CText>
   );
 }

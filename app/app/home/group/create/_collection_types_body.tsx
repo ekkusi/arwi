@@ -1,5 +1,5 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
+import { COLLECTION_TYPE_CATEGORIES, CollectionTypeCategory } from "arwi-backend/src/types";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import debounce from "lodash.debounce";
@@ -41,8 +41,7 @@ export default function CollectionTypesBody({
   const [isNameDirty, setIsNameDirty] = useState(false);
 
   const collectionTypeOptions: CollectionTypeOption[] = useMemo(() => {
-    // const filteredTypes = Object.keys(CollectionTypeCategory).filter((key) => !selectedTypes.find((item) => item.value === key));
-    return Object.keys(CollectionTypeCategory).map((key) => ({
+    return COLLECTION_TYPE_CATEGORIES.map((key) => ({
       name: getCollectionTypeTranslation(t, key as CollectionTypeCategory),
       category: key as CollectionTypeCategory,
     }));

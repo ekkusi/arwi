@@ -8,89 +8,14 @@ import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CView from "../../../components/primitives/CView";
-import { graphql } from "../../../gql";
 import { COLORS } from "../../../theme";
 import { CColor } from "../../../theme/types";
 import { HomeStackParams } from "../types";
 import StatisticsView from "./StatisticsView";
 import EvaluationList from "./EvaluationList";
 import ObjectiveList from "./ObjectiveList";
+import { GroupOverviewPage_GetGroup_Query } from "./graphql";
 import StudentList from "./StudentList";
-
-const GroupOverviewPage_GetGroup_Query = graphql(`
-  query GroupOverviewPage_GetGroup($groupId: ID!) {
-    getGroup(id: $groupId) {
-      id
-      name
-      archived
-      subject {
-        label {
-          fi
-        }
-        code
-      }
-      currentModule {
-        id
-        info {
-          educationLevel
-          learningObjectiveGroupKey
-          label {
-            fi
-          }
-        }
-        students {
-          id
-          name
-          currentModuleEvaluations {
-            id
-            wasPresent
-          }
-        }
-        evaluationCollections {
-          id
-          date
-          type {
-            id
-            category
-          }
-          __typename
-          ... on ClassParticipationCollection {
-            environment {
-              label {
-                fi
-              }
-              code
-              color
-            }
-            learningObjectives {
-              code
-              label {
-                fi
-              }
-              description {
-                fi
-              }
-              type
-            }
-            ...CollectionStatistics_EvaluationCollection
-          }
-        }
-      }
-      currentModule {
-        id
-        collectionTypes {
-          id
-          category
-          name
-          weight
-          defaultTypeCollection {
-            id
-          }
-        }
-      }
-    }
-  }
-`);
 
 const StudentListMemoed = memo(StudentList);
 const EvaluationListMemoed = memo(EvaluationList);

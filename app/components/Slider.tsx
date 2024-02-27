@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import { Alert, Dimensions, Platform, StyleSheet, View } from "react-native";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, { useSharedValue } from "react-native-reanimated";
 import type { ComponentType } from "react";
 import type { StyleProp, ViewProps, ViewStyle } from "react-native";
-import type { WithSpringConfig } from "react-native-reanimated";
 import { COLORS } from "../theme";
 
 export type SliderStyleProps = {
@@ -26,8 +25,6 @@ export type SliderProps = SliderStyleProps & {
   minValue?: number;
   onUpdate?: (value: number) => void;
   onEnd?: () => void;
-  // springConfig?: SpringBaseConfig;
-  springConfig?: WithSpringConfig;
   step?: number;
   ThumbComponent?: ComponentType<Pick<ViewProps, "style">>;
   /**
@@ -73,7 +70,6 @@ export function Slider({
   thumbStyle = styles.thumb,
   touchSlop = 10,
   width = DEFAULT_SLIDER_WIDTH,
-  springConfig,
   activeOffsetX = [-5, 5],
 }: SliderProps) {
   // console.debug("Slider rendered ✅");
@@ -114,7 +110,7 @@ export function Slider({
         }
       }
     })
-    .onEnd((e) => {
+    .onEnd(() => {
       start.value = localTranslateX.value;
       // select snap point
       // if (step !== undefined) {

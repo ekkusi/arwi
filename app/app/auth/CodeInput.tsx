@@ -8,7 +8,7 @@ import TextFormField from "../../components/form/TextFormField";
 import { AuthStackParams } from "./types";
 import CText from "../../components/primitives/CText";
 import CButton from "../../components/primitives/CButton";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 
 const CODE_LENGTH = 6;

@@ -5,7 +5,7 @@ import { hasRequiredField } from "arwi-backend/src/types/typeGuards";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import { HomeStackParams } from "../types";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
 import CButton from "../../../components/primitives/CButton";

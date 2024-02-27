@@ -8,17 +8,21 @@ import { UpdateTypesStackParams } from "./update_type_stack_types";
 import { CollectionTypeFull, useUpdateTypesContext } from "./UpdateTypesProvider";
 import GroupCollectionTypeWeightsBodyView from "../create/_collection_type_weights_body";
 import { COLORS } from "../../../../theme";
-import { graphql } from "../../../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { useToast } from "../../../../hooks-and-providers/ToastProvider";
+import { GroupCollectionTypesUpdate_Fragment } from "@/helpers/graphql/fragments";
 
-const EditTypeWeightsView_UpdateGroup_Mutation = graphql(`
-  mutation EditTypeWeightsView_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {
-    updateGroup(groupId: $id, data: $input) {
-      ...GroupCollectionTypesUpdate
+const EditTypeWeightsView_UpdateGroup_Mutation = graphql(
+  `
+    mutation EditTypeWeightsView_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {
+      updateGroup(groupId: $id, data: $input) {
+        ...GroupCollectionTypesUpdate
+      }
     }
-  }
-`);
+  `,
+  [GroupCollectionTypesUpdate_Fragment]
+);
 
 export default function EditTypeWeightsView({
   route,

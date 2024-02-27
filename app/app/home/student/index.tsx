@@ -5,19 +5,20 @@ import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
-import EvaluationsAccordion from "../../../components/EvaluationsAccordion";
+import { CollectionType } from "arwi-backend/src/types";
+import EvaluationsAccordion, { EvaluationsAccordion_Evaluation_Fragment } from "../../../components/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import { HomeStackParams } from "../types";
 import CircledNumber from "../../../components/CircledNumber";
 import { analyzeEvaluations, parseFloatToGradeString } from "../../../helpers/evaluationUtils";
-import EvaluationsBarChart from "../../../components/charts/EvaluationsBarChart";
-import EvaluationStatistics from "../../../components/charts/EvaluationStatistics";
+import EvaluationsBarChart, { EvaluationsBarChart_Evaluation_Fragment } from "../../../components/charts/EvaluationsBarChart";
+import EvaluationStatistics, { EvaluationStatistics_Evaluation_Fragment } from "../../../components/charts/EvaluationStatistics";
 import InfoButton from "../../../components/InfoButton";
 import GradeSuggestionView from "../../../components/GradeSuggestionView";
-import EvaluationsHistogram from "../../../components/charts/EvaluationsHistogram";
+import EvaluationsHistogram, { EvaluationsHistogram_Evaluation_Fragment } from "../../../components/charts/EvaluationsHistogram";
 import Layout from "../../../components/Layout";
 import CButton from "../../../components/primitives/CButton";
 import { getEnvironmentTranslation } from "../../../helpers/translation";
@@ -25,74 +26,82 @@ import { Accordion } from "../../../components/Accordion";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { SPACING } from "../../../theme";
 
-const StudentPage_GetStudent_Query = graphql(`
-  query StudentPage_GetStudent($studentId: ID!) {
-    getStudent(id: $studentId) {
-      id
-      name
-      group {
+const StudentPage_GetStudent_Query = graphql(
+  `
+    query StudentPage_GetStudent($studentId: ID!) {
+      getStudent(id: $studentId) {
         id
         name
-        subject {
-          code
-          label {
-            fi
-          }
-        }
-        currentModule {
+        group {
           id
-          info {
-            educationLevel
-            learningObjectiveGroupKey
+          name
+          subject {
+            code
             label {
               fi
             }
           }
-        }
-        currentModule {
-          collectionTypes {
+          currentModule {
             id
-            category
-            name
-            weight
-            defaultTypeCollection {
-              id
-            }
-          }
-        }
-      }
-      currentModuleEvaluations {
-        id
-        notes
-        wasPresent
-        __typename
-        ... on ClassParticipationEvaluation {
-          behaviourRating
-          skillsRating
-          collection {
-            environment {
-              code
+            info {
+              educationLevel
+              learningObjectiveGroupKey
               label {
                 fi
               }
             }
           }
-          ...EvaluationStatistics_Evaluation
-          ...EvaluationsBarChart_Evaluation
-          ...EvaluationsHistogram_Evaluation
-          ...EvaluationsAccordion_Evaluation
+          currentModule {
+            collectionTypes {
+              id
+              category
+              name
+              weight
+              defaultTypeCollection {
+                id
+              }
+            }
+          }
         }
-        ... on DefaultEvaluation {
-          rating
-        }
-        collection {
+        currentModuleEvaluations {
           id
-          date
+          notes
+          wasPresent
+          __typename
+          ... on ClassParticipationEvaluation {
+            behaviourRating
+            skillsRating
+            collection {
+              environment {
+                code
+                label {
+                  fi
+                }
+              }
+            }
+            ...EvaluationStatistics_Evaluation
+            ...EvaluationsBarChart_Evaluation
+            ...EvaluationsHistogram_Evaluation
+            ...EvaluationsAccordion_Evaluation
+          }
+          ... on DefaultEvaluation {
+            rating
+          }
+          collection {
+            id
+            date
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [
+    EvaluationStatistics_Evaluation_Fragment,
+    EvaluationsBarChart_Evaluation_Fragment,
+    EvaluationsHistogram_Evaluation_Fragment,
+    EvaluationsAccordion_Evaluation_Fragment,
+  ]
+);
 
 export default function StudentView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "student">) {
   const { id: studentId, archived } = route.params;
@@ -109,7 +118,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
 
   const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
 
-  const { collectionTypes } = student.group.currentModule;
+  const collectionTypes = student.group.currentModule.collectionTypes as CollectionType[];
   const otherCollectionTypes = collectionTypes.filter((coll) => coll.category !== "CLASS_PARTICIPATION");
   const {
     absencesAmount,
@@ -234,11 +243,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             <EvaluationsBarChart evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} />
           </CView>
           <EvaluationsHistogram evaluations={classParticipationEvaluations} subjectCode={student.group.subject.code} moduleInfo={moduleInfo} />
-          <EvaluationStatistics
-            subjectCode={student.group.subject.code}
-            evaluations={classParticipationEvaluations}
-            moduleInfo={student.group.currentModule.info}
-          />
+          <EvaluationStatistics subjectCode={student.group.subject.code} evaluations={classParticipationEvaluations} moduleInfo={moduleInfo} />
           <CView style={{ gap: 10 }}>
             <CView style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 10 }}>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("characteristics", "Tunnusluvut")}</CText>

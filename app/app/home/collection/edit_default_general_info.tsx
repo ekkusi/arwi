@@ -5,16 +5,18 @@ import { useMutation, useQuery } from "@apollo/client";
 import { isDefaultCollection } from "arwi-backend/src/types/typeGuards";
 import { HomeStackParams } from "../types";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import Layout from "../../../components/Layout";
 import CText from "../../../components/primitives/CText";
 import DefaultCollectionGeneralInfoForm, { DefaultGeneralInfoData } from "./_default_general_info_form";
+import { DefaultCollectionUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const EditDefaultGeneralDetails_GetCollection_Query = graphql(`
   query EditDefaultGeneralDetails_GetCollection($collectionId: ID!) {
     getCollection(id: $collectionId) {
+      __typename
       id
       date
       description
@@ -47,13 +49,16 @@ const EditDefaultGeneralDetails_GetCollection_Query = graphql(`
   }
 `);
 
-const EditDefaultGeneralDetails_UpdateCollection_Mutation = graphql(`
-  mutation EditDefaultGeneralDetails_UpdateCollection($id: ID!, $input: UpdateDefaultCollectionInput!) {
-    updateDefaultCollection(collectionId: $id, data: $input) {
-      ...DefaultCollectionUpdate_Info
+const EditDefaultGeneralDetails_UpdateCollection_Mutation = graphql(
+  `
+    mutation EditDefaultGeneralDetails_UpdateCollection($id: ID!, $input: UpdateDefaultCollectionInput!) {
+      updateDefaultCollection(collectionId: $id, data: $input) {
+        ...DefaultCollectionUpdate_Info
+      }
     }
-  }
-`);
+  `,
+  [DefaultCollectionUpdate_Info_Fragment]
+);
 
 export default function EditDefaultCollectionGeneralInfoView({
   navigation,
@@ -109,7 +114,9 @@ export default function EditDefaultCollectionGeneralInfoView({
           }}
         />
       ) : (
-        <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
+        <CText>
+          {t("you-should-not-end-up-here", "Sinun ei kuuluisi päätyä tälle näkymälle. Jos viitsit, niin ilmoita asiasta kehittäjille info@arwi.fi.")}
+        </CText>
       )}
     </Layout>
   );

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { Alert, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { COLORS } from "../theme";
 import CPressable from "./primitives/CPressable";
 import CText from "./primitives/CText";
@@ -80,7 +79,7 @@ export default function RatingSelecter({ onChange, disabled = false, initialRati
         contentContainerStyle={{ paddingHorizontal: 10 }}
       >
         <CView style={{ flexDirection: "row", gap: 4 }}>
-          {RATING_VALUES.map((rating, i) => {
+          {RATING_VALUES.map((rating) => {
             let isSelected = true;
             if (disabled) {
               isSelected = false;

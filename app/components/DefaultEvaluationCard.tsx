@@ -1,4 +1,4 @@
-import { Student } from "arwi-backend/src/types";
+import { CreateDefaultEvaluationInput, Student, UpdateDefaultEvaluationInput, WarningInfo } from "arwi-backend/src/types";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, Dimensions, Platform, Switch } from "react-native";
@@ -7,7 +7,6 @@ import Animated from "react-native-reanimated";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "react-native-gesture-handler";
 import Constants from "expo-constants";
-import { CreateDefaultEvaluationInput, UpdateDefaultEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 import { COLORS } from "../theme";
@@ -15,7 +14,7 @@ import CButton from "./primitives/CButton";
 import { formatDate } from "../helpers/dateHelpers";
 import { useModal } from "../hooks-and-providers/ModalProvider";
 import CustomTextInputView from "../app/home/CustomTextInputView";
-import { graphql } from "../gql";
+import { graphql } from "@/graphql";
 import { useToast } from "../hooks-and-providers/ToastProvider";
 import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";
 import SliderWithScale from "./SliderWithScale";
@@ -185,7 +184,7 @@ function DefaultEvaluationCard({
       openToast(t("ai-fix-completed", "Oppilaan {{studentName}} arvioinnin korjaus suoritettu.", { studentName: evaluation.student.name }));
 
       const tokenUseWarning = result.data?.fixTextGrammatics.usageData.warning;
-      if (tokenUseWarning) toggleTokenUseWarning(tokenUseWarning);
+      if (tokenUseWarning) toggleTokenUseWarning(tokenUseWarning as WarningInfo);
     } catch (e) {
       console.error(e);
       Alert.alert(t("text-fix-error", "Tekstin korjaamisessa tapahtui virhe."));

@@ -1,21 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Animated, Modal, ModalProps, StatusBar, TouchableWithoutFeedback } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { Modal, ModalProps, StatusBar, TouchableWithoutFeedback } from "react-native";
 import {
   BaseAnimationBuilder,
   FadeIn,
   FadeOut,
-  interpolateColor,
   runOnJS,
   SlideInDown,
-  SlideInLeft,
   SlideInUp,
   SlideOutDown,
   SlideOutUp,
-  useAnimatedProps,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
   ZoomIn,
   ZoomOut,
 } from "react-native-reanimated";
@@ -63,8 +56,6 @@ const innerViewStyle: CViewStyle = {
   backgroundColor: "white",
   overflow: "hidden",
 };
-
-const AnimatedStatusBar = Animated.createAnimatedComponent(StatusBar);
 
 export default function CModal({
   animated = true,
@@ -189,10 +180,10 @@ export default function CModal({
             {typeof title === "string" ? <CText style={{ flex: 1, color: "darkgray", fontWeight: "bold" }}>{title}</CText> : title}
             {typeof closeButton === "boolean"
               ? closeButton && (
-                <CButton variant="empty" onPress={onClose}>
-                  <MaterialCommunityIcon name="close" size={25} />
-                </CButton>
-              )
+                  <CButton variant="empty" onPress={onClose}>
+                    <MaterialCommunityIcon name="close" size={25} />
+                  </CButton>
+                )
               : closeButton}
           </CView>
         )}

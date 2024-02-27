@@ -3,17 +3,16 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import React from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
-import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
 import CButton from "../../../components/primitives/CButton";
 import { COLORS, SPACING } from "../../../theme";
-import { GroupNavigationProps } from "./types";
 import Card from "../../../components/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import { formatDate } from "../../../helpers/dateHelpers";
+import { GroupOverviewProps } from "./types";
 
-export default function EvaluationList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
+export default function EvaluationList({ getGroup: group, navigation }: GroupOverviewProps) {
   const { t } = useTranslation();
 
   const { evaluationCollections } = group.currentModule;

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Alert } from "react-native";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import { HomeStackParams } from "./types";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";

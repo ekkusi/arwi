@@ -5,7 +5,7 @@ import { useMatomo } from "matomo-tracker-react-native";
 import { useState } from "react";
 import { Platform } from "react-native";
 import CButton from "../../components/primitives/CButton";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import { useAuth, useAuthenticatedUser } from "../../hooks-and-providers/AuthProvider";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";

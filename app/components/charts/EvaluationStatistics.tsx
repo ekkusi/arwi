@@ -1,14 +1,13 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MinimalModuleInfo } from "arwi-backend/src/types";
-import { FragmentType, getFragmentData, graphql } from "../../gql";
 import CircledNumber from "../CircledNumber";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
 import MovingAverageLineChart, { EvaluationDataType, MovingAverageLineChartProps } from "./MovingAverageLineChart";
 import StatisticsFilterMenu from "./StatisticsFilterMenu";
 import { formatDate } from "../../helpers/dateHelpers";
-import { EvaluationStatistics_EvaluationFragment } from "../../gql/graphql";
+import { FragmentOf, ResultOf, graphql, readFragment } from "@/graphql";
 
 export const EvaluationStatistics_Evaluation_Fragment = graphql(`
   fragment EvaluationStatistics_Evaluation on ClassParticipationEvaluation {
@@ -29,7 +28,7 @@ export const EvaluationStatistics_Evaluation_Fragment = graphql(`
   }
 `);
 
-export const mapEvaluationData = (evaluations: EvaluationStatistics_EvaluationFragment[]) => {
+export const mapEvaluationData = (evaluations: ResultOf<typeof EvaluationStatistics_Evaluation_Fragment>[]) => {
   const data: EvaluationDataType[] = [];
   evaluations.forEach((ev) => {
     const skillsRating = ev.skillsRating && ev.skillsRating;
@@ -50,7 +49,7 @@ type EvaluationStatisticsProps = Omit<MovingAverageLineChartProps, "data"> & {
   title?: string;
   subjectCode: string;
   moduleInfo: MinimalModuleInfo;
-  evaluations: readonly FragmentType<typeof EvaluationStatistics_Evaluation_Fragment>[];
+  evaluations: readonly FragmentOf<typeof EvaluationStatistics_Evaluation_Fragment>[];
   showAvgThreshhold?: number;
 };
 
@@ -66,7 +65,7 @@ export default function EvaluationsStatistics({
 
   const [filter, setFilter] = useState<string | undefined>(undefined);
 
-  const evaluations = getFragmentData(EvaluationStatistics_Evaluation_Fragment, evaluationFragments);
+  const evaluations = readFragment(EvaluationStatistics_Evaluation_Fragment, evaluationFragments);
 
   const sortedEvaluations = [...evaluations]
     .sort((a, b) => new Date(a.collection.date).getTime() - new Date(b.collection.date).getTime())
