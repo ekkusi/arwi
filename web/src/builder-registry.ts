@@ -8,7 +8,6 @@ import Link from "./components/primitives/Link";
 import LinkButton from "./components/primitives/LinkButton";
 import { withBuilderProps, withChakraOptions, withChakraProps } from "./utils/builderUtils";
 import LazyIcon, { CHAKRA_ICON_KEYS } from "./components/primitives/LazyIcon";
-import Footer from "./components/general/Footer";
 import Header from "./components/general/Header";
 import FooterBase from "./components/general/FooterBase";
 import Logo from "./components/general/Logo";
