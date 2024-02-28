@@ -368,22 +368,4 @@ input UpdateDefaultCollectionInput {
   evaluations: [UpdateDefaultEvaluationInput!]
 }
 
-input UpdateClassParticipationEvaluationInput {
-  id: ID!
-  wasPresent: Boolean
-  skillsRating: Int
-  behaviourRating: Int
-  notes: String
-}
-
-input UpdateDefaultEvaluationInput {
-  id: ID!
-  wasPresent: Boolean
-  rating: Float
-  notes: String
-}
-
-input ChangeGroupModuleInput {
-  newEducationLevel: EducationLevel!
-  newLearningObjectiveGroupKey: String!
-}
+input UpdateClassParticipationEval

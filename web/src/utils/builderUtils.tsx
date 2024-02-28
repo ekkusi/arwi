@@ -4,11 +4,12 @@ import { StyleProps } from "@chakra-ui/react";
 import React from "react";
 import theme from "@/theme";
 
-export const withBuilderProps = <P extends object>(Component: React.ComponentType<P>) => {
+export const withBuilderProps = <P extends Record<string, any>>(Component: React.ComponentType<any>) => {
   // eslint-disable-next-line react/function-component-definition
-  return (props: P & { attributes?: React.HTMLAttributes<HTMLElement> }) => {
-    const { attributes } = props;
-    return <Component {...attributes} {...props} />;
+  return (props: P & { attributes?: Record<string, any> }) => {
+    const { attributes, builderBlock: _, builderState: __, ...rest } = props;
+    const { key, ...attributesWithoutKey } = attributes || {};
+    return <Component key={key} {...attributesWithoutKey} {...rest} />;
   };
 };
 

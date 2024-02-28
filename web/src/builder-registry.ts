@@ -6,8 +6,13 @@ import PageWrapper from "./components/general/PageWrapper";
 import Section from "./components/general/Section";
 import Link from "./components/primitives/Link";
 import LinkButton from "./components/primitives/LinkButton";
-import { withChakraOptions, withChakraProps } from "./utils/builderUtils";
-import ChakraIcon, { ICON_KEYS } from "./components/primitives/ChakraIcon";
+import { withBuilderProps, withChakraOptions, withChakraProps } from "./utils/builderUtils";
+import LazyIcon, { CHAKRA_ICON_KEYS } from "./components/primitives/LazyIcon";
+import Footer from "./components/general/Footer";
+import Header from "./components/general/Header";
+import FooterBase from "./components/general/FooterBase";
+import Logo from "./components/general/Logo";
+import Navigation from "./components/general/Navigation";
 
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
@@ -92,7 +97,6 @@ Builder.registerComponent(
     defaultStyles: {
       marginTop: "0",
     },
-    noWrap: true,
     override: true,
     inputs: [{ name: "isFullWidth", friendlyName: "Fill page width", type: "boolean", defaultValue: false }],
     image: "https://www.svgrepo.com/show/358608/web-section.svg",
@@ -145,16 +149,82 @@ Builder.registerComponent(
 );
 
 Builder.registerComponent(
-  withChakraProps(ChakraIcon),
+  withChakraProps(LazyIcon),
   withChakraOptions({
     name: "Icon",
     defaultStyles: {
       marginTop: "0",
     },
     inputs: [
-      { name: "icon", friendlyName: "Icon", type: "string", enum: [...ICON_KEYS] },
+      {
+        name: "fetchFromReactIcons",
+        friendlyName: "From React Icons",
+
+        type: "boolean",
+        helperText: "All icons from https://react-icons.github.io/react-icons",
+        defaultValue: false,
+      },
+      {
+        name: "icon",
+        friendlyName: "Icon",
+        type: "string",
+        enum: [...CHAKRA_ICON_KEYS],
+        helperText: "The corresponding icons can be found in https://chakra-ui.com/docs/components/icon#all-icons",
+        showIf: (options) => !options.get("fetchFromReactIcons"),
+      },
+      {
+        name: "icon",
+        friendlyName: "Icon",
+        type: "string",
+        helperText: "Find the icon you want from https://react-icons.github.io/react-icons and paste its' name here (e.g. FiInstagram)",
+        showIf: (options) => options.get("fetchFromReactIcons"),
+      },
       { name: "boxSize", friendlyName: "Size", type: "number", defaultValue: 10 },
     ],
     image: "https://www.svgrepo.com/show/513832/info-circle.svg",
   })
 );
+
+Builder.registerComponent(
+  withChildren(withChakraProps(FooterBase)),
+  withChakraOptions({
+    name: "FooterBase",
+    defaultStyles: {
+      marginTop: "0",
+    },
+    inputs: [{ name: "isWaveFixed", friendlyName: "Keep top wave fixed in the bottom", type: "boolean", defaultValue: false }],
+  })
+);
+
+Builder.registerComponent(
+  withChildren(withChakraProps(Header)),
+  withChakraOptions({
+    name: "Header",
+    defaultStyles: {
+      marginTop: "0",
+    },
+    inputs: [{ name: "isFixed", friendlyName: "Keep header fixed on top", type: "boolean", defaultValue: false }],
+  })
+);
+
+Builder.registerComponent(
+  withChakraProps(Logo),
+  withChakraOptions({
+    name: "Logo",
+    defaultStyles: {
+      marginTop: "0",
+      flexDirection: "row",
+    },
+  })
+);
+
+Builder.registerComponent(withChildren(withBuilderProps(Navigation)), {
+  name: "Navigation",
+  noWrap: true,
+  defaultStyles: {
+    marginTop: "0",
+    marginLeft: "0",
+    // @ts-ignore
+    flexDirection: undefined,
+  },
+});
