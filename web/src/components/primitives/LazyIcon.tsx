@@ -65,7 +65,7 @@ export const CHAKRA_ICON_KEYS = [
   "warning-two",
 ] as const;
 
-type IconKey = (typeof ICON_KEYS)[number];
+type IconKey = (typeof CHAKRA_ICON_KEYS)[number];
 
 // Define the type for the icon cache
 type IconCache = Record<string, React.LazyExoticComponent<ComponentWithAs<"svg", any>>>;
@@ -77,6 +77,7 @@ const lazyLoadFromChakra = (iconName: IconKey) => {
   if (!iconCache[iconName]) {
     iconCache[iconName] = React.lazy<ComponentWithAs<"svg", BaseIconProps>>(async () => {
       const icons = import("@chakra-ui/icons");
+      // Format the icon name, e.g. "arrow-up" to "ArrowUpIcon"
       const formattedName = `${iconName.replace(/(^\w|-\w)/g, (clearAndUpper) => clearAndUpper.replace(/-/, "").toUpperCase())}Icon`;
       const IconComponent = (await icons)[formattedName] as ComponentWithAs<"svg", BaseIconProps>;
       if (IconComponent) {
