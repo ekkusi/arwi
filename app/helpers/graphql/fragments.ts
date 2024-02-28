@@ -1,4 +1,4 @@
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 
 export const ClassParticipationCollectionUpdate_GeneralInfoMinimal_Fragment = graphql(`
   fragment ClassParticipationCollectionUpdate_GeneralInfoMinimal on ClassParticipationCollection {
@@ -14,21 +14,24 @@ export const ClassParticipationCollectionUpdate_GeneralInfoMinimal_Fragment = gr
   }
 `);
 
-export const ClassParticipationCollectionUpdate_GeneralInfoFull_Fragment = graphql(`
-  fragment ClassParticipationCollectionUpdate_GeneralInfoFull on ClassParticipationCollection {
-    ...ClassParticipationCollectionUpdate_GeneralInfoMinimal
-    learningObjectives {
-      code
-      label {
-        fi
+export const ClassParticipationCollectionUpdate_GeneralInfoFull_Fragment = graphql(
+  `
+    fragment ClassParticipationCollectionUpdate_GeneralInfoFull on ClassParticipationCollection {
+      ...ClassParticipationCollectionUpdate_GeneralInfoMinimal
+      learningObjectives {
+        code
+        label {
+          fi
+        }
+        description {
+          fi
+        }
+        type
       }
-      description {
-        fi
-      }
-      type
     }
-  }
-`);
+  `,
+  [ClassParticipationCollectionUpdate_GeneralInfoMinimal_Fragment]
+);
 
 export const DefaultCollectionUpdate_Info_Fragment = graphql(`
   fragment DefaultCollectionUpdate_Info on DefaultCollection {
@@ -86,17 +89,20 @@ export const GroupCollectionTypesUpdate_TypeInfo_Fragment = graphql(`
   }
 `);
 
-export const GroupCollectionTypesUpdate_Fragment = graphql(`
-  fragment GroupCollectionTypesUpdate on Group {
-    id
-    currentModule {
+export const GroupCollectionTypesUpdate_Fragment = graphql(
+  `
+    fragment GroupCollectionTypesUpdate on Group {
       id
-      collectionTypes {
-        ...GroupCollectionTypesUpdate_TypeInfo
+      currentModule {
+        id
+        collectionTypes {
+          ...GroupCollectionTypesUpdate_TypeInfo
+        }
       }
     }
-  }
-`);
+  `,
+  [GroupCollectionTypesUpdate_TypeInfo_Fragment]
+);
 
 export const FeedbackCacheUpdate_Fragment = graphql(`
   fragment FeedbackCacheUpdate on Feedback {

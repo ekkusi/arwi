@@ -1,26 +1,29 @@
 import React, { createContext, useState } from "react";
 import { ApolloError, FetchResult, useMutation } from "@apollo/client";
-import { graphql } from "../gql";
-import { GenerateFeedbacks_UseGeneratedFeedbacks_MutationMutation } from "../gql/graphql";
+import { ResultOf, graphql } from "@/graphql";
 import { useThrowCatchableError } from "./error";
+import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
 
-const GenerateFeedbacks_useGeneratedFeedbacks_Mutation = graphql(`
-  mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!) {
-    generateGroupFeedback(groupId: $groupId) {
-      feedbacks {
-        ...FeedbackCacheUpdate
-      }
-      usageData {
-        id
-        monthlyTokensUsed
-        warning {
-          warning
-          threshhold
+const GenerateFeedbacks_useGeneratedFeedbacks_Mutation = graphql(
+  `
+    mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!) {
+      generateGroupFeedback(groupId: $groupId) {
+        feedbacks {
+          ...FeedbackCacheUpdate
+        }
+        usageData {
+          id
+          monthlyTokensUsed
+          warning {
+            warning
+            threshhold
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [FeedbackCacheUpdate_Fragment]
+);
 
 type GenerateFeedbacksContextType = {
   generatingGroupIds: string[];
@@ -43,7 +46,7 @@ export function useGenerateFeedback(groupId: string) {
   const isGenerating = context?.generatingGroupIds.includes(groupId);
 
   const startGenerateFeedbacks = async (
-    onSuccess?: (result: FetchResult<GenerateFeedbacks_UseGeneratedFeedbacks_MutationMutation>) => void,
+    onSuccess?: (result: FetchResult<ResultOf<typeof GenerateFeedbacks_useGeneratedFeedbacks_Mutation>>) => void,
     onError?: (err: Error) => void
   ) => {
     if (isGenerating) {

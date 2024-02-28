@@ -1,6 +1,6 @@
 import { compare } from "bcryptjs";
 import supertest from "supertest";
-import { graphql } from "../gql";
+import { graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { createTestUserAndLogin, TestTeacher } from "../testHelpers";

@@ -2,36 +2,39 @@ import { useQuery } from "@apollo/client";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { CollectionTypeMinimal } from "arwi-backend/src/types";
 import { DefaultEvaluation } from "../../../../../components/DefaultEvaluationCard";
-import { graphql } from "../../../../../gql";
-import { CollectionCreationProvider_GetGroupQuery } from "../../../../../gql/graphql";
+import { graphql, ResultOf } from "@/graphql";
 import { useThrowCatchableError } from "../../../../../hooks-and-providers/error";
+import { CollectionGeneralInfoView_Group_Fragment } from "../graphql";
 
-const DefaultCollectionCreationProvider_GetGroup_Query = graphql(`
-  query DefaultCollectionCreationProvider_GetGroup($groupId: ID!) {
-    getGroup(id: $groupId) {
-      id
-      currentModule {
+const DefaultCollectionCreationProvider_GetGroup_Query = graphql(
+  `
+    query DefaultCollectionCreationProvider_GetGroup($groupId: ID!) {
+      getGroup(id: $groupId) {
         id
-        students {
+        currentModule {
           id
-          name
-          currentModuleEvaluations {
+          students {
             id
-            notes
+            name
+            currentModuleEvaluations {
+              id
+              notes
+            }
           }
         }
-      }
-      currentModule {
-        collectionTypes {
-          id
-          name
-          category
+        currentModule {
+          collectionTypes {
+            id
+            name
+            category
+          }
         }
+        ...CollectionGeneralInfoView_Group
       }
-      ...CollectionGeneralInfoView_Group
     }
-  }
-`);
+  `,
+  [CollectionGeneralInfoView_Group_Fragment]
+);
 
 export type DefaultCollectionData = {
   description: string;
@@ -52,7 +55,7 @@ type DefaultCollectionCreationContextParams = {
   loading: boolean;
   collectionType?: CollectionTypeMinimal;
   evaluations?: DefaultEvaluationData[];
-  groupInfo?: CollectionCreationProvider_GetGroupQuery["getGroup"];
+  groupInfo?: ResultOf<typeof DefaultCollectionCreationProvider_GetGroup_Query>["getGroup"];
   setGeneralData: (data: DefaultCollectionData) => void;
   setEvaluations: Dispatch<SetStateAction<DefaultEvaluationData[] | undefined>>;
 };

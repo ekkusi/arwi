@@ -4,8 +4,8 @@ import { Box, BoxProps, Button } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
+import { graphql } from "@/graphql";
 import Link, { LinkProps } from "../primitives/Link";
-import { graphql } from "../../gql";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
 
 export type HeaderProps = Omit<BoxProps, "children"> & {

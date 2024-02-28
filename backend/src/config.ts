@@ -24,11 +24,11 @@ export const MONTHLY_TOKEN_USE_WARNING_THRESHOLDS: { [key in TokenUseWarning]: n
   SECOND_WARNING: 0.9,
 };
 
-export const ALLOWED_ORIGINS_DEV = ["http://localhost:3000"];
+export const ALLOWED_ORIGINS_DEV = ["http://localhost:3000", "http://localhost:3333"];
 
 export const ALLOWED_ORIGINS_STAGING = [...ALLOWED_ORIGINS_DEV, "https://staging-website.arwi.fi"];
 
-export const ALLOWED_ORIGINS_PROD = ["https://arwi.fi"];
+export const ALLOWED_ORIGINS_PROD = ["https://arwi.fi", "https://arwi.sanity.studio"];
 
 export const getAllowedOrigins = () => {
   switch (APP_ENV) {

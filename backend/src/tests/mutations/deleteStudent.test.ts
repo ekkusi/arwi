@@ -1,5 +1,5 @@
 import { CollectionTypeCategory, Student } from "@prisma/client";
-import { graphql } from "../gql";
+import { graphql } from "@/tests/graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import {

@@ -10,6 +10,7 @@ import {
   checkAuthenticatedByTeacher,
   checkAuthenticatedByType,
 } from "../utils/auth";
+import { fetchOrganizationChildren } from "@/utils/organizationApi";
 
 const resolvers: QueryResolvers<CustomContext> = {
   getAppMetadata: () => {
@@ -60,6 +61,9 @@ const resolvers: QueryResolvers<CustomContext> = {
   getEvaluation: async (_, { id }, { dataLoaders, user }) => {
     await checkAuthenticatedByEvaluation(user, id);
     return dataLoaders.evaluationLoader.load(id);
+  },
+  getMPassIDOrganizations: (_, { parentOid }) => {
+    return fetchOrganizationChildren(parentOid);
   },
 };
 

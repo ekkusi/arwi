@@ -9,6 +9,7 @@ type Query {
   getType(id: ID!): CollectionType!
   getStudent(id: ID!): Student!
   getEvaluation(id: ID!): Evaluation!
+  getMPassIDOrganizations(parentOid: String!): [MPassIDOrganization!]!
 }
 
 type Mutation {
@@ -117,6 +118,11 @@ enum LearningObjectiveType {
   SKILLS
   SKILLS_AND_BEHAVIOUR
   NOT_EVALUATED
+}
+
+type MPassIDOrganization {
+  id: ID!
+  name: String!
 }
 
 type LearningObjective {
@@ -362,22 +368,4 @@ input UpdateDefaultCollectionInput {
   evaluations: [UpdateDefaultEvaluationInput!]
 }
 
-input UpdateClassParticipationEvaluationInput {
-  id: ID!
-  wasPresent: Boolean
-  skillsRating: Int
-  behaviourRating: Int
-  notes: String
-}
-
-input UpdateDefaultEvaluationInput {
-  id: ID!
-  wasPresent: Boolean
-  rating: Float
-  notes: String
-}
-
-input ChangeGroupModuleInput {
-  newEducationLevel: EducationLevel!
-  newLearningObjectiveGroupKey: String!
-}
+input UpdateClassParticipationEval

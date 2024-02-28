@@ -10,7 +10,6 @@ import { GroupCreationStackParams } from "./types";
 import ProgressBar from "../../../../components/ProgressBar";
 import Layout from "../../../../components/Layout";
 import { CKeyboardAvoidingViewProps } from "../../../../components/primitives/CKeyboardAvoidingView";
-import CKeyboardStickyView from "../../../../components/primitives/CKeyboardStickyView";
 
 type GroupCreationBodyProps = Omit<CKeyboardAvoidingViewProps, "avoidKeyboard"> & {
   navigation: NativeStackNavigationProp<

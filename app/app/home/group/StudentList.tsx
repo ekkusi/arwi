@@ -3,16 +3,15 @@ import React, { useEffect, useState } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Keyboard } from "react-native";
-import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
 import { SPACING } from "../../../theme";
-import { GroupNavigationProps } from "./types";
+import { GroupOverviewProps } from "./types";
 import Card from "../../../components/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import SearchBar from "../../../components/SearchBar";
 
-export default function StudentList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
+export default function StudentList({ getGroup: group, navigation }: GroupOverviewProps) {
   const { t } = useTranslation();
 
   const translateY = useSharedValue(0);

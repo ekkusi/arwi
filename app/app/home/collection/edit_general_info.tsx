@@ -5,12 +5,16 @@ import { useMutation, useQuery } from "@apollo/client";
 import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import { HomeStackParams } from "../types";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import CollectionGeneralInfoForm, { GeneralInfoData } from "./_general_info_form";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import Layout from "../../../components/Layout";
 import CText from "../../../components/primitives/CText";
+import {
+  ClassParticipationCollectionUpdate_GeneralInfoFull_Fragment,
+  ClassParticipationCollectionUpdate_GeneralInfoMinimal_Fragment,
+} from "@/helpers/graphql/fragments";
 
 const EditGeneralDetails_GetCollection_Query = graphql(`
   query EditGeneralDetails_GetCollection($collectionId: ID!) {
@@ -64,30 +68,33 @@ const EditGeneralDetails_GetCollection_Query = graphql(`
   }
 `);
 
-const EditGeneralDetails_UpdateCollection_Mutation = graphql(`
-  mutation EditGeneralDetails_UpdateCollection($id: ID!, $input: UpdateClassParticipationCollectionInput!) {
-    updateClassParticipationCollection(collectionId: $id, data: $input) {
-      ...ClassParticipationCollectionUpdate_GeneralInfoFull
-      evaluations {
-        id
-        collection {
-          ...ClassParticipationCollectionUpdate_GeneralInfoMinimal
-        }
-      }
-      module {
-        group {
+const EditGeneralDetails_UpdateCollection_Mutation = graphql(
+  `
+    mutation EditGeneralDetails_UpdateCollection($id: ID!, $input: UpdateClassParticipationCollectionInput!) {
+      updateClassParticipationCollection(collectionId: $id, data: $input) {
+        ...ClassParticipationCollectionUpdate_GeneralInfoFull
+        evaluations {
           id
-          currentModule {
+          collection {
+            ...ClassParticipationCollectionUpdate_GeneralInfoMinimal
+          }
+        }
+        module {
+          group {
             id
-            evaluationCollections {
-              ...ClassParticipationCollectionUpdate_GeneralInfoMinimal
+            currentModule {
+              id
+              evaluationCollections {
+                ...ClassParticipationCollectionUpdate_GeneralInfoMinimal
+              }
             }
           }
         }
       }
     }
-  }
-`);
+  `,
+  [ClassParticipationCollectionUpdate_GeneralInfoMinimal_Fragment, ClassParticipationCollectionUpdate_GeneralInfoFull_Fragment]
+);
 
 export default function EditCollectionGeneralInfoView({ navigation, route }: NativeStackScreenProps<HomeStackParams, "collection-edit">) {
   const { collectionId, onSaved } = route.params;
@@ -149,7 +156,9 @@ export default function EditCollectionGeneralInfoView({ navigation, route }: Nat
           }}
         />
       ) : (
-        <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
+        <CText>
+          {t("you-should-not-end-up-here", "Sinun ei kuuluisi päätyä tälle näkymälle. Jos viitsit, niin ilmoita asiasta kehittäjille info@arwi.fi.")}
+        </CText>
       )}
     </Layout>
   );

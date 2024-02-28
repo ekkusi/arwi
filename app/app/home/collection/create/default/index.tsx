@@ -10,7 +10,7 @@ import DefaultCollectionCreationLayout from "./_layout";
 function DefaultCollectionGeneralInfoContent({
   navigation,
 }: NativeStackScreenProps<DefaultCollectionCreationStackParams, "default-collection-create-general-info">) {
-  const { groupInfo, setGeneralData } = useDefaultCollectionCreationContext();
+  const { setGeneralData } = useDefaultCollectionCreationContext();
 
   const handleSubmit = (data: DefaultGeneralInfoData) => {
     setGeneralData({

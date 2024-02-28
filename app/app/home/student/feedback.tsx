@@ -15,10 +15,11 @@ import { COLORS, SPACING } from "../../../theme";
 import { HomeStackParams } from "../types";
 import GradeSuggestionView from "../../../components/GradeSuggestionView";
 import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { useAuthenticatedUser } from "../../../hooks-and-providers/AuthProvider";
 import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
+import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
 
 const StudentFeedbackView_GetStudent_Query = graphql(`
   query StudentFeedbackView_GetStudent($id: ID!) {
@@ -69,24 +70,27 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
   }
 `);
 
-const StudentFeedbackView_GenerateFeedback_Mutation = graphql(`
-  mutation StudentFeedbackView_GenerateFeedback($studentId: ID!, $moduleId: ID!) {
-    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
-      feedback {
-        text
-        ...FeedbackCacheUpdate
-      }
-      usageData {
-        id
-        monthlyTokensUsed
-        warning {
-          warning
-          threshhold
+const StudentFeedbackView_GenerateFeedback_Mutation = graphql(
+  `
+    mutation StudentFeedbackView_GenerateFeedback($studentId: ID!, $moduleId: ID!) {
+      generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
+        feedback {
+          text
+          ...FeedbackCacheUpdate
+        }
+        usageData {
+          id
+          monthlyTokensUsed
+          warning {
+            warning
+            threshhold
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [FeedbackCacheUpdate_Fragment]
+);
 
 export default function StudentFeedbackView({ route }: NativeStackScreenProps<HomeStackParams, "student-feedback">) {
   const { t } = useTranslation();
@@ -137,7 +141,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       setError(
         t(
           "StudentView.summaryGenerationError",
-          "Palautteen generoinnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
+          "Palautteen luonnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
         )
       );
     }
@@ -179,7 +183,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
     return (
       <Layout style={{ alignItems: "center", justifyContent: "center" }}>
         <LoadingIndicator style={{ marginBottom: "4xl" }}>
-          <CText style={{ marginTop: "lg", color: "primary" }}>{t("generating-summary", "Loppuarviointia generoidaan...")}</CText>
+          <CText style={{ marginTop: "lg", color: "primary" }}>{t("generating-final-feedback", "Loppuarviointia generoidaan...")}</CText>
         </LoadingIndicator>
       </Layout>
     );

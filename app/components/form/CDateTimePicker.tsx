@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import { Platform } from "react-native";
 import DateTimePicker, { BaseProps } from "@react-native-community/datetimepicker";
 import { useTranslation } from "react-i18next";

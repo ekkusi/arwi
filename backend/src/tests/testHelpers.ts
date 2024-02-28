@@ -1,11 +1,11 @@
 import { hash } from "bcryptjs";
 import { CollectionType, CollectionTypeCategory, EducationLevel, Group, Module, Prisma, Student, Teacher } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
-import { TokenSet, UserinfoResponse } from "openid-client";
+import { TokenSet } from "openid-client";
 import prisma from "@/prismaClient";
 import { BRCRYPT_SALT_ROUNDS } from "../config";
 import { TestGraphQLRequest } from "./createTestServer";
-import { graphql } from "./gql";
+import { graphql } from "./graphql";
 import { MpassIDUserInfo } from "@/routes/auth";
 
 export const TEST_USER = {

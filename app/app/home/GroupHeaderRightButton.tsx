@@ -34,7 +34,6 @@ export default function GroupHeaderRightButton({
   const handleGenerateFeedbacks = async () => {
     try {
       await generateFeedbacks();
-      console.log("Feedbacks generated");
     } catch (err) {
       console.error("Feedbacks generate error", err);
     }

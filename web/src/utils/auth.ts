@@ -1,5 +1,5 @@
 import { serverQueryWithoutErrorHandling } from "@/apollo/server";
-import { graphql } from "@/gql";
+import { graphql } from "@/graphql";
 
 const GetIsAuthenticated_GetCurrentUser_Query = graphql(`
   query GetIsAuthenticated_GetCurrentUser {

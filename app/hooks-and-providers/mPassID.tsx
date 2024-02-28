@@ -1,7 +1,7 @@
 import * as WebBrowser from "expo-web-browser";
 import { useMutation } from "@apollo/client";
 import { useEffect } from "react";
-import { graphql } from "../gql";
+import { graphql } from "@/graphql";
 
 const MPassID_Login_Mutation = graphql(`
   mutation MPassID_Login($code: String!) {
@@ -35,7 +35,7 @@ export const useMPassIDAuth = (redirectUri: string) => {
   const grantCode = async () => {
     const authUrl = `${BACKEND_API_URL_NO_PROXY}/auth/authorize?${new URLSearchParams({ redirect_uri: redirectUri, type: "code_only" })}`;
 
-    const authResult = (await WebBrowser.openAuthSessionAsync(authUrl, redirectUri)) as WebBrowser.WebBrowserRedirectResult;
+    const authResult = (await WebBrowser.openAuthSessionAsync(authUrl, redirectUri, { showInRecents: true })) as WebBrowser.WebBrowserRedirectResult;
 
     if (!authResult.url) return null;
     const code = authResult.url.split("code=")[1];

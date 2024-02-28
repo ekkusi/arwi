@@ -11,7 +11,6 @@ import {
   CreateStudentInput,
   CreateTeacherInput,
   EducationLevel,
-  LearningObjectiveType,
   UpdateClassParticipationCollectionInput,
   UpdateClassParticipationEvaluationInput,
   UpdateDefaultEvaluationInput,
@@ -52,11 +51,7 @@ export const validateLearningObjectives = (
   learningObjectiveCodes: string[]
 ) => {
   const learningObjectives = getLearningObjectives(subjectCode, educationLevel, learningObjectiveGroupKey);
-  if (
-    !learningObjectiveCodes.every((code) =>
-      learningObjectives.some((objective) => objective.code === code && objective.type !== LearningObjectiveType.NOT_EVALUATED)
-    )
-  )
+  if (!learningObjectiveCodes.every((code) => learningObjectives.some((objective) => objective.code === code && objective.type !== "NOT_EVALUATED")))
     throw new ValidationError(`Osa oppimistavoitteista ei ole olemassa tai ei ole arvioitavia.`);
 };
 

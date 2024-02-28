@@ -37,7 +37,7 @@ export default function CustomTextInputView({ initialText, onSave, onClose, isAc
         onChange={onChange}
         onClose={onClose}
         focusOnMount
-        isActive
+        isActive={isActive}
         microphoneStyle={{
           bottom: 20,
           right: 20,

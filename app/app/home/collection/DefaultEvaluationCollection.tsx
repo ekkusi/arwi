@@ -7,7 +7,7 @@ import { useEffect, useMemo } from "react";
 import { HomeStackParams } from "../types";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CScrollView from "../../../components/primitives/CScrollView";
 import { getCollectionTypeTranslation } from "../../../helpers/translation";

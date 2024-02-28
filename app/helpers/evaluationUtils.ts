@@ -1,6 +1,5 @@
-import { TranslatedString } from "arwi-backend/src/types";
+import { ClassParticipationEvaluation, TranslatedString } from "arwi-backend/src/types";
 import { median, mode, stdev } from "./mathUtilts";
-import { ClassParticipationEvaluation } from "../gql/graphql";
 
 type EvaluationResultSimple = {
   skillsAverage: number;

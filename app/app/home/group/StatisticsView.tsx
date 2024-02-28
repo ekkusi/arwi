@@ -3,9 +3,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { getEnvironmentsByLevel, getEvaluableLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
 import React, { useMemo } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { isClassParticipationCollection, isDefaultCollection } from "arwi-backend/src/types/typeGuards";
-import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import { subjectToIcon } from "../../../helpers/dataMappers";
 import StyledBarChart, { StyledBarChartDataType } from "../../../components/charts/StyledBarChart";
 import CView from "../../../components/primitives/CView";
@@ -14,14 +12,13 @@ import CImage from "../../../components/primitives/CImage";
 import CollectionStatistics from "../../../components/charts/CollectionStatistics";
 import CButton from "../../../components/primitives/CButton";
 import { COLORS } from "../../../theme";
-import { GroupNavigationProps } from "./types";
-import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../helpers/translation";
-import Card from "../../../components/Card";
-import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
+import { GroupOverviewProps } from "./types";
+import { getEnvironmentTranslation } from "../../../helpers/translation";
 import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
 import LoadingIndicator from "../../../components/LoadingIndicator";
+import EvaluationTargetCard from "./components/EvaluationTargetCard";
 
-export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
+export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewProps) {
   const { t } = useTranslation();
   const { isGenerating: isGeneratingFeedbacks } = useGenerateFeedback(group.id);
 
@@ -37,6 +34,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
   const otherCollections =
     evaluationCollections.filter<WithTypename<(typeof evaluationCollections)[number], "DefaultCollection">>(isDefaultCollection);
 
+  const classEvaluationType = group.currentModule.collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
   const otherSelectedTypes = group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
   const otherSelectedTypeEvaluations = otherSelectedTypes.map((type) => {
     const evaluation = otherCollections.find((coll) => coll.type.id === type.id);
@@ -130,7 +128,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           </LoadingIndicator>
         )}
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
-          <CView>
+          <CView style={{ width: "70%" }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.currentModule.info.label.fi}</CText>
             <CText style={{ fontSize: "md", fontWeight: "300" }}>{group.subject.label.fi}</CText>
@@ -140,8 +138,11 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
                 count: group.currentModule.evaluationCollections.filter((ev) => ev.type.category === "CLASS_PARTICIPATION").length,
               })}
             </CText>
+            <CText style={{ fontSize: "md", fontWeight: "300" }}>
+              {t("class-evaluation-weight", "Tuntityöskentelyn painoarvo")}: {classEvaluationType?.weight}%
+            </CText>
           </CView>
-          <CView style={{ gap: 10, alignItems: "center", justifyContent: "center" }}>
+          <CView style={{ gap: 10, alignItems: "flex-end", justifyContent: "center", width: "30%" }}>
             {group.archived && (
               <CView
                 style={{
@@ -181,61 +182,23 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
         </CView>
         {otherSelectedTypes.length > 0 && (
           <CView style={{ gap: 20 }}>
-            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arviointikohteet")}</CText>
+            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arvioitavat sisällöt")}</CText>
             <CView style={{ gap: 5 }}>
               {otherSelectedTypes.map((type, i) => {
                 const evaluation = otherSelectedTypeEvaluations[i];
                 return (
-                  <Card
-                    style={{
-                      borderColor: "primary",
-                      borderWidth: 1,
-                    }}
+                  <EvaluationTargetCard
                     key={type.id}
-                  >
-                    <CTouchableOpacity
-                      style={{ flex: 1, height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
-                      onPress={() => {
-                        navigation.navigate("default-evaluation-collection", {
-                          id: type.id,
-                          collectionId: type.defaultTypeCollection?.id,
-                          name: type.name,
-                          archived: group.archived,
-                        });
-                      }}
-                    >
-                      <CView style={{ gap: 5 }}>
-                        <CText style={{ fontSize: "md", fontWeight: "500" }}>{type.name}</CText>
-                        <CText>
-                          {type.category === "CLASS_PARTICIPATION" ? (
-                            <CText />
-                          ) : (
-                            <CText style={{ fontSize: "sm", color: "gray" }}>
-                              {getCollectionTypeTranslation(t, type.category as CollectionTypeCategory)},{" "}
-                            </CText>
-                          )}
-                          <CText style={{ fontSize: "sm", color: "gray" }}>
-                            {type.category === "CLASS_PARTICIPATION"
-                              ? t("evaluated-continuously", "jatkuvasti arvioitava")
-                              : t("evaluated-once", "Kerran arvioitava").toLocaleLowerCase()}
-                          </CText>
-                        </CText>
-                      </CView>
-                      {!evaluation && (
-                        <CButton
-                          variant="empty"
-                          textStyle={{ color: "primary", fontSize: "sm", fontWeight: "500" }}
-                          title={t("evaluate", "Arvioi").toLocaleUpperCase()}
-                          onPress={() => {
-                            navigation.navigate("default-collection-create", { groupId: group.id, collectionTypeId: type.id });
-                          }}
-                        />
-                      )}
-                      {evaluation && (
-                        <CText style={{ color: "gray", fontSize: "sm", fontWeight: "500" }}>{t("evaluated", "Arvioitu").toLocaleUpperCase()}</CText>
-                      )}
-                    </CTouchableOpacity>
-                  </Card>
+                    navigation={navigation}
+                    id={type.id}
+                    collectionId={type.defaultTypeCollection?.id}
+                    name={type.name}
+                    archived={group.archived}
+                    category={type.category}
+                    groupId={group.id}
+                    evaluated={!!evaluation}
+                    weight={type.weight}
+                  />
                 );
               })}
             </CView>

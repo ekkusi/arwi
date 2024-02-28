@@ -30,6 +30,7 @@ const config: CodegenConfig = {
       config: {
         scalars: customScalars,
         mapperTypeSuffix: "Prisma",
+        enumsAsTypes: true,
         mappers: {
           Teacher: "./contextTypes#UserInfo",
           EvaluationCollection: "@prisma/client#EvaluationCollection",

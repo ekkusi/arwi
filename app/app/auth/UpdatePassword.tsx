@@ -7,7 +7,7 @@ import CView from "../../components/primitives/CView";
 import { AuthStackParams } from "./types";
 import CText from "../../components/primitives/CText";
 import CButton from "../../components/primitives/CButton";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import TextFormField from "../../components/form/TextFormField";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
 

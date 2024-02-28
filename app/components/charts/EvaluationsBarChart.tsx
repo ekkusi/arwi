@@ -1,8 +1,7 @@
 import { useMemo, useState } from "react";
 import { t } from "i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { FragmentType, getFragmentData, graphql } from "../../gql";
-import { EvaluationsBarChart_EvaluationFragment } from "../../gql/graphql";
+import { FragmentOf, readFragment, graphql, ResultOf } from "@/graphql";
 
 import { hexToRgbA } from "../../helpers/color";
 import CView, { CViewProps } from "../primitives/CView";
@@ -14,7 +13,7 @@ import i18n from "../../i18n";
 import { COLORS } from "../../theme";
 import { getEnvironmentTranslation } from "../../helpers/translation";
 
-const EvaluationsBarChart_Evaluation_Fragment = graphql(`
+export const EvaluationsBarChart_Evaluation_Fragment = graphql(`
   fragment EvaluationsBarChart_Evaluation on ClassParticipationEvaluation {
     id
     skillsRating
@@ -55,7 +54,7 @@ type EvaluationsBarChartDataType = StyledBarChartDataType & {
   type: "skills" | "behaviour";
 };
 
-const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
+const mapData = (evaluations: ResultOf<typeof EvaluationsBarChart_Evaluation_Fragment>[]) => {
   const data: EvaluationsBarChartDataType[] = [];
   const tempData: { [key: string]: TempDataType } = {};
   evaluations.forEach((evaluation) => {
@@ -104,7 +103,7 @@ const mapData = (evaluations: EvaluationsBarChart_EvaluationFragment[]) => {
 };
 
 type EvaluationsBarChartProps = CViewProps & {
-  evaluations: readonly FragmentType<typeof EvaluationsBarChart_Evaluation_Fragment>[];
+  evaluations: readonly FragmentOf<typeof EvaluationsBarChart_Evaluation_Fragment>[];
   subjectCode: string;
 };
 
@@ -120,7 +119,7 @@ const getFilteredData = (data: EvaluationsBarChartDataType[], filter: string) =>
 };
 
 export default function EvaluationsBarChart({ evaluations: evaluationFragments, subjectCode, ...rest }: EvaluationsBarChartProps) {
-  const evaluations = getFragmentData(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
+  const evaluations = readFragment(EvaluationsBarChart_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
   const [filter, setFilter] = useState<FilterValue>("all");
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);

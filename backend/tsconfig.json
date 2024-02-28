@@ -5,14 +5,12 @@
       "module": "commonjs"
     }
   },
-  "files": [
-    "src/types/global.d.ts"
-  ],
+  "files": ["src/types/global.d.ts"],
   "compilerOptions": {
     "allowJs": true,
-    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-    "strict": true,                                      /* Enable all strict type-checking options. */
-    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+    "strict": true /* Enable all strict type-checking options. */,
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -28,6 +26,14 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "types": ["node", "jest"],
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "http://localhost:4000/graphql",
+        "tadaOutputLocation": "./src/tests/types/graphql-env.d.ts",
+        "trackFieldUsage": false
+      }
+    ]
   },
   "include": ["src"],
   "exclude": ["node_modules", "lib"]

@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { UpdateTypesStackParams } from "./update_type_stack_types";
 import { useUpdateTypesContext } from "./UpdateTypesProvider";
-import { mapCollectionTypeInfos } from "../create/helpers";
 import UpdateTypesBody from "./_update_types_body";
 import CollectionTypesBody from "../create/_collection_types_body";
 import { dividePercentages } from "../../../../helpers/mathUtilts";

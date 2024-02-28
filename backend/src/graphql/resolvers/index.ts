@@ -17,6 +17,7 @@ function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Res
     try {
       return await resolver(parent, args, context, info);
     } catch (initialError) {
+      console.error(initialError);
       let error = initialError;
       let type = "unknown";
       let level: Sentry.SeverityLevel = "error";

@@ -5,7 +5,7 @@ import { defaultHeaderStyles } from "../../../config";
 import { UpdateTypesStackParams } from "./update_type_stack_types";
 import EditTypeWeightsView from "./edit-collection-type-weights";
 import EditTypesView from "./edit-collection-types";
-import { graphql } from "../../../../gql";
+import { graphql } from "@/graphql";
 import LoadingIndicator from "../../../../components/LoadingIndicator";
 import { UpdateTypesProvider } from "./UpdateTypesProvider";
 import { HomeStackParams } from "../../types";

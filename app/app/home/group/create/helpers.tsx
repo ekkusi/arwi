@@ -1,10 +1,6 @@
 import { CollectionTypeInfo, CollectionTypeOption } from "./types_body";
 
-export const mapCollectionTypeInfo = (
-  type: CollectionTypeOption,
-  otherSelectedTypes: CollectionTypeOption[],
-  noNameMap = false
-): CollectionTypeInfo => {
+export const mapCollectionTypeInfo = (type: CollectionTypeOption, otherSelectedTypes: CollectionTypeOption[]): CollectionTypeInfo => {
   const { name } = type;
   let id = type.category.toString();
   let matchingCount = 0;
@@ -22,7 +18,7 @@ export const mapCollectionTypeInfo = (
 export const mapCollectionTypeInfos = (types: CollectionTypeOption[]): CollectionTypeInfo[] => {
   const mappedTypes: CollectionTypeInfo[] = [];
   types.forEach((type) => {
-    const mappedType = mapCollectionTypeInfo(type, mappedTypes, true);
+    const mappedType = mapCollectionTypeInfo(type, mappedTypes);
     mappedTypes.push(mappedType);
   });
   return mappedTypes;

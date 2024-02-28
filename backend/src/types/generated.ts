@@ -34,6 +34,7 @@ export type Query = {
   getType: CollectionType;
   getStudent: Student;
   getEvaluation: Evaluation;
+  getMPassIDOrganizations: Array<MPassIdOrganization>;
 };
 
 
@@ -69,6 +70,11 @@ export type QueryGetStudentArgs = {
 
 export type QueryGetEvaluationArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetMPassIdOrganizationsArgs = {
+  parentOid: Scalars['String'];
 };
 
 export type Mutation = {
@@ -327,17 +333,21 @@ export type TranslatedString = {
   se?: Maybe<Scalars['String']>;
 };
 
-export enum TokenUseWarning {
-  FIRST_WARNING = 'FIRST_WARNING',
-  SECOND_WARNING = 'SECOND_WARNING'
-}
+export type TokenUseWarning =
+  | 'FIRST_WARNING'
+  | 'SECOND_WARNING';
 
-export enum LearningObjectiveType {
-  BEHAVIOUR = 'BEHAVIOUR',
-  SKILLS = 'SKILLS',
-  SKILLS_AND_BEHAVIOUR = 'SKILLS_AND_BEHAVIOUR',
-  NOT_EVALUATED = 'NOT_EVALUATED'
-}
+export type LearningObjectiveType =
+  | 'BEHAVIOUR'
+  | 'SKILLS'
+  | 'SKILLS_AND_BEHAVIOUR'
+  | 'NOT_EVALUATED';
+
+export type MPassIdOrganization = {
+  __typename?: 'MPassIDOrganization';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
 
 export type LearningObjective = {
   __typename?: 'LearningObjective';
@@ -386,13 +396,12 @@ export type CollectionType = {
   defaultTypeCollection?: Maybe<DefaultCollection>;
 };
 
-export enum CollectionTypeCategory {
-  CLASS_PARTICIPATION = 'CLASS_PARTICIPATION',
-  EXAM = 'EXAM',
-  WRITTEN_WORK = 'WRITTEN_WORK',
-  GROUP_WORK = 'GROUP_WORK',
-  OTHER = 'OTHER'
-}
+export type CollectionTypeCategory =
+  | 'CLASS_PARTICIPATION'
+  | 'EXAM'
+  | 'WRITTEN_WORK'
+  | 'GROUP_WORK'
+  | 'OTHER';
 
 export type ModuleInfo = {
   __typename?: 'ModuleInfo';
@@ -490,19 +499,18 @@ export type Feedback = {
   createdAt: Scalars['DateTime'];
 };
 
-export enum EducationLevel {
-  PRIMARY_FIRST = 'PRIMARY_FIRST',
-  PRIMARY_SECOND = 'PRIMARY_SECOND',
-  PRIMARY_THIRD = 'PRIMARY_THIRD',
-  PRIMARY_FOURTH = 'PRIMARY_FOURTH',
-  PRIMARY_FIFTH = 'PRIMARY_FIFTH',
-  PRIMARY_SIXTH = 'PRIMARY_SIXTH',
-  PRIMARY_SEVENTH = 'PRIMARY_SEVENTH',
-  PRIMARY_EIGHTH = 'PRIMARY_EIGHTH',
-  PRIMARY_NINTH = 'PRIMARY_NINTH',
-  HIGH_SCHOOL = 'HIGH_SCHOOL',
-  VOCATIONAL = 'VOCATIONAL'
-}
+export type EducationLevel =
+  | 'PRIMARY_FIRST'
+  | 'PRIMARY_SECOND'
+  | 'PRIMARY_THIRD'
+  | 'PRIMARY_FOURTH'
+  | 'PRIMARY_FIFTH'
+  | 'PRIMARY_SIXTH'
+  | 'PRIMARY_SEVENTH'
+  | 'PRIMARY_EIGHTH'
+  | 'PRIMARY_NINTH'
+  | 'HIGH_SCHOOL'
+  | 'VOCATIONAL';
 
 export type CreateTeacherInput = {
   email: Scalars['EmailAddress'];
@@ -691,8 +699,8 @@ export type ResolversTypes = {
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  Mutation: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AppMetadata: ResolverTypeWrapper<AppMetadata>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -709,6 +717,7 @@ export type ResolversTypes = {
   TranslatedString: ResolverTypeWrapper<TranslatedString>;
   TokenUseWarning: TokenUseWarning;
   LearningObjectiveType: LearningObjectiveType;
+  MPassIDOrganization: ResolverTypeWrapper<MPassIdOrganization>;
   LearningObjective: ResolverTypeWrapper<LearningObjective>;
   Subject: ResolverTypeWrapper<SubjectMinimalPrisma>;
   Environment: ResolverTypeWrapper<EnvironmentInfoPrisma>;
@@ -751,8 +760,8 @@ export type ResolversParentTypes = {
   EmailAddress: Scalars['EmailAddress'];
   Query: {};
   ID: Scalars['ID'];
-  Mutation: {};
   String: Scalars['String'];
+  Mutation: {};
   Boolean: Scalars['Boolean'];
   AppMetadata: AppMetadata;
   Int: Scalars['Int'];
@@ -767,6 +776,7 @@ export type ResolversParentTypes = {
   FixTextGrammaticsResult: FixTextGrammaticsResult;
   LoginResult: Omit<LoginResult, 'userData'> & { userData: ResolversParentTypes['Teacher'] };
   TranslatedString: TranslatedString;
+  MPassIDOrganization: MPassIdOrganization;
   LearningObjective: LearningObjective;
   Subject: SubjectMinimalPrisma;
   Environment: EnvironmentInfoPrisma;
@@ -823,6 +833,7 @@ export type QueryResolvers<ContextType = CustomContext, ParentType extends Resol
   getType?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType, RequireFields<QueryGetTypeArgs, 'id'>>;
   getStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<QueryGetStudentArgs, 'id'>>;
   getEvaluation?: Resolver<ResolversTypes['Evaluation'], ParentType, ContextType, RequireFields<QueryGetEvaluationArgs, 'id'>>;
+  getMPassIDOrganizations?: Resolver<Array<ResolversTypes['MPassIDOrganization']>, ParentType, ContextType, RequireFields<QueryGetMPassIdOrganizationsArgs, 'parentOid'>>;
 };
 
 export type MutationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -929,6 +940,12 @@ export type TranslatedStringResolvers<ContextType = CustomContext, ParentType ex
   fi?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   en?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   se?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MPassIdOrganizationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['MPassIDOrganization'] = ResolversParentTypes['MPassIDOrganization']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1094,6 +1111,7 @@ export type Resolvers<ContextType = CustomContext> = {
   FixTextGrammaticsResult?: FixTextGrammaticsResultResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
   TranslatedString?: TranslatedStringResolvers<ContextType>;
+  MPassIDOrganization?: MPassIdOrganizationResolvers<ContextType>;
   LearningObjective?: LearningObjectiveResolvers<ContextType>;
   Subject?: SubjectResolvers<ContextType>;
   Environment?: EnvironmentResolvers<ContextType>;

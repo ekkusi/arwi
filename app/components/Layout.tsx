@@ -1,5 +1,4 @@
 import CKeyboardAvoidingView, { CKeyboardAvoidingViewProps } from "./primitives/CKeyboardAvoidingView";
-import CView from "./primitives/CView";
 
 export type LayoutProps = CKeyboardAvoidingViewProps & {
   avoidKeyboard?: boolean;

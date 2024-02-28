@@ -9,7 +9,7 @@ import TextFormField from "../../../../components/form/TextFormField";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
-import { graphql } from "../../../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
 import { useAuthenticatedUser } from "../../../../hooks-and-providers/AuthProvider";
 import { COLORS } from "../../../../theme";

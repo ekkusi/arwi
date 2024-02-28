@@ -39,8 +39,6 @@ export function AccordionItem({
   icons,
   ...rest
 }: AccordionItemProps): JSX.Element {
-  const { t } = useTranslation();
-
   return (
     <CAnimatedView layout={Layout}>
       <Card {...rest}>

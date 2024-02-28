@@ -1,18 +1,16 @@
 import { useTranslation } from "react-i18next";
 import React from "react";
 import { getLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import { LearningObjectiveType } from "arwi-backend/src/types";
 import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
-import { GroupOverviewPage_GetGroupQuery } from "../../../gql/graphql";
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
 import { SPACING } from "../../../theme";
-import { GroupNavigationProps } from "./types";
 import Card from "../../../components/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import CFlatList from "../../../components/primitives/CFlatList";
+import { GroupOverviewProps } from "./types";
 
-export default function ObjectiveList({ getGroup: group, navigation }: GroupOverviewPage_GetGroupQuery & GroupNavigationProps) {
+export default function ObjectiveList({ getGroup: group, navigation }: GroupOverviewProps) {
   const moduleInfo = group.currentModule.info;
   const objectives = getLearningObjectives(group.subject.code, moduleInfo.educationLevel, moduleInfo.learningObjectiveGroupKey);
   const { t } = useTranslation();
@@ -50,7 +48,7 @@ export default function ObjectiveList({ getGroup: group, navigation }: GroupOver
               <Card style={{ marginBottom: "md" }}>
                 <CText>{`${item.code}: ${item.label.fi}`}</CText>
                 <CText style={{ fontSize: "sm", fontWeight: "400", color: "gray" }}>
-                  {item.type !== LearningObjectiveType.NOT_EVALUATED
+                  {item.type !== "NOT_EVALUATED"
                     ? t("group.objective-evaluation-count", "Arvioitu {{count}} kertaa", { count: item.count })
                     : t("not-evaluated", "Ei arvioitava")}
                 </CText>

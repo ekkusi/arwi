@@ -20,8 +20,8 @@ export default function CircledNumber({
   title?: string;
 }) {
   let fontSize: CFontSize = "title";
-  if (size < 40) fontSize = "sm";
-  else if (size < 50) fontSize = "md";
+  if (size < 45) fontSize = "sm";
+  else if (size < 55) fontSize = "md";
   else if (size < 60) fontSize = "lg";
 
   let valueText = "-";

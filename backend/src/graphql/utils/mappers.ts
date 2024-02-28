@@ -132,9 +132,9 @@ export const mapEvaluationFeedbackData = (
 
 export const mapWarningSeenUpdateData = (warning: TokenUseWarning): Prisma.TeacherUpdateInput => {
   switch (warning) {
-    case TokenUseWarning.FIRST_WARNING:
+    case "FIRST_WARNING":
       return { hasSeenFirstMonthlyTokenWarning: true };
-    case TokenUseWarning.SECOND_WARNING:
+    case "SECOND_WARNING":
     default:
       return {};
   }
@@ -146,7 +146,7 @@ export const mapTeacherUsageData = (teacher: Teacher): TeacherUsageData => {
   const monthlyTokensUtilizationRate = teacher.monthlyTokensUsed / MONTHLY_TOKEN_USE_LIMIT;
   if (monthlyTokensUtilizationRate > MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.SECOND_WARNING && !teacher.hasSeenSecondMonthlyTokenWarning) {
     warningData = {
-      warning: TokenUseWarning.SECOND_WARNING,
+      warning: "SECOND_WARNING",
       threshhold: MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.SECOND_WARNING,
     };
   } else if (
@@ -155,7 +155,7 @@ export const mapTeacherUsageData = (teacher: Teacher): TeacherUsageData => {
     !teacher.hasSeenSecondMonthlyTokenWarning
   ) {
     warningData = {
-      warning: TokenUseWarning.FIRST_WARNING,
+      warning: "FIRST_WARNING",
       threshhold: MONTHLY_TOKEN_USE_WARNING_THRESHOLDS.FIRST_WARNING,
     };
   }

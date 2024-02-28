@@ -8,7 +8,7 @@ import TextFormField from "../../components/form/TextFormField";
 import { nameValidator } from "../../helpers/textValidation";
 import CButton from "../../components/primitives/CButton";
 import { AuthStackParams } from "./types";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import CText from "../../components/primitives/CText";
 import { getErrorMessage } from "../../helpers/errorUtils";
 
