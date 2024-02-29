@@ -15,6 +15,7 @@ export type LinkProps = Omit<React.ComponentProps<typeof MotionLink>, "ref"> & {
   hoverStyle?: "underline" | "none" | "opacity";
   queryParams?: Record<string, string>;
   underLineSize?: string | number;
+  underLineColor?: string;
 };
 
 const underLineMotion: Variants = {
@@ -35,6 +36,7 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
       color = "primary",
       hoverStyle = "opacity",
       underLineSize = "1px",
+      underLineColor: _underLineColor,
       fontSize,
       queryParams: _queryParams,
       ...rest
@@ -45,6 +47,7 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
     const locale = i18n.language as LanguageOption;
 
     const queryParams = _queryParams ? new URLSearchParams(_queryParams) : undefined;
+    const underLineColor = _underLineColor || color;
 
     let href = _href;
     if (!noTranslate) {
