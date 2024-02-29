@@ -12,6 +12,7 @@ import Header from "./components/general/Header";
 import FooterBase from "./components/general/FooterBase";
 import Logo from "./components/general/Logo";
 import Navigation from "./components/general/Navigation";
+import { COLORS } from "./theme";
 
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
@@ -119,6 +120,7 @@ Builder.registerComponent(
         helperText: "The URL to link to. Use relative paths, e.g. /tietosuojaseloste, for internal links",
       },
       { name: "hoverStyle", type: "string", defaultValue: "opacity", enum: ["opacity", "underline", "none"] },
+      { name: "underLineColor", type: "color", defaultValue: COLORS.primary, showIf: (options) => options.get("hoverStyle") === "underline" },
       { name: "noTranslate", type: "boolean", defaultValue: true, hideFromUI: true },
     ],
     image: "https://www.svgrepo.com/show/529680/link.svg",
