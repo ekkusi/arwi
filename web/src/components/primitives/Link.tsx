@@ -101,7 +101,7 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
             position="absolute"
             bottom="-1"
             left=" 0"
-            backgroundColor={color}
+            backgroundColor={underLineColor}
             width="100%"
             height={underLineSize}
           />
