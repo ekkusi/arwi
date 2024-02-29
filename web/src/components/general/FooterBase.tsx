@@ -81,7 +81,7 @@ export default function FooterBase({ isWaveFixed = false, children, ...rest }: F
             <Image src="/images/layered-wave-bottom-1.svg" fill alt="Waves" />
           </Box>
         </Box>
-        <Box ref={footerContentRef} paddingTop={isWaveFixed ? WAVE_MARGIN : 0} bg="primary" width="100%" color="white" fontSize="sm">
+        <Box ref={footerContentRef} paddingTop={isWaveFixed ? WAVE_MARGIN : 0} bg="primary" width="100%" color="white" fontSize="sm" marginTop="-1px">
           {children}
         </Box>
       </Box>
