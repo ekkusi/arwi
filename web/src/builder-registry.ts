@@ -2,7 +2,6 @@
 
 import { Builder, builder, withChildren } from "@builder.io/react";
 import { Text } from "@chakra-ui/react";
-import PageWrapper from "./components/general/PageWrapper";
 import Section from "./components/general/Section";
 import Link from "./components/primitives/Link";
 import LinkButton from "./components/primitives/LinkButton";
@@ -13,29 +12,30 @@ import FooterBase from "./components/general/FooterBase";
 import Logo from "./components/general/Logo";
 import Navigation from "./components/general/Navigation";
 import { COLORS } from "./theme";
+import LogoutButton from "./components/general/LogoutButton";
 
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
-Builder.registerComponent(
-  withChildren(withChakraProps(PageWrapper)),
-  withChakraOptions({
-    name: "PageWrapper",
-    defaultStyles: {
-      marginTop: "0",
-    },
-    inputs: [
-      {
-        name: "layout",
-        type: "string",
-        friendlyName: "Page width",
-        defaultValue: "default",
-        helperText: "Controls the wrapper width: default = with margins on the sides, full = full page width",
-        enum: ["default", "full"],
-      },
-    ],
-    image: "https://www.svgrepo.com/show/498970/page.svg",
-  })
-);
+// Builder.registerComponent(
+//   withChildren(withChakraProps(PageWrapper)),
+//   withChakraOptions({
+//     name: "PageWrapper",
+//     defaultStyles: {
+//       marginTop: "0",
+//     },
+//     inputs: [
+//       {
+//         name: "layout",
+//         type: "string",
+//         friendlyName: "Page width",
+//         defaultValue: "default",
+//         helperText: "Controls the wrapper width: default = with margins on the sides, full = full page width",
+//         enum: ["default", "full"],
+//       },
+//     ],
+//     image: "https://www.svgrepo.com/show/498970/page.svg",
+//   })
+// );
 
 Builder.registerComponent(
   withChakraProps(Text),
@@ -55,13 +55,13 @@ Builder.registerComponent(
 Builder.registerComponent(
   withChakraProps(Text),
   withChakraOptions({
-    name: "Custom Text",
+    name: "CustomText",
     defaultStyles: {
       marginTop: "0",
     },
     inputs: [
       { name: "children", friendlyName: "Text", type: "string", defaultValue: "Text" },
-      { name: "as", friendlyName: "Text Type", type: "string", defaultValue: "p", enum: ["p", "h1", "h2", "h3"] },
+      { name: "as", friendlyName: "Text Type", type: "string", defaultValue: "p", enum: ["p", "span", "h1", "h2", "h3"] },
     ],
     image: "https://www.svgrepo.com/show/532231/text-size.svg",
   })
@@ -227,5 +227,14 @@ Builder.registerComponent(withChildren(withBuilderProps(Navigation)), {
     marginLeft: "0",
     // @ts-ignore
     flexDirection: undefined,
+  },
+});
+
+Builder.registerComponent(withChildren(withBuilderProps(LogoutButton)), {
+  name: "LogoutButton",
+  noWrap: true,
+  defaultStyles: {
+    marginTop: "0",
+    marginLeft: "0",
   },
 });

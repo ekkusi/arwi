@@ -1,22 +1,35 @@
 import { Flex, BoxProps, Box } from "@chakra-ui/react";
-import Footer, { FooterProps } from "./Footer";
-import Header, { HeaderProps } from "./Header";
+import { builder } from "@builder.io/sdk";
+import { RenderBuilderContent } from "../builder";
 
 export type PageWrapperProps = BoxProps & {
-  footerProps?: FooterProps;
-  headerProps?: HeaderProps;
   outerProps?: BoxProps;
 };
 
-export default function PageWrapper({ children, footerProps, headerProps, outerProps, ...rest }: PageWrapperProps) {
-  const layoutProps = {};
+builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
+
+export default async function PageWrapper({ children, outerProps, ...rest }: PageWrapperProps) {
+  const symbolModelName = "symbol";
+  const headerContent = await builder
+    .get(symbolModelName, {
+      query: { name: "Header" },
+    })
+    .toPromise();
+
+  const footerContent = await builder
+    .get(symbolModelName, {
+      query: { name: "Footer" },
+    })
+    .toPromise();
+
   return (
     <Flex flexDirection="column" bg="light-gray" minHeight="100vh" width="100%" position="relative" {...outerProps}>
-      <Header {...headerProps} />
-      <Box as="main" flex={1} width="100%" {...layoutProps} {...rest}>
+      <RenderBuilderContent content={headerContent} model={symbolModelName} redirectToNotFound={false} />
+      <Box as="main" flex={1} width="100%" {...rest}>
         {children}
       </Box>
-      <Footer {...footerProps} />
+      <RenderBuilderContent content={footerContent} model={symbolModelName} redirectToNotFound={false} />
     </Flex>
   );
 }
+//
