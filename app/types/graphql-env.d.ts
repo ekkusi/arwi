@@ -263,7 +263,7 @@ export type introspection = {
             },
             "args": [
               {
-                "name": "searchString",
+                "name": "parentOid",
                 "type": {
                   "kind": "NON_NULL",
                   "ofType": {
@@ -1617,18 +1617,6 @@ export type introspection = {
           },
           {
             "name": "name",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "code",
             "type": {
               "kind": "NON_NULL",
               "ofType": {
