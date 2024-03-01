@@ -44,6 +44,7 @@ export default function ForgotPassword({ navigation }: NativeStackScreenProps<Au
       <CView style={{ flex: 1, width: "100%", paddingHorizontal: "lg" }}>
         <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "2xl" }}>
           <TextFormField
+            autoCapitalize="none"
             title={t("email", "Sähköposti")}
             placeholder="arwioija@gmail.com"
             validate={nameValidator}

@@ -14,11 +14,7 @@ interface PageProps {
 
 export default async function Page(props: LocalizedPage & PageProps) {
   const { lng, page } = props.params;
-  console.log("lng", lng);
-  console.log("page", page);
-
   const urlPath = page ? `/${page.join("/")}` : "/";
-  console.log("urlPath", urlPath);
 
   const pathWithoutLocale = urlPath.replace(`/${lng}`, "");
 

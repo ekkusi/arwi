@@ -11,7 +11,7 @@ const { env } = process;
 
 export const APP_ENV = env.APP_ENV || "development";
 
-export const MINIMUM_SUPPORTED_APP_VERSION = "1.1.5";
+export const MINIMUM_SUPPORTED_APP_VERSION = "1.1.6";
 
 export const MONTHLY_TOKEN_USE_LIMIT = 10000;
 

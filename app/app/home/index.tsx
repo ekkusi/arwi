@@ -26,6 +26,7 @@ const MainPage_GetCurrentUser_Query = graphql(
   `
     query MainPage_GetCurrentUser {
       getCurrentUser {
+        id
         groups {
           id
           name

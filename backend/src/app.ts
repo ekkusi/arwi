@@ -8,7 +8,7 @@ import express from "express";
 import * as Sentry from "@sentry/node";
 import { APP_ENV, HELMET_OPTIONS, SESSION_OPTIONS, getAllowedOrigins } from "./config";
 import initAuth from "./routes/auth";
-import { checkAuthHeaders, checkSessionTimeout, checkTokens } from "./middleware/auth";
+import { checkAuthHeaders, checkSessionTimeout } from "./middleware/auth";
 import graphqlServer from "./graphql/server";
 import { errorHandler, notFoundHandler } from "./middleware/errors";
 import "express-async-errors";
@@ -61,8 +61,6 @@ app.use(checkSessionTimeout);
 
 const createApp = async (contextOverrides?: Partial<CustomContext>) => {
   const { router, OIDCClient } = await initAuth();
-
-  if (OIDCClient) app.use(checkTokens(OIDCClient));
 
   app.use("/auth", router);
 

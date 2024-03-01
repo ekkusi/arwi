@@ -145,6 +145,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
         <CView style={{ flex: 1, width: "100%", paddingHorizontal: "lg" }}>
           <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "xl" }}>
             <TextFormField
+              autoCapitalize="none"
               title={t("email", "Sähköpostiosoite")}
               placeholder="arwioija@gmail.com"
               validate={nameValidator}

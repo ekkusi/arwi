@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { Client } from "openid-client";
 import { isValidApiToken, logOut } from "../utils/auth";
-import { API_TOKEN_HEADER_NAME, SESSION_ABSOLUTE_TIMEOUT_MS, SESSION_ID_HEADER_NAME, SESSION_TYPE_HEADER_NAME } from "../config";
+import { API_TOKEN_HEADER_NAME, SESSION_ABSOLUTE_TIMEOUT_MS, SESSION_TYPE_HEADER_NAME } from "../config";
 
 export const checkAuth = (): RequestHandler => {
   return async (req, res, next) => {

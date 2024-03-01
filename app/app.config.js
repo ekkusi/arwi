@@ -25,7 +25,7 @@ module.exports = {
   android: {
     package: "net.arwi.twa",
     adaptiveIcon: {
-      foregroundImage: "./assets/logo-new.png",
+      foregroundImage: "./assets/logo-new-android.png",
       backgroundColor: "#FEFCFB",
     },
   },

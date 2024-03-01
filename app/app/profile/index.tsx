@@ -23,6 +23,9 @@ import { formatDate, getFirstDayOfNextMonth } from "../../helpers/dateHelpers";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import InfoButton from "../../components/InfoButton";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
+import Layout from "@/components/Layout";
+import CKeyboardAwareScrollView from "@/components/primitives/CKeyboardAwareScrollView";
+import { useIsKeyboardVisible } from "@/hooks-and-providers/keyboard";
 
 const ProfileView_GetCurrentUserUsageData_Query = graphql(`
   query ProfileView_GetCurrentUserUsageData {
@@ -48,6 +51,9 @@ const ProfileView_ConnectMPassID_Mutation = graphql(`
         consentsAnalytics
         languagePreference
         isMPassIDConnected
+        groups {
+          id
+        }
       }
     }
   }
@@ -80,6 +86,7 @@ export default function ProfileView() {
   const { openModal } = useModal();
   const { grantCode } = useMPassIDAuth(REDIRECT_URI);
   const { monthlyTokenUseLimit, feedbackGenerationTokenCost, textFixTokenCost } = useMetadata();
+  const isKeyboardOpen = useIsKeyboardVisible();
 
   const [isLocalLoginModalOpen, setIsLocalLoginModalOpen] = useState(false);
   const [localLoginError, setLocalLoginError] = useState<string | undefined>();
@@ -236,9 +243,9 @@ export default function ProfileView() {
           <LoadingIndicator type="inline" />
         )}
       </CView>
-
       <>
         <CModal
+          placement={isKeyboardOpen ? "top" : "center"}
           isOpen={isLocalLoginModalOpen}
           onClose={() => setIsLocalLoginModalOpen(false)}
           title={t("connect-local-credentials", "Liitä tunnukset MPassID:seen")}
@@ -247,6 +254,7 @@ export default function ProfileView() {
             <CText style={{ marginBottom: "md" }}>{t("login-to-connect", "Kirjaudu sisään liittääksesi tunnuksesi MPassID:seen")}</CText>
             <TextFormField
               title={t("email", "Sähköposti")}
+              autoCapitalize="none"
               placeholder="arwioija@gmail.com"
               style={{ width: "100%" }}
               titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
