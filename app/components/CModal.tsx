@@ -13,6 +13,8 @@ import {
   ZoomOut,
 } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Constants from "expo-constants";
+import { hasNotch } from "react-native-device-info";
 import { CViewStyle } from "../theme/types";
 import CAnimatedView from "./primitives/CAnimatedView";
 import CButton from "./primitives/CButton";
@@ -98,7 +100,7 @@ export default function CModal({
     let placementStyles: CViewStyle;
     switch (placement) {
       case "top":
-        placementStyles = { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 };
+        placementStyles = { borderBottomLeftRadius: 20, borderBottomRightRadius: 20, paddingTop: hasNotch() ? Constants.statusBarHeight : "md" };
         break;
       case "bottom":
         placementStyles = { borderTopLeftRadius: 20, borderTopRightRadius: 20 };
