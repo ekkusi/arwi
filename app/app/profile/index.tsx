@@ -254,6 +254,7 @@ export default function ProfileView() {
             <CText style={{ marginBottom: "md" }}>{t("login-to-connect", "Kirjaudu sisään liittääksesi tunnuksesi MPassID:seen")}</CText>
             <TextFormField
               title={t("email", "Sähköposti")}
+              autoCapitalize="none"
               placeholder="arwioija@gmail.com"
               style={{ width: "100%" }}
               titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}
