@@ -145,7 +145,6 @@ export default function Footer({ extraContent, containerProps, isDecorationFixed
               noTranslate
               mt={{ base: 6, md: 0 }}
             >
-              <ChakraIcon icon="FiInstagram" fetchFromReactIcons width={5} height={5} mr="3px" mb="0" />
               arwi.fi
             </Link>
           </Flex>

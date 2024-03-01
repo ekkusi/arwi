@@ -13,12 +13,14 @@ export default async function PageWrapper({ children, outerProps, ...rest }: Pag
   const headerContent = await builder
     .get(symbolModelName, {
       query: { name: "Header" },
+      staleCacheSeconds: process.env.NODE_ENV === "development" ? 0 : undefined,
     })
     .toPromise();
 
   const footerContent = await builder
     .get(symbolModelName, {
       query: { name: "Footer" },
+      staleCacheSeconds: process.env.NODE_ENV === "development" ? 0 : undefined,
     })
     .toPromise();
 

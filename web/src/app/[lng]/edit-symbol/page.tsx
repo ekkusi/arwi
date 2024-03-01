@@ -6,7 +6,11 @@ builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
 export default async function Page() {
   const builderModelName = "symbol";
-  const content = await builder.get(builderModelName).toPromise();
+  const content = await builder
+    .get(builderModelName, {
+      staleCacheSeconds: process.env.NODE_ENV === "development" ? 0 : undefined,
+    })
+    .toPromise();
 
   return (
     <>
