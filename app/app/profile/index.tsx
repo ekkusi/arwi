@@ -48,6 +48,9 @@ const ProfileView_ConnectMPassID_Mutation = graphql(`
         consentsAnalytics
         languagePreference
         isMPassIDConnected
+        groups {
+          id
+        }
       }
     }
   }
