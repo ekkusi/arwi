@@ -9,6 +9,7 @@ export const withBuilderProps = <P extends Record<string, any>>(Component: React
   return (props: P & { attributes?: Record<string, any> }) => {
     const { attributes, builderBlock: _, builderState: __, ...rest } = props;
     const { key, ...attributesWithoutKey } = attributes || {};
+
     return <Component key={key} {...attributesWithoutKey} {...rest} />;
   };
 };

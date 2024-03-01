@@ -7,6 +7,7 @@ import theme from "@/theme";
 import { LocalizedPage } from "@/types/page";
 import { LanguageOption, languages } from "@/i18n/settings";
 import Providers from "@/app/[lng]/Providers";
+import Script from "next/script";
 import { getIsAuthenticated } from "../../utils/auth";
 
 const aileron = localFont({
@@ -87,6 +88,7 @@ export default async function RootLayout({ children, params: { lng } }: { childr
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#65AF53" />
         <meta name="msapplication-TileColor" content="#65af53" />
         <meta name="theme-color" content="#65af53" />
+        <Script src="https://kit.fontawesome.com/bee3d0df31.js" crossOrigin="anonymous" />
       </head>
       <body suppressHydrationWarning>
         <Providers lng={lng} theme={theme} initialIsAuthenticated={isAuthenticated}>

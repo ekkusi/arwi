@@ -13,6 +13,7 @@ import Logo from "./components/general/Logo";
 import Navigation from "./components/general/Navigation";
 import { COLORS } from "./theme";
 import LogoutButton from "./components/general/LogoutButton";
+import FontAwesomeIcon from "./components/primitives/FontAwesomeIcon";
 
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
@@ -185,6 +186,26 @@ Builder.registerComponent(
     image: "https://www.svgrepo.com/show/513832/info-circle.svg",
   })
 );
+
+Builder.registerComponent(withBuilderProps(FontAwesomeIcon), {
+  name: "FontAwesomeIcon",
+  noWrap: true,
+  defaultStyles: {
+    marginTop: "0",
+    marginLeft: "0",
+  },
+  description: "Font Awesome icon. Find the icons from: https://fontawesome.com/icons",
+  inputs: [
+    {
+      name: "icon",
+      friendlyName: "Icon",
+      type: "string",
+      defaultValue: "fa-solid fa-user",
+      helperText: 'Find the icons from: https://fontawesome.com/icons. Copy the content from the "class" attribute in the font awesome icon page',
+    },
+  ],
+  image: "https://www.svgrepo.com/show/330459/fontawesome.svg",
+});
 
 Builder.registerComponent(
   withChildren(withChakraProps(FooterBase)),

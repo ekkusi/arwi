@@ -26,6 +26,7 @@ export default async function Page(props: LocalizedPage & PageProps) {
         // Use the page path specified in the URL to fetch the content
         urlPath: pathWithoutLocale,
       },
+      staleCacheSeconds: process.env.NODE_ENV === "development" ? 0 : undefined,
     })
     // Convert the result to a promise
     .toPromise();
