@@ -16,7 +16,7 @@ RUN yarn --cwd backend build
 
 RUN yarn install --production --ignore-scripts --prefer-offline --frozen-lockfile
 
-RUN jq .version package.json -r > /root/version.txt
+RUN jq .version backend/package.json -r > /root/version.txt
 
 FROM base AS runner
 
