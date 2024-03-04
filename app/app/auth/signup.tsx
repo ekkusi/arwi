@@ -124,7 +124,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
         }}
         innerViewStyles={{ height: "95%", maxHeight: "95%", paddingHorizontal: 0 }}
       >
-        <WebView source={{ uri: TERMS_AND_CONDITIONS_URL }} startInLoadingState renderLoading={() => <LoadingIndicator />} />
+        <WebView source={{ uri: TERMS_AND_CONDITIONS_URL }} startInLoadingState renderLoading={() => <LoadingIndicator />} nestedScrollEnabled />
       </CModal>
       <CModal
         isOpen={isPrivacyPolicyOpen}
@@ -139,7 +139,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
         }}
         innerViewStyles={{ height: "95%", maxHeight: "95%", paddingHorizontal: 0 }}
       >
-        <WebView source={{ uri: PRIVACY_POLICY_URL }} startInLoadingState renderLoading={() => <LoadingIndicator />} />
+        <WebView source={{ uri: PRIVACY_POLICY_URL }} startInLoadingState renderLoading={() => <LoadingIndicator />} nestedScrollEnabled />
       </CModal>
       <LandingComponent title={t("register", "Rekisteröidy")}>
         <CView style={{ flex: 1, width: "100%", paddingHorizontal: "lg" }}>
