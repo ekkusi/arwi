@@ -1,4 +1,4 @@
-import { EvaluationCollection, Student } from "@prisma/client";
+import { CollectionType, EvaluationCollection, Student } from "@prisma/client";
 import { graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
@@ -12,6 +12,8 @@ import {
   testLogin,
 } from "../testHelpers";
 import { feedbacksLoader } from "@/graphql/dataLoaders/feedback";
+import { collectionsByModuleLoader } from "@/graphql/dataLoaders/collection";
+import { MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK } from "@/config";
 
 const query = graphql(`
   mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {
@@ -30,17 +32,27 @@ describe("generateStudentFeedback", () => {
   let group: TestGroup;
   let student: Student;
   let collection: EvaluationCollection;
+  let classParticipationCollectionType: CollectionType;
+  let examCollectionType: CollectionType;
 
   beforeAll(async () => {
     ({ graphqlRequest } = await createServer());
     teacher = await createTestUserAndLogin(graphqlRequest);
     group = await createTestGroup(teacher.id);
     [student] = group.students;
-    collection = await createTestEvaluationCollection(group.currentModuleId, group.currentModule.collectionTypes[0].id);
+    classParticipationCollectionType = group.currentModule.collectionTypes.find(
+      (collectionType) => collectionType.category === "CLASS_PARTICIPATION"
+    )!;
+    examCollectionType = group.currentModule.collectionTypes.find((collectionType) => collectionType.category === "EXAM")!;
+    collection = await createTestEvaluationCollection(group.currentModuleId, classParticipationCollectionType.id);
+    await createTestEvaluationCollection(group.currentModuleId, examCollectionType.id);
   });
 
   beforeEach(async () => {
-    await createTestEvaluation(collection.id, student.id);
+    const createEvaluationsPromises = [7, 8, 9].map((rating) => {
+      return createTestEvaluation(collection.id, student.id, { skillsRating: rating });
+    });
+    await Promise.all(createEvaluationsPromises);
   });
 
   afterEach(async () => {
@@ -86,7 +98,9 @@ describe("generateStudentFeedback", () => {
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
     expect(response.errors).toBeDefined();
-    expect(response.errors?.[0].message).toContain("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
+    expect(response.errors?.[0].message).toContain(
+      `Oppilaalla ei ole tarpeeksi arviointeja tuntityöskentelystä palautteen luomiseksi. Oppilaalla tulee olla vähintään ${MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK} arviointia.`
+    );
   });
 
   it("should update the DataLoader caches after generating feedback", async () => {
@@ -102,5 +116,23 @@ describe("generateStudentFeedback", () => {
 
     // Check that the student's latest feedback has been updated correctly
     expect(updatedFeedbacksFromLoader[0]).toEqual(expect.objectContaining({ text: "Mock response from OpenAI" }));
+  });
+
+  it("should throw an error if the non-class participation collection types have not been evaluated", async () => {
+    // Remove the exam collection
+    await prisma.evaluationCollection.deleteMany({ where: { typeId: examCollectionType.id } });
+    collectionsByModuleLoader.clear(group.currentModuleId);
+    // Execute the request
+    const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
+
+    // Assert the expected error message for invalid ID is thrown
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain(
+      "Ryhmälle ei ole tehty kaikkia arviointeja. Tarkista, että ryhmälle on tehty arvioinnit kaikille ei-tuntityöskentely arviointityypeille."
+    );
+
+    // Add the exam collection back
+    await createTestEvaluationCollection(group.currentModule.id, examCollectionType.id);
+    collectionsByModuleLoader.clear(group.currentModuleId);
   });
 });

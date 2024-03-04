@@ -1,6 +1,6 @@
 import { SessionData } from "express-session";
 import { compare } from "bcryptjs";
-import { CollectionTypeCategory, Teacher } from "@prisma/client";
+import { CollectionTypeCategory, Module, Teacher } from "@prisma/client";
 import ValidationError from "../errors/ValidationError";
 import prisma from "@/prismaClient";
 import {
@@ -20,10 +20,12 @@ import {
 import { getEnvironment, getLearningObjectiveGroupKeys, getLearningObjectives, getSubject, isPrimaryEducationLevel } from "../../utils/subjectUtils";
 import { evaluationLoader } from "../dataLoaders/evaluation";
 import { collectionTypeLoader, collectionTypesByModuleLoader } from "../dataLoaders/collectionType";
-import { collectionLoader } from "../dataLoaders/collection";
+import { collectionLoader, collectionsByModuleLoader } from "../dataLoaders/collection";
 import { moduleLoader } from "../dataLoaders/module";
 import { groupLoader } from "../dataLoaders/group";
 import { mapModuleInfo } from "./mappers";
+import { FeedbackGenerationEvaluationData, isClassParticipationEvaluationData } from "@/utils/openAI";
+import { MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK } from "@/config";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
 
@@ -394,4 +396,27 @@ export const validateUpdateGroupInput = async (input: UpdateGroupInput, groupId:
   if (totalWeight !== 100) {
     throw new ValidationError("Arviointityyppien painotusten summan on oltava 100. Tarkista syötetyt arviointityypit.");
   }
+};
+
+export const checkEvaluatedNonClassParticipationCollectionTypes = async (module: Module) => {
+  const collectionTypes = await collectionTypesByModuleLoader.load(module.id);
+  const collections = await collectionsByModuleLoader.load(module.id);
+
+  collectionTypes.forEach((type) => {
+    if (type.category !== CollectionTypeCategory.CLASS_PARTICIPATION) {
+      const collection = collections.find((it) => it.typeId === type.id);
+      if (!collection)
+        throw new ValidationError(
+          "Ryhmälle ei ole tehty kaikkia arviointeja. Tarkista, että ryhmälle on tehty arvioinnit kaikille ei-tuntityöskentely arviointityypeille."
+        );
+    }
+  });
+};
+
+export const validateStudentFeedbackEvaluations = async (evaluations: FeedbackGenerationEvaluationData[]) => {
+  const classParticipationEvaluations = evaluations.filter(isClassParticipationEvaluationData);
+  if (classParticipationEvaluations.length < MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK)
+    throw new ValidationError(
+      `Oppilaalla ei ole tarpeeksi arviointeja tuntityöskentelystä palautteen luomiseksi. Oppilaalla tulee olla vähintään ${MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK} arviointia.`
+    );
 };

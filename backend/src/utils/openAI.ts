@@ -14,6 +14,8 @@ export type DefaultEvaluationData = Partial<Pick<Evaluation, "generalRating" | "
   collectionTypeName: string;
 };
 
+export type FeedbackGenerationEvaluationData = ClassParticipationEvaluationData | DefaultEvaluationData;
+
 export function isClassParticipationEvaluationData(evaluation: any): evaluation is ClassParticipationEvaluationData {
   return !!evaluation.environmentLabel;
 }
@@ -55,11 +57,7 @@ function getTeacherLabel(subjectCode: string): string {
   }
 }
 
-export async function generateStudentSummary(
-  evaluations: (ClassParticipationEvaluationData | DefaultEvaluationData)[],
-  userId: string,
-  subjectCode: string
-) {
+export async function generateStudentSummary(evaluations: FeedbackGenerationEvaluationData[], userId: string, subjectCode: string) {
   if (openAIClient === null) throw new Error("OpenAI client not initialized, cannot generate student summary");
   let prompt = `Olen kyseisen oppilaan ${getTeacherLabel(subjectCode)}, ja minun tulee antaa hänelle yleinen palaute,
                         kehitysehdotus ja huomio vahvuusalueesta hänen suoritustensa perusteella. Päivämäärät,
@@ -129,9 +127,8 @@ export async function generateStudentSummary(
 
 export async function fixTextGrammatics(text: string, userId: string) {
   if (openAIClient === null) throw new Error("OpenAI client not initialized, cannot fix text grammatics");
-  const startMessage = `Seuraava teksti on saatu äänittämällä puhetta. Teksti sisältää palautteen/muistiinpanoja oppilaan suoriutumisesta oppitunnilla/tehtävässä. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi siten, että korjattu teksti on maksimissaan ${
-    text.length + 30
-  } kirjainta pitkä. Teksti saattaa sisältää puheentunnistuksen aiheuttamia virheitä, kuten väärin tunnistettuja sanoja. Palauta pelkkä korjattu teksti: \n\n`;
+  const startMessage = `Seuraava teksti on saatu äänittämällä puhetta. Teksti sisältää palautteen/muistiinpanoja oppilaan suoriutumisesta oppitunnilla/tehtävässä. Korjaa teksti selvälle suomen kielelle ja kieliopillisesti oikeaksi siten, että korjattu teksti on maksimissaan ${text.length + 30
+    } kirjainta pitkä. Teksti saattaa sisältää puheentunnistuksen aiheuttamia virheitä, kuten väärin tunnistettuja sanoja. Palauta pelkkä korjattu teksti: \n\n`;
   const prompt = startMessage + text;
   const tokenCount = prompt.length / CHARACTERS_PER_TOKEN;
 

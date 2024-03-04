@@ -24,6 +24,8 @@ export const MONTHLY_TOKEN_USE_WARNING_THRESHOLDS: { [key in TokenUseWarning]: n
   SECOND_WARNING: 0.9,
 };
 
+export const MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK = 3;
+
 export const ALLOWED_ORIGINS_DEV = ["http://localhost:3000", "http://localhost:3333"];
 
 export const ALLOWED_ORIGINS_STAGING = [...ALLOWED_ORIGINS_DEV, "https://staging-website.arwi.fi"];

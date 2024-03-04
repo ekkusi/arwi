@@ -20,6 +20,7 @@ import {
 } from "../utils/mappers";
 import {
   REQUEST_PASSWORD_RESET_EXPIRY_IN_MS,
+  checkEvaluatedNonClassParticipationCollectionTypes,
   validateChangeGroupLevelInput,
   validateCreateClassParticipationCollectionInput,
   validateCreateDefaultCollectionInput,
@@ -29,6 +30,7 @@ import {
   validatePasswordResetCode,
   validateRegisterInput,
   validateRequestPasswordReset,
+  validateStudentFeedbackEvaluations,
   validateUpdateClassParticipationCollectionInput,
   validateUpdateClassParticipationEvaluationInput,
   validateUpdateDefaultCollectionInput,
@@ -502,8 +504,11 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     const [evaluations, group] = await Promise.all([evaluationsPromise, groupPromise]);
     const { currentModule } = group;
+
+    await checkEvaluatedNonClassParticipationCollectionTypes(currentModule);
     const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, currentModule));
-    if (mappedEvaluations.length === 0) throw new ValidationError("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
+    await validateStudentFeedbackEvaluations(mappedEvaluations);
+
     const summary = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode); // Safe cast after authenticated check
     const feedbackCreatePromise = createFeedback({
       data: {
@@ -546,18 +551,30 @@ const resolvers: MutationResolvers<CustomContext> = {
       usageData: mapTeacherUsageData(updatedTeacher),
     };
   },
-  generateGroupFeedback: async (_, { groupId }, { dataLoaders, prisma, user }) => {
+  generateGroupFeedback: async (_, { groupId, onlyGenerateMissing }, { dataLoaders, prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
 
     const groupPromise = dataLoaders.groupLoader.load(groupId);
-    const studentsPromise = dataLoaders.studentsByGroupLoader.load(groupId);
+    // If onlyGenerateMissing is true, only get students that don't have feedback yet
+    const studentsPromise = prisma.student.findMany({
+      where: {
+        groupId,
+        feedbacks: onlyGenerateMissing
+          ? {
+              none: {}, // This returns only students that don't have feedbacks
+            }
+          : undefined,
+      },
+    });
+
     const [group, students] = await Promise.all([groupPromise, studentsPromise]);
+
+    const module = await dataLoaders.moduleLoader.load(group.currentModuleId);
+    await checkEvaluatedNonClassParticipationCollectionTypes(module);
 
     // Check if the user has enough tokens to generate feedback for all students
     const tokenCost = students.length * FEEDBACK_GENERATION_TOKEN_COST;
     await checkMonthlyTokenUse(user, tokenCost);
-
-    const module = await dataLoaders.moduleLoader.load(group.currentModuleId);
 
     const generationPromises = students.map(async (student) => {
       const evaluations = await prisma.evaluation.findMany({
@@ -583,15 +600,24 @@ const resolvers: MutationResolvers<CustomContext> = {
       });
 
       const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, module));
-      const feedback = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode);
-      const feedbackCreatePromise = createFeedback({
-        data: {
-          studentId: student.id,
-          text: feedback,
-          moduleId: module.id,
-        },
-      });
-      return feedbackCreatePromise;
+      try {
+        await validateStudentFeedbackEvaluations(mappedEvaluations);
+        const feedback = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode);
+        const feedbackCreatePromise = createFeedback({
+          data: {
+            studentId: student.id,
+            text: feedback,
+            moduleId: module.id,
+          },
+        });
+        return await feedbackCreatePromise;
+      } catch (error) {
+        // If the validation error is thrown, return null to filter out the feedback from the results
+        if (error instanceof ValidationError) {
+          return null;
+        }
+        throw error;
+      }
     });
 
     const updateTeacherPromise = updateTeacher(user!.id, {
@@ -603,8 +629,11 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     const [updatedTeacher, ...feedbacks] = await Promise.all([updateTeacherPromise, ...generationPromises]);
 
+    // Filter out null feedbacks and cast to non-null
+    const nonNullFeedbacks = feedbacks.filter((it): it is NonNullable<typeof it> => it !== null);
+
     return {
-      feedbacks,
+      feedbacks: nonNullFeedbacks,
       tokensUsed: tokenCost,
       usageData: mapTeacherUsageData(updatedTeacher),
     };

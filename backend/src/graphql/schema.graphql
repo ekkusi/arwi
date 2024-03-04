@@ -38,7 +38,7 @@ type Mutation {
   deleteCollection(collectionId: ID!): EvaluationCollection!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): GenerateStudentFeedbackResult!
-  generateGroupFeedback(groupId: ID!): GenerateGroupFeedbackResult!
+  generateGroupFeedback(groupId: ID!, onlyGenerateMissing: Boolean): GenerateGroupFeedbackResult!
   fixTextGrammatics(studentId: ID!, text: String!): FixTextGrammaticsResult!
   setTokenUseWarningSeen(warning: TokenUseWarning!): Boolean!
 }

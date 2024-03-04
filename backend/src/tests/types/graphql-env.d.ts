@@ -1031,6 +1031,14 @@ export type introspection = {
                     "ofType": null
                   }
                 }
+              },
+              {
+                "name": "onlyGenerateMissing",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
               }
             ]
           },

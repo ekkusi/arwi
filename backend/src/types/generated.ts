@@ -244,6 +244,7 @@ export type MutationGenerateStudentFeedbackArgs = {
 
 export type MutationGenerateGroupFeedbackArgs = {
   groupId: Scalars['ID'];
+  onlyGenerateMissing?: InputMaybe<Scalars['Boolean']>;
 };
 
 

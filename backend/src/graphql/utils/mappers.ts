@@ -15,7 +15,7 @@ import {
   UpdateStudentInput,
   WarningInfo,
 } from "../../types";
-import { ClassParticipationEvaluationData, DefaultEvaluationData } from "@/utils/openAI";
+import { FeedbackGenerationEvaluationData } from "@/utils/openAI";
 import { getEnvironment } from "@/utils/subjectUtils";
 import { MONTHLY_TOKEN_USE_LIMIT, MONTHLY_TOKEN_USE_WARNING_THRESHOLDS } from "@/config";
 
@@ -111,10 +111,7 @@ type EvaluationWithCollection = Evaluation & {
   evaluationCollection: Pick<EvaluationCollection, "environmentCode" | "date"> & { type: CollectionTypeData };
 };
 
-export const mapEvaluationFeedbackData = (
-  evaluation: EvaluationWithCollection,
-  module: Module
-): ClassParticipationEvaluationData | DefaultEvaluationData => {
+export const mapEvaluationFeedbackData = (evaluation: EvaluationWithCollection, module: Module): FeedbackGenerationEvaluationData => {
   const { environmentCode } = evaluation.evaluationCollection;
   return environmentCode
     ? {
