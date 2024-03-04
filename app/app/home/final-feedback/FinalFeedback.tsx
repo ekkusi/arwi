@@ -15,46 +15,50 @@ import CFlatList from "../../../components/primitives/CFlatList";
 import Layout from "../../../components/Layout";
 import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 import { COLORS } from "../../../theme";
-import FinalFeedbackItem from "./FinalFeedbackItem";
+import FinalFeedbackItem, { FinalFeedbackItem_Student_Fragment } from "./FinalFeedbackItem";
 
-const FinalFeedback_GetGroup_Query = graphql(`
-  query FinalFeedback_GetGroup($groupId: ID!) {
-    getGroup(id: $groupId) {
-      id
-      name
-      archived
-      students {
+const FinalFeedback_GetGroup_Query = graphql(
+  `
+    query FinalFeedback_GetGroup($groupId: ID!) {
+      getGroup(id: $groupId) {
         id
-        latestFeedback {
+        name
+        archived
+        students {
           id
+          latestFeedback {
+            id
+          }
+          currentModuleEvaluations {
+            id
+            notes
+          }
+          ...FinalFeedbackItem_Student
         }
-        currentModuleEvaluations {
+        currentModule {
           id
-          notes
-        }
-      }
-      currentModule {
-        id
-        evaluationCollections {
-          id
-          type {
+          evaluationCollections {
+            id
+            type {
+              id
+              category
+            }
+          }
+          collectionTypes {
             id
             category
-          }
-        }
-        collectionTypes {
-          id
-          category
-          name
-          weight
-          defaultTypeCollection {
-            id
+            name
+            weight
+            defaultTypeCollection {
+              id
+            }
           }
         }
       }
     }
-  }
-`);
+  `,
+  [FinalFeedbackItem_Student_Fragment]
+);
 
 export default function FinalFeedback({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback-collection">) {
   const { groupId } = route.params;
@@ -214,7 +218,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         <CFlatList
           data={studentsWithFeedback}
           renderItem={({ item }) => {
-            return <FinalFeedbackItem studentId={item.id} />;
+            return <FinalFeedbackItem student={item} />;
           }}
         />
       )}

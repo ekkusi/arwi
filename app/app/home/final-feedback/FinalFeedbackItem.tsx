@@ -1,56 +1,51 @@
 import { useQuery } from "@apollo/client";
-import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
+import { isClassParticipationEvaluation } from "arwi-backend/src/types/typeGuards";
 import { useTranslation } from "react-i18next";
 import CView from "../../../components/primitives/CView";
-import { graphql } from "@/graphql";
+import { FragmentOf, graphql, readFragment } from "@/graphql";
 import CText from "../../../components/primitives/CText";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import CircledNumber from "../../../components/CircledNumber";
 
-const FinalFeedbackItem_GetStudent_Query = graphql(`
-  query FinalFeedbackItem_GetStudent($studentId: ID!) {
-    getStudent(id: $studentId) {
+export const FinalFeedbackItem_Student_Fragment = graphql(`
+  fragment FinalFeedbackItem_Student on Student {
+    id
+    name
+    latestFeedback {
       id
-      name
-      latestFeedback {
-        id
-        text
-      }
-      currentModuleEvaluations {
-        id
-        notes
-        wasPresent
-        __typename
-        ... on ClassParticipationEvaluation {
-          behaviourRating
-          skillsRating
-          collection {
-            environment {
-              code
-              label {
-                fi
-              }
+      text
+    }
+    currentModuleEvaluations {
+      id
+      notes
+      wasPresent
+      __typename
+      ... on ClassParticipationEvaluation {
+        behaviourRating
+        skillsRating
+        collection {
+          environment {
+            code
+            label {
+              fi
             }
           }
         }
-        ... on DefaultEvaluation {
-          rating
-        }
-        collection {
-          id
-          date
-        }
+      }
+      ... on DefaultEvaluation {
+        rating
+      }
+      collection {
+        id
+        date
       }
     }
   }
 `);
 
-export default function FinalFeedbackItem({ studentId }: { studentId: string }) {
-  const { data, loading } = useQuery(FinalFeedbackItem_GetStudent_Query, { variables: { studentId } });
-  const { t } = useTranslation();
-  if (!data || loading) return <LoadingIndicator />;
-  const student = data.getStudent;
+export default function FinalFeedbackItem({ student: studentFragment }: { student: FragmentOf<typeof FinalFeedbackItem_Student_Fragment> }) {
+  const student = readFragment(FinalFeedbackItem_Student_Fragment, studentFragment);
   const evaluations = student.currentModuleEvaluations;
 
   const classParticipationEvaluations =
