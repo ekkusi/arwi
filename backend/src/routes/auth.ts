@@ -59,7 +59,7 @@ export const grantToken = async (client: OpenIDClient, code: string) => {
     const isAuthorized = await checkIsAuthorized(organizationID);
     if (!isAuthorized)
       throw new UnauthorizedError(
-        "Koulullasi tai kunnallasi ei ole vielä sopimusta Arwin kanssa MPassID-palvelun käytöstä, joten sen kautta kirjautuminen ei valitettavasti vielä ole tunnuksillasi mahdollista. Mikäli haluaisit MPassID-kirjautumisen käyttöön, voit kehottaa koulusi tai kuntasi vastaavan olemaan yhteydessä meihin info@arwi.fi@arwi.fi. \n\nSillä välin voit luoda omat tunnukset ja käyttää Arwia normaalisesti. Voit myöhemmin linkittää tilisi ja tietosi MPassID:n tunnuksiin, kun MPassID-kirjautuminen on saatavilla koulullesi."
+        "Koulullasi tai kunnallasi ei ole vielä sopimusta Arwin kanssa MPassID-palvelun käytöstä, joten sen kautta kirjautuminen ei valitettavasti vielä ole tunnuksillasi mahdollista. Mikäli haluaisit MPassID-kirjautumisen käyttöön, voit kehottaa koulusi tai kuntasi vastaavan olemaan yhteydessä meihin info@arwi.fi. \n\nSillä välin voit luoda omat tunnukset ja käyttää Arwia normaalisesti. Voit myöhemmin linkittää tilisi ja tietosi MPassID:n tunnuksiin, kun MPassID-kirjautuminen on saatavilla koulullesi."
       );
   }
 
