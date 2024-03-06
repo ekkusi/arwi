@@ -217,8 +217,14 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
       ) : (
         <CFlatList
           data={studentsWithFeedback}
-          renderItem={({ item }) => {
-            return <FinalFeedbackItem student={item} />;
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => {
+            return (
+              <FinalFeedbackItem
+                student={item}
+                style={{ borderBottomWidth: index !== studentsWithFeedback.length - 1 ? 1 : 0, borderBottomColor: "gray", paddingVertical: "3xl" }}
+              />
+            );
           }}
         />
       )}

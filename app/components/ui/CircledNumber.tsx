@@ -1,6 +1,17 @@
-import { CColor, CFontSize } from "../../theme/types";
+import { CColor, CFontSize, CTextStyle } from "../../theme/types";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
+
+export type CircledNumberProps = {
+  size?: number;
+  value?: number;
+  valueString?: string;
+  decimals?: number;
+  borderWidth?: number;
+  borderColor?: CColor;
+  title?: string;
+  titleStyle?: CTextStyle;
+};
 
 export default function CircledNumber({
   size = 70,
@@ -10,15 +21,8 @@ export default function CircledNumber({
   borderWidth = 1,
   borderColor = "lightgray",
   title,
-}: {
-  size?: number;
-  value?: number;
-  valueString?: string;
-  decimals?: number;
-  borderWidth?: number;
-  borderColor?: CColor;
-  title?: string;
-}) {
+  titleStyle,
+}: CircledNumberProps) {
   let fontSize: CFontSize = "title";
   if (size < 45) fontSize = "sm";
   else if (size < 55) fontSize = "md";
@@ -32,7 +36,7 @@ export default function CircledNumber({
   }
   return (
     <CView style={{ justifyContent: "center", alignItems: "center", gap: 5 }}>
-      {title && <CText style={{ fontSize: "xs", fontWeight: "500", width: 100, textAlign: "center" }}>{title}</CText>}
+      {title && <CText style={{ fontSize: "xs", fontWeight: "500", textAlign: "center", ...titleStyle }}>{title}</CText>}
       <CView
         style={{
           width: size || 70,

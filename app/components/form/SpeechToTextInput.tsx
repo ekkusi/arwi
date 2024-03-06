@@ -11,7 +11,7 @@ import { COLORS } from "../../theme";
 import { CViewStyle } from "../../theme/types";
 import CTouchableWithoutFeedback from "../primitives/CTouchableWithoutFeedback";
 
-type SpeechToTextInputProps = Omit<CTextInputProps, "onChange"> & {
+export type SpeechToTextInputProps = Omit<CTextInputProps, "onChange"> & {
   initialText?: string;
   onChange?: (text: string, speechObtained: boolean) => void;
   inputRef?: React.RefObject<TextInput>;

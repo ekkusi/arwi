@@ -153,7 +153,11 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                 <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("absence", "poissaoloa", { count: absencesAmount })}</CText>
               </CText>
             </CView>
-            <CircledNumber value={(skillsAverage + behaviourAverage) / 2} title={t("class-evaluation-mean", "Tuntityöskentelyn keskiarvo")} />
+            <CircledNumber
+              value={(skillsAverage + behaviourAverage) / 2}
+              title={t("class-evaluation-mean", "Tuntityöskentelyn keskiarvo")}
+              titleStyle={{ width: 105 }}
+            />
           </CView>
           {otherCollectionTypes.length > 0 && (
             <CView style={{ width: "100%", gap: 20 }}>

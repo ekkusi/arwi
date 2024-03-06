@@ -14,7 +14,7 @@ import RatingSelector from "../form/RatingSelector";
 import CButton from "../primitives/CButton";
 import { formatDate } from "../../helpers/dateHelpers";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
-import CustomTextInputView from "../form/CustomTextInputView";
+import CustomTextInputView from "../form/ModalTextInput";
 import { graphql } from "@/graphql";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
 import SpeechToTextInput, { SpeechToTextInputHandle } from "../form/SpeechToTextInput";
@@ -150,28 +150,28 @@ function ClassParticipationEvaluationCard({
   const { openModal, closeModal } = useModal();
   const { openToast } = useToast();
 
-  const openTextInputModal = () => {
-    speechRef.current?.removeVoiceListeners().then(() => {
-      openModal({
-        placement: "bottom",
-        innerViewStyles: { flex: 1, maxHeight: "100%", paddingTop: Platform.OS === "ios" ? 60 : 50 },
-        children: (
-          <CustomTextInputView
-            initialText={notes}
-            onSave={(text, speechObtained) => {
-              onNotesChanged(text, true);
-              closeModal();
-              if (speechObtained) setNewSpeechObtained(true);
-            }}
-            isActive={isActive}
-            onClose={() => {
-              if (isActive) speechRef.current?.refreshVoiceListeners();
-            }}
-          />
-        ),
-      });
-    });
-  };
+  // const openTextInputModal = () => {
+  //   speechRef.current?.removeVoiceListeners().then(() => {
+  //     openModal({
+  //       placement: "bottom",
+  //       innerViewStyles: { flex: 1, maxHeight: "100%", paddingTop: Platform.OS === "ios" ? 60 : 50 },
+  //       children: (
+  //         <CustomTextInputView
+  //           initialText={notes}
+  //           onSave={(text, speechObtained) => {
+  //             onNotesChanged(text, true);
+  //             closeModal();
+  //             if (speechObtained) setNewSpeechObtained(true);
+  //           }}
+  //           isActive={isActive}
+  //           onClose={() => {
+  //             if (isActive) speechRef.current?.refreshVoiceListeners();
+  //           }}
+  //         />
+  //       ),
+  //     });
+  //   });
+  // };
 
   const fixText = async () => {
     try {
@@ -268,7 +268,7 @@ function ClassParticipationEvaluationCard({
             isActive={isActive}
             isDisabled={isFixingText}
             placeholder={t("update-evaluation-notes-placeholder", "Sanallinen palaute oppilaan toiminnasta tunnilla...")}
-            onPress={() => openTextInputModal()}
+            // onPress={() => openTextInputModal()}
             onChange={(newText, speechObtained) => {
               onNotesChanged(newText);
               if (speechObtained) setNewSpeechObtained(true);
