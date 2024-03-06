@@ -125,6 +125,7 @@ const theme = extendTheme(
         },
         h2: {
           fontSize: { base: "3xl", md: "4xl" },
+          fontWeight: "thin",
           mb: 4,
           mt: 6,
         },
@@ -141,6 +142,12 @@ const theme = extendTheme(
           },
         },
         "p, ol, ul": {
+          mb: 3,
+        },
+        "ol, ul": {
+          ml: 5,
+        },
+        "body .builder-text p:first-of-type": {
           mb: 3,
         },
         img: {
