@@ -1,8 +1,8 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { Animated } from "react-native";
-import { CViewStyle } from "../theme/types";
-import { createViewStyles } from "../theme/utils";
-import CPressable from "./primitives/CPressable";
+import { CViewStyle } from "../../theme/types";
+import { createViewStyles } from "../../theme/utils";
+import CPressable from "../primitives/CPressable";
 
 type FlippingCardProps = {
   height: number;

@@ -14,17 +14,17 @@ import CImage from "../../components/primitives/CImage";
 import { SingleSelect } from "../../components/form/Select";
 import { useMPassIDAuth } from "../../hooks-and-providers/mPassID";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
-import CModal from "../../components/CModal";
+import CModal from "../../components/modals/CModal";
 import TextFormField from "../../components/form/TextFormField";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
 import { useMetadata } from "../../hooks-and-providers/MetadataProvider";
 import { formatDate, getFirstDayOfNextMonth } from "../../helpers/dateHelpers";
-import LoadingIndicator from "../../components/LoadingIndicator";
-import InfoButton from "../../components/InfoButton";
+import LoadingIndicator from "../../components/ui/LoadingIndicator";
+import InfoButton from "../../components/ui/InfoButton";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
-import Layout from "@/components/Layout";
-import CKeyboardAwareScrollView from "@/components/primitives/CKeyboardAwareScrollView";
+import Layout from "@/components/layout/Layout";
+import CKeyboardAwareScrollView from "@/components/layout/CKeyboardAwareScrollView";
 import { useIsKeyboardVisible } from "@/hooks-and-providers/keyboard";
 
 const ProfileView_GetCurrentUserUsageData_Query = graphql(`

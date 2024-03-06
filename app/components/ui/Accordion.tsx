@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Layout } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS, SPACING } from "../theme";
+import { COLORS, SPACING } from "../../theme";
 import Card from "./Card";
-import CAnimatedView from "./primitives/CAnimatedView";
-import CPressable from "./primitives/CPressable";
-import CText from "./primitives/CText";
-import CTouchableOpacity from "./primitives/CTouchableOpacity";
-import CView, { CViewProps } from "./primitives/CView";
+import CAnimatedView from "../primitives/CAnimatedView";
+import CPressable from "../primitives/CPressable";
+import CText from "../primitives/CText";
+import CTouchableOpacity from "../primitives/CTouchableOpacity";
+import CView, { CViewProps } from "../primitives/CView";
 
 type AccordionData = {
   key: string;

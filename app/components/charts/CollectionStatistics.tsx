@@ -4,7 +4,7 @@ import { MinimalModuleInfo } from "arwi-backend/src/types";
 import { FragmentOf, readFragment, graphql, ResultOf } from "@/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
 import { analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
-import CircledNumber from "../CircledNumber";
+import CircledNumber from "../ui/CircledNumber";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
 import { LineChartBaseProps } from "./LineChartBase";

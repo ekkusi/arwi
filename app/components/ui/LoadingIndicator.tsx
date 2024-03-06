@@ -1,10 +1,10 @@
 import { ActivityIndicator } from "react-native";
 import { useMemo } from "react";
-import { COLORS } from "../theme";
-import CView, { CViewProps } from "./primitives/CView";
-import { hexToRgbA } from "../helpers/color";
-import { getColor } from "../theme/utils";
-import { CViewStyle } from "../theme/types";
+import { COLORS } from "../../theme";
+import CView, { CViewProps } from "../primitives/CView";
+import { hexToRgbA } from "../../helpers/color";
+import { getColor } from "../../theme/utils";
+import { CViewStyle } from "../../theme/types";
 
 type LoadingIndicatorProps = CViewProps & {
   type?: "inline" | "cover" | "overlay";

@@ -1,4 +1,4 @@
-import CView, { CViewProps } from "./primitives/CView";
+import CView, { CViewProps } from "../primitives/CView";
 
 export type LazyLoadViewProps = CViewProps & {
   currentIndex: number;

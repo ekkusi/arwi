@@ -3,10 +3,10 @@ import { ModuleInfo } from "arwi-backend/src/types";
 import { getModuleInfos, isPrimaryEducationLevel } from "arwi-backend/src/utils/subjectUtils";
 import { useState } from "react";
 import SelectFormField from "../../../../../components/form/SelectFormField";
-import LoadingIndicator from "../../../../../components/LoadingIndicator";
+import LoadingIndicator from "../../../../../components/ui/LoadingIndicator";
 import CText from "../../../../../components/primitives/CText";
 import CView from "../../../../../components/primitives/CView";
-import SaveAndCancelButtons from "../../../../../components/SaveAndCancelButtons";
+import SaveAndCancelButtons from "../../../../../components/ui/SaveAndCancelButtons";
 import { graphql } from "@/graphql";
 
 const ChangeModule_GetGroup_Query = graphql(`

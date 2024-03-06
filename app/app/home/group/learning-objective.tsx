@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
-import Layout from "../../../components/Layout";
+import Layout from "../../../components/layout/Layout";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import { HomeStackParams } from "../types";

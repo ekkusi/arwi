@@ -16,7 +16,7 @@ import { COLORS } from "../../../../theme";
 import { useGroupCreationContext } from "./GroupCreationProvider";
 import { GroupCreationStackParams } from "./types";
 import GroupCreationBody, { SCROLL_TO_INPUT_EXTRA_HEIGHT } from "./_body";
-import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
+import CKeyboardAwareScrollView from "../../../../components/layout/CKeyboardAwareScrollView";
 
 const CreateGroupPage_CreateGroup_Mutation = graphql(`
   mutation CreateGroupPage_CreateGroup($input: CreateGroupInput!) {

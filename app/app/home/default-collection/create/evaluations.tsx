@@ -8,7 +8,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import PagerView, { PagerViewOnPageSelectedEvent } from "react-native-pager-view";
 import CButton from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
-import { CARD_HEIGHT, CreateDefaultEvaluationCardMemoed, DefaultEvaluation } from "../../../../components/DefaultEvaluationCard";
+import { CARD_HEIGHT, CreateDefaultEvaluationCardMemoed, DefaultEvaluation } from "../../../../components/evaluations/DefaultEvaluationCard";
 import { graphql } from "@/graphql";
 import { formatDate } from "../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../helpers/errorUtils";
@@ -18,7 +18,7 @@ import { COLORS } from "../../../../theme";
 import { useDefaultCollectionCreationContext } from "./DefaultCollectionCreationProvider";
 import { DefaultCollectionCreationStackParams } from "./types";
 import DefaultCollectionCreationLayout from "./_layout";
-import LazyLoadView from "../../../../components/LazyLoadView";
+import LazyLoadView from "../../../../components/common/LazyLoadView";
 import {
   CollectionModuleCacheUpdate_Fragment,
   DefaultCollectionUpdate_Info_Fragment,

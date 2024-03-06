@@ -2,14 +2,14 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { FragmentOf, graphql, readFragment } from "@/graphql";
-import { COLORS } from "../theme";
-import Card, { CardProps } from "./Card";
-import { timeSince } from "../helpers/dateHelpers";
-import CText from "./primitives/CText";
-import CView from "./primitives/CView";
-import CTouchableOpacity from "./primitives/CTouchableOpacity";
-import CImage from "./primitives/CImage";
-import { subjectToIcon } from "../helpers/dataMappers";
+import { COLORS } from "../../theme";
+import Card, { CardProps } from "../ui/Card";
+import { timeSince } from "../../helpers/dateHelpers";
+import CText from "../primitives/CText";
+import CView from "../primitives/CView";
+import CTouchableOpacity from "../primitives/CTouchableOpacity";
+import CImage from "../primitives/CImage";
+import { subjectToIcon } from "../../helpers/dataMappers";
 
 export const GroupListItem_Fragment = graphql(`
   fragment GroupListItem on Group {

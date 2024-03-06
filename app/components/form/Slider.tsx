@@ -4,7 +4,7 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, { useSharedValue } from "react-native-reanimated";
 import type { ComponentType } from "react";
 import type { StyleProp, ViewProps, ViewStyle } from "react-native";
-import { COLORS } from "../theme";
+import { COLORS } from "../../theme";
 
 export type SliderStyleProps = {
   thumbAnimatedStyle: StyleProp<Animated.AnimateStyle<StyleProp<ViewStyle>>>;

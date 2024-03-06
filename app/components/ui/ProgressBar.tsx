@@ -1,5 +1,5 @@
-import CText from "./primitives/CText";
-import CView, { CViewProps } from "./primitives/CView";
+import CText from "../primitives/CText";
+import CView, { CViewProps } from "../primitives/CView";
 
 type ProgressBarProps = CViewProps & {
   color: string;

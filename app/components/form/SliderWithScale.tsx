@@ -1,10 +1,10 @@
 import { Dimensions } from "react-native";
 import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated";
 import { ReText } from "react-native-redash";
-import { parseFloatToGradeString } from "../helpers/evaluationUtils";
-import CView from "./primitives/CView";
+import { parseFloatToGradeString } from "../../helpers/evaluationUtils";
+import CView from "../primitives/CView";
 import { Slider } from "./Slider";
-import CText from "./primitives/CText";
+import CText from "../primitives/CText";
 
 const windowWidth = Dimensions.get("window").width;
 const DEFAULT_SLIDER_HORIZONTAL_MARGIN = 30;

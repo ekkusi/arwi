@@ -1,14 +1,14 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { CollectionTypeCategory } from "arwi-backend/src/types";
 import { useTranslation } from "react-i18next";
-import Card from "../../../../components/Card";
+import Card from "../../../../components/ui/Card";
 import CTouchableOpacity from "../../../../components/primitives/CTouchableOpacity";
 import { HomeStackParams } from "../../types";
 import CView from "../../../../components/primitives/CView";
 import CText from "../../../../components/primitives/CText";
 import { getCollectionTypeTranslation } from "../../../../helpers/translation";
 import CButton from "../../../../components/primitives/CButton";
-import CircledNumber from "../../../../components/CircledNumber";
+import CircledNumber from "../../../../components/ui/CircledNumber";
 
 type EvaluationTargetCardProps = {
   navigation: NativeStackScreenProps<HomeStackParams, "group" | "final-feedback">["navigation"];

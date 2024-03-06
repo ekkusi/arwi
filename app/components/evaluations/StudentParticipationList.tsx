@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Platform, Switch } from "react-native";
-import { COLORS } from "../theme";
-import CFlatList from "./primitives/CFlatList";
-import CText from "./primitives/CText";
-import CView, { CViewProps } from "./primitives/CView";
+import { COLORS } from "../../theme";
+import CFlatList from "../layout/CFlatList";
+import CText from "../primitives/CText";
+import CView, { CViewProps } from "../primitives/CView";
 
 type StudentParticipationListProps<T extends StudentParticipation> = Omit<CViewProps, "onChange"> & {
   initialParticipations: T[];

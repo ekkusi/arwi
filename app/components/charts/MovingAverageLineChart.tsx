@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import LineChartBase, { DataType, LineChartBaseProps } from "./LineChartBase";
 import CView, { CViewProps } from "../primitives/CView";
-import InfoButton from "../InfoButton";
+import InfoButton from "../ui/InfoButton";
 import CText from "../primitives/CText";
 
 export type EvaluationDataType = DataType & {

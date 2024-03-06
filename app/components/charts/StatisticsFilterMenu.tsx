@@ -7,7 +7,7 @@ import { COLORS } from "../../theme";
 import CButton from "../primitives/CButton";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
-import CModal from "../CModal";
+import CModal from "../modals/CModal";
 
 export default function StatisticsFilterMenu({
   subjectCode,

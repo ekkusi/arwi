@@ -1,13 +1,13 @@
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import { formatDate } from "../helpers/dateHelpers";
-import { Accordion, AccordionProps } from "./Accordion";
-import CButton from "./primitives/CButton";
-import CText from "./primitives/CText";
-import CView from "./primitives/CView";
-import { COLORS, SPACING } from "../theme";
-import CircledNumber from "./CircledNumber";
+import { formatDate } from "../../helpers/dateHelpers";
+import { Accordion, AccordionProps } from "../ui/Accordion";
+import CButton from "../primitives/CButton";
+import CText from "../primitives/CText";
+import CView from "../primitives/CView";
+import { COLORS, SPACING } from "../../theme";
+import CircledNumber from "../ui/CircledNumber";
 import { FragmentOf, graphql, readFragment } from "@/graphql";
 
 export const EvaluationsAccordion_Evaluation_Fragment = graphql(/* GraphQL */ `

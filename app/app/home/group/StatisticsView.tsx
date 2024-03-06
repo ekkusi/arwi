@@ -15,7 +15,7 @@ import { COLORS } from "../../../theme";
 import { GroupOverviewProps } from "./types";
 import { getEnvironmentTranslation } from "../../../helpers/translation";
 import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
-import LoadingIndicator from "../../../components/LoadingIndicator";
+import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import EvaluationTargetCard from "./components/EvaluationTargetCard";
 
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewProps) {

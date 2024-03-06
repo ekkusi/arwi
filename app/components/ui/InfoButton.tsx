@@ -1,6 +1,6 @@
 import Icon from "react-native-vector-icons/Ionicons";
-import { COLORS } from "../theme";
-import CTouchableOpacity from "./primitives/CTouchableOpacity";
+import { COLORS } from "../../theme";
+import CTouchableOpacity from "../primitives/CTouchableOpacity";
 
 export default function InfoButton({ size = 36, onPress }: { size?: number; onPress: () => void }) {
   return (

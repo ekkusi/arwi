@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { CollectionTypeMinimal } from "arwi-backend/src/types";
-import { DefaultEvaluation } from "../../../../components/DefaultEvaluationCard";
+import { DefaultEvaluation } from "../../../../components/evaluations/DefaultEvaluationCard";
 import { graphql, ResultOf } from "@/graphql";
 import { useThrowCatchableError } from "../../../../hooks-and-providers/error";
 

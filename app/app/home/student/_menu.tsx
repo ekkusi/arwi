@@ -9,8 +9,8 @@ import CText from "../../../components/primitives/CText";
 import { useModal } from "../../../hooks-and-providers/ModalProvider";
 import ChangeStudentName from "../group/components/menu/ChangeStudentName";
 import { getErrorMessage } from "../../../helpers/errorUtils";
-import SaveAndCancelButtons from "../../../components/SaveAndCancelButtons";
-import ViewMenuBase from "@/components/ViewMenuBase";
+import SaveAndCancelButtons from "../../../components/ui/SaveAndCancelButtons";
+import ViewMenuBase from "@/components/common/ViewMenuBase";
 
 const StudentMenu_DeleteStudent_Mutation = graphql(`
   mutation StudentMenu_DeleteStudent($id: ID!) {

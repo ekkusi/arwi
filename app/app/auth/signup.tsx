@@ -17,8 +17,8 @@ import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
 import { SPACING } from "../../theme";
-import CModal from "../../components/CModal";
-import LoadingIndicator from "../../components/LoadingIndicator";
+import CModal from "../../components/modals/CModal";
+import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
 const RegisterPage_Register_Mutation = graphql(`

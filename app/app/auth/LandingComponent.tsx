@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Constants from "expo-constants";
 import { useKeyboardListener } from "../../hooks-and-providers/keyboard";
 import { COLORS } from "../../theme";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout/Layout";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
 

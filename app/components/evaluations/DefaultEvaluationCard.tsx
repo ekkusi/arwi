@@ -7,18 +7,18 @@ import Animated from "react-native-reanimated";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "react-native-gesture-handler";
 import Constants from "expo-constants";
-import CText from "./primitives/CText";
-import CView from "./primitives/CView";
-import { COLORS } from "../theme";
-import CButton from "./primitives/CButton";
-import { formatDate } from "../helpers/dateHelpers";
-import { useModal } from "../hooks-and-providers/ModalProvider";
-import CustomTextInputView from "./CustomTextInputView";
+import CText from "../primitives/CText";
+import CView from "../primitives/CView";
+import { COLORS } from "../../theme";
+import CButton from "../primitives/CButton";
+import { formatDate } from "../../helpers/dateHelpers";
+import { useModal } from "../../hooks-and-providers/ModalProvider";
+import CustomTextInputView from "../form/CustomTextInputView";
 import { graphql } from "@/graphql";
-import { useToast } from "../hooks-and-providers/ToastProvider";
-import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";
-import SliderWithScale from "./SliderWithScale";
-import { useToggleTokenUseWarning } from "../hooks-and-providers/monthlyTokenUseWarning";
+import { useToast } from "../../hooks-and-providers/ToastProvider";
+import SpeechToTextInput, { SpeechToTextInputHandle } from "../form/SpeechToTextInput";
+import SliderWithScale from "../form/SliderWithScale";
+import { useToggleTokenUseWarning } from "../../hooks-and-providers/monthlyTokenUseWarning";
 
 export type DefaultEvaluation = Omit<CreateDefaultEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {

@@ -13,10 +13,10 @@ import LandingComponent from "./LandingComponent";
 import { AuthStackParams } from "./types";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import { useMPassIDAuth } from "../../hooks-and-providers/mPassID";
-import LoadingIndicator from "../../components/LoadingIndicator";
+import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
 import { getErrorMessage } from "../../helpers/errorUtils";
-import CModal from "../../components/CModal";
+import CModal from "../../components/modals/CModal";
 
 const BACKEND_API_URL = process.env.EXPO_PUBLIC_BACKEND_API_URL;
 if (!BACKEND_API_URL) throw new Error("Backend API URL not defined, define EXPO_PUBLIC_BACKEND_API_URL in .env");

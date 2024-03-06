@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import { Slider } from "@miblanchard/react-native-slider";
 import { DefaultEvaluation, CollectionType, DefaultCollection } from "arwi-backend/src/types";
 import { Alert } from "react-native";
-import { COLORS } from "../theme";
-import CButton from "./primitives/CButton";
-import CText from "./primitives/CText";
-import CView, { CViewProps } from "./primitives/CView";
-import CircledNumber from "./CircledNumber";
-import CModal from "./CModal";
-import InfoButton from "./InfoButton";
+import { COLORS } from "../../../../theme";
+import CButton from "../../../../components/primitives/CButton";
+import CText from "../../../../components/primitives/CText";
+import CView, { CViewProps } from "../../../../components/primitives/CView";
+import CircledNumber from "../../../../components/ui/CircledNumber";
+import CModal from "../../../../components/modals/CModal";
+import InfoButton from "../../../../components/ui/InfoButton";
 
 type PartialCollectionType = Pick<CollectionType, "category" | "weight" | "name" | "id"> & {
   defaultTypeCollection?: Pick<DefaultCollection, "id"> | null;

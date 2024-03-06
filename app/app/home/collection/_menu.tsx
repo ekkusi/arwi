@@ -7,9 +7,9 @@ import { graphql } from "@/graphql";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
 import { useModal } from "../../../hooks-and-providers/ModalProvider";
-import SaveAndCancelButtons from "../../../components/SaveAndCancelButtons";
+import SaveAndCancelButtons from "../../../components/ui/SaveAndCancelButtons";
 import { getErrorMessage } from "../../../helpers/errorUtils";
-import ViewMenuBase from "@/components/ViewMenuBase";
+import ViewMenuBase from "@/components/common/ViewMenuBase";
 
 const CollectionMenu_DeleteCollection_Mutation = graphql(`
   mutation CollectionMenu_DeleteCollection($id: ID!) {

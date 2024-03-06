@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import TextFormField from "./form/TextFormField";
-import CView from "./primitives/CView";
-import SaveAndCancelButtons from "./SaveAndCancelButtons";
+import TextFormField from "../form/TextFormField";
+import CView from "../primitives/CView";
+import SaveAndCancelButtons from "../ui/SaveAndCancelButtons";
 
 type ChangeNameViewProps = {
   name: string;

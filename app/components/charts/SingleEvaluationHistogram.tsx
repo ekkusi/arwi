@@ -8,8 +8,8 @@ import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
 import CText from "../primitives/CText";
 import CButton from "../primitives/CButton";
 import { COLORS } from "../../theme";
-import CModal from "../CModal";
-import { EvaluationsAccordion_Evaluation_Fragment } from "../EvaluationsAccordion";
+import CModal from "../modals/CModal";
+import { EvaluationsAccordion_Evaluation_Fragment } from "../evaluations/EvaluationsAccordion";
 
 type FilterValue = "all" | "skills" | "behaviour";
 

@@ -20,7 +20,7 @@ import HomeStack from "./app/home/_stack";
 import { isValidLanguage, STORAGE_LANG_KEY } from "./i18n";
 import PopupProvider from "./hooks-and-providers/ToastProvider";
 import { isVersionSmaller } from "./helpers/versionUtils";
-import NewUpdateAvailableModal from "./components/NewUpdateAvailableModal";
+import NewUpdateAvailableModal from "./components/modals/NewUpdateAvailableModal";
 import { useThrowCatchableError } from "./hooks-and-providers/error";
 import GenerateFeedbacksProvider from "./hooks-and-providers/GenerateFeedbacksProvider";
 import MetadataProvider from "./hooks-and-providers/MetadataProvider";

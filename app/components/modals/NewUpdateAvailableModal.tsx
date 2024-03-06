@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Linking, Platform } from "react-native";
 import CModal from "./CModal";
-import CButton from "./primitives/CButton";
-import CText from "./primitives/CText";
+import CButton from "../primitives/CButton";
+import CText from "../primitives/CText";
 
 type NewUpdateAvailableModalProps = {
   isOpen: boolean;

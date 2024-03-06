@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "@apollo/client";
 import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import { HomeStackParams } from "../types";
-import LoadingIndicator from "../../../components/LoadingIndicator";
+import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import { graphql } from "@/graphql";
 import CollectionGeneralInfoForm, { GeneralInfoData } from "./_general_info_form";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../helpers/errorUtils";
-import Layout from "../../../components/Layout";
+import Layout from "../../../components/layout/Layout";
 import CText from "../../../components/primitives/CText";
 import {
   ClassParticipationCollectionUpdate_GeneralInfoFull_Fragment,

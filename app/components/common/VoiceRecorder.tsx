@@ -4,8 +4,8 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTim
 import { Alert, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CView from "./primitives/CView";
-import { COLORS } from "../theme";
+import CView from "../primitives/CView";
+import { COLORS } from "../../theme";
 
 type VoiceRecorderProps = {
   currentText: string;

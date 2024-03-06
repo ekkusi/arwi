@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import CButton, { CButtonProps } from "./primitives/CButton";
-import CView, { CViewProps } from "./primitives/CView";
+import CButton, { CButtonProps } from "../primitives/CButton";
+import CView, { CViewProps } from "../primitives/CView";
 
 type SaveAndCancelButtonsProps = CViewProps & {
   onCancel?: () => void;

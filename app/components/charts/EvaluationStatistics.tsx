@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MinimalModuleInfo } from "arwi-backend/src/types";
-import CircledNumber from "../CircledNumber";
+import CircledNumber from "../ui/CircledNumber";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
 import MovingAverageLineChart, { EvaluationDataType, MovingAverageLineChartProps } from "./MovingAverageLineChart";

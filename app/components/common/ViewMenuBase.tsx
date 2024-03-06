@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import CView, { CViewProps } from "./primitives/CView";
+import CView, { CViewProps } from "../primitives/CView";
 
 export type ViewMenuBaseProps = CViewProps;
 

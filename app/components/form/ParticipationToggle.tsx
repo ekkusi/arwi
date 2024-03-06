@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import CButton from "./primitives/CButton";
-import CView, { CViewProps } from "./primitives/CView";
+import CButton from "../primitives/CButton";
+import CView, { CViewProps } from "../primitives/CView";
 
 type ParticipationToggleProps = Omit<CViewProps, "onChange"> & {
   disabled?: boolean;

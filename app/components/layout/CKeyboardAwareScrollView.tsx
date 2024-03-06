@@ -4,7 +4,7 @@ import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
 import { CViewStyle } from "../../theme/types";
 import { createViewStyles } from "../../theme/utils";
 import CKeyboardAvoidingView, { CKeyboardAvoidingViewProps } from "./CKeyboardAvoidingView";
-import CView from "./CView";
+import CView from "../primitives/CView";
 
 export type CKeyboardAwareScrollViewProps = Omit<KeyboardAwareScrollViewProps, "style" | "contentContainerStyle" | "enableOnAndroid"> & {
   style?: CViewStyle;

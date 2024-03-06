@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 import { View } from "react-native";
 import { BaseAnimationBuilder } from "react-native-reanimated";
-import CAnimatedView from "./primitives/CAnimatedView";
-import { createStyles } from "../theme/utils";
-import CView, { CViewProps } from "./primitives/CView";
+import CAnimatedView from "../primitives/CAnimatedView";
+import { createStyles } from "../../theme/utils";
+import CView, { CViewProps } from "../primitives/CView";
 
 export type CardProps = CViewProps & {
   enterAnimation?: BaseAnimationBuilder | typeof BaseAnimationBuilder;

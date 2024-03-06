@@ -7,9 +7,9 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import CView from "../../../../components/primitives/CView";
 import { SCROLL_TO_INPUT_EXTRA_HEIGHT } from "./_body";
 import CText from "../../../../components/primitives/CText";
-import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
+import CKeyboardAwareScrollView from "../../../../components/layout/CKeyboardAwareScrollView";
 import { COLORS, FONT_SIZES } from "../../../../theme";
-import { Slider } from "../../../../components/Slider";
+import { Slider } from "../../../../components/form/Slider";
 import CTouchableOpacity from "../../../../components/primitives/CTouchableOpacity";
 import { CollectionTypeFull } from "../edit/UpdateTypesProvider";
 

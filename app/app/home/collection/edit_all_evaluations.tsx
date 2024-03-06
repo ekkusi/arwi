@@ -7,17 +7,21 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 import PagerView, { PagerViewOnPageSelectedEvent } from "react-native-pager-view";
-import LoadingIndicator from "../../../components/LoadingIndicator";
+import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
-import { EvaluationToUpdate, CARD_HEIGHT, UpdateClassParticipationEvaluationCardMemoed } from "../../../components/ClassParticipationEvaluationCard";
+import {
+  EvaluationToUpdate,
+  CARD_HEIGHT,
+  UpdateClassParticipationEvaluationCardMemoed,
+} from "../../../components/evaluations/ClassParticipationEvaluationCard";
 import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../hooks-and-providers/keyboard";
 import { COLORS } from "../../../theme";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
-import LazyLoadView from "../../../components/LazyLoadView";
+import LazyLoadView from "../../../components/common/LazyLoadView";
 import { ClassParticipationEvaluationUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const CollectionEditAllEvaluationsView_GetCollection_Query = graphql(`

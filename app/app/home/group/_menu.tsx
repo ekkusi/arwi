@@ -9,7 +9,7 @@ import AddNewStudent from "./components/menu/AddNewStudent";
 import ChangeGroupModule from "./components/menu/ChangeGroupModule";
 import ChangeArchiveStatus from "./components/menu/ChangeArchiveStatus";
 import { useToast } from "../../../hooks-and-providers/ToastProvider";
-import ViewMenuBase from "@/components/ViewMenuBase";
+import ViewMenuBase from "@/components/common/ViewMenuBase";
 
 export default function GroupMenu({ route, navigation }: NativeStackScreenProps<HomeStackParams, "group">) {
   const { id, name, archived, classYearId } = route.params;

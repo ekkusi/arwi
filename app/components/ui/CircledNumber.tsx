@@ -1,6 +1,6 @@
-import { CColor, CFontSize } from "../theme/types";
-import CText from "./primitives/CText";
-import CView from "./primitives/CView";
+import { CColor, CFontSize } from "../../theme/types";
+import CText from "../primitives/CText";
+import CView from "../primitives/CView";
 
 export default function CircledNumber({
   size = 70,

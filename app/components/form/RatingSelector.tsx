@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
-import { COLORS } from "../theme";
-import CPressable from "./primitives/CPressable";
-import CText from "./primitives/CText";
-import CView, { CViewProps } from "./primitives/CView";
+import { COLORS } from "../../theme";
+import CPressable from "../primitives/CPressable";
+import CText from "../primitives/CText";
+import CView, { CViewProps } from "../primitives/CView";
 
 type RatingSelecterProps = Omit<CViewProps, "onChange"> & {
   onChange: (rating: number | null) => void;

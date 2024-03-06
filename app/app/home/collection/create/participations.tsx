@@ -5,7 +5,7 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
-import StudentParticipationList from "../../../../components/StudentParticipationList";
+import StudentParticipationList from "../../../../components/evaluations/StudentParticipationList";
 import { graphql } from "@/graphql";
 import { COLORS } from "../../../../theme";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";

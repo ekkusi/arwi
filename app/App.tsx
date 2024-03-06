@@ -10,7 +10,7 @@ import { AuthProvider } from "./hooks-and-providers/AuthProvider";
 
 import "./i18n";
 import "react-native-url-polyfill/auto";
-import LoadingIndicator from "./components/LoadingIndicator";
+import LoadingIndicator from "./components/ui/LoadingIndicator";
 import ErrorView from "./app/ErrorView";
 import ApolloProvider from "./hooks-and-providers/ApolloProvider";
 

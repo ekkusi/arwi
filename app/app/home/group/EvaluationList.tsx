@@ -7,7 +7,7 @@ import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
 import CButton from "../../../components/primitives/CButton";
 import { COLORS, SPACING } from "../../../theme";
-import Card from "../../../components/Card";
+import Card from "../../../components/ui/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { GroupOverviewProps } from "./types";

@@ -7,7 +7,7 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { isDefaultCollection } from "arwi-backend/src/types/typeGuards";
 import PagerView, { PagerViewOnPageSelectedEvent } from "react-native-pager-view";
-import LoadingIndicator from "../../../components/LoadingIndicator";
+import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
 import { graphql } from "@/graphql";
@@ -16,8 +16,8 @@ import { useKeyboardListener } from "../../../hooks-and-providers/keyboard";
 import { COLORS } from "../../../theme";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
-import { CARD_HEIGHT, DefaultEvaluationToUpdate, UpdateDefaultEvaluationCardMemoed } from "../../../components/DefaultEvaluationCard";
-import LazyLoadView from "../../../components/LazyLoadView";
+import { CARD_HEIGHT, DefaultEvaluationToUpdate, UpdateDefaultEvaluationCardMemoed } from "../../../components/evaluations/DefaultEvaluationCard";
+import LazyLoadView from "../../../components/common/LazyLoadView";
 import { DefaultEvaluationUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const DefaultCollectionEditAllEvaluationsView_GetCollection_Query = graphql(`

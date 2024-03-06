@@ -15,13 +15,13 @@ import {
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Constants from "expo-constants";
 import { hasNotch } from "react-native-device-info";
-import { CViewStyle } from "../theme/types";
-import CAnimatedView from "./primitives/CAnimatedView";
-import CButton from "./primitives/CButton";
-import CText from "./primitives/CText";
-import CView, { CViewProps } from "./primitives/CView";
-import { blendColors, hexToRgbA, rgbaToString } from "../helpers/color";
-import { COLORS } from "../theme";
+import { CViewStyle } from "../../theme/types";
+import CAnimatedView from "../primitives/CAnimatedView";
+import CButton from "../primitives/CButton";
+import CText from "../primitives/CText";
+import CView, { CViewProps } from "../primitives/CView";
+import { blendColors, hexToRgbA, rgbaToString } from "../../helpers/color";
+import { COLORS } from "../../theme";
 
 export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   isOpen: boolean;

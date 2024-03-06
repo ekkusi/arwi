@@ -7,9 +7,9 @@ import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
 import { SPACING } from "../../../theme";
 import { GroupOverviewProps } from "./types";
-import Card from "../../../components/Card";
+import Card from "../../../components/ui/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
-import SearchBar from "../../../components/SearchBar";
+import SearchBar from "../../../components/ui/SearchBar";
 
 export default function StudentList({ getGroup: group, navigation }: GroupOverviewProps) {
   const { t } = useTranslation();

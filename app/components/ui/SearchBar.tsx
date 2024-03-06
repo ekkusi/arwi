@@ -12,9 +12,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { useKeyboardListener } from "../hooks-and-providers/keyboard";
-import { COLORS } from "../theme";
-import CView from "./primitives/CView";
+import { useKeyboardListener } from "../../hooks-and-providers/keyboard";
+import { COLORS } from "../../theme";
+import CView from "../primitives/CView";
 
 const AnimatedIcon = Animated.createAnimatedComponent(MaterialCommunityIcon);
 

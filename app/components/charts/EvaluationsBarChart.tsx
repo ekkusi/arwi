@@ -7,7 +7,7 @@ import { hexToRgbA } from "../../helpers/color";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
 import CText from "../primitives/CText";
-import CModal from "../CModal";
+import CModal from "../modals/CModal";
 import CButton from "../primitives/CButton";
 import i18n from "../../i18n";
 import { COLORS } from "../../theme";

@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import { isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
-import Layout from "../../../components/Layout";
-import LoadingIndicator from "../../../components/LoadingIndicator";
+import Layout from "../../../components/layout/Layout";
+import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
 import { graphql } from "@/graphql";
@@ -13,7 +13,7 @@ import { getErrorMessage } from "../../../helpers/errorUtils";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
 import { DefaultEvaluationDataToUpdate } from "../default-collection/edit_all_evaluations";
-import { UpdateDefaultEvaluationCard } from "../../../components/DefaultEvaluationCard";
+import { UpdateDefaultEvaluationCard } from "../../../components/evaluations/DefaultEvaluationCard";
 import { DefaultEvaluationUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const DefaultEvaluationEditView_GetEvaluation_Query = graphql(`

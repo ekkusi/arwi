@@ -2,7 +2,7 @@ import React from "react";
 import { Platform } from "react-native";
 import DateTimePicker, { BaseProps } from "@react-native-community/datetimepicker";
 import { useTranslation } from "react-i18next";
-import CModal from "../CModal";
+import CModal from "../modals/CModal";
 import { COLORS } from "../../theme";
 
 type CDateTimePickerProps = BaseProps & {
