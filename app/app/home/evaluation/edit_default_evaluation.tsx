@@ -8,12 +8,13 @@ import Layout from "../../../components/Layout";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
 import { DefaultEvaluationDataToUpdate } from "../collection/edit_all_default_evaluations";
 import { UpdateDefaultEvaluationCard } from "../../../components/DefaultEvaluationCard";
+import { DefaultEvaluationUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const DefaultEvaluationEditView_GetEvaluation_Query = graphql(`
   query DefaultEvaluationEditView_GetEvaluation($evaluationId: ID!) {
@@ -41,13 +42,16 @@ const DefaultEvaluationEditView_GetEvaluation_Query = graphql(`
   }
 `);
 
-const DefaultEvaluationEditView_UpdateEvaluation_Mutation = graphql(`
-  mutation DefaultEvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateDefaultEvaluationInput!) {
-    updateDefaultEvaluation(input: $updateEvaluationInput) {
-      ...DefaultEvaluationUpdate_Info
+const DefaultEvaluationEditView_UpdateEvaluation_Mutation = graphql(
+  `
+    mutation DefaultEvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateDefaultEvaluationInput!) {
+      updateDefaultEvaluation(input: $updateEvaluationInput) {
+        ...DefaultEvaluationUpdate_Info
+      }
     }
-  }
-`);
+  `,
+  [DefaultEvaluationUpdate_Info_Fragment]
+);
 
 function DefaultEvaluationEditViewContent({
   navigation,
@@ -108,7 +112,9 @@ export default function DefaultEvaluationEditView({ navigation, route }: NativeS
       {isDefaultEvaluation<WithTypename<typeof evaluation, "DefaultEvaluation">>(evaluation) ? (
         <DefaultEvaluationEditViewContent initialEvaluation={evaluation} date={evaluation.collection.date} navigation={navigation} />
       ) : (
-        <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
+        <CText>
+          {t("you-should-not-end-up-here", "Sinun ei kuuluisi päätyä tälle näkymälle. Jos viitsit, niin ilmoita asiasta kehittäjille info@arwi.fi.")}
+        </CText>
       )}
     </Layout>
   );

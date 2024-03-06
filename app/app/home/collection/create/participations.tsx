@@ -6,13 +6,13 @@ import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
 import CView from "../../../../components/primitives/CView";
 import StudentParticipationList from "../../../../components/StudentParticipationList";
-import { graphql } from "../../../../gql";
+import { graphql } from "@/graphql";
 import { COLORS } from "../../../../theme";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import { CollectionCreationStackParams } from "./types";
 import CollectionCreationLayout from "./_layout";
 
-const CollectionParticipationsView_Group_Fragment = graphql(`
+export const CollectionParticipationsView_Group_Fragment = graphql(`
   fragment CollectionParticipationsView_Group on Group {
     students {
       id

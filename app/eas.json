@@ -31,8 +31,7 @@
     "dev": {
       "env": {
         "ANDROID_HOME": "/Users/ekeukko/Library/Android/sdk",
-        "EXPO_PUBLIC_BACKEND_API_URL": "https://staging-proxy-api.arwi.fi",
-        "EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY": "https://staging-api.arwi.fi",
+        "EXPO_PUBLIC_BACKEND_API_URL": "http://localhost:4000",
         "EXPO_PUBLIC_GRIDLY_API_KEY": "Y4F7IPBTRojbQ4",
         "EXPO_PUBLIC_GRIDLY_VIEW_ID": "25jtlp8198qrz"
       },

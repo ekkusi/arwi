@@ -1,7 +1,6 @@
-import { LearningObjectiveInfo } from "arwi-backend/src/types";
+import { LearningObjectiveInfo, LearningObjectiveType } from "arwi-backend/src/types";
 import { ImageSourcePropType } from "react-native";
 import { SubjectMinimal } from "arwi-backend/src/types/codegenOverrides";
-import { LearningObjectiveType } from "../gql/graphql";
 
 export const subjectToIcon = (subject: SubjectMinimal): ImageSourcePropType => {
   switch (subject.code) {
@@ -120,12 +119,14 @@ export const formatObjectiveLabel = (learningObjective: LearningObjectiveInfo) =
 
 export const formatObjectiveTypeLabel = (type: LearningObjectiveType) => {
   switch (type) {
-    case LearningObjectiveType.SKILLS:
+    case "SKILLS":
       return "Taidot";
-    case LearningObjectiveType.BEHAVIOUR:
+    case "BEHAVIOUR":
       return "Työskentely";
-    case LearningObjectiveType.NOT_EVALUATED:
+    case "NOT_EVALUATED":
       return "Ei arvioitava tavoite";
+    case "SKILLS_AND_BEHAVIOUR":
+      return "Taidot ja työskentely";
     default:
       throw new Error("Unknown learning objective type");
   }

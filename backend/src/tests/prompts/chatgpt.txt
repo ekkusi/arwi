@@ -1,12 +1,10 @@
 Write me a test suite for a graphql resolver. Write the whole file. Write at least one test entirely and others can be skeletons. Here is the resolver:
 
-
-
 Below you will have the necessary context:
 
 Validator function(s) code:
 
-
+Other used functions:
 
 Graphql definition(s):
 
@@ -43,6 +41,7 @@ type Mutation {
   updateClassParticipationEvaluation(input: UpdateClassParticipationEvaluationInput!): ClassParticipationEvaluation!
   updateDefaultEvaluation(input: UpdateDefaultEvaluationInput!): DefaultEvaluation!
   deleteStudent(studentId: ID!): Student!
+  deleteTeacher(teacherId: ID!): Teacher!
   deleteGroup(groupId: ID!): Group!
   deleteCollection(collectionId: ID!): EvaluationCollection!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
@@ -52,6 +51,7 @@ type Mutation {
 
 type AppMetadata {
   appVersion: String!
+  minimumSupportedAppVersion: String!
 }
 
 type AuthPayload {
@@ -342,9 +342,9 @@ input ChangeGroupModuleInput {
   newLearningObjectiveGroupKey: String!
 }
 
-The createCollection test suite to be used as an example:
+The createDefaultCollection test suite to be used as an example:
 
-import { graphql } from "../gql";
+import { graphql } from "@/tests/graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { CollectionTypeCategory, CreateDefaultCollectionInput } from "../../types";
@@ -535,8 +535,10 @@ describe("createDefaultCollection", () => {
 });
 
 
+
 Keep these things in mind:
 - query/mutation names have to be unique (see sample test suite)
 - remember to test all the possible validation cases
+- remember to test that the Dataloader caches are updated
 - remember to take error messages to be checked from the thrown errors in the validators
 - the error message for invalid ID is the following: "Hakemaasi resurssia ei löytynyt. Tarkista syöttämäsi id:t."

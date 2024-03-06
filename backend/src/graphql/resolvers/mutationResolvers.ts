@@ -1,21 +1,22 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
-import { getEnvironment } from "../../utils/subjectUtils";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
-import ValidationError from "../../errors/ValidationError";
+import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
 import {
   mapCreateClassParticipationEvaluationInput,
   mapCreateDefaultEvaluationInput,
   mapCreateTeacherInput,
-  mapModuleInfo,
+  mapEvaluationFeedbackData,
+  mapTeacherUsageData,
   mapUpdateClassParticipationCollectionInput,
   mapUpdateClassParticipationEvaluationInput,
   mapUpdateDefaultCollectionInput,
   mapUpdateDefaultEvaluationInput,
   mapUpdateGroupInput,
   mapUpdateStudentInput,
+  mapWarningSeenUpdateData,
 } from "../utils/mappers";
 import {
   REQUEST_PASSWORD_RESET_EXPIRY_IN_MS,
@@ -41,12 +42,13 @@ import {
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
   checkAuthenticatedByTeacher,
+  checkMonthlyTokenUse,
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
 import { generateCode } from "../../utils/passwordRecovery";
 import { sendMail } from "@/utils/mail";
-import { BRCRYPT_SALT_ROUNDS, MATOMO_EVENT_CATEGORIES } from "../../config";
+import { BRCRYPT_SALT_ROUNDS, FEEDBACK_GENERATION_TOKEN_COST, MATOMO_EVENT_CATEGORIES, TEXT_FIX_TOKEN_COST } from "../../config";
 import matomo from "../../matomo";
 import { createTeacher, deleteTeacher, updateTeacher } from "../mutationWrappers/teacher";
 import { deleteGroup, updateGroup, updateGroupMany } from "../mutationWrappers/group";
@@ -55,8 +57,10 @@ import { createStudent, deleteStudent, updateStudent } from "../mutationWrappers
 import { updateEvaluation } from "../mutationWrappers/evaluation";
 import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
-import OpenIDError from "../../errors/OpenIDError";
+import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
+import AuthorizationError from "@/errors/AuthorizationError";
+import { createFeedback } from "../mutationWrappers/feedback";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -101,7 +105,11 @@ const resolvers: MutationResolvers<CustomContext> = {
         newUserCreated: isNewUser,
       };
     } catch (error) {
-      throw new OpenIDError(error instanceof Error ? error.message : undefined);
+      if (error instanceof AuthorizationError) {
+        throw new ValidationError(error.message);
+      } else {
+        throw new OpenIDError(error instanceof Error ? error.message : undefined);
+      }
     }
   },
   connectMPassID: async (_, { code }, { req, OIDCClient, user, prisma }) => {
@@ -116,8 +124,8 @@ const resolvers: MutationResolvers<CustomContext> = {
     } catch (error) {
       throw new OpenIDError(error instanceof Error ? error.message : undefined);
     }
-    if (userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
-    const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.sub } });
+    if (!userInfo.mPassID) throw new OpenIDError("Something went wrong, mpass-id not found from user after grant");
+    const matchingUser = await prisma.teacher.findFirst({ where: { mPassID: userInfo.mPassID } });
     if (matchingUser?.email) throw new ValidationError("Kyseinen mpass-id on jo liitetty toiseen käyttäjään");
 
     // If there is already an existing user with the mpass-id, merge it to the current user
@@ -132,8 +140,11 @@ const resolvers: MutationResolvers<CustomContext> = {
       await deleteTeacher(matchingUser.id);
     }
 
-    const updatedUser = await updateTeacher(currentUser.id, { data: { mPassID: userInfo.sub } });
-    req.session.userInfo = updatedUser;
+    const updatedUser = await updateTeacher(currentUser.id, { data: { mPassID: userInfo.mPassID } });
+    req.session.userInfo = {
+      ...updatedUser,
+      type: "mpass-id",
+    };
     req.session.tokenSet = tokenSet;
     return {
       userData: updatedUser,
@@ -160,7 +171,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     await deleteTeacher(matchingTeacher.id);
     // Update old user with new credentials
     const updatedUser = await updateTeacher(currentUser.id, { data: { email: matchingTeacher.email, passwordHash: matchingTeacher.passwordHash } });
-    req.session.userInfo = updatedUser;
+    req.session.userInfo = {
+      ...updatedUser,
+      type: "mpass-id",
+    };
     return {
       userData: updatedUser,
     };
@@ -385,7 +399,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     return collection;
   },
   deleteTeacher: async (_, { teacherId }, { user, req, res }) => {
-    await checkAuthenticatedByTeacher(user, teacherId);
+    checkAuthenticatedByTeacher(user, teacherId);
     const teacher = await deleteTeacher(teacherId);
     await logOut(req, res);
     return teacher;
@@ -449,7 +463,8 @@ const resolvers: MutationResolvers<CustomContext> = {
     return updatedGroup;
   },
   generateStudentFeedback: async (_, { studentId, moduleId }, { dataLoaders, user, prisma }) => {
-    await checkAuthenticatedByStudent(user, studentId);
+    await Promise.all([checkAuthenticatedByStudent(user, studentId), checkMonthlyTokenUse(user, FEEDBACK_GENERATION_TOKEN_COST)]);
+
     const student = await dataLoaders.studentLoader.load(studentId);
     const evaluationsPromise = prisma.evaluation.findMany({
       where: {
@@ -487,30 +502,118 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     const [evaluations, group] = await Promise.all([evaluationsPromise, groupPromise]);
     const { currentModule } = group;
-    const mappedEvaluations = evaluations.map((it) => {
-      const { environmentCode } = it.evaluationCollection;
-      return environmentCode
-        ? {
-            environmentLabel: getEnvironment(environmentCode, mapModuleInfo(currentModule))?.label.fi || "Ei ympäristöä",
-            date: it.evaluationCollection.date,
-            skillsRating: it.skillsRating,
-            behaviourRating: it.behaviourRating,
-          }
-        : {
-            date: it.evaluationCollection.date,
-            generalRating: it.generalRating,
-            collectionTypeName: it.evaluationCollection.type.name,
-          };
-    });
+    const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, currentModule));
     if (mappedEvaluations.length === 0) throw new ValidationError("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
     const summary = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode); // Safe cast after authenticated check
-    return summary;
+    const feedbackCreatePromise = createFeedback({
+      data: {
+        studentId: student.id,
+        text: summary,
+        moduleId,
+      },
+    });
+    const updateTeacherPromise = updateTeacher(user!.id, {
+      data: {
+        monthlyTokensUsed: {
+          increment: FEEDBACK_GENERATION_TOKEN_COST,
+        },
+      },
+    });
+    const [updatedTeacher, feedback] = await Promise.all([updateTeacherPromise, feedbackCreatePromise]);
+
+    return {
+      feedback,
+      tokensUsed: FEEDBACK_GENERATION_TOKEN_COST,
+      usageData: mapTeacherUsageData(updatedTeacher),
+    };
   },
   fixTextGrammatics: async (_, { studentId, text }, { user }) => {
-    await checkAuthenticatedByStudent(user, studentId);
+    await Promise.all([checkAuthenticatedByStudent(user, studentId), checkMonthlyTokenUse(user, TEXT_FIX_TOKEN_COST)]);
+
     validateFixTextGrammaticsInput(text);
-    const summary = await fixTextGrammatics(text, user!.id); // Safe cast after authenticated check
-    return summary;
+    const fixTextPromise = fixTextGrammatics(text, user!.id); // Safe cast after authenticated check
+    const updateTeacherPromise = updateTeacher(user!.id, {
+      data: {
+        monthlyTokensUsed: {
+          increment: TEXT_FIX_TOKEN_COST,
+        },
+      },
+    });
+    const [fixedText, updatedTeacher] = await Promise.all([fixTextPromise, updateTeacherPromise]);
+    return {
+      result: fixedText,
+      tokensUsed: TEXT_FIX_TOKEN_COST,
+      usageData: mapTeacherUsageData(updatedTeacher),
+    };
+  },
+  generateGroupFeedback: async (_, { groupId }, { dataLoaders, prisma, user }) => {
+    await checkAuthenticatedByGroup(user, groupId);
+
+    const groupPromise = dataLoaders.groupLoader.load(groupId);
+    const studentsPromise = dataLoaders.studentsByGroupLoader.load(groupId);
+    const [group, students] = await Promise.all([groupPromise, studentsPromise]);
+
+    // Check if the user has enough tokens to generate feedback for all students
+    const tokenCost = students.length * FEEDBACK_GENERATION_TOKEN_COST;
+    await checkMonthlyTokenUse(user, tokenCost);
+
+    const module = await dataLoaders.moduleLoader.load(group.currentModuleId);
+
+    const generationPromises = students.map(async (student) => {
+      const evaluations = await prisma.evaluation.findMany({
+        where: {
+          studentId: student.id,
+          evaluationCollection: {
+            moduleId: module.id,
+          },
+        },
+        include: {
+          evaluationCollection: {
+            select: {
+              environmentCode: true,
+              date: true,
+              type: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, module));
+      const feedback = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode);
+      const feedbackCreatePromise = createFeedback({
+        data: {
+          studentId: student.id,
+          text: feedback,
+          moduleId: module.id,
+        },
+      });
+      return feedbackCreatePromise;
+    });
+
+    const updateTeacherPromise = updateTeacher(user!.id, {
+      data: {
+        monthlyTokensUsed: {
+          increment: tokenCost,
+        },
+      },
+    });
+    const [updatedTeacher, ...feedbacks] = await Promise.all([updateTeacherPromise, ...generationPromises]);
+
+    return {
+      feedbacks,
+      tokensUsed: tokenCost,
+      usageData: mapTeacherUsageData(updatedTeacher),
+    };
+  },
+  setTokenUseWarningSeen: async (_, { warning }, { user }) => {
+    await updateTeacher(user!.id, {
+      data: mapWarningSeenUpdateData(warning),
+    });
+    return true;
   },
 };
 

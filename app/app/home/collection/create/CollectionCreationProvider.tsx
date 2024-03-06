@@ -1,37 +1,10 @@
 import { useQuery } from "@apollo/client";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { CollectionTypeCategory, CollectionTypeMinimal } from "arwi-backend/src/types";
+import { CollectionTypeMinimal } from "arwi-backend/src/types";
 import { Evaluation } from "../../../../components/ClassParticipationEvaluationCard";
-import { graphql } from "../../../../gql";
-import { CollectionCreationProvider_GetGroupQuery } from "../../../../gql/graphql";
 import { useThrowCatchableError } from "../../../../hooks-and-providers/error";
-
-const CollectionCreationProvider_GetGroup_Query = graphql(`
-  query CollectionCreationProvider_GetGroup($groupId: ID!) {
-    getGroup(id: $groupId) {
-      id
-      currentModule {
-        id
-        students {
-          id
-          name
-          currentModuleEvaluations {
-            id
-            notes
-          }
-        }
-      }
-      currentModule {
-        collectionTypes {
-          id
-          name
-          category
-        }
-      }
-      ...CollectionGeneralInfoView_Group
-    }
-  }
-`);
+import { ResultOf } from "@/graphql";
+import { CollectionCreationProvider_GetGroup_Query } from "./graphql";
 
 export type CollectionData = {
   description: string;
@@ -56,7 +29,7 @@ type CollectionCreationContextParams = {
   loading: boolean;
   collectionType?: CollectionTypeMinimal;
   evaluations?: EvaluationData[];
-  groupInfo?: CollectionCreationProvider_GetGroupQuery["getGroup"];
+  groupInfo?: ResultOf<typeof CollectionCreationProvider_GetGroup_Query>["getGroup"];
   setGeneralData: (data: CollectionData) => void;
   setEvaluations: Dispatch<SetStateAction<EvaluationData[] | undefined>>;
 };
@@ -102,9 +75,7 @@ function CollectionCreationProvider({ children, groupId }: CollectionCreationPro
       const { getGroup } = queryData;
       const mappedEvaluations = getGroup.currentModule.students.map((student) => ({ student, wasPresent: true }));
 
-      const matchingCollectionType = queryData?.getGroup?.currentModule.collectionTypes.find(
-        (it) => it.category === CollectionTypeCategory.CLASS_PARTICIPATION
-      );
+      const matchingCollectionType = queryData?.getGroup?.currentModule.collectionTypes.find((it) => it.category === "CLASS_PARTICIPATION");
       if (!matchingCollectionType)
         throwCatchableError(new Error("Invalid collection type passed to collection creation, type not found in group's collection types"));
 

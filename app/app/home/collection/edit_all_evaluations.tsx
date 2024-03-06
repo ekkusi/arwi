@@ -11,13 +11,14 @@ import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
 import { EvaluationToUpdate, CARD_HEIGHT, UpdateClassParticipationEvaluationCardMemoed } from "../../../components/ClassParticipationEvaluationCard";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../hooks-and-providers/keyboard";
 import { COLORS } from "../../../theme";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
 import LazyLoadView from "../../../components/LazyLoadView";
+import { ClassParticipationEvaluationUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const CollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
   query CollectionEditAllEvaluationsView_GetCollection($collectionId: ID!) {
@@ -56,16 +57,19 @@ const CollectionEditAllEvaluationsView_GetCollection_Query = graphql(`
   }
 `);
 
-const CollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(`
-  mutation CollectionEvaluationsView_UpdateCollection($updateCollectionInput: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
-    updateClassParticipationCollection(data: $updateCollectionInput, collectionId: $collectionId) {
-      id
-      evaluations {
-        ...ClassParticipationEvaluationUpdate_Info
+const CollectionEditAllEvaluationsView_UpdateCollection_Mutation = graphql(
+  `
+    mutation CollectionEvaluationsView_UpdateCollection($updateCollectionInput: UpdateClassParticipationCollectionInput!, $collectionId: ID!) {
+      updateClassParticipationCollection(data: $updateCollectionInput, collectionId: $collectionId) {
+        id
+        evaluations {
+          ...ClassParticipationEvaluationUpdate_Info
+        }
       }
     }
-  }
-`);
+  `,
+  [ClassParticipationEvaluationUpdate_Info_Fragment]
+);
 
 export type EvaluationDataToUpdate = Omit<EvaluationToUpdate, "student"> & {
   student: { id: string; name: string } & EvaluationToUpdate["student"];
@@ -221,15 +225,19 @@ export default function CollectionEditAllEvaluationsView(props: NativeStackScree
 
   if (loading || !data) return <LoadingIndicator />;
 
-  return isClassParticipationCollection<WithTypename<typeof data.getCollection, "ClassParticipationCollection">>(data.getCollection) ? (
+  const collection = data?.getCollection;
+
+  return isClassParticipationCollection<WithTypename<typeof collection, "ClassParticipationCollection">>(collection) ? (
     <CollectionEditAllEvaluationsContent
-      defaultEvaluations={data.getCollection.evaluations}
-      envColor={data.getCollection.environment.color}
-      environmentLabel={data.getCollection.environment.label.fi}
-      date={data.getCollection.date}
+      defaultEvaluations={collection.evaluations as WithTypename<(typeof collection.evaluations)[number], "ClassParticipationEvaluation">[]}
+      envColor={collection.environment.color}
+      environmentLabel={collection.environment.label.fi}
+      date={collection.date}
       {...props}
     />
   ) : (
-    <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
+    <CText>
+      {t("you-should-not-end-up-here", "Sinun ei kuuluisi päätyä tälle näkymälle. Jos viitsit, niin ilmoita asiasta kehittäjille info@arwi.fi.")}
+    </CText>
   );
 }

@@ -61,6 +61,7 @@ export const COLORS = {
   "light-green": "#86c078",
   green: "#65AF53",
   primary: "#65AF53",
+  darkgreen: COLOR_PALETTE.green[800],
   // primary: "#008775",
   // secondary: "#33414C",
   secondary: "#35352A",
@@ -83,6 +84,7 @@ export const COLORS = {
 export const FONT_SIZES = {
   xs: 12,
   sm: 14,
+  sm2: 16,
   md: 18,
   lg: 22,
   title: 24,

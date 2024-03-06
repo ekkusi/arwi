@@ -1,6 +1,6 @@
 import DataLoader from "dataloader";
 
-export default class CustomDataLoader<K, V> extends DataLoader<K, V> {
+export default class CustomDataLoader<K, V, C = K> extends DataLoader<K, V, C> {
   async load(key: K): Promise<V> {
     const value = await super.load(key);
 

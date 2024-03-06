@@ -59,10 +59,10 @@ export const PRIMARY_YEAR_CODE_LABELS: Record<PrimaryEducationLevel, TranslatedS
 export const getModuleInfo = (subjectCode: string, educationLevel: EducationLevel, learningObjectiveGroupKey: string): ModuleInfo | undefined => {
   let label: TranslatedString | undefined;
   switch (educationLevel) {
-    case EducationLevel.HIGH_SCHOOL:
+    case "HIGH_SCHOOL":
       label = getSubject(subjectCode)?.highSchoolModules?.find((it) => it.code === learningObjectiveGroupKey)?.name;
       break;
-    case EducationLevel.VOCATIONAL:
+    case "VOCATIONAL":
       label = getSubject(subjectCode)?.vocationalSchoolModules?.find((it) => it.code === learningObjectiveGroupKey)?.name;
       break;
     default:
@@ -87,25 +87,22 @@ export const getModuleInfos = (subjectCode: string): ModuleInfo[] => {
   if (!subject) return [];
   const moduleInfos: ModuleInfo[] = [];
   if (subject.elementarySchool.one_to_two_years) {
-    [EducationLevel.PRIMARY_FIRST, EducationLevel.PRIMARY_SECOND].forEach((it) =>
-      getAndPushModuleIfExists(subjectCode, EducationLevel[it], "one_to_two_years", moduleInfos)
-    );
+    const oneToTwoYearLevels: EducationLevel[] = ["PRIMARY_FIRST", "PRIMARY_SECOND"];
+    oneToTwoYearLevels.forEach((it) => getAndPushModuleIfExists(subjectCode, it, "one_to_two_years", moduleInfos));
   }
   if (subject.elementarySchool.three_to_six_years) {
-    [EducationLevel.PRIMARY_THIRD, EducationLevel.PRIMARY_FOURTH, EducationLevel.PRIMARY_FIFTH, EducationLevel.PRIMARY_SIXTH].forEach((it) =>
-      getAndPushModuleIfExists(subjectCode, EducationLevel[it], "three_to_six_years", moduleInfos)
-    );
+    const threeToSixYearLevels: EducationLevel[] = ["PRIMARY_THIRD", "PRIMARY_FOURTH", "PRIMARY_FIFTH", "PRIMARY_SIXTH"];
+    threeToSixYearLevels.forEach((it) => getAndPushModuleIfExists(subjectCode, it, "three_to_six_years", moduleInfos));
   }
   if (subject.elementarySchool.seven_to_nine_years) {
-    [EducationLevel.PRIMARY_SEVENTH, EducationLevel.PRIMARY_EIGHTH, EducationLevel.PRIMARY_NINTH].forEach((it) =>
-      getAndPushModuleIfExists(subjectCode, EducationLevel[it], "seven_to_nine_years", moduleInfos)
-    );
+    const sevenToNineYearLevels: EducationLevel[] = ["PRIMARY_SEVENTH", "PRIMARY_EIGHTH", "PRIMARY_NINTH"];
+    sevenToNineYearLevels.forEach((it) => getAndPushModuleIfExists(subjectCode, it, "seven_to_nine_years", moduleInfos));
   }
   subject.highSchoolModules?.forEach((it) => {
-    getAndPushModuleIfExists(subjectCode, EducationLevel.HIGH_SCHOOL, it.code, moduleInfos);
+    getAndPushModuleIfExists(subjectCode, "HIGH_SCHOOL", it.code, moduleInfos);
   });
   subject.vocationalSchoolModules?.forEach((it) => {
-    getAndPushModuleIfExists(subjectCode, EducationLevel.VOCATIONAL, it.code, moduleInfos);
+    getAndPushModuleIfExists(subjectCode, "VOCATIONAL", it.code, moduleInfos);
   });
   return moduleInfos;
 };
@@ -120,10 +117,10 @@ export const getLearningObjectives = (
 
   let objectives = [];
   switch (educationLevel) {
-    case EducationLevel.HIGH_SCHOOL:
+    case "HIGH_SCHOOL":
       objectives = subject.highSchoolModules?.find((it) => it.code === learningObjectivesGroupKey)?.learningObjectives || [];
       break;
-    case EducationLevel.VOCATIONAL:
+    case "VOCATIONAL":
       objectives = subject.vocationalSchoolModules?.find((it) => it.code === learningObjectivesGroupKey)?.learningObjectives || [];
       break;
     default:
@@ -183,9 +180,9 @@ export const getEnvironment = (environmentCode: string, moduleInfo: MinimalModul
   if (isPrimaryEducationLevel(moduleInfo.educationLevel)) {
     const environmentKey = getElementarySchoolEnvironmentsKey(moduleInfo.learningObjectiveGroupKey as ElementarySchoolObjectiveGroups);
     environment = subject.elementarySchool[environmentKey]?.find((it) => it.code === environmentCode);
-  } else if (moduleInfo.educationLevel === EducationLevel.HIGH_SCHOOL)
+  } else if (moduleInfo.educationLevel === "HIGH_SCHOOL")
     environment = subject.highSchoolModules?.flatMap((it) => it.environments)?.find((it) => it.code === environmentCode);
-  else if (moduleInfo.educationLevel === EducationLevel.VOCATIONAL)
+  else if (moduleInfo.educationLevel === "VOCATIONAL")
     environment = subject.vocationalSchoolModules?.flatMap((it) => it.environments)?.find((it) => it.code === environmentCode);
   return environment && mapEnvironment(environment);
 };
@@ -196,11 +193,11 @@ export const getEnvironmentsByLevel = (subjectCode: string, educationLevel: Educ
   let environments;
   // On top of environments that belong to all modules, fetch module-specific environments
   switch (educationLevel) {
-    case EducationLevel.HIGH_SCHOOL: {
+    case "HIGH_SCHOOL": {
       environments = subject.highSchoolModules?.find((it) => it.code === learningObjectiveGroupKey)?.environments || [];
       break;
     }
-    case EducationLevel.VOCATIONAL: {
+    case "VOCATIONAL": {
       environments = subject.vocationalSchoolModules?.find((it) => it.code === learningObjectiveGroupKey)?.environments || [];
       break;
     }
@@ -233,9 +230,9 @@ export const getLearningObjectiveGroupKeys = (subjectCode: string, educationLeve
   const subject = getSubject(subjectCode);
   if (!subject) return [];
   switch (educationLevel) {
-    case EducationLevel.HIGH_SCHOOL:
+    case "HIGH_SCHOOL":
       return subject.highSchoolModules?.map((it) => it.code) || [];
-    case EducationLevel.VOCATIONAL:
+    case "VOCATIONAL":
       return subject.vocationalSchoolModules?.map((it) => it.code) || [];
     default:
       return ELEMENTARY_LEARNING_GROUP_KEYS;
@@ -244,15 +241,15 @@ export const getLearningObjectiveGroupKeys = (subjectCode: string, educationLeve
 
 export const isPrimaryEducationLevel = (educationLevel: EducationLevel): boolean => {
   switch (educationLevel) {
-    case EducationLevel.PRIMARY_FIRST:
-    case EducationLevel.PRIMARY_SECOND:
-    case EducationLevel.PRIMARY_THIRD:
-    case EducationLevel.PRIMARY_FOURTH:
-    case EducationLevel.PRIMARY_FIFTH:
-    case EducationLevel.PRIMARY_SIXTH:
-    case EducationLevel.PRIMARY_SEVENTH:
-    case EducationLevel.PRIMARY_EIGHTH:
-    case EducationLevel.PRIMARY_NINTH:
+    case "PRIMARY_FIRST":
+    case "PRIMARY_SECOND":
+    case "PRIMARY_THIRD":
+    case "PRIMARY_FOURTH":
+    case "PRIMARY_FIFTH":
+    case "PRIMARY_SIXTH":
+    case "PRIMARY_SEVENTH":
+    case "PRIMARY_EIGHTH":
+    case "PRIMARY_NINTH":
       return true;
     default:
       return false;

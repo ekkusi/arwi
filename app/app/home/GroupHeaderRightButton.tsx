@@ -28,6 +28,7 @@ export default function GroupHeaderRightButton({
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   const { openToast } = useToast();
+
   return (
     <Menu>
       <MenuTrigger>

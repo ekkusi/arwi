@@ -9,15 +9,18 @@ datasource db {
 }
 
 model Teacher {
-  id                      String      @id @default(uuid())
-  mPassID                 String?     @unique
-  email                   String?     @unique
-  passwordHash            String?
-  groups                  Group[]
-  languagePreference      String      @default("fi_FI")
-  consentsAnalytics       Boolean     @default(true)
-  passwordResetStartedAt  DateTime?
-  passwordResetTries      Int         @default(0)
+  id                                String      @id @default(uuid())
+  mPassID                           String?     @unique
+  email                             String?     @unique
+  passwordHash                      String?
+  groups                            Group[]
+  languagePreference                String      @default("fi_FI")
+  consentsAnalytics                 Boolean     @default(true)
+  passwordResetStartedAt            DateTime?
+  passwordResetTries                Int         @default(0)
+  monthlyTokensUsed                 Int         @default(0)
+  hasSeenFirstMonthlyTokenWarning   Boolean     @default(false)
+  hasSeenSecondMonthlyTokenWarning  Boolean     @default(false)
 }
 
 model Group {
@@ -44,6 +47,7 @@ model Module {
   groupId                     String
   students                    Student[]
   evaluationCollections       EvaluationCollection[]
+  feedbacks                   Feedback[]
 }
 
 model EvaluationCollection {
@@ -79,6 +83,7 @@ model Student {
   groupId     String
   modules     Module[]  
   evaluations Evaluation[]
+  feedbacks   Feedback[]
 }
 
 model CollectionType {
@@ -89,6 +94,16 @@ model CollectionType {
   collection  EvaluationCollection[]
   module      Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   moduleId    String
+}
+
+model Feedback {
+  id                      String       @id @default(uuid())
+  student                 Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId               String
+  text                    String
+  module                  Module       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  moduleId                String
+  createdAt               DateTime     @default(now())
 }
 
 enum CollectionTypeCategory {

@@ -8,7 +8,7 @@ import TextFormField from "../../components/form/TextFormField";
 import { nameValidator } from "../../helpers/textValidation";
 import CButton from "../../components/primitives/CButton";
 import { AuthStackParams } from "./types";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import CText from "../../components/primitives/CText";
 import { getErrorMessage } from "../../helpers/errorUtils";
 
@@ -44,6 +44,7 @@ export default function ForgotPassword({ navigation }: NativeStackScreenProps<Au
       <CView style={{ flex: 1, width: "100%", paddingHorizontal: "lg" }}>
         <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "2xl" }}>
           <TextFormField
+            autoCapitalize="none"
             title={t("email", "Sähköposti")}
             placeholder="arwioija@gmail.com"
             validate={nameValidator}

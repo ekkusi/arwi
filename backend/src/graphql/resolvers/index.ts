@@ -6,16 +6,18 @@ import mutationResolvers from "./mutationResolvers";
 import queryResolvers from "./queryResolvers";
 import typeResolvers from "./typeResolvers";
 import NotFoundError from "../../errors/NotFoundError";
-import AuthenticationError from "../../errors/AuthenticationError";
-import ValidationError from "../../errors/ValidationError";
-import MissingDataError from "../../errors/MissingDataError";
-import OpenIDError from "../../errors/OpenIDError";
+import AuthenticationError from "../errors/AuthenticationError";
+import ValidationError from "../errors/ValidationError";
+import MissingDataError from "../errors/MissingDataError";
+import OpenIDError from "../errors/OpenIDError";
+import AuthorizationError from "../errors/AuthorizationError";
 
 function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Resolver<{}, {}, CustomContext> {
   return async (parent, args, context, info) => {
     try {
       return await resolver(parent, args, context, info);
     } catch (initialError) {
+      console.error(initialError);
       let error = initialError;
       let type = "unknown";
       let level: Sentry.SeverityLevel = "error";
@@ -26,6 +28,10 @@ function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Res
           break;
         case AuthenticationError:
           type = "authentication";
+          level = "warning";
+          break;
+        case AuthorizationError:
+          type = "authorization";
           level = "warning";
           break;
         case ValidationError:

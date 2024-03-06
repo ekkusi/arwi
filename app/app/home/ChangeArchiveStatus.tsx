@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import CText from "../../components/primitives/CText";
 import SaveAndCancelButtons from "../../components/SaveAndCancelButtons";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 
 type ChangeArchiveStatusProps = {

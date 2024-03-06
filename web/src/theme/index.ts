@@ -58,15 +58,15 @@ const themeOverrides = {
 
 export const DEFAULT_COLOR_SCHEME = "green";
 
-const colors = {
+export const COLORS = {
   ...themeOverrides,
   "light-gray": themeOverrides.gray["100"],
   "medium-gray": themeOverrides.gray["200"],
-  text: "black",
-  "light-text": themeOverrides.gray["700"],
+  text: themeOverrides.gray["700"],
+  "light-text": themeOverrides.gray["400"],
   "secondary-bg": themeOverrides.blue["100"],
   "dark-bg": "#404040",
-  // "secondary-bg": baseTheme.colors.yellow["100"],
+  // "secondary-bg": baseTheme.COLORS.yellow["100"],
   "primary-bg": themeOverrides[DEFAULT_COLOR_SCHEME]["100"],
   primary: themeOverrides[DEFAULT_COLOR_SCHEME]["500"],
 
@@ -101,7 +101,7 @@ const theme = extendTheme(
       "8xl": "6rem",
       "9xl": "8rem",
     },
-    colors,
+    colors: COLORS,
     styles: {
       global: () => ({
         "html, body, #root": {
@@ -110,9 +110,9 @@ const theme = extendTheme(
           width: "100%",
           height: "100%",
           overflowX: "hidden",
-          color: "light-text",
+          color: "text",
           lineHeight: 1.2,
-          bg: colors["light-gray"],
+          bg: COLORS["light-gray"],
           fontWeight: "light",
         },
         body: {
@@ -130,14 +130,24 @@ const theme = extendTheme(
           mt: 6,
         },
         h3: {
-          fontSize: { base: "xl", md: "2xl" },
+          fontSize: { base: "2xl", md: "3xl" },
           mb: 3,
           mt: 4,
         },
         a: {
           color: `${DEFAULT_COLOR_SCHEME}.500`,
+          transition: "opacity 0.3s",
+          "&:hover": {
+            opacity: 0.7,
+          },
         },
         "p, ol, ul": {
+          mb: 3,
+        },
+        "ol, ul": {
+          ml: 5,
+        },
+        "body .builder-text p:first-of-type": {
           mb: 3,
         },
         img: {

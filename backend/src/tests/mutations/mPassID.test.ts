@@ -1,5 +1,5 @@
 import { Teacher } from "@prisma/client";
-import { graphql } from "../gql";
+import { graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "../../prismaClient";
 import { MOCK_USER_INFO_RESPONSE, MOCK_VALID_CODE, TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin } from "../testHelpers";

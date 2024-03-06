@@ -1,8 +1,8 @@
 import { CollectionType } from "@prisma/client";
-import { graphql } from "../gql";
+import { graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
-import { CollectionTypeCategory, CreateCollectionTypeInput, UpdateCollectionTypeInput, UpdateGroupInput } from "../../types";
+import { CreateCollectionTypeInput, UpdateCollectionTypeInput, UpdateGroupInput } from "../../types";
 import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin, testLogin } from "../testHelpers";
 import { groupLoader, groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
 import { collectionTypesByModuleLoader } from "../../graphql/dataLoaders/collectionType";
@@ -23,8 +23,8 @@ describe("updateGroup", () => {
   beforeEach(async () => {
     group = await createTestGroup(teacher.id);
     groupId = group.id;
-    classParticipationType = group.currentModule.collectionTypes.find((type) => type.category === CollectionTypeCategory.CLASS_PARTICIPATION)!;
-    defaultCollectionType = group.currentModule.collectionTypes.find((type) => type.category === CollectionTypeCategory.EXAM)!;
+    classParticipationType = group.currentModule.collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION")!;
+    defaultCollectionType = group.currentModule.collectionTypes.find((type) => type.category === "EXAM")!;
   });
 
   afterEach(async () => {
@@ -114,7 +114,7 @@ describe("updateGroup", () => {
     expect(group).toEqual(expect.objectContaining(groupsFromTeacherLoaderBeforeUpdate[0]));
     expect(group.currentModule.collectionTypes).toEqual(expect.arrayContaining(collectionTypesByModuleBeforeUpdate));
 
-    const createCollectionTypeInputs: CreateCollectionTypeInput[] = [{ name: "New Type 1", weight: 25, category: CollectionTypeCategory.EXAM }];
+    const createCollectionTypeInputs: CreateCollectionTypeInput[] = [{ name: "New Type 1", weight: 25, category: "EXAM" }];
     const updateCollectionTypeInputs: UpdateCollectionTypeInput[] = [{ id: classParticipationType.id, name: "Updated Type 1", weight: 25 }]; // Should be of weight 50 originally
 
     // Update the group
@@ -155,8 +155,8 @@ describe("updateGroup", () => {
 
   it("should successfully create, update, and delete collection types", async () => {
     const createCollectionTypeInputs: CreateCollectionTypeInput[] = [
-      { name: "New Type 1", weight: 30, category: CollectionTypeCategory.EXAM },
-      { name: "New Type 2", weight: 30, category: CollectionTypeCategory.EXAM },
+      { name: "New Type 1", weight: 30, category: "EXAM" },
+      { name: "New Type 2", weight: 30, category: "EXAM" },
     ];
     const updateCollectionTypeInputs: UpdateCollectionTypeInput[] = [{ id: classParticipationType.id, name: "Updated Type 1", weight: 40 }]; // Should be of weight 50 originally
     const deleteCollectionTypeIds = [defaultCollectionType.id];
@@ -260,7 +260,7 @@ describe("updateGroup", () => {
 
   it("should throw an error if trying to change class participation collection type to other category", async () => {
     const updateCollectionTypeInputs: UpdateCollectionTypeInput[] = [
-      { id: classParticipationType.id, name: "Updated Type 1", weight: 40, category: CollectionTypeCategory.EXAM },
+      { id: classParticipationType.id, name: "Updated Type 1", weight: 40, category: "EXAM" },
     ];
     const updateData = {
       updateCollectionTypeInputs,
@@ -292,7 +292,7 @@ describe("updateGroup", () => {
 
   it("should throw an error if trying to change exam collection type to class participation category", async () => {
     const updateCollectionTypeInputs: UpdateCollectionTypeInput[] = [
-      { id: defaultCollectionType.id, name: "Updated Type 1", weight: 40, category: CollectionTypeCategory.CLASS_PARTICIPATION },
+      { id: defaultCollectionType.id, name: "Updated Type 1", weight: 40, category: "CLASS_PARTICIPATION" },
     ];
     const updateData = {
       updateCollectionTypeInputs,
@@ -352,8 +352,8 @@ describe("updateGroup", () => {
 
   it("should throw an error if there is more than one CLASS_PARTICIPATION category", async () => {
     const createCollectionTypeInputs: CreateCollectionTypeInput[] = [
-      { name: "New Type 1", weight: 30, category: CollectionTypeCategory.CLASS_PARTICIPATION },
-      { name: "New Type 2", weight: 30, category: CollectionTypeCategory.CLASS_PARTICIPATION },
+      { name: "New Type 1", weight: 30, category: "CLASS_PARTICIPATION" },
+      { name: "New Type 2", weight: 30, category: "CLASS_PARTICIPATION" },
     ];
     const updateData = {
       createCollectionTypeInputs,

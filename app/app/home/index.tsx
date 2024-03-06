@@ -12,55 +12,42 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
-import { graphql } from "../../gql";
+import { ResultOf, graphql } from "@/graphql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
-import GroupListItem from "../../components/GroupListItem";
-import { MainPage_GetCurrentUserQuery } from "../../gql/graphql";
+import GroupListItem, { GroupListItem_Fragment } from "../../components/GroupListItem";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { HomeStackParams } from "./types";
 import CButton from "../../components/primitives/CButton";
 import { COLORS } from "../../theme";
 import Layout from "../../components/Layout";
 
-const MainPage_GetCurrentUser_Query = graphql(`
-  query MainPage_GetCurrentUser {
-    getCurrentUser {
-      email
-      id
-      groups {
+const MainPage_GetCurrentUser_Query = graphql(
+  `
+    query MainPage_GetCurrentUser {
+      getCurrentUser {
         id
-        name
-        archived
-        updatedAt
-        currentModule {
-          collectionTypes {
-            id
-            category
-            name
-            weight
-          }
-        }
-        subject {
-          label {
-            fi
-          }
-          code
-        }
-        currentModule {
+        groups {
           id
+          name
+          updatedAt
+          archived
+          currentModule {
+            id
+          }
+          ...GroupListItem
         }
       }
     }
-  }
-`);
+  `,
+  [GroupListItem_Fragment]
+);
 
 function HomePageContent({
   data,
   navigation,
 }: {
-  data: MainPage_GetCurrentUserQuery;
+  data: ResultOf<typeof MainPage_GetCurrentUser_Query>;
   navigation: NativeStackNavigationProp<HomeStackParams, "home">;
 }) {
   const { t } = useTranslation();
@@ -110,31 +97,29 @@ function HomePageContent({
     return teacher.groups.filter((group) => !group.archived);
   }, [teacher.groups]);
 
-  const sortedGroups = useMemo(() => {
-    return [...notArchivedGroups].sort((a, b) => {
-      return a.updatedAt < b.updatedAt ? 1 : -1;
-    });
-  }, [notArchivedGroups]);
+  const renderItem = ({ item }: { item: (typeof teacher.groups)[number] }) => {
+    return (
+      <GroupListItem
+        enterAnimation={firstRender.current ? undefined : SlideInLeft}
+        exitAnimation={SlideOutRight}
+        group={item}
+        onEvaluateIconPress={() => navigation.navigate("collection-create", { groupId: item.id })}
+        onListItemPress={() =>
+          navigation.navigate("group", { id: item.id, classYearId: item.currentModule.id, name: item.name, archived: item.archived })
+        }
+      />
+    );
+  };
 
   return (
     <Layout style={{ paddingHorizontal: "sm" }}>
-      {sortedGroups.length > 0 ? (
+      {notArchivedGroups.length > 0 ? (
         <Animated.FlatList
           onScroll={scrollHandler}
           contentContainerStyle={{ paddingTop: 10 }}
           showsVerticalScrollIndicator={false}
-          data={sortedGroups}
-          renderItem={({ item }) => (
-            <GroupListItem
-              enterAnimation={firstRender.current ? undefined : SlideInLeft}
-              exitAnimation={SlideOutRight}
-              group={item}
-              onEvaluateIconPress={() => navigation.navigate("collection-create", { groupId: item.id })}
-              onListItemPress={() =>
-                navigation.navigate("group", { id: item.id, classYearId: item.currentModule.id, name: item.name, archived: item.archived })
-              }
-            />
-          )}
+          data={notArchivedGroups}
+          renderItem={renderItem}
           keyExtractor={(group) => group.id}
         />
       ) : (

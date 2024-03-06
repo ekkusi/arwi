@@ -4,45 +4,41 @@ import { useTranslation } from "react-i18next";
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SlideInLeft, SlideOutRight } from "react-native-reanimated";
 import { FlatList } from "react-native";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
-import { graphql } from "../../gql";
+import { ResultOf, graphql } from "@/graphql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
-import GroupListItem from "../../components/GroupListItem";
-import { ArchivePage_GetCurrentUserQuery, MainPage_GetCurrentUserQuery } from "../../gql/graphql";
+import GroupListItem, { GroupListItem_Fragment } from "../../components/GroupListItem";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { HomeStackParams } from "../home/types";
 import Layout from "../../components/Layout";
 
-const ArchivePage_GetCurrentUser_Query = graphql(`
-  query ArchivePage_GetCurrentUser {
-    getCurrentUser {
-      email
-      id
-      groups {
+const ArchivePage_GetCurrentUser_Query = graphql(
+  `
+    query ArchivePage_GetCurrentUser {
+      getCurrentUser {
+        email
         id
-        name
-        archived
-        updatedAt
-        subject {
-          label {
-            fi
-          }
-          code
-        }
-        currentModule {
+        groups {
           id
+          name
+          archived
+          updatedAt
+          currentModule {
+            id
+          }
+          ...GroupListItem
         }
       }
     }
-  }
-`);
+  `,
+  [GroupListItem_Fragment]
+);
 
 function ArchivePageContent({
   data,
   navigation,
 }: {
-  data: ArchivePage_GetCurrentUserQuery;
+  data: ResultOf<typeof ArchivePage_GetCurrentUser_Query>;
   navigation: NativeStackNavigationProp<HomeStackParams, "archive">;
 }) {
   const { t } = useTranslation();

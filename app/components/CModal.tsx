@@ -1,25 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Animated, Modal, ModalProps, StatusBar, TouchableWithoutFeedback } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { Modal, ModalProps, StatusBar, TouchableWithoutFeedback } from "react-native";
 import {
   BaseAnimationBuilder,
   FadeIn,
   FadeOut,
-  interpolateColor,
   runOnJS,
   SlideInDown,
-  SlideInLeft,
   SlideInUp,
   SlideOutDown,
   SlideOutUp,
-  useAnimatedProps,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
   ZoomIn,
   ZoomOut,
 } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Constants from "expo-constants";
+import { hasNotch } from "react-native-device-info";
 import { CViewStyle } from "../theme/types";
 import CAnimatedView from "./primitives/CAnimatedView";
 import CButton from "./primitives/CButton";
@@ -59,12 +54,10 @@ const innerViewStyle: CViewStyle = {
   maxHeight: "80%",
   paddingHorizontal: "xl",
   paddingTop: "md",
-  paddingBottom: "lg",
+  paddingBottom: "xl",
   backgroundColor: "white",
   overflow: "hidden",
 };
-
-const AnimatedStatusBar = Animated.createAnimatedComponent(StatusBar);
 
 export default function CModal({
   animated = true,
@@ -107,7 +100,7 @@ export default function CModal({
     let placementStyles: CViewStyle;
     switch (placement) {
       case "top":
-        placementStyles = { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 };
+        placementStyles = { borderBottomLeftRadius: 20, borderBottomRightRadius: 20, paddingTop: hasNotch() ? Constants.statusBarHeight : "md" };
         break;
       case "bottom":
         placementStyles = { borderTopLeftRadius: 20, borderTopRightRadius: 20 };
@@ -182,7 +175,7 @@ export default function CModal({
               flexDirection: "row",
               justifyContent: title ? "space-between" : "flex-end",
               alignItems: "center",
-              // marginBottom: title ? "md" : 0,
+              marginBottom: title ? "md" : 0,
               ...headerStyles,
             }}
           >

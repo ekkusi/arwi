@@ -7,10 +7,9 @@ type ParticipationToggleProps = Omit<CViewProps, "onChange"> & {
   disabled?: boolean;
   initialValue?: boolean;
   onChange?: (value: boolean) => void;
-  size?: "xs" | "sm" | "md" | "lg";
 };
 
-export default function ParticipationToggle({ disabled, initialValue = true, onChange, size = "xs", ...rest }: ParticipationToggleProps) {
+export default function ParticipationToggle({ disabled, initialValue = true, onChange, ...rest }: ParticipationToggleProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState(initialValue);
 

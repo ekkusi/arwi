@@ -1,4 +1,4 @@
-import { CollectionTypeCategory, TranslatedString } from "arwi-backend/src/types";
+import { TranslatedString } from "arwi-backend/src/types";
 
 export type HomeStackParams = {
   home: undefined;
@@ -41,6 +41,9 @@ export type HomeStackParams = {
     collectionId: string;
   };
   "collection-create": {
+    groupId: string;
+  };
+  "final-feedback-collection": {
     groupId: string;
   };
   "default-collection-create": {

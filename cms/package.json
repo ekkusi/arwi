@@ -18,14 +18,19 @@
   ],
   "dependencies": {
     "@sanity/color-input": "^3.1.0",
+    "@sanity/ui": "^2.0.2",
     "@sanity/vision": "^3.16.7",
+    "gql.tada": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
+    "react-select": "^5.8.0",
     "sanity": "^3.16.7",
-    "styled-components": "^5.3.9"
+    "styled-components": "^6.1.8",
+    "urql": "^4.0.6"
   },
   "devDependencies": {
+    "@0no-co/graphqlsp": "^1.4.1",
     "@types/react": "^18.0.25",
     "@types/styled-components": "^5.1.26",
     "ndjson-cli": "^0.3.1",

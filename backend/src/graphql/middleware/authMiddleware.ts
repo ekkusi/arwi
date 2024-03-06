@@ -1,6 +1,6 @@
 import { IMiddleware, IMiddlewareFunction } from "graphql-middleware";
 import queryResolvers from "../resolvers/queryResolvers";
-import AuthenticationError from "../../errors/AuthenticationError";
+import AuthenticationError from "../errors/AuthenticationError";
 import mutationResolvers from "../resolvers/mutationResolvers";
 import { Mutation, Query } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
@@ -24,7 +24,7 @@ const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = [
   "updatePassword",
   "requestPasswordReset",
 ];
-const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata"];
+const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata", "getMPassIDOrganizations"];
 
 const mutationResolverKeys: (keyof Mutation)[] = Object.keys(mutationResolvers) as (keyof Mutation)[];
 

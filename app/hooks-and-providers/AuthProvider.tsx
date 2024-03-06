@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useState } from "react";
 import { Teacher } from "arwi-backend/src/types";
 import { removeSessionId } from "../helpers/session";
 
-type UserInfo = Omit<Teacher, "passwordHash" | "groups">;
+type UserInfo = Omit<Teacher, "passwordHash" | "groups" | "monthlyTokensUsed">;
 
 type AuthState = {
   authenticated: boolean;

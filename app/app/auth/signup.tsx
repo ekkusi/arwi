@@ -6,7 +6,7 @@ import WebView from "react-native-webview";
 import { useMatomo } from "matomo-tracker-react-native";
 import Checkbox from "expo-checkbox";
 import CButton from "../../components/primitives/CButton";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
@@ -145,6 +145,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
         <CView style={{ flex: 1, width: "100%", paddingHorizontal: "lg" }}>
           <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "xl" }}>
             <TextFormField
+              autoCapitalize="none"
               title={t("email", "Sähköpostiosoite")}
               placeholder="arwioija@gmail.com"
               validate={nameValidator}

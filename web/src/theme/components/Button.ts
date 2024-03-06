@@ -58,7 +58,7 @@ const Button: ComponentSingleStyleConfig = defineStyleConfig({
       px: 0,
       py: 0,
       textTransform: "none",
-      color: `${colorScheme}.600`,
+      color: `${colorScheme}.500`,
       textDecoration: "underline",
       _hover: {
         bg: "inherit",

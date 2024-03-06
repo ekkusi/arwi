@@ -5,27 +5,13 @@ import { CollectionCreationStackParams } from "./types";
 import { useCollectionCreationContext } from "./CollectionCreationProvider";
 import CollectionCreationLayout from "./_layout";
 import { COLORS } from "../../../../theme";
-import { getFragmentData, graphql } from "../../../../gql";
+import { readFragment } from "@/graphql";
 import CollectionGeneralInfoForm, { GeneralInfoData } from "../_general_info_form";
-
-const CollectionGeneralInfoView_Group_Fragment = graphql(`
-  fragment CollectionGeneralInfoView_Group on Group {
-    subject {
-      code
-    }
-    currentModule {
-      id
-      info {
-        educationLevel
-        learningObjectiveGroupKey
-      }
-    }
-  }
-`);
+import { CollectionGeneralInfoView_Group_Fragment } from "./graphql";
 
 function CollectionGeneralInfoContent({ navigation }: NativeStackScreenProps<CollectionCreationStackParams, "collection-create-general-info">) {
   const { groupInfo, setGeneralData } = useCollectionCreationContext();
-  const group = getFragmentData(CollectionGeneralInfoView_Group_Fragment, groupInfo);
+  const group = readFragment(CollectionGeneralInfoView_Group_Fragment, groupInfo);
 
   const subjectCode = group.subject.code;
   const moduleInfo = group.currentModule.info;

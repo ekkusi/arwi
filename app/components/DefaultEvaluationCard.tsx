@@ -1,4 +1,4 @@
-import { Student } from "arwi-backend/src/types";
+import { CreateDefaultEvaluationInput, Student, UpdateDefaultEvaluationInput, WarningInfo } from "arwi-backend/src/types";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, Dimensions, Platform, Switch } from "react-native";
@@ -7,7 +7,6 @@ import Animated from "react-native-reanimated";
 import { useMutation } from "@apollo/client";
 import { TextInput } from "react-native-gesture-handler";
 import Constants from "expo-constants";
-import { CreateDefaultEvaluationInput, UpdateDefaultEvaluationInput } from "../gql/graphql";
 import CText from "./primitives/CText";
 import CView from "./primitives/CView";
 import { COLORS } from "../theme";
@@ -15,10 +14,11 @@ import CButton from "./primitives/CButton";
 import { formatDate } from "../helpers/dateHelpers";
 import { useModal } from "../hooks-and-providers/ModalProvider";
 import CustomTextInputView from "../app/home/CustomTextInputView";
-import { graphql } from "../gql";
+import { graphql } from "@/graphql";
 import { useToast } from "../hooks-and-providers/ToastProvider";
 import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";
 import SliderWithScale from "./SliderWithScale";
+import { useToggleTokenUseWarning } from "../hooks-and-providers/monthlyTokenUseWarning";
 
 export type DefaultEvaluation = Omit<CreateDefaultEvaluationInput, "studentId"> & {
   student: Pick<Student, "id" | "name"> & {
@@ -61,9 +61,19 @@ type DefaultEvaluationCardProps = {
   isActive?: boolean;
 };
 
-const ClassParticipationEvaluationCard_FixTextGrammatics_Mutation = graphql(`
-  mutation ClassParticipationEvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
-    fixTextGrammatics(studentId: $studentId, text: $text)
+const DefaultEvaluationCard_FixTextGrammatics_Mutation = graphql(`
+  mutation DefaultEvaluationCard_FixTextGrammatics($studentId: ID!, $text: String!) {
+    fixTextGrammatics(studentId: $studentId, text: $text) {
+      result
+      usageData {
+        id
+        monthlyTokensUsed
+        warning {
+          warning
+          threshhold
+        }
+      }
+    }
   }
 `);
 
@@ -85,12 +95,13 @@ function DefaultEvaluationCard({
   height = "auto",
   isActive = true,
 }: DefaultEvaluationCardProps) {
+  const toggleTokenUseWarning = useToggleTokenUseWarning();
   const [notes, setNotes] = useState(() => evaluation.notes || "");
   const [previousNotes, setPreviousNotes] = useState<string | undefined>(undefined);
   const [newSpeechObtained, setNewSpeechObtained] = useState(false);
   const [data, setData] = useState<Omit<DefaultEvaluation | DefaultEvaluationToUpdate, "notes">>(evaluation);
 
-  const [fixTextGrammatics, { loading: isFixingText }] = useMutation(ClassParticipationEvaluationCard_FixTextGrammatics_Mutation);
+  const [fixTextGrammatics, { loading: isFixingText }] = useMutation(DefaultEvaluationCard_FixTextGrammatics_Mutation);
 
   const speechRef = useRef<SpeechToTextInputHandle>(null);
   const inputRef = useRef<TextInput>(null);
@@ -166,11 +177,14 @@ function DefaultEvaluationCard({
 
       if (!result.data?.fixTextGrammatics) throw new Error("Text rephrasing failed");
       setPreviousNotes(notes);
-      const resultText = result.data?.fixTextGrammatics;
+      const resultText = result.data?.fixTextGrammatics.result;
       setNotes(resultText);
       onChanged("notes", resultText);
       setNewSpeechObtained(false);
       openToast(t("ai-fix-completed", "Oppilaan {{studentName}} arvioinnin korjaus suoritettu.", { studentName: evaluation.student.name }));
+
+      const tokenUseWarning = result.data?.fixTextGrammatics.usageData.warning;
+      if (tokenUseWarning) toggleTokenUseWarning(tokenUseWarning as WarningInfo);
     } catch (e) {
       console.error(e);
       Alert.alert(t("text-fix-error", "Tekstin korjaamisessa tapahtui virhe."));

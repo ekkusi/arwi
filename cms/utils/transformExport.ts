@@ -4,6 +4,7 @@ import path from "path";
 import json from "../export/data.json";
 
 const data: any = json;
+const subjectsData = data.filter((it: any) => it._type === "subject");
 
 const deleteKeyAndType = (arr: any[]) => {
   for (let i = 0; i < arr.length; i += 1) {
@@ -26,15 +27,15 @@ function hslToHex(hue: number, sat: number, light: number): string {
   return `#${f(0)}${f(8)}${f(4)}`;
 }
 
-function generatePastelColors(numColors: number): string[] {
+function generatePastelColors(numColors: number, initialHue: number, saturation: number, lightness: number): string[] {
   const colors: string[] = [];
-  const saturation = 60; // Saturation percentage
-  const lightness = 60; // Lightness percentage
-  const hueStep = 360 / numColors; // Distribute the hues evenly
+  const goldenRatioConjugate: number = 0.618033988749895; // Golden ratio conjugate
+  let hue: number = initialHue;
 
-  for (let i = 0; i < numColors; i += 1) {
-    const hue = i * hueStep; // Calculate the hue
-    const color = hslToHex(hue, saturation, lightness); // Create HEX color
+  for (let i: number = 0; i < numColors; i += 1) {
+    hue += goldenRatioConjugate; // Use the golden ratio to distribute hues
+    hue %= 1; // Keep hue in the range [0, 1)
+    const color: string = hslToHex(hue * 360, saturation, lightness); // Create HEX color
     colors.push(color); // Add the color to the array
   }
 
@@ -43,7 +44,7 @@ function generatePastelColors(numColors: number): string[] {
 
 const formatEnvironments = (environments: any[]) => {
   deleteKeyAndType(environments);
-  const colors = generatePastelColors(environments.length);
+  const colors = generatePastelColors(environments.length, 0.2, 45, 50);
   for (let i = 0; i < environments.length; i += 1) {
     const environment = environments[i];
     environment.color = colors[i];
@@ -58,7 +59,7 @@ const formatEnvironments = (environments: any[]) => {
 
 const formatLearningObjecives = (objectives: any[]) => {
   deleteKeyAndType(objectives);
-  const colors = generatePastelColors(objectives.length);
+  const colors = generatePastelColors(objectives.length, 0.05, 30, 45);
   for (let i = 0; i < objectives.length; i += 1) {
     const objective = objectives[i];
     objective.color = colors[i];
@@ -77,8 +78,8 @@ const formatLearningObjecives = (objectives: any[]) => {
   }
 };
 
-for (let i = 0; i < data.length; i += 1) {
-  const subject = data[i];
+for (let i = 0; i < subjectsData.length; i += 1) {
+  const subject = subjectsData[i];
   subject.code = subject.code.current;
   const commonEnvironments = subject.environments || [];
   delete subject.environments;
@@ -134,4 +135,4 @@ for (let i = 0; i < data.length; i += 1) {
 }
 
 // eslint-disable-next-line no-console
-fs.writeFile(path.join(__dirname, "../export/data.json"), JSON.stringify(data, null, 2), () => console.log("Transform done!"));
+fs.writeFile(path.join(__dirname, "../export/data.json"), JSON.stringify(subjectsData, null, 2), () => console.log("Transform done!"));

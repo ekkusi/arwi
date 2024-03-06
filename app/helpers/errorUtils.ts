@@ -8,7 +8,6 @@ type GenericError = Error & {
 export const getGraphqlErrorMessage = (errors: readonly GraphQLError[]) => {
   if (errors && errors.length > 0) {
     const graphQLError = errors[0];
-    console.log("graphQLError", graphQLError);
 
     // Try fetch originalError from extensions and return it's message if exists.
     // if (graphQLError.extensions?.originalError) {

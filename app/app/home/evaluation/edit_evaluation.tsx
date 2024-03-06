@@ -9,11 +9,12 @@ import LoadingIndicator from "../../../components/LoadingIndicator";
 import CButton from "../../../components/primitives/CButton";
 import CView from "../../../components/primitives/CView";
 import { UpdateClassParticipationEvaluationCard } from "../../../components/ClassParticipationEvaluationCard";
-import { graphql } from "../../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { EvaluationDataToUpdate } from "../collection/edit_all_evaluations";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
+import { ClassParticipationEvaluationUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const EvaluationEditView_GetEvaluation_Query = graphql(`
   query EvaluationEditView_GetEvaluation($evaluationId: ID!) {
@@ -49,19 +50,22 @@ const EvaluationEditView_GetEvaluation_Query = graphql(`
   }
 `);
 
-const EvaluationEditView_UpdateEvaluation_Mutation = graphql(`
-  mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateClassParticipationEvaluationInput!) {
-    updateClassParticipationEvaluation(input: $updateEvaluationInput) {
-      ...ClassParticipationEvaluationUpdate_Info
-      collection {
-        id
-        evaluations {
-          ...ClassParticipationEvaluationUpdate_Info
+const EvaluationEditView_UpdateEvaluation_Mutation = graphql(
+  `
+    mutation EvaluationEditView_UpdateEvaluation($updateEvaluationInput: UpdateClassParticipationEvaluationInput!) {
+      updateClassParticipationEvaluation(input: $updateEvaluationInput) {
+        ...ClassParticipationEvaluationUpdate_Info
+        collection {
+          id
+          evaluations {
+            ...ClassParticipationEvaluationUpdate_Info
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [ClassParticipationEvaluationUpdate_Info_Fragment]
+);
 
 function EvaluationEditViewContent({
   navigation,
@@ -139,7 +143,9 @@ export default function EvaluationEditView({ navigation, route }: NativeStackScr
           navigation={navigation}
         />
       ) : (
-        <CText>{t("this-view-not-implemented", "Tämä näkymä ei ole vielä implementoitu")}</CText>
+        <CText>
+          {t("you-should-not-end-up-here", "Sinun ei kuuluisi päätyä tälle näkymälle. Jos viitsit, niin ilmoita asiasta kehittäjille info@arwi.fi.")}
+        </CText>
       )}
     </Layout>
   );

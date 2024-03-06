@@ -1,8 +1,7 @@
 import { useMemo, useState } from "react";
 import { t } from "i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { FragmentType, getFragmentData } from "../../gql";
-import { EvaluationsAccordion_EvaluationFragment, EvaluationsAccordion_EvaluationFragmentDoc } from "../../gql/graphql";
+import { FragmentOf, ResultOf, readFragment } from "gql.tada";
 import { getColorForGrade } from "../../helpers/dataMappers";
 import CView, { CViewProps } from "../primitives/CView";
 import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
@@ -10,6 +9,7 @@ import CText from "../primitives/CText";
 import CButton from "../primitives/CButton";
 import { COLORS } from "../../theme";
 import CModal from "../CModal";
+import { EvaluationsAccordion_Evaluation_Fragment } from "../EvaluationsAccordion";
 
 type FilterValue = "all" | "skills" | "behaviour";
 
@@ -19,7 +19,7 @@ type TempDataType = {
 };
 type TempDataHash = { [grade: number]: TempDataType };
 
-const mapToTempData = (evaluations: EvaluationsAccordion_EvaluationFragment[]) => {
+const mapToTempData = (evaluations: ResultOf<typeof EvaluationsAccordion_Evaluation_Fragment>[]) => {
   const tempData: TempDataHash = {};
   [4, 5, 6, 7, 8, 9, 10].forEach((grade) => {
     tempData[grade] = {
@@ -58,13 +58,13 @@ const filterTempDataToChartData = (data: TempDataHash, typeFilter: string) => {
 };
 
 type EvaluationsHistogramProps = CViewProps & {
-  evaluations: ({ id: string } & FragmentType<typeof EvaluationsAccordion_EvaluationFragmentDoc>)[];
+  evaluations: ({ id: string } & FragmentOf<typeof EvaluationsAccordion_Evaluation_Fragment>)[];
 };
 
 export default function SingleEvaluationHistogram({ evaluations: evaluationFragments, ...rest }: EvaluationsHistogramProps) {
   const [typeFilter, setTypeFilter] = useState<FilterValue>("all");
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const evaluations = getFragmentData(EvaluationsAccordion_EvaluationFragmentDoc, evaluationFragments);
+  const evaluations = readFragment(EvaluationsAccordion_Evaluation_Fragment, evaluationFragments);
   const filteredEvaluations = useMemo(() => evaluations.filter((it) => it.wasPresent), [evaluations]);
 
   const data = useMemo(() => mapToTempData(filteredEvaluations), [filteredEvaluations]);

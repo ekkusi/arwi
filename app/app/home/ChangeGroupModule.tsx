@@ -7,7 +7,7 @@ import LoadingIndicator from "../../components/LoadingIndicator";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
 import SaveAndCancelButtons from "../../components/SaveAndCancelButtons";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 
 const ChangeModule_GetGroup_Query = graphql(`
   query ChangeModule_GetGroup($id: ID!) {
@@ -57,9 +57,10 @@ export default function ChangeModule({ groupId, onCancel, onSaved }: ChangeModul
     },
   });
 
+  const moduleInfo = data?.getGroup.currentModule.info;
   const [changeModule, { loading }] = useMutation(ChangeModule_ChangeModule_Mutation);
   const getOptionValue = (item: ModuleInfo) => `${item.educationLevel}-${item.learningObjectiveGroupKey}`;
-  const isValid = selectedModule && data && getOptionValue(selectedModule) !== getOptionValue(data?.getGroup.currentModule.info);
+  const isValid = selectedModule && moduleInfo && getOptionValue(selectedModule) !== getOptionValue(moduleInfo);
 
   const changeYear = async () => {
     if (!isValid) throw new Error("Unexpected error, selected class year not valid"); // Should never happen
@@ -82,7 +83,7 @@ export default function ChangeModule({ groupId, onCancel, onSaved }: ChangeModul
 
   if (!data) return <LoadingIndicator />;
 
-  const currentModuleLevel = data.getGroup.currentModule.info.educationLevel;
+  const currentModuleLevel = moduleInfo!.educationLevel;
   const isCurrentModulePrimaryLevel = isPrimaryEducationLevel(currentModuleLevel);
 
   const modules = getModuleInfos(data.getGroup.subject.code);
@@ -93,7 +94,7 @@ export default function ChangeModule({ groupId, onCancel, onSaved }: ChangeModul
   return (
     <CView>
       <SelectFormField
-        defaultValue={data.getGroup.currentModule.info}
+        defaultValue={moduleInfo}
         options={educationLevelModules}
         onSelect={(item) => setSelectedModule(item)}
         getOptionValue={(item) => `${item.educationLevel}-${item.learningObjectiveGroupKey}`}

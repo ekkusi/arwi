@@ -9,7 +9,7 @@ import PagerView, { PagerViewOnPageSelectedEvent } from "react-native-pager-view
 import CButton from "../../../../../components/primitives/CButton";
 import CView from "../../../../../components/primitives/CView";
 import { CARD_HEIGHT, CreateDefaultEvaluationCardMemoed, DefaultEvaluation } from "../../../../../components/DefaultEvaluationCard";
-import { graphql } from "../../../../../gql";
+import { graphql } from "@/graphql";
 import { formatDate } from "../../../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../../../helpers/errorUtils";
 import { useKeyboardListener } from "../../../../../hooks-and-providers/keyboard";
@@ -19,33 +19,34 @@ import { useDefaultCollectionCreationContext } from "./DefaultCollectionCreation
 import { DefaultCollectionCreationStackParams } from "./types";
 import DefaultCollectionCreationLayout from "./_layout";
 import LazyLoadView from "../../../../../components/LazyLoadView";
+import {
+  CollectionModuleCacheUpdate_Fragment,
+  DefaultCollectionUpdate_Info_Fragment,
+  DefaultEvaluationUpdate_Info_Fragment,
+} from "@/helpers/graphql/fragments";
 
-const DefaultCollectionEvaluationsView_CreateCollection_Mutation = graphql(`
-  mutation DefaultCollectionEvaluationsView_CreateCollection($createCollectionInput: CreateDefaultCollectionInput!, $moduleId: ID!) {
-    createDefaultCollection(data: $createCollectionInput, moduleId: $moduleId) {
-      ...DefaultCollectionUpdate_Info
-      evaluations {
-        ...DefaultEvaluationUpdate_Info
-        student {
-          id
-          currentModuleEvaluations {
+const DefaultCollectionEvaluationsView_CreateCollection_Mutation = graphql(
+  `
+    mutation DefaultCollectionEvaluationsView_CreateCollection($createCollectionInput: CreateDefaultCollectionInput!, $moduleId: ID!) {
+      createDefaultCollection(data: $createCollectionInput, moduleId: $moduleId) {
+        ...DefaultCollectionUpdate_Info
+        evaluations {
+          ...DefaultEvaluationUpdate_Info
+          student {
             id
+            currentModuleEvaluations {
+              id
+            }
           }
         }
-      }
-      module {
-        id
-        evaluationCollections {
-          id
-        }
-        group {
-          id
-          updatedAt
+        module {
+          ...CollectionModuleCacheUpdate
         }
       }
     }
-  }
-`);
+  `,
+  [DefaultCollectionUpdate_Info_Fragment, CollectionModuleCacheUpdate_Fragment, DefaultEvaluationUpdate_Info_Fragment]
+);
 
 function DefaultCollectionEvaluationsContent({
   navigation,

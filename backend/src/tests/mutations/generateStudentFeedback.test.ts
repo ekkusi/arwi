@@ -1,5 +1,5 @@
 import { EvaluationCollection, Student } from "@prisma/client";
-import { graphql } from "../gql";
+import { graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import {
@@ -11,6 +11,18 @@ import {
   createTestUserAndLogin,
   testLogin,
 } from "../testHelpers";
+import { feedbacksLoader } from "@/graphql/dataLoaders/feedback";
+
+const query = graphql(`
+  mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {
+    generateStudentFeedback(studentId: $studentId, moduleId: $moduleId) {
+      feedback {
+        id
+        text
+      }
+    }
+  }
+`);
 
 describe("generateStudentFeedback", () => {
   let graphqlRequest: TestGraphQLRequest;
@@ -33,19 +45,14 @@ describe("generateStudentFeedback", () => {
 
   afterEach(async () => {
     await prisma.evaluation.deleteMany();
+    await prisma.feedback.deleteMany();
   });
 
   it("should successfully generate student feedback", async () => {
-    const query = graphql(`
-      mutation GenerateStudentFeedbackValid($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
-      }
-    `);
-
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
     expect(response.data?.generateStudentFeedback).toBeDefined();
-    expect(response.data?.generateStudentFeedback).toContain("Mock response from OpenAI");
+    expect(response.data?.generateStudentFeedback.feedback.text).toContain("Mock response from OpenAI");
   });
 
   it("should throw error if user is not authorized for the student", async () => {
@@ -53,12 +60,6 @@ describe("generateStudentFeedback", () => {
       email: "unauthorized@example.com",
       password: "password",
     });
-
-    const query = graphql(`
-      mutation GenerateStudentFeedbackUnAuthorized($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
-      }
-    `);
 
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
@@ -73,12 +74,6 @@ describe("generateStudentFeedback", () => {
   it("should throw error if student does not exist", async () => {
     const invalidStudentId = "nonexistent_student_id";
 
-    const query = graphql(`
-      mutation GenerateStudentFeedbackStudentDoesntExist($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
-      }
-    `);
-
     const response = await graphqlRequest(query, { studentId: invalidStudentId, moduleId: group.currentModuleId });
 
     expect(response.errors).toBeDefined();
@@ -88,15 +83,24 @@ describe("generateStudentFeedback", () => {
   it("should handle no evaluations case gracefully", async () => {
     await prisma.evaluation.deleteMany();
 
-    const query = graphql(`
-      mutation GenerateStudentFeedbackNoEvaluation($studentId: ID!, $moduleId: ID!) {
-        generateStudentFeedback(studentId: $studentId, moduleId: $moduleId)
-      }
-    `);
-
     const response = await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
+  });
+
+  it("should update the DataLoader caches after generating feedback", async () => {
+    // Fetch the initial state of the student from the DataLoaders
+    const feedbacksFromLoader = await feedbacksLoader.load({ studentId: student.id, moduleId: group.currentModuleId });
+    expect(feedbacksFromLoader).toEqual([]);
+
+    // Execute the request
+    await graphqlRequest(query, { studentId: student.id, moduleId: group.currentModuleId });
+
+    // Fetch the updated state of the student from the DataLoaders
+    const updatedFeedbacksFromLoader = await feedbacksLoader.load({ studentId: student.id, moduleId: group.currentModuleId });
+
+    // Check that the student's latest feedback has been updated correctly
+    expect(updatedFeedbacksFromLoader[0]).toEqual(expect.objectContaining({ text: "Mock response from OpenAI" }));
   });
 });

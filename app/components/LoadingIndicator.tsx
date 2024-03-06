@@ -7,11 +7,19 @@ import { getColor } from "../theme/utils";
 import { CViewStyle } from "../theme/types";
 
 type LoadingIndicatorProps = CViewProps & {
-  type?: "inline" | "overlay";
+  type?: "inline" | "cover" | "overlay";
+  color?: string;
   overlayOpacity?: number;
 };
 
-export default function LoadingIndicator({ style, children, type = "inline", overlayOpacity = 0.6, ...rest }: LoadingIndicatorProps) {
+export default function LoadingIndicator({
+  style,
+  children,
+  type = "cover",
+  overlayOpacity = 0.6,
+  color: indicatorColor,
+  ...rest
+}: LoadingIndicatorProps) {
   const { backgroundColor, ...restStyle } = style ?? {};
 
   const bgColor = useMemo(() => {
@@ -22,15 +30,26 @@ export default function LoadingIndicator({ style, children, type = "inline", ove
   }, [backgroundColor, overlayOpacity, type]);
 
   const positionStyles: CViewStyle = useMemo(() => {
-    if (type === "inline") return {};
-    return {
-      position: "absolute",
-      top: 0,
-      right: 0,
-      left: 0,
-      bottom: 0,
-      zIndex: 1,
-    };
+    switch (type) {
+      case "inline":
+        return {
+          paddingVertical: "lg",
+        };
+      case "cover":
+        return {
+          width: "100%",
+          height: "100%",
+        };
+      default:
+        return {
+          position: "absolute",
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
+          zIndex: 1,
+        };
+    }
   }, [type]);
 
   return (
@@ -38,15 +57,13 @@ export default function LoadingIndicator({ style, children, type = "inline", ove
       style={{
         justifyContent: "center",
         alignItems: "center",
-        height: "100%",
-        width: "100%",
         backgroundColor: bgColor,
         ...positionStyles,
         ...restStyle,
       }}
       {...rest}
     >
-      <ActivityIndicator size="large" color={COLORS.primary} />
+      <ActivityIndicator size="large" color={indicatorColor || COLORS.primary} />
       {children}
     </CView>
   );

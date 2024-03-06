@@ -15,15 +15,7 @@ export type LinkProps = Omit<React.ComponentProps<typeof MotionLink>, "ref"> & {
   hoverStyle?: "underline" | "none" | "opacity";
   queryParams?: Record<string, string>;
   underLineSize?: string | number;
-};
-
-const opacityMotion: Variants = {
-  rest: {
-    opacity: 1,
-  },
-  hover: {
-    opacity: 0.7,
-  },
+  underLineColor?: string;
 };
 
 const underLineMotion: Variants = {
@@ -44,6 +36,7 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
       color = "primary",
       hoverStyle = "opacity",
       underLineSize = "1px",
+      underLineColor: _underLineColor,
       fontSize,
       queryParams: _queryParams,
       ...rest
@@ -54,6 +47,7 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
     const locale = i18n.language as LanguageOption;
 
     const queryParams = _queryParams ? new URLSearchParams(_queryParams) : undefined;
+    const underLineColor = _underLineColor || color;
 
     let href = _href;
     if (!noTranslate) {
@@ -74,12 +68,17 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
     }
     href = queryParams ? `${href}?${new URLSearchParams(queryParams)}` : href;
 
-    const linkVariants = useMemo(() => {
+    const hoverStyles = useMemo(() => {
       switch (hoverStyle) {
         case "opacity":
-          return opacityMotion;
-        default:
           return undefined;
+        // In underline or none, override the default opacity hover style
+        default:
+          return {
+            _hover: {
+              opacity: 1,
+            },
+          };
       }
     }, [hoverStyle]);
 
@@ -87,12 +86,12 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
       <MotionLink
         ref={ref}
         href={href}
-        variants={linkVariants}
         initial="rest"
         whileHover="hover"
         position="relative"
         color={color}
         fontSize={fontSize}
+        {...hoverStyles}
         {...rest}
       >
         {children}
@@ -101,8 +100,8 @@ export default forwardRef<HTMLAnchorElement, LinkProps>(
             variants={underLineMotion}
             position="absolute"
             bottom="-1"
-            left="0"
-            backgroundColor={color}
+            left=" 0"
+            backgroundColor={underLineColor}
             width="100%"
             height={underLineSize}
           />

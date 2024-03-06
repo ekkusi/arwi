@@ -1,8 +1,7 @@
 import { hash } from "bcryptjs";
 import { Teacher } from "@prisma/client";
 import { BRCRYPT_SALT_ROUNDS } from "../../config";
-import { graphql } from "../gql";
-import { SampleTest_RegisterMutationVariables } from "../gql/graphql";
+import { VariablesOf, graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import { createTestUser, deleteTestUser } from "../testHelpers";
 
@@ -23,12 +22,6 @@ describe("Sample", () => {
   it("should register a new teacher", async () => {
     const password = "password";
     const passwordHash = await hash(password, BRCRYPT_SALT_ROUNDS);
-    const teacherData: SampleTest_RegisterMutationVariables = {
-      data: {
-        email: "new-teacher@email.com",
-        password: passwordHash,
-      },
-    };
 
     const query = graphql(`
       mutation SampleTest_Register($data: CreateTeacherInput!) {
@@ -39,6 +32,13 @@ describe("Sample", () => {
         }
       }
     `);
+
+    const teacherData: VariablesOf<typeof query> = {
+      data: {
+        email: "new-teacher@email.com",
+        password: passwordHash,
+      },
+    };
 
     const response = await graphqlRequest(query, teacherData);
 

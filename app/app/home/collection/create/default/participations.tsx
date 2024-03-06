@@ -6,20 +6,10 @@ import CButton from "../../../../../components/primitives/CButton";
 import CText from "../../../../../components/primitives/CText";
 import CView from "../../../../../components/primitives/CView";
 import StudentParticipationList from "../../../../../components/StudentParticipationList";
-import { graphql } from "../../../../../gql";
 import { COLORS } from "../../../../../theme";
 import { useDefaultCollectionCreationContext } from "./DefaultCollectionCreationProvider";
 import { DefaultCollectionCreationStackParams } from "./types";
 import DefaultCollectionCreationLayout from "./_layout";
-
-const CollectionParticipationsView_Group_Fragment = graphql(`
-  fragment CollectionParticipationsView_Group on Group {
-    students {
-      id
-      name
-    }
-  }
-`);
 
 function DefaultCollectionParticipationsContent({
   navigation,

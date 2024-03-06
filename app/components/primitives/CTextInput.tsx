@@ -1,6 +1,6 @@
 import React, { forwardRef, useMemo } from "react";
 import { TextInput, TextInputProps } from "react-native";
-import { COLORS, FONT_SIZES } from "../../theme";
+import { COLORS } from "../../theme";
 import { CTextStyle } from "../../theme/types";
 import { createStyles, createTextStyles } from "../../theme/utils";
 

@@ -1,4 +1,4 @@
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import { LanguageOption } from "@/i18n/settings";
 import { extractLocaleFromPath } from "./route";
 
@@ -18,9 +18,4 @@ export const getLocaleServer = (): LanguageOption => {
 
   const lng = extractLocaleFromPath(pathName) || "fi";
   return lng;
-};
-
-export const getIsAuthenticated = (): boolean => {
-  const sessionID = cookies().get(SESSION_COOKIE_NAME);
-  return !!sessionID;
 };

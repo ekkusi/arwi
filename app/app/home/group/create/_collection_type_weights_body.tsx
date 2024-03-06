@@ -1,14 +1,11 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated";
-import { Alert, Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 import { ReText } from "react-native-redash";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CView from "../../../../components/primitives/CView";
-import { useGroupCreationContext } from "./GroupCreationProvider";
-import { GroupCreationStackParams } from "./types";
-import GroupCreationBody, { SCROLL_TO_INPUT_EXTRA_HEIGHT } from "./_body";
+import { SCROLL_TO_INPUT_EXTRA_HEIGHT } from "./_body";
 import CText from "../../../../components/primitives/CText";
 import CKeyboardAwareScrollView from "../../../../components/primitives/CKeyboardAwareScrollView";
 import { COLORS, FONT_SIZES } from "../../../../theme";

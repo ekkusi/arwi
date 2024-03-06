@@ -1,12 +1,12 @@
 "use client";
 
-import { Text, Box, BoxProps, Flex, Icon } from "@chakra-ui/react";
+import { Text, Box, BoxProps, Flex } from "@chakra-ui/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { FiInstagram } from "@/components/react-icons/fi";
 import { useTranslation } from "@/i18n/client";
 import CenteredContainer from "../primitives/CenteredContainer";
 import Link from "../primitives/Link";
+import ChakraIcon from "../primitives/LazyIcon";
 
 export type FooterProps = BoxProps & {
   isDecorationFixed?: boolean;
@@ -83,13 +83,13 @@ export default function Footer({ extraContent, containerProps, isDecorationFixed
           <Image src="/images/layered-wave-bottom-1.svg" fill alt="Waves" />
         </Box>
       )}
-      <Box as="footer" position="relative" marginTop="auto" zIndex={isInView ? 3 : 1} {...containerProps}>
+      <Box as="footer" position="relative" marginTop="auto" zIndex={isInView ? 3 : 1} {...containerProps} {...rest}>
         <Box aspectRatio="960/200" position="relative">
           <Box position="absolute" top="0" left="0" right="0" bottom="0" width="100%" height="100%" mt={isDecorationFixed ? WAVE_MARGIN : "0"}>
             <Image src="/images/layered-wave-bottom-1.svg" fill alt="Waves" />
           </Box>
         </Box>
-        <Box ref={footerContentRef} paddingTop={isDecorationFixed ? WAVE_MARGIN : 0} bg="transparent" width="100%" color="white">
+        <Box ref={footerContentRef} paddingTop={isDecorationFixed ? WAVE_MARGIN : 0} bg="primary" width="100%" color="white">
           {extraContent && (
             <Box width="100%" bg="primary">
               {extraContent}
@@ -101,7 +101,7 @@ export default function Footer({ extraContent, containerProps, isDecorationFixed
             pb="7"
             pt={{
               base: "8",
-              md: "8",
+              md: "7",
             }}
             bg="primary"
             justifyContent="space-between"
@@ -115,7 +115,6 @@ export default function Footer({ extraContent, containerProps, isDecorationFixed
               base: "column",
               md: "row",
             }}
-            {...rest}
           >
             <Flex alignItems="center">
               <Text as="span">© Arwi 2023</Text>
@@ -146,7 +145,6 @@ export default function Footer({ extraContent, containerProps, isDecorationFixed
               noTranslate
               mt={{ base: 6, md: 0 }}
             >
-              <Icon as={FiInstagram} width={5} height={5} mr="3px" mb="0" />
               arwi.fi
             </Link>
           </Flex>

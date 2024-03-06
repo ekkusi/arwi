@@ -4,9 +4,9 @@ import { Button, Input, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { usePathname, useRouter } from "next/navigation";
+import { graphql } from "@/graphql";
 import { useTranslation } from "../../../i18n/client";
 import ModalTemplate from "../../../components/primitives/ModalTemplate";
-import { graphql } from "../../../gql";
 import { getErrorMessage } from "../../../utils/errorUtils";
 import { useAuth } from "../../../hooks-and-providers/AuthProvider";
 

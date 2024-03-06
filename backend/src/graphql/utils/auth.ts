@@ -1,14 +1,17 @@
-import AuthenticationError from "../../errors/AuthenticationError";
+import AuthenticationError from "../errors/AuthenticationError";
 import prisma from "@/prismaClient";
 import { CustomContext } from "../../types/contextTypes";
 import { groupLoader } from "../dataLoaders/group";
+import AuthorizationError from "../errors/AuthorizationError";
+import { MONTHLY_TOKEN_USE_LIMIT } from "@/config";
+import { teacherLoader } from "../dataLoaders/teacher";
 
 type User = CustomContext["user"];
 
 export const checkAuthenticatedByGroup = async (user: User, groupId: string) => {
   if (!user) throw new AuthenticationError();
   const matchingGroup = await groupLoader.load(groupId);
-  if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu ryhmä ei kuulu sinulle");
+  if (matchingGroup.teacherId !== user.id) throw new AuthorizationError("Haettu ryhmä ei kuulu sinulle");
 };
 
 export const checkAuthenticatedByCollection = async (user: User, collectionId: string) => {
@@ -31,7 +34,7 @@ export const checkAuthenticatedByCollection = async (user: User, collectionId: s
     },
   });
 
-  if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointikokoelma ei kuulu sinulle");
+  if (matchingGroup.teacherId !== user.id) throw new AuthorizationError("Haettu arviointikokoelma ei kuulu sinulle");
 };
 
 export const checkAuthenticatedByType = async (user: User, typeId: string) => {
@@ -52,7 +55,7 @@ export const checkAuthenticatedByType = async (user: User, typeId: string) => {
     },
   });
 
-  if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointisisältö ei kuulu sinulle");
+  if (matchingGroup.teacherId !== user.id) throw new AuthorizationError("Haettu arviointisisältö ei kuulu sinulle");
 };
 
 export const checkAuthenticatedByStudent = async (user: User, studentId: string) => {
@@ -69,7 +72,7 @@ export const checkAuthenticatedByStudent = async (user: User, studentId: string)
       teacherId: true,
     },
   });
-  if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu oppilas ei kuulu sinun oppilaisiin");
+  if (matchingGroup.teacherId !== user.id) throw new AuthorizationError("Haettu oppilas ei kuulu sinun oppilaisiin");
 };
 
 export const checkAuthenticatedByEvaluation = async (user: User, evaluationId: string) => {
@@ -90,10 +93,18 @@ export const checkAuthenticatedByEvaluation = async (user: User, evaluationId: s
       teacherId: true,
     },
   });
-  if (matchingGroup.teacherId !== user.id) throw new AuthenticationError("Haettu arviointi ei kuulu sinulle");
+  if (matchingGroup.teacherId !== user.id) throw new AuthorizationError("Haettu arviointi ei kuulu sinulle");
 };
 
 export const checkAuthenticatedByTeacher = (user: User, teacherId: string) => {
   if (!user) throw new AuthenticationError();
-  if (user.id !== teacherId) throw new AuthenticationError("Et voi hakea muiden opettajien tietoja kuin omiasi");
+  if (user.id !== teacherId) throw new AuthorizationError("Et voi hakea muiden opettajien tietoja kuin omiasi");
+};
+
+export const checkMonthlyTokenUse = async (user: User, currentActionTokenCost: number) => {
+  if (!user) throw new AuthenticationError();
+  const matchingTeacher = await teacherLoader.load(user.id);
+  if (matchingTeacher.monthlyTokensUsed + currentActionTokenCost > MONTHLY_TOKEN_USE_LIMIT) {
+    throw new AuthorizationError("Kuukausittainen AI-toimintojen määrä on ylittynyt");
+  }
 };

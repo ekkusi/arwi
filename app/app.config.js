@@ -2,7 +2,7 @@ module.exports = {
   name: "Arwi",
   slug: "arwi-app",
   owner: "arwi",
-  version: "1.1.5",
+  version: "1.1.6",
   orientation: "portrait",
   icon: "./assets/logo-new.png",
   userInterfaceStyle: "light",
@@ -25,7 +25,7 @@ module.exports = {
   android: {
     package: "net.arwi.twa",
     adaptiveIcon: {
-      foregroundImage: "./assets/logo-new.png",
+      foregroundImage: "./assets/logo-new-android.png",
       backgroundColor: "#FEFCFB",
     },
   },

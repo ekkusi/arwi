@@ -6,7 +6,7 @@ import { useMatomo } from "matomo-tracker-react-native";
 import CButton from "../../components/primitives/CButton";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
-import { graphql } from "../../gql";
+import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
@@ -58,7 +58,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
     try {
       const { data } = await login({ variables: { email, password } });
       if (!data) throw new Error("Unexpected error");
-      await setUser(data.login.userData);
+      setUser(data.login.userData);
       const userInfo = {
         uid: data.login.userData.id,
       };
@@ -88,6 +88,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
         {/* <CText style={{ fontSize: "xl", marginBottom: "2xl", textAlign: "center" }}>{t("login", "Kirjaudu sisään")}</CText> */}
         <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "2xl" }}>
           <TextFormField
+            autoCapitalize="none"
             title={t("email", "Sähköposti")}
             placeholder="arwioija@gmail.com"
             validate={nameValidator}

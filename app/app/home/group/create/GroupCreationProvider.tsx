@@ -1,4 +1,4 @@
-import { CollectionTypeCategory, CreateCollectionTypeInput, ModuleInfo, SubjectMinimal } from "arwi-backend/src/types";
+import { CreateCollectionTypeInput, ModuleInfo, SubjectMinimal } from "arwi-backend/src/types";
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getCollectionTypeTranslation } from "../../../../helpers/translation";
@@ -34,8 +34,8 @@ function GroupCreationProvider({ children }: React.PropsWithChildren) {
     students: [],
     collectionTypes: [
       {
-        category: CollectionTypeCategory.CLASS_PARTICIPATION,
-        name: getCollectionTypeTranslation(t, CollectionTypeCategory.CLASS_PARTICIPATION),
+        category: "CLASS_PARTICIPATION",
+        name: getCollectionTypeTranslation(t, "CLASS_PARTICIPATION"),
         weight: 100,
       },
     ],

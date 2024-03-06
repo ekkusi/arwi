@@ -1,5 +1,5 @@
 import { Student } from "@prisma/client";
-import { graphql } from "../gql";
+import { graphql } from "../graphql";
 import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { createTestUserAndLogin, createTestGroup, TestTeacher, testLogin } from "../testHelpers";
@@ -19,7 +19,9 @@ describe("fixTextGrammatics", () => {
   it("should successfully fix text grammatics", async () => {
     const query = graphql(`
       mutation FixTextGrammaticsValidInput($studentId: ID!, $text: String!) {
-        fixTextGrammatics(studentId: $studentId, text: $text)
+        fixTextGrammatics(studentId: $studentId, text: $text) {
+          result
+        }
       }
     `);
 
@@ -27,7 +29,7 @@ describe("fixTextGrammatics", () => {
     const response = await graphqlRequest(query, { studentId: student.id, text });
 
     expect(response.data?.fixTextGrammatics).toBeDefined();
-    expect(response.data?.fixTextGrammatics).toEqual("Mock response from OpenAI");
+    expect(response.data?.fixTextGrammatics.result).toEqual("Mock response from OpenAI");
   });
 
   it("should throw error if user is not authorized for the student", async () => {
@@ -38,7 +40,9 @@ describe("fixTextGrammatics", () => {
 
     const query = graphql(`
       mutation FixTextGrammaticsUnauthorized($studentId: ID!, $text: String!) {
-        fixTextGrammatics(studentId: $studentId, text: $text)
+        fixTextGrammatics(studentId: $studentId, text: $text) {
+          result
+        }
       }
     `);
 
@@ -57,7 +61,9 @@ describe("fixTextGrammatics", () => {
     const invalidStudentId = "nonexistent_student_id";
     const query = graphql(`
       mutation FixTextGrammaticsInvalidStudent($studentId: ID!, $text: String!) {
-        fixTextGrammatics(studentId: $studentId, text: $text)
+        fixTextGrammatics(studentId: $studentId, text: $text) {
+          result
+        }
       }
     `);
 
@@ -71,7 +77,9 @@ describe("fixTextGrammatics", () => {
   it("should handle empty text input gracefully", async () => {
     const query = graphql(`
       mutation FixTextGrammaticsEmptyText($studentId: ID!, $text: String!) {
-        fixTextGrammatics(studentId: $studentId, text: $text)
+        fixTextGrammatics(studentId: $studentId, text: $text) {
+          result
+        }
       }
     `);
 

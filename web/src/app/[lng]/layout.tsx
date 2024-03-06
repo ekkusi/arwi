@@ -7,7 +7,8 @@ import theme from "@/theme";
 import { LocalizedPage } from "@/types/page";
 import { LanguageOption, languages } from "@/i18n/settings";
 import Providers from "@/app/[lng]/Providers";
-import { getIsAuthenticated } from "../../utils/server";
+import Script from "next/script";
+import { getIsAuthenticated } from "../../utils/auth";
 
 const aileron = localFont({
   src: [
@@ -70,12 +71,12 @@ export const metadata: Metadata = {
   description: "Arwi - opettajan paras ystävä",
 };
 
-export default function RootLayout({ children, params: { lng } }: { children: JSX.Element } & LocalizedPage) {
+export default async function RootLayout({ children, params: { lng } }: { children: JSX.Element } & LocalizedPage) {
   const isValidLocale = languages.some((it) => it === lng);
 
   if (!isValidLocale) notFound();
 
-  const isAuthenticated = getIsAuthenticated();
+  const isAuthenticated = await getIsAuthenticated();
 
   return (
     <html lang={lng} dir={dir(lng)} className={aileron.variable}>
@@ -87,6 +88,7 @@ export default function RootLayout({ children, params: { lng } }: { children: JS
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#65AF53" />
         <meta name="msapplication-TileColor" content="#65af53" />
         <meta name="theme-color" content="#65af53" />
+        <Script src="https://kit.fontawesome.com/bee3d0df31.js" crossOrigin="anonymous" />
       </head>
       <body suppressHydrationWarning>
         <Providers lng={lng} theme={theme} initialIsAuthenticated={isAuthenticated}>

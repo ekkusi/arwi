@@ -1,7 +1,7 @@
 import { CollectionTypeCategory } from "@prisma/client";
 import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInfo, getSubject } from "../../utils/subjectUtils";
 import { EducationLevel, Resolvers } from "../../types";
-import MissingDataError from "../../errors/MissingDataError";
+import MissingDataError from "../errors/MissingDataError";
 import { mapModuleInfo } from "../utils/mappers";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
@@ -157,6 +157,15 @@ const resolvers: TypeResolvers = {
       });
       return evaluations;
     },
+    latestFeedback: async ({ id, groupId }, _, { dataLoaders }) => {
+      const group = await dataLoaders.groupLoader.load(groupId);
+      const feedbacks = await dataLoaders.feedbacksLoader.load({ studentId: id, moduleId: group.currentModuleId });
+      return feedbacks[0];
+    },
+    feedbacks: async ({ id, groupId }, _, { dataLoaders }) => {
+      const group = await dataLoaders.groupLoader.load(groupId);
+      return dataLoaders.feedbacksLoader.load({ studentId: id, moduleId: group.currentModuleId });
+    },
   },
   Subject: {
     environments: ({ code }) => {
@@ -207,6 +216,14 @@ const resolvers: TypeResolvers = {
           typeId: id,
         },
       });
+    },
+  },
+  Feedback: {
+    student: ({ studentId }, _, { dataLoaders }) => {
+      return dataLoaders.studentLoader.load(studentId);
+    },
+    module: ({ moduleId }, _, { dataLoaders }) => {
+      return dataLoaders.moduleLoader.load(moduleId);
     },
   },
 };
