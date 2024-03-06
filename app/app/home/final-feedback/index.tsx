@@ -15,7 +15,7 @@ import CFlatList from "../../../components/layout/CFlatList";
 import Layout from "../../../components/layout/Layout";
 import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 import { COLORS } from "../../../theme";
-import FinalFeedbackItem, { FinalFeedbackItem_Student_Fragment } from "./FinalFeedbackItem";
+import FinalFeedbackItem, { FinalFeedbackItem_Student_Fragment } from "./components/FinalFeedbackItem";
 
 const FinalFeedback_GetGroup_Query = graphql(
   `

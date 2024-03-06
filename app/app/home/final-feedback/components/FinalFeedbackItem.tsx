@@ -1,10 +1,10 @@
 import { isClassParticipationEvaluation } from "arwi-backend/src/types/typeGuards";
 import { useTranslation } from "react-i18next";
-import CView from "../../../components/primitives/CView";
+import CView from "../../../../components/primitives/CView";
 import { FragmentOf, graphql, readFragment } from "@/graphql";
-import CText from "../../../components/primitives/CText";
-import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
-import CircledNumber from "../../../components/ui/CircledNumber";
+import CText from "../../../../components/primitives/CText";
+import { analyzeEvaluations } from "../../../../helpers/evaluationUtils";
+import CircledNumber from "../../../../components/ui/CircledNumber";
 
 export const FinalFeedbackItem_Student_Fragment = graphql(`
   fragment FinalFeedbackItem_Student on Student {

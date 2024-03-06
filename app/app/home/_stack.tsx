@@ -29,7 +29,7 @@ import DefaultCollectionEditAllEvaluationsView from "./default-collection/edit_a
 import EditDefaultCollectionGeneralInfoView from "./default-collection/edit_general_info";
 import DefaultEvaluationEditView from "./evaluation/edit_default_evaluation";
 import UpdateTypesStack from "./group/edit/_update_types_stack";
-import FinalFeedback from "./final-feedback/FinalFeedback";
+import FinalFeedback from "./final-feedback";
 import FinalFeedbackMenu from "./final-feedback/_menu";
 import DefaultCollectionMenu from "./default-collection/_menu";
 
