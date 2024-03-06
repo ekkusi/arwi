@@ -11,7 +11,7 @@ import CButton from "../../../../components/primitives/CButton";
 import CircledNumber from "../../../../components/CircledNumber";
 
 type EvaluationTargetCardProps = {
-  navigation: NativeStackScreenProps<HomeStackParams, "group" | "final-feedback-collection">["navigation"];
+  navigation: NativeStackScreenProps<HomeStackParams, "group" | "final-feedback">["navigation"];
   id: string;
   groupId: string;
   collectionId?: string;

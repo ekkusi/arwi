@@ -60,7 +60,7 @@ const FinalFeedback_GetGroup_Query = graphql(
   [FinalFeedbackItem_Student_Fragment]
 );
 
-export default function FinalFeedback({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback-collection">) {
+export default function FinalFeedback({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback">) {
   const { groupId } = route.params;
   const { isGenerating, generateFeedbacks } = useGenerateFeedback(groupId);
   const toggleTokenUseWarning = useToggleTokenUseWarning();
@@ -101,7 +101,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
           t("final-feedback-finished", "Loppupalaute on luontu ryhmälle {{groupName}}", { groupName: group.name }),
           { closeTimeout: 10000 },
           {
-            action: () => navigation.navigate("final-feedback-collection", { groupId: group.id }),
+            action: () => navigation.navigate("final-feedback", { groupId: group.id }),
             label: t("inspect", "Tarkastele"),
           }
         );

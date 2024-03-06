@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import Layout, { LayoutProps } from "../../../../../components/Layout";
-import LoadingIndicator from "../../../../../components/LoadingIndicator";
+import Layout, { LayoutProps } from "../../../../components/Layout";
+import LoadingIndicator from "../../../../components/LoadingIndicator";
 import { DefaultCollectionCreationContext } from "./DefaultCollectionCreationProvider";
 
 type DefaultCollectionCreationLayoutProps = LayoutProps;

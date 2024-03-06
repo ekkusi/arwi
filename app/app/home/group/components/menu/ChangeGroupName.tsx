@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
-import ChangeNameView from "../../components/ChangeNameView";
+import ChangeNameView from "../../../../../components/ChangeNameView";
 import { graphql } from "@/graphql";
-import { getErrorMessage } from "../../helpers/errorUtils";
+import { getErrorMessage } from "../../../../../helpers/errorUtils";
 
 const ChangeGroupName_UpdateGroup_Mutation = graphql(`
   mutation ChangeGroupName_UpdateGroup($id: ID!, $input: UpdateGroupInput!) {

@@ -12,7 +12,7 @@ import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
-import { DefaultEvaluationDataToUpdate } from "../collection/edit_all_default_evaluations";
+import { DefaultEvaluationDataToUpdate } from "../default-collection/edit_all_evaluations";
 import { UpdateDefaultEvaluationCard } from "../../../components/DefaultEvaluationCard";
 import { DefaultEvaluationUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 

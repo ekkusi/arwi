@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import CButton from "../../components/primitives/CButton";
-import CView from "../../components/primitives/CView";
-import SpeechToTextInput from "../../components/form/SpeechToTextInput";
+import CButton from "./primitives/CButton";
+import CView from "./primitives/CView";
+import SpeechToTextInput from "./form/SpeechToTextInput";
 
 type CustomTextInputViewProps = {
   initialText: string;

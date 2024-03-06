@@ -1,10 +1,8 @@
-import { useQuery } from "@apollo/client";
 import { isClassParticipationEvaluation } from "arwi-backend/src/types/typeGuards";
 import { useTranslation } from "react-i18next";
 import CView from "../../../components/primitives/CView";
 import { FragmentOf, graphql, readFragment } from "@/graphql";
 import CText from "../../../components/primitives/CText";
-import LoadingIndicator from "../../../components/LoadingIndicator";
 import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
 import CircledNumber from "../../../components/CircledNumber";
 
@@ -45,6 +43,7 @@ export const FinalFeedbackItem_Student_Fragment = graphql(`
 `);
 
 export default function FinalFeedbackItem({ student: studentFragment }: { student: FragmentOf<typeof FinalFeedbackItem_Student_Fragment> }) {
+  const { t } = useTranslation();
   const student = readFragment(FinalFeedbackItem_Student_Fragment, studentFragment);
   const evaluations = student.currentModuleEvaluations;
 

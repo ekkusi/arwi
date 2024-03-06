@@ -43,7 +43,7 @@ export type HomeStackParams = {
   "collection-create": {
     groupId: string;
   };
-  "final-feedback-collection": {
+  "final-feedback": {
     groupId: string;
   };
   "default-collection-create": {

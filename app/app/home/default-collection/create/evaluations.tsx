@@ -6,19 +6,19 @@ import { KeyboardEventListener, Platform } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import PagerView, { PagerViewOnPageSelectedEvent } from "react-native-pager-view";
-import CButton from "../../../../../components/primitives/CButton";
-import CView from "../../../../../components/primitives/CView";
-import { CARD_HEIGHT, CreateDefaultEvaluationCardMemoed, DefaultEvaluation } from "../../../../../components/DefaultEvaluationCard";
+import CButton from "../../../../components/primitives/CButton";
+import CView from "../../../../components/primitives/CView";
+import { CARD_HEIGHT, CreateDefaultEvaluationCardMemoed, DefaultEvaluation } from "../../../../components/DefaultEvaluationCard";
 import { graphql } from "@/graphql";
-import { formatDate } from "../../../../../helpers/dateHelpers";
-import { getErrorMessage } from "../../../../../helpers/errorUtils";
-import { useKeyboardListener } from "../../../../../hooks-and-providers/keyboard";
-import { useToast } from "../../../../../hooks-and-providers/ToastProvider";
-import { COLORS } from "../../../../../theme";
+import { formatDate } from "../../../../helpers/dateHelpers";
+import { getErrorMessage } from "../../../../helpers/errorUtils";
+import { useKeyboardListener } from "../../../../hooks-and-providers/keyboard";
+import { useToast } from "../../../../hooks-and-providers/ToastProvider";
+import { COLORS } from "../../../../theme";
 import { useDefaultCollectionCreationContext } from "./DefaultCollectionCreationProvider";
 import { DefaultCollectionCreationStackParams } from "./types";
 import DefaultCollectionCreationLayout from "./_layout";
-import LazyLoadView from "../../../../../components/LazyLoadView";
+import LazyLoadView from "../../../../components/LazyLoadView";
 import {
   CollectionModuleCacheUpdate_Fragment,
   DefaultCollectionUpdate_Info_Fragment,

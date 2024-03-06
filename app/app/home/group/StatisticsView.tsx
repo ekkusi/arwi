@@ -209,7 +209,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
           <CButton
             title={t("final-feedback-group", "Siirry loppuarviointiin")}
             onPress={() => {
-              navigation.navigate("final-feedback-collection", { groupId: group.id });
+              navigation.navigate("final-feedback", { groupId: group.id });
             }}
           />
         </CView>

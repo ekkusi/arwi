@@ -14,7 +14,7 @@ import RatingSelector from "./RatingSelector";
 import CButton from "./primitives/CButton";
 import { formatDate } from "../helpers/dateHelpers";
 import { useModal } from "../hooks-and-providers/ModalProvider";
-import CustomTextInputView from "../app/home/CustomTextInputView";
+import CustomTextInputView from "./CustomTextInputView";
 import { graphql } from "@/graphql";
 import { useToast } from "../hooks-and-providers/ToastProvider";
 import SpeechToTextInput, { SpeechToTextInputHandle } from "./form/SpeechToTextInput";

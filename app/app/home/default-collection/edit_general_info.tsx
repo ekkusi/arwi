@@ -10,7 +10,7 @@ import { formatDate } from "../../../helpers/dateHelpers";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import Layout from "../../../components/Layout";
 import CText from "../../../components/primitives/CText";
-import DefaultCollectionGeneralInfoForm, { DefaultGeneralInfoData } from "./_default_general_info_form";
+import DefaultCollectionGeneralInfoForm, { DefaultGeneralInfoData } from "./_general_info_form";
 import { DefaultCollectionUpdate_Info_Fragment } from "@/helpers/graphql/fragments";
 
 const EditDefaultGeneralDetails_GetCollection_Query = graphql(`

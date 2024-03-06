@@ -10,26 +10,28 @@ import { defaultHeaderStyles } from "../config";
 import ProfileView from "../profile";
 import CollectionView from "./collection";
 import CollectionCreationStack from "./collection/create/_stack";
-import DefaultCollectionCreationStack from "./collection/create/default/_stack";
+import DefaultCollectionCreationStack from "./default-collection/create/_stack";
 import GroupView from "./group";
 import GroupCreationStack from "./group/create/_stack";
-import LearningObjective from "./group/learningObjective";
+import LearningObjective from "./group/learning-objective";
 import StudentView from "./student";
 import { HomeStackParams } from "./types";
 import EditCollectionGeneralInfoView from "./collection/edit_general_info";
 import CollectionEditAllEvaluationsView from "./collection/edit_all_evaluations";
 import EvaluationEditView from "./evaluation/edit_evaluation";
 import ArchivePage from "../archive";
-import GroupHeaderRightButton from "./GroupHeaderRightButton";
-import CollectionHeaderRightButton from "./CollectionHeaderRightButton";
-import StudentHeaderRightButton from "./StudentHeaderRightButton";
+import GroupHeaderRightButton from "./group/_menu";
+import CollectionMenu from "./collection/_menu";
+import StudentHeaderRightButton from "./student/_menu";
 import StudentFeedbackView from "./student/feedback";
-import DefaultEvaluationCollection from "./collection/DefaultEvaluationCollection";
-import DefaultCollectionEditAllEvaluationsView from "./collection/edit_all_default_evaluations";
-import EditDefaultCollectionGeneralInfoView from "./collection/edit_default_general_info";
+import DefaultEvaluationCollection from "./default-collection/DefaultEvaluationCollection";
+import DefaultCollectionEditAllEvaluationsView from "./default-collection/edit_all_evaluations";
+import EditDefaultCollectionGeneralInfoView from "./default-collection/edit_general_info";
 import DefaultEvaluationEditView from "./evaluation/edit_default_evaluation";
 import UpdateTypesStack from "./group/edit/_update_types_stack";
 import FinalFeedback from "./final-feedback/FinalFeedback";
+import FinalFeedbackMenu from "./final-feedback/_menu";
+import DefaultCollectionMenu from "./default-collection/_menu";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -79,26 +81,17 @@ export default function HomeStack() {
       <HomeStackNavigator.Screen
         name="group"
         component={GroupView}
-        options={({ navigation, route }) => ({
-          title: route.params.name,
-          headerRight: () => (
-            <GroupHeaderRightButton
-              id={route.params.id}
-              classYearId={route.params.classYearId}
-              archived={route.params.archived}
-              name={route.params.name}
-              navigation={navigation}
-            />
-          ),
+        options={(props) => ({
+          title: props.route.params.name,
+          headerRight: () => <GroupHeaderRightButton {...props} />,
         })}
       />
       <HomeStackNavigator.Screen
         name="student"
         component={StudentView}
-        options={({ route, navigation }) => ({
-          title: route.params.name,
-          headerRight: () =>
-            route.params.archived ? undefined : <StudentHeaderRightButton id={route.params.id} name={route.params.name} navigation={navigation} />,
+        options={(props) => ({
+          title: props.route.params.name,
+          headerRight: () => (props.route.params.archived ? undefined : <StudentHeaderRightButton {...props} />),
         })}
       />
       <HomeStackNavigator.Screen
@@ -111,11 +104,13 @@ export default function HomeStack() {
       <HomeStackNavigator.Screen
         name="collection"
         component={CollectionView}
-        options={({ route, navigation }) => ({
-          title: `${route.params.date}: ${route.params.environmentLabel.fi}`,
-          headerRight: () =>
-            route.params.archived ? undefined : <CollectionHeaderRightButton id={route.params.id} isClassParticipation navigation={navigation} />,
-        })}
+        options={(props) => {
+          const { route } = props;
+          return {
+            title: `${route.params.date}: ${route.params.environmentLabel.fi}`,
+            headerRight: () => (route.params.archived ? undefined : <CollectionMenu {...props} />),
+          };
+        }}
       />
       <HomeStackNavigator.Screen
         name="group-create"
@@ -154,21 +149,19 @@ export default function HomeStack() {
       />
       <HomeStackNavigator.Screen name="archive" component={ArchivePage} options={{ title: t("archive", "Arkisto") }} />
       <HomeStackNavigator.Screen
-        name="final-feedback-collection"
+        name="final-feedback"
         component={FinalFeedback}
-        options={{ title: t("final-feedback", "Loppupalaute") }}
+        options={(props) => ({ title: t("final-feedback", "Loppupalaute"), headerRight: () => <FinalFeedbackMenu {...props} /> })}
       />
       <HomeStackNavigator.Screen
         name="default-evaluation-collection"
         component={DefaultEvaluationCollection}
-        options={({ route, navigation }) => {
+        options={(props) => {
+          const { route } = props;
           return {
             title: route.params.name,
 
-            headerRight: () =>
-              route.params.archived ? undefined : (
-                <CollectionHeaderRightButton id={route.params.collectionId} isClassParticipation={false} navigation={navigation} />
-              ),
+            headerRight: () => (route.params.archived ? undefined : <DefaultCollectionMenu {...props} />),
           };
         }}
       />

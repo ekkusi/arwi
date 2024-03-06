@@ -1,10 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { CollectionTypeMinimal } from "arwi-backend/src/types";
-import { DefaultEvaluation } from "../../../../../components/DefaultEvaluationCard";
+import { DefaultEvaluation } from "../../../../components/DefaultEvaluationCard";
 import { graphql, ResultOf } from "@/graphql";
-import { useThrowCatchableError } from "../../../../../hooks-and-providers/error";
-import { CollectionGeneralInfoView_Group_Fragment } from "../graphql";
+import { useThrowCatchableError } from "../../../../hooks-and-providers/error";
 
 const DefaultCollectionCreationProvider_GetGroup_Query = graphql(
   `
@@ -29,11 +28,9 @@ const DefaultCollectionCreationProvider_GetGroup_Query = graphql(
             category
           }
         }
-        ...CollectionGeneralInfoView_Group
       }
     }
-  `,
-  [CollectionGeneralInfoView_Group_Fragment]
+  `
 );
 
 export type DefaultCollectionData = {

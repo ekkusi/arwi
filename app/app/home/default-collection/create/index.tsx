@@ -3,8 +3,8 @@ import React from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { DefaultCollectionCreationStackParams } from "./types";
 import { useDefaultCollectionCreationContext } from "./DefaultCollectionCreationProvider";
-import { COLORS } from "../../../../../theme";
-import DefaultCollectionGeneralInfoForm, { DefaultGeneralInfoData } from "../../_default_general_info_form";
+import { COLORS } from "../../../../theme";
+import DefaultCollectionGeneralInfoForm, { DefaultGeneralInfoData } from "../_general_info_form";
 import DefaultCollectionCreationLayout from "./_layout";
 
 function DefaultCollectionGeneralInfoContent({
