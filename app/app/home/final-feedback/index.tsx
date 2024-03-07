@@ -222,6 +222,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
             return (
               <FinalFeedbackItem
                 student={item}
+                moduleId={group.currentModule.id}
                 style={{ borderBottomWidth: index !== studentsWithFeedback.length - 1 ? 1 : 0, borderBottomColor: "gray", paddingVertical: "3xl" }}
               />
             );
