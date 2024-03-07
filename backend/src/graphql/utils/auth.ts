@@ -101,6 +101,21 @@ export const checkAuthenticatedByTeacher = (user: User, teacherId: string) => {
   if (user.id !== teacherId) throw new AuthorizationError("Et voi hakea muiden opettajien tietoja kuin omiasi");
 };
 
+export const checkAuthenticatedByFeedback = async (user: User, feedbackId: string) => {
+  if (!user) throw new AuthenticationError();
+  const matchingFeedback = await prisma.feedback.findFirst({
+    where: {
+      id: feedbackId,
+      student: {
+        group: {
+          teacherId: user.id,
+        },
+      },
+    },
+  });
+  if (!matchingFeedback) throw new AuthorizationError("Haettu palaute ei kuulu sinulle");
+};
+
 export const checkMonthlyTokenUse = async (user: User, currentActionTokenCost: number) => {
   if (!user) throw new AuthenticationError();
   const matchingTeacher = await teacherLoader.load(user.id);

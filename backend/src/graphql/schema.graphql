@@ -32,6 +32,7 @@ type Mutation {
   updateGroup(data: UpdateGroupInput!, groupId: ID!): Group!
   updateClassParticipationEvaluation(input: UpdateClassParticipationEvaluationInput!): ClassParticipationEvaluation!
   updateDefaultEvaluation(input: UpdateDefaultEvaluationInput!): DefaultEvaluation!
+  updateFeedback(feedbackId: ID!, text: String!): Feedback!
   deleteStudent(studentId: ID!): Student!
   deleteTeacher(teacherId: ID!): Teacher!
   deleteGroup(groupId: ID!): Group!

@@ -41,6 +41,7 @@ import {
 import {
   checkAuthenticatedByCollection,
   checkAuthenticatedByEvaluation,
+  checkAuthenticatedByFeedback,
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
   checkAuthenticatedByTeacher,
@@ -62,7 +63,7 @@ import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 import AuthorizationError from "@/errors/AuthorizationError";
-import { createFeedback } from "../mutationWrappers/feedback";
+import { createFeedback, updateFeedback } from "../mutationWrappers/feedback";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -384,6 +385,17 @@ const resolvers: MutationResolvers<CustomContext> = {
       { updateCollectionTypeInputs, deleteCollectionTypeIds, createCollectionTypeInputs }
     );
     return updatedGroup;
+  },
+  updateFeedback: async (_, { feedbackId, text }, { user }) => {
+    await checkAuthenticatedByFeedback(user, feedbackId);
+    return updateFeedback({
+      data: {
+        text,
+      },
+      where: {
+        id: feedbackId,
+      },
+    });
   },
   deleteStudent: async (_, { studentId }, { user }) => {
     await checkAuthenticatedByStudent(user, studentId);
