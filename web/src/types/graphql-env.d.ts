@@ -1195,6 +1195,18 @@ export type introspection = {
               }
             },
             "args": []
+          },
+          {
+            "name": "minimumClassParticipationEvalsForFeedback",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "args": []
           }
         ],
         "interfaces": []

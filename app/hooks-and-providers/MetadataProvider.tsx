@@ -1,13 +1,7 @@
+import { AppMetadata } from "arwi-backend/src/types";
 import React, { createContext } from "react";
 
-type Metadata = {
-  minimumSupportedAppVersion: string;
-  monthlyTokenUseLimit: number;
-  feedbackGenerationTokenCost: number;
-  textFixTokenCost: number;
-};
-
-const MetadataContext = createContext<Metadata | null>(null);
+const MetadataContext = createContext<AppMetadata | null>(null);
 
 const { Provider } = MetadataContext;
 
@@ -19,6 +13,6 @@ export const useMetadata = () => {
   return context;
 };
 
-export default function MetadataProvider({ children, ...metadata }: React.PropsWithChildren<Metadata>) {
+export default function MetadataProvider({ children, ...metadata }: React.PropsWithChildren<AppMetadata>) {
   return <Provider value={metadata}>{children}</Provider>;
 }

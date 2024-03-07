@@ -50,6 +50,7 @@ type AppMetadata {
   monthlyTokenUseLimit: Int!
   feedbackGenerationTokenCost: Int!
   textFixTokenCost: Int!
+  minimumClassParticipationEvalsForFeedback: Int!
 }
 
 type AuthPayload {

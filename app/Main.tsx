@@ -45,6 +45,7 @@ const Main_GetAppMetadata_Query = graphql(`
       monthlyTokenUseLimit
       feedbackGenerationTokenCost
       textFixTokenCost
+      minimumClassParticipationEvalsForFeedback
     }
   }
 `);
