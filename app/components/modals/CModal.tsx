@@ -53,7 +53,7 @@ const innerViewStyle: CViewStyle = {
   width: "100%",
   maxHeight: "80%",
   paddingHorizontal: "xl",
-  paddingTop: "md",
+  paddingTop: "xl",
   paddingBottom: "xl",
   backgroundColor: "white",
   overflow: "hidden",
@@ -175,7 +175,7 @@ export default function CModal({
               flexDirection: "row",
               justifyContent: title ? "space-between" : "flex-end",
               alignItems: "center",
-              marginBottom: title ? "md" : 0,
+              marginBottom: title ? "xl" : 0,
               ...headerStyles,
             }}
           >
