@@ -39,7 +39,7 @@ type Mutation {
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): GenerateStudentFeedbackResult!
   generateGroupFeedback(groupId: ID!, onlyGenerateMissing: Boolean): GenerateGroupFeedbackResult!
-  fixTextGrammatics(studentId: ID!, text: String!): FixTextGrammaticsResult!
+  fixTextGrammatics(text: String!): FixTextGrammaticsResult!
   setTokenUseWarningSeen(warning: TokenUseWarning!): Boolean!
 }
 

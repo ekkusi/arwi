@@ -1054,17 +1054,6 @@ export type introspection = {
             },
             "args": [
               {
-                "name": "studentId",
-                "type": {
-                  "kind": "NON_NULL",
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                }
-              },
-              {
                 "name": "text",
                 "type": {
                   "kind": "NON_NULL",

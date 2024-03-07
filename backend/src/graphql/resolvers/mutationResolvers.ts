@@ -532,8 +532,8 @@ const resolvers: MutationResolvers<CustomContext> = {
       usageData: mapTeacherUsageData(updatedTeacher),
     };
   },
-  fixTextGrammatics: async (_, { studentId, text }, { user }) => {
-    await Promise.all([checkAuthenticatedByStudent(user, studentId), checkMonthlyTokenUse(user, TEXT_FIX_TOKEN_COST)]);
+  fixTextGrammatics: async (_, { text }, { user }) => {
+    await checkMonthlyTokenUse(user, TEXT_FIX_TOKEN_COST);
 
     validateFixTextGrammaticsInput(text);
     const fixTextPromise = fixTextGrammatics(text, user!.id); // Safe cast after authenticated check
