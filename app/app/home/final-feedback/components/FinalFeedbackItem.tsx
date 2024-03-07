@@ -71,6 +71,17 @@ export const FinalFeedbackItem_GenerateStudentFeedback_Mutation = graphql(
   [FeedbackCacheUpdate_Fragment]
 );
 
+const FinalFeedbackItem_UpdateFeedback_Mutation = graphql(
+  `
+    mutation FinalFeedbackItem_UpdateFeedback($feedbackId: ID!, $text: String!) {
+      updateFeedback(feedbackId: $feedbackId, text: $text) {
+        ...FeedbackCacheUpdate
+      }
+    }
+  `,
+  [FeedbackCacheUpdate_Fragment]
+);
+
 export type FinalFeedbackItemProps = Omit<CViewProps, "children"> & {
   student: FragmentOf<typeof FinalFeedbackItem_Student_Fragment>;
   moduleId: string;
@@ -103,12 +114,31 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
     },
   });
 
+  const [updateFeedback, { loading: updatingFeedback }] = useMutation(FinalFeedbackItem_UpdateFeedback_Mutation, {
+    onError: (error) => {
+      Sentry.captureException(error);
+      openToast(
+        t(
+          "update-feedback-failed-message",
+          "Jokin meni vikaan oppilaan {{studentName}} palautteen muokkauksessa. Voi olla, että tekemäsi muutokset eivät ole tallentuneet.",
+          { studentName: student.name }
+        ),
+        {
+          type: "error",
+        }
+      );
+    },
+  });
+
   const editFeedback = (newText: string) => {
-    console.log("edit feedback for student", student.name, "with text", {
-      someObj: {
-        text: newText,
-      },
-    });
+    if (student.latestFeedback) {
+      updateFeedback({
+        variables: {
+          feedbackId: student.latestFeedback.id,
+          text: newText,
+        },
+      });
+    }
   };
 
   const openRegenerateFeedbackModal = () => {
@@ -119,9 +149,7 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
           <CText>{t("regenerate-feedback-confirmation-description", "Haluatko varmasti generoida uuden palautteen oppilaalle?")}</CText>
           <SaveAndCancelButtons
             onSave={() => {
-              generateStudentFeedback().then((result) => {
-                console.log("result", result);
-              });
+              generateStudentFeedback();
               closeModal();
             }}
             onCancel={closeModal}
@@ -163,10 +191,9 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
       {student.latestFeedback ? (
         <ModalTextInput
           initialValue={student.latestFeedback?.text.toString()}
-          onSave={(text) => {
-            editFeedback(text);
-          }}
+          onSave={(text) => editFeedback(text)}
           isLoading={generatingFeedback}
+          isDisabled={updatingFeedback}
           containerStyle={{ marginTop: "xl" }}
           placeholder="Ei sanallista palautetta generoitu"
           innerInputProps={{

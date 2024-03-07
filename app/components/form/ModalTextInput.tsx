@@ -149,7 +149,7 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
 
   const save = () => {
     changeValue(modalValue);
-    onSave?.(value);
+    onSave?.(modalValue);
     closeModal(true);
   };
 
