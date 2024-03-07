@@ -80,11 +80,14 @@ export default function FinalFeedbackItem({ student: studentFragment, ...rest }:
       <CText style={{ fontWeight: "500" }}>{t("oral-feedback", "Sanallinen palaute")}</CText>
       {student.latestFeedback ? (
         <ModalTextInput
-          initialText={student.latestFeedback?.text}
+          initialValue={student.latestFeedback?.text}
           onSave={(text) => {
             editFeedback(text);
           }}
           containerStyle={{ marginTop: "xl" }}
+          innerInputProps={{
+            growWithContent: true,
+          }}
         />
       ) : (
         <CText>{t("no-oral-feedback-generated-for-student", "Oppilaalle ei ole generoitu sanallista palautetta")}</CText>

@@ -27,6 +27,7 @@ export type SpeechToTextInputHandle = {
   recording: boolean;
   refreshVoiceListeners: () => Promise<void>;
   removeVoiceListeners: () => Promise<void>;
+  setSpeechObtained: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CLOSE_SPEECH_TIMEOUT_MS = 3000;
@@ -143,6 +144,7 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
       recording,
       refreshVoiceListeners,
       removeVoiceListeners,
+      setSpeechObtained,
     }));
 
     const onChange = useCallback((newText: string, newSpeechObtained: boolean) => {
@@ -222,11 +224,11 @@ export default forwardRef<SpeechToTextInputHandle, SpeechToTextInputProps>(
     }, [focusOnMount, inputRef]);
 
     return (
-      <CView style={{ flex: 1, width: "100%", ...containerStyle }}>
-        <CTouchableWithoutFeedback style={{ flex: 1, width: "100%" }} onPress={onPress} disabled={isDisabled}>
+      <CView style={{ flexGrow: 1, width: "100%", ...containerStyle }}>
+        <CTouchableWithoutFeedback style={{ flexGrow: 1, width: "100%" }} onPress={onPress} disabled={isDisabled}>
           <CTextInput
             ref={inputRef}
-            style={{ flex: 1, width: "100%", ...rest?.style }}
+            style={rest.style}
             as="textarea"
             editable={!recording}
             value={text}
