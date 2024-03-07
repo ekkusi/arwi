@@ -30,8 +30,9 @@ import EditDefaultCollectionGeneralInfoView from "./default-collection/edit_gene
 import DefaultEvaluationEditView from "./evaluation/edit_default_evaluation";
 import UpdateTypesStack from "./group/edit/_update_types_stack";
 import FinalFeedback from "./final-feedback";
-import FinalFeedbackMenu from "./final-feedback/_menu";
 import DefaultCollectionMenu from "./default-collection/_menu";
+import FinalFeedbackResults from "./final-feedback/results";
+import FinalFeedbackResultsMenu from "./final-feedback/results/_menu";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -148,10 +149,11 @@ export default function HomeStack() {
         options={{ title: t("edit", "Muokkaa") }}
       />
       <HomeStackNavigator.Screen name="archive" component={ArchivePage} options={{ title: t("archive", "Arkisto") }} />
+      <HomeStackNavigator.Screen name="final-feedback" component={FinalFeedback} options={{ title: t("final-feedback", "Loppupalaute") }} />
       <HomeStackNavigator.Screen
-        name="final-feedback"
-        component={FinalFeedback}
-        options={(props) => ({ title: t("final-feedback", "Loppupalaute"), headerRight: () => <FinalFeedbackMenu {...props} /> })}
+        name="final-feedback-results"
+        component={FinalFeedbackResults}
+        options={(props) => ({ title: t("final-feedbacks", "Loppuarvioinnit"), headerRight: () => <FinalFeedbackResultsMenu {...props} /> })}
       />
       <HomeStackNavigator.Screen
         name="default-evaluation-collection"

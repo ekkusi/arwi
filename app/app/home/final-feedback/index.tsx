@@ -11,11 +11,10 @@ import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
 import CButton from "../../../components/primitives/CButton";
 import { useToast } from "../../../hooks-and-providers/ToastProvider";
-import CFlatList from "../../../components/layout/CFlatList";
 import Layout from "../../../components/layout/Layout";
 import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 import { COLORS } from "../../../theme";
-import FinalFeedbackItem, { FinalFeedbackItem_Student_Fragment } from "./components/FinalFeedbackItem";
+import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
 
 const FinalFeedback_GetGroup_Query = graphql(
   `
@@ -33,7 +32,6 @@ const FinalFeedback_GetGroup_Query = graphql(
             id
             notes
           }
-          ...FinalFeedbackItem_Student
         }
         currentModule {
           id
@@ -56,12 +54,12 @@ const FinalFeedback_GetGroup_Query = graphql(
         }
       }
     }
-  `,
-  [FinalFeedbackItem_Student_Fragment]
+  `
 );
 
 export default function FinalFeedback({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback">) {
-  const { groupId } = route.params;
+  const { minimumClassParticipationEvalsForFeedback } = useMetadata();
+  const { groupId, redirectIfFeedbackGenerated = true } = route.params;
   const { isGenerating, generateFeedbacks } = useGenerateFeedback(groupId);
   const toggleTokenUseWarning = useToggleTokenUseWarning();
   const { t } = useTranslation();
@@ -84,13 +82,15 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
 
   const group = data.getGroup;
 
-  const otherCollectionTypes = group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
-  const nonEvaluatedOtherCollectionTypes = otherCollectionTypes.filter((type) => !hasRequiredField(type, "defaultTypeCollection"));
-
   const studentsWithFeedback = group.students.filter((student) => hasRequiredField(student, "latestFeedback")) as WithRequiredNonNull<
     (typeof group.students)[number],
     "latestFeedback"
   >[];
+
+  if (redirectIfFeedbackGenerated && studentsWithFeedback.length > 0) navigation.replace("final-feedback-results", { groupId });
+
+  const otherCollectionTypes = group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
+  const nonEvaluatedOtherCollectionTypes = otherCollectionTypes.filter((type) => !hasRequiredField(type, "defaultTypeCollection"));
 
   const generateFinalFeedback = () => {
     generateFeedbacks(
@@ -122,12 +122,14 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   };
 
   const studentsWithLessThanThreeVerbalFeedback = group.students.filter(
-    (student) => student.currentModuleEvaluations.filter((ev) => ev.notes).length < 3
+    (student) => student.currentModuleEvaluations.filter((ev) => ev.notes).length < minimumClassParticipationEvalsForFeedback
   );
-  const studentsWithLessThanThreeEvaluations = group.students.filter((student) => student.currentModuleEvaluations.length < 3);
+  const studentsWithInsufficientEvaluations = group.students.filter(
+    (student) => student.currentModuleEvaluations.length < minimumClassParticipationEvalsForFeedback
+  );
 
   const allOtherCollectionTypesEvaluated = nonEvaluatedOtherCollectionTypes.length === 0;
-  const allStudentsHaveThreeEvaluations = !(studentsWithLessThanThreeEvaluations.length > 0);
+  const allStudentsHaveThreeEvaluations = !(studentsWithInsufficientEvaluations.length > 0);
   const allStudentsHaveThreeVerbalFeedback = !(studentsWithLessThanThreeVerbalFeedback.length > 0);
 
   let bottomText = t("all-set-for-generation", "Kaikki valmiina loppupalautteen luontiin!");
@@ -135,100 +137,83 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
     bottomText = t("fix-errors-before-generation", "Korjaa punaisella merkatut kohdat ennen loppupalautteen luontia.");
   else if (!allStudentsHaveThreeEvaluations || !allStudentsHaveThreeVerbalFeedback)
     bottomText = t("see-warnings-before-generation", "Huomioi keltaisella merkatut kohdat. Voit kuitenkin jatkaa loppupalautteen luontiin.");
-
   return (
-    <Layout style={{ paddingHorizontal: "md", paddingVertical: "lg", backgroundColor: "white", gap: "lg" }}>
+    <Layout style={{ backgroundColor: "white", paddingHorizontal: "md", paddingVertical: "lg" }}>
       <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name} - Loppuarviointi</CText>
-      {studentsWithFeedback.length === 0 ? (
-        <CView style={{ gap: "2xl" }}>
-          <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
-            {t(
-              "feedback-generation-info1",
-              "Sanallinen palaute luodaan tekoälyä hyödyntäen antamiesi numeeristen ja sanallisten arviointien perusteella."
-            )}
-          </CText>
-          <CView style={{ gap: "xl" }}>
-            <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
-              <MaterialCommunityIcon
-                name={!allOtherCollectionTypesEvaluated ? "alert-outline" : "check-bold"}
-                size={40}
-                color={!allOtherCollectionTypesEvaluated ? COLORS.red : COLORS.primary}
-              />
-              <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
-                {allOtherCollectionTypesEvaluated
-                  ? t("all-types-evaluated", "Kaikki arvioitavat sisällöt on arvioitu!")
-                  : t(
-                      "all-types-not-evaluated",
-                      `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
-                      { count: nonEvaluatedOtherCollectionTypes.length }
-                    )}
-              </CText>
-            </CView>
-            <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
-              <MaterialCommunityIcon
-                name={!allStudentsHaveThreeEvaluations ? "alert-rhombus-outline" : "check-bold"}
-                size={40}
-                color={!allStudentsHaveThreeEvaluations ? COLORS.yellow : COLORS.primary}
-              />
-              <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
-                {allStudentsHaveThreeEvaluations
-                  ? t("all-students-evaluated", "Kaikilla ryhmän oppilailla on riittävästi arviointeja!")
-                  : t(
-                      "all-students-not-evaluated",
-                      `Ryhmässä on {{count}} oppilasta, joilla on alle 3 arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
-                      { count: studentsWithLessThanThreeEvaluations.length }
-                    )}
-              </CText>
-            </CView>
-            <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
-              <MaterialCommunityIcon
-                name={!allStudentsHaveThreeVerbalFeedback ? "alert-rhombus-outline" : "check-bold"}
-                size={40}
-                color={!allStudentsHaveThreeVerbalFeedback ? COLORS.yellow : COLORS.primary}
-              />
-              <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
-                {allStudentsHaveThreeVerbalFeedback
-                  ? t("all-students-have-verbal-feedback", "Kaikille ryhmän oppilaille on annettu riittävästi sanallista palautetta!")
-                  : t(
-                      "all-students-have-not-verbal-feedback",
-                      `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
-                      { count: studentsWithLessThanThreeVerbalFeedback.length }
-                    )}
-              </CText>
-            </CView>
-          </CView>
-          <CView style={{ gap: "md" }}>
-            <CText style={{ fontSize: "sm2", fontWeight: "500" }}>{bottomText}</CText>
-          </CView>
-          <CView style={{ gap: "sm" }}>
-            <CButton
-              title={t("generate-final-feedback", "Luo loppupalaute")}
-              onPress={generateFinalFeedback}
-              disabled={!allOtherCollectionTypesEvaluated}
+      <CView style={{ gap: "2xl" }}>
+        <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+          {t(
+            "feedback-generation-info1",
+            "Sanallinen palaute luodaan tekoälyä hyödyntäen antamiesi numeeristen ja sanallisten arviointien perusteella."
+          )}
+        </CText>
+        <CView style={{ gap: "xl" }}>
+          <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
+            <MaterialCommunityIcon
+              name={!allOtherCollectionTypesEvaluated ? "alert-outline" : "check-bold"}
+              size={40}
+              color={!allOtherCollectionTypesEvaluated ? COLORS.red : COLORS.primary}
             />
-            <CText style={{ fontSize: "sm", fontWeight: "300" }}>
-              {t(
-                "feedback-generation-info2",
-                "Loppuarviointien luonti tapahtuu taustalla. Voit liikkua sovelluksessa vapaasti tai sulkea sovelluksen luonnin ajaksi."
-              )}
+            <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
+              {allOtherCollectionTypesEvaluated
+                ? t("all-types-evaluated", "Kaikki arvioitavat sisällöt on arvioitu!")
+                : t(
+                    "all-types-not-evaluated",
+                    `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
+                    { count: nonEvaluatedOtherCollectionTypes.length }
+                  )}
+            </CText>
+          </CView>
+          <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
+            <MaterialCommunityIcon
+              name={!allStudentsHaveThreeEvaluations ? "alert-rhombus-outline" : "check-bold"}
+              size={40}
+              color={!allStudentsHaveThreeEvaluations ? COLORS.yellow : COLORS.primary}
+            />
+            <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
+              {allStudentsHaveThreeEvaluations
+                ? t("all-students-evaluated", "Kaikilla ryhmän oppilailla on riittävästi arviointeja!")
+                : t(
+                    "all-students-not-evaluated",
+                    `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumClassParticipationEvalsForFeedback}} arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
+                    { count: studentsWithInsufficientEvaluations.length, minimumClassParticipationEvalsForFeedback }
+                  )}
+            </CText>
+          </CView>
+          <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
+            <MaterialCommunityIcon
+              name={!allStudentsHaveThreeVerbalFeedback ? "alert-rhombus-outline" : "check-bold"}
+              size={40}
+              color={!allStudentsHaveThreeVerbalFeedback ? COLORS.yellow : COLORS.primary}
+            />
+            <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
+              {allStudentsHaveThreeVerbalFeedback
+                ? t("all-students-have-verbal-feedback", "Kaikille ryhmän oppilaille on annettu riittävästi sanallista palautetta!")
+                : t(
+                    "all-students-have-not-verbal-feedback",
+                    `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
+                    { count: studentsWithLessThanThreeVerbalFeedback.length }
+                  )}
             </CText>
           </CView>
         </CView>
-      ) : (
-        <CFlatList
-          data={studentsWithFeedback}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => {
-            return (
-              <FinalFeedbackItem
-                student={item}
-                moduleId={group.currentModule.id}
-                style={{ borderBottomWidth: index !== studentsWithFeedback.length - 1 ? 1 : 0, borderBottomColor: "gray", paddingVertical: "3xl" }}
-              />
-            );
-          }}
-        />
-      )}
+        <CView style={{ gap: "md" }}>
+          <CText style={{ fontSize: "sm2", fontWeight: "500" }}>{bottomText}</CText>
+        </CView>
+        <CView style={{ gap: "sm" }}>
+          <CButton
+            title={t("generate-final-feedback", "Luo loppupalaute")}
+            onPress={generateFinalFeedback}
+            disabled={!allOtherCollectionTypesEvaluated}
+          />
+          <CText style={{ fontSize: "sm", fontWeight: "300" }}>
+            {t(
+              "feedback-generation-info2",
+              "Loppuarviointien luonti tapahtuu taustalla. Voit liikkua sovelluksessa vapaasti tai sulkea sovelluksen luonnin ajaksi."
+            )}
+          </CText>
+        </CView>
+      </CView>
     </Layout>
   );
 }

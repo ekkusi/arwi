@@ -45,6 +45,10 @@ export type HomeStackParams = {
   };
   "final-feedback": {
     groupId: string;
+    redirectIfFeedbackGenerated?: boolean;
+  };
+  "final-feedback-results": {
+    groupId: string;
   };
   "default-collection-create": {
     groupId: string;
