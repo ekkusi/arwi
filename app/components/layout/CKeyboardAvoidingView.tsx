@@ -14,5 +14,5 @@ export default function CKeyboardAvoidingView({ style, ...rest }: CKeyboardAvoid
 
   const styles = useMemo(() => style && createViewStyles(style), [style]);
 
-  return <KeyboardAvoidingView style={styles} behavior="padding" keyboardVerticalOffset={headerHeight} {...rest} />;
+  return <KeyboardAvoidingView style={styles} behavior="padding" keyboardVerticalOffset={headerHeight + 15} {...rest} />;
 }

@@ -15,6 +15,7 @@ import { CViewStyle } from "@/theme/types";
 import { graphql } from "@/graphql";
 import { useToast } from "@/hooks-and-providers/ToastProvider";
 import { useToggleTokenUseWarning } from "@/hooks-and-providers/monthlyTokenUseWarning";
+import CKeyboardAvoidingView from "../layout/CKeyboardAvoidingView";
 
 type ExtraInputProps = Omit<CTextInputProps, "onChange" | "onChangeText" | "value">;
 
@@ -242,23 +243,25 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
         isOpen={isEditModalOpen}
         onClose={() => closeModal(false)}
         placement="bottom"
-        innerViewStyles={{ maxHeight: "100%", flex: 1, paddingTop: hasNotch() ? 60 : 50 }}
+        innerViewStyles={{ maxHeight: "100%", flex: 1, paddingTop: hasNotch() ? 60 : "xl" }}
       >
         <CView style={{ flex: 1, paddingTop: 20 }}>
           <CView style={{ position: "absolute", left: 0, top: -45 }}>
             <CButton title={t("save", "Tallenna")} onPress={save} />
           </CView>
-          {hasSpeechRecognition(props) ? (
-            <SpeechToTextInput
-              ref={modalSpeechRef}
-              initialText={modalValue}
-              onChange={onSpeechInputChanged}
-              {...getCommonSpeechInputProps(props)}
-              {...commonModalInputProps}
-            />
-          ) : (
-            <CTextInput value={modalValue} onChangeText={setModalValue} {...getCommonTextInputProps()} {...commonModalInputProps} />
-          )}
+          <CKeyboardAvoidingView style={{ flexGrow: 1 }}>
+            {hasSpeechRecognition(props) ? (
+              <SpeechToTextInput
+                ref={modalSpeechRef}
+                initialText={modalValue}
+                onChange={onSpeechInputChanged}
+                {...getCommonSpeechInputProps(props)}
+                {...commonModalInputProps}
+              />
+            ) : (
+              <CTextInput value={modalValue} onChangeText={setModalValue} {...getCommonTextInputProps()} {...commonModalInputProps} />
+            )}
+          </CKeyboardAvoidingView>
         </CView>
       </CModal>
       {hasSpeechRecognition(props) ? (
