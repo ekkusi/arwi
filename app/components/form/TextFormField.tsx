@@ -27,7 +27,7 @@ export default forwardRef<TextInput, TextFormFieldProps>((props: TextFormFieldPr
   const error = errorOverride || _error;
 
   return (
-    <FormField title={title} error={error} errorTextStyle={errorTextStyle} titleStyle={titleStyle} {...containerStyle}>
+    <FormField title={title} error={error} errorTextStyle={errorTextStyle} titleStyle={titleStyle} style={containerStyle}>
       {isSecret ? (
         <SecretInput ref={ref} onChange={onChangeWithValidate} error={!!error} {...rest} />
       ) : (

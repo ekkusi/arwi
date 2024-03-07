@@ -16,6 +16,7 @@ import { graphql } from "@/graphql";
 import { useToast } from "@/hooks-and-providers/ToastProvider";
 import { useToggleTokenUseWarning } from "@/hooks-and-providers/monthlyTokenUseWarning";
 import CKeyboardAvoidingView from "../layout/CKeyboardAvoidingView";
+import LoadingIndicator from "../ui/LoadingIndicator";
 
 type ExtraInputProps = Omit<CTextInputProps, "onChange" | "onChangeText" | "value">;
 
@@ -24,6 +25,7 @@ type CommonProps = ExtraInputProps & {
   onClose?: () => void;
   onChange?: (value: string) => void;
   onSave?: (value: string) => void;
+  isLoading?: boolean;
   containerStyle?: CViewStyle;
   innerInputProps?: ExtraInputProps;
   modalInputProps?: ExtraInputProps;
@@ -70,7 +72,7 @@ function hasSpeechRecognition(props: WithSpeechRecognitionProps | WithoutSpeechR
 }
 
 export default function ModalTextInput(props: WithSpeechRecognitionProps | WithoutSpeechRecognitionProps) {
-  const { initialValue, onSave, onClose, onChange, isDisabled: _isDisabled, modalInputProps, innerInputProps } = props;
+  const { initialValue, onSave, onClose, onChange, isDisabled: _isDisabled, modalInputProps, innerInputProps, isLoading: _isLoading } = props;
   // Default to true if not defined
   const hasTextFix = hasSpeechRecognition(props) && props.hasTextFix != null ? props.hasTextFix : true;
   const textFixSuccessMessage = hasSpeechRecognition(props) ? props.textFixSuccessMessage : undefined;
@@ -89,7 +91,8 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
   const toggleTokenUseWarning = useToggleTokenUseWarning();
   const [fixTextGrammatics, { loading: isFixingText }] = useMutation(ModalTextInput_FixTextGrammatics_Mutation);
 
-  const isDisabled = _isDisabled || isFixingText;
+  const isLoading = _isLoading || isFixingText;
+  const isDisabled = _isDisabled || isLoading;
 
   const onSpeechInputChanged = useCallback(
     (newValue: string, newSpeechObtained: boolean) => {
@@ -264,40 +267,43 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
           </CKeyboardAvoidingView>
         </CView>
       </CModal>
-      {hasSpeechRecognition(props) ? (
-        <CView>
-          <SpeechToTextInput
-            initialText={value}
-            ref={speechRef}
-            onChange={onSpeechInputChangedOutsideModal}
-            onPress={openModal}
-            containerStyle={props.containerStyle}
-            {...getCommonSpeechInputProps(props)}
-            {...commonInnerInputProps}
-          />
-          {hasTextFix && (textFixAvailable || valueBeforeTextFix) && (
-            <CView style={{ position: "absolute", left: 5, bottom: 8, zIndex: 1 }}>
-              <CButton
-                title={valueBeforeTextFix ? t("rollback", "Peru korjaus") : t("ai-fix", "AI Korjaus")}
-                loading={isFixingText}
-                size="small"
-                variant="outline"
-                onPress={() => {
-                  if (!valueBeforeTextFix) {
-                    fixText();
-                  } else {
-                    rollbackTextFix();
-                  }
-                }}
-              />
-            </CView>
-          )}
-        </CView>
-      ) : (
-        <CTouchableWithoutFeedback onPress={openModal} disabled={isDisabled} style={props.containerStyle}>
-          <CTextInput value={value} {...getCommonTextInputProps()} {...commonInnerInputProps} />
-        </CTouchableWithoutFeedback>
-      )}
+      <CView>
+        {hasSpeechRecognition(props) ? (
+          <>
+            <SpeechToTextInput
+              initialText={value}
+              ref={speechRef}
+              onChange={onSpeechInputChangedOutsideModal}
+              onPress={openModal}
+              containerStyle={props.containerStyle}
+              {...getCommonSpeechInputProps(props)}
+              {...commonInnerInputProps}
+            />
+            {hasTextFix && (textFixAvailable || valueBeforeTextFix) && (
+              <CView style={{ position: "absolute", left: 5, bottom: 8, zIndex: 1 }}>
+                <CButton
+                  title={valueBeforeTextFix ? t("rollback", "Peru korjaus") : t("ai-fix", "AI Korjaus")}
+                  loading={isFixingText}
+                  size="small"
+                  variant="outline"
+                  onPress={() => {
+                    if (!valueBeforeTextFix) {
+                      fixText();
+                    } else {
+                      rollbackTextFix();
+                    }
+                  }}
+                />
+              </CView>
+            )}
+          </>
+        ) : (
+          <CTouchableWithoutFeedback onPress={openModal} disabled={isDisabled} style={props.containerStyle}>
+            <CTextInput value={value} {...getCommonTextInputProps()} {...commonInnerInputProps} />
+          </CTouchableWithoutFeedback>
+        )}
+        {isLoading && <LoadingIndicator type="overlay" />}
+      </CView>
     </>
   );
 }

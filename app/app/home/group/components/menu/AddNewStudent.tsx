@@ -55,5 +55,5 @@ export default function AddNewStudent({ classYearId, onCancel, onSaved }: AddNew
     }
   };
 
-  return <ChangeNameView name="" onSaved={save} onCancel={onCancel} loading={loading} />;
+  return <ChangeNameView onSaved={save} onCancel={onCancel} loading={loading} />;
 }

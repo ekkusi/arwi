@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
-import ChangeNameView from "../../../../../components/common/ChangeNameView";
+import ChangeNameView from "../../../../components/common/ChangeNameView";
 import { graphql } from "@/graphql";
-import { getErrorMessage } from "../../../../../helpers/errorUtils";
+import { getErrorMessage } from "../../../../helpers/errorUtils";
 
 const ChangeStudentName_UpdateStudent_Mutation = graphql(`
   mutation ChangeStudentName_UpdateStudent($id: ID!, $input: UpdateStudentInput!) {

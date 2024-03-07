@@ -7,7 +7,7 @@ import { graphql } from "@/graphql";
 import { HomeStackParams } from "../types";
 import CText from "../../../components/primitives/CText";
 import { useModal } from "../../../hooks-and-providers/ModalProvider";
-import ChangeStudentName from "../group/components/menu/ChangeStudentName";
+import ChangeStudentName from "./components/ChangeStudentName";
 import { getErrorMessage } from "../../../helpers/errorUtils";
 import SaveAndCancelButtons from "../../../components/ui/SaveAndCancelButtons";
 import ViewMenuBase from "@/components/common/ViewMenuBase";

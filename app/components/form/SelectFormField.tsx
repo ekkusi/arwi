@@ -12,7 +12,7 @@ export default function SelectFormField<CustomOptionType = unknown>(props: Selec
   const { title, containerStyle, errorTextStyle, titleStyle, error, ...rest } = props;
 
   return (
-    <FormField title={title} error={error} errorTextStyle={errorTextStyle} titleStyle={titleStyle} {...containerStyle}>
+    <FormField title={title} error={error} errorTextStyle={errorTextStyle} titleStyle={titleStyle} style={containerStyle}>
       <SingleSelect error={!!error} title={title} {...rest} />
     </FormField>
   );

@@ -10,6 +10,8 @@ type SaveAndCancelButtonsProps = CViewProps & {
   disabled?: boolean;
   cancelButtonProps?: Omit<CButtonProps, "variant" | "shadowed">;
   saveButtonProps?: CButtonProps;
+  saveTitle?: string;
+  cancelTitle?: string;
 };
 
 export default function SaveAndCancelButtons({
@@ -20,16 +22,19 @@ export default function SaveAndCancelButtons({
   disabled,
   cancelButtonProps,
   saveButtonProps,
+  saveTitle,
+  cancelTitle,
   variant = "default",
   ...rest
 }: SaveAndCancelButtonsProps) {
   const { t } = useTranslation();
+
   return (
     <CView style={{ flexDirection: "row", width: "100%", justifyContent: "flex-end", gap: 20, ...style }} {...rest}>
       <CButton
         disabled={loading}
         variant="empty"
-        title={t("cancel", "Peruuta")}
+        title={cancelTitle || t("cancel", "Peruuta")}
         onPress={onCancel}
         textStyle={{ color: "gray" }}
         {...cancelButtonProps}
@@ -38,7 +43,7 @@ export default function SaveAndCancelButtons({
         colorScheme={variant === "default" ? "primary" : "error"}
         disabled={disabled}
         loading={loading}
-        title={variant === "default" ? t("save", "Tallenna") : t("delete", "Poista")}
+        title={saveTitle || (variant === "default" ? t("save", "Tallenna") : t("delete", "Poista"))}
         onPress={onSave}
         {...saveButtonProps}
       />
