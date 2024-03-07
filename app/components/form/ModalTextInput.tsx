@@ -246,7 +246,7 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
         isOpen={isEditModalOpen}
         onClose={() => closeModal(false)}
         placement="bottom"
-        innerViewStyles={{ maxHeight: "100%", flex: 1, paddingTop: hasNotch() ? 60 : "xl" }}
+        innerViewStyles={{ maxHeight: "100%", flex: 1, paddingTop: hasNotch() ? 80 : "xl" }}
       >
         <CView style={{ flex: 1, paddingTop: 20 }}>
           <CView style={{ position: "absolute", left: 0, top: -45 }}>
