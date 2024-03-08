@@ -1197,7 +1197,7 @@ export type introspection = {
             "args": []
           },
           {
-            "name": "minimumClassParticipationEvalsForFeedback",
+            "name": "minimumEvalsForFeedback",
             "type": {
               "kind": "NON_NULL",
               "ofType": {

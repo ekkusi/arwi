@@ -6,8 +6,8 @@ import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
 
 const GenerateFeedbacks_useGeneratedFeedbacks_Mutation = graphql(
   `
-    mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!) {
-      generateGroupFeedback(groupId: $groupId) {
+    mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!, $onlyGenerateMissing: Boolean!) {
+      generateGroupFeedback(groupId: $groupId, onlyGenerateMissing: $onlyGenerateMissing) {
         feedbacks {
           ...FeedbackCacheUpdate
         }
@@ -35,12 +35,12 @@ const GenerateFeedbacksContext = createContext<GenerateFeedbacksContextType | nu
 
 const { Provider } = GenerateFeedbacksContext;
 
-export function useGenerateFeedback(groupId: string) {
+export function useGenerateFeedback(groupId: string, onlyGenerateMissing: boolean = false) {
   const context = React.useContext(GenerateFeedbacksContext);
   const throwCatchableError = useThrowCatchableError();
 
   const [generateFeedbacks] = useMutation(GenerateFeedbacks_useGeneratedFeedbacks_Mutation, {
-    variables: { groupId },
+    variables: { groupId, onlyGenerateMissing },
   });
 
   const isGenerating = context?.generatingGroupIds.includes(groupId);

@@ -119,11 +119,13 @@ export const mapEvaluationFeedbackData = (evaluation: EvaluationWithCollection, 
         date: evaluation.evaluationCollection.date,
         skillsRating: evaluation.skillsRating,
         behaviourRating: evaluation.behaviourRating,
+        wasPresent: evaluation.wasPresent,
       }
     : {
         date: evaluation.evaluationCollection.date,
         generalRating: evaluation.generalRating,
         collectionTypeName: evaluation.evaluationCollection.type.name,
+        wasPresent: evaluation.wasPresent,
       };
 };
 

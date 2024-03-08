@@ -1,7 +1,7 @@
 import {
   FEEDBACK_GENERATION_TOKEN_COST,
   MINIMUM_SUPPORTED_APP_VERSION,
-  MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK,
+  MIN_EVALS_FOR_FEEDBACK,
   MONTHLY_TOKEN_USE_LIMIT,
   TEXT_FIX_TOKEN_COST,
 } from "../../config";
@@ -28,7 +28,7 @@ const resolvers: QueryResolvers<CustomContext> = {
       monthlyTokenUseLimit: MONTHLY_TOKEN_USE_LIMIT,
       feedbackGenerationTokenCost: FEEDBACK_GENERATION_TOKEN_COST,
       textFixTokenCost: TEXT_FIX_TOKEN_COST,
-      minimumClassParticipationEvalsForFeedback: MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK,
+      minimumEvalsForFeedback: MIN_EVALS_FOR_FEEDBACK,
     };
   },
   getCurrentUser: async (_, __, { user }) => {

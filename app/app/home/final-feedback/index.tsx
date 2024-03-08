@@ -31,6 +31,7 @@ const FinalFeedback_GetGroup_Query = graphql(
           currentModuleEvaluations {
             id
             notes
+            wasPresent
           }
         }
         currentModule {
@@ -58,7 +59,7 @@ const FinalFeedback_GetGroup_Query = graphql(
 );
 
 export default function FinalFeedback({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback">) {
-  const { minimumClassParticipationEvalsForFeedback } = useMetadata();
+  const { minimumEvalsForFeedback } = useMetadata();
   const { groupId, redirectIfFeedbackGenerated = true } = route.params;
   const { isGenerating, generateFeedbacks } = useGenerateFeedback(groupId);
   const toggleTokenUseWarning = useToggleTokenUseWarning();
@@ -122,10 +123,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   };
 
   const studentsWithLessThanThreeVerbalFeedback = group.students.filter(
-    (student) => student.currentModuleEvaluations.filter((ev) => ev.notes).length < minimumClassParticipationEvalsForFeedback
+    (student) => student.currentModuleEvaluations.filter((ev) => ev.notes).length < minimumEvalsForFeedback
   );
   const studentsWithInsufficientEvaluations = group.students.filter(
-    (student) => student.currentModuleEvaluations.length < minimumClassParticipationEvalsForFeedback
+    (student) => student.currentModuleEvaluations.filter((ev) => ev.wasPresent).length < minimumEvalsForFeedback
   );
 
   const allOtherCollectionTypesEvaluated = nonEvaluatedOtherCollectionTypes.length === 0;
@@ -175,8 +176,8 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
                 ? t("all-students-evaluated", "Kaikilla ryhmän oppilailla on riittävästi arviointeja!")
                 : t(
                     "all-students-not-evaluated",
-                    `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumClassParticipationEvalsForFeedback}} arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
-                    { count: studentsWithInsufficientEvaluations.length, minimumClassParticipationEvalsForFeedback }
+                    `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
+                    { count: studentsWithInsufficientEvaluations.length, minimumEvalsForFeedback }
                   )}
             </CText>
           </CView>
