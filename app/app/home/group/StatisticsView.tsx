@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { getEnvironmentsByLevel, getEvaluableLearningObjectives } from "arwi-backend/src/utils/subjectUtils";
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { isClassParticipationCollection, isDefaultCollection } from "arwi-backend/src/types/typeGuards";
 import { subjectToIcon } from "../../../helpers/dataMappers";
@@ -21,6 +21,8 @@ import EvaluationTargetCard from "./components/EvaluationTargetCard";
 export default function StatisticsView({ getGroup: group, navigation }: GroupOverviewProps) {
   const { t } = useTranslation();
   const { isGenerating: isGeneratingFeedbacks } = useGenerateFeedback(group.id);
+  const scrollRef = useRef<Animated.ScrollView>(null);
+  const [classEvaluationsY, setClassEvaluationsY] = useState(0);
 
   const moduleInfo = group.currentModule.info;
 
@@ -105,6 +107,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
   return (
     <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg" }}>
       <Animated.ScrollView
+        ref={scrollRef}
         onScroll={scrollHandler}
         style={{ flex: 1 }}
         contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }}
@@ -124,7 +127,7 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
               alignItems: "center",
             }}
           >
-            <CText style={{ color: "white" }}>{t("generating-final-feedback", "Loppupalautetta generoidaan...")}</CText>
+            <CText style={{ color: "white" }}>{t("generating-final-feedback", "Loppupalautetta luodaan...")}</CText>
           </LoadingIndicator>
         )}
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
@@ -137,9 +140,6 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
               {t("class-evaluation-count", "{{count}} tuntiarviointia", {
                 count: group.currentModule.evaluationCollections.filter((ev) => ev.type.category === "CLASS_PARTICIPATION").length,
               })}
-            </CText>
-            <CText style={{ fontSize: "md", fontWeight: "300" }}>
-              {t("class-evaluation-weight", "Tuntityöskentelyn painoarvo")}: {classEvaluationType?.weight}%
             </CText>
           </CView>
           <CView style={{ gap: 10, alignItems: "flex-end", justifyContent: "center", width: "30%" }}>
@@ -180,30 +180,44 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             </CView>
           </CView>
         </CView>
-        {otherSelectedTypes.length > 0 && (
-          <CView style={{ gap: 20 }}>
-            <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arvioitavat sisällöt")}</CText>
-            <CView style={{ gap: 5 }}>
-              {otherSelectedTypes.map((type, i) => {
-                const evaluation = otherSelectedTypeEvaluations[i];
-                return (
-                  <EvaluationTargetCard
-                    key={type.id}
-                    navigation={navigation}
-                    id={type.id}
-                    collectionId={type.defaultTypeCollection?.id}
-                    name={type.name}
-                    archived={group.archived}
-                    category={type.category}
-                    groupId={group.id}
-                    evaluated={!!evaluation}
-                    weight={type.weight}
-                  />
-                );
-              })}
-            </CView>
+        <CView style={{ gap: 20 }}>
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arvioitavat sisällöt")}</CText>
+          <CView style={{ gap: 5 }}>
+            {classEvaluationType && (
+              <EvaluationTargetCard
+                id={classEvaluationType.id}
+                navigation={navigation}
+                collectionId={classEvaluationType.defaultTypeCollection?.id}
+                name={classEvaluationType.name}
+                archived={group.archived}
+                category={classEvaluationType.category}
+                groupId={group.id}
+                evaluated={false}
+                weight={classEvaluationType.weight}
+                customEvent={() => {
+                  scrollRef?.current?.scrollTo({ y: classEvaluationsY, animated: true });
+                }}
+              />
+            )}
+            {otherSelectedTypes.map((type, i) => {
+              const evaluation = otherSelectedTypeEvaluations[i];
+              return (
+                <EvaluationTargetCard
+                  key={type.id}
+                  navigation={navigation}
+                  id={type.id}
+                  collectionId={type.defaultTypeCollection?.id}
+                  name={type.name}
+                  archived={group.archived}
+                  category={type.category}
+                  groupId={group.id}
+                  evaluated={!!evaluation}
+                  weight={type.weight}
+                />
+              );
+            })}
           </CView>
-        )}
+        </CView>
         <CView style={{ gap: 20 }}>
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("final-feedback", "Loppuarviointi")}</CText>
           <CButton
@@ -213,7 +227,12 @@ export default function StatisticsView({ getGroup: group, navigation }: GroupOve
             }}
           />
         </CView>
-        <CView style={{ gap: 10 }}>
+        <CView
+          style={{ gap: 10 }}
+          onLayout={(event) => {
+            setClassEvaluationsY(event.nativeEvent.layout.y);
+          }}
+        >
           <CView style={{ gap: 5 }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
           </CView>

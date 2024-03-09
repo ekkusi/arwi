@@ -141,14 +141,14 @@ export default function FinalFeedbackResults({ route, navigation }: NativeStackS
       <TopToast count={studentsWithoutFeedbackToGenerate.length} action={generateMissingFeedbacks} isGenerating={isGenerating} />
       <CScrollView style={{ paddingHorizontal: "md", paddingVertical: "lg" }}>
         <CFlatList
-          data={studentsWithFeedback}
+          data={group.students}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => {
             return (
               <FinalFeedbackItem
                 student={item}
                 moduleId={group.currentModule.id}
-                style={{ borderBottomWidth: index !== studentsWithFeedback.length - 1 ? 1 : 0, borderBottomColor: "gray", paddingVertical: "3xl" }}
+                style={{ borderBottomWidth: index !== group.students.length - 1 ? 1 : 0, borderBottomColor: "gray", paddingVertical: "3xl" }}
               />
             );
           }}

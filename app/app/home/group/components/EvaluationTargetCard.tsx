@@ -20,11 +20,12 @@ type EvaluationTargetCardProps = {
   category: string;
   evaluated: boolean;
   weight: number;
+  customEvent?: () => void;
 };
 
 export default function EvaluationTargetCard(props: EvaluationTargetCardProps) {
   const { t } = useTranslation();
-  const { navigation, id, groupId, collectionId, name, archived, category, evaluated, weight } = props;
+  const { navigation, id, groupId, collectionId, name, archived, category, evaluated, weight, customEvent } = props;
   return (
     <Card
       style={{
@@ -36,12 +37,15 @@ export default function EvaluationTargetCard(props: EvaluationTargetCardProps) {
       <CTouchableOpacity
         style={{ height: 50, gap: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
         onPress={() => {
-          navigation.navigate("default-evaluation-collection", {
-            id,
-            collectionId,
-            name,
-            archived,
-          });
+          if (customEvent) customEvent();
+          else {
+            navigation.navigate("default-evaluation-collection", {
+              id,
+              collectionId,
+              name,
+              archived,
+            });
+          }
         }}
       >
         <CView style={{ flexDirection: "row", alignItems: "center", gap: "md" }}>
@@ -62,17 +66,23 @@ export default function EvaluationTargetCard(props: EvaluationTargetCardProps) {
             </CText>
           </CView>
         </CView>
-        {!evaluated && (
-          <CButton
-            variant="empty"
-            textStyle={{ color: "primary", fontSize: "sm", fontWeight: "500" }}
-            title={t("evaluate", "Arvioi").toLocaleUpperCase()}
-            onPress={() => {
-              navigation.navigate("default-collection-create", { groupId, collectionTypeId: id });
-            }}
-          />
+        {category !== "CLASS_PARTICIPATION" && (
+          <>
+            {!evaluated && (
+              <CButton
+                variant="empty"
+                textStyle={{ color: "primary", fontSize: "sm", fontWeight: "500" }}
+                title={t("evaluate", "Arvioi").toLocaleUpperCase()}
+                onPress={() => {
+                  navigation.navigate("default-collection-create", { groupId, collectionTypeId: id });
+                }}
+              />
+            )}
+            {evaluated && (
+              <CText style={{ color: "gray", fontSize: "sm", fontWeight: "500" }}>{t("evaluated", "Arvioitu").toLocaleUpperCase()}</CText>
+            )}
+          </>
         )}
-        {evaluated && <CText style={{ color: "gray", fontSize: "sm", fontWeight: "500" }}>{t("evaluated", "Arvioitu").toLocaleUpperCase()}</CText>}
       </CTouchableOpacity>
     </Card>
   );
