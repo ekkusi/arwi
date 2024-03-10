@@ -15669,6 +15669,22 @@ af51aa23-e84f-4d2a-9b17-c6cdad90d876	a14489cd-62d3-49b6-9ab4-a7524ee16d3c	\N	f1f
 e1cf83d9-1bd3-4357-ace1-f953f3b4852c	82d4a68a-9f28-4ece-8ccf-7e2fea437edd	\N	f1fadcf1-6617-4321-b662-69531258bed4	f	\N	\N	\N
 42125588-01ab-48bf-a924-648cf71889a7	a833c5b2-d6c2-41e9-a4e2-61ca3b49e551		f1fadcf1-6617-4321-b662-69531258bed4	t	9	9	\N
 78cc302e-cc13-44dd-8f84-783b3cceeee0	149649e9-0a7f-4685-a8e7-f469176f06fb	Työskentelyssä oli tänään parannettavaa ja ohjeiden kuuntelussa	f1fadcf1-6617-4321-b662-69531258bed4	t	9	7	\N
+5880c1ad-ccf9-43ab-a1cf-e5d152b56a20	0d0c3bdf-96a7-46c0-a981-e9614660bd07	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+04d94dd2-8ada-4040-8efe-22ee4110453d	60057f95-4dbd-49b8-8b83-bf6146c45f21	Luistelu vielä vähän epävarmaa. Syötöt tarkkoja!	3fa6aee3-656c-4294-890b-78eb299ca06c	t	8	9	\N
+ade20b8b-0db8-4ca9-b86b-8aceec699885	290cd4d5-7c8d-4ce5-b477-46c74daf1b80	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+e9bb2cde-3f9d-4915-8e19-ebe27d3772e3	04b53170-a29f-4141-bb5b-40d721234074	Syöttämiseen ja syötön vastaanottoon vielä tarkkuutta. Luistelutaidot onnistuvat hyvin	3fa6aee3-656c-4294-890b-78eb299ca06c	t	9	10	\N
+fee46adb-5842-40fe-b14e-47d74cb7c303	acbf058e-937f-473c-8442-f4c01d291583	Luistelu sujuu hyvi eteen ja taakse, syöttämiseen ja syötön vastaanottoon vielä tarkkuutta	3fa6aee3-656c-4294-890b-78eb299ca06c	t	9	10	\N
+849ffac8-0f55-4fcd-a2aa-526185f9f0fd	a5ed00a2-a946-459a-bcf8-58175de8bac8	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+2fbea99a-d2cb-4fa8-abcd-9e07b8c19b90	6cb277e0-ffa3-4492-ae44-68c3f2e64faa	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+67d29001-fb4f-46a0-9cf1-32d23178bac6	798d39a1-e426-449c-a81d-afbb7bd464ba	Luistelutaidot hyvällä mallilla, hienoa itsenäistä työskentelyä myös tällä tunnilla! Myös pelissä loistit, osasit hakea paikkaa	3fa6aee3-656c-4294-890b-78eb299ca06c	t	9	9	\N
+25923816-61be-45a7-8e65-8afc6699c2a6	a14489cd-62d3-49b6-9ab4-a7524ee16d3c	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+a8606811-074b-4b38-a607-f1020b3edf05	deac0664-d9ac-4152-b5eb-c06d6ce54ad2	Luistelu vielä epävarmaa, etenkin taaksepäin, mutta syötöt ja vastaanotot tarkkoja!	3fa6aee3-656c-4294-890b-78eb299ca06c	t	8	9	\N
+6071b9d1-97f0-4de7-a209-d5b530aab097	3af2607a-cd9f-49da-af4f-587b53780b34	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+a0ac3b95-560d-43dc-addc-93b1a4c2194a	b812f153-65b5-499e-950d-1770d29d11ce	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+000452e4-7edc-4426-ac42-a7a3bcc23ba9	d56c804e-49f4-4fff-986d-669ec9b1e2a0	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+d30c884b-5753-4eed-83c8-7962a26f681d	82d4a68a-9f28-4ece-8ccf-7e2fea437edd	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+d606527c-8f26-48dd-a5dc-e5034d66b0d9	a833c5b2-d6c2-41e9-a4e2-61ca3b49e551	\N	3fa6aee3-656c-4294-890b-78eb299ca06c	f	\N	\N	\N
+7f033e67-b52f-4034-84eb-d46edc7621a4	149649e9-0a7f-4685-a8e7-f469176f06fb	Luistelutaidot hyvällä mallilla, hyvää itsenäistä työskentelyä. Välineenkäsittelytaidot myös hyvällä mallilla	3fa6aee3-656c-4294-890b-78eb299ca06c	t	9	9	\N
 \.
 
 
@@ -16106,6 +16122,7 @@ dab5a45a-8d4b-44b8-8709-a6aa65f4b9d3	2024-02-23 00:00:00		LI_ENV_TAL	f672513f-ed
 fc10ea00-1879-47e7-8e38-bd884b258f8f	2024-02-23 00:00:00		LI_ENV_PAL	f672513f-ed07-4b56-99bd-eddbd49db97f	{T10,T7}	06cfa567-97bc-442f-b8b9-a6b35f430612
 038cd489-7f62-4d2a-81d2-df83cfbd5fd1	2024-03-08 00:00:00	Kpk, cicapo, letkis	LI_ENV_TAN	45982a54-e42c-4e48-8b84-32689d592abd	{T3}	50f1c646-4d2c-4eda-b14a-19a5569e8ecb
 5965d610-24ba-4088-8add-280097584cbb	2024-02-23 00:00:00		LI_ENV_TAL	9db487b3-d066-464e-a1c9-25f4aa32c2a9	{T9}	9b5cc5ee-c306-43e3-813c-cdd0bc7d910e
+3fa6aee3-656c-4294-890b-78eb299ca06c	2024-03-09 00:00:00	Luistelu, liukuminen ja luistelutaidot, syöttäminen ja vastaanottaminen, itsenäinen työskentely	LI_ENV_TAL	ff174794-b9b6-4f1c-ad34-bc2098ee29fd	{T3,T4,T10}	24f105a9-3bf2-4210-922b-b0505b056c58
 62f116a7-61a7-4f75-b881-d3ac50dc4c8e	2024-02-26 00:00:00	Kpk, liikkuvuus, lihaskunto, ryhmäkisat	LI_ENV_KUN	31169d42-b6c4-485c-8ced-f3fca6fe9ea9	{T5,T8}	2b195760-5c81-41bc-bd18-50196d015984
 d826f829-f602-4052-9eff-d0b160cb185a	2024-02-26 00:00:00	Kpk, liikkuvuus, lihaskunto, ryhmätyökisat, rentoutuminen	LI_ENV_KUN	fd028225-16dd-4d8e-8c86-a81a9d9243e5	{T8,T5}	74fecc14-ea1e-46ca-b5c5-44abecb9f395
 f3a651ac-f25e-4f56-9927-7946332213cd	2023-09-01 00:00:00	Fireball, kpk, futsal	LI_ENV_PAL	a6a42248-8033-4254-8b5d-ba325479414d	{T4}	f6fa20c3-80b6-4f09-b3ef-dcbdf2f0aab8
@@ -16808,10 +16825,10 @@ d5a059ec-3fb1-430b-9ce7-5be3d4255b27	Uusi Terkka	483e736f-00a6-46d1-a1c3-3099eb6
 f53bf41a-69c0-4b5b-8877-839346e818bf	8 luokka valinnainen TO	786d367e-855b-4ac6-8e28-d5fdec21efcd	2024-02-01 14:17:53.327	LI	f	a6529d45-707f-4e00-857e-9f72c2c15c91
 b9b0c08c-4f3a-4ea4-9ea9-7d7bb0b528d6	Lukio 2.1 	786d367e-855b-4ac6-8e28-d5fdec21efcd	2024-02-05 11:03:07.235	LI	f	faba5a37-92cd-4e92-917e-4e6cd1e020f4
 3313387b-a1ad-4246-9bd5-981f75d14aa4	OPEA525, liikunta	9ec8ee79-0762-4208-a893-e44b5061b468	2024-02-14 15:38:44.502	LI	f	85f22ec1-9f53-4df7-9467-b6b2313063ef
-9eb12c4e-2e2a-472b-8f3e-0d58d54480c7	Liikka 9lk	3386ad42-5f46-49ab-ab12-fa11bb8723a5	2024-03-08 09:20:05.96	LI	f	ff174794-b9b6-4f1c-ad34-bc2098ee29fd
 0a3f4809-c914-491f-ae92-9519ffbfffde	Te 8b	c71a57e7-5fb0-452d-88b0-f96072f8be2d	2024-03-06 11:25:15.753	TE	f	5d64b64a-9450-4a75-b2b9-784eb94c3948
 a7815324-5889-4ac3-8afd-8b97c59173df	9BDE	51b0ee01-f526-4d88-bcf6-fe9f4f5f4bca	2024-02-20 11:33:27.091	LI	f	e4e3bbdc-68e9-4f17-ae65-2463eec1a33b
 b30fc707-b507-4176-ac68-6e3a5ce2651f	8lk. valinnainen	cb990980-2dfa-4f3c-8bde-e4e63c149904	2024-02-22 10:43:34.335	LI	f	cc5e1b0a-1a39-414c-8b46-224aea14b531
+9eb12c4e-2e2a-472b-8f3e-0d58d54480c7	Liikka 9lk	3386ad42-5f46-49ab-ab12-fa11bb8723a5	2024-03-09 08:34:08.48	LI	f	ff174794-b9b6-4f1c-ad34-bc2098ee29fd
 3df776c3-ba94-472c-8c6a-5f4c963901a0	9ABC	5af8de33-689a-4c83-a270-b4a75e6206fd	2024-02-23 17:31:23.772	LI	f	ccc44c7a-6cb7-4c49-9887-6a1ef031d601
 4f29fdee-a1b2-4c2b-8cab-d52e3a86f9bc	Esimerkki ryhmä	4c83a51e-c322-41d5-ae09-f639f1ecdb01	2024-02-23 20:03:19.352	LI	f	f672513f-ed07-4b56-99bd-eddbd49db97f
 c6961496-ae16-4671-b30c-4a9447ce6056	Testi	eddfeca0-413b-4328-b979-96f65d629dc7	2024-03-06 15:51:50.421	LI	f	1c953992-1369-4be2-980c-a5538ae6d720
