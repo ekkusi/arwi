@@ -19959,6 +19959,7 @@ f9a50289-8598-4bc8-b0e0-9b0d5b2a60e5	aulisipila@live.com	$2a$12$t1yJgMkNHL9AL2Qz
 40b738f7-6ba8-4389-aeda-0bc29e6173a6	inkahuo@uef.fi	$2a$12$w5ZIRKGHoInocpKHisdjyeNWgCcHOeAKrQHSDqa2eQrjYhfRqW6JC	t	fi_FI	\N	\N	0	0	f	f
 06f9ca4d-62a7-4471-988f-ca250bf941f0	kemppainentoto@gmail.com	$2a$12$XN.iRg7x7zHFAmQPxd8hOugsEK2l/pRzTnksrACb568/NAk4jLfty	t	fi_FI	\N	\N	0	0	f	f
 9ec8ee79-0762-4208-a893-e44b5061b468	tuuli.eveliina@gmail.com	$2a$12$6V9NeV53S6xqzc/3PvJTuOoJbKdO47pdv.80Bh5r2.6D46qDRNm4e	t	fi_FI	\N	\N	0	10	f	f
+01c2777b-3aff-4b30-9b21-851d9e6f52a1	villeepietikainen@gmail.com	$2a$12$veLcNKWM5qzxuKk3eTmwhuW.NgVkxZyeC5tfwhVaQ70q4BBL87fky	t	fi_FI	\N	\N	0	0	f	f
 06ace530-dac3-49c4-a804-0a61d35ac989	ainoaineslahti96@gmail.com	$2a$12$jwsPYUxgvAGTDv2LBrjwOuu46o/vF9cWQQzv74UJ4yQB..jx0Omeq	t	fi_FI	\N	\N	0	0	f	f
 9d7305e7-6591-446f-a593-7265e800d65a	pinja.koivumaki@gmail.com	$2a$12$WpWnqbAeVgP4NKf9rWIbn.31SOz/UbdIBw89C6dxguk9cF0.viZKi	t	fi_FI	\N	\N	0	0	f	f
 483e736f-00a6-46d1-a1c3-3099eb626012	eke@email.com	$2b$12$.c1f5H3Q0JVFOmpK5KMBC.3zcjmUKzfI3Rnb6Z9Utxuf.mXYD4pdi	t	fi_FI	\N	\N	0	0	f	f
