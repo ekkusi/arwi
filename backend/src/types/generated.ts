@@ -271,7 +271,7 @@ export type AppMetadata = {
   monthlyTokenUseLimit: Scalars['Int'];
   feedbackGenerationTokenCost: Scalars['Int'];
   textFixTokenCost: Scalars['Int'];
-  minimumClassParticipationEvalsForFeedback: Scalars['Int'];
+  minimumEvalsForFeedback: Scalars['Int'];
 };
 
 export type AuthPayload = {
@@ -882,7 +882,7 @@ export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends
   monthlyTokenUseLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   feedbackGenerationTokenCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   textFixTokenCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  minimumClassParticipationEvalsForFeedback?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  minimumEvalsForFeedback?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

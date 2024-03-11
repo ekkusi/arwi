@@ -4,12 +4,12 @@ import openAIClient from "@/openAIClient";
 import { formatDate } from "./date";
 import { MATOMO_EVENT_CATEGORIES } from "../config";
 
-export type ClassParticipationEvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviourRating" | "notes">> & {
+export type ClassParticipationEvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviourRating" | "notes" | "wasPresent">> & {
   date: Date;
   environmentLabel: string;
 };
 
-export type DefaultEvaluationData = Partial<Pick<Evaluation, "generalRating" | "notes">> & {
+export type DefaultEvaluationData = Partial<Pick<Evaluation, "generalRating" | "notes" | "wasPresent">> & {
   date: Date;
   collectionTypeName: string;
 };

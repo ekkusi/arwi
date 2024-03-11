@@ -25,9 +25,19 @@ type GradeSuggestionViewProps = CViewProps & {
   behaviourMean: number;
   collectionTypes: PartialCollectionType[];
   otherEvaluations: PartialEvaluation[];
+  size?: "large" | "small";
+  hideEdit?: boolean;
 };
 
-export default function GradeSuggestionView({ skillsMean, behaviourMean, collectionTypes, otherEvaluations, ...rest }: GradeSuggestionViewProps) {
+export default function GradeSuggestionView({
+  skillsMean,
+  behaviourMean,
+  collectionTypes,
+  otherEvaluations,
+  size = "large",
+  hideEdit = false,
+  ...rest
+}: GradeSuggestionViewProps) {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [gradeSuggestionSkillsWeight, setGradeSuggestionSkillWeight] = useState(0.5);
@@ -106,19 +116,23 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean, collect
       <CView {...rest} style={{ gap: 10, ...rest?.style }}>
         <CView style={{ gap: 5 }}>
           <CView style={{ flexDirection: "row", gap: "md", justifyContent: "flex-start", alignItems: "center" }}>
-            <CText style={{ fontSize: "lg", fontWeight: "300" }}>{t("grade-suggestion", "Arvosanaehdotus")}</CText>
-            <InfoButton
-              onPress={() => {
-                Alert.alert(
-                  t("grade-suggestion", "Arvosanaehdotus"),
-                  t(
-                    "grade-suggestion-info",
-                    "Arvosanaehdotus on laskettu painottamalla valittuja arviointisisältöjä ryhmälle asetettujen painojen mukaisesti. Painoja pääset tarkastelemaan ja muokkaamaan Ryhmä-sivulta."
-                  )
-                );
-              }}
-            />
+            <CText style={{ fontSize: size === "large" ? "lg" : "sm2", fontWeight: "300" }}>{t("grade-suggestion", "Arvosanaehdotus")}</CText>
+            {size === "large" && (
+              <InfoButton
+                onPress={() => {
+                  Alert.alert(
+                    t("grade-suggestion", "Arvosanaehdotus"),
+                    t(
+                      "grade-suggestion-info",
+                      "Arvosanaehdotus on laskettu painottamalla valittuja arviointisisältöjä ryhmälle asetettujen painojen mukaisesti. Painoja pääset tarkastelemaan ja muokkaamaan Ryhmä-sivulta."
+                    )
+                  );
+                }}
+              />
+            )}
           </CView>
+        </CView>
+        {!hideEdit && (
           <CView style={{ flexDirection: "row" }}>
             <CButton
               size="small"
@@ -135,9 +149,9 @@ export default function GradeSuggestionView({ skillsMean, behaviourMean, collect
               onPress={() => setIsMenuOpen(true)}
             />
           </CView>
-        </CView>
+        )}
         <CView style={{ justifyContent: "center", alignItems: "center" }}>
-          <CircledNumber borderColor="darkgray" borderWidth={2} value={gradeSuggestion} decimals={0} />
+          <CircledNumber size={size === "large" ? 70 : 60} borderColor="darkgray" borderWidth={2} value={gradeSuggestion} decimals={0} />
         </CView>
       </CView>
     </>

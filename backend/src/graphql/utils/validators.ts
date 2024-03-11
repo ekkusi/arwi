@@ -25,7 +25,7 @@ import { moduleLoader } from "../dataLoaders/module";
 import { groupLoader } from "../dataLoaders/group";
 import { mapModuleInfo } from "./mappers";
 import { FeedbackGenerationEvaluationData, isClassParticipationEvaluationData } from "@/utils/openAI";
-import { MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK } from "@/config";
+import { MIN_EVALS_FOR_FEEDBACK } from "@/config";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
 
@@ -414,9 +414,9 @@ export const checkEvaluatedNonClassParticipationCollectionTypes = async (module:
 };
 
 export const validateStudentFeedbackEvaluations = async (evaluations: FeedbackGenerationEvaluationData[]) => {
-  const classParticipationEvaluations = evaluations.filter(isClassParticipationEvaluationData);
-  if (classParticipationEvaluations.length < MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK)
+  const presentEvaluations = evaluations.filter((ev) => ev.wasPresent);
+  if (presentEvaluations.length < MIN_EVALS_FOR_FEEDBACK)
     throw new ValidationError(
-      `Oppilaalla ei ole tarpeeksi arviointeja tuntityöskentelystä palautteen luomiseksi. Oppilaalla tulee olla vähintään ${MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK} arviointia.`
+      `Oppilaalla ei ole tarpeeksi arviointeja palautteen luomiseksi. Oppilaalla tulee olla vähintään ${MIN_EVALS_FOR_FEEDBACK} arviointia.`
     );
 };

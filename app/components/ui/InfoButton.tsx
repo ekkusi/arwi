@@ -16,7 +16,7 @@ export default function InfoButton({ size = 36, onPress }: { size?: number; onPr
         alignItems: "center",
       }}
     >
-      <Icon name="information" size={20} color={COLORS.darkgray} />
+      <Icon name="information" size={(20 / 36) * size} color={COLORS.darkgray} />
     </CTouchableOpacity>
   );
 }

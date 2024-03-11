@@ -94,7 +94,7 @@ export default function DefaultEvaluationCollection({
   });
 
   return (
-    <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg", paddingVertical: "2xl" }}>
+    <CView style={{ flexGrow: 1, backgroundColor: "white", paddingHorizontal: "lg", paddingVertical: 0 }}>
       <CScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 30, paddingBottom: 100, paddingTop: 20 }} showsVerticalScrollIndicator={false}>
         <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "2xl" }}>
           <CView style={{ gap: 2 }}>
