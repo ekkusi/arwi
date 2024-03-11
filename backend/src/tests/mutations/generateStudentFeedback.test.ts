@@ -13,7 +13,7 @@ import {
 } from "../testHelpers";
 import { feedbacksLoader } from "@/graphql/dataLoaders/feedback";
 import { collectionsByModuleLoader } from "@/graphql/dataLoaders/collection";
-import { MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK } from "@/config";
+import { MIN_EVALS_FOR_FEEDBACK } from "@/config";
 
 const query = graphql(`
   mutation GenerateStudentFeedbackTest($studentId: ID!, $moduleId: ID!) {
@@ -99,7 +99,7 @@ describe("generateStudentFeedback", () => {
 
     expect(response.errors).toBeDefined();
     expect(response.errors?.[0].message).toContain(
-      `Oppilaalla ei ole tarpeeksi arviointeja tuntityöskentelystä palautteen luomiseksi. Oppilaalla tulee olla vähintään ${MIN_CLASS_PARTICIPATION_EVALS_FOR_FEEDBACK} arviointia.`
+      `Oppilaalla ei ole tarpeeksi arviointeja palautteen luomiseksi. Oppilaalla tulee olla vähintään ${MIN_EVALS_FOR_FEEDBACK} arviointia.`
     );
   });
 

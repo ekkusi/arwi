@@ -24,7 +24,7 @@ import { collectionLoader, collectionsByModuleLoader } from "../dataLoaders/coll
 import { moduleLoader } from "../dataLoaders/module";
 import { groupLoader } from "../dataLoaders/group";
 import { mapModuleInfo } from "./mappers";
-import { FeedbackGenerationEvaluationData, isClassParticipationEvaluationData } from "@/utils/openAI";
+import { FeedbackGenerationEvaluationData } from "@/utils/openAI";
 import { MIN_EVALS_FOR_FEEDBACK } from "@/config";
 
 const VALID_LANGUAGE_CODES = ["fi_FI", "sv_SE", "en_US"];
