@@ -138,8 +138,8 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
     <Layout style={{ backgroundColor: "white" }}>
       <ScrollView>
         <CView style={{ padding: "lg", gap: 30 }}>
-          <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "3xl" }}>
-            <CView>
+          <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "xl" }}>
+            <CView style={{ width: "55%" }}>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{student.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.currentModule.info.label.fi}</CText>
@@ -153,10 +153,14 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                 <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("absence", "poissaoloa", { count: absencesAmount })}</CText>
               </CText>
             </CView>
-            <CircledNumber
-              value={(skillsAverage + behaviourAverage) / 2}
-              title={t("class-evaluation-mean", "Tuntityöskentelyn keskiarvo")}
-              titleStyle={{ width: 105 }}
+            <GradeSuggestionView
+              skillsMean={skillsAverage}
+              behaviourMean={behaviourAverage}
+              otherEvaluations={otherEvaluations}
+              collectionTypes={collectionTypes}
+              style={{ marginLeft: "lg" }}
+              size="small"
+              hideEdit
             />
           </CView>
           {otherCollectionTypes.length > 0 && (
@@ -327,13 +331,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               </CView>
             </CView>
           </CView>
-          <GradeSuggestionView
-            skillsMean={skillsAverage}
-            behaviourMean={behaviourAverage}
-            otherEvaluations={otherEvaluations}
-            collectionTypes={collectionTypes}
-            hideEdit
-          />
           {!archived && (
             <CButton
               title={t("student-final-evaluation", "Siirry loppuarviointiin")}
