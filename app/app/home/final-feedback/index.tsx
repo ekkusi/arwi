@@ -60,7 +60,7 @@ const FinalFeedback_GetGroup_Query = graphql(
 
 export default function FinalFeedback({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback">) {
   const { minimumEvalsForFeedback } = useMetadata();
-  const { groupId, redirectIfFeedbackGenerated = true } = route.params;
+  const { groupId, noRedirect = false } = route.params;
   const { isGenerating, generateFeedbacks } = useGenerateFeedback(groupId);
   const toggleTokenUseWarning = useToggleTokenUseWarning();
   const { t } = useTranslation();
@@ -88,7 +88,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
     "latestFeedback"
   >[];
 
-  if (redirectIfFeedbackGenerated && studentsWithFeedback.length > 0) navigation.replace("final-feedback-results", { groupId });
+  if (!noRedirect && studentsWithFeedback.length > 0) navigation.replace("final-feedback-results", { groupId });
 
   const otherCollectionTypes = group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
   const nonEvaluatedOtherCollectionTypes = otherCollectionTypes.filter((type) => !hasRequiredField(type, "defaultTypeCollection"));
@@ -101,10 +101,12 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         openToast(
           t("final-feedback-finished", "Loppupalaute on luontu ryhmälle {{groupName}}", { groupName: group.name }),
           { closeTimeout: 10000 },
-          {
-            action: () => navigation.navigate("final-feedback", { groupId: group.id }),
-            label: t("inspect", "Tarkastele"),
-          }
+          noRedirect
+            ? {
+                action: () => navigation.navigate("final-feedback", { groupId: group.id }),
+                label: t("inspect", "Tarkastele"),
+              }
+            : undefined
         );
       },
       (err) => {
@@ -130,13 +132,53 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   );
 
   const allOtherCollectionTypesEvaluated = nonEvaluatedOtherCollectionTypes.length === 0;
-  const allStudentsHaveThreeEvaluations = !(studentsWithInsufficientEvaluations.length > 0);
+  const allStudentsHaveSufficientEvaluations = !(studentsWithInsufficientEvaluations.length > 0);
   const allStudentsHaveThreeVerbalFeedback = !(studentsWithLessThanThreeVerbalFeedback.length > 0);
+
+  const isGeneratingDisabled = !allOtherCollectionTypesEvaluated || studentsWithInsufficientEvaluations.length === group.students.length;
+
+  const renderSufficientEvaluationsContent = () => {
+    let icon;
+    let color;
+    let message;
+    switch (studentsWithInsufficientEvaluations.length) {
+      case 0: {
+        icon = "check-bold";
+        color = COLORS.primary;
+        message = t("all-students-evaluated", "Kaikilla ryhmän oppilailla on riittävästi arviointeja!");
+        break;
+      }
+      case group.students.length: {
+        icon = "alert-rhombus-outline";
+        color = COLORS.red;
+        message = t(
+          "no-students-evaluated",
+          "Ryhmässä ei ole yhtään oppilasta, jolla olisi yli {{minimumEvalsForFeedback}} arviointia. Palautteen generointi ei ole mahdollista.",
+          { minimumEvalsForFeedback }
+        );
+        break;
+      }
+      default:
+        icon = "alert-rhombus-outline";
+        color = COLORS.yellow;
+        message = t(
+          "all-students-not-evaluated",
+          `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
+          { count: studentsWithInsufficientEvaluations.length, minimumEvalsForFeedback }
+        );
+    }
+    return (
+      <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
+        <MaterialCommunityIcon name={icon} size={40} color={color} />
+        <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>{message}</CText>
+      </CView>
+    );
+  };
 
   let bottomText = t("all-set-for-generation", "Kaikki valmiina loppupalautteen luontiin!");
   if (!allOtherCollectionTypesEvaluated)
     bottomText = t("fix-errors-before-generation", "Korjaa punaisella merkatut kohdat ennen loppupalautteen luontia.");
-  else if (!allStudentsHaveThreeEvaluations || !allStudentsHaveThreeVerbalFeedback)
+  else if (!allStudentsHaveSufficientEvaluations || !allStudentsHaveThreeVerbalFeedback)
     bottomText = t("see-warnings-before-generation", "Huomioi keltaisella merkatut kohdat. Voit kuitenkin jatkaa loppupalautteen luontiin.");
   return (
     <Layout style={{ backgroundColor: "white", paddingHorizontal: "md", paddingVertical: "lg" }}>
@@ -165,22 +207,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
                   )}
             </CText>
           </CView>
-          <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
-            <MaterialCommunityIcon
-              name={!allStudentsHaveThreeEvaluations ? "alert-rhombus-outline" : "check-bold"}
-              size={40}
-              color={!allStudentsHaveThreeEvaluations ? COLORS.yellow : COLORS.primary}
-            />
-            <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>
-              {allStudentsHaveThreeEvaluations
-                ? t("all-students-evaluated", "Kaikilla ryhmän oppilailla on riittävästi arviointeja!")
-                : t(
-                    "all-students-not-evaluated",
-                    `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
-                    { count: studentsWithInsufficientEvaluations.length, minimumEvalsForFeedback }
-                  )}
-            </CText>
-          </CView>
+          {renderSufficientEvaluationsContent()}
           <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
             <MaterialCommunityIcon
               name={!allStudentsHaveThreeVerbalFeedback ? "alert-rhombus-outline" : "check-bold"}
@@ -202,12 +229,16 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
           <CText style={{ fontSize: "sm2", fontWeight: "500" }}>{bottomText}</CText>
         </CView>
         <CView style={{ gap: "sm" }}>
-          <CButton
-            title={t("generate-final-feedback", "Luo loppupalaute")}
-            onPress={generateFinalFeedback}
-            disabled={!allOtherCollectionTypesEvaluated}
-          />
-          <CText style={{ fontSize: "sm", fontWeight: "300" }}>
+          <CButton title={t("generate-final-feedback", "Luo loppupalaute")} onPress={generateFinalFeedback} disabled={isGeneratingDisabled} />
+          {isGeneratingDisabled && (
+            <CButton
+              variant="empty"
+              textStyle={{ color: "primary", fontWeight: "600", marginTop: "md" }}
+              title={t("inspect-feedback-suggestions", "Tarkastele arvosanaehdotuksia")}
+              onPress={() => navigation.navigate("final-feedback-results", { groupId, noRedirect: true })}
+            />
+          )}
+          <CText style={{ fontSize: "sm", fontWeight: "300", marginTop: "lg" }}>
             {t(
               "feedback-generation-info2",
               "Loppuarviointien luonti tapahtuu taustalla. Voit liikkua sovelluksessa vapaasti tai sulkea sovelluksen luonnin ajaksi."

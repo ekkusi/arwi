@@ -3,12 +3,11 @@ import { useTranslation } from "react-i18next";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import * as Sentry from "@sentry/react-native";
 import { useMutation } from "@apollo/client";
-import evaluation from "arwi-backend/src/graphql/dataLoaders/evaluation";
-import { CollectionTypeCategory } from "arwi-backend/src/types";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useMemo } from "react";
 import { FragmentOf, graphql, readFragment } from "@/graphql";
 import CText from "@/components/primitives/CText";
 import { analyzeEvaluations } from "@/helpers/evaluationUtils";
-import CircledNumber from "@/components/ui/CircledNumber";
 import CView, { CViewProps } from "@/components/primitives/CView";
 import ModalTextInput from "@/components/form/ModalTextInput";
 import { useModal } from "@/hooks-and-providers/ModalProvider";
@@ -16,9 +15,9 @@ import SaveAndCancelButtons from "@/components/ui/SaveAndCancelButtons";
 import CButton from "@/components/primitives/CButton";
 import { useToast } from "@/hooks-and-providers/ToastProvider";
 import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
-import { getCollectionTypeTranslation, getEnvironmentTranslation } from "../../../../helpers/translation";
-import GradeSuggestionView from "../../student/components/GradeSuggestionView";
-import Card from "../../../../components/ui/Card";
+import GradeSuggestionView from "../../../student/components/GradeSuggestionView";
+import { HomeStackParams } from "../../../types";
+import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
 
 export const FinalFeedbackItem_Student_Fragment = graphql(`
   fragment FinalFeedbackItem_Student on Student {
@@ -109,28 +108,23 @@ const FinalFeedbackItem_UpdateFeedback_Mutation = graphql(
 );
 
 export type FinalFeedbackItemProps = Omit<CViewProps, "children"> & {
+  navigation: NativeStackNavigationProp<HomeStackParams, "final-feedback-results">;
   student: FragmentOf<typeof FinalFeedbackItem_Student_Fragment>;
   moduleId: string;
+  generatingFeedback?: boolean;
 };
 
-function StatisticItem({ text, value }: { text: string; value: number }) {
-  return (
-    <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "45%" }}>
-      <CText style={{ flex: 3, fontSize: "sm", fontWeight: "300" }}>{text}</CText>
-      <CText style={{ textAlign: "right", flex: 1, fontSize: "md", fontWeight: "500" }}>{Number.isNaN(value) ? "-" : value.toPrecision(2)}</CText>
-    </CView>
-  );
-}
-
-export default function FinalFeedbackItem({ student: studentFragment, moduleId, ...rest }: FinalFeedbackItemProps) {
+export default function FinalFeedbackItem({ student: studentFragment, moduleId, navigation, ...rest }: FinalFeedbackItemProps) {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   const { openToast } = useToast();
 
+  const { minimumEvalsForFeedback } = useMetadata();
+
   const student = readFragment(FinalFeedbackItem_Student_Fragment, studentFragment);
   const evaluations = student.currentModuleEvaluations;
 
-  const [generateStudentFeedback, { loading: generatingFeedback }] = useMutation(FinalFeedbackItem_GenerateStudentFeedback_Mutation, {
+  const [generateStudentFeedback, { loading: _generatingFeedback }] = useMutation(FinalFeedbackItem_GenerateStudentFeedback_Mutation, {
     variables: {
       studentId: student.id,
       moduleId,
@@ -148,6 +142,8 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
       openToast(t("feedback-generated-success-message", "Uusi palaute generoitu oppilaalle {{studentName}}.", { studentName: student.name }));
     },
   });
+
+  const generatingFeedback = rest.generatingFeedback || _generatingFeedback;
 
   const [updateFeedback, { loading: updatingFeedback }] = useMutation(FinalFeedbackItem_UpdateFeedback_Mutation, {
     onError: (error) => {
@@ -178,17 +174,17 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
 
   const openRegenerateFeedbackModal = () => {
     openModal({
-      title: t("regenerate-feedback-title", "Generoi uusi palaute"),
+      title: t("regenerate-feedback-title", "Luo uusi palaute"),
       children: (
         <>
-          <CText>{t("regenerate-feedback-confirmation-description", "Haluatko varmasti generoida uuden palautteen oppilaalle?")}</CText>
+          <CText>{t("regenerate-feedback-confirmation-description", "Haluatko varmasti luoda uuden palautteen oppilaalle?")}</CText>
           <SaveAndCancelButtons
             onSave={() => {
               generateStudentFeedback();
               closeModal();
             }}
             onCancel={closeModal}
-            saveTitle={t("regenerate-feedback", "Generoi palaute")}
+            saveTitle={t("generate-feedback", "Luo palaute")}
             style={{ marginTop: "lg" }}
           />
         </>
@@ -196,22 +192,44 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
     });
   };
 
-  const classEvaluationType = student.group.currentModule.collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
-  const otherSelectedTypes = student.group.currentModule.collectionTypes.filter((type) => type.category !== "CLASS_PARTICIPATION");
-
   const classParticipationEvaluations =
     evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
 
   const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
 
-  const { absencesAmount, presencesAmount, skillsAverage, behaviourAverage, skillsMeanByEnvironments, behaviourMeanByEnvironments } =
-    analyzeEvaluations([...classParticipationEvaluations]);
+  const { absencesAmount, presencesAmount, skillsAverage, behaviourAverage } = analyzeEvaluations([...classParticipationEvaluations]);
+
+  const canGenerateFeedback = student.currentModuleEvaluations.filter((ev) => ev.wasPresent).length >= minimumEvalsForFeedback;
+
+  const noFeedbackContent = useMemo(() => {
+    return canGenerateFeedback ? (
+      <>
+        <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+          {t(
+            "no-oral-feedback-generated-but-available",
+            "Oppilaalle ei ole luotu sanallista palautetta, mutta sen luominen on mahdollista. Luo sanallinen palaute alta."
+          )}
+        </CText>
+        <CView style={{ alignItems: "center" }}>
+          <CButton title={t("generate-feedback", "Luo palaute")} loading={generatingFeedback} onPress={() => generateStudentFeedback()} />
+        </CView>
+      </>
+    ) : (
+      <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+        {t(
+          "feedback-generation-not-available-for-student",
+          "Sanallista palautetta ei voi luoda puutteellisten arviointien vuoksi. Oppilaalla tulee olla vähintään {{minimumEvalsForFeedback}} arviointia palautteen luomiseksi.",
+          { minimumEvalsForFeedback }
+        )}
+      </CText>
+    );
+  }, [canGenerateFeedback, generateStudentFeedback, generatingFeedback, minimumEvalsForFeedback, t]);
 
   return (
     <CView {...rest}>
       <CView style={{ gap: "3xl" }}>
-        <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "3xl" }}>
-          <CView>
+        <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "xl" }}>
+          <CView style={{ flexDirection: "column", alignItems: "flex-start", width: "50%" }}>
             <CText style={{ fontSize: "title", fontWeight: "500" }}>{student.name}</CText>
             <CText>
               <CText style={{ fontSize: "md", fontWeight: "500" }}>{presencesAmount} </CText>
@@ -221,64 +239,32 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
               <CText style={{ fontSize: "md", fontWeight: "500" }}>{absencesAmount} </CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("absence", "poissaoloa", { count: absencesAmount })}</CText>
             </CText>
+            <CButton
+              variant="empty"
+              title="Katso lisää"
+              textStyle={{ color: "primary" }}
+              style={{ marginTop: "sm" }}
+              onPress={() => navigation.push("student", { id: student.id, name: student.name, archived: false })}
+            />
           </CView>
           <GradeSuggestionView
             skillsMean={skillsAverage}
             behaviourMean={behaviourAverage}
             otherEvaluations={otherEvaluations}
             collectionTypes={evaluations.map((ev) => ev.collection.type)}
+            style={{ justifyContent: "center" }}
             size="small"
             hideEdit
           />
         </CView>
         <CView style={{ gap: "lg" }}>
-          <CText style={{ fontSize: "lg", fontWeight: "300" }}>{t("evaluated-types", "Arvioidut sisällöt")}</CText>
-          <CView style={{ gap: 5 }}>
-            {classEvaluationType && (
-              <CView style={{ padding: "md", borderColor: "lightgray", borderRadius: 5, borderWidth: 1 }}>
-                <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                  <CView style={{ flexDirection: "row", alignItems: "center", gap: "md" }}>
-                    <CircledNumber valueString={`${classEvaluationType.weight}%`} size={44} />
-                    <CView style={{ gap: 5, height: 50 }}>
-                      <CText style={{ fontSize: "md", fontWeight: "500" }}>{classEvaluationType.name}</CText>
-                      <CText style={{ fontSize: "sm", color: "gray" }}>{t("evaluated-continuously", "Jatkuvasti arvioitava")}</CText>
-                    </CView>
-                  </CView>
-
-                  <CircledNumber value={(skillsAverage + behaviourAverage) / 2} size={44} />
-                </CView>
-              </CView>
-            )}
-            {otherSelectedTypes.map((type) => {
-              const typeEvaluation = otherEvaluations.find((ev) => ev.collection.type.id === type.id);
-              return (
-                <CView style={{ padding: "md", borderColor: "lightgray", borderRadius: 5, borderWidth: 1 }} key={type.id}>
-                  <CView style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                    <CView style={{ flexDirection: "row", alignItems: "center", gap: "md" }}>
-                      <CircledNumber valueString={`${type.weight}%`} size={44} />
-                      <CView style={{ gap: 5, height: 50 }}>
-                        <CText style={{ fontSize: "md", fontWeight: "500" }}>{type.name}</CText>
-                        <CText>
-                          <CText style={{ fontSize: "sm", color: "gray" }}>
-                            {getCollectionTypeTranslation(t, type.category as CollectionTypeCategory)},{" "}
-                          </CText>
-                          <CText style={{ fontSize: "sm", color: "gray" }}>{t("evaluated-once", "Kerran arvioitava").toLocaleLowerCase()}</CText>
-                        </CText>
-                      </CView>
-                    </CView>
-                    <CircledNumber value={typeEvaluation?.rating || NaN} size={44} />
-                  </CView>
-                </CView>
-              );
-            })}
-          </CView>
-        </CView>
-        <CView style={{ gap: "lg" }}>
           <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "md" }}>
             <CText style={{ fontWeight: "300", fontSize: "lg" }}>{t("oral-feedback", "Sanallinen palaute")}</CText>
-            <CButton variant="empty" onPress={openRegenerateFeedbackModal}>
-              <Ionicons name="reload" size={24} />
-            </CButton>
+            {student.latestFeedback && (
+              <CButton variant="empty" onPress={openRegenerateFeedbackModal}>
+                <Ionicons name="reload" size={24} />
+              </CButton>
+            )}
           </CView>
           {student.latestFeedback ? (
             <ModalTextInput
@@ -293,9 +279,7 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
               }}
             />
           ) : (
-            <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
-              {t("no-oral-feedback-generated-for-student", "Oppilaalle ei ole generoitu sanallista palautetta")}
-            </CText>
+            noFeedbackContent
           )}
         </CView>
       </CView>

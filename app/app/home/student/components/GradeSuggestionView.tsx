@@ -117,19 +117,18 @@ export default function GradeSuggestionView({
         <CView style={{ gap: 5 }}>
           <CView style={{ flexDirection: "row", gap: "md", justifyContent: "flex-start", alignItems: "center" }}>
             <CText style={{ fontSize: size === "large" ? "lg" : "sm2", fontWeight: "300" }}>{t("grade-suggestion", "Arvosanaehdotus")}</CText>
-            {size === "large" && (
-              <InfoButton
-                onPress={() => {
-                  Alert.alert(
-                    t("grade-suggestion", "Arvosanaehdotus"),
-                    t(
-                      "grade-suggestion-info",
-                      "Arvosanaehdotus on laskettu painottamalla valittuja arviointisisältöjä ryhmälle asetettujen painojen mukaisesti. Painoja pääset tarkastelemaan ja muokkaamaan Ryhmä-sivulta."
-                    )
-                  );
-                }}
-              />
-            )}
+            <InfoButton
+              size={size === "large" ? 36 : 28}
+              onPress={() => {
+                Alert.alert(
+                  t("grade-suggestion", "Arvosanaehdotus"),
+                  t(
+                    "grade-suggestion-info",
+                    "Arvosanaehdotus on laskettu painottamalla valittuja arviointisisältöjä ryhmälle asetettujen painojen mukaisesti. Painoja pääset tarkastelemaan ja muokkaamaan Ryhmä-sivulta."
+                  )
+                );
+              }}
+            />
           </CView>
         </CView>
         {!hideEdit && (

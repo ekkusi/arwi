@@ -45,10 +45,11 @@ export type HomeStackParams = {
   };
   "final-feedback": {
     groupId: string;
-    redirectIfFeedbackGenerated?: boolean;
+    noRedirect?: boolean;
   };
   "final-feedback-results": {
     groupId: string;
+    noRedirect?: boolean;
   };
   "default-collection-create": {
     groupId: string;

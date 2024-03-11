@@ -13,7 +13,7 @@ export default function FinalFeedbackResultsMenu({ route, navigation }: FinalFee
 
   return (
     <ViewMenuBase>
-      <MenuOption onSelect={() => navigation.push("final-feedback", { groupId, redirectIfFeedbackGenerated: false })}>
+      <MenuOption onSelect={() => navigation.push("final-feedback", { groupId, noRedirect: true })}>
         <CText>{t("generate-again", "Generoi uudelleen")}</CText>
       </MenuOption>
     </ViewMenuBase>

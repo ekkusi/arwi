@@ -135,9 +135,9 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   const moduleInfo = student.group.currentModule.info;
 
   return (
-    <Layout>
+    <Layout style={{ backgroundColor: "white" }}>
       <ScrollView>
-        <CView style={{ padding: "lg", backgroundColor: "white", gap: 30 }}>
+        <CView style={{ padding: "lg", gap: 30 }}>
           <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "3xl" }}>
             <CView>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{student.name}</CText>
@@ -332,12 +332,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             behaviourMean={behaviourAverage}
             otherEvaluations={otherEvaluations}
             collectionTypes={collectionTypes}
-          />
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
-          <EvaluationsAccordion
-            allowEditing={!archived}
-            evaluations={classParticipationEvaluations}
-            onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
+            hideEdit
           />
           {!archived && (
             <CButton
@@ -346,6 +341,12 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               style={{ marginBottom: "lg" }}
             />
           )}
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
+          <EvaluationsAccordion
+            allowEditing={!archived}
+            evaluations={classParticipationEvaluations}
+            onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
+          />
         </CView>
       </ScrollView>
     </Layout>
