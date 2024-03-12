@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { hasRequiredField } from "arwi-backend/src/types/typeGuards";
 import Animated, { LinearTransition, SlideInUp, SlideOutUp } from "react-native-reanimated";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
-import { useNavigation } from "@react-navigation/native";
 import CText from "../../../../components/primitives/CText";
 import { HomeStackParams } from "../../types";
 import { graphql } from "@/graphql";

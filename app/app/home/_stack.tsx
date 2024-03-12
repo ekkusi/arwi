@@ -24,7 +24,7 @@ import GroupHeaderRightButton from "./group/_menu";
 import CollectionMenu from "./collection/_menu";
 import StudentHeaderRightButton from "./student/_menu";
 import StudentFeedbackView from "./student/feedback";
-import DefaultEvaluationCollection from "./default-collection/DefaultEvaluationCollection";
+import DefaultEvaluationCollection from "./default-collection";
 import DefaultCollectionEditAllEvaluationsView from "./default-collection/edit_all_evaluations";
 import EditDefaultCollectionGeneralInfoView from "./default-collection/edit_general_info";
 import DefaultEvaluationEditView from "./evaluation/edit_default_evaluation";
