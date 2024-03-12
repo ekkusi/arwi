@@ -246,12 +246,10 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
         isOpen={isEditModalOpen}
         onClose={() => closeModal(false)}
         placement="bottom"
-        innerViewStyles={{ maxHeight: "100%", flex: 1, paddingTop: hasNotch() ? 80 : "xl" }}
+        innerViewStyles={{ maxHeight: "100%", flex: 1, paddingTop: hasNotch() ? 70 : "xl" }}
+        title={<CButton title={t("save", "Tallenna")} onPress={save} />}
       >
-        <CView style={{ flex: 1, paddingTop: 20 }}>
-          <CView style={{ position: "absolute", left: 0, top: -45 }}>
-            <CButton title={t("save", "Tallenna")} onPress={save} />
-          </CView>
+        <CView style={{ flex: 1 }}>
           <CKeyboardAvoidingView style={{ flexGrow: 1 }}>
             {hasSpeechRecognition(props) ? (
               <SpeechToTextInput

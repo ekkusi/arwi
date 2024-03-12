@@ -208,7 +208,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
               >
                 <MaterialCommunityIcon name={getToastIcon(toast.props.type)} size={25} color={COLORS.white} style={{ marginRight: SPACING.md }} />
                 {renderContent(toast)}
-                <CButton variant="empty" onPress={() => closeToast(toast.id)} style={{ position: "absolute", right: "sm", top: 10 }}>
+                <CButton variant="empty" onPress={() => closeToast(toast.id)} style={{ position: "absolute", right: "sm" }}>
                   <MaterialCommunityIcon name="close" size={20} color={COLORS.white} />
                 </CButton>
               </CView>

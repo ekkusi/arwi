@@ -16,6 +16,7 @@ import Layout from "../../../components/layout/Layout";
 import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 import { COLORS } from "../../../theme";
 import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
+import { getCurrentRoute } from "@/helpers/navigation";
 
 const FinalFeedback_GetGroup_Query = graphql(
   `
@@ -144,18 +145,21 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   const generateFinalFeedback = () => {
     generateFeedbacks(
       (res) => {
+        const currentRoute = getCurrentRoute(navigation);
+
         const warning = res.data?.generateGroupFeedback.usageData?.warning;
         if (warning) toggleTokenUseWarning(warning);
         openToast(
           t("final-feedback-finished", "Loppupalaute on luontu ryhmälle {{groupName}}", { groupName: group.name }),
           { closeTimeout: 10000 },
-          noRedirect
+          currentRoute?.name !== "final-feedback-results" && currentRoute?.name !== "final-feedback"
             ? {
                 action: () => navigation.navigate("final-feedback", { groupId: group.id }),
                 label: t("inspect", "Tarkastele"),
               }
             : undefined
         );
+        if (currentRoute?.name === "final-feedback") navigation.replace("final-feedback-results", { groupId });
       },
       (err) => {
         openToast(
