@@ -92,7 +92,7 @@ export default function EvaluationsAccordion({
         title: type === "collection" ? `${it.collection.environment.label.fi}` : it.student.name,
         date: formatDate(it.collection.date),
         stateText: formatStateText(it),
-        color: type === "student" ? formatEvaluationColor(it) : it.collection.environment.color,
+        color: formatEvaluationColor(it),
         icons: it.wasPresent && !!it.notes && <MaterialCommunityIcon name="note-text-outline" size={20} style={{ marginLeft: SPACING.xs }} />,
         content: (
           <>
