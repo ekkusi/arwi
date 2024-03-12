@@ -138,8 +138,8 @@ export default function Main() {
   if (!appMetadataResult) return throwErrorAndHideSplash(new Error("App metadata not found"));
 
   return (
-    <SafeAreaView style={{ flex: 1 }} onLayout={onRootLayout}>
-      <StatusBar backgroundColor={COLORS.green} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.primary }} onLayout={onRootLayout}>
+      <StatusBar backgroundColor={COLORS.primary} />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NewUpdateAvailableModal isOpen={isVersionSmaller(CURRENT_APP_VERSION, minimumAppVersion)} />
         <MenuProvider>
