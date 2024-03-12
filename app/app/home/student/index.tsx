@@ -218,7 +218,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                               {t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}
                             </CText>
                           )}
-                          {collectionEvaluation && (
+                          {collectionEvaluation ? (
                             <CButton
                               size="small"
                               title={t("edit", "Muokkaa")}
@@ -227,8 +227,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                                 navigation.navigate("edit-default-evaluation", { evaluationId: collectionEvaluation.id });
                               }}
                             />
-                          )}
-                          {!collectionEvaluation && (
+                          ) : (
                             <CButton
                               size="small"
                               title={t("evaluate", "Arvioi")}
