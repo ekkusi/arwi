@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { hasRequiredField } from "arwi-backend/src/types/typeGuards";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useMemo } from "react";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import { HomeStackParams } from "../types";
@@ -70,6 +71,53 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
     variables: { groupId },
   });
 
+  const students = data?.getGroup.students || [];
+
+  const studentsWithLessThanThreeVerbalFeedback = students.filter(
+    (student) => student.currentModuleEvaluations.filter((ev) => ev.notes).length < minimumEvalsForFeedback
+  );
+  const studentsWithInsufficientEvaluations = students.filter(
+    (student) => student.currentModuleEvaluations.filter((ev) => ev.wasPresent).length < minimumEvalsForFeedback
+  );
+
+  const sufficientEvaluationsContent = useMemo(() => {
+    let icon;
+    let color;
+    let message;
+    switch (studentsWithInsufficientEvaluations.length) {
+      case 0: {
+        icon = "check-bold";
+        color = COLORS.primary;
+        message = t("all-students-evaluated", "Kaikilla ryhmän oppilailla on riittävästi arviointeja!");
+        break;
+      }
+      case students.length: {
+        icon = "alert-rhombus-outline";
+        color = COLORS.red;
+        message = t(
+          "no-students-evaluated",
+          "Ryhmässä ei ole yhtään oppilasta, jolla olisi yli {{minimumEvalsForFeedback}} arviointia. Palautteen generointi ei ole mahdollista.",
+          { minimumEvalsForFeedback }
+        );
+        break;
+      }
+      default:
+        icon = "alert-rhombus-outline";
+        color = COLORS.yellow;
+        message = t(
+          "all-students-not-evaluated",
+          `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
+          { count: studentsWithInsufficientEvaluations.length, minimumEvalsForFeedback }
+        );
+    }
+    return (
+      <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
+        <MaterialCommunityIcon name={icon} size={40} color={color} />
+        <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>{message}</CText>
+      </CView>
+    );
+  }, [studentsWithInsufficientEvaluations.length, students.length, t, minimumEvalsForFeedback]);
+
   if (isGenerating)
     return (
       <LoadingIndicator style={{ paddingHorizontal: "lg" }}>
@@ -124,56 +172,11 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
     );
   };
 
-  const studentsWithLessThanThreeVerbalFeedback = group.students.filter(
-    (student) => student.currentModuleEvaluations.filter((ev) => ev.notes).length < minimumEvalsForFeedback
-  );
-  const studentsWithInsufficientEvaluations = group.students.filter(
-    (student) => student.currentModuleEvaluations.filter((ev) => ev.wasPresent).length < minimumEvalsForFeedback
-  );
-
   const allOtherCollectionTypesEvaluated = nonEvaluatedOtherCollectionTypes.length === 0;
   const allStudentsHaveSufficientEvaluations = !(studentsWithInsufficientEvaluations.length > 0);
   const allStudentsHaveThreeVerbalFeedback = !(studentsWithLessThanThreeVerbalFeedback.length > 0);
 
   const isGeneratingDisabled = !allOtherCollectionTypesEvaluated || studentsWithInsufficientEvaluations.length === group.students.length;
-
-  const renderSufficientEvaluationsContent = () => {
-    let icon;
-    let color;
-    let message;
-    switch (studentsWithInsufficientEvaluations.length) {
-      case 0: {
-        icon = "check-bold";
-        color = COLORS.primary;
-        message = t("all-students-evaluated", "Kaikilla ryhmän oppilailla on riittävästi arviointeja!");
-        break;
-      }
-      case group.students.length: {
-        icon = "alert-rhombus-outline";
-        color = COLORS.red;
-        message = t(
-          "no-students-evaluated",
-          "Ryhmässä ei ole yhtään oppilasta, jolla olisi yli {{minimumEvalsForFeedback}} arviointia. Palautteen generointi ei ole mahdollista.",
-          { minimumEvalsForFeedback }
-        );
-        break;
-      }
-      default:
-        icon = "alert-rhombus-outline";
-        color = COLORS.yellow;
-        message = t(
-          "all-students-not-evaluated",
-          `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
-          { count: studentsWithInsufficientEvaluations.length, minimumEvalsForFeedback }
-        );
-    }
-    return (
-      <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
-        <MaterialCommunityIcon name={icon} size={40} color={color} />
-        <CText style={{ width: "80%", fontSize: "sm", fontWeight: "300" }}>{message}</CText>
-      </CView>
-    );
-  };
 
   let bottomText = t("all-set-for-generation", "Kaikki valmiina loppupalautteen luontiin!");
   if (!allOtherCollectionTypesEvaluated)
@@ -207,7 +210,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
                   )}
             </CText>
           </CView>
-          {renderSufficientEvaluationsContent()}
+          {sufficientEvaluationsContent}
           <CView style={{ flexDirection: "row", gap: "lg", alignItems: "center" }}>
             <MaterialCommunityIcon
               name={!allStudentsHaveThreeVerbalFeedback ? "alert-rhombus-outline" : "check-bold"}
