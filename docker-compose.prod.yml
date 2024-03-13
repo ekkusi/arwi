@@ -85,6 +85,7 @@ services:
       MAIL_PASS: ${MAIL_PASS}
       SENTRY_URL: ${SENTRY_URL}
       API_TOKENS: ${BACKEND_HEADER_AUTH_API_TOKENS}
+      SANITY_PROJECT_ID: ${SANITY_PROJECT_ID}
       APP_ENV: production
     ports:
       - "4000:4000"
@@ -108,9 +109,9 @@ services:
     image: ekkusi/arwi-web
     restart: always
     environment:
-        NEXT_PUBLIC_GRIDLY_API_KEY: ${GRIDLY_API_KEY}
-        NEXT_PUBLIC_GRIDLY_VIEW_ID: ${GRIDLY_API_KEY}
-        NEXT_PUBLIC_BACKEND_URL: ${MAIN_BACKEND_URL}
+      NEXT_PUBLIC_GRIDLY_API_KEY: ${GRIDLY_API_KEY}
+      NEXT_PUBLIC_GRIDLY_VIEW_ID: ${GRIDLY_API_KEY}
+      NEXT_PUBLIC_BACKEND_URL: ${MAIN_BACKEND_URL}
     ports:
       - "5000:3000"
     networks:
@@ -123,13 +124,12 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/root/redis
-    command: redis-server --requirepass ${REDIS_PASSWORD} 
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_PORT=6379
       - REDIS_DATABASES=16
-  
-  
+
 networks:
   app-network:
     driver: bridge
