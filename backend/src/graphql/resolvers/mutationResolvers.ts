@@ -62,8 +62,8 @@ import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
-import AuthorizationError from "@/errors/AuthorizationError";
 import { createFeedback, updateFeedback } from "../mutationWrappers/feedback";
+import UnauthorizedError from "@/errors/UnauthorizedError";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -108,7 +108,7 @@ const resolvers: MutationResolvers<CustomContext> = {
         newUserCreated: isNewUser,
       };
     } catch (error) {
-      if (error instanceof AuthorizationError) {
+      if (error instanceof UnauthorizedError) {
         throw new ValidationError(error.message);
       } else {
         throw new OpenIDError(error instanceof Error ? error.message : undefined);
@@ -573,8 +573,8 @@ const resolvers: MutationResolvers<CustomContext> = {
         groupId,
         feedbacks: onlyGenerateMissing
           ? {
-              none: {}, // This returns only students that don't have feedbacks
-            }
+            none: {}, // This returns only students that don't have feedbacks
+          }
           : undefined,
       },
     });

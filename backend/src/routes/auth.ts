@@ -7,7 +7,7 @@ import BadRequestError from "../errors/BadRequestError";
 import { APP_ENV } from "../config";
 import { hasAgreement } from "@/utils/sanity";
 import { fetchParentOids } from "@/utils/organizationApi";
-import UnauthorizedError from "@/errors/AuthorizationError";
+import UnauthorizedError from "@/errors/UnauthorizedError";
 
 dotenv.config();
 
