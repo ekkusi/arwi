@@ -9,6 +9,7 @@ import { LanguageOption, languages } from "@/i18n/settings";
 import Providers from "@/app/[lng]/Providers";
 import Script from "next/script";
 import { getIsAuthenticated } from "../../utils/auth";
+import Matomo from "@/components/general/Matomo";
 
 const aileron = localFont({
   src: [
@@ -89,6 +90,7 @@ export default async function RootLayout({ children, params: { lng } }: { childr
         <meta name="msapplication-TileColor" content="#65af53" />
         <meta name="theme-color" content="#65af53" />
         <Script src="https://kit.fontawesome.com/bee3d0df31.js" crossOrigin="anonymous" />
+        <Matomo />
       </head>
       <body suppressHydrationWarning>
         <Providers lng={lng} theme={theme} initialIsAuthenticated={isAuthenticated}>
