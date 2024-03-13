@@ -40,3 +40,5 @@ jobs:
             "GRIDLY_VIEW_ID=${{ secrets.GRIDLY_WEB_VIEW_ID }}"
             "BACKEND_URL=${{ steps.extract_branch.outputs.branch == 'main' && 'https://api.arwi.fi' || 'https://staging-api.arwi.fi' }}"
             "BUILDER_IO_PUBLIC_API_KEY=${{ secrets.BUILDER_IO_PUBLIC_API_KEY }}"
+            "MATOMO_URL=https://analytics.arwi.fi"
+            "MATOMO_SITE_ID=2"
