@@ -8,8 +8,8 @@ import { LocalizedPage } from "@/types/page";
 import { LanguageOption, languages } from "@/i18n/settings";
 import Providers from "@/app/[lng]/Providers";
 import Script from "next/script";
-import { getIsAuthenticated } from "../../utils/auth";
 import Matomo from "@/components/general/Matomo";
+import { getIsAuthenticated } from "../../utils/auth";
 
 const aileron = localFont({
   src: [
