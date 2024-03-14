@@ -5,6 +5,7 @@ import { groupLoader } from "../dataLoaders/group";
 import AuthorizationError from "../errors/AuthorizationError";
 import { MONTHLY_TOKEN_USE_LIMIT } from "@/config";
 import { teacherLoader } from "../dataLoaders/teacher";
+import UsageLimitError from "../errors/UsageLimitErrors";
 
 type User = CustomContext["user"];
 
@@ -120,6 +121,6 @@ export const checkMonthlyTokenUse = async (user: User, currentActionTokenCost: n
   if (!user) throw new AuthenticationError();
   const matchingTeacher = await teacherLoader.load(user.id);
   if (matchingTeacher.monthlyTokensUsed + currentActionTokenCost > MONTHLY_TOKEN_USE_LIMIT) {
-    throw new AuthorizationError("Kuukausittainen AI-toimintojen määrä on ylittynyt");
+    throw new UsageLimitError("Kuukausittainen AI-toimintojen määrä on ylittynyt");
   }
 };

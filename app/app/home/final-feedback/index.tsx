@@ -13,7 +13,6 @@ import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedba
 import CButton from "../../../components/primitives/CButton";
 import { useToast } from "../../../hooks-and-providers/ToastProvider";
 import Layout from "../../../components/layout/Layout";
-import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 import { COLORS } from "../../../theme";
 import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
 import { getCurrentRoute } from "@/helpers/navigation";
@@ -64,7 +63,6 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   const { minimumEvalsForFeedback } = useMetadata();
   const { groupId, noRedirect = false } = route.params;
   const { isGenerating, generateFeedbacks } = useGenerateFeedback(groupId);
-  const toggleTokenUseWarning = useToggleTokenUseWarning();
   const { t } = useTranslation();
   const { openToast } = useToast();
 
@@ -143,37 +141,21 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   const nonEvaluatedOtherCollectionTypes = otherCollectionTypes.filter((type) => !hasRequiredField(type, "defaultTypeCollection"));
 
   const generateFinalFeedback = () => {
-    generateFeedbacks(
-      (res) => {
-        const currentRoute = getCurrentRoute(navigation);
+    generateFeedbacks(() => {
+      const currentRoute = getCurrentRoute(navigation);
 
-        const warning = res.data?.generateGroupFeedback.usageData?.warning;
-        if (warning) toggleTokenUseWarning(warning);
-        openToast(
-          t("final-feedback-finished", "Loppupalaute on luontu ryhmälle {{groupName}}", { groupName: group.name }),
-          { closeTimeout: 10000 },
-          currentRoute?.name !== "final-feedback-results" && currentRoute?.name !== "final-feedback"
-            ? {
-                action: () => navigation.navigate("final-feedback", { groupId: group.id }),
-                label: t("inspect", "Tarkastele"),
-              }
-            : undefined
-        );
-        if (currentRoute?.name === "final-feedback") navigation.replace("final-feedback-results", { groupId });
-      },
-      (err) => {
-        openToast(
-          t("final-feedback-generation-failed", "Loppupalautteen luonti epäonnistui: {{error}}", { error: err.message }),
-          {
-            type: "error",
-          },
-          {
-            action: () => navigation.navigate("profile"),
-            label: t("inspect-in-profile", "Tarkastele profiilissa"),
+      openToast(
+        t("final-feedback-finished", "Loppupalaute on luotu ryhmälle {{groupName}}", { groupName: group.name }),
+        { closeTimeout: 10000 },
+        currentRoute?.name !== "final-feedback-results" && currentRoute?.name !== "final-feedback"
+          ? {
+            action: () => navigation.navigate("final-feedback", { groupId: group.id }),
+            label: t("inspect", "Tarkastele"),
           }
-        );
-      }
-    );
+          : undefined
+      );
+      if (currentRoute?.name === "final-feedback") navigation.replace("final-feedback-results", { groupId });
+    });
   };
 
   const allOtherCollectionTypesEvaluated = nonEvaluatedOtherCollectionTypes.length === 0;
@@ -208,10 +190,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               {allOtherCollectionTypesEvaluated
                 ? t("all-types-evaluated", "Kaikki arvioitavat sisällöt on arvioitu!")
                 : t(
-                    "all-types-not-evaluated",
-                    `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
-                    { count: nonEvaluatedOtherCollectionTypes.length }
-                  )}
+                  "all-types-not-evaluated",
+                  `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
+                  { count: nonEvaluatedOtherCollectionTypes.length }
+                )}
             </CText>
           </CView>
           {sufficientEvaluationsContent}
@@ -225,10 +207,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               {allStudentsHaveThreeVerbalFeedback
                 ? t("all-students-have-verbal-feedback", "Kaikille ryhmän oppilaille on annettu riittävästi sanallista palautetta!")
                 : t(
-                    "all-students-have-not-verbal-feedback",
-                    `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
-                    { count: studentsWithLessThanThreeVerbalFeedback.length }
-                  )}
+                  "all-students-have-not-verbal-feedback",
+                  `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
+                  { count: studentsWithLessThanThreeVerbalFeedback.length }
+                )}
             </CText>
           </CView>
         </CView>

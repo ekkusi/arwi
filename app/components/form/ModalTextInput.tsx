@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { hasNotch } from "react-native-device-info";
 import { useMutation } from "@apollo/client";
-import { Alert } from "react-native";
 import { WarningInfo } from "arwi-backend/src/types";
 import CButton from "../primitives/CButton";
 import CView from "../primitives/CView";
@@ -17,6 +16,7 @@ import { useToast } from "@/hooks-and-providers/ToastProvider";
 import { useToggleTokenUseWarning } from "@/hooks-and-providers/monthlyTokenUseWarning";
 import CKeyboardAvoidingView from "../layout/CKeyboardAvoidingView";
 import LoadingIndicator from "../ui/LoadingIndicator";
+import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
 
 type ExtraInputProps = Omit<CTextInputProps, "onChange" | "onChangeText" | "value">;
 
@@ -87,6 +87,7 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
   const speechRef = useRef<SpeechToTextInputHandle>(null);
   const modalSpeechRef = useRef<SpeechToTextInputHandle>(null);
 
+  const handleError = useHandleOpenAIError();
   const { openToast } = useToast();
   const toggleTokenUseWarning = useToggleTokenUseWarning();
   const [fixTextGrammatics, { loading: isFixingText }] = useMutation(ModalTextInput_FixTextGrammatics_Mutation);
@@ -212,8 +213,8 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
       const tokenUseWarning = result.data?.fixTextGrammatics.usageData.warning;
       if (tokenUseWarning) toggleTokenUseWarning(tokenUseWarning as WarningInfo);
     } catch (e) {
-      console.error(e);
-      Alert.alert(t("text-fix-error", "Tekstin korjaamisessa tapahtui virhe."));
+      const msg = t("text-fix-unexpected-error", "Tekstin korjaamisessa tapahtui odottamaton virhe. Yritä myöhemmin uudelleen.");
+      handleError(e, msg);
     }
   };
 

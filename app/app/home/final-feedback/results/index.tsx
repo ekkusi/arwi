@@ -15,11 +15,10 @@ import CView from "../../../../components/primitives/CView";
 import CButton from "../../../../components/primitives/CButton";
 import Card from "../../../../components/ui/Card";
 import { useGenerateFeedback } from "../../../../hooks-and-providers/GenerateFeedbacksProvider";
-import { useToggleTokenUseWarning } from "../../../../hooks-and-providers/monthlyTokenUseWarning";
-import { useToast } from "../../../../hooks-and-providers/ToastProvider";
 import CAnimatedView from "@/components/primitives/CAnimatedView";
 import { COLORS } from "@/theme";
 import { createViewStyles } from "@/theme/utils";
+import { useToast } from "@/hooks-and-providers/ToastProvider";
 
 const FinalFeedbackResults_GetGroup_Query = graphql(
   `
@@ -50,7 +49,6 @@ const FinalFeedbackResults_GetGroup_Query = graphql(
 export default function FinalFeedbackResults({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback-results">) {
   const { groupId, noRedirect = false } = route.params;
   const { isGenerating, generateFeedbacks } = useGenerateFeedback(groupId, true);
-  const toggleTokenUseWarning = useToggleTokenUseWarning();
   const { t } = useTranslation();
   const { openToast } = useToast();
 
@@ -77,24 +75,9 @@ export default function FinalFeedbackResults({ route, navigation }: NativeStackS
   if (!noRedirect && studentsWithFeedback.length === 0) navigation.replace("final-feedback", { groupId });
 
   const generateMissingFeedbacks = () => {
-    generateFeedbacks(
-      (res) => {
-        const warning = res.data?.generateGroupFeedback.usageData?.warning;
-        if (warning) toggleTokenUseWarning(warning);
-      },
-      (err) => {
-        openToast(
-          t("final-feedback-generation-failed", "Loppupalautteen luonti epäonnistui: {{error}}", { error: err.message }),
-          {
-            type: "error",
-          },
-          {
-            action: () => navigation.navigate("profile"),
-            label: t("inspect-in-profile", "Tarkastele profiilissa"),
-          }
-        );
-      }
-    );
+    generateFeedbacks(() => {
+      openToast(t("feedbacks-generated", "Loppupalautteet päivitetty onnistuneesti!"));
+    });
   };
 
   return (

@@ -1,5 +1,6 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
+import { OpenAIError } from "openai";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../../types";
@@ -64,6 +65,7 @@ import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 import { createFeedback, updateFeedback } from "../mutationWrappers/feedback";
 import UnauthorizedError from "@/errors/UnauthorizedError";
+import OpenAIGraphQLError from "../errors/OpenAIGraphqlError";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -536,13 +538,20 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-    const [updatedTeacher, feedback] = await Promise.all([updateTeacherPromise, feedbackCreatePromise]);
+    try {
+      const [updatedTeacher, feedback] = await Promise.all([updateTeacherPromise, feedbackCreatePromise]);
 
-    return {
-      feedback,
-      tokensUsed: FEEDBACK_GENERATION_TOKEN_COST,
-      usageData: mapTeacherUsageData(updatedTeacher),
-    };
+      return {
+        feedback,
+        tokensUsed: FEEDBACK_GENERATION_TOKEN_COST,
+        usageData: mapTeacherUsageData(updatedTeacher),
+      };
+    } catch (error) {
+      if (error instanceof OpenAIError) {
+        throw new OpenAIGraphQLError(error.message);
+      }
+      throw error;
+    }
   },
   fixTextGrammatics: async (_, { text }, { user }) => {
     await checkMonthlyTokenUse(user, TEXT_FIX_TOKEN_COST);
@@ -556,12 +565,20 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-    const [fixedText, updatedTeacher] = await Promise.all([fixTextPromise, updateTeacherPromise]);
-    return {
-      result: fixedText,
-      tokensUsed: TEXT_FIX_TOKEN_COST,
-      usageData: mapTeacherUsageData(updatedTeacher),
-    };
+
+    try {
+      const [fixedText, updatedTeacher] = await Promise.all([fixTextPromise, updateTeacherPromise]);
+      return {
+        result: fixedText,
+        tokensUsed: TEXT_FIX_TOKEN_COST,
+        usageData: mapTeacherUsageData(updatedTeacher),
+      };
+    } catch (error) {
+      if (error instanceof OpenAIError) {
+        throw new OpenAIGraphQLError(error.message);
+      }
+      throw error;
+    }
   },
   generateGroupFeedback: async (_, { groupId, onlyGenerateMissing }, { dataLoaders, prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
@@ -573,8 +590,8 @@ const resolvers: MutationResolvers<CustomContext> = {
         groupId,
         feedbacks: onlyGenerateMissing
           ? {
-            none: {}, // This returns only students that don't have feedbacks
-          }
+              none: {}, // This returns only students that don't have feedbacks
+            }
           : undefined,
       },
     });
@@ -627,6 +644,9 @@ const resolvers: MutationResolvers<CustomContext> = {
         // If the validation error is thrown, return null to filter out the feedback from the results
         if (error instanceof ValidationError) {
           return null;
+        }
+        if (error instanceof OpenAIError) {
+          throw new OpenAIGraphQLError(error.message);
         }
         throw error;
       }

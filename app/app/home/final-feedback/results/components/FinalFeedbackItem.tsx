@@ -18,6 +18,8 @@ import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
 import GradeSuggestionView from "../../../student/components/GradeSuggestionView";
 import { HomeStackParams } from "../../../types";
 import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
+import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
+import { useToggleTokenUseWarning } from "@/hooks-and-providers/monthlyTokenUseWarning";
 
 export const FinalFeedbackItem_Student_Fragment = graphql(`
   fragment FinalFeedbackItem_Student on Student {
@@ -118,6 +120,8 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   const { openToast } = useToast();
+  const handleError = useHandleOpenAIError();
+  const toggleTokenUseWarning = useToggleTokenUseWarning();
 
   const { minimumEvalsForFeedback } = useMetadata();
 
@@ -129,17 +133,11 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
       studentId: student.id,
       moduleId,
     },
-    onError: (error) => {
-      Sentry.captureException(error);
-      openToast(
-        t("feedback-generation-failed-message", "Palautteen generointi oppilaalle {{studentName}} epäonnistui.", { studentName: student.name }),
-        {
-          type: "error",
-        }
-      );
-    },
-    onCompleted: () => {
-      openToast(t("feedback-generated-success-message", "Uusi palaute generoitu oppilaalle {{studentName}}.", { studentName: student.name }));
+    onError: handleError,
+    onCompleted: (res) => {
+      const warning = res.generateStudentFeedback?.usageData.warning;
+      if (warning) toggleTokenUseWarning(warning);
+      openToast(t("student-feedback-generated-success-message", "Uusi palaute generoitu oppilaalle {{studentName}}.", { studentName: student.name }));
     },
   });
 

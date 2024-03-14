@@ -124,6 +124,14 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
                 shouldThrow = false;
                 break;
               }
+              case "USAGE_LIMIT_EXCEEDED": {
+                shouldThrow = false;
+                break;
+              }
+              case "OPENAI_ERROR": {
+                shouldThrow = false;
+                break;
+              }
               default:
                 break;
             }

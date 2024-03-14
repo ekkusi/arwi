@@ -3,6 +3,8 @@ import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { useToast } from "./ToastProvider";
 import { graphql } from "@/graphql";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { HomeStackParams } from "@/app/home/types";
 
 const MonthlyTokenUseWarning_SetTokenUseWarningSeen_Mutation = graphql(`
   mutation MonthlyTokenUseWarning_SetTokenUseWarningSeen($warning: TokenUseWarning!) {
@@ -14,6 +16,7 @@ export const useToggleTokenUseWarning = () => {
   const [setTokenUseWarningSeen] = useMutation(MonthlyTokenUseWarning_SetTokenUseWarningSeen_Mutation);
   const { openToast } = useToast();
   const { t } = useTranslation();
+  const navigation = useNavigation<NavigationProp<HomeStackParams>>();
 
   const toggleTokenUseWarning = (warningInfo: WarningInfo) => {
     setTokenUseWarningSeen({ variables: { warning: warningInfo.warning } });
@@ -26,7 +29,11 @@ export const useToggleTokenUseWarning = () => {
           tokenUseWarningThresholdPercentage,
         }
       ),
-      { type: "warning", closeTimeout: 10000 }
+      { type: "warning", closeTimeout: 10000 },
+      {
+        action: () => navigation.navigate("profile"),
+        label: t("inspect", "Tarkastele"),
+      }
     );
   };
 

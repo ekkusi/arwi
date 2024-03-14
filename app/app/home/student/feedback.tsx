@@ -20,6 +20,7 @@ import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import { useAuthenticatedUser } from "../../../hooks-and-providers/AuthProvider";
 import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
+import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
 
 const StudentFeedbackView_GetStudent_Query = graphql(`
   query StudentFeedbackView_GetStudent($id: ID!) {
@@ -97,6 +98,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
   const { id, name } = route.params;
   const { trackAction } = useMatomo();
   const toggleTokenUseWarning = useToggleTokenUseWarning();
+  const handleError = useHandleOpenAIError();
   const user = useAuthenticatedUser();
 
   const [summary, setSummary] = useState<string | undefined>();
@@ -137,13 +139,11 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       if (!result.data?.generateStudentFeedback) throw new Error("Summary generation failed");
       setSummary(result.data?.generateStudentFeedback.feedback.text);
     } catch (e) {
-      console.error(e);
-      setError(
-        t(
-          "StudentView.summaryGenerationError",
-          "Palautteen luonnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
-        )
+      const msg = t(
+        "StudentView.summaryGenerationError",
+        "Palautteen luonnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
       );
+      handleError(e, msg);
     }
   };
 
