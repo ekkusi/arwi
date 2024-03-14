@@ -22,6 +22,9 @@ function LanguageProvider({ lng, children }: LanguageProviderProps) {
   return children;
 }
 
+// @ts-ignore
+if (typeof window !== "undefined") window.builderNoTrack = true;
+
 export default function Providers({ theme, initialIsAuthenticated, ...rest }: ProvidersProps) {
   return (
     <CacheProvider>

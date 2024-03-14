@@ -9,7 +9,10 @@ import { LanguageOption, languages } from "@/i18n/settings";
 import Providers from "@/app/[lng]/Providers";
 import Script from "next/script";
 import Matomo from "@/components/general/Matomo";
+import { builder } from "@builder.io/sdk";
 import { getIsAuthenticated } from "../../utils/auth";
+
+builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!, false);
 
 const aileron = localFont({
   src: [
