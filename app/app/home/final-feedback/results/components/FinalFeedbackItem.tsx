@@ -133,11 +133,11 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
       studentId: student.id,
       moduleId,
     },
-    onError: handleError,
+    onError: (err) => handleError(err),
     onCompleted: (res) => {
       const warning = res.generateStudentFeedback?.usageData.warning;
       if (warning) toggleTokenUseWarning(warning);
-      openToast(t("student-feedback-generated-success-message", "Uusi palaute generoitu oppilaalle {{studentName}}.", { studentName: student.name }));
+      openToast(t("student-feedback-generated-success-message", "Uusi palaute luotu oppilaalle {{studentName}}.", { studentName: student.name }));
     },
   });
 

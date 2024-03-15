@@ -183,7 +183,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
     return (
       <Layout style={{ alignItems: "center", justifyContent: "center" }}>
         <LoadingIndicator style={{ marginBottom: "4xl" }}>
-          <CText style={{ marginTop: "lg", color: "primary" }}>{t("generating-final-feedback", "Loppuarviointia generoidaan...")}</CText>
+          <CText style={{ marginTop: "lg", color: "primary" }}>{t("generating-final-feedback", "Loppuarviointia luodaan...")}</CText>
         </LoadingIndicator>
       </Layout>
     );
@@ -193,9 +193,9 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       <Layout style={{ alignItems: "center", justifyContent: "center", marginBottom: "4xl", padding: "lg" }}>
         <CText style={{ fontSize: "2xl" }}>{`${name} - ${t("final-feedback", "Loppuarviointi").toLowerCase()}`}</CText>
         <CText style={{ marginBottom: "lg" }}>
-          {t("final-feedback-generation-info", "Generoi oppilaan loppuarviointi alta. Huom! Generoinnissa voi mennä hetki.")}
+          {t("final-feedback-generation-info", "Luo oppilaan loppuarviointi alta. Huom! Loppuarvioinnin luonnissa voi mennä hetki.")}
         </CText>
-        <CButton title={t("generate-final-feedback", "Generoi loppuarviointi")} onPress={generateSummary} />
+        <CButton title={t("generate-final-feedback", "Luo loppuarviointi")} onPress={generateSummary} />
         {error && <CText style={{ color: "error", marginTop: "lg" }}>{error}</CText>}
       </Layout>
     );
