@@ -1,9 +1,9 @@
 import { WarningInfo } from "arwi-backend/src/types";
 import { useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useToast } from "./ToastProvider";
 import { graphql } from "@/graphql";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { HomeStackParams } from "@/app/home/types";
 
 const MonthlyTokenUseWarning_SetTokenUseWarningSeen_Mutation = graphql(`

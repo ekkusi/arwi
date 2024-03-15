@@ -213,7 +213,7 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
       const tokenUseWarning = result.data?.fixTextGrammatics.usageData.warning;
       if (tokenUseWarning) toggleTokenUseWarning(tokenUseWarning as WarningInfo);
     } catch (e) {
-      const msg = t("text-fix-unexpected-error", "Tekstin korjaamisessa tapahtui odottamaton virhe. Yritä myöhemmin uudelleen.");
+      const msg = t("text-fix-unexpected-error", "Tekstin korjaamisessa tapahtui odottamaton virhe.");
       handleError(e, msg);
     }
   };
