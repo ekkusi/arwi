@@ -5,6 +5,8 @@ import prisma from "@/prismaClient";
 import {
   TestGroup,
   TestTeacher,
+  createTestDefaultEvaluation,
+  createTestDefaultEvaluationCollection,
   createTestEvaluation,
   createTestEvaluationCollection,
   createTestGroup,
@@ -31,7 +33,8 @@ describe("generateStudentFeedback", () => {
   let teacher: TestTeacher;
   let group: TestGroup;
   let student: Student;
-  let collection: EvaluationCollection;
+  let classParticipationCollection: EvaluationCollection;
+  let examCollection: EvaluationCollection;
   let classParticipationCollectionType: CollectionType;
   let examCollectionType: CollectionType;
 
@@ -44,15 +47,16 @@ describe("generateStudentFeedback", () => {
       (collectionType) => collectionType.category === "CLASS_PARTICIPATION"
     )!;
     examCollectionType = group.currentModule.collectionTypes.find((collectionType) => collectionType.category === "EXAM")!;
-    collection = await createTestEvaluationCollection(group.currentModuleId, classParticipationCollectionType.id);
-    await createTestEvaluationCollection(group.currentModuleId, examCollectionType.id);
+    classParticipationCollection = await createTestEvaluationCollection(group.currentModuleId, classParticipationCollectionType.id);
+    examCollection = await createTestDefaultEvaluationCollection(group.currentModuleId, examCollectionType.id);
   });
 
   beforeEach(async () => {
-    const createEvaluationsPromises = [7, 8, 9].map((rating) => {
-      return createTestEvaluation(collection.id, student.id, { skillsRating: rating });
+    const createEvaluationsPromises = [7, 8].map((rating) => {
+      return createTestEvaluation(classParticipationCollection.id, student.id, { skillsRating: rating });
     });
-    await Promise.all(createEvaluationsPromises);
+    const examEvaluationPromise = createTestDefaultEvaluation(examCollection.id, student.id);
+    await Promise.all([...createEvaluationsPromises, examEvaluationPromise]);
   });
 
   afterEach(async () => {

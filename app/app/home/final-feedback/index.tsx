@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import { HomeStackParams } from "../types";
-import { graphql } from "@/graphql";
+import { ResultOf, graphql } from "@/graphql";
 import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import { useGenerateFeedback } from "../../../hooks-and-providers/GenerateFeedbacksProvider";
 import CButton from "../../../components/primitives/CButton";
@@ -30,9 +30,17 @@ const FinalFeedback_GetGroup_Query = graphql(
             id
           }
           currentModuleEvaluations {
+            __typename
             id
             notes
             wasPresent
+            ... on ClassParticipationEvaluation {
+              skillsRating
+              behaviourRating
+            }
+            ... on DefaultEvaluation {
+              rating
+            }
           }
         }
         currentModule {
@@ -59,6 +67,14 @@ const FinalFeedback_GetGroup_Query = graphql(
   `
 );
 
+function checkIsEvaluationEvaluated(
+  evaluation: ResultOf<typeof FinalFeedback_GetGroup_Query>["getGroup"]["students"][number]["currentModuleEvaluations"][number]
+) {
+  if (!evaluation.wasPresent) return false;
+  if (evaluation.__typename === "ClassParticipationEvaluation") return evaluation.skillsRating != null && evaluation.behaviourRating != null;
+  if (evaluation.__typename === "DefaultEvaluation") return evaluation.rating != null;
+}
+
 export default function FinalFeedback({ route, navigation }: NativeStackScreenProps<HomeStackParams, "final-feedback">) {
   const { minimumEvalsForFeedback } = useMetadata();
   const { groupId, noRedirect = false } = route.params;
@@ -76,7 +92,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
     (student) => student.currentModuleEvaluations.filter((ev) => ev.notes).length < minimumEvalsForFeedback
   );
   const studentsWithInsufficientEvaluations = students.filter(
-    (student) => student.currentModuleEvaluations.filter((ev) => ev.wasPresent).length < minimumEvalsForFeedback
+    (student) => student.currentModuleEvaluations.filter(checkIsEvaluationEvaluated).length < minimumEvalsForFeedback
   );
 
   const sufficientEvaluationsContent = useMemo(() => {
@@ -95,7 +111,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         color = COLORS.red;
         message = t(
           "no-students-evaluated",
-          "Ryhmässä ei ole yhtään oppilasta, jolla olisi yli {{minimumEvalsForFeedback}} arviointia. Palautteen generointi ei ole mahdollista.",
+          "Ryhmässä ei ole yhtään oppilasta, jolla olisi yli {{minimumEvalsForFeedback}} täysin arvioitua arviointia. Palautteen generointi ei ole mahdollista.",
           { minimumEvalsForFeedback }
         );
         break;
@@ -105,7 +121,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         color = COLORS.yellow;
         message = t(
           "all-students-not-evaluated",
-          `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
+          `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} täysin arvioitua arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
           { count: studentsWithInsufficientEvaluations.length, minimumEvalsForFeedback }
         );
     }
@@ -149,9 +165,9 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         { closeTimeout: 10000 },
         currentRoute?.name !== "final-feedback-results" && currentRoute?.name !== "final-feedback"
           ? {
-            action: () => navigation.navigate("final-feedback", { groupId: group.id }),
-            label: t("inspect", "Tarkastele"),
-          }
+              action: () => navigation.navigate("final-feedback", { groupId: group.id }),
+              label: t("inspect", "Tarkastele"),
+            }
           : undefined
       );
       if (currentRoute?.name === "final-feedback") navigation.replace("final-feedback-results", { groupId });
@@ -190,10 +206,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               {allOtherCollectionTypesEvaluated
                 ? t("all-types-evaluated", "Kaikki arvioitavat sisällöt on arvioitu!")
                 : t(
-                  "all-types-not-evaluated",
-                  `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
-                  { count: nonEvaluatedOtherCollectionTypes.length }
-                )}
+                    "all-types-not-evaluated",
+                    `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
+                    { count: nonEvaluatedOtherCollectionTypes.length }
+                  )}
             </CText>
           </CView>
           {sufficientEvaluationsContent}
@@ -207,10 +223,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               {allStudentsHaveThreeVerbalFeedback
                 ? t("all-students-have-verbal-feedback", "Kaikille ryhmän oppilaille on annettu riittävästi sanallista palautetta!")
                 : t(
-                  "all-students-have-not-verbal-feedback",
-                  `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
-                  { count: studentsWithLessThanThreeVerbalFeedback.length }
-                )}
+                    "all-students-have-not-verbal-feedback",
+                    `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
+                    { count: studentsWithLessThanThreeVerbalFeedback.length }
+                  )}
             </CText>
           </CView>
         </CView>

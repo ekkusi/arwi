@@ -590,8 +590,8 @@ const resolvers: MutationResolvers<CustomContext> = {
         groupId,
         feedbacks: onlyGenerateMissing
           ? {
-              none: {}, // This returns only students that don't have feedbacks
-            }
+            none: {}, // This returns only students that don't have feedbacks
+          }
           : undefined,
       },
     });
@@ -663,7 +663,6 @@ const resolvers: MutationResolvers<CustomContext> = {
 
     // Filter out null feedbacks and cast to non-null
     const nonNullFeedbacks = feedbacks.filter((it): it is NonNullable<typeof it> => it !== null);
-
     return {
       feedbacks: nonNullFeedbacks,
       tokensUsed: tokenCost,

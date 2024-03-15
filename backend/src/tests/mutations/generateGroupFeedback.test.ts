@@ -10,6 +10,8 @@ import {
   createTestUser,
   createTestEvaluationCollection,
   createTestEvaluation,
+  createTestDefaultEvaluation,
+  createTestDefaultEvaluationCollection,
 } from "../testHelpers";
 import { FEEDBACK_GENERATION_TOKEN_COST, MONTHLY_TOKEN_USE_LIMIT } from "@/config";
 import { teacherLoader } from "@/graphql/dataLoaders/teacher";
@@ -53,17 +55,20 @@ describe("generateGroupFeedback", () => {
   });
 
   beforeEach(async () => {
-    const classParticipationCollectionPromises = [0, 0, 0].map(() =>
+    const classParticipationCollectionPromises = [0, 0].map(() =>
       createTestEvaluationCollection(group.currentModule.id, classParticipationCollectionType.id)
     );
     const classParticipationCollections = await Promise.all(classParticipationCollectionPromises);
-    await createTestEvaluationCollection(group.currentModule.id, examCollectionType.id);
+    const examCollection = await createTestDefaultEvaluationCollection(group.currentModule.id, examCollectionType.id);
+    // Create 2 class participation evaluatins
     const studentPromises = group.students.map((student) => {
-      const createEvaluationsPromises = [7, 8, 9].map((rating, i) => {
+      const createEvaluationsPromises = [7, 8].map((rating, i) => {
         return createTestEvaluation(classParticipationCollections[i].id, student.id, { skillsRating: rating });
       });
-      return Promise.all(createEvaluationsPromises);
+      const examEvaluationPromise = createTestDefaultEvaluation(examCollection.id, student.id);
+      return Promise.all([...createEvaluationsPromises, examEvaluationPromise]);
     });
+    // Create exam evaluatin
     await Promise.all(studentPromises);
   });
 
@@ -80,6 +85,7 @@ describe("generateGroupFeedback", () => {
 
     // Assertions to ensure correct functionality
     expect(response.data?.generateGroupFeedback).toBeDefined();
+    expect(response.data?.generateGroupFeedback.feedbacks).toHaveLength(group.students.length);
     expect(response.data?.generateGroupFeedback.usageData.monthlyTokensUsed).toEqual(group.students.length * FEEDBACK_GENERATION_TOKEN_COST);
 
     response.data?.generateGroupFeedback.feedbacks.forEach((feedback) => {
@@ -123,7 +129,7 @@ describe("generateGroupFeedback", () => {
     const updatedTeacher = await prisma.teacher.findUnique({ where: { id: teacher.id } });
     expect(updatedTeacher?.monthlyTokensUsed).toEqual(group.students.length * FEEDBACK_GENERATION_TOKEN_COST);
   });
-  // Execute the request and check the teacher's token usage has been updated correctly
+  // execute the request and check the teacher's token usage has been updated correctly
 
   it("should update the DataLoader caches after generating feedback", async () => {
     // Fetch the initial state of the student from the DataLoaders
@@ -173,10 +179,11 @@ describe("generateGroupFeedback", () => {
     collectionsByModuleLoader.clear(group.currentModuleId);
   });
 
-  it("should not return feedbacks for students who don't have sufficient amount of class participation evaluations", async () => {
-    // Remove evaluation for the first student
-    const firstStudent = group.students[0];
-    await prisma.evaluation.deleteMany({ where: { studentId: firstStudent.id } });
+  it("should not return feedbacks for students who don't have sufficient amount of evaluations", async () => {
+    // Remove one evaluation for the first student
+    const student = group.students[0];
+    const evaluation = await prisma.evaluation.findFirst({ where: { studentId: student.id } });
+    await prisma.evaluation.delete({ where: { id: evaluation!.id } });
 
     // Execute the request
     const response = await graphqlRequest(query, { groupId: group.id });
@@ -184,8 +191,51 @@ describe("generateGroupFeedback", () => {
     // Assert that first student feedbacks is an empty array
     expect(response.data?.generateGroupFeedback).toBeDefined();
 
-    const matchingFeedbacks = response.data?.generateGroupFeedback.feedbacks.filter((feedback) => feedback.student.id === firstStudent.id);
-    expect(matchingFeedbacks).toHaveLength(0);
+    const studentFeedbacks = response.data?.generateGroupFeedback.feedbacks.filter((feedback) => feedback.student.id === student.id);
+    expect(studentFeedbacks).toHaveLength(0);
+  });
+
+  it("should not return feedbacks for students who don't have sufficient amount of participations", async () => {
+    // Update one evaluation for the first student to not present
+    const student = group.students[0];
+    const evaluation = await prisma.evaluation.findFirst({ where: { studentId: student.id } });
+    await prisma.evaluation.update({ where: { id: evaluation!.id }, data: { wasPresent: false } });
+
+    // Execute the request
+    const response = await graphqlRequest(query, { groupId: group.id });
+
+    // Assert that first student feedbacks is an empty array
+    expect(response.data?.generateGroupFeedback).toBeDefined();
+
+    const studentFeedbacks = response.data?.generateGroupFeedback.feedbacks.filter((feedback) => feedback.student.id === student.id);
+    expect(studentFeedbacks).toHaveLength(0);
+  });
+
+  it("should not return feedbacks for students who don't have sufficient amount of evaluations with data", async () => {
+    // Update one class participation evaluation for the first student to not have skillsRating
+    const firstStudent = group.students[0];
+    const classParticipationEvaluation = await prisma.evaluation.findFirst({
+      where: { studentId: firstStudent.id, evaluationCollection: { typeId: classParticipationCollectionType.id } },
+    });
+    await prisma.evaluation.update({ where: { id: classParticipationEvaluation!.id }, data: { skillsRating: null } });
+
+    // Update one exam evaluation for the second student to not have generalRating
+    const secondStudent = group.students[1];
+    const defaultEvaluation = await prisma.evaluation.findFirst({
+      where: { studentId: secondStudent.id, evaluationCollection: { typeId: examCollectionType.id } },
+    });
+    await prisma.evaluation.update({ where: { id: defaultEvaluation!.id }, data: { generalRating: null } });
+
+    // Execute the request
+    const response = await graphqlRequest(query, { groupId: group.id });
+
+    // Assert that first student feedbacks is an empty array
+    expect(response.data?.generateGroupFeedback).toBeDefined();
+
+    const firstStudentFeedbacks = response.data?.generateGroupFeedback.feedbacks.filter((feedback) => feedback.student.id === firstStudent.id);
+    expect(firstStudentFeedbacks).toHaveLength(0);
+    const secondStudentFeedbacks = response.data?.generateGroupFeedback.feedbacks.filter((feedback) => feedback.student.id === secondStudent.id);
+    expect(secondStudentFeedbacks).toHaveLength(0);
   });
 
   it("should not generate feedbacks for student that already have one when onlyGenerateMissing is passed as true", async () => {
