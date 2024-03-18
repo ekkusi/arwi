@@ -9,26 +9,26 @@ import CView from "../../components/primitives/CView";
 import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
-import { useAuth } from "../../hooks-and-providers/AuthProvider";
+import { useAuth, AuthProvider_UserInfo_Fragment } from "../../hooks-and-providers/AuthProvider";
 import LandingComponent from "./LandingComponent";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
-const LoginPage_Login_Mutation = graphql(`
-  mutation LoginPage_Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      userData {
-        email
-        id
-        languagePreference
-        consentsAnalytics
-        isMPassIDConnected
+const LoginPage_Login_Mutation = graphql(
+  `
+    mutation LoginPage_Login($email: EmailAddress!, $password: String!) {
+      login(email: $email, password: $password) {
+        userData {
+          id
+          ...AuthProvider_UserInfo
+        }
       }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
 export default function LoginPage({ navigation }: NativeStackScreenProps<AuthStackParams, "login">) {
   // useKeyboardMode(AndroidSoftInputModes.SOFT_INPUT_ADJUST_NOTHING);

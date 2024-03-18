@@ -5,7 +5,7 @@ import createServer, { TestGraphQLRequest } from "../createTestServer";
 import prisma from "@/prismaClient";
 import { createTestUserAndLogin, TestTeacher } from "../testHelpers";
 import { sendMail } from "@/utils/mail";
-import { generateCode } from "@/utils/passwordRecovery";
+import { generateCode } from "@/utils/securityUtils";
 import {
   MAX_AMOUNT_OF_RESET_CODE_TRIES,
   MAX_AMOUNT_OF_RESET_PASSWORD_REQUEST,
@@ -24,7 +24,7 @@ describe("Password Reset Flow", () => {
 
   const requestReset = async (email?: string) => {
     const requestResetMutation = graphql(`
-      mutation RequestPasswordResetValid($email: String!) {
+      mutation RequestPasswordResetValid($email: EmailAddress!) {
         requestPasswordReset(email: $email)
       }
     `);
@@ -92,7 +92,7 @@ describe("Password Reset Flow", () => {
 
   it("should not send email for non-existing email", async () => {
     const requestResetMutation = graphql(`
-      mutation RequestPasswordResetInvalidEmail($email: String!) {
+      mutation RequestPasswordResetInvalidEmail($email: EmailAddress!) {
         requestPasswordReset(email: $email)
       }
     `);
@@ -107,7 +107,7 @@ describe("Password Reset Flow", () => {
   it("should throw an error if the maximum number of reset attempts is exceeded and reset after the expiry time", async () => {
     // Simulate multiple password reset requests to exceed the max amount of tries
     const requestResetMutation = graphql(`
-      mutation RequestPasswordResetExceedTries($email: String!) {
+      mutation RequestPasswordResetExceedTries($email: EmailAddress!) {
         requestPasswordReset(email: $email)
       }
     `);

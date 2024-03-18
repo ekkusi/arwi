@@ -31,6 +31,7 @@ export const mapCreateTeacherInput = (data: Omit<CreateTeacherInput, "password">
     passwordHash,
     languagePreference: data.languagePreference === null ? undefined : data.languagePreference,
     consentsAnalytics: data.consentsAnalytics === null ? undefined : data.consentsAnalytics,
+    verifiedEmails: [data.email],
   };
 };
 

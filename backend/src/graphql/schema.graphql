@@ -14,13 +14,13 @@ type Query {
 
 type Mutation {
   register(data: CreateTeacherInput!): AuthPayload!
-  login(email: String!, password: String!): AuthPayload!
+  login(email: EmailAddress!, password: String!): AuthPayload!
   mPassIDLogin(code: String!): MPassIDAuthPayload!
-  requestPasswordReset(email: String!): Boolean!
+  requestPasswordReset(email: EmailAddress!): Boolean!
   verifyPasswordResetCode(code: String!): Boolean!
   updatePassword(recoveryCode: String!, newPassword: String!): Boolean!
   connectMPassID(code: String!): AuthPayload!
-  connectLocalCredentials(email: String!, password: String!): AuthPayload!
+  connectLocalCredentials(email: EmailAddress!, password: String!): AuthPayload!
   logout: Boolean!
   createGroup(data: CreateGroupInput!): Group!
   createClassParticipationCollection(data: CreateClassParticipationCollectionInput!, moduleId: ID!): ClassParticipationCollection!
@@ -42,6 +42,7 @@ type Mutation {
   generateGroupFeedback(groupId: ID!, onlyGenerateMissing: Boolean): GenerateGroupFeedbackResult!
   fixTextGrammatics(text: String!): FixTextGrammaticsResult!
   setTokenUseWarningSeen(warning: TokenUseWarning!): Boolean!
+  sendFeedbackEmail(groupId: ID!, email: EmailAddress!): SendMailResult!
 }
 
 type AppMetadata {
@@ -65,6 +66,7 @@ type MPassIDAuthPayload {
 type Teacher {
   id: ID!
   email: EmailAddress
+  verifiedEmails: [EmailAddress!]!
   groups: [Group!]!
   languagePreference: String!
   consentsAnalytics: Boolean!
@@ -98,6 +100,11 @@ type FixTextGrammaticsResult {
   result: String!
   tokensUsed: Int!
   usageData: TeacherUsageData!
+}
+
+enum SendMailResult {
+  EMAIL_VERIFICATION_REQUIRED
+  SUCCESS
 }
 
 type LoginResult {

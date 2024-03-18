@@ -11,31 +11,31 @@ import * as SplashScreen from "expo-splash-screen";
 import * as Application from "expo-application";
 import { useMatomo } from "matomo-tracker-react-native";
 import { useFonts } from "expo-font";
-import { useAuth } from "./hooks-and-providers/AuthProvider";
+import { AuthProvider_UserInfo_Fragment, useAuth } from "./hooks-and-providers/AuthProvider";
 import { COLORS } from "./theme";
 import AuthStack from "./app/auth/_stack";
 import { graphql } from "@/graphql";
 import ModalProvider from "./hooks-and-providers/ModalProvider";
 import HomeStack from "./app/home/_stack";
 import { isValidLanguage, STORAGE_LANG_KEY } from "./i18n";
-import PopupProvider from "./hooks-and-providers/ToastProvider";
 import { isVersionSmaller } from "./helpers/versionUtils";
 import NewUpdateAvailableModal from "./components/modals/NewUpdateAvailableModal";
 import { useThrowCatchableError } from "./hooks-and-providers/error";
 import GenerateFeedbacksProvider from "./hooks-and-providers/GenerateFeedbacksProvider";
 import MetadataProvider from "./hooks-and-providers/MetadataProvider";
+import ToastProvider from "./hooks-and-providers/ToastProvider";
 
-const Main_GetCurrentUser_Query = graphql(`
-  query Main_GetCurrentUser {
-    getCurrentUser {
-      email
-      languagePreference
-      consentsAnalytics
-      id
-      isMPassIDConnected
+const Main_GetCurrentUser_Query = graphql(
+  `
+    query Main_GetCurrentUser {
+      getCurrentUser {
+        id
+        ...AuthProvider_UserInfo
+      }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
 const Main_GetAppMetadata_Query = graphql(`
   query Main_GetAppMetadata {
@@ -143,8 +143,8 @@ export default function Main() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NewUpdateAvailableModal isOpen={isVersionSmaller(CURRENT_APP_VERSION, minimumAppVersion)} />
         <MenuProvider>
-          <ModalProvider>
-            <PopupProvider>
+          <ToastProvider>
+            <ModalProvider>
               <GenerateFeedbacksProvider>
                 <MetadataProvider {...appMetadataResult.getAppMetadata}>
                   <NavigationContainer ref={navigationRef} onStateChange={onNavigationStateChange}>
@@ -152,8 +152,8 @@ export default function Main() {
                   </NavigationContainer>
                 </MetadataProvider>
               </GenerateFeedbacksProvider>
-            </PopupProvider>
-          </ModalProvider>
+            </ModalProvider>
+          </ToastProvider>
         </MenuProvider>
       </GestureHandlerRootView>
     </SafeAreaView>

@@ -1,5 +1,6 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 import { OpenAIError } from "openai";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
 import ValidationError from "../errors/ValidationError";
@@ -50,8 +51,8 @@ import {
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
-import { generateCode } from "../../utils/passwordRecovery";
-import { sendMail } from "@/utils/mail";
+import { generateAndSetEmailVerificationToken, generateCode } from "../../utils/securityUtils";
+import { sendEmailVerificationMail, sendMail } from "@/utils/mail";
 import { BRCRYPT_SALT_ROUNDS, FEEDBACK_GENERATION_TOKEN_COST, MATOMO_EVENT_CATEGORIES, TEXT_FIX_TOKEN_COST } from "../../config";
 import matomo from "../../matomo";
 import { createTeacher, deleteTeacher, updateTeacher } from "../mutationWrappers/teacher";
@@ -590,8 +591,8 @@ const resolvers: MutationResolvers<CustomContext> = {
         groupId,
         feedbacks: onlyGenerateMissing
           ? {
-            none: {}, // This returns only students that don't have feedbacks
-          }
+              none: {}, // This returns only students that don't have feedbacks
+            }
           : undefined,
       },
     });
@@ -674,6 +675,28 @@ const resolvers: MutationResolvers<CustomContext> = {
       data: mapWarningSeenUpdateData(warning),
     });
     return true;
+  },
+  sendFeedbackEmail: async (_, { email, groupId }, { prisma, user, dataLoaders }) => {
+    await checkAuthenticatedByGroup(user, groupId);
+
+    // If email is not verified, sent verification email
+    // Safe cast after authenticated check
+    if (!user!.verifiedEmails.includes(email)) {
+      sendEmailVerificationMail(email, user!.id, "feedback-generation");
+      return "EMAIL_VERIFICATION_REQUIRED";
+    }
+
+    // const group = await dataLoaders.groupLoader.load(groupId);
+    // const feedbacks = await prisma.feedback.findMany({
+    //   where: {
+    //     student: {
+    //       groupId,
+    //     },
+    //     moduleId: group.currentModuleId,
+    //   },
+    // });
+
+    return "SUCCESS";
   },
 };
 

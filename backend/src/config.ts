@@ -2,8 +2,8 @@ import { SessionOptions } from "express-session";
 import RedisStore from "connect-redis";
 import dotenv from "dotenv";
 import { HelmetOptions } from "helmet";
-import Redis from "ioredis";
 import { TokenUseWarning } from "./types";
+import redis from "./redis";
 
 dotenv.config();
 
@@ -71,20 +71,7 @@ export const API_TOKEN_HEADER_NAME = "x-api-token";
 
 export const SESSION_ABSOLUTE_TIMEOUT_MS = +(env.SESSION_ABSOLUTE_TIME || ONE_DAY_MS * 30);
 
-if (env.NODE_ENV === "production" && !env.REDIS_PASSWORD && !env.REDIS_HOST) {
-  console.warn("WARNING: No REDIS_PASSWORD or REDIS_HOST environment variables found. Redis session setup will probably fail.");
-}
-
-if (env.NODE_ENV === "production" && env.NO_REDIS_SESSION === "true") throw new Error("NO_REDIS_SESSION cannot be true in production");
-
-const sessionClient =
-  env.NO_REDIS_SESSION !== "true"
-    ? new Redis({
-        password: env.REDIS_PASSWORD,
-        host: env.REDIS_HOST,
-        db: env.REDIS_DB_INDEX ? +env.REDIS_DB_INDEX : 0,
-      })
-    : undefined;
+const sessionClient = env.NO_REDIS_SESSION !== "true" ? redis : undefined;
 
 const getCookieSameSite = () => {
   switch (APP_ENV) {

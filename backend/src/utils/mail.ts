@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import { generateAndSetEmailVerificationToken } from "./securityUtils";
 
 dotenv.config();
 
@@ -51,4 +52,27 @@ export const sendMail = async (to: string, subject: string, html: string): Promi
       }
     );
   });
+};
+
+let baseUrl = "http://localhost:4000";
+if (APP_ENV === "production") baseUrl = "https://api.arwi.fi";
+else if (APP_ENV === "staging") baseUrl = "https://staging-api.arwi.fi";
+
+export const sendEmailVerificationMail = async (to: string, userId: string, type: "feedback-generation" | "register" = "register") => {
+  const token = await generateAndSetEmailVerificationToken(to);
+  const queryParams = new URLSearchParams({ token, email: to, user_id: userId });
+  const verificationUrl = `${baseUrl}/auth/verify-email?${queryParams.toString()}`;
+
+  const subject = "Vahvista sähköpostisi";
+  const startMessage =
+    type === "feedback-generation"
+      ? "Olet pyytänyt loppuarviointien viemistä tähän sähköpostiin.<br /><br />"
+      : "Tervetuloa käyttämään Arwia!<br /><br />";
+  const html = `
+    ${startMessage}
+    Jatkaaksesi sinun täytyy vahvistaa sähköpostisi. Vahvista sähköpostiosoitteesi klikkaamalla alta (voimassa 24h ajan):<br /><br />
+    <a href="${verificationUrl}">${verificationUrl}</a><br /><br />
+    Jos et tunnista tätä aktiviteettia, suosittelemme ottamaan yhteyttä Arwin järjestelmänvalvontaan info@arwi.fi.
+  `;
+  return sendMail(to, subject, html);
 };

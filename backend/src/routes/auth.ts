@@ -8,6 +8,7 @@ import { APP_ENV } from "../config";
 import { hasAgreement } from "@/utils/sanity";
 import { fetchParentOids } from "@/utils/organizationApi";
 import UnauthorizedError from "@/errors/UnauthorizedError";
+import { getEmailVerificationToken } from "@/utils/securityUtils";
 
 dotenv.config();
 
@@ -173,6 +174,35 @@ const initAuth = async () => {
     const { redirect_uri } = req.query;
     if (redirect_uri) return res.redirect(redirect_uri as string);
     return res.json({ msg: "Logout succesful!" });
+  });
+
+  router.get("/verify-email", async (req, res) => {
+    const { email, token, user_id } = req.query;
+    if (typeof email !== "string" || typeof token !== "string" || typeof user_id !== "string") throw new BadRequestError("Invalid query params");
+    if (!email || !token) throw new BadRequestError("Email or token is missing from query params");
+    const emailVerificationToken = await getEmailVerificationToken(email as string);
+    if (!emailVerificationToken) throw new BadRequestError("Token has expired");
+    if (emailVerificationToken !== token) throw new BadRequestError("Invalid token");
+
+    const user = await prisma.teacher.findFirst({
+      where: {
+        id: user_id as string,
+      },
+    });
+    if (!user) throw new BadRequestError("Invalid query params, user not found.");
+
+    // Add email to user verified emails
+    await prisma.teacher.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        verifiedEmails: {
+          push: email as string,
+        },
+      },
+    });
+    return res.redirect("https://arwi.fi/sahkoposti-vahvistettu");
   });
 
   return {

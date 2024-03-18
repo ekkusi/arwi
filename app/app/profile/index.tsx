@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Platform } from "react-native";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "@/graphql";
-import { useAuth, useAuthenticatedUser } from "../../hooks-and-providers/AuthProvider";
+import { useAuth, useAuthenticatedUser, AuthProvider_UserInfo_Fragment } from "../../hooks-and-providers/AuthProvider";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
 import { languages, STORAGE_LANG_KEY } from "../../i18n";
@@ -23,8 +23,6 @@ import { formatDate, getFirstDayOfNextMonth } from "../../helpers/dateHelpers";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import InfoButton from "../../components/ui/InfoButton";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
-import Layout from "@/components/layout/Layout";
-import CKeyboardAwareScrollView from "@/components/layout/CKeyboardAwareScrollView";
 import { useIsKeyboardVisible } from "@/hooks-and-providers/keyboard";
 
 const ProfileView_GetCurrentUserUsageData_Query = graphql(`
@@ -42,39 +40,37 @@ const ProfileView_Logout_Mutation = graphql(`
   }
 `);
 
-const ProfileView_ConnectMPassID_Mutation = graphql(`
-  mutation ProfileView_ConnectMPassID($code: String!) {
-    connectMPassID(code: $code) {
-      userData {
-        id
-        email
-        consentsAnalytics
-        languagePreference
-        isMPassIDConnected
-        groups {
-          id
+const ProfileView_ConnectMPassID_Mutation = graphql(
+  `
+    mutation ProfileView_ConnectMPassID($code: String!) {
+      connectMPassID(code: $code) {
+        userData {
+          ...AuthProvider_UserInfo
+          groups {
+            id
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
-const ProfileView_ConnectLocalCredentials_Mutation = graphql(`
-  mutation ProfileView_ConnectLocalCredentials($email: String!, $password: String!) {
-    connectLocalCredentials(email: $email, password: $password) {
-      userData {
-        id
-        email
-        consentsAnalytics
-        languagePreference
-        isMPassIDConnected
-        groups {
-          id
+const ProfileView_ConnectLocalCredentials_Mutation = graphql(
+  `
+    mutation ProfileView_ConnectLocalCredentials($email: EmailAddress!, $password: String!) {
+      connectLocalCredentials(email: $email, password: $password) {
+        userData {
+          ...AuthProvider_UserInfo
+          groups {
+            id
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
 const REDIRECT_URI = "arwi-app://profile";
 

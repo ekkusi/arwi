@@ -13,7 +13,7 @@ import CText from "../../components/primitives/CText";
 import { getErrorMessage } from "../../helpers/errorUtils";
 
 const ForgotPassword_RequestPasswordReset_Mutation = graphql(`
-  mutation ForgotPassword_RequestPasswordReset($email: String!) {
+  mutation ForgotPassword_RequestPasswordReset($email: EmailAddress!) {
     requestPasswordReset(email: $email)
   }
 `);

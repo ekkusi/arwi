@@ -46,7 +46,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
     try {
       const loginResult = await login();
       if (loginResult) {
-        await setUser(loginResult.payload.userData);
+        setUser(loginResult.payload.userData);
         trackEvent({
           category: MATOMO_EVENT_CATEGORIES.AUTH,
           action: "Login - MPassID",

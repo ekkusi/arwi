@@ -9,7 +9,7 @@ import CButton from "../../components/primitives/CButton";
 import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
-import { useAuth } from "../../hooks-and-providers/AuthProvider";
+import { useAuth, AuthProvider_UserInfo_Fragment } from "../../hooks-and-providers/AuthProvider";
 import LandingComponent from "./LandingComponent";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -21,19 +21,19 @@ import CModal from "../../components/modals/CModal";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
-const RegisterPage_Register_Mutation = graphql(`
-  mutation RegisterPage_Register($input: CreateTeacherInput!) {
-    register(data: $input) {
-      userData {
-        email
-        id
-        languagePreference
-        consentsAnalytics
-        isMPassIDConnected
+const RegisterPage_Register_Mutation = graphql(
+  `
+    mutation RegisterPage_Register($input: CreateTeacherInput!) {
+      register(data: $input) {
+        userData {
+          id
+          ...AuthProvider_UserInfo
+        }
       }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
 const PRIVACY_POLICY_URL = "https://arwi.fi/tietosuojaseloste";
 const TERMS_AND_CONDITIONS_URL = "https://arwi.fi/kayttoehdot";

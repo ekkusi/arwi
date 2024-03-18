@@ -36,7 +36,7 @@ export async function testLogin(graphqlRequest: TestGraphQLRequest, user: Create
   };
 
   const query = graphql(`
-    mutation Test_Login($email: String!, $password: String!) {
+    mutation Test_Login($email: EmailAddress!, $password: String!) {
       login(email: $email, password: $password) {
         userData {
           email
