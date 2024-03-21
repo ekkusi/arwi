@@ -15,7 +15,7 @@ import {
   UpdateStudentInput,
   WarningInfo,
 } from "../../types";
-import { ClassParticipationEvaluationData, DefaultEvaluationData } from "@/utils/openAI";
+import { FeedbackGenerationEvaluationData } from "@/utils/openAI";
 import { getEnvironment } from "@/utils/subjectUtils";
 import { MONTHLY_TOKEN_USE_LIMIT, MONTHLY_TOKEN_USE_WARNING_THRESHOLDS } from "@/config";
 
@@ -31,6 +31,7 @@ export const mapCreateTeacherInput = (data: Omit<CreateTeacherInput, "password">
     passwordHash,
     languagePreference: data.languagePreference === null ? undefined : data.languagePreference,
     consentsAnalytics: data.consentsAnalytics === null ? undefined : data.consentsAnalytics,
+    verifiedEmails: [data.email],
   };
 };
 
@@ -111,10 +112,7 @@ type EvaluationWithCollection = Evaluation & {
   evaluationCollection: Pick<EvaluationCollection, "environmentCode" | "date"> & { type: CollectionTypeData };
 };
 
-export const mapEvaluationFeedbackData = (
-  evaluation: EvaluationWithCollection,
-  module: Module
-): ClassParticipationEvaluationData | DefaultEvaluationData => {
+export const mapEvaluationFeedbackData = (evaluation: EvaluationWithCollection, module: Module): FeedbackGenerationEvaluationData => {
   const { environmentCode } = evaluation.evaluationCollection;
   return environmentCode
     ? {
@@ -122,11 +120,13 @@ export const mapEvaluationFeedbackData = (
         date: evaluation.evaluationCollection.date,
         skillsRating: evaluation.skillsRating,
         behaviourRating: evaluation.behaviourRating,
+        wasPresent: evaluation.wasPresent,
       }
     : {
         date: evaluation.evaluationCollection.date,
         generalRating: evaluation.generalRating,
         collectionTypeName: evaluation.evaluationCollection.type.name,
+        wasPresent: evaluation.wasPresent,
       };
 };
 
@@ -164,4 +164,37 @@ export const mapTeacherUsageData = (teacher: Teacher): TeacherUsageData => {
     monthlyTokensUsed: teacher.monthlyTokensUsed,
     warning: warningData,
   };
+};
+
+export type EvaluationWithCollectionTypeInfo = Evaluation & { evaluationCollection: Pick<EvaluationCollection, "typeId"> };
+export type ClassParticipationEvaluationWithCollectionTypeInfo<T extends EvaluationWithCollectionTypeInfo = EvaluationWithCollectionTypeInfo> = Omit<
+  T,
+  "behaviourRating" | "skillsRating"
+>;
+export type DefaultEvaluationWithCollectionTypeInfo<T extends EvaluationWithCollectionTypeInfo = EvaluationWithCollectionTypeInfo> = Omit<
+  T,
+  "generalRating"
+>;
+
+type EvaluationsByCollectionType<T extends EvaluationWithCollectionTypeInfo = EvaluationWithCollectionTypeInfo> = {
+  classParticipationEvaluations: ClassParticipationEvaluationWithCollectionTypeInfo<T>[];
+  defaultEvaluations: DefaultEvaluationWithCollectionTypeInfo<T>[];
+};
+
+export const mapEvaluationsByCollectionType = <T extends EvaluationWithCollectionTypeInfo>(
+  evaluations: T[],
+  collectionTypes: CollectionType[]
+): EvaluationsByCollectionType<T> => {
+  const classParticipationEvaluations: ClassParticipationEvaluationWithCollectionTypeInfo<T>[] = [];
+  const defaultEvaluations: DefaultEvaluationWithCollectionTypeInfo<T>[] = [];
+  evaluations.forEach((evaluation) => {
+    const collectionType = collectionTypes.find((type) => type.id === evaluation.evaluationCollection.typeId);
+    if (!collectionType) return;
+    if (collectionType.category === "CLASS_PARTICIPATION") {
+      classParticipationEvaluations.push(evaluation as ClassParticipationEvaluationWithCollectionTypeInfo<T>);
+    } else {
+      defaultEvaluations.push(evaluation as DefaultEvaluationWithCollectionTypeInfo<T>);
+    }
+  });
+  return { classParticipationEvaluations, defaultEvaluations };
 };

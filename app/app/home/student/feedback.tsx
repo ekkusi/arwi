@@ -7,19 +7,20 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMutation, useQuery } from "@apollo/client";
 import { useMatomo } from "matomo-tracker-react-native";
 import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
-import Layout from "../../../components/Layout";
+import { analyzeEvaluations } from "arwi-shared";
+import Layout from "../../../components/layout/Layout";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import CButton from "../../../components/primitives/CButton";
 import { COLORS, SPACING } from "../../../theme";
 import { HomeStackParams } from "../types";
-import GradeSuggestionView from "../../../components/GradeSuggestionView";
-import { analyzeEvaluations } from "../../../helpers/evaluationUtils";
+import GradeSuggestionView from "./components/GradeSuggestionView";
 import { graphql } from "@/graphql";
-import LoadingIndicator from "../../../components/LoadingIndicator";
+import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import { useAuthenticatedUser } from "../../../hooks-and-providers/AuthProvider";
 import { useToggleTokenUseWarning } from "../../../hooks-and-providers/monthlyTokenUseWarning";
 import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
+import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
 
 const StudentFeedbackView_GetStudent_Query = graphql(`
   query StudentFeedbackView_GetStudent($id: ID!) {
@@ -30,14 +31,6 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
         archived
         currentModule {
           id
-        }
-        currentModule {
-          collectionTypes {
-            id
-            category
-            name
-            weight
-          }
         }
       }
       currentModuleEvaluations {
@@ -60,6 +53,13 @@ const StudentFeedbackView_GetStudent_Query = graphql(`
         }
         ... on DefaultEvaluation {
           rating
+          collection {
+            id
+            type {
+              id
+              weight
+            }
+          }
         }
         collection {
           id
@@ -97,6 +97,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
   const { id, name } = route.params;
   const { trackAction } = useMatomo();
   const toggleTokenUseWarning = useToggleTokenUseWarning();
+  const handleError = useHandleOpenAIError();
   const user = useAuthenticatedUser();
 
   const [summary, setSummary] = useState<string | undefined>();
@@ -137,13 +138,11 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       if (!result.data?.generateStudentFeedback) throw new Error("Summary generation failed");
       setSummary(result.data?.generateStudentFeedback.feedback.text);
     } catch (e) {
-      console.error(e);
-      setError(
-        t(
-          "StudentView.summaryGenerationError",
-          "Palautteen luonnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
-        )
+      const msg = t(
+        "StudentView.summaryGenerationError",
+        "Palautteen luonnissa meni jotakin mönkään. Yritä myöhemmin uudelleen tai ota yhteyttä järjestelmänvalvojaan."
       );
+      handleError(e, msg);
     }
   };
 
@@ -160,11 +159,9 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
   const evaluations = student.currentModuleEvaluations ?? [];
   const classParticipationEvaluations =
     evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
-  const { skillsAverage, behaviourAverage } = analyzeEvaluations([...classParticipationEvaluations]);
+  const { skillsMean, behaviourMean } = analyzeEvaluations([...classParticipationEvaluations]);
 
   const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
-
-  const { collectionTypes } = student.group.currentModule;
 
   if (student.group.archived)
     return (
@@ -183,7 +180,7 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
     return (
       <Layout style={{ alignItems: "center", justifyContent: "center" }}>
         <LoadingIndicator style={{ marginBottom: "4xl" }}>
-          <CText style={{ marginTop: "lg", color: "primary" }}>{t("generating-final-feedback", "Loppuarviointia generoidaan...")}</CText>
+          <CText style={{ marginTop: "lg", color: "primary" }}>{t("generating-final-feedback", "Loppuarviointia luodaan...")}</CText>
         </LoadingIndicator>
       </Layout>
     );
@@ -193,9 +190,9 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
       <Layout style={{ alignItems: "center", justifyContent: "center", marginBottom: "4xl", padding: "lg" }}>
         <CText style={{ fontSize: "2xl" }}>{`${name} - ${t("final-feedback", "Loppuarviointi").toLowerCase()}`}</CText>
         <CText style={{ marginBottom: "lg" }}>
-          {t("final-feedback-generation-info", "Generoi oppilaan loppuarviointi alta. Huom! Generoinnissa voi mennä hetki.")}
+          {t("final-feedback-generation-info", "Luo oppilaan loppuarviointi alta. Huom! Loppuarvioinnin luonnissa voi mennä hetki.")}
         </CText>
-        <CButton title={t("generate-final-feedback", "Generoi loppuarviointi")} onPress={generateSummary} />
+        <CButton title={t("generate-final-feedback", "Luo loppuarviointi")} onPress={generateSummary} />
         {error && <CText style={{ color: "error", marginTop: "lg" }}>{error}</CText>}
       </Layout>
     );
@@ -206,8 +203,8 @@ export default function StudentFeedbackView({ route }: NativeStackScreenProps<Ho
         <CText style={{ fontSize: "xl", marginBottom: "2xl", marginTop: "md", textAlign: "center" }}>{t("final-feedback", "Loppuarviointi")}</CText>
         <GradeSuggestionView
           style={{ marginBottom: "3xl" }}
-          skillsMean={skillsAverage}
-          behaviourMean={behaviourAverage}
+          skillsMean={skillsMean}
+          behaviourMean={behaviourMean}
           otherEvaluations={otherEvaluations}
           collectionTypes={collectionTypes}
         />

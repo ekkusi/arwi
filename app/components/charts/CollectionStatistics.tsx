@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MinimalModuleInfo } from "arwi-backend/src/types";
+import { analyzeEvaluations } from "arwi-shared";
 import { FragmentOf, readFragment, graphql, ResultOf } from "@/graphql";
 import { formatDate } from "../../helpers/dateHelpers";
-import { analyzeEvaluationsSimple } from "../../helpers/evaluationUtils";
-import CircledNumber from "../CircledNumber";
+import CircledNumber from "../ui/CircledNumber";
 import CText from "../primitives/CText";
 import CView from "../primitives/CView";
 import { LineChartBaseProps } from "./LineChartBase";
@@ -36,19 +36,19 @@ const mapData = (collections: ResultOf<typeof CollectionStatistics_Collection_Fr
   let currentBehaviourSum = 0;
   let notNullBehaviourCount = 0;
   collections.forEach((it) => {
-    const { skillsAverage, behaviourAverage } = analyzeEvaluationsSimple(it.evaluations);
-    if (skillsAverage > 0) {
+    const { skillsMean, behaviourMean } = analyzeEvaluations(it.evaluations);
+    if (skillsMean > 0) {
       notNullSkillsCount += 1;
-      currentSkillsSum += skillsAverage;
+      currentSkillsSum += skillsMean;
     }
-    if (behaviourAverage > 0) {
+    if (behaviourMean > 0) {
       notNullBehaviourCount += 1;
-      currentBehaviourSum += behaviourAverage;
+      currentBehaviourSum += behaviourMean;
     }
     data.push({
       date: formatDate(it.date),
-      skills: skillsAverage > 0 ? Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100 : null,
-      behaviour: behaviourAverage > 0 ? Math.round((currentBehaviourSum / notNullBehaviourCount) * 100) / 100 : null,
+      skills: skillsMean > 0 ? Math.round((currentSkillsSum / notNullSkillsCount) * 100) / 100 : null,
+      behaviour: behaviourMean > 0 ? Math.round((currentBehaviourSum / notNullBehaviourCount) * 100) / 100 : null,
       environment: it.environment,
     });
   });

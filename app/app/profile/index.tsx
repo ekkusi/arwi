@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Platform } from "react-native";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "@/graphql";
-import { useAuth, useAuthenticatedUser } from "../../hooks-and-providers/AuthProvider";
+import { useAuth, useAuthenticatedUser, AuthProvider_UserInfo_Fragment } from "../../hooks-and-providers/AuthProvider";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
 import { languages, STORAGE_LANG_KEY } from "../../i18n";
@@ -14,17 +14,15 @@ import CImage from "../../components/primitives/CImage";
 import { SingleSelect } from "../../components/form/Select";
 import { useMPassIDAuth } from "../../hooks-and-providers/mPassID";
 import { useToast } from "../../hooks-and-providers/ToastProvider";
-import CModal from "../../components/CModal";
+import CModal from "../../components/modals/CModal";
 import TextFormField from "../../components/form/TextFormField";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
 import { useMetadata } from "../../hooks-and-providers/MetadataProvider";
 import { formatDate, getFirstDayOfNextMonth } from "../../helpers/dateHelpers";
-import LoadingIndicator from "../../components/LoadingIndicator";
-import InfoButton from "../../components/InfoButton";
+import LoadingIndicator from "../../components/ui/LoadingIndicator";
+import InfoButton from "../../components/ui/InfoButton";
 import { useModal } from "../../hooks-and-providers/ModalProvider";
-import Layout from "@/components/Layout";
-import CKeyboardAwareScrollView from "@/components/primitives/CKeyboardAwareScrollView";
 import { useIsKeyboardVisible } from "@/hooks-and-providers/keyboard";
 
 const ProfileView_GetCurrentUserUsageData_Query = graphql(`
@@ -42,39 +40,37 @@ const ProfileView_Logout_Mutation = graphql(`
   }
 `);
 
-const ProfileView_ConnectMPassID_Mutation = graphql(`
-  mutation ProfileView_ConnectMPassID($code: String!) {
-    connectMPassID(code: $code) {
-      userData {
-        id
-        email
-        consentsAnalytics
-        languagePreference
-        isMPassIDConnected
-        groups {
-          id
+const ProfileView_ConnectMPassID_Mutation = graphql(
+  `
+    mutation ProfileView_ConnectMPassID($code: String!) {
+      connectMPassID(code: $code) {
+        userData {
+          ...AuthProvider_UserInfo
+          groups {
+            id
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
-const ProfileView_ConnectLocalCredentials_Mutation = graphql(`
-  mutation ProfileView_ConnectLocalCredentials($email: String!, $password: String!) {
-    connectLocalCredentials(email: $email, password: $password) {
-      userData {
-        id
-        email
-        consentsAnalytics
-        languagePreference
-        isMPassIDConnected
-        groups {
-          id
+const ProfileView_ConnectLocalCredentials_Mutation = graphql(
+  `
+    mutation ProfileView_ConnectLocalCredentials($email: EmailAddress!, $password: String!) {
+      connectLocalCredentials(email: $email, password: $password) {
+        userData {
+          ...AuthProvider_UserInfo
+          groups {
+            id
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
 const REDIRECT_URI = "arwi-app://profile";
 
@@ -255,6 +251,7 @@ export default function ProfileView() {
             <TextFormField
               title={t("email", "Sähköposti")}
               autoCapitalize="none"
+              inputMode="email"
               placeholder="arwioija@gmail.com"
               style={{ width: "100%" }}
               titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}

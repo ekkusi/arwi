@@ -9,7 +9,7 @@ import StyledBarChart, { StyledBarChartDataType } from "./StyledBarChart";
 import CText from "../primitives/CText";
 import CButton from "../primitives/CButton";
 import { COLORS } from "../../theme";
-import CModal from "../CModal";
+import CModal from "../modals/CModal";
 import { getEnvironmentTranslation } from "../../helpers/translation";
 import { FragmentOf, ResultOf, graphql, readFragment } from "@/graphql";
 

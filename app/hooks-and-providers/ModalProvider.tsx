@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import CModal, { CModalProps } from "../components/CModal";
+import CModal, { CModalProps } from "../components/modals/CModal";
 
 type OpenModalProps = Omit<CModalProps, "isOpen" | "children"> & {
   children: React.ReactNode;

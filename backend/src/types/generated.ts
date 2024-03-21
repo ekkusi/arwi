@@ -98,6 +98,7 @@ export type Mutation = {
   updateGroup: Group;
   updateClassParticipationEvaluation: ClassParticipationEvaluation;
   updateDefaultEvaluation: DefaultEvaluation;
+  updateFeedback: Feedback;
   deleteStudent: Student;
   deleteTeacher: Teacher;
   deleteGroup: Group;
@@ -107,6 +108,7 @@ export type Mutation = {
   generateGroupFeedback: GenerateGroupFeedbackResult;
   fixTextGrammatics: FixTextGrammaticsResult;
   setTokenUseWarningSeen: Scalars['Boolean'];
+  sendFeedbackEmail: SendMailResult;
 };
 
 
@@ -116,7 +118,7 @@ export type MutationRegisterArgs = {
 
 
 export type MutationLoginArgs = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
   password: Scalars['String'];
 };
 
@@ -127,7 +129,7 @@ export type MutationMPassIdLoginArgs = {
 
 
 export type MutationRequestPasswordResetArgs = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
 };
 
 
@@ -148,7 +150,7 @@ export type MutationConnectMPassIdArgs = {
 
 
 export type MutationConnectLocalCredentialsArgs = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
   password: Scalars['String'];
 };
 
@@ -210,6 +212,12 @@ export type MutationUpdateDefaultEvaluationArgs = {
 };
 
 
+export type MutationUpdateFeedbackArgs = {
+  feedbackId: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+
 export type MutationDeleteStudentArgs = {
   studentId: Scalars['ID'];
 };
@@ -244,17 +252,23 @@ export type MutationGenerateStudentFeedbackArgs = {
 
 export type MutationGenerateGroupFeedbackArgs = {
   groupId: Scalars['ID'];
+  onlyGenerateMissing?: InputMaybe<Scalars['Boolean']>;
 };
 
 
 export type MutationFixTextGrammaticsArgs = {
-  studentId: Scalars['ID'];
   text: Scalars['String'];
 };
 
 
 export type MutationSetTokenUseWarningSeenArgs = {
   warning: TokenUseWarning;
+};
+
+
+export type MutationSendFeedbackEmailArgs = {
+  groupId: Scalars['ID'];
+  email: Scalars['EmailAddress'];
 };
 
 export type AppMetadata = {
@@ -264,6 +278,7 @@ export type AppMetadata = {
   monthlyTokenUseLimit: Scalars['Int'];
   feedbackGenerationTokenCost: Scalars['Int'];
   textFixTokenCost: Scalars['Int'];
+  minimumEvalsForFeedback: Scalars['Int'];
 };
 
 export type AuthPayload = {
@@ -281,6 +296,7 @@ export type Teacher = {
   __typename?: 'Teacher';
   id: Scalars['ID'];
   email?: Maybe<Scalars['EmailAddress']>;
+  verifiedEmails: Array<Scalars['EmailAddress']>;
   groups: Array<Group>;
   languagePreference: Scalars['String'];
   consentsAnalytics: Scalars['Boolean'];
@@ -320,6 +336,10 @@ export type FixTextGrammaticsResult = {
   tokensUsed: Scalars['Int'];
   usageData: TeacherUsageData;
 };
+
+export type SendMailResult =
+  | 'EMAIL_VERIFICATION_REQUIRED'
+  | 'GENERATION_STARTED_SUCCESSFULLY';
 
 export type LoginResult = {
   __typename?: 'LoginResult';
@@ -713,6 +733,7 @@ export type ResolversTypes = {
   GenerateStudentFeedbackResult: ResolverTypeWrapper<Omit<GenerateStudentFeedbackResult, 'feedback'> & { feedback: ResolversTypes['Feedback'] }>;
   GenerateGroupFeedbackResult: ResolverTypeWrapper<Omit<GenerateGroupFeedbackResult, 'feedbacks'> & { feedbacks: Array<ResolversTypes['Feedback']> }>;
   FixTextGrammaticsResult: ResolverTypeWrapper<FixTextGrammaticsResult>;
+  SendMailResult: SendMailResult;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   TranslatedString: ResolverTypeWrapper<TranslatedString>;
   TokenUseWarning: TokenUseWarning;
@@ -856,6 +877,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   updateGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationUpdateGroupArgs, 'data' | 'groupId'>>;
   updateClassParticipationEvaluation?: Resolver<ResolversTypes['ClassParticipationEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateClassParticipationEvaluationArgs, 'input'>>;
   updateDefaultEvaluation?: Resolver<ResolversTypes['DefaultEvaluation'], ParentType, ContextType, RequireFields<MutationUpdateDefaultEvaluationArgs, 'input'>>;
+  updateFeedback?: Resolver<ResolversTypes['Feedback'], ParentType, ContextType, RequireFields<MutationUpdateFeedbackArgs, 'feedbackId' | 'text'>>;
   deleteStudent?: Resolver<ResolversTypes['Student'], ParentType, ContextType, RequireFields<MutationDeleteStudentArgs, 'studentId'>>;
   deleteTeacher?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType, RequireFields<MutationDeleteTeacherArgs, 'teacherId'>>;
   deleteGroup?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationDeleteGroupArgs, 'groupId'>>;
@@ -863,8 +885,9 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   changeGroupModule?: Resolver<ResolversTypes['Group'], ParentType, ContextType, RequireFields<MutationChangeGroupModuleArgs, 'data' | 'groupId'>>;
   generateStudentFeedback?: Resolver<ResolversTypes['GenerateStudentFeedbackResult'], ParentType, ContextType, RequireFields<MutationGenerateStudentFeedbackArgs, 'studentId' | 'moduleId'>>;
   generateGroupFeedback?: Resolver<ResolversTypes['GenerateGroupFeedbackResult'], ParentType, ContextType, RequireFields<MutationGenerateGroupFeedbackArgs, 'groupId'>>;
-  fixTextGrammatics?: Resolver<ResolversTypes['FixTextGrammaticsResult'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'studentId' | 'text'>>;
+  fixTextGrammatics?: Resolver<ResolversTypes['FixTextGrammaticsResult'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'text'>>;
   setTokenUseWarningSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetTokenUseWarningSeenArgs, 'warning'>>;
+  sendFeedbackEmail?: Resolver<ResolversTypes['SendMailResult'], ParentType, ContextType, RequireFields<MutationSendFeedbackEmailArgs, 'groupId' | 'email'>>;
 };
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
@@ -873,6 +896,7 @@ export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends
   monthlyTokenUseLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   feedbackGenerationTokenCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   textFixTokenCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  minimumEvalsForFeedback?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -890,6 +914,7 @@ export type MPassIdAuthPayloadResolvers<ContextType = CustomContext, ParentType 
 export type TeacherResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Teacher'] = ResolversParentTypes['Teacher']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['EmailAddress']>, ParentType, ContextType>;
+  verifiedEmails?: Resolver<Array<ResolversTypes['EmailAddress']>, ParentType, ContextType>;
   groups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType>;
   languagePreference?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   consentsAnalytics?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;

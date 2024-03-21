@@ -43,8 +43,13 @@ export type HomeStackParams = {
   "collection-create": {
     groupId: string;
   };
-  "final-feedback-collection": {
+  "final-feedback": {
     groupId: string;
+    noRedirect?: boolean;
+  };
+  "final-feedback-results": {
+    groupId: string;
+    noRedirect?: boolean;
   };
   "default-collection-create": {
     groupId: string;

@@ -24,7 +24,7 @@ describe("Login", () => {
     };
 
     const query = graphql(`
-      mutation LoginTest_ValidLogin($email: String!, $password: String!) {
+      mutation LoginTest_ValidLogin($email: EmailAddress!, $password: String!) {
         login(email: $email, password: $password) {
           userData {
             email
@@ -45,7 +45,7 @@ describe("Login", () => {
     };
 
     const query = graphql(`
-      mutation LoginTest_ValidLoginInDifferentCase($email: String!, $password: String!) {
+      mutation LoginTest_ValidLoginInDifferentCase($email: EmailAddress!, $password: String!) {
         login(email: $email, password: $password) {
           userData {
             email
@@ -66,7 +66,7 @@ describe("Login", () => {
     };
 
     const query = graphql(`
-      mutation LoginTest_InvalidLogin($email: String!, $password: String!) {
+      mutation LoginTest_InvalidLogin($email: EmailAddress!, $password: String!) {
         login(email: $email, password: $password) {
           userData {
             email
@@ -96,7 +96,7 @@ describe("Login", () => {
     };
 
     const query = graphql(`
-      mutation LoginTest_NoEmailLogin($email: String!, $password: String!) {
+      mutation LoginTest_NoEmailLogin($email: EmailAddress!, $password: String!) {
         login(email: $email, password: $password) {
           userData {
             email

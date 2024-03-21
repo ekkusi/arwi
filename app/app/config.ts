@@ -5,7 +5,7 @@ import { COLORS, SPACING } from "../theme";
 export const defaultHeaderStyles: NativeStackNavigationOptions = {
   statusBarColor: COLORS.primary,
   headerStyle: {
-    backgroundColor: COLORS.green,
+    backgroundColor: COLORS.primary,
   },
   headerTintColor: COLORS.white,
 };

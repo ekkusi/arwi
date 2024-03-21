@@ -33,10 +33,12 @@ jobs:
           context: .
           file: ./Dockerfile.web
           push: true
-          tags: ekkusi/arwi-web:${{ steps.extract_branch.outputs.branch == 'main' && 'latest' || steps.extract_branch.outputs.branch }}
+         tags: ekkusi/arwi-web:${{ steps.extract_branch.outputs.branch == 'main' && 'latest' || steps.extract_branch.outputs.branch }}
           platforms: linux/amd64
           secrets: |
             "GRIDLY_API_KEY=${{ secrets.GRIDLY_API_KEY }}"
             "GRIDLY_VIEW_ID=${{ secrets.GRIDLY_WEB_VIEW_ID }}"
             "BACKEND_URL=${{ steps.extract_branch.outputs.branch == 'main' && 'https://api.arwi.fi' || 'https://staging-api.arwi.fi' }}"
             "BUILDER_IO_PUBLIC_API_KEY=${{ secrets.BUILDER_IO_PUBLIC_API_KEY }}"
+            "MATOMO_URL=https://analytics.arwi.fi"
+            "MATOMO_SITE_ID=2"

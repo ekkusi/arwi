@@ -10,7 +10,7 @@ import { GroupCreationStackParams } from "./types";
 import GroupCreationBody from "./_body";
 import TextFormField from "../../../../components/form/TextFormField";
 import SelectFormField from "../../../../components/form/SelectFormField";
-import CKeyboardAvoidingView from "../../../../components/primitives/CKeyboardAvoidingView";
+import CKeyboardAvoidingView from "../../../../components/layout/CKeyboardAvoidingView";
 
 export default function GroupNameSelectionView({
   navigation,

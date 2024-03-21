@@ -159,7 +159,7 @@ PODS:
     - FBLazyVector (= 0.73.2)
     - RCTRequired (= 0.73.2)
     - React-Core (= 0.73.2)
-  - ReachabilitySwift (5.0.0)
+  - ReachabilitySwift (5.2.1)
   - React (0.73.2):
     - React-Core (= 0.73.2)
     - React-Core/DevSupport (= 0.73.2)
@@ -1185,7 +1185,7 @@ PODS:
     - React-jsi (= 0.73.2)
     - React-logger (= 0.73.2)
     - React-perflogger (= 0.73.2)
-  - RNDateTimePicker (7.6.1):
+  - RNDateTimePicker (7.6.3):
     - React-Core
   - RNDeviceInfo (10.13.1):
     - React-Core
@@ -1526,7 +1526,7 @@ SPEC CHECKSUMS:
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: 9b1e7e262745fb671e33c51c1078d093bd30e322
   RCTTypeSafety: a759e3b086eccf3e2cbf2493d22f28e082f958e6
-  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  ReachabilitySwift: 5ae15e16814b5f9ef568963fb2c87aeb49158c66
   React: 805f5dd55bbdb92c36b4914c64aaae4c97d358dc
   React-callinvoker: 6a697867607c990c2c2c085296ee32cfb5e47c01
   React-Codegen: c4447ffa339f4e7a22e0c9c800eec9084f31899c
@@ -1570,7 +1570,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: df8945a656356ff10f58f65a70820478bfcf33ad
   React-utils: f5bc61e7ea3325c0732ae2d755f4441940163b85
   ReactCommon: 45b5d4f784e869c44a6f5a8fad5b114ca8f78c53
-  RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
+  RNDateTimePicker: 7b38b71bcd7c4cfa1cb95f2dff9a4f1faed2dced
   RNDeviceInfo: 4f9c7cfd6b9db1b05eb919620a001cf35b536423
   RNExitApp: 00036cabe7bacbb413d276d5520bf74ba39afa6a
   RNGestureHandler: 25b969a1ffc806b9f9ad2e170d4a3b049c6af85e

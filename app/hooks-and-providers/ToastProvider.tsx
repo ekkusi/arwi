@@ -176,7 +176,16 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
       {children}
       {/* Wrapper View is needed to make exit animation work in iOS */}
       <CView
-        style={{ position: "absolute", bottom: 0, right: 0, left: 0, top: 0, justifyContent: "flex-end", gap: "lg", paddingHorizontal: "md" }}
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          left: 0,
+          top: 0,
+          justifyContent: "flex-end",
+          gap: "lg",
+          paddingHorizontal: "md",
+        }}
         pointerEvents="box-none"
       >
         {toasts
@@ -199,7 +208,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
               >
                 <MaterialCommunityIcon name={getToastIcon(toast.props.type)} size={25} color={COLORS.white} style={{ marginRight: SPACING.md }} />
                 {renderContent(toast)}
-                <CButton variant="empty" onPress={() => closeToast(toast.id)} style={{ position: "absolute", right: "sm", top: -10 }}>
+                <CButton variant="empty" onPress={() => closeToast(toast.id)} style={{ position: "absolute", right: "sm" }}>
                   <MaterialCommunityIcon name="close" size={20} color={COLORS.white} />
                 </CButton>
               </CView>

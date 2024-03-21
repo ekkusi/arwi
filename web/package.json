@@ -12,6 +12,7 @@
     "codegen": "graphql-codegen && node ./scripts/prepend-eslint-disable.js"
   },
   "dependencies": {
+    "arwi-shared": "*",
     "@apollo/client": "^3.9.2",
     "@apollo/experimental-nextjs-app-support": "^0.8.0",
     "@builder.io/dev-tools": "^0.2.16",

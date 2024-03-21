@@ -12,7 +12,7 @@ export default function MultiSelectFormField<CustomOptionType = unknown>(props: 
   const { title, containerStyle, errorTextStyle, titleStyle, error, ...rest } = props;
 
   return (
-    <FormField title={title} error={error} errorTextStyle={errorTextStyle} titleStyle={titleStyle} {...containerStyle}>
+    <FormField title={title} error={error} errorTextStyle={errorTextStyle} titleStyle={titleStyle} style={containerStyle}>
       <MultiSelect error={!!error} title={title} {...rest} />
     </FormField>
   );

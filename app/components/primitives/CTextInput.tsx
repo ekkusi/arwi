@@ -3,6 +3,7 @@ import { TextInput, TextInputProps } from "react-native";
 import { COLORS } from "../../theme";
 import { CTextStyle } from "../../theme/types";
 import { createStyles, createTextStyles } from "../../theme/utils";
+import CView from "./CView";
 
 export type CTextInputProps = Omit<TextInputProps, "style"> & {
   error?: boolean;
@@ -11,10 +12,12 @@ export type CTextInputProps = Omit<TextInputProps, "style"> & {
   style?: CTextStyle;
   isDisabled?: boolean;
   as?: "input" | "textarea";
+  growWithContent?: boolean;
 };
 
 export default forwardRef<TextInput, CTextInputProps>((props, ref) => {
-  const { error: hasError = false, errorStyle, isDisabled = false, lightTheme = false, style, as = "input", ...rest } = props;
+  const { error: hasError = false, errorStyle, isDisabled = false, lightTheme = false, style, as = "input", growWithContent, ...rest } = props;
+  const baseHeight = as === "textarea" ? 150 : 54;
   const allStyles = useMemo(() => {
     const error = {
       ...styles.errorInputStyle,
@@ -26,18 +29,21 @@ export default forwardRef<TextInput, CTextInputProps>((props, ref) => {
       ...(as === "textarea" ? styles.textAreaStyle : {}),
       ...(lightTheme ? styles.lightThemeStyle : {}),
       ...(isDisabled ? styles.disabledInputStyle : {}),
+      ...(growWithContent ? { minHeight: baseHeight } : { height: baseHeight }),
       ...style,
     });
-  }, [errorStyle, hasError, as, lightTheme, isDisabled, style]);
+  }, [errorStyle, hasError, as, lightTheme, isDisabled, growWithContent, baseHeight, style]);
   return (
-    <TextInput
-      multiline={as === "textarea"}
-      ref={ref}
-      style={allStyles}
-      placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray}
-      pointerEvents={isDisabled ? "none" : "auto"}
-      {...rest}
-    />
+    <CView style={{ flex: allStyles.flex, minHeight: allStyles.minHeight, width: allStyles.width, height: allStyles.height }}>
+      <TextInput
+        multiline={as === "textarea"}
+        ref={ref}
+        style={allStyles}
+        placeholderTextColor={lightTheme ? COLORS.white : COLORS.lightgray}
+        pointerEvents={isDisabled ? "none" : "auto"}
+        {...rest}
+      />
+    </CView>
   );
 });
 
@@ -46,13 +52,11 @@ const styles = createStyles({
     borderBottomWidth: 1,
     color: "darkgray",
     borderColor: "gray",
-    height: 54,
     width: "100%",
     fontSize: "md",
     fontWeight: "300",
   },
   textAreaStyle: {
-    height: 150,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "lightgray",

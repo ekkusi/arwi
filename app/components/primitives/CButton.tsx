@@ -43,15 +43,29 @@ export default function CButton({
 }: CButtonProps) {
   if (children && title)
     console.warn("CButton children overrides title prop, title prop won't be rendered. You should only define one of these two.");
+  const buttonSizeStyles: CViewStyle = useMemo(() => {
+    switch (size) {
+      case "large":
+        return {
+          paddingHorizontal: "xl",
+          paddingVertical: "lg",
+          borderRadius: 24,
+        };
+      default:
+        return {
+          paddingHorizontal: "lg",
+          paddingVertical: "md",
+          borderRadius: 18,
+        };
+    }
+  }, [size]);
   const buttonVariantStyles: CViewStyle = useMemo(() => {
     switch (variant) {
       case "outline":
         return {
           backgroundColor: "white",
-          borderWidth: 2,
+          borderWidth: size === "large" ? 2 : 1.5,
           borderColor: colorScheme,
-          minHeight: size === "large" ? 48 : 36,
-          borderRadius: size === "large" ? 24 : 18,
         };
       case "empty":
         return {
@@ -59,17 +73,13 @@ export default function CButton({
           borderWidth: 0,
           paddingHorizontal: 0,
           paddingVertical: 0,
-          minHeight: size === "large" ? 48 : 36,
-          borderRadius: size === "large" ? 24 : 18,
         };
       default:
         return {
           backgroundColor: colorScheme,
-          minHeight: size === "large" ? 48 : 36,
-          borderRadius: size === "large" ? 24 : 18,
         };
     }
-  }, [colorScheme, variant, size]);
+  }, [colorScheme, size, variant]);
 
   const textSizeStyles: CTextStyle = useMemo(() => {
     switch (size) {
@@ -108,12 +118,13 @@ export default function CButton({
   const buttonStyle = useMemo(() => {
     return createViewStyles({
       ...styles.container,
+      ...buttonSizeStyles,
       ...buttonVariantStyles,
       ...(shadowed ? styles.shadow : {}),
       ...(disabled || loading ? styles.disabled : {}),
       ...style,
     });
-  }, [buttonVariantStyles, shadowed, disabled, loading, style]);
+  }, [buttonSizeStyles, buttonVariantStyles, shadowed, disabled, loading, style]);
 
   const titleStyle = useMemo(
     () => ({
@@ -161,11 +172,9 @@ const styles = createStyles({
     opacity: 0.7,
   },
   container: {
-    minHeight: 48,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 24,
-    paddingHorizontal: "xl",
     flexDirection: "row",
     gap: "md",
   },

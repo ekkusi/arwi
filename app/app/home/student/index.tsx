@@ -6,23 +6,24 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
 import { CollectionType } from "arwi-backend/src/types";
-import EvaluationsAccordion, { EvaluationsAccordion_Evaluation_Fragment } from "../../../components/EvaluationsAccordion";
-import LoadingIndicator from "../../../components/LoadingIndicator";
+import { analyzeEvaluationsAdvanced } from "arwi-shared";
+import EvaluationsAccordion, { EvaluationsAccordion_Evaluation_Fragment } from "../../../components/evaluations/EvaluationsAccordion";
+import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
 import CView from "../../../components/primitives/CView";
 import { graphql } from "@/graphql";
 import { HomeStackParams } from "../types";
-import CircledNumber from "../../../components/CircledNumber";
-import { analyzeEvaluations, parseFloatToGradeString } from "../../../helpers/evaluationUtils";
+import CircledNumber from "../../../components/ui/CircledNumber";
+import { parseFloatToGradeString } from "../../../helpers/evaluationUtils";
 import EvaluationsBarChart, { EvaluationsBarChart_Evaluation_Fragment } from "../../../components/charts/EvaluationsBarChart";
 import EvaluationStatistics, { EvaluationStatistics_Evaluation_Fragment } from "../../../components/charts/EvaluationStatistics";
-import InfoButton from "../../../components/InfoButton";
-import GradeSuggestionView from "../../../components/GradeSuggestionView";
+import InfoButton from "../../../components/ui/InfoButton";
+import GradeSuggestionView from "./components/GradeSuggestionView";
 import EvaluationsHistogram, { EvaluationsHistogram_Evaluation_Fragment } from "../../../components/charts/EvaluationsHistogram";
-import Layout from "../../../components/Layout";
+import Layout from "../../../components/layout/Layout";
 import CButton from "../../../components/primitives/CButton";
 import { getEnvironmentTranslation } from "../../../helpers/translation";
-import { Accordion } from "../../../components/Accordion";
+import { Accordion } from "../../../components/ui/Accordion";
 import { formatDate } from "../../../helpers/dateHelpers";
 import { SPACING } from "../../../theme";
 
@@ -123,23 +124,23 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   const {
     absencesAmount,
     presencesAmount,
-    skillsAverage,
+    skillsMean,
     skillsMedian,
     skillsMode,
     skillsMeanByEnvironments,
-    behaviourAverage,
+    behaviourMean,
     behaviourMedian,
     behaviourMode,
     behaviourMeanByEnvironments,
-  } = analyzeEvaluations([...classParticipationEvaluations]);
+  } = analyzeEvaluationsAdvanced([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
 
   return (
-    <Layout>
+    <Layout style={{ backgroundColor: "white" }}>
       <ScrollView>
-        <CView style={{ padding: "lg", backgroundColor: "white", gap: 30 }}>
-          <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "3xl" }}>
-            <CView>
+        <CView style={{ padding: "lg", gap: 30 }}>
+          <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "xl" }}>
+            <CView style={{ width: "55%" }}>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{student.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.currentModule.info.label.fi}</CText>
@@ -153,7 +154,15 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                 <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("absence", "poissaoloa", { count: absencesAmount })}</CText>
               </CText>
             </CView>
-            <CircledNumber value={(skillsAverage + behaviourAverage) / 2} title={t("class-evaluation-mean", "Tuntityöskentelyn keskiarvo")} />
+            <GradeSuggestionView
+              skillsMean={skillsMean}
+              behaviourMean={behaviourMean}
+              otherEvaluations={otherEvaluations}
+              collectionTypes={collectionTypes}
+              style={{ marginLeft: "lg" }}
+              size="small"
+              hideEdit
+            />
           </CView>
           {otherCollectionTypes.length > 0 && (
             <CView style={{ width: "100%", gap: 20 }}>
@@ -210,7 +219,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                               {t("components.EvaluationsAccordion.studentNotPresent", "Oppilas ei ollut paikalla, ei arviointeja")}
                             </CText>
                           )}
-                          {collectionEvaluation && (
+                          {collectionEvaluation ? (
                             <CButton
                               size="small"
                               title={t("edit", "Muokkaa")}
@@ -219,8 +228,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
                                 navigation.navigate("edit-default-evaluation", { evaluationId: collectionEvaluation.id });
                               }}
                             />
-                          )}
-                          {!collectionEvaluation && (
+                          ) : (
                             <CButton
                               size="small"
                               title={t("evaluate", "Arvioi")}
@@ -268,13 +276,13 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
                 <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("skills-mean", "Taitojen keskiarvo")} </CText>
                 <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
-                  {Number.isNaN(skillsAverage) ? "-" : skillsAverage.toPrecision(2)}
+                  {Number.isNaN(skillsMean) ? "-" : skillsMean.toPrecision(2)}
                 </CText>
               </CView>
               <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
                 <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("behaviour-mean", "Työskentelyn keskiarvo")} </CText>
                 <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
-                  {Number.isNaN(behaviourAverage) ? "-" : behaviourAverage.toPrecision(2)}
+                  {Number.isNaN(behaviourMean) ? "-" : behaviourMean.toPrecision(2)}
                 </CText>
               </CView>
               <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
@@ -323,18 +331,6 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               </CView>
             </CView>
           </CView>
-          <GradeSuggestionView
-            skillsMean={skillsAverage}
-            behaviourMean={behaviourAverage}
-            otherEvaluations={otherEvaluations}
-            collectionTypes={collectionTypes}
-          />
-          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
-          <EvaluationsAccordion
-            allowEditing={!archived}
-            evaluations={classParticipationEvaluations}
-            onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
-          />
           {!archived && (
             <CButton
               title={t("student-final-evaluation", "Siirry loppuarviointiin")}
@@ -342,6 +338,12 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               style={{ marginBottom: "lg" }}
             />
           )}
+          <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
+          <EvaluationsAccordion
+            allowEditing={!archived}
+            evaluations={classParticipationEvaluations}
+            onAccordionButtonPress={(id) => navigation.navigate("edit-evaluation", { evaluationId: id })}
+          />
         </CView>
       </ScrollView>
     </Layout>

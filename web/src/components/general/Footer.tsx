@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@/i18n/client";
 import CenteredContainer from "../primitives/CenteredContainer";
 import Link from "../primitives/Link";
-import ChakraIcon from "../primitives/LazyIcon";
 
 export type FooterProps = BoxProps & {
   isDecorationFixed?: boolean;

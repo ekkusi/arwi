@@ -21,6 +21,7 @@ model Teacher {
   monthlyTokensUsed                 Int         @default(0)
   hasSeenFirstMonthlyTokenWarning   Boolean     @default(false)
   hasSeenSecondMonthlyTokenWarning  Boolean     @default(false)
+  verifiedEmails                    String[]
 }
 
 model Group {

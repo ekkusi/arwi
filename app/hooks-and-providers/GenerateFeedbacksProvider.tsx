@@ -1,13 +1,14 @@
 import React, { createContext, useState } from "react";
 import { ApolloError, FetchResult, useMutation } from "@apollo/client";
 import { ResultOf, graphql } from "@/graphql";
-import { useThrowCatchableError } from "./error";
 import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
+import { useToggleTokenUseWarning } from "./monthlyTokenUseWarning";
+import { useHandleOpenAIError } from "./openAI";
 
 const GenerateFeedbacks_useGeneratedFeedbacks_Mutation = graphql(
   `
-    mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!) {
-      generateGroupFeedback(groupId: $groupId) {
+    mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!, $onlyGenerateMissing: Boolean!) {
+      generateGroupFeedback(groupId: $groupId, onlyGenerateMissing: $onlyGenerateMissing) {
         feedbacks {
           ...FeedbackCacheUpdate
         }
@@ -35,12 +36,13 @@ const GenerateFeedbacksContext = createContext<GenerateFeedbacksContextType | nu
 
 const { Provider } = GenerateFeedbacksContext;
 
-export function useGenerateFeedback(groupId: string) {
+export function useGenerateFeedback(groupId: string, onlyGenerateMissing: boolean = false) {
   const context = React.useContext(GenerateFeedbacksContext);
-  const throwCatchableError = useThrowCatchableError();
+  const handleError = useHandleOpenAIError();
+  const toggleTokenUseWarning = useToggleTokenUseWarning();
 
   const [generateFeedbacks] = useMutation(GenerateFeedbacks_useGeneratedFeedbacks_Mutation, {
-    variables: { groupId },
+    variables: { groupId, onlyGenerateMissing },
   });
 
   const isGenerating = context?.generatingGroupIds.includes(groupId);
@@ -55,19 +57,18 @@ export function useGenerateFeedback(groupId: string) {
     context?.addGeneratingGroupId(groupId);
     try {
       const result = await generateFeedbacks();
+
+      // Toggle token use warning if there is one
+      const warning = result.data?.generateGroupFeedback.usageData.warning;
+      if (warning) toggleTokenUseWarning(warning);
+
       context?.removeGeneratingGroupId(groupId);
       onSuccess?.(result);
       return result;
     } catch (err) {
       context?.removeGeneratingGroupId(groupId);
-      if (err instanceof ApolloError) {
-        const graphqlError = err.graphQLErrors[0];
-        if (graphqlError && graphqlError.extensions?.code === "UNAUTHORIZED") {
-          onError?.(err);
-          return;
-        }
-      }
-      throwCatchableError(err);
+      if (onError && err instanceof ApolloError) onError(err);
+      else handleError(err);
     }
   };
 

@@ -6,9 +6,9 @@ import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import CButton, { CButtonProps } from "../../../../components/primitives/CButton";
 import CView from "../../../../components/primitives/CView";
 import { COLORS } from "../../../../theme";
-import ProgressBar from "../../../../components/ProgressBar";
-import Layout from "../../../../components/Layout";
-import { CKeyboardAvoidingViewProps } from "../../../../components/primitives/CKeyboardAvoidingView";
+import ProgressBar from "../../../../components/ui/ProgressBar";
+import Layout from "../../../../components/layout/Layout";
+import { CKeyboardAvoidingViewProps } from "../../../../components/layout/CKeyboardAvoidingView";
 import { UpdateTypesStackParams } from "./update_type_stack_types";
 
 type UpdateTypesBodyProps = Omit<CKeyboardAvoidingViewProps, "avoidKeyboard"> & {

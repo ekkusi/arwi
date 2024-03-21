@@ -1,13 +1,6 @@
 {
   "root": true,
-  // "eslint.workingDirectoreis": ["./app", "./backend", "./cms"],
-  "extends": [
-    "airbnb",
-    "airbnb/hooks",
-    "airbnb-typescript",
-    "prettier",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["airbnb", "airbnb/hooks", "airbnb-typescript", "prettier", "plugin:prettier/recommended"],
   "plugins": ["@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -21,28 +14,14 @@
     "react/style-prop-object": "off",
     "no-restricted-exports": "off",
     "consistent-return": "off",
-    "max-classes-per-file": "off", 
-    "no-restricted-syntax": [
-      "error",
-      "ForInStatement",
-      "LabeledStatement",
-      "WithStatement"
-    ],
+    "max-classes-per-file": "off",
+    "no-underscore-dangle": "off",
+    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
     "react/prop-types": ["error", { "ignore": ["navigation", "route"] }],
-    // "prettier/prettier": [
-    //   "error",
-    //   {
-    //     "printWidth": 150
-    //   }
-    // ],
     "no-console": [
       "warn",
       {
-        "allow": [
-          "warn",
-          "error",
-          "info"
-        ]
+        "allow": ["warn", "error", "info"]
       }
     ],
     "import/no-extraneous-dependencies": [
@@ -60,7 +39,7 @@
         "tsx": "never",
         "json": "always"
       }
-   ],
+    ],
     "import/prefer-default-export": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/no-use-before-define": [
@@ -70,7 +49,7 @@
       }
     ],
     "@typescript-eslint/no-unused-vars": [
-      "warn", // or "error"
+      "warn",
       {
         "argsIgnorePattern": "_",
         "varsIgnorePattern": "_",

@@ -1,13 +1,16 @@
 import { Request, Router } from "express";
 import dotenv from "dotenv";
 import { Issuer, Client as OpenIDClient, UserinfoResponse } from "openid-client";
+import * as Sentry from "@sentry/node";
 import { initSession, logOut } from "../utils/auth";
 import prisma from "@/prismaClient";
 import BadRequestError from "../errors/BadRequestError";
 import { APP_ENV } from "../config";
 import { hasAgreement } from "@/utils/sanity";
 import { fetchParentOids } from "@/utils/organizationApi";
-import UnauthorizedError from "@/errors/AuthorizationError";
+import UnauthorizedError from "@/errors/UnauthorizedError";
+import { deleteEmailVerificationToken, getEmailVerificationToken } from "@/utils/securityUtils";
+import { teacherLoader } from "@/graphql/dataLoaders/teacher";
 
 dotenv.config();
 
@@ -59,7 +62,7 @@ export const grantToken = async (client: OpenIDClient, code: string) => {
     const isAuthorized = await checkIsAuthorized(organizationID);
     if (!isAuthorized)
       throw new UnauthorizedError(
-        "Koulullasi tai kunnallasi ei ole vielä sopimusta Arwin kanssa MPassID-palvelun käytöstä, joten sen kautta kirjautuminen ei valitettavasti vielä ole tunnuksillasi mahdollista. Mikäli haluaisit MPassID-kirjautumisen käyttöön, voit kehottaa koulusi tai kuntasi vastaavan olemaan yhteydessä meihin info@arwi.fi@arwi.fi. \n\nSillä välin voit luoda omat tunnukset ja käyttää Arwia normaalisesti. Voit myöhemmin linkittää tilisi ja tietosi MPassID:n tunnuksiin, kun MPassID-kirjautuminen on saatavilla koulullesi."
+        "Koulullasi tai kunnallasi ei ole vielä sopimusta Arwin kanssa MPassID-palvelun käytöstä, joten sen kautta kirjautuminen ei valitettavasti vielä ole tunnuksillasi mahdollista. Mikäli haluaisit MPassID-kirjautumisen käyttöön, voit kehottaa koulusi tai kuntasi vastaavan olemaan yhteydessä meihin info@arwi.fi. \n\nSillä välin voit luoda omat tunnukset ja käyttää Arwia normaalisesti. Voit myöhemmin linkittää tilisi ja tietosi MPassID:n tunnuksiin, kun MPassID-kirjautuminen on saatavilla koulullesi."
       );
   }
 
@@ -173,6 +176,48 @@ const initAuth = async () => {
     const { redirect_uri } = req.query;
     if (redirect_uri) return res.redirect(redirect_uri as string);
     return res.json({ msg: "Logout succesful!" });
+  });
+
+  router.get("/verify-email", async (req, res) => {
+    const { email, token, user_id } = req.query;
+    try {
+      if (typeof email !== "string" || typeof token !== "string" || typeof user_id !== "string") throw new BadRequestError("Invalid query params");
+      if (!email || !token) throw new BadRequestError("Email or token is missing from query params");
+      const emailVerificationToken = await getEmailVerificationToken(email as string);
+      if (!emailVerificationToken) throw new BadRequestError("Token has expired");
+      if (emailVerificationToken !== token) throw new BadRequestError("Invalid token");
+
+      const user = await prisma.teacher.findFirst({
+        where: {
+          id: user_id as string,
+        },
+      });
+      if (!user) throw new BadRequestError("Invalid query params, user not found.");
+
+      // Add email to user verified emails
+      const updatedTeacher = await prisma.teacher.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          verifiedEmails: {
+            push: email as string,
+          },
+        },
+      });
+      // Clear teacher loader cache
+      teacherLoader.clear(updatedTeacher.id);
+      await deleteEmailVerificationToken(email as string);
+      return res.redirect("https://arwi.fi/sahkoposti-vahvistettu");
+    } catch (error) {
+      console.error(error);
+      Sentry.withScope((scope) => {
+        // If token has expired, only log warning instead of an error
+        scope.setLevel(error instanceof Error && error.message === "Token has expired" ? "warning" : "error");
+        Sentry.captureException(error);
+      });
+      return res.redirect("https://arwi.fi/sahkoposti-vahvistus-virhe");
+    }
   });
 
   return {

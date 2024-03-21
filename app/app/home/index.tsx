@@ -15,12 +15,12 @@ import Animated, {
 import { ResultOf, graphql } from "@/graphql";
 import CView from "../../components/primitives/CView";
 import CText from "../../components/primitives/CText";
-import GroupListItem, { GroupListItem_Fragment } from "../../components/GroupListItem";
-import LoadingIndicator from "../../components/LoadingIndicator";
+import GroupListItem, { GroupListItem_Fragment } from "../../components/group/GroupListItem";
+import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import { HomeStackParams } from "./types";
 import CButton from "../../components/primitives/CButton";
 import { COLORS } from "../../theme";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout/Layout";
 
 const MainPage_GetCurrentUser_Query = graphql(
   `

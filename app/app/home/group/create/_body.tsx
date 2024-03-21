@@ -7,9 +7,9 @@ import CButton, { CButtonProps } from "../../../../components/primitives/CButton
 import CView from "../../../../components/primitives/CView";
 import { COLORS } from "../../../../theme";
 import { GroupCreationStackParams } from "./types";
-import ProgressBar from "../../../../components/ProgressBar";
-import Layout from "../../../../components/Layout";
-import { CKeyboardAvoidingViewProps } from "../../../../components/primitives/CKeyboardAvoidingView";
+import ProgressBar from "../../../../components/ui/ProgressBar";
+import Layout from "../../../../components/layout/Layout";
+import { CKeyboardAvoidingViewProps } from "../../../../components/layout/CKeyboardAvoidingView";
 
 type GroupCreationBodyProps = Omit<CKeyboardAvoidingViewProps, "avoidKeyboard"> & {
   navigation: NativeStackNavigationProp<

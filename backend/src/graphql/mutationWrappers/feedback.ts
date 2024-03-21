@@ -13,3 +13,14 @@ export async function createFeedback<T extends Prisma.FeedbackCreateArgs>(args: 
 
   return createdFeedback;
 }
+
+type UpdateFeedbackReturnType<T extends Prisma.FeedbackUpdateArgs> = GetResult<Prisma.$FeedbackPayload, T, "update">;
+
+export async function updateFeedback<T extends Prisma.FeedbackUpdateArgs>(args: T): Promise<UpdateFeedbackReturnType<T>> {
+  const updatedFeedback = (await prisma.feedback.update(args)) as UpdateFeedbackReturnType<T>;
+
+  // Clear the DataLoader cache for this module
+  feedbacksLoader.clear({ studentId: updatedFeedback.studentId, moduleId: updatedFeedback.moduleId });
+
+  return updatedFeedback;
+}

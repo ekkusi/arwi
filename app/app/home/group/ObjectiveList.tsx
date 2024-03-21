@@ -5,9 +5,9 @@ import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuard
 import CView from "../../../components/primitives/CView";
 import CText from "../../../components/primitives/CText";
 import { SPACING } from "../../../theme";
-import Card from "../../../components/Card";
+import Card from "../../../components/ui/Card";
 import CTouchableOpacity from "../../../components/primitives/CTouchableOpacity";
-import CFlatList from "../../../components/primitives/CFlatList";
+import CFlatList from "../../../components/layout/CFlatList";
 import { GroupOverviewProps } from "./types";
 
 export default function ObjectiveList({ getGroup: group, navigation }: GroupOverviewProps) {

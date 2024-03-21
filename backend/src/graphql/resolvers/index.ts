@@ -11,6 +11,8 @@ import ValidationError from "../errors/ValidationError";
 import MissingDataError from "../errors/MissingDataError";
 import OpenIDError from "../errors/OpenIDError";
 import AuthorizationError from "../errors/AuthorizationError";
+import OpenAIGraphQLError from "../errors/OpenAIGraphqlError";
+import UsageLimitError from "../errors/UsageLimitErrors";
 
 function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Resolver<{}, {}, CustomContext> {
   return async (parent, args, context, info) => {
@@ -38,11 +40,18 @@ function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Res
           type = "validation";
           level = "warning";
           break;
+        case UsageLimitError:
+          type = "usage_limit";
+          level = "warning";
+          break;
         case MissingDataError:
           type = "missing_data";
           break;
         case OpenIDError:
           type = "openid";
+          break;
+        case OpenAIGraphQLError:
+          type = "openai";
           break;
         default:
           type = "unknown";

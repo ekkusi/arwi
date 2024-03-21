@@ -5,7 +5,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: arwi 
+      POSTGRES_DB: arwi
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     networks:
@@ -28,15 +28,15 @@ services:
       - app-network
     restart: unless-stopped
   redis:
-      image: redis:7.2.3-alpine
-      restart: always
-      ports:
-        - "6379:6379"
-      volumes:
-        - redis_data:/root/redis
-      environment:
-        - REDIS_PORT=6379
-        - REDIS_DATABASES=16
+    image: redis:7.2.3-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/root/redis
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
 networks:
   app-network:
     driver: bridge

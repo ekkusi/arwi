@@ -1,23 +1,24 @@
 import * as WebBrowser from "expo-web-browser";
 import { useMutation } from "@apollo/client";
 import { useEffect } from "react";
+import { AuthProvider_UserInfo_Fragment } from "./AuthProvider";
 import { graphql } from "@/graphql";
 
-const MPassID_Login_Mutation = graphql(`
-  mutation MPassID_Login($code: String!) {
-    mPassIDLogin(code: $code) {
-      payload {
-        userData {
-          email
-          languagePreference
-          consentsAnalytics
-          id
-          isMPassIDConnected
+const MPassID_Login_Mutation = graphql(
+  `
+    mutation MPassID_Login($code: String!) {
+      mPassIDLogin(code: $code) {
+        payload {
+          userData {
+            id
+            ...AuthProvider_UserInfo
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
 const BACKEND_API_URL_NO_PROXY = process.env.EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY || process.env.EXPO_PUBLIC_BACKEND_API_URL;
 if (!BACKEND_API_URL_NO_PROXY)

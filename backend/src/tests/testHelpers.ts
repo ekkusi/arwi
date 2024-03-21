@@ -18,6 +18,17 @@ export type TestTeacher = Omit<Teacher, "email"> & {
   email: string;
 };
 
+export const BASE_COLLECTION_DATA = {
+  date: new Date(),
+  description: "Test Description",
+  learningObjectiveCodes: ["T1", "T2"],
+};
+
+export const BASE_EVALUATION_DATA = {
+  wasPresent: true,
+  notes: "Improved performance",
+};
+
 export async function testLogin(graphqlRequest: TestGraphQLRequest, user: CreateUserInput = TEST_USER) {
   const userData = {
     ...TEST_USER,
@@ -25,7 +36,7 @@ export async function testLogin(graphqlRequest: TestGraphQLRequest, user: Create
   };
 
   const query = graphql(`
-    mutation Test_Login($email: String!, $password: String!) {
+    mutation Test_Login($email: EmailAddress!, $password: String!) {
       login(email: $email, password: $password) {
         userData {
           email
@@ -171,12 +182,25 @@ export const createTestEvaluationCollection = async (
 ) => {
   return prisma.evaluationCollection.create({
     data: {
-      date: new Date(),
+      ...BASE_COLLECTION_DATA,
       typeId,
       moduleId,
       environmentCode: VALID_LI_ENV_CODE,
-      description: "Test Description",
-      learningObjectiveCodes: ["T1", "T2"],
+      ...dataOverride,
+    },
+  });
+};
+
+export const createTestDefaultEvaluationCollection = async (
+  moduleId: string,
+  typeId: string,
+  dataOverride?: Omit<Partial<Prisma.EvaluationCollectionCreateInput>, "type" | "module" | "evaluations">
+) => {
+  return prisma.evaluationCollection.create({
+    data: {
+      ...BASE_COLLECTION_DATA,
+      typeId,
+      moduleId,
       ...dataOverride,
     },
   });
@@ -189,12 +213,27 @@ export const createTestEvaluation = async (
 ) => {
   return prisma.evaluation.create({
     data: {
+      ...BASE_EVALUATION_DATA,
       evaluationCollectionId: collectionId,
       studentId,
-      wasPresent: true,
-      skillsRating: 5,
-      behaviourRating: 4,
-      notes: "Improved performance",
+      skillsRating: 7,
+      behaviourRating: 8,
+      ...dataOverride,
+    },
+  });
+};
+
+export const createTestDefaultEvaluation = async (
+  collectionId: string,
+  studentId: string,
+  dataOverride?: Omit<Partial<Prisma.EvaluationCreateInput>, "evaluationCollection" | "student">
+) => {
+  return prisma.evaluation.create({
+    data: {
+      ...BASE_EVALUATION_DATA,
+      evaluationCollectionId: collectionId,
+      studentId,
+      generalRating: 8,
       ...dataOverride,
     },
   });

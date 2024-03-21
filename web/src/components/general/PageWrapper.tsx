@@ -6,8 +6,6 @@ export type PageWrapperProps = BoxProps & {
   outerProps?: BoxProps;
 };
 
-builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
-
 export default async function PageWrapper({ children, outerProps, ...rest }: PageWrapperProps) {
   const symbolModelName = "symbol";
   const headerContent = await builder

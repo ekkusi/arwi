@@ -12,13 +12,13 @@ const { Navigator, Screen } = createNativeStackNavigator<AuthStackParams>();
 
 export default function AuthStack() {
   return (
-    <Navigator initialRouteName="welcome" screenOptions={{ headerTransparent: true }}>
-      <Screen name="welcome" component={LandingPage} options={{ title: "", statusBarColor: COLORS.primary }} />
-      <Screen name="login" component={LoginPage} options={{ title: "", statusBarColor: COLORS.white }} />
-      <Screen name="signup" component={SignupPage} options={{ title: "", statusBarColor: COLORS.white }} />
-      <Screen name="forgot-password" component={ForgotPassword} options={{ title: "", statusBarColor: COLORS.white }} />
-      <Screen name="code-input" component={CodeInput} options={{ title: "", statusBarColor: COLORS.white }} />
-      <Screen name="update-password" component={UpdatePassword} options={{ title: "", statusBarColor: COLORS.white }} />
+    <Navigator initialRouteName="welcome" screenOptions={{ statusBarColor: COLORS.primary, headerTransparent: true }}>
+      <Screen name="welcome" component={LandingPage} options={{ title: "" }} />
+      <Screen name="login" component={LoginPage} options={{ title: "" }} />
+      <Screen name="signup" component={SignupPage} options={{ title: "" }} />
+      <Screen name="forgot-password" component={ForgotPassword} options={{ title: "" }} />
+      <Screen name="code-input" component={CodeInput} options={{ title: "" }} />
+      <Screen name="update-password" component={UpdatePassword} options={{ title: "" }} />
     </Navigator>
   );
 }

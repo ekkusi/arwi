@@ -2,16 +2,12 @@
 
 import { ComponentProps } from "react";
 import { BuilderComponent, useIsPreviewing } from "@builder.io/react";
-import { builder } from "@builder.io/sdk";
 import { notFound } from "next/navigation";
 import "../builder-registry";
 
 type BuilderPageProps = ComponentProps<typeof BuilderComponent> & {
   redirectToNotFound?: boolean;
 };
-
-// Builder Public API Key set in .env file
-builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
 export function RenderBuilderContent({ content, model, redirectToNotFound = true }: BuilderPageProps) {
   // Call the useIsPreviewing hook to determine if

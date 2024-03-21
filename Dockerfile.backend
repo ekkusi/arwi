@@ -7,9 +7,11 @@ RUN apk update && apk add jq
 WORKDIR /app
 
 COPY backend ./backend
+COPY shared ./shared
+COPY tsconfig.json ./
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --prefer-offline
 
 RUN yarn --cwd backend prisma:generate
 RUN yarn --cwd backend build
@@ -27,6 +29,8 @@ ENV NODE_ENV production
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/backend/node_modules ./backend/node_modules
 COPY --from=builder /app/backend/lib ./backend/lib
+COPY --from=builder /app/shared/lib ./shared/lib
+COPY --from=builder /app/shared/package.json ./shared/package.json
 COPY --from=builder /root/version.txt /root/version.txt
 
 EXPOSE 4000

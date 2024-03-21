@@ -9,7 +9,7 @@ import CButton from "../../components/primitives/CButton";
 import { graphql } from "@/graphql";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import { nameValidator } from "../../helpers/textValidation";
-import { useAuth } from "../../hooks-and-providers/AuthProvider";
+import { useAuth, AuthProvider_UserInfo_Fragment } from "../../hooks-and-providers/AuthProvider";
 import LandingComponent from "./LandingComponent";
 import CText from "../../components/primitives/CText";
 import CView from "../../components/primitives/CView";
@@ -17,23 +17,23 @@ import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
 import { SPACING } from "../../theme";
-import CModal from "../../components/CModal";
-import LoadingIndicator from "../../components/LoadingIndicator";
+import CModal from "../../components/modals/CModal";
+import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import { MATOMO_EVENT_CATEGORIES } from "../../config";
 
-const RegisterPage_Register_Mutation = graphql(`
-  mutation RegisterPage_Register($input: CreateTeacherInput!) {
-    register(data: $input) {
-      userData {
-        email
-        id
-        languagePreference
-        consentsAnalytics
-        isMPassIDConnected
+const RegisterPage_Register_Mutation = graphql(
+  `
+    mutation RegisterPage_Register($input: CreateTeacherInput!) {
+      register(data: $input) {
+        userData {
+          id
+          ...AuthProvider_UserInfo
+        }
       }
     }
-  }
-`);
+  `,
+  [AuthProvider_UserInfo_Fragment]
+);
 
 const PRIVACY_POLICY_URL = "https://arwi.fi/tietosuojaseloste";
 const TERMS_AND_CONDITIONS_URL = "https://arwi.fi/kayttoehdot";
@@ -124,7 +124,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
         }}
         innerViewStyles={{ height: "95%", maxHeight: "95%", paddingHorizontal: 0 }}
       >
-        <WebView source={{ uri: TERMS_AND_CONDITIONS_URL }} startInLoadingState renderLoading={() => <LoadingIndicator />} />
+        <WebView source={{ uri: TERMS_AND_CONDITIONS_URL }} startInLoadingState renderLoading={() => <LoadingIndicator />} nestedScrollEnabled />
       </CModal>
       <CModal
         isOpen={isPrivacyPolicyOpen}
@@ -139,7 +139,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
         }}
         innerViewStyles={{ height: "95%", maxHeight: "95%", paddingHorizontal: 0 }}
       >
-        <WebView source={{ uri: PRIVACY_POLICY_URL }} startInLoadingState renderLoading={() => <LoadingIndicator />} />
+        <WebView source={{ uri: PRIVACY_POLICY_URL }} startInLoadingState renderLoading={() => <LoadingIndicator />} nestedScrollEnabled />
       </CModal>
       <LandingComponent title={t("register", "Rekisteröidy")}>
         <CView style={{ flex: 1, width: "100%", paddingHorizontal: "lg" }}>
@@ -148,6 +148,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
               autoCapitalize="none"
               title={t("email", "Sähköpostiosoite")}
               placeholder="arwioija@gmail.com"
+              inputMode="email"
               validate={nameValidator}
               style={{ width: "100%" }}
               titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}

@@ -1,5 +1,8 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
+import { OpenAIError } from "openai";
+import * as Sentry from "@sentry/node";
+import Mail from "nodemailer/lib/mailer";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../../types";
@@ -20,6 +23,7 @@ import {
 } from "../utils/mappers";
 import {
   REQUEST_PASSWORD_RESET_EXPIRY_IN_MS,
+  checkEvaluatedNonClassParticipationCollectionTypes,
   validateChangeGroupLevelInput,
   validateCreateClassParticipationCollectionInput,
   validateCreateDefaultCollectionInput,
@@ -29,6 +33,7 @@ import {
   validatePasswordResetCode,
   validateRegisterInput,
   validateRequestPasswordReset,
+  validateStudentFeedbackEvaluations,
   validateUpdateClassParticipationCollectionInput,
   validateUpdateClassParticipationEvaluationInput,
   validateUpdateDefaultCollectionInput,
@@ -39,6 +44,7 @@ import {
 import {
   checkAuthenticatedByCollection,
   checkAuthenticatedByEvaluation,
+  checkAuthenticatedByFeedback,
   checkAuthenticatedByGroup,
   checkAuthenticatedByStudent,
   checkAuthenticatedByTeacher,
@@ -46,8 +52,8 @@ import {
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
-import { generateCode } from "../../utils/passwordRecovery";
-import { sendMail } from "@/utils/mail";
+import { generateCode } from "../../utils/securityUtils";
+import { sendEmailVerificationMail, sendMail } from "@/utils/mail";
 import { BRCRYPT_SALT_ROUNDS, FEEDBACK_GENERATION_TOKEN_COST, MATOMO_EVENT_CATEGORIES, TEXT_FIX_TOKEN_COST } from "../../config";
 import matomo from "../../matomo";
 import { createTeacher, deleteTeacher, updateTeacher } from "../mutationWrappers/teacher";
@@ -59,8 +65,10 @@ import { createModule } from "../mutationWrappers/module";
 import { createCollectionAndUpdateGroup } from "../utils/resolverUtils";
 import OpenIDError from "../errors/OpenIDError";
 import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
-import AuthorizationError from "@/errors/AuthorizationError";
-import { createFeedback } from "../mutationWrappers/feedback";
+import { createFeedback, updateFeedback } from "../mutationWrappers/feedback";
+import UnauthorizedError from "@/errors/UnauthorizedError";
+import OpenAIGraphQLError from "../errors/OpenAIGraphqlError";
+import { generateFeedbackPDF } from "@/utils/feedback";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -105,7 +113,7 @@ const resolvers: MutationResolvers<CustomContext> = {
         newUserCreated: isNewUser,
       };
     } catch (error) {
-      if (error instanceof AuthorizationError) {
+      if (error instanceof UnauthorizedError) {
         throw new ValidationError(error.message);
       } else {
         throw new OpenIDError(error instanceof Error ? error.message : undefined);
@@ -383,6 +391,17 @@ const resolvers: MutationResolvers<CustomContext> = {
     );
     return updatedGroup;
   },
+  updateFeedback: async (_, { feedbackId, text }, { user }) => {
+    await checkAuthenticatedByFeedback(user, feedbackId);
+    return updateFeedback({
+      data: {
+        text,
+      },
+      where: {
+        id: feedbackId,
+      },
+    });
+  },
   deleteStudent: async (_, { studentId }, { user }) => {
     await checkAuthenticatedByStudent(user, studentId);
     const student = await deleteStudent(studentId);
@@ -502,8 +521,11 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     const [evaluations, group] = await Promise.all([evaluationsPromise, groupPromise]);
     const { currentModule } = group;
+
+    await checkEvaluatedNonClassParticipationCollectionTypes(currentModule);
     const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, currentModule));
-    if (mappedEvaluations.length === 0) throw new ValidationError("Oppilaalla ei ole vielä arviointeja, palautetta ei voida generoida");
+    await validateStudentFeedbackEvaluations(mappedEvaluations);
+
     const summary = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode); // Safe cast after authenticated check
     const feedbackCreatePromise = createFeedback({
       data: {
@@ -519,16 +541,23 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-    const [updatedTeacher, feedback] = await Promise.all([updateTeacherPromise, feedbackCreatePromise]);
+    try {
+      const [updatedTeacher, feedback] = await Promise.all([updateTeacherPromise, feedbackCreatePromise]);
 
-    return {
-      feedback,
-      tokensUsed: FEEDBACK_GENERATION_TOKEN_COST,
-      usageData: mapTeacherUsageData(updatedTeacher),
-    };
+      return {
+        feedback,
+        tokensUsed: FEEDBACK_GENERATION_TOKEN_COST,
+        usageData: mapTeacherUsageData(updatedTeacher),
+      };
+    } catch (error) {
+      if (error instanceof OpenAIError) {
+        throw new OpenAIGraphQLError(error.message);
+      }
+      throw error;
+    }
   },
-  fixTextGrammatics: async (_, { studentId, text }, { user }) => {
-    await Promise.all([checkAuthenticatedByStudent(user, studentId), checkMonthlyTokenUse(user, TEXT_FIX_TOKEN_COST)]);
+  fixTextGrammatics: async (_, { text }, { user }) => {
+    await checkMonthlyTokenUse(user, TEXT_FIX_TOKEN_COST);
 
     validateFixTextGrammaticsInput(text);
     const fixTextPromise = fixTextGrammatics(text, user!.id); // Safe cast after authenticated check
@@ -539,25 +568,45 @@ const resolvers: MutationResolvers<CustomContext> = {
         },
       },
     });
-    const [fixedText, updatedTeacher] = await Promise.all([fixTextPromise, updateTeacherPromise]);
-    return {
-      result: fixedText,
-      tokensUsed: TEXT_FIX_TOKEN_COST,
-      usageData: mapTeacherUsageData(updatedTeacher),
-    };
+
+    try {
+      const [fixedText, updatedTeacher] = await Promise.all([fixTextPromise, updateTeacherPromise]);
+      return {
+        result: fixedText,
+        tokensUsed: TEXT_FIX_TOKEN_COST,
+        usageData: mapTeacherUsageData(updatedTeacher),
+      };
+    } catch (error) {
+      if (error instanceof OpenAIError) {
+        throw new OpenAIGraphQLError(error.message);
+      }
+      throw error;
+    }
   },
-  generateGroupFeedback: async (_, { groupId }, { dataLoaders, prisma, user }) => {
+  generateGroupFeedback: async (_, { groupId, onlyGenerateMissing }, { dataLoaders, prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
 
     const groupPromise = dataLoaders.groupLoader.load(groupId);
-    const studentsPromise = dataLoaders.studentsByGroupLoader.load(groupId);
+    // If onlyGenerateMissing is true, only get students that don't have feedback yet
+    const studentsPromise = prisma.student.findMany({
+      where: {
+        groupId,
+        feedbacks: onlyGenerateMissing
+          ? {
+              none: {}, // This returns only students that don't have feedbacks
+            }
+          : undefined,
+      },
+    });
+
     const [group, students] = await Promise.all([groupPromise, studentsPromise]);
+
+    const module = await dataLoaders.moduleLoader.load(group.currentModuleId);
+    await checkEvaluatedNonClassParticipationCollectionTypes(module);
 
     // Check if the user has enough tokens to generate feedback for all students
     const tokenCost = students.length * FEEDBACK_GENERATION_TOKEN_COST;
     await checkMonthlyTokenUse(user, tokenCost);
-
-    const module = await dataLoaders.moduleLoader.load(group.currentModuleId);
 
     const generationPromises = students.map(async (student) => {
       const evaluations = await prisma.evaluation.findMany({
@@ -583,15 +632,27 @@ const resolvers: MutationResolvers<CustomContext> = {
       });
 
       const mappedEvaluations = evaluations.map((it) => mapEvaluationFeedbackData(it, module));
-      const feedback = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode);
-      const feedbackCreatePromise = createFeedback({
-        data: {
-          studentId: student.id,
-          text: feedback,
-          moduleId: module.id,
-        },
-      });
-      return feedbackCreatePromise;
+      try {
+        await validateStudentFeedbackEvaluations(mappedEvaluations);
+        const feedback = await generateStudentSummary(mappedEvaluations, user!.id, group.subjectCode);
+        const feedbackCreatePromise = createFeedback({
+          data: {
+            studentId: student.id,
+            text: feedback,
+            moduleId: module.id,
+          },
+        });
+        return await feedbackCreatePromise;
+      } catch (error) {
+        // If the validation error is thrown, return null to filter out the feedback from the results
+        if (error instanceof ValidationError) {
+          return null;
+        }
+        if (error instanceof OpenAIError) {
+          throw new OpenAIGraphQLError(error.message);
+        }
+        throw error;
+      }
     });
 
     const updateTeacherPromise = updateTeacher(user!.id, {
@@ -603,8 +664,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
     const [updatedTeacher, ...feedbacks] = await Promise.all([updateTeacherPromise, ...generationPromises]);
 
+    // Filter out null feedbacks and cast to non-null
+    const nonNullFeedbacks = feedbacks.filter((it): it is NonNullable<typeof it> => it !== null);
     return {
-      feedbacks,
+      feedbacks: nonNullFeedbacks,
       tokensUsed: tokenCost,
       usageData: mapTeacherUsageData(updatedTeacher),
     };
@@ -614,6 +677,61 @@ const resolvers: MutationResolvers<CustomContext> = {
       data: mapWarningSeenUpdateData(warning),
     });
     return true;
+  },
+  sendFeedbackEmail: async (_, { email, groupId }, { prisma, user, dataLoaders }) => {
+    await checkAuthenticatedByGroup(user, groupId);
+
+    // If email is not verified, sent verification email
+    // Safe cast after authenticated check
+    if (!user!.verifiedEmails.includes(email)) {
+      sendEmailVerificationMail(email, user!.id, "feedback-generation");
+      return "EMAIL_VERIFICATION_REQUIRED";
+    }
+
+    process.nextTick(async () => {
+      try {
+        const group = await dataLoaders.groupLoader.load(groupId);
+        const collectionTypes = await dataLoaders.collectionTypesByModuleLoader.load(group.currentModuleId);
+
+        const studentsWithData = await prisma.student.findMany({
+          where: {
+            groupId,
+          },
+          include: {
+            feedbacks: true,
+            evaluations: {
+              where: {
+                evaluationCollection: {
+                  moduleId: group.currentModuleId,
+                },
+              },
+              include: {
+                evaluationCollection: {
+                  select: {
+                    id: true,
+                    typeId: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+        const pdfBytes = await generateFeedbackPDF(group, collectionTypes, studentsWithData);
+        const groupFileName = `${group.name.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`;
+        const attachment: Mail.Attachment = {
+          filename: groupFileName,
+          content: Buffer.from(pdfBytes),
+        };
+        await sendMail(email, "Loppuarviointikooste", "Loppuarviointikooste ryhmälle löytyy liitteistä", {
+          attachments: [attachment],
+        });
+      } catch (error) {
+        console.error("Error sending feedback email", error);
+        Sentry.captureException(error);
+      }
+    });
+
+    return "GENERATION_STARTED_SUCCESSFULLY";
   },
 };
 

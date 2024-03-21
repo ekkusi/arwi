@@ -18,6 +18,8 @@ export const clearTeacherLoadersById = async (teacherId: string) => {
 };
 
 export const teacherLoader = new CustomDataLoader<string, Teacher>(async (teacherIds) => {
+  console.log("Fetching teachers", teacherIds);
+
   const teachers = await prisma.teacher.findMany({
     where: {
       id: {

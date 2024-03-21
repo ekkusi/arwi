@@ -1,18 +1,21 @@
 import { Evaluation } from "@prisma/client";
+import { OpenAIError } from "openai";
 import matomo from "../matomo";
 import openAIClient from "@/openAIClient";
 import { formatDate } from "./date";
 import { MATOMO_EVENT_CATEGORIES } from "../config";
 
-export type ClassParticipationEvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviourRating" | "notes">> & {
+export type ClassParticipationEvaluationData = Partial<Pick<Evaluation, "skillsRating" | "behaviourRating" | "notes" | "wasPresent">> & {
   date: Date;
   environmentLabel: string;
 };
 
-export type DefaultEvaluationData = Partial<Pick<Evaluation, "generalRating" | "notes">> & {
+export type DefaultEvaluationData = Partial<Pick<Evaluation, "generalRating" | "notes" | "wasPresent">> & {
   date: Date;
   collectionTypeName: string;
 };
+
+export type FeedbackGenerationEvaluationData = ClassParticipationEvaluationData | DefaultEvaluationData;
 
 export function isClassParticipationEvaluationData(evaluation: any): evaluation is ClassParticipationEvaluationData {
   return !!evaluation.environmentLabel;
@@ -55,11 +58,7 @@ function getTeacherLabel(subjectCode: string): string {
   }
 }
 
-export async function generateStudentSummary(
-  evaluations: (ClassParticipationEvaluationData | DefaultEvaluationData)[],
-  userId: string,
-  subjectCode: string
-) {
+export async function generateStudentSummary(evaluations: FeedbackGenerationEvaluationData[], userId: string, subjectCode: string) {
   if (openAIClient === null) throw new Error("OpenAI client not initialized, cannot generate student summary");
   let prompt = `Olen kyseisen oppilaan ${getTeacherLabel(subjectCode)}, ja minun tulee antaa hänelle yleinen palaute,
                         kehitysehdotus ja huomio vahvuusalueesta hänen suoritustensa perusteella. Päivämäärät,
@@ -100,31 +99,26 @@ export async function generateStudentSummary(
 
   const tokenCountFallback = prompt.length / CHARACTERS_PER_TOKEN;
 
-  try {
-    const completion = await openAIClient.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
+  const completion = await openAIClient.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  if (completion.choices[0]?.message?.content) {
+    const tokenCount = completion.usage?.total_tokens || tokenCountFallback;
+    matomo.trackEventWithValue(MATOMO_EVENT_CATEGORIES.OPEN_AI, "Generate student feedback", tokenCount, {
+      userInfo: {
+        uid: userId,
+      },
+      custom: {
+        token_count: tokenCount,
+      },
     });
 
-    if (completion.choices[0]?.message?.content) {
-      const tokenCount = completion.usage?.total_tokens || tokenCountFallback;
-      matomo.trackEventWithValue(MATOMO_EVENT_CATEGORIES.OPEN_AI, "Generate student feedback", tokenCount, {
-        userInfo: {
-          uid: userId,
-        },
-        custom: {
-          token_count: tokenCount,
-        },
-      });
-
-      return completion.choices[0].message.content;
-    }
-
-    throw new Error(`Error with generateSumamry: no message found from result`);
-  } catch (error: any) {
-    console.error("error", error?.response?.data || error);
-    throw new Error(`Unknown error: ${error?.response?.data?.error}` || "");
+    return completion.choices[0].message.content;
   }
+
+  throw new OpenAIError(`Error with generateSummary: no message found from result`);
 }
 
 export async function fixTextGrammatics(text: string, userId: string) {
@@ -141,19 +135,14 @@ export async function fixTextGrammatics(text: string, userId: string) {
     },
   });
 
-  try {
-    const process = openAIClient.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-    });
-    const completion = await process;
+  const process = openAIClient.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: prompt }],
+  });
+  const completion = await process;
 
-    if (completion.choices[0]?.message?.content) {
-      return completion.choices[0].message.content;
-    }
-    throw new Error(`Error with generateSumamry: no message found from result`);
-  } catch (error: any) {
-    console.error("error", error?.response?.data || error);
-    throw new Error(`Unknown error: ${error?.response?.data?.error}` || "");
+  if (completion.choices[0]?.message?.content) {
+    return completion.choices[0].message.content;
   }
+  throw new OpenAIError(`Error with fixTextGrammatics: no message found from result`);
 }
