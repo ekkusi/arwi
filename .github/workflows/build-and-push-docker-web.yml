@@ -33,7 +33,7 @@ jobs:
           context: .
           file: ./Dockerfile.web
           push: true
-         tags: ekkusi/arwi-web:${{ steps.extract_branch.outputs.branch == 'main' && 'latest' || steps.extract_branch.outputs.branch }}
+          tags: ekkusi/arwi-web:${{ steps.extract_branch.outputs.branch == 'main' && 'latest' || steps.extract_branch.outputs.branch }}
           platforms: linux/amd64
           secrets: |
             "GRIDLY_API_KEY=${{ secrets.GRIDLY_API_KEY }}"
