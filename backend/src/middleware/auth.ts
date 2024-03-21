@@ -64,9 +64,10 @@ export const fetchSessionUserInfo: RequestHandler = async (req, res, next) => {
       const userInfo = await teacherLoader.load(req.session.userInfo.id);
       req.session.userInfo = { ...req.session.userInfo, ...userInfo };
     } catch (error) {
-      console.error("No user info found for session");
+      console.error("No user info found for session", error);
+      req.session.userInfo = undefined;
+      req.session.tokenSet = undefined;
       Sentry.captureException(error);
-      await logOut(req, res);
     }
   }
   next();

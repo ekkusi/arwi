@@ -144,9 +144,9 @@ export type MinimalDefaultEvaluation = Pick<DefaultEvaluation, "rating"> & { col
 export type GradeSuggestionMeanValue =
   | number
   | {
-    value: number;
-    weight: number;
-  };
+      value: number;
+      weight: number;
+    };
 
 type MinimalCollectionType = Pick<CollectionType, "id" | "category" | "weight"> & {
   defaultTypeCollection?: Maybe<{

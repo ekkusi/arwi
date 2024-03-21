@@ -1618,7 +1618,7 @@ export type introspection = {
             "name": "EMAIL_VERIFICATION_REQUIRED"
           },
           {
-            "name": "SUCCESS"
+            "name": "GENERATION_STARTED_SUCCESSFULLY"
           }
         ]
       },

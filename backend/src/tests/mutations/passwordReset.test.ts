@@ -14,7 +14,7 @@ import {
 } from "../../graphql/utils/validators";
 import { teacherLoader } from "../../graphql/dataLoaders/teacher";
 
-jest.mock("@/utils/passwordRecovery");
+jest.mock("@/utils/securityUtils");
 
 describe("Password Reset Flow", () => {
   let graphqlRequest: TestGraphQLRequest;
