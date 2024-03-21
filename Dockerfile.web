@@ -11,6 +11,7 @@ WORKDIR /app
 COPY web ./web
 COPY shared ./shared
 COPY package.json yarn.lock ./
+COPY types ./types
 COPY tsconfig.json ./
 
 RUN yarn install --frozen-lockfile --prefer-offline --ignore-scripts

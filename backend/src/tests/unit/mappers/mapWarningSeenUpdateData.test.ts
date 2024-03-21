@@ -7,6 +7,7 @@ const baseTeacherData: Teacher = {
   monthlyTokensUsed: 0,
   hasSeenFirstMonthlyTokenWarning: false,
   hasSeenSecondMonthlyTokenWarning: false,
+  verifiedEmails: [],
   passwordResetTries: 0,
   passwordResetStartedAt: null,
   languagePreference: "fi",

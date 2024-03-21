@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working_directory: app
+        working-directory: app
     steps:
       - name: Check for EXPO_TOKEN
         run: |
