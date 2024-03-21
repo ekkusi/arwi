@@ -1,3 +1,4 @@
+// Trigger EAS Github action build
 module.exports = {
   name: "Arwi",
   slug: "arwi-app",
