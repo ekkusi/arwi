@@ -90,6 +90,12 @@ const StudentPage_GetStudent_Query = graphql(
           collection {
             id
             date
+            type {
+              id
+              weight
+              name
+              category
+            }
           }
         }
       }
@@ -134,6 +140,8 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   } = analyzeEvaluations([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
 
+  const classParticipationType = collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
+
   return (
     <Layout style={{ backgroundColor: "white" }}>
       <ScrollView>
@@ -156,8 +164,8 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             <GradeSuggestionView
               skillsMean={skillsAverage}
               behaviourMean={behaviourAverage}
+              classParticipationWeight={classParticipationType?.weight || 0}
               otherEvaluations={otherEvaluations}
-              collectionTypes={collectionTypes}
               style={{ marginLeft: "lg" }}
               size="small"
               hideEdit

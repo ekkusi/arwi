@@ -199,6 +199,8 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
 
   const canGenerateFeedback = student.currentModuleEvaluations.filter((ev) => ev.wasPresent).length >= minimumEvalsForFeedback;
 
+  const classParticipationType = student.group.currentModule.collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
+
   const noFeedbackContent = useMemo(() => {
     return canGenerateFeedback ? (
       <>
@@ -248,9 +250,10 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
           <GradeSuggestionView
             skillsMean={skillsAverage}
             behaviourMean={behaviourAverage}
+            classParticipationWeight={classParticipationType?.weight ?? 0}
             otherEvaluations={otherEvaluations}
-            collectionTypes={evaluations.map((ev) => ev.collection.type)}
             style={{ justifyContent: "center" }}
+            infoButtonLinkAction={() => navigation.navigate("edit-evaluation-types", { groupId: student.group.id })}
             size="small"
             hideEdit
           />
