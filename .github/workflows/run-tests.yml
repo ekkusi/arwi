@@ -2,9 +2,11 @@ name: Run tests workflow
 on:
   push:
     branches:
-      - '*'
-      - '!main'
-      - '!v*'
+      - "*"
+      - "!main"
+      - "!v*"
+    paths:
+      - "backend/**"
 
 jobs:
   run-tests:
