@@ -6,7 +6,7 @@ on:
       - "main"
       - "v*"
     paths:
-      - ".github/workflows/build-and-push-backend.yml"
+      - ".github/workflows/build-and-push-docker-backend.yml"
       - "backend/**"
       - "Dockerfile.backend"
 
