@@ -251,6 +251,7 @@ export default function ProfileView() {
             <TextFormField
               title={t("email", "Sähköposti")}
               autoCapitalize="none"
+              inputMode="email"
               placeholder="arwioija@gmail.com"
               style={{ width: "100%" }}
               titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}

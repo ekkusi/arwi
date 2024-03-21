@@ -148,6 +148,7 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
               autoCapitalize="none"
               title={t("email", "Sähköpostiosoite")}
               placeholder="arwioija@gmail.com"
+              inputMode="email"
               validate={nameValidator}
               style={{ width: "100%" }}
               titleStyle={{ fontSize: "md", marginBottom: "-sm", fontWeight: "500" }}

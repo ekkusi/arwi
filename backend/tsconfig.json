@@ -35,6 +35,17 @@
       }
     ]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "lib"]
+  "include": [
+    "src",
+    "../shared/types/typeGuards.ts",
+    "../shared/types/generated.ts",
+    "../shared/types/general.ts",
+    "../shared/types/codegenOverrides.ts"
+  ],
+  "exclude": ["node_modules", "lib"],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
 }

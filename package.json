@@ -5,7 +5,8 @@
     "backend",
     "cms",
     "web",
-    "backend-proxy"
+    "backend-proxy",
+    "shared"
   ],
   "version": "1.0.0",
   "private": true,
@@ -14,7 +15,7 @@
   "author": "Ekku Sipilä <ekku.eki@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "yarn --cwd backend prisma:generate && yarn --cwd backend patch-package",
+    "postinstall": "yarn --cwd backend prisma:generate && yarn --cwd backend patch-package && yarn --cwd shared build",
     "start": "yarn --cwd backend start",
     "start-win": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-win\"",
     "start-mac": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd app start-mac\"",

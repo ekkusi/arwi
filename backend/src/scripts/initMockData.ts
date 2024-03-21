@@ -18,11 +18,12 @@ const initMockData = async () => {
   const email = "test@email.com";
   const hashedPassword = await hash(password, 12);
   const existingTeacher = await prisma.teacher.findUnique({ where: { email } });
-  if (existingTeacher) await prisma.teacher.delete({ where: { email: "test@email.com" } });
+  if (existingTeacher) await prisma.teacher.delete({ where: { email } });
   const testTeacher = await prisma.teacher.create({
     data: {
-      email: "test@email.com",
+      email,
       passwordHash: hashedPassword,
+      verifiedEmails: [email],
     },
   });
   const groupId = uuidv4();

@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "noEmit": false,
+    "outDir": "lib"
+  },
+  "exclude": ["node_modules", "lib", "types", "codegen.ts"]
+}

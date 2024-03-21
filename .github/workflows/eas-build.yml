@@ -1,0 +1,52 @@
+name: EAS App Build
+
+on:
+  push:
+    branches:
+      - "main"
+      - "v*"
+    paths:
+      - "app/**"
+      - "shared/**"
+
+jobs:
+  build:
+    name: EAS Build and Submit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working_directory: app
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: yarn
+
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: |
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build and submit
+        run: eas build --platform all --profile ${{ steps.extract_branch.outputs.branch == 'main' && 'production' || 'staging' }} --auto-submit-with-profile=production

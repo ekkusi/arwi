@@ -6,7 +6,7 @@ import { TestGroup, TestTeacher, VALID_LI_ENV_CODE, createTestGroup, createTestU
 import { formatDate } from "../../utils/date";
 import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
 import { groupLoader } from "../../graphql/dataLoaders/group";
-import { isClassParticipationCollection } from "../../types/typeGuards";
+import { isClassParticipationCollection } from "arwi-backend/src/types/typeGuards";
 
 describe("createClassParticipationCollection", () => {
   let graphqlRequest: TestGraphQLRequest;

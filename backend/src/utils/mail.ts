@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import Mail from "nodemailer/lib/mailer";
 import { generateAndSetEmailVerificationToken } from "./securityUtils";
 
 dotenv.config();
@@ -23,7 +24,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendMail = async (to: string, subject: string, html: string): Promise<SMTPTransport.SentMessageInfo> => {
+export const sendMail = async (
+  to: string,
+  subject: string,
+  html: string,
+  options?: Omit<Mail.Options, "from" | "to" | "subject" | "html">
+): Promise<SMTPTransport.SentMessageInfo> => {
   if (!MAIL_USER || !MAIL_PASS) throw new Error("Missing mail credentials, cannot send email. Define MAIL_USER and MAIL_PASS");
 
   await new Promise((resolve, reject) => {
@@ -45,6 +51,7 @@ export const sendMail = async (to: string, subject: string, html: string): Promi
         to,
         subject,
         html,
+        ...(options || {}),
       },
       (err, info) => {
         if (err) rej(err);

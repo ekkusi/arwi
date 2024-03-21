@@ -89,6 +89,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
         <CView style={{ justifyContent: "center", width: "100%", gap: "lg", marginBottom: "2xl" }}>
           <TextFormField
             autoCapitalize="none"
+            inputMode="email"
             title={t("email", "Sähköposti")}
             placeholder="arwioija@gmail.com"
             validate={nameValidator}

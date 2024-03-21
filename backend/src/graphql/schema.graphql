@@ -104,7 +104,7 @@ type FixTextGrammaticsResult {
 
 enum SendMailResult {
   EMAIL_VERIFICATION_REQUIRED
-  SUCCESS
+  GENERATION_STARTED_SUCCESSFULLY
 }
 
 type LoginResult {

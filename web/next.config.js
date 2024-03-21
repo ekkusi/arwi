@@ -49,6 +49,7 @@ const nextConfig = withBuilderDevTools(
     experimental: {
       serverActions: true,
     },
+    transpilePackages: ["arwi-shared"],
   })
 );
 

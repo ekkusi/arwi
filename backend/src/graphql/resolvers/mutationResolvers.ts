@@ -1,7 +1,8 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
-import crypto from "crypto";
 import { OpenAIError } from "openai";
+import * as Sentry from "@sentry/node";
+import Mail from "nodemailer/lib/mailer";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../../types";
@@ -51,7 +52,7 @@ import {
 } from "../utils/auth";
 import { initSession, logOut } from "../../utils/auth";
 import { grantAndInitSession, grantToken } from "../../routes/auth";
-import { generateAndSetEmailVerificationToken, generateCode } from "../../utils/securityUtils";
+import { generateCode } from "../../utils/securityUtils";
 import { sendEmailVerificationMail, sendMail } from "@/utils/mail";
 import { BRCRYPT_SALT_ROUNDS, FEEDBACK_GENERATION_TOKEN_COST, MATOMO_EVENT_CATEGORIES, TEXT_FIX_TOKEN_COST } from "../../config";
 import matomo from "../../matomo";
@@ -67,6 +68,7 @@ import { clearGroupLoadersByTeacher } from "../dataLoaders/group";
 import { createFeedback, updateFeedback } from "../mutationWrappers/feedback";
 import UnauthorizedError from "@/errors/UnauthorizedError";
 import OpenAIGraphQLError from "../errors/OpenAIGraphqlError";
+import { generateFeedbackPDF } from "@/utils/feedback";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -686,17 +688,50 @@ const resolvers: MutationResolvers<CustomContext> = {
       return "EMAIL_VERIFICATION_REQUIRED";
     }
 
-    // const group = await dataLoaders.groupLoader.load(groupId);
-    // const feedbacks = await prisma.feedback.findMany({
-    //   where: {
-    //     student: {
-    //       groupId,
-    //     },
-    //     moduleId: group.currentModuleId,
-    //   },
-    // });
+    process.nextTick(async () => {
+      try {
+        const group = await dataLoaders.groupLoader.load(groupId);
+        const collectionTypes = await dataLoaders.collectionTypesByModuleLoader.load(group.currentModuleId);
 
-    return "SUCCESS";
+        const studentsWithData = await prisma.student.findMany({
+          where: {
+            groupId,
+          },
+          include: {
+            feedbacks: true,
+            evaluations: {
+              where: {
+                evaluationCollection: {
+                  moduleId: group.currentModuleId,
+                },
+              },
+              include: {
+                evaluationCollection: {
+                  select: {
+                    id: true,
+                    typeId: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+        const pdfBytes = await generateFeedbackPDF(group, collectionTypes, studentsWithData);
+        const groupFileName = `${group.name.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`;
+        const attachment: Mail.Attachment = {
+          filename: groupFileName,
+          content: Buffer.from(pdfBytes),
+        };
+        await sendMail(email, "Loppuarviointikooste", "Loppuarviointikooste ryhmälle löytyy liitteistä", {
+          attachments: [attachment],
+        });
+      } catch (error) {
+        console.error("Error sending feedback email", error);
+        Sentry.captureException(error);
+      }
+    });
+
+    return "GENERATION_STARTED_SUCCESSFULLY";
   },
 };
 

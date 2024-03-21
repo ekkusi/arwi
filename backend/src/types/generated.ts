@@ -339,7 +339,7 @@ export type FixTextGrammaticsResult = {
 
 export type SendMailResult =
   | 'EMAIL_VERIFICATION_REQUIRED'
-  | 'SUCCESS';
+  | 'GENERATION_STARTED_SUCCESSFULLY';
 
 export type LoginResult = {
   __typename?: 'LoginResult';

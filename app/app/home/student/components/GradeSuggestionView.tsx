@@ -2,8 +2,8 @@ import { useState } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { Slider } from "@miblanchard/react-native-slider";
-import { DefaultEvaluation, CollectionType, DefaultCollection } from "arwi-backend/src/types";
 import { Alert } from "react-native";
+import { calculateGradeSuggestion } from "arwi-shared";
 import { COLORS } from "../../../../theme";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
@@ -11,20 +11,42 @@ import CView, { CViewProps } from "../../../../components/primitives/CView";
 import CircledNumber from "../../../../components/ui/CircledNumber";
 import CModal from "../../../../components/modals/CModal";
 import InfoButton from "../../../../components/ui/InfoButton";
+import { FragmentOf, graphql, readFragment } from "@/graphql";
 
-type PartialCollectionType = Pick<CollectionType, "category" | "weight" | "name" | "id"> & {
-  defaultTypeCollection?: Pick<DefaultCollection, "id"> | null;
-};
+export const GradeSuggestionView_CollectionType_Fragment = graphql(`
+  fragment GradeSuggestionView_CollectionType on CollectionType {
+    category
+    weight
+    name
+    id
+    defaultTypeCollection {
+      id
+      evaluations {
+        id
+        rating
+      }
+    }
+  }
+`);
 
-type PartialEvaluation = Pick<DefaultEvaluation, "__typename" | "id" | "rating"> & {
-  collection: Pick<DefaultCollection, "id">;
-};
+export const GradeSuggestionView_DefaultEvaluation_Fragment = graphql(`
+  fragment GradeSuggestionView_DefaultEvaluation on DefaultEvaluation {
+    rating
+    collection {
+      id
+      type {
+        id
+        weight
+      }
+    }
+  }
+`);
 
 type GradeSuggestionViewProps = CViewProps & {
   skillsMean: number;
   behaviourMean: number;
-  collectionTypes: PartialCollectionType[];
-  otherEvaluations: PartialEvaluation[];
+  collectionTypes: FragmentOf<typeof GradeSuggestionView_CollectionType_Fragment>[];
+  defaultTypeEvaluations: FragmentOf<typeof GradeSuggestionView_DefaultEvaluation_Fragment>[];
   size?: "large" | "small";
   hideEdit?: boolean;
 };
@@ -32,8 +54,8 @@ type GradeSuggestionViewProps = CViewProps & {
 export default function GradeSuggestionView({
   skillsMean,
   behaviourMean,
-  collectionTypes,
-  otherEvaluations,
+  collectionTypes: collectionTypeFragments,
+  defaultTypeEvaluations: defaultTypeEvaluationFragments,
   size = "large",
   hideEdit = false,
   ...rest
@@ -41,22 +63,15 @@ export default function GradeSuggestionView({
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [gradeSuggestionSkillsWeight, setGradeSuggestionSkillWeight] = useState(0.5);
-  const classParticipationGrade = skillsMean * gradeSuggestionSkillsWeight + behaviourMean * (1 - gradeSuggestionSkillsWeight);
-  let weightSum = 0;
-  let weightedRating = 0;
-  collectionTypes.forEach((colType) => {
-    if (colType.category === "CLASS_PARTICIPATION") {
-      weightSum += colType.weight;
-      weightedRating += classParticipationGrade * colType.weight;
-    } else if (colType.defaultTypeCollection != null) {
-      const collEvaluation = otherEvaluations.find((ev) => ev.collection.id === colType.defaultTypeCollection!.id);
-      if (collEvaluation?.rating) {
-        weightSum += colType.weight;
-        weightedRating += colType.weight * collEvaluation.rating;
-      }
-    }
+
+  const collectionTypes = readFragment(GradeSuggestionView_CollectionType_Fragment, collectionTypeFragments);
+  const defaultEvaluations = readFragment(GradeSuggestionView_DefaultEvaluation_Fragment, defaultTypeEvaluationFragments);
+
+  const gradeSuggestion = calculateGradeSuggestion(skillsMean, behaviourMean, collectionTypes, defaultEvaluations, {
+    skillsWeight: gradeSuggestionSkillsWeight,
+    behaviourWeight: 1 - gradeSuggestionSkillsWeight,
   });
-  const gradeSuggestion = weightedRating / weightSum;
+
   return (
     <>
       <CModal isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} closeButton={false} placement="bottom">

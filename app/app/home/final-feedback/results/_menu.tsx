@@ -11,7 +11,7 @@ export type FinalFeedbackResultsMenuProps = NativeStackScreenProps<HomeStackPara
 
 export default function FinalFeedbackResultsMenu({ route, navigation }: FinalFeedbackResultsMenuProps) {
   const { groupId } = route.params;
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
   const { t } = useTranslation();
 
   return (
@@ -23,7 +23,7 @@ export default function FinalFeedbackResultsMenu({ route, navigation }: FinalFee
         onSelect={() =>
           openModal({
             title: t("export-pdf", "Vie PDF"),
-            children: <ExportPDF groupId={groupId} />,
+            children: <ExportPDF groupId={groupId} onError={closeModal} onCompleted={closeModal} />,
           })
         }
       >

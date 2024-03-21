@@ -19,9 +19,10 @@ const ExportPDF_SendFeedbackEmail_Mutation = graphql(`
 type ExportPDFProps = {
   groupId: string;
   onCompleted?: () => void;
+  onError?: () => void;
 };
 
-export default function ExportPDF({ groupId, onCompleted }: ExportPDFProps) {
+export default function ExportPDF({ groupId, onCompleted, onError }: ExportPDFProps) {
   const user = useAuthenticatedUser();
   const { t } = useTranslation();
   const { openToast } = useToast();
@@ -43,20 +44,29 @@ export default function ExportPDF({ groupId, onCompleted }: ExportPDFProps) {
           { type: "warning" }
         );
       } else {
-        openToast(t("pdf-exported", "PDF:n luonti aloitettu onnistuneesti. Tarkista sähköpostisi hetken kuluttua."));
+        openToast(t("pdf-exported", "PDF:n luonti aloitettu onnistuneesti. Tarkista sähköpostisi hetken kuluttua. Luonnissa voi mennä hetki."), {
+          closeTimeout: 10000,
+        });
       }
       onCompleted?.();
     } catch (error) {
       openToast(t("something-went-wrong-in-pdf-export", "Jokin meni vikaan odottamattomasti PDF:n viemisessä. Yritä myöhemmin uudelleen."), {
         type: "error",
       });
+      onError?.();
     }
   };
 
   return (
     <CView>
       <CText>{t("insert-email-for-feedback-export", "Syötä alle sähköposti, johon haluat lähettää PDF-koosteen loppuarvioinneista.")}</CText>
-      <CTextInput placeholder={t("email", "Sähköposti")} inputMode="email" value={email} onChangeText={(value) => setEmail(value)} />
+      <CTextInput
+        autoCapitalize="none"
+        inputMode="email"
+        placeholder={t("email", "Sähköposti")}
+        value={email}
+        onChangeText={(value) => setEmail(value)}
+      />
       <CView style={{ justifyContent: "center", marginTop: "2xl" }}>
         <CButton title={t("export-pdf", "Vie PDF")} onPress={handleExportPDF} loading={loading} disabled={email.length === 0} />
       </CView>

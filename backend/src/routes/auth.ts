@@ -1,6 +1,7 @@
 import { Request, Router } from "express";
 import dotenv from "dotenv";
 import { Issuer, Client as OpenIDClient, UserinfoResponse } from "openid-client";
+import * as Sentry from "@sentry/node";
 import { initSession, logOut } from "../utils/auth";
 import prisma from "@/prismaClient";
 import BadRequestError from "../errors/BadRequestError";
@@ -8,7 +9,8 @@ import { APP_ENV } from "../config";
 import { hasAgreement } from "@/utils/sanity";
 import { fetchParentOids } from "@/utils/organizationApi";
 import UnauthorizedError from "@/errors/UnauthorizedError";
-import { getEmailVerificationToken } from "@/utils/securityUtils";
+import { deleteEmailVerificationToken, getEmailVerificationToken } from "@/utils/securityUtils";
+import { teacherLoader } from "@/graphql/dataLoaders/teacher";
 
 dotenv.config();
 
@@ -178,31 +180,44 @@ const initAuth = async () => {
 
   router.get("/verify-email", async (req, res) => {
     const { email, token, user_id } = req.query;
-    if (typeof email !== "string" || typeof token !== "string" || typeof user_id !== "string") throw new BadRequestError("Invalid query params");
-    if (!email || !token) throw new BadRequestError("Email or token is missing from query params");
-    const emailVerificationToken = await getEmailVerificationToken(email as string);
-    if (!emailVerificationToken) throw new BadRequestError("Token has expired");
-    if (emailVerificationToken !== token) throw new BadRequestError("Invalid token");
+    try {
+      if (typeof email !== "string" || typeof token !== "string" || typeof user_id !== "string") throw new BadRequestError("Invalid query params");
+      if (!email || !token) throw new BadRequestError("Email or token is missing from query params");
+      const emailVerificationToken = await getEmailVerificationToken(email as string);
+      if (!emailVerificationToken) throw new BadRequestError("Token has expired");
+      if (emailVerificationToken !== token) throw new BadRequestError("Invalid token");
 
-    const user = await prisma.teacher.findFirst({
-      where: {
-        id: user_id as string,
-      },
-    });
-    if (!user) throw new BadRequestError("Invalid query params, user not found.");
-
-    // Add email to user verified emails
-    await prisma.teacher.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        verifiedEmails: {
-          push: email as string,
+      const user = await prisma.teacher.findFirst({
+        where: {
+          id: user_id as string,
         },
-      },
-    });
-    return res.redirect("https://arwi.fi/sahkoposti-vahvistettu");
+      });
+      if (!user) throw new BadRequestError("Invalid query params, user not found.");
+
+      // Add email to user verified emails
+      const updatedTeacher = await prisma.teacher.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          verifiedEmails: {
+            push: email as string,
+          },
+        },
+      });
+      // Clear teacher loader cache
+      teacherLoader.clear(updatedTeacher.id);
+      await deleteEmailVerificationToken(email as string);
+      return res.redirect("https://arwi.fi/sahkoposti-vahvistettu");
+    } catch (error) {
+      console.error(error);
+      Sentry.withScope((scope) => {
+        // If token has expired, only log warning instead of an error
+        scope.setLevel(error instanceof Error && error.message === "Token has expired" ? "warning" : "error");
+        Sentry.captureException(error);
+      });
+      return res.redirect("https://arwi.fi/sahkoposti-vahvistus-virhe");
+    }
   });
 
   return {

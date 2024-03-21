@@ -122,7 +122,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         message = t(
           "all-students-not-evaluated",
           `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} täysin arvioitua arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
-          { count: studentsWithInsufficientEvaluations.length, minimumEvalsForFeedback }
+          {
+            count: studentsWithInsufficientEvaluations.length,
+            minimumEvalsForFeedback,
+          }
         );
     }
     return (
@@ -165,9 +168,9 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         { closeTimeout: 10000 },
         currentRoute?.name !== "final-feedback-results" && currentRoute?.name !== "final-feedback"
           ? {
-            action: () => navigation.navigate("final-feedback", { groupId: group.id }),
-            label: t("inspect", "Tarkastele"),
-          }
+              action: () => navigation.navigate("final-feedback", { groupId: group.id }),
+              label: t("inspect", "Tarkastele"),
+            }
           : undefined
       );
       if (currentRoute?.name === "final-feedback") navigation.replace("final-feedback-results", { groupId });
@@ -186,7 +189,13 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   else if (!allStudentsHaveSufficientEvaluations || !allStudentsHaveThreeVerbalFeedback)
     bottomText = t("see-warnings-before-generation", "Huomioi keltaisella merkatut kohdat. Voit kuitenkin jatkaa loppupalautteen luontiin.");
   return (
-    <Layout style={{ backgroundColor: "white", paddingHorizontal: "md", paddingVertical: "lg" }}>
+    <Layout
+      style={{
+        backgroundColor: "white",
+        paddingHorizontal: "md",
+        paddingVertical: "lg",
+      }}
+    >
       <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name} - Loppuarviointi</CText>
       <CView style={{ gap: "2xl" }}>
         <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
@@ -206,10 +215,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               {allOtherCollectionTypesEvaluated
                 ? t("all-types-evaluated", "Kaikki arvioitavat sisällöt on arvioitu!")
                 : t(
-                  "all-types-not-evaluated",
-                  `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
-                  { count: nonEvaluatedOtherCollectionTypes.length }
-                )}
+                    "all-types-not-evaluated",
+                    `Ryhmällä on {{count}} arvioitavaa sisältöä arvioimatta. Arvioi sisällöt ennen loppuarvioinnin luontia.`,
+                    { count: nonEvaluatedOtherCollectionTypes.length }
+                  )}
             </CText>
           </CView>
           {sufficientEvaluationsContent}
@@ -223,10 +232,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
               {allStudentsHaveThreeVerbalFeedback
                 ? t("all-students-have-verbal-feedback", "Kaikille ryhmän oppilaille on annettu riittävästi sanallista palautetta!")
                 : t(
-                  "all-students-have-not-verbal-feedback",
-                  `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
-                  { count: studentsWithLessThanThreeVerbalFeedback.length }
-                )}
+                    "all-students-have-not-verbal-feedback",
+                    `Ryhmässä on {{count}} oppilasta, joille on annettu alle 3 sanallista arviointia. Antamalla sanallisia arviointeja, yksilöllisempien palautteiden luonti on mahdollista.`,
+                    { count: studentsWithLessThanThreeVerbalFeedback.length }
+                  )}
             </CText>
           </CView>
         </CView>
@@ -238,9 +247,18 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
           {isGeneratingDisabled && (
             <CButton
               variant="empty"
-              textStyle={{ color: "primary", fontWeight: "600", marginTop: "md" }}
+              textStyle={{
+                color: "primary",
+                fontWeight: "600",
+                marginTop: "md",
+              }}
               title={t("inspect-feedback-suggestions", "Tarkastele arvosanaehdotuksia")}
-              onPress={() => navigation.navigate("final-feedback-results", { groupId, noRedirect: true })}
+              onPress={() =>
+                navigation.navigate("final-feedback-results", {
+                  groupId,
+                  noRedirect: true,
+                })
+              }
             />
           )}
           <CText style={{ fontSize: "sm", fontWeight: "300", marginTop: "lg" }}>
