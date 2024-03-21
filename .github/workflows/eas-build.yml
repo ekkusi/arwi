@@ -6,6 +6,7 @@ on:
       - "main"
       - "v*"
     paths:
+      - ".github/workflows/eas-build.yml"
       - "app/**"
       - "shared/**"
 
