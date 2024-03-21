@@ -6,6 +6,7 @@ on:
       - "main"
       - "v*"
     paths:
+      - ".github/workflows/build-and-push-web.yml"
       - "web/**"
       - "Dockerfile.web"
 

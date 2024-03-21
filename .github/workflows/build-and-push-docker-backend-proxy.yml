@@ -6,6 +6,7 @@ on:
       - "main"
       - "v*"
     paths:
+      - ".github/workflows/build-and-push-backend-proxy.yml"
       - "backend-proxy/**"
       - "Dockerfile.backend-proxy"
 
