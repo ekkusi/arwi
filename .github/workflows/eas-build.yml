@@ -23,10 +23,10 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
-        working-directory: .
         with:
           node-version: 18.x
           cache: yarn
+          cache-dependency-path: "./yarn.lock"
 
       - name: Extract branch name
         id: extract_branch
