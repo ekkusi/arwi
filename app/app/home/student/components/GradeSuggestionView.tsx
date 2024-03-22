@@ -111,15 +111,15 @@ export default function GradeSuggestionView({
             <CText style={{ fontSize: "xl", fontWeight: "300" }}>{APPROX_SIGN}</CText>
             <CircledNumber value={Math.round(gradeSuggestion)} size={46} decimals={0} />
           </CView>
-          <CButton
-            title="Muokkaa painoarvoja"
-            onPress={() => {
-              if (infoButtonLinkAction) {
+          {infoButtonLinkAction && (
+            <CButton
+              title="Muokkaa painoarvoja"
+              onPress={() => {
                 closeModal();
                 infoButtonLinkAction();
-              }
-            }}
-          />
+              }}
+            />
+          )}
         </CView>
       ),
     });

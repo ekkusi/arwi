@@ -126,7 +126,7 @@ export default function FinalFeedbackResults({ route, navigation }: NativeStackS
                 student={item}
                 moduleId={group.currentModule.id}
                 generatingFeedback={studentsWithoutFeedbackToGenerate.find((s) => s.id === item.id) ? isGenerating : false}
-                style={{ borderBottomWidth: index !== group.students.length - 1 ? 1 : 0, borderBottomColor: "gray", paddingVertical: "3xl" }}
+                style={{ borderBottomWidth: index !== group.students.length - 1 ? 1 : 0, borderBottomColor: "lightgray", paddingVertical: "3xl" }}
               />
             );
           }}

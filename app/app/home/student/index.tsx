@@ -147,7 +147,7 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
       <ScrollView>
         <CView style={{ padding: "lg", gap: 30 }}>
           <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "xl" }}>
-            <CView style={{ width: "55%" }}>
+            <CView style={{ width: "50%" }}>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{student.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.currentModule.info.label.fi}</CText>
@@ -168,6 +168,9 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               otherEvaluations={otherEvaluations}
               style={{ marginLeft: "lg" }}
               size="small"
+              infoButtonLinkAction={() => {
+                navigation.navigate("edit-evaluation-types", { groupId: student.group.id, onlyWeights: true });
+              }}
               hideEdit
             />
           </CView>

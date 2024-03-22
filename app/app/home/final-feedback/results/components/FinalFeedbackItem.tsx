@@ -253,7 +253,7 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
             classParticipationWeight={classParticipationType?.weight ?? 0}
             otherEvaluations={otherEvaluations}
             style={{ justifyContent: "center" }}
-            infoButtonLinkAction={() => navigation.navigate("edit-evaluation-types", { groupId: student.group.id })}
+            infoButtonLinkAction={() => navigation.navigate("edit-evaluation-types", { groupId: student.group.id, onlyWeights: true })}
             size="small"
             hideEdit
           />

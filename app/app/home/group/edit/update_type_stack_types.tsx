@@ -8,5 +8,6 @@ export type UpdateTypesStackParams = {
   "group-edit-collection-types-weights": {
     groupId: string;
     originalTypes: CollectionTypeFull[];
+    hideBackButton?: boolean;
   };
 };
