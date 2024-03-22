@@ -56,9 +56,11 @@ export async function generateFeedbackPDF(group: Group, collectionTypes: Collect
   for (let j = 0; j < 4; j += 1) {
     for (let i = 0; i < studentsWithData.length; i += 1) {
       const student = studentsWithData[i];
-      const latestFeedback = student.feedbacks.sort((a, b) => {
-        return a.createdAt > b.createdAt ? -1 : 1;
-      })[0];
+      const latestFeedback =
+        student.feedbacks.length > 0 &&
+        student.feedbacks.sort((a, b) => {
+          return a.createdAt > b.createdAt ? -1 : 1;
+        })[0];
       // Group evaluations by collection types
       const { defaultEvaluations, classParticipationEvaluations } = mapEvaluationsByCollectionType(student.evaluations, collectionTypes);
       const mappedDefaultEvaluations = defaultEvaluations.map((evaluation) => ({ ...evaluation, collection: evaluation.evaluationCollection }));
@@ -72,7 +74,7 @@ export async function generateFeedbackPDF(group: Group, collectionTypes: Collect
 
         Loppupalaute:
 
-        ${latestFeedback.text}
+        ${latestFeedback ? latestFeedback.text : "Oppilaalle ei ole luotu loppupalautetta."}
       `;
 
       safeDrawText(studentString);
