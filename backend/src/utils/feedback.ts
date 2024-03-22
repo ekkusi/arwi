@@ -61,22 +61,21 @@ export async function generateFeedbackPDF(group: Group, collectionTypes: Collect
     });
   };
 
-  for (let j = 0; j < 4; j += 1) {
-    for (let i = 0; i < studentsWithData.length; i += 1) {
-      const student = studentsWithData[i];
-      const latestFeedback =
-        student.feedbacks.length > 0 &&
-        student.feedbacks.sort((a, b) => {
-          return a.createdAt > b.createdAt ? -1 : 1;
-        })[0];
-      // Group evaluations by collection types
-      const { defaultEvaluations, classParticipationEvaluations } = mapEvaluationsByCollectionType(student.evaluations, collectionTypes);
-      const mappedDefaultEvaluations = defaultEvaluations.map((evaluation) => ({ ...evaluation, collection: evaluation.evaluationCollection }));
-      const { skillsMean, behaviourMean } = analyzeEvaluations(classParticipationEvaluations);
-      const classParticipationWeight = collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION")?.weight || 0;
-      const gradeSuggestion = calculateGradeSuggestion(skillsMean, behaviourMean, classParticipationWeight, mappedDefaultEvaluations);
+  for (let i = 0; i < studentsWithData.length; i += 1) {
+    const student = studentsWithData[i];
+    const latestFeedback =
+      student.feedbacks.length > 0 &&
+      student.feedbacks.sort((a, b) => {
+        return a.createdAt > b.createdAt ? -1 : 1;
+      })[0];
+    // Group evaluations by collection types
+    const { defaultEvaluations, classParticipationEvaluations } = mapEvaluationsByCollectionType(student.evaluations, collectionTypes);
+    const mappedDefaultEvaluations = defaultEvaluations.map((evaluation) => ({ ...evaluation, collection: evaluation.evaluationCollection }));
+    const { skillsMean, behaviourMean } = analyzeEvaluations(classParticipationEvaluations);
+    const classParticipationWeight = collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION")?.weight || 0;
+    const gradeSuggestion = calculateGradeSuggestion(skillsMean, behaviourMean, classParticipationWeight, mappedDefaultEvaluations);
 
-      const studentString = `
+    const studentString = `
         Oppilas: ${student.name}
 
         Arvosanaehdotus: ${gradeSuggestion.toFixed(1)}
@@ -86,14 +85,13 @@ export async function generateFeedbackPDF(group: Group, collectionTypes: Collect
         ${latestFeedback ? latestFeedback.text : "Oppilaalle ei ole luotu loppupalautetta."}
       `;
 
-      safeDrawText(studentString);
-      if (i !== studentsWithData.length - 1) {
-        page.drawLine({
-          start: { x: PAGE_MARGIN, y: page.getY() },
-          end: { x: width - PAGE_MARGIN * 2, y: page.getY() },
-        });
-        page.moveDown(2 * BASE_TEXT_SIZE);
-      }
+    safeDrawText(studentString);
+    if (i !== studentsWithData.length - 1) {
+      page.drawLine({
+        start: { x: PAGE_MARGIN, y: page.getY() },
+        end: { x: width - PAGE_MARGIN * 2, y: page.getY() },
+      });
+      page.moveDown(2 * BASE_TEXT_SIZE);
     }
   }
 
