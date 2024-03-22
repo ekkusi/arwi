@@ -593,8 +593,8 @@ const resolvers: MutationResolvers<CustomContext> = {
         groupId,
         feedbacks: onlyGenerateMissing
           ? {
-              none: {}, // This returns only students that don't have feedbacks
-            }
+            none: {}, // This returns only students that don't have feedbacks
+          }
           : undefined,
       },
     });
@@ -707,10 +707,6 @@ const resolvers: MutationResolvers<CustomContext> = {
               },
               include: {
                 evaluationCollection: {
-                  select: {
-                    id: true,
-                    typeId: true,
-                  },
                   include: {
                     type: {
                       select: {
