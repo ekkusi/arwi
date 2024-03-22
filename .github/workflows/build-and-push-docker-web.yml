@@ -11,7 +11,18 @@ on:
       - "Dockerfile.web"
 
 jobs:
-  docker:
+  extract_branch:
+    outputs:
+      branch: ${{ steps.extrach_branch.outputs.branch }}
+    runs_on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: |
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  build:
+    needs: extract_branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,23 +34,31 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Extract branch name
-        id: extract_branch
-        shell: bash
-        run: |
-          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile.web
           push: true
-          tags: ekkusi/arwi-web:${{ steps.extract_branch.outputs.branch == 'main' && 'latest' || steps.extract_branch.outputs.branch }}
+          tags: ekkusi/arwi-web:${{ needs.extract_branch.outputs.branch == 'main' && 'latest' || needs.extract_branch.outputs.branch }}
           platforms: linux/amd64
           secrets: |
             "GRIDLY_API_KEY=${{ secrets.GRIDLY_API_KEY }}"
             "GRIDLY_VIEW_ID=${{ secrets.GRIDLY_WEB_VIEW_ID }}"
-            "BACKEND_URL=${{ steps.extract_branch.outputs.branch == 'main' && 'https://api.arwi.fi' || 'https://staging-api.arwi.fi' }}"
+            "BACKEND_URL=${{ needs.extract_branch.outputs.branch == 'main' && 'https://api.arwi.fi' || 'https://staging-api.arwi.fi' }}"
             "BUILDER_IO_PUBLIC_API_KEY=${{ secrets.BUILDER_IO_PUBLIC_API_KEY }}"
             "MATOMO_URL=https://analytics.arwi.fi"
             "MATOMO_SITE_ID=2"
+  deploy:
+    needs: [extra_branch, build]
+    runs-on: ubuntu-latest
+    if: ${{ needs.extract_branch.outputs.branch != 'main' }}
+    steps:
+      - name: SSH to server and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.ARWI_HOST }}
+          username: ${{ secrets.ARWI_USER }}
+          key: ${{ secrets.ARWI_SSH_KEY }}
+          script: |
+            ./scripts/prod/loadAndRestartStagingWeb.sh ${{ needs.extract_branch.outputs.branch }}
