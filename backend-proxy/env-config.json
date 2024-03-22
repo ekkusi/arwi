@@ -1,0 +1,5 @@
+{
+  "obligatory": ["HEADER_AUTH_API_KEY", "MAIN_API_URL"],
+  "obligatory_prod": [],
+  "optional": []
+}

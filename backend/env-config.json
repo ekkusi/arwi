@@ -1,0 +1,16 @@
+{
+  "obligatory": ["DATABASE_URL", "SANITY_PROJECT_ID"],
+  "obligatory_prod": [
+    "OPENAI_API_KEY",
+    "OPENAI_ORGANIZATION",
+    "MPASSID_CLIENT_SECRET",
+    "MPASSID_CLIENT_ID",
+    "REDIS_PASSWORD",
+    "REDIS_HOST",
+    "MAIL_USER",
+    "MAIL_PASS",
+    "SENTRY_URL",
+    "HEADER_AUTH_API_TOKENS"
+  ],
+  "optional": ["MATOMO_BASE_URL", "MATOMO_SITE_ID", "ADVANCED_SENTRY_LOGGING", "NO_REDIS_SESSION"]
+}
