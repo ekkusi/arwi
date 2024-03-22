@@ -12,6 +12,7 @@ COPY web ./web
 COPY shared ./shared
 COPY package.json yarn.lock ./
 COPY .eslintrc.json ./
+COPY .prettierrc.json ./
 COPY types ./types
 COPY tsconfig.json ./
 
