@@ -5,12 +5,12 @@ parentPath=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parentPath"
 cd "../../"
 
-set -o allexport
+set -o allexport -o errexit
 source .env.production
 ./scripts/prod/checkEnv.sh ./env-config.json
 ./scripts/prod/checkEnv.sh ./backend/env-config.json
 ./scripts/prod/checkEnv.sh ./backend-proxy/env-config.json
-set +o allexport
+set +o allexport +o errexit
 
 
 exit 1

@@ -5,10 +5,10 @@ parentPath=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parentPath"
 cd "../../"
 
-set -o allexport
+set -o allexport -o errexit
 source .env.staging-proxy
 ./scripts/prod/checkEnv.sh ./backend-proxy/env-config.json
-set +o allexport
+set +o allexport +o errexit
 
 containerName=arwi-backend-proxy-staging
 imageName=ekkusi/arwi-backend-proxy
