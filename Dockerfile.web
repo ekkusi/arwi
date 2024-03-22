@@ -11,6 +11,7 @@ WORKDIR /app
 COPY web ./web
 COPY shared ./shared
 COPY package.json yarn.lock ./
+COPY .eslintrc.json ./
 COPY types ./types
 COPY tsconfig.json ./
 
@@ -63,4 +64,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["node", "server.js"]
+CMD ["node", "./web/server.js"]

@@ -1,6 +1,11 @@
 #!/bin/bash
 # SCRIPT TO TEST BUILDING THE WEB IMAGE, BASICALLY JUST TO READ SECRETS FROM .secrets FILE
 
+callPath=$(pwd)
+parentPath=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+cd "$parentPath"
+cd ".."
+
 # Check if .secrets file exists and exit if not
 if [ ! -f .secrets ]; then
     echo "No .secrets file found!"
@@ -28,7 +33,7 @@ while IFS= read -r line; do
 done < .secrets
 
 # Add the context to the build command
-build_command+=" -f Dockerfile.web --platform linux/amd64 -t ekkusi/arwi-web-test ."
+build_command+=" -f Dockerfile.web -t ekkusi/arwi-web-test ."
 
 # Execute the Docker build command
 # Copy command to clipboard
