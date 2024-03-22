@@ -103,13 +103,20 @@ const FinalFeedbackItem_UpdateFeedback_Mutation = graphql(
 );
 
 export type FinalFeedbackItemProps = Omit<CViewProps, "children"> & {
-  navigation: NativeStackNavigationProp<HomeStackParams, "final-feedback-results">;
+  navigation: NativeStackNavigationProp<HomeStackParams, "final-feedback-results" | "student-feedback">;
   student: FragmentOf<typeof FinalFeedbackItem_Student_Fragment>;
   moduleId: string;
   generatingFeedback?: boolean;
+  hideSeeMoreButton?: boolean;
 };
 
-export default function FinalFeedbackItem({ student: studentFragment, moduleId, navigation, ...rest }: FinalFeedbackItemProps) {
+export default function FinalFeedbackItem({
+  student: studentFragment,
+  moduleId,
+  navigation,
+  hideSeeMoreButton = false,
+  ...rest
+}: FinalFeedbackItemProps) {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   const { openToast } = useToast();
@@ -232,13 +239,15 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
               <CText style={{ fontSize: "md", fontWeight: "500" }}>{absencesAmount} </CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("absence", "poissaoloa", { count: absencesAmount })}</CText>
             </CText>
-            <CButton
-              variant="empty"
-              title="Katso lisää"
-              textStyle={{ color: "primary" }}
-              style={{ marginTop: "sm" }}
-              onPress={() => navigation.push("student", { id: student.id, name: student.name, archived: false })}
-            />
+            {!hideSeeMoreButton && (
+              <CButton
+                variant="empty"
+                title={t("see-more", "Katso lisää")}
+                textStyle={{ color: "primary" }}
+                style={{ marginTop: "sm" }}
+                onPress={() => navigation.push("student", { id: student.id, name: student.name, archived: false })}
+              />
+            )}
           </CView>
           <GradeSuggestionView
             skillsMean={skillsMean}
