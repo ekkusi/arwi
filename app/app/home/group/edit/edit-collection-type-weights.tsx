@@ -30,6 +30,7 @@ export default function EditTypeWeightsView({
 }: NativeStackScreenProps<UpdateTypesStackParams, "group-edit-collection-types-weights", "home-stack">) {
   const { t } = useTranslation();
   const { openToast } = useToast();
+  const { groupId, hideBackButton, originalTypes } = route.params;
 
   const { types, setTypes } = useUpdateTypesContext();
   const [updateGroup] = useMutation(EditTypeWeightsView_UpdateGroup_Mutation);
@@ -42,13 +43,13 @@ export default function EditTypeWeightsView({
     setLoading(true);
     try {
       const newIds = newTypes.map((type) => type.id);
-      const oldIds = route.params.originalTypes.map((type) => type.id);
-      const typesToDelete = route.params.originalTypes.filter((type) => type.id && !newIds.includes(type.id));
+      const oldIds = originalTypes.map((type) => type.id);
+      const typesToDelete = originalTypes.filter((type) => type.id && !newIds.includes(type.id));
       const typesToUpdate = newTypes.filter((type) => type.id && oldIds.includes(type.id));
       const typesToAdd = newTypes.filter((type) => !oldIds.includes(type.id));
       await updateGroup({
         variables: {
-          id: route.params.groupId,
+          id: groupId,
           input: {
             updateCollectionTypeInputs: typesToUpdate.map((type) => {
               return {
@@ -92,7 +93,8 @@ export default function EditTypeWeightsView({
     if (sum !== 100) {
       return;
     }
-    const newTypes = types.map((item, i) => ({ category: item.category, name: item.name, weight: weights[i], id: item.id }));
+    const typesToEdit = hideBackButton ? originalTypes : types;
+    const newTypes = typesToEdit.map((item, i) => ({ category: item.category, name: item.name, weight: weights[i], id: item.id }));
     setTypes(newTypes);
     handleSubmit(newTypes);
   };
@@ -102,6 +104,7 @@ export default function EditTypeWeightsView({
       navigation={navigation}
       progressState={2}
       moveForwardDisabled={forwardDisabled}
+      noBackButton={hideBackButton}
       onMoveBack={onMoveBack}
       onMoveForward={onMoveForward}
       forwardButtonProps={{ title: t("save", "Tallenna"), leftIcon: <MaterialCommunityIcon name="check" size={25} color={COLORS.white} />, loading }}

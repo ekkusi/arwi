@@ -5,7 +5,15 @@ import { EvaluationWithCollectionTypeInfo, mapEvaluationsByCollectionType } from
 
 export type StudentWithFeedbacksAndEvaluations = Student & {
   feedbacks: Feedback[];
-  evaluations: (EvaluationWithCollectionTypeInfo & { evaluationCollection: { id: string } })[];
+  evaluations: (EvaluationWithCollectionTypeInfo & {
+    evaluationCollection: {
+      id: string;
+      type: {
+        weight: number;
+        id: string;
+      };
+    };
+  })[];
 };
 
 const PAGE_MARGIN = 25;
@@ -65,7 +73,8 @@ export async function generateFeedbackPDF(group: Group, collectionTypes: Collect
       const { defaultEvaluations, classParticipationEvaluations } = mapEvaluationsByCollectionType(student.evaluations, collectionTypes);
       const mappedDefaultEvaluations = defaultEvaluations.map((evaluation) => ({ ...evaluation, collection: evaluation.evaluationCollection }));
       const { skillsMean, behaviourMean } = analyzeEvaluations(classParticipationEvaluations);
-      const gradeSuggestion = calculateGradeSuggestion(skillsMean, behaviourMean, collectionTypes, mappedDefaultEvaluations);
+      const classParticipationWeight = collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION")?.weight || 0;
+      const gradeSuggestion = calculateGradeSuggestion(skillsMean, behaviourMean, classParticipationWeight, mappedDefaultEvaluations);
 
       const studentString = `
         Oppilas: ${student.name}

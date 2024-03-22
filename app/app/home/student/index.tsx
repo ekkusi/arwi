@@ -91,6 +91,12 @@ const StudentPage_GetStudent_Query = graphql(
           collection {
             id
             date
+            type {
+              id
+              weight
+              name
+              category
+            }
           }
         }
       }
@@ -135,12 +141,14 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   } = analyzeEvaluationsAdvanced([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
 
+  const classParticipationType = collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
+
   return (
     <Layout style={{ backgroundColor: "white" }}>
       <ScrollView>
         <CView style={{ padding: "lg", gap: 30 }}>
           <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "xl" }}>
-            <CView style={{ width: "55%" }}>
+            <CView style={{ width: "50%" }}>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{student.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.currentModule.info.label.fi}</CText>
@@ -157,10 +165,13 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             <GradeSuggestionView
               skillsMean={skillsMean}
               behaviourMean={behaviourMean}
+              classParticipationWeight={classParticipationType?.weight || 0}
               otherEvaluations={otherEvaluations}
-              collectionTypes={collectionTypes}
               style={{ marginLeft: "lg" }}
               size="small"
+              infoButtonLinkAction={() => {
+                navigation.navigate("edit-evaluation-types", { groupId: student.group.id, onlyWeights: true });
+              }}
               hideEdit
             />
           </CView>

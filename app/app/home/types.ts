@@ -32,6 +32,7 @@ export type HomeStackParams = {
   };
   "edit-evaluation-types": {
     groupId: string;
+    onlyWeights?: boolean;
   };
   "collection-edit": {
     collectionId: string;

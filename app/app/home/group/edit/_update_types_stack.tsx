@@ -30,17 +30,20 @@ const { Navigator, Screen } = createNativeStackNavigator<UpdateTypesStackParams>
 
 export default function UpdateTypesStack({ route }: NativeStackScreenProps<HomeStackParams, "edit-evaluation-types">) {
   const { t } = useTranslation();
+  const { groupId, onlyWeights } = route.params;
 
   const { data, loading } = useQuery(UpdateTypesProvider_GetGroup_Query, {
-    variables: { groupId: route.params.groupId },
+    variables: { groupId },
   });
 
   if (loading || !data) return <LoadingIndicator />;
 
+  const initialRouteName = onlyWeights ? "group-edit-collection-types-weights" : "group-edit-collection-types";
+
   return (
     <UpdateTypesProvider initialTypes={data.getGroup.currentModule.collectionTypes}>
       <Navigator
-        initialRouteName="group-edit-collection-types"
+        initialRouteName={initialRouteName}
         screenOptions={() => ({
           animationTypeForReplace: "push",
           title: t("edit-evaluation-types", "Muokkaa arviointisisältöjä"),
@@ -53,7 +56,11 @@ export default function UpdateTypesStack({ route }: NativeStackScreenProps<HomeS
           component={EditTypesView}
           initialParams={{ groupId: data.getGroup.id, originalTypes: data.getGroup.currentModule.collectionTypes }}
         />
-        <Screen name="group-edit-collection-types-weights" component={EditTypeWeightsView} />
+        <Screen
+          name="group-edit-collection-types-weights"
+          component={EditTypeWeightsView}
+          initialParams={{ groupId: data.getGroup.id, hideBackButton: onlyWeights, originalTypes: data.getGroup.currentModule.collectionTypes }}
+        />
       </Navigator>
     </UpdateTypesProvider>
   );

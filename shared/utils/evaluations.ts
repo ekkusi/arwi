@@ -139,7 +139,15 @@ export const analyzeEvaluationsAdvanced = (evaluations: Evaluation[]) => {
   return result;
 };
 
-export type MinimalDefaultEvaluation = Pick<DefaultEvaluation, "rating"> & { collection: { id: string } };
+export type MinimalDefaultEvaluation = Pick<DefaultEvaluation, "rating"> & {
+  collection: {
+    id: string;
+    type: {
+      id: string;
+      weight: number;
+    };
+  };
+};
 
 export type GradeSuggestionMeanValue =
   | number
@@ -148,16 +156,10 @@ export type GradeSuggestionMeanValue =
       weight: number;
     };
 
-type MinimalCollectionType = Pick<CollectionType, "id" | "category" | "weight"> & {
-  defaultTypeCollection?: Maybe<{
-    id: string;
-  }>;
-};
-
 export const calculateGradeSuggestion = (
   skillsMean: number,
   behaviourMean: number,
-  collectionTypes: MinimalCollectionType[],
+  classParticipationWeight: number,
   defaultTypeEvaluations: MinimalDefaultEvaluation[],
   options?: { skillsWeight: number; behaviourWeight: number }
 ) => {
@@ -166,20 +168,16 @@ export const calculateGradeSuggestion = (
   if (skillsWeight + behaviourWeight !== 1) throw new Error("The sum of the weights must be 1");
 
   const classParticipationGrade = skillsMean * skillsWeight + behaviourMean * behaviourWeight;
-  let weightSum = 0;
-  let weightedRating = 0;
-  collectionTypes.forEach((colType) => {
-    if (colType.category === "CLASS_PARTICIPATION") {
-      weightSum += colType.weight;
-      weightedRating += classParticipationGrade * colType.weight;
-    } else if (colType.defaultTypeCollection != null) {
-      const collEvaluation = defaultTypeEvaluations.find((ev) => ev.collection.id === colType.defaultTypeCollection!.id);
-      if (collEvaluation?.rating) {
-        weightSum += colType.weight;
-        weightedRating += colType.weight * collEvaluation.rating;
-      }
+  let weightSum = classParticipationWeight;
+  let weightedRating = classParticipationGrade * classParticipationWeight;
+
+  defaultTypeEvaluations.forEach((evaluation) => {
+    if (evaluation.rating) {
+      weightSum += evaluation.collection.type.weight;
+      weightedRating += evaluation.collection.type.weight * evaluation.rating;
     }
   });
   const gradeSuggestion = weightedRating / weightSum;
+
   return gradeSuggestion;
 };

@@ -711,6 +711,14 @@ const resolvers: MutationResolvers<CustomContext> = {
                     id: true,
                     typeId: true,
                   },
+                  include: {
+                    type: {
+                      select: {
+                        id: true,
+                        weight: true,
+                      },
+                    },
+                  },
                 },
               },
             },
