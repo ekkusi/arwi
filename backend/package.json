@@ -1,6 +1,6 @@
 {
   "name": "arwi-backend",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "private": true,
   "workspaces": {
     "nohoist": [
@@ -12,7 +12,7 @@
     "dev": "npm run kill && cross-env TS_NODE_DEV=true NODE_ENV=development APP_VERSION=$npm_package_version ts-node-dev --exit-child --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
     "kill": "bash ./scripts/kill-process.sh",
     "start": "APP_VERSION=$npm_package_version node lib/index.js",
-    "build": "tsc -p tsconfig.prod.json && copyfiles -u 1 \"src/**/*.graphql\" \"src/**/*.json\" lib",
+    "build": "tsc --build --verbose tsconfig.prod.json && copyfiles -u 1 \"src/**/*.graphql\" \"src/**/*.json\" lib",
     "type-check": "tsc --noEmit",
     "prisma:migrate-test": "dotenv -e .env.test -- npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
@@ -41,6 +41,7 @@
     "@sentry/node": "^7.93.0",
     "@sentry/profiling-node": "^1.3.5",
     "@types/nodemailer": "^6.4.14",
+    "arwi-shared": "*",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "connect-redis": "^7.1.0",
@@ -65,6 +66,8 @@
     "openai": "^4.6.0",
     "openid-client": "^5.6.1",
     "patch-package": "^8.0.0",
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "^0.14.0",
     "postinstall-postinstall": "^2.1.0",
     "uuid": "^9.0.1"
   },
@@ -82,6 +85,7 @@
     "@types/jest": "^29.5.0",
     "@types/module-alias": "^2.0.4",
     "@types/node": "^20.2.1",
+    "@types/pdfkit": "^0.13.4",
     "@types/supertest": "^2.0.16",
     "@types/uuid": "^9.0.1",
     "copyfiles": "^2.4.1",

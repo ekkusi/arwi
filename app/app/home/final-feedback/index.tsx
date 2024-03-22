@@ -122,7 +122,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         message = t(
           "all-students-not-evaluated",
           `Ryhmässä on {{count}} oppilasta, joilla on alle {{minimumEvalsForFeedback}} täysin arvioitua arviointia. Kyseisille oppilaille ei ole mahdollista luoda sanallista loppupalautetta.`,
-          { count: studentsWithInsufficientEvaluations.length, minimumEvalsForFeedback }
+          {
+            count: studentsWithInsufficientEvaluations.length,
+            minimumEvalsForFeedback,
+          }
         );
     }
     return (
@@ -240,9 +243,18 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
           {isGeneratingDisabled && (
             <CButton
               variant="empty"
-              textStyle={{ color: "primary", fontWeight: "600", marginTop: "md" }}
+              textStyle={{
+                color: "primary",
+                fontWeight: "600",
+                marginTop: "md",
+              }}
               title={t("inspect-feedback-suggestions", "Tarkastele arvosanaehdotuksia")}
-              onPress={() => navigation.navigate("final-feedback-results", { groupId, noRedirect: true })}
+              onPress={() =>
+                navigation.navigate("final-feedback-results", {
+                  groupId,
+                  noRedirect: true,
+                })
+              }
             />
           )}
           <CText style={{ fontSize: "sm", fontWeight: "300", marginTop: "lg" }}>

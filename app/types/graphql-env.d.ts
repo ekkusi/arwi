@@ -331,7 +331,7 @@ export type introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "EmailAddress",
                     "ofType": null
                   }
                 }
@@ -390,7 +390,7 @@ export type introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "EmailAddress",
                     "ofType": null
                   }
                 }
@@ -497,7 +497,7 @@ export type introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "EmailAddress",
                     "ofType": null
                   }
                 }
@@ -1124,6 +1124,41 @@ export type introspection = {
                 }
               }
             ]
+          },
+          {
+            "name": "sendFeedbackEmail",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "ENUM",
+                "name": "SendMailResult",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "groupId",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                }
+              },
+              {
+                "name": "email",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "EmailAddress",
+                    "ofType": null
+                  }
+                }
+              }
+            ]
           }
         ],
         "interfaces": []
@@ -1287,6 +1322,24 @@ export type introspection = {
               "kind": "SCALAR",
               "name": "EmailAddress",
               "ofType": null
+            },
+            "args": []
+          },
+          {
+            "name": "verifiedEmails",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "EmailAddress",
+                    "ofType": null
+                  }
+                }
+              }
             },
             "args": []
           },
@@ -1556,6 +1609,18 @@ export type introspection = {
           }
         ],
         "interfaces": []
+      },
+      {
+        "kind": "ENUM",
+        "name": "SendMailResult",
+        "enumValues": [
+          {
+            "name": "EMAIL_VERIFICATION_REQUIRED"
+          },
+          {
+            "name": "GENERATION_STARTED_SUCCESSFULLY"
+          }
+        ]
       },
       {
         "kind": "OBJECT",

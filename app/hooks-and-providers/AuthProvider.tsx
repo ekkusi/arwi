@@ -1,6 +1,18 @@
 import React, { createContext, useCallback, useState } from "react";
 import { Teacher } from "arwi-backend/src/types";
 import { removeSessionId } from "../helpers/session";
+import { FragmentOf, graphql, readFragment } from "@/graphql";
+
+export const AuthProvider_UserInfo_Fragment = graphql(`
+  fragment AuthProvider_UserInfo on Teacher {
+    id
+    email
+    languagePreference
+    consentsAnalytics
+    isMPassIDConnected
+    verifiedEmails
+  }
+`);
 
 type UserInfo = Omit<Teacher, "passwordHash" | "groups" | "monthlyTokensUsed">;
 
@@ -16,7 +28,7 @@ const initialState: AuthState = {
 
 type AuthContextType = {
   authState: AuthState;
-  setUser: (user: UserInfo) => void;
+  setUser: (user: FragmentOf<typeof AuthProvider_UserInfo_Fragment>) => void;
   logout: () => void;
 };
 
@@ -52,9 +64,10 @@ function AuthProvider({ children }: React.PropsWithChildren<{}>) {
     });
   }, []);
 
-  const setUser = useCallback((user: UserInfo) => {
+  const setUser = useCallback((user: FragmentOf<typeof AuthProvider_UserInfo_Fragment>) => {
+    const userData = readFragment(AuthProvider_UserInfo_Fragment, user);
     setAuthState({
-      user,
+      user: userData,
       authenticated: true,
     });
   }, []);

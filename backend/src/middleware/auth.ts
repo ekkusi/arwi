@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
 import { Client } from "openid-client";
+import * as Sentry from "@sentry/node";
 import { isValidApiToken, logOut } from "../utils/auth";
 import { API_TOKEN_HEADER_NAME, SESSION_ABSOLUTE_TIMEOUT_MS, SESSION_TYPE_HEADER_NAME } from "../config";
+import { teacherLoader } from "@/graphql/dataLoaders/teacher";
 
 export const checkAuth = (): RequestHandler => {
   return async (req, res, next) => {
@@ -53,6 +55,21 @@ export const checkSessionTimeout: RequestHandler = async (req, res, next) => {
     }
   }
 
+  next();
+};
+
+export const fetchSessionUserInfo: RequestHandler = async (req, res, next) => {
+  if (req.session.userInfo) {
+    try {
+      const userInfo = await teacherLoader.load(req.session.userInfo.id);
+      req.session.userInfo = { ...req.session.userInfo, ...userInfo };
+    } catch (error) {
+      console.error("No user info found for session", error);
+      req.session.userInfo = undefined;
+      req.session.tokenSet = undefined;
+      Sentry.captureException(error);
+    }
+  }
   next();
 };
 

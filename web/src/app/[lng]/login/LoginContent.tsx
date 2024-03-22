@@ -11,7 +11,7 @@ import { getErrorMessage } from "../../../utils/errorUtils";
 import { useAuth } from "../../../hooks-and-providers/AuthProvider";
 
 const LoginPageContent_Login_Mutation = graphql(`
-  mutation LoginPageContent_Login($email: String!, $password: String!) {
+  mutation LoginPageContent_Login($email: EmailAddress!, $password: String!) {
     login(email: $email, password: $password) {
       userData {
         email

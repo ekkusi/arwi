@@ -6,7 +6,7 @@ import { TestGroup, TestTeacher, createTestGroup, createTestUserAndLogin } from 
 import { formatDate } from "../../utils/date";
 import { collectionLoader, collectionsByModuleLoader } from "../../graphql/dataLoaders/collection";
 import { groupLoader } from "../../graphql/dataLoaders/group";
-import { isDefaultCollection } from "../../types/typeGuards";
+import { isDefaultCollection } from "arwi-backend/src/types/typeGuards";
 
 describe("createDefaultCollection", () => {
   let graphqlRequest: TestGraphQLRequest;

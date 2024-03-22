@@ -1,3 +1,4 @@
+// Trigger EAS Github action build
 const withBuilderDevTools = require("@builder.io/dev-tools/next")();
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
@@ -49,6 +50,7 @@ const nextConfig = withBuilderDevTools(
     experimental: {
       serverActions: true,
     },
+    transpilePackages: ["arwi-shared"],
   })
 );
 

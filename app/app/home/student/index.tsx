@@ -6,6 +6,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { isClassParticipationEvaluation, isDefaultEvaluation } from "arwi-backend/src/types/typeGuards";
 import { CollectionType } from "arwi-backend/src/types";
+import { analyzeEvaluationsAdvanced } from "arwi-shared";
 import EvaluationsAccordion, { EvaluationsAccordion_Evaluation_Fragment } from "../../../components/evaluations/EvaluationsAccordion";
 import LoadingIndicator from "../../../components/ui/LoadingIndicator";
 import CText from "../../../components/primitives/CText";
@@ -13,7 +14,7 @@ import CView from "../../../components/primitives/CView";
 import { graphql } from "@/graphql";
 import { HomeStackParams } from "../types";
 import CircledNumber from "../../../components/ui/CircledNumber";
-import { analyzeEvaluations, parseFloatToGradeString } from "../../../helpers/evaluationUtils";
+import { parseFloatToGradeString } from "../../../helpers/evaluationUtils";
 import EvaluationsBarChart, { EvaluationsBarChart_Evaluation_Fragment } from "../../../components/charts/EvaluationsBarChart";
 import EvaluationStatistics, { EvaluationStatistics_Evaluation_Fragment } from "../../../components/charts/EvaluationStatistics";
 import InfoButton from "../../../components/ui/InfoButton";
@@ -129,15 +130,15 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   const {
     absencesAmount,
     presencesAmount,
-    skillsAverage,
+    skillsMean,
     skillsMedian,
     skillsMode,
     skillsMeanByEnvironments,
-    behaviourAverage,
+    behaviourMean,
     behaviourMedian,
     behaviourMode,
     behaviourMeanByEnvironments,
-  } = analyzeEvaluations([...classParticipationEvaluations]);
+  } = analyzeEvaluationsAdvanced([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
 
   const classParticipationType = collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
@@ -162,8 +163,8 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               </CText>
             </CView>
             <GradeSuggestionView
-              skillsMean={skillsAverage}
-              behaviourMean={behaviourAverage}
+              skillsMean={skillsMean}
+              behaviourMean={behaviourMean}
               classParticipationWeight={classParticipationType?.weight || 0}
               otherEvaluations={otherEvaluations}
               style={{ marginLeft: "lg" }}
@@ -286,13 +287,13 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
               <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
                 <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("skills-mean", "Taitojen keskiarvo")} </CText>
                 <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
-                  {Number.isNaN(skillsAverage) ? "-" : skillsAverage.toPrecision(2)}
+                  {Number.isNaN(skillsMean) ? "-" : skillsMean.toPrecision(2)}
                 </CText>
               </CView>
               <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
                 <CText style={{ flex: 3, fontSize: "sm", fontWeight: "600" }}>{t("behaviour-mean", "Työskentelyn keskiarvo")} </CText>
                 <CText style={{ textAlign: "right", flex: 1, fontSize: "lg", fontWeight: "700" }}>
-                  {Number.isNaN(behaviourAverage) ? "-" : behaviourAverage.toPrecision(2)}
+                  {Number.isNaN(behaviourMean) ? "-" : behaviourMean.toPrecision(2)}
                 </CText>
               </CView>
               <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>

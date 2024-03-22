@@ -31,6 +31,7 @@ export const mapCreateTeacherInput = (data: Omit<CreateTeacherInput, "password">
     passwordHash,
     languagePreference: data.languagePreference === null ? undefined : data.languagePreference,
     consentsAnalytics: data.consentsAnalytics === null ? undefined : data.consentsAnalytics,
+    verifiedEmails: [data.email],
   };
 };
 
@@ -163,4 +164,37 @@ export const mapTeacherUsageData = (teacher: Teacher): TeacherUsageData => {
     monthlyTokensUsed: teacher.monthlyTokensUsed,
     warning: warningData,
   };
+};
+
+export type EvaluationWithCollectionTypeInfo = Evaluation & { evaluationCollection: Pick<EvaluationCollection, "typeId"> };
+export type ClassParticipationEvaluationWithCollectionTypeInfo<T extends EvaluationWithCollectionTypeInfo = EvaluationWithCollectionTypeInfo> = Omit<
+  T,
+  "behaviourRating" | "skillsRating"
+>;
+export type DefaultEvaluationWithCollectionTypeInfo<T extends EvaluationWithCollectionTypeInfo = EvaluationWithCollectionTypeInfo> = Omit<
+  T,
+  "generalRating"
+>;
+
+type EvaluationsByCollectionType<T extends EvaluationWithCollectionTypeInfo = EvaluationWithCollectionTypeInfo> = {
+  classParticipationEvaluations: ClassParticipationEvaluationWithCollectionTypeInfo<T>[];
+  defaultEvaluations: DefaultEvaluationWithCollectionTypeInfo<T>[];
+};
+
+export const mapEvaluationsByCollectionType = <T extends EvaluationWithCollectionTypeInfo>(
+  evaluations: T[],
+  collectionTypes: CollectionType[]
+): EvaluationsByCollectionType<T> => {
+  const classParticipationEvaluations: ClassParticipationEvaluationWithCollectionTypeInfo<T>[] = [];
+  const defaultEvaluations: DefaultEvaluationWithCollectionTypeInfo<T>[] = [];
+  evaluations.forEach((evaluation) => {
+    const collectionType = collectionTypes.find((type) => type.id === evaluation.evaluationCollection.typeId);
+    if (!collectionType) return;
+    if (collectionType.category === "CLASS_PARTICIPATION") {
+      classParticipationEvaluations.push(evaluation as ClassParticipationEvaluationWithCollectionTypeInfo<T>);
+    } else {
+      defaultEvaluations.push(evaluation as DefaultEvaluationWithCollectionTypeInfo<T>);
+    }
+  });
+  return { classParticipationEvaluations, defaultEvaluations };
 };

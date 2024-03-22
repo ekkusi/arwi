@@ -1,0 +1,24 @@
+{
+  "name": "arwi-shared",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Arwi shared module",
+  "author": "Arwi",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "devDependencies": {
+    "@graphql-codegen/add": "^5.0.2",
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/introspection": "4.0.3",
+    "@graphql-codegen/typescript": "4.0.6",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "preinstall": "node ./patch-yarn.js",
+    "build": "tsc",
+    "dev": "tsc -w",
+    "codegen": "graphql-codegen --config codegen.ts",
+    "postinstall": "echo \"Running shared postinstall\" && npm run build"
+  }
+}

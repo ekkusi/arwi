@@ -2,7 +2,7 @@ import { useState } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { Slider } from "@miblanchard/react-native-slider";
-import { DefaultEvaluation, CollectionType, DefaultCollection } from "arwi-backend/src/types";
+import { calculateGradeSuggestion } from "arwi-shared";
 import { COLORS } from "../../../../theme";
 import CButton from "../../../../components/primitives/CButton";
 import CText from "../../../../components/primitives/CText";
@@ -11,6 +11,7 @@ import CircledNumber from "../../../../components/ui/CircledNumber";
 import CModal from "../../../../components/modals/CModal";
 import InfoButton from "../../../../components/ui/InfoButton";
 import { useModal } from "../../../../hooks-and-providers/ModalProvider";
+import { FragmentOf, graphql, readFragment } from "@/graphql";
 
 const ALPHABETS = "ABCDEFGHIJKLMNOPQRSTUVWYXZ";
 const APPROX_SIGN = "\u2248";
@@ -22,17 +23,26 @@ const getAlphabet = (i: number) => {
   return "";
 };
 
-type PartialEvaluation = Pick<DefaultEvaluation, "__typename" | "id" | "rating"> & {
-  collection: Pick<DefaultCollection, "id"> & {
-    type: Pick<CollectionType, "id" | "category" | "name" | "weight">;
-  };
-};
+export const GradeSuggestionView_DefaultEvaluation_Fragment = graphql(`
+  fragment GradeSuggestionView_DefaultEvaluation on DefaultEvaluation {
+    id
+    rating
+    collection {
+      id
+      type {
+        id
+        weight
+        name
+      }
+    }
+  }
+`);
 
 type GradeSuggestionViewProps = CViewProps & {
   skillsMean: number;
   behaviourMean: number;
   classParticipationWeight: number;
-  otherEvaluations: PartialEvaluation[];
+  defaultTypeEvaluations: FragmentOf<typeof GradeSuggestionView_DefaultEvaluation_Fragment>[];
   size?: "large" | "small";
   hideEdit?: boolean;
   infoButtonLinkAction?: () => void;
@@ -42,7 +52,7 @@ export default function GradeSuggestionView({
   skillsMean,
   behaviourMean,
   classParticipationWeight,
-  otherEvaluations,
+  defaultTypeEvaluations: defaultTypeEvaluationFragments,
   size = "large",
   hideEdit = false,
   infoButtonLinkAction,
@@ -52,16 +62,13 @@ export default function GradeSuggestionView({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openModal, closeModal } = useModal();
   const [gradeSuggestionSkillsWeight, setGradeSuggestionSkillWeight] = useState(0.5);
-  const classParticipationGrade = skillsMean * gradeSuggestionSkillsWeight + behaviourMean * (1 - gradeSuggestionSkillsWeight);
-  let weightSum = classParticipationWeight;
-  let weightedRating = classParticipationGrade * classParticipationWeight;
-  otherEvaluations.forEach((evaluation) => {
-    if (evaluation.rating) {
-      weightSum += evaluation.collection.type.weight;
-      weightedRating += evaluation.collection.type.weight * evaluation.rating;
-    }
+
+  const defaultEvaluations = readFragment(GradeSuggestionView_DefaultEvaluation_Fragment, defaultTypeEvaluationFragments);
+
+  const gradeSuggestion = calculateGradeSuggestion(skillsMean, behaviourMean, classParticipationWeight, defaultEvaluations, {
+    skillsWeight: gradeSuggestionSkillsWeight,
+    behaviourWeight: 1 - gradeSuggestionSkillsWeight,
   });
-  const gradeSuggestion = weightedRating / weightSum;
 
   const constOpenGradeSuggestionInfoView = () => {
     openModal({
@@ -86,7 +93,7 @@ export default function GradeSuggestionView({
               </CText>
               <CText style={{ fontSize: "md", fontWeight: "500" }}>{Math.round(10 * behaviourMean) / 10}</CText>
             </CView>
-            {otherEvaluations.map((evaluation, i) => (
+            {defaultEvaluations.map((evaluation, i) => (
               <CView key={evaluation.id} style={{ flexDirection: "row", justifyContent: "space-between" }}>
                 <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
                   <CText style={{ fontSize: "md", fontWeight: "500" }}>{getAlphabet(i + 1)}</CText>: {evaluation.collection.type.name}
@@ -98,7 +105,7 @@ export default function GradeSuggestionView({
           <CText style={{ fontSize: "md", fontWeight: "500" }}>
             {(gradeSuggestionSkillsWeight * classParticipationWeight) / 100}A<CText style={{ fontSize: "sm", fontWeight: "500" }}>1</CText> +{" "}
             {((1 - gradeSuggestionSkillsWeight) * classParticipationWeight) / 100}A<CText style={{ fontSize: "sm", fontWeight: "500" }}>2</CText>
-            {otherEvaluations.map((evaluation, i) => (
+            {defaultEvaluations.map((evaluation, i) => (
               <CText key={evaluation.id} style={{ fontSize: "md", fontWeight: "500" }}>
                 {" "}
                 + {evaluation.collection.type.weight / 100}
@@ -124,6 +131,7 @@ export default function GradeSuggestionView({
       ),
     });
   };
+
   return (
     <>
       <CModal isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} closeButton={false} placement="bottom">

@@ -3,6 +3,17 @@ import createServer, { TestGraphQLRequest } from "../createTestServer";
 import { TestTeacher, createTestUser } from "../testHelpers";
 import prisma from "../../prismaClient";
 
+const query = graphql(`
+  mutation RegisterTest_Register($data: CreateTeacherInput!) {
+    register(data: $data) {
+      userData {
+        email
+        verifiedEmails
+      }
+    }
+  }
+`);
+
 describe("Register", () => {
   let graphqlRequest: TestGraphQLRequest;
   let existingTeacher: TestTeacher;
@@ -19,7 +30,7 @@ describe("Register", () => {
     await prisma.teacher.deleteMany();
   });
 
-  it("should register a new teacher", async () => {
+  it("should register a new teacher correctly", async () => {
     const password = "password";
     const teacherData = {
       data: {
@@ -28,19 +39,10 @@ describe("Register", () => {
       },
     };
 
-    const query = graphql(`
-      mutation RegisterTest_Register($data: CreateTeacherInput!) {
-        register(data: $data) {
-          userData {
-            email
-          }
-        }
-      }
-    `);
-
     const response = await graphqlRequest(query, teacherData);
 
     expect(response.data?.register.userData.email).toEqual(teacherData.data.email);
+    expect(response.data?.register.userData.verifiedEmails).toEqual([teacherData.data.email]);
   });
 
   it("should throw an error if email is already in use", async () => {
@@ -50,16 +52,6 @@ describe("Register", () => {
         password: "password",
       },
     };
-
-    const query = graphql(`
-      mutation RegisterTest_RegisterExistingEmail($data: CreateTeacherInput!) {
-        register(data: $data) {
-          userData {
-            email
-          }
-        }
-      }
-    `);
 
     const response = await graphqlRequest(query, userData);
 
@@ -73,16 +65,6 @@ describe("Register", () => {
         password: "password",
       },
     };
-
-    const query = graphql(`
-      mutation RegisterTest_RegisterEmailInLowerCase($data: CreateTeacherInput!) {
-        register(data: $data) {
-          userData {
-            email
-          }
-        }
-      }
-    `);
 
     const response = await graphqlRequest(query, userData);
 
@@ -98,16 +80,6 @@ describe("Register", () => {
         languagePreference: "invalid_language",
       },
     };
-
-    const query = graphql(`
-      mutation RegisterTest_RegisterInvalidLanguage($data: CreateTeacherInput!) {
-        register(data: $data) {
-          userData {
-            email
-          }
-        }
-      }
-    `);
 
     const response = await graphqlRequest(query, userData);
 

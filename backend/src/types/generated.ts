@@ -108,6 +108,7 @@ export type Mutation = {
   generateGroupFeedback: GenerateGroupFeedbackResult;
   fixTextGrammatics: FixTextGrammaticsResult;
   setTokenUseWarningSeen: Scalars['Boolean'];
+  sendFeedbackEmail: SendMailResult;
 };
 
 
@@ -117,7 +118,7 @@ export type MutationRegisterArgs = {
 
 
 export type MutationLoginArgs = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
   password: Scalars['String'];
 };
 
@@ -128,7 +129,7 @@ export type MutationMPassIdLoginArgs = {
 
 
 export type MutationRequestPasswordResetArgs = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
 };
 
 
@@ -149,7 +150,7 @@ export type MutationConnectMPassIdArgs = {
 
 
 export type MutationConnectLocalCredentialsArgs = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
   password: Scalars['String'];
 };
 
@@ -264,6 +265,12 @@ export type MutationSetTokenUseWarningSeenArgs = {
   warning: TokenUseWarning;
 };
 
+
+export type MutationSendFeedbackEmailArgs = {
+  groupId: Scalars['ID'];
+  email: Scalars['EmailAddress'];
+};
+
 export type AppMetadata = {
   __typename?: 'AppMetadata';
   appVersion: Scalars['String'];
@@ -289,6 +296,7 @@ export type Teacher = {
   __typename?: 'Teacher';
   id: Scalars['ID'];
   email?: Maybe<Scalars['EmailAddress']>;
+  verifiedEmails: Array<Scalars['EmailAddress']>;
   groups: Array<Group>;
   languagePreference: Scalars['String'];
   consentsAnalytics: Scalars['Boolean'];
@@ -328,6 +336,10 @@ export type FixTextGrammaticsResult = {
   tokensUsed: Scalars['Int'];
   usageData: TeacherUsageData;
 };
+
+export type SendMailResult =
+  | 'EMAIL_VERIFICATION_REQUIRED'
+  | 'GENERATION_STARTED_SUCCESSFULLY';
 
 export type LoginResult = {
   __typename?: 'LoginResult';
@@ -721,6 +733,7 @@ export type ResolversTypes = {
   GenerateStudentFeedbackResult: ResolverTypeWrapper<Omit<GenerateStudentFeedbackResult, 'feedback'> & { feedback: ResolversTypes['Feedback'] }>;
   GenerateGroupFeedbackResult: ResolverTypeWrapper<Omit<GenerateGroupFeedbackResult, 'feedbacks'> & { feedbacks: Array<ResolversTypes['Feedback']> }>;
   FixTextGrammaticsResult: ResolverTypeWrapper<FixTextGrammaticsResult>;
+  SendMailResult: SendMailResult;
   LoginResult: ResolverTypeWrapper<Omit<LoginResult, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   TranslatedString: ResolverTypeWrapper<TranslatedString>;
   TokenUseWarning: TokenUseWarning;
@@ -874,6 +887,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   generateGroupFeedback?: Resolver<ResolversTypes['GenerateGroupFeedbackResult'], ParentType, ContextType, RequireFields<MutationGenerateGroupFeedbackArgs, 'groupId'>>;
   fixTextGrammatics?: Resolver<ResolversTypes['FixTextGrammaticsResult'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'text'>>;
   setTokenUseWarningSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetTokenUseWarningSeenArgs, 'warning'>>;
+  sendFeedbackEmail?: Resolver<ResolversTypes['SendMailResult'], ParentType, ContextType, RequireFields<MutationSendFeedbackEmailArgs, 'groupId' | 'email'>>;
 };
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
@@ -900,6 +914,7 @@ export type MPassIdAuthPayloadResolvers<ContextType = CustomContext, ParentType 
 export type TeacherResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Teacher'] = ResolversParentTypes['Teacher']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['EmailAddress']>, ParentType, ContextType>;
+  verifiedEmails?: Resolver<Array<ResolversTypes['EmailAddress']>, ParentType, ContextType>;
   groups?: Resolver<Array<ResolversTypes['Group']>, ParentType, ContextType>;
   languagePreference?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   consentsAnalytics?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;

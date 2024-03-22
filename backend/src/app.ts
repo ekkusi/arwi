@@ -8,7 +8,7 @@ import express from "express";
 import * as Sentry from "@sentry/node";
 import { APP_ENV, HELMET_OPTIONS, SESSION_OPTIONS, getAllowedOrigins } from "./config";
 import initAuth from "./routes/auth";
-import { checkAuthHeaders, checkSessionTimeout } from "./middleware/auth";
+import { checkAuthHeaders, checkSessionTimeout, fetchSessionUserInfo } from "./middleware/auth";
 import graphqlServer from "./graphql/server";
 import { errorHandler, notFoundHandler } from "./middleware/errors";
 import "express-async-errors";
@@ -57,6 +57,7 @@ app.use(cors({ credentials: true, origin: getAllowedOrigins() }));
 
 app.use(checkAuthHeaders);
 app.use(session(SESSION_OPTIONS));
+app.use(fetchSessionUserInfo);
 app.use(checkSessionTimeout);
 
 const createApp = async (contextOverrides?: Partial<CustomContext>) => {

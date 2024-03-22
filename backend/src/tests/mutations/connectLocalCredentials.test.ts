@@ -7,7 +7,7 @@ import { teacherLoader } from "../../graphql/dataLoaders/teacher";
 import { groupsByTeacherLoader } from "../../graphql/dataLoaders/group";
 
 const connectLocalCredentialsQuery = graphql(`
-  mutation ConnectLocalCredentials($email: String!, $password: String!) {
+  mutation ConnectLocalCredentials($email: EmailAddress!, $password: String!) {
     connectLocalCredentials(email: $email, password: $password) {
       userData {
         id

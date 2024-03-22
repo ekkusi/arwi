@@ -5,9 +5,9 @@ import * as Sentry from "@sentry/react-native";
 import { useMutation } from "@apollo/client";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useMemo } from "react";
+import { analyzeEvaluations } from "arwi-shared";
 import { FragmentOf, graphql, readFragment } from "@/graphql";
 import CText from "@/components/primitives/CText";
-import { analyzeEvaluations } from "@/helpers/evaluationUtils";
 import CView, { CViewProps } from "@/components/primitives/CView";
 import ModalTextInput from "@/components/form/ModalTextInput";
 import { useModal } from "@/hooks-and-providers/ModalProvider";
@@ -15,68 +15,61 @@ import SaveAndCancelButtons from "@/components/ui/SaveAndCancelButtons";
 import CButton from "@/components/primitives/CButton";
 import { useToast } from "@/hooks-and-providers/ToastProvider";
 import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
-import GradeSuggestionView from "../../../student/components/GradeSuggestionView";
+import GradeSuggestionView, { GradeSuggestionView_DefaultEvaluation_Fragment } from "../../../student/components/GradeSuggestionView";
 import { HomeStackParams } from "../../../types";
 import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
 import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
 import { useToggleTokenUseWarning } from "@/hooks-and-providers/monthlyTokenUseWarning";
 
-export const FinalFeedbackItem_Student_Fragment = graphql(`
-  fragment FinalFeedbackItem_Student on Student {
-    id
-    name
-    latestFeedback {
+export const FinalFeedbackItem_Student_Fragment = graphql(
+  `
+    fragment FinalFeedbackItem_Student on Student {
       id
-      text
-    }
-    group {
-      id
-      subject {
-        code
-      }
-      currentModule {
+      name
+      latestFeedback {
         id
-        collectionTypes {
-          id
-          name
-          weight
-          category
-        }
+        text
       }
-    }
-    currentModuleEvaluations {
-      id
-      notes
-      wasPresent
-      __typename
-      ... on ClassParticipationEvaluation {
-        behaviourRating
-        skillsRating
-        collection {
-          environment {
-            code
-            label {
-              fi
-            }
+      group {
+        id
+        subject {
+          code
+        }
+        currentModule {
+          collectionTypes {
+            id
+            weight
+            name
+            category
           }
         }
       }
-      ... on DefaultEvaluation {
-        rating
-      }
-      collection {
+      currentModuleEvaluations {
         id
-        date
-        type {
-          id
-          weight
-          category
-          name
+        notes
+        wasPresent
+        __typename
+        ... on ClassParticipationEvaluation {
+          behaviourRating
+          skillsRating
+          collection {
+            environment {
+              code
+              label {
+                fi
+              }
+            }
+          }
+        }
+        ... on DefaultEvaluation {
+          rating
+          ...GradeSuggestionView_DefaultEvaluation
         }
       }
     }
-  }
-`);
+  `,
+  [GradeSuggestionView_DefaultEvaluation_Fragment]
+);
 
 export const FinalFeedbackItem_GenerateStudentFeedback_Mutation = graphql(
   `
@@ -193,9 +186,9 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
   const classParticipationEvaluations =
     evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
 
-  const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
+  const defaultTypeEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
 
-  const { absencesAmount, presencesAmount, skillsAverage, behaviourAverage } = analyzeEvaluations([...classParticipationEvaluations]);
+  const { absencesAmount, presencesAmount, skillsMean, behaviourMean } = analyzeEvaluations([...classParticipationEvaluations]);
 
   const canGenerateFeedback = student.currentModuleEvaluations.filter((ev) => ev.wasPresent).length >= minimumEvalsForFeedback;
 
@@ -248,10 +241,10 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
             />
           </CView>
           <GradeSuggestionView
-            skillsMean={skillsAverage}
-            behaviourMean={behaviourAverage}
+            skillsMean={skillsMean}
+            behaviourMean={behaviourMean}
             classParticipationWeight={classParticipationType?.weight ?? 0}
-            otherEvaluations={otherEvaluations}
+            defaultTypeEvaluations={defaultTypeEvaluations}
             style={{ justifyContent: "center" }}
             infoButtonLinkAction={() => navigation.navigate("edit-evaluation-types", { groupId: student.group.id, onlyWeights: true })}
             size="small"
