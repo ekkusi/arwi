@@ -20,8 +20,8 @@ export const initSession = (req: Request, userInfo: UserSessionInfo, tokenSet?: 
   req.session.createdAt = Date.now();
 };
 
-const API_TOKENS = process.env.API_TOKENS?.split(",") || [];
+const HEADER_AUTH_API_TOKENS = process.env.HEADER_AUTH_API_TOKENS?.split(",") || [];
 
 export const isValidApiToken = (apiToken: string): boolean => {
-  return API_TOKENS.includes(apiToken);
+  return HEADER_AUTH_API_TOKENS.includes(apiToken);
 };

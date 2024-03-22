@@ -189,14 +189,10 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
   else if (!allStudentsHaveSufficientEvaluations || !allStudentsHaveThreeVerbalFeedback)
     bottomText = t("see-warnings-before-generation", "Huomioi keltaisella merkatut kohdat. Voit kuitenkin jatkaa loppupalautteen luontiin.");
   return (
-    <Layout
-      style={{
-        backgroundColor: "white",
-        paddingHorizontal: "md",
-        paddingVertical: "lg",
-      }}
-    >
-      <CText style={{ fontSize: "title", fontWeight: "500" }}>{group.name} - Loppuarviointi</CText>
+    <Layout style={{ backgroundColor: "white", paddingHorizontal: "md", paddingVertical: "lg" }}>
+      <CText style={{ fontSize: "title", fontWeight: "500" }}>
+        {t("group_final_feedback", "{{groupName}} - Loppuarviointi", { groupName: group.name })}
+      </CText>
       <CView style={{ gap: "2xl" }}>
         <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
           {t(

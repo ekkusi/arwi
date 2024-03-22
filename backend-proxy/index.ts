@@ -13,8 +13,8 @@ if (process.env.NODE_ENV === "production") {
     throw new Error("MAIN_API_URL environment variable is required in production");
   }
 }
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable is required to run the proxy server");
+if (!process.env.HEADER_AUTH_API_KEY) {
+  throw new Error("HEADER_AUTH_API_KEY environment variable is required to run the proxy server");
 }
 const mainApiUrl = process.env.MAIN_API_URL || "http://localhost:4000";
 
@@ -38,7 +38,7 @@ const proxyOptions: Options = {
   changeOrigin: true,
   onProxyReq: (proxyReq) => {
     // Add the API key to the proxied request
-    const apiKey = process.env.API_KEY;
+    const apiKey = process.env.HEADER_AUTH_API_KEY;
     if (!apiKey) {
       throw new Error("API key not found in environment variables");
     }

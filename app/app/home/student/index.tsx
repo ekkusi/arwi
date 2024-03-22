@@ -18,7 +18,7 @@ import { parseFloatToGradeString } from "../../../helpers/evaluationUtils";
 import EvaluationsBarChart, { EvaluationsBarChart_Evaluation_Fragment } from "../../../components/charts/EvaluationsBarChart";
 import EvaluationStatistics, { EvaluationStatistics_Evaluation_Fragment } from "../../../components/charts/EvaluationStatistics";
 import InfoButton from "../../../components/ui/InfoButton";
-import GradeSuggestionView from "./components/GradeSuggestionView";
+import GradeSuggestionView, { GradeSuggestionView_DefaultEvaluation_Fragment } from "./components/GradeSuggestionView";
 import EvaluationsHistogram, { EvaluationsHistogram_Evaluation_Fragment } from "../../../components/charts/EvaluationsHistogram";
 import Layout from "../../../components/layout/Layout";
 import CButton from "../../../components/primitives/CButton";
@@ -87,10 +87,17 @@ const StudentPage_GetStudent_Query = graphql(
           }
           ... on DefaultEvaluation {
             rating
+            ...GradeSuggestionView_DefaultEvaluation
           }
           collection {
             id
             date
+            type {
+              id
+              weight
+              name
+              category
+            }
           }
         }
       }
@@ -101,6 +108,7 @@ const StudentPage_GetStudent_Query = graphql(
     EvaluationsBarChart_Evaluation_Fragment,
     EvaluationsHistogram_Evaluation_Fragment,
     EvaluationsAccordion_Evaluation_Fragment,
+    GradeSuggestionView_DefaultEvaluation_Fragment,
   ]
 );
 
@@ -117,10 +125,10 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   const classParticipationEvaluations =
     evaluations.filter<WithTypename<(typeof evaluations)[number], "ClassParticipationEvaluation">>(isClassParticipationEvaluation);
 
-  const otherEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
+  const defaultTypeEvaluations = evaluations.filter<WithTypename<(typeof evaluations)[number], "DefaultEvaluation">>(isDefaultEvaluation);
 
   const collectionTypes = student.group.currentModule.collectionTypes as CollectionType[];
-  const otherCollectionTypes = collectionTypes.filter((coll) => coll.category !== "CLASS_PARTICIPATION");
+  const defaultCollectionTypes = collectionTypes.filter((coll) => coll.category !== "CLASS_PARTICIPATION");
   const {
     absencesAmount,
     presencesAmount,
@@ -135,12 +143,14 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
   } = analyzeEvaluationsAdvanced([...classParticipationEvaluations]);
   const moduleInfo = student.group.currentModule.info;
 
+  const classParticipationType = collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
+
   return (
     <Layout style={{ backgroundColor: "white" }}>
       <ScrollView>
         <CView style={{ padding: "lg", gap: 30 }}>
           <CView style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: "xl" }}>
-            <CView style={{ width: "55%" }}>
+            <CView style={{ width: "50%" }}>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{student.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.name}</CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{student.group.currentModule.info.label.fi}</CText>
@@ -157,22 +167,25 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             <GradeSuggestionView
               skillsMean={skillsMean}
               behaviourMean={behaviourMean}
-              otherEvaluations={otherEvaluations}
-              collectionTypes={collectionTypes}
+              classParticipationWeight={classParticipationType?.weight ?? 0}
+              defaultTypeEvaluations={defaultTypeEvaluations}
               style={{ marginLeft: "lg" }}
               size="small"
+              infoButtonLinkAction={() => {
+                navigation.navigate("edit-evaluation-types", { groupId: student.group.id, onlyWeights: true });
+              }}
               hideEdit
             />
           </CView>
-          {otherCollectionTypes.length > 0 && (
+          {defaultCollectionTypes.length > 0 && (
             <CView style={{ width: "100%", gap: 20 }}>
               <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("evaluation-types", "Arvioitavat sisällöt")}</CText>
               <CView style={{ gap: 10 }}>
                 <Accordion
                   allowMultiple={false}
-                  data={[...otherCollectionTypes].map((type) => {
+                  data={[...defaultCollectionTypes].map((type) => {
                     const collectionEvaluation = type.defaultTypeCollection?.id
-                      ? otherEvaluations.find((ev) => ev.collection.id === type.defaultTypeCollection!.id)
+                      ? defaultTypeEvaluations.find((ev) => ev.collection.id === type.defaultTypeCollection!.id)
                       : undefined;
                     return {
                       key: type.id,

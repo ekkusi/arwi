@@ -1,0 +1,5 @@
+{
+  "obligatory": ["DB_USER", "DB_PASSWORD", "PGADMIN_ADMIN_EMAIL"],
+  "obligatory_prod": [],
+  "optional": []
+}

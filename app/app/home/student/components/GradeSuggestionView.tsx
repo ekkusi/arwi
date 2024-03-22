@@ -2,7 +2,6 @@ import { useState } from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTranslation } from "react-i18next";
 import { Slider } from "@miblanchard/react-native-slider";
-import { Alert } from "react-native";
 import { calculateGradeSuggestion } from "arwi-shared";
 import { COLORS } from "../../../../theme";
 import CButton from "../../../../components/primitives/CButton";
@@ -11,32 +10,29 @@ import CView, { CViewProps } from "../../../../components/primitives/CView";
 import CircledNumber from "../../../../components/ui/CircledNumber";
 import CModal from "../../../../components/modals/CModal";
 import InfoButton from "../../../../components/ui/InfoButton";
+import { useModal } from "../../../../hooks-and-providers/ModalProvider";
 import { FragmentOf, graphql, readFragment } from "@/graphql";
 
-export const GradeSuggestionView_CollectionType_Fragment = graphql(`
-  fragment GradeSuggestionView_CollectionType on CollectionType {
-    category
-    weight
-    name
-    id
-    defaultTypeCollection {
-      id
-      evaluations {
-        id
-        rating
-      }
-    }
+const ALPHABETS = "ABCDEFGHIJKLMNOPQRSTUVWYXZ";
+const APPROX_SIGN = "\u2248";
+
+const getAlphabet = (i: number) => {
+  if (i >= 0 && i < ALPHABETS.length) {
+    return ALPHABETS[i];
   }
-`);
+  return "";
+};
 
 export const GradeSuggestionView_DefaultEvaluation_Fragment = graphql(`
   fragment GradeSuggestionView_DefaultEvaluation on DefaultEvaluation {
+    id
     rating
     collection {
       id
       type {
         id
         weight
+        name
       }
     }
   }
@@ -45,32 +41,96 @@ export const GradeSuggestionView_DefaultEvaluation_Fragment = graphql(`
 type GradeSuggestionViewProps = CViewProps & {
   skillsMean: number;
   behaviourMean: number;
-  collectionTypes: FragmentOf<typeof GradeSuggestionView_CollectionType_Fragment>[];
+  classParticipationWeight: number;
   defaultTypeEvaluations: FragmentOf<typeof GradeSuggestionView_DefaultEvaluation_Fragment>[];
   size?: "large" | "small";
   hideEdit?: boolean;
+  infoButtonLinkAction?: () => void;
 };
 
 export default function GradeSuggestionView({
   skillsMean,
   behaviourMean,
-  collectionTypes: collectionTypeFragments,
+  classParticipationWeight,
   defaultTypeEvaluations: defaultTypeEvaluationFragments,
   size = "large",
   hideEdit = false,
+  infoButtonLinkAction,
   ...rest
 }: GradeSuggestionViewProps) {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { openModal, closeModal } = useModal();
   const [gradeSuggestionSkillsWeight, setGradeSuggestionSkillWeight] = useState(0.5);
 
-  const collectionTypes = readFragment(GradeSuggestionView_CollectionType_Fragment, collectionTypeFragments);
   const defaultEvaluations = readFragment(GradeSuggestionView_DefaultEvaluation_Fragment, defaultTypeEvaluationFragments);
 
-  const gradeSuggestion = calculateGradeSuggestion(skillsMean, behaviourMean, collectionTypes, defaultEvaluations, {
+  const gradeSuggestion = calculateGradeSuggestion(skillsMean, behaviourMean, classParticipationWeight, defaultEvaluations, {
     skillsWeight: gradeSuggestionSkillsWeight,
     behaviourWeight: 1 - gradeSuggestionSkillsWeight,
   });
+
+  const constOpenGradeSuggestionInfoView = () => {
+    openModal({
+      title: t("grade-suggestion", "Arvosanaehdotus"),
+      children: (
+        <CView style={{ gap: 15 }}>
+          <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+            Arvosanaehdotus lasketaan painotettuna summana ryhmän arviointisisällöille asetettujen painojen mukaisesti:
+          </CText>
+          <CView style={{ gap: -3 }}>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+                <CText style={{ fontSize: "md", fontWeight: "500" }}>A</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "500" }}>1</CText>: Tuntityöskentely, taidot
+              </CText>
+              <CText style={{ fontSize: "md", fontWeight: "500" }}>{Math.round(10 * skillsMean) / 10}</CText>
+            </CView>
+            <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+                <CText style={{ fontSize: "md", fontWeight: "500" }}>A</CText>
+                <CText style={{ fontSize: "sm", fontWeight: "500" }}>2</CText>: Tuntityöskentely, työskentely
+              </CText>
+              <CText style={{ fontSize: "md", fontWeight: "500" }}>{Math.round(10 * behaviourMean) / 10}</CText>
+            </CView>
+            {defaultEvaluations.map((evaluation, i) => (
+              <CView key={evaluation.id} style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+                  <CText style={{ fontSize: "md", fontWeight: "500" }}>{getAlphabet(i + 1)}</CText>: {evaluation.collection.type.name}
+                </CText>
+                <CText style={{ fontSize: "md", fontWeight: "500" }}>{evaluation.rating}</CText>
+              </CView>
+            ))}
+          </CView>
+          <CText style={{ fontSize: "md", fontWeight: "500" }}>
+            {(gradeSuggestionSkillsWeight * classParticipationWeight) / 100}A<CText style={{ fontSize: "sm", fontWeight: "500" }}>1</CText> +{" "}
+            {((1 - gradeSuggestionSkillsWeight) * classParticipationWeight) / 100}A<CText style={{ fontSize: "sm", fontWeight: "500" }}>2</CText>
+            {defaultEvaluations.map((evaluation, i) => (
+              <CText key={evaluation.id} style={{ fontSize: "md", fontWeight: "500" }}>
+                {" "}
+                + {evaluation.collection.type.weight / 100}
+                {getAlphabet(i + 1)}
+              </CText>
+            ))}{" "}
+            = {Math.round(100 * gradeSuggestion) / 100}
+          </CText>
+          <CView style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 5 }}>
+            <CText style={{ fontSize: "xl", fontWeight: "300" }}>{APPROX_SIGN}</CText>
+            <CircledNumber value={Math.round(gradeSuggestion)} size={46} decimals={0} />
+          </CView>
+          {infoButtonLinkAction && (
+            <CButton
+              title="Muokkaa painoarvoja"
+              onPress={() => {
+                closeModal();
+                infoButtonLinkAction();
+              }}
+            />
+          )}
+        </CView>
+      ),
+    });
+  };
 
   return (
     <>
@@ -135,13 +195,7 @@ export default function GradeSuggestionView({
             <InfoButton
               size={size === "large" ? 36 : 28}
               onPress={() => {
-                Alert.alert(
-                  t("grade-suggestion", "Arvosanaehdotus"),
-                  t(
-                    "grade-suggestion-info",
-                    "Arvosanaehdotus on laskettu painottamalla valittuja arviointisisältöjä ryhmälle asetettujen painojen mukaisesti. Painoja pääset tarkastelemaan ja muokkaamaan Ryhmä-sivulta."
-                  )
-                );
+                constOpenGradeSuggestionInfoView();
               }}
             />
           </CView>

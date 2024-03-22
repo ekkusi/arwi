@@ -15,10 +15,7 @@ import SaveAndCancelButtons from "@/components/ui/SaveAndCancelButtons";
 import CButton from "@/components/primitives/CButton";
 import { useToast } from "@/hooks-and-providers/ToastProvider";
 import { FeedbackCacheUpdate_Fragment } from "@/helpers/graphql/fragments";
-import GradeSuggestionView, {
-  GradeSuggestionView_CollectionType_Fragment,
-  GradeSuggestionView_DefaultEvaluation_Fragment,
-} from "../../../student/components/GradeSuggestionView";
+import GradeSuggestionView, { GradeSuggestionView_DefaultEvaluation_Fragment } from "../../../student/components/GradeSuggestionView";
 import { HomeStackParams } from "../../../types";
 import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
 import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
@@ -39,9 +36,11 @@ export const FinalFeedbackItem_Student_Fragment = graphql(
           code
         }
         currentModule {
-          id
           collectionTypes {
-            ...GradeSuggestionView_CollectionType
+            id
+            weight
+            name
+            category
           }
         }
       }
@@ -69,7 +68,7 @@ export const FinalFeedbackItem_Student_Fragment = graphql(
       }
     }
   `,
-  [GradeSuggestionView_CollectionType_Fragment, GradeSuggestionView_DefaultEvaluation_Fragment]
+  [GradeSuggestionView_DefaultEvaluation_Fragment]
 );
 
 export const FinalFeedbackItem_GenerateStudentFeedback_Mutation = graphql(
@@ -193,6 +192,8 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
 
   const canGenerateFeedback = student.currentModuleEvaluations.filter((ev) => ev.wasPresent).length >= minimumEvalsForFeedback;
 
+  const classParticipationType = student.group.currentModule.collectionTypes.find((type) => type.category === "CLASS_PARTICIPATION");
+
   const noFeedbackContent = useMemo(() => {
     return canGenerateFeedback ? (
       <>
@@ -242,9 +243,10 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
           <GradeSuggestionView
             skillsMean={skillsMean}
             behaviourMean={behaviourMean}
+            classParticipationWeight={classParticipationType?.weight ?? 0}
             defaultTypeEvaluations={defaultTypeEvaluations}
-            collectionTypes={student.group.currentModule.collectionTypes}
             style={{ justifyContent: "center" }}
+            infoButtonLinkAction={() => navigation.navigate("edit-evaluation-types", { groupId: student.group.id, onlyWeights: true })}
             size="small"
             hideEdit
           />
