@@ -36,7 +36,7 @@ jobs:
 
       - name: Setup Google Service Account
         run: |
-          echo '${{ secrets.GOOGLE_CREDENTIALS_BASE64 }}' > ./google-credentials.json
+          echo '${{ secrets.GOOGLE_CREDENTIALS_BASE64 }}' | base64 --decode | jq > ./google-credentials.json
 
       - name: Setup EAS
         uses: expo/expo-github-action@v8
