@@ -50,7 +50,7 @@ jobs:
             "MATOMO_URL=https://analytics.arwi.fi"
             "MATOMO_SITE_ID=2"
   deploy:
-    needs: [extra_branch, build]
+    needs: [extract_branch, build]
     runs-on: ubuntu-latest
     if: ${{ needs.extract_branch.outputs.branch != 'main' }}
     steps:
