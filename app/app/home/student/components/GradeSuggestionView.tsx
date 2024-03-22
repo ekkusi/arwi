@@ -76,20 +76,25 @@ export default function GradeSuggestionView({
       children: (
         <CView style={{ gap: 15 }}>
           <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
-            Arvosanaehdotus lasketaan painotettuna summana ryhmän arviointisisällöille asetettujen painojen mukaisesti:
+            {t(
+              "Arvosanaehdotus lasketaan painotettuna summana ryhmän arviointisisällöille asetettujen painojen mukaisesti:",
+              "grade-suggestion-info"
+            )}
           </CText>
           <CView style={{ gap: -3 }}>
             <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
               <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>A</CText>
-                <CText style={{ fontSize: "sm", fontWeight: "500" }}>1</CText>: Tuntityöskentely, taidot
+                <CText style={{ fontSize: "sm", fontWeight: "500" }}>1</CText>: {t("class-participation", "Tuntityöskentely")},{" "}
+                {t("skills", "taidot").toLocaleLowerCase()}
               </CText>
               <CText style={{ fontSize: "md", fontWeight: "500" }}>{Math.round(10 * skillsMean) / 10}</CText>
             </CView>
             <CView style={{ flexDirection: "row", justifyContent: "space-between" }}>
               <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
                 <CText style={{ fontSize: "md", fontWeight: "500" }}>A</CText>
-                <CText style={{ fontSize: "sm", fontWeight: "500" }}>2</CText>: Tuntityöskentely, työskentely
+                <CText style={{ fontSize: "sm", fontWeight: "500" }}>2</CText>: {t("class-participation", "Tuntityöskentely")},{" "}
+                {t("behaviour", "työskentely").toLocaleLowerCase()}
               </CText>
               <CText style={{ fontSize: "md", fontWeight: "500" }}>{Math.round(10 * behaviourMean) / 10}</CText>
             </CView>
@@ -102,18 +107,20 @@ export default function GradeSuggestionView({
               </CView>
             ))}
           </CView>
-          <CText style={{ fontSize: "md", fontWeight: "500" }}>
-            {(gradeSuggestionSkillsWeight * classParticipationWeight) / 100}A<CText style={{ fontSize: "sm", fontWeight: "500" }}>1</CText> +{" "}
-            {((1 - gradeSuggestionSkillsWeight) * classParticipationWeight) / 100}A<CText style={{ fontSize: "sm", fontWeight: "500" }}>2</CText>
-            {defaultEvaluations.map((evaluation, i) => (
-              <CText key={evaluation.id} style={{ fontSize: "md", fontWeight: "500" }}>
-                {" "}
-                + {evaluation.collection.type.weight / 100}
-                {getAlphabet(i + 1)}
-              </CText>
-            ))}{" "}
-            = {Math.round(100 * gradeSuggestion) / 100}
-          </CText>
+          <CView style={{ justifyContent: "center" }}>
+            <CText style={{ fontSize: "md", fontWeight: "500" }}>
+              {(gradeSuggestionSkillsWeight * classParticipationWeight) / 100}A<CText style={{ fontSize: "sm", fontWeight: "500" }}>1</CText> +{" "}
+              {((1 - gradeSuggestionSkillsWeight) * classParticipationWeight) / 100}A<CText style={{ fontSize: "sm", fontWeight: "500" }}>2</CText>
+              {defaultEvaluations.map((evaluation, i) => (
+                <CText key={evaluation.id} style={{ fontSize: "md", fontWeight: "500" }}>
+                  {" "}
+                  + {evaluation.collection.type.weight / 100}
+                  {getAlphabet(i + 1)}
+                </CText>
+              ))}{" "}
+              = {Math.round(100 * gradeSuggestion) / 100}
+            </CText>
+          </CView>
           <CView style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 5 }}>
             <CText style={{ fontSize: "xl", fontWeight: "300" }}>{APPROX_SIGN}</CText>
             <CircledNumber value={Math.round(gradeSuggestion)} size={46} decimals={0} />
