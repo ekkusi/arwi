@@ -43,7 +43,7 @@ jobs:
           tags: ekkusi/arwi-backend:${{ needs.extract_branch.outputs.branch == 'main' && 'latest' || needs.extract_branch.outputs.branch }}
           platforms: linux/amd64
   deploy:
-    needs: [extra_branch, build]
+    needs: [extract_branch, build]
     runs-on: ubuntu-latest
     if: ${{ needs.extract_branch.outputs.branch != 'main' }}
     steps:
