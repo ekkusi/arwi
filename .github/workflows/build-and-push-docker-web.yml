@@ -61,4 +61,4 @@ jobs:
           username: ${{ secrets.ARWI_USER }}
           key: ${{ secrets.ARWI_SSH_KEY }}
           script: |
-            ./scripts/prod/loadAndRestartStagingWeb.sh ${{ needs.extract_branch.outputs.branch }}
+            ./arwi-staging/scripts/prod/loadAndRestartStagingWeb.sh ${{ needs.extract_branch.outputs.branch }}
