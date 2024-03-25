@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { hasNotch } from "react-native-device-info";
 import { useMutation } from "@apollo/client";
 import { WarningInfo } from "arwi-backend/src/types";
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import CButton from "../primitives/CButton";
 import CView from "../primitives/CView";
 import SpeechToTextInput, { SpeechToTextInputHandle, SpeechToTextInputProps } from "./SpeechToTextInput";
@@ -17,6 +18,7 @@ import { useToggleTokenUseWarning } from "@/hooks-and-providers/monthlyTokenUseW
 import CKeyboardAvoidingView from "../layout/CKeyboardAvoidingView";
 import LoadingIndicator from "../ui/LoadingIndicator";
 import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
+import { COLORS } from "../../theme";
 
 type ExtraInputProps = Omit<CTextInputProps, "onChange" | "onChangeText" | "value">;
 
@@ -299,6 +301,9 @@ export default function ModalTextInput(props: WithSpeechRecognitionProps | Witho
         ) : (
           <CTouchableWithoutFeedback onPress={openModal} disabled={isDisabled} style={props.containerStyle}>
             <CTextInput value={value} {...getCommonTextInputProps()} {...commonInnerInputProps} />
+            <CView style={{ position: "absolute", top: 10, right: 10 }}>
+              <MaterialCommunityIcon name="pencil-outline" size={25} color={COLORS.primary} />
+            </CView>
           </CTouchableWithoutFeedback>
         )}
         {isLoading && <LoadingIndicator type="overlay" />}

@@ -33,6 +33,10 @@ const StudentPage_GetStudent_Query = graphql(
       getStudent(id: $studentId) {
         id
         name
+        latestFeedback {
+          id
+          text
+        }
         group {
           id
           name
@@ -345,11 +349,31 @@ export default function StudentView({ navigation, route }: NativeStackScreenProp
             </CView>
           </CView>
           {!archived && (
-            <CButton
-              title={t("student-final-evaluation", "Siirry loppuarviointiin")}
-              onPress={() => navigation.push("student-feedback", route.params)}
-              style={{ marginBottom: "lg" }}
-            />
+            <CView style={{ gap: 20 }}>
+              <CView style={{ gap: 5 }}>
+                <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("final-feedback", "Loppuarviointi")}</CText>
+                {!student.latestFeedback && (
+                  <CText style={{ fontSize: "sm2", fontWeight: "300" }}>
+                    {t("student-final-feedback-not-generated", "Oppilaalle ei ole luotu loppupalautta")}
+                  </CText>
+                )}
+              </CView>
+              {student.latestFeedback && (
+                <CButton
+                  title={t("student-final-evaluation", "Siirry loppuarviointiin")}
+                  onPress={() => navigation.push("student-feedback", route.params)}
+                  style={{ marginBottom: "lg" }}
+                />
+              )}
+              {!student.latestFeedback && (
+                <CView>
+                  <CButton
+                    title={t("group-final-feedback", "Siirry ryhmän loppuarviointiin")}
+                    onPress={() => navigation.push("final-feedback", { groupId: student.group.id })}
+                  />
+                </CView>
+              )}
+            </CView>
           )}
           <CText style={{ fontSize: "title", fontWeight: "500" }}>{t("class-evaluations", "Tuntiarvioinnit")}</CText>
           <EvaluationsAccordion
