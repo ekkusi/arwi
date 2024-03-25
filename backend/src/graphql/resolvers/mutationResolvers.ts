@@ -1,8 +1,8 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { OpenAIError } from "openai";
-import * as Sentry from "@sentry/node";
 import Mail from "nodemailer/lib/mailer";
+import * as Sentry from "@sentry/node";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../../types";
@@ -583,25 +583,33 @@ const resolvers: MutationResolvers<CustomContext> = {
       throw error;
     }
   },
-  generateGroupFeedback: async (_, { groupId, onlyGenerateMissing }, { dataLoaders, prisma, user }) => {
+  generateGroupFeedback: async (_, { groupId, studentIdsToGenerate }, { dataLoaders, prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
 
-    const groupPromise = dataLoaders.groupLoader.load(groupId);
-    // If onlyGenerateMissing is true, only get students that don't have feedback yet
+    const group = await dataLoaders.groupLoader.load(groupId);
     const studentsPromise = prisma.student.findMany({
       where: {
-        groupId,
-        feedbacks: onlyGenerateMissing
+        modules: {
+          some: {
+            id: group.currentModuleId,
+          },
+        },
+        id: studentIdsToGenerate
           ? {
-            none: {}, // This returns only students that don't have feedbacks
-          }
+              in: studentIdsToGenerate,
+            }
           : undefined,
       },
     });
 
-    const [group, students] = await Promise.all([groupPromise, studentsPromise]);
+    const modulePromise = dataLoaders.moduleLoader.load(group.currentModuleId);
 
-    const module = await dataLoaders.moduleLoader.load(group.currentModuleId);
+    const [module, students] = await Promise.all([modulePromise, studentsPromise]);
+
+    // Check if all student ids to generate feedback for are in the group
+    if (studentIdsToGenerate && studentIdsToGenerate.some((id) => !students.find((it) => it.id === id))) {
+      throw new ValidationError("Palautegenerointi epäonnistui, yksi tai useampi oppilas ei kuulu ryhmään.");
+    }
     await checkEvaluatedNonClassParticipationCollectionTypes(module);
 
     // Check if the user has enough tokens to generate feedback for all students

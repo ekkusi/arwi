@@ -20,8 +20,8 @@ import { feedbacksLoader } from "@/graphql/dataLoaders/feedback";
 import { collectionsByModuleLoader } from "@/graphql/dataLoaders/collection";
 
 const query = graphql(`
-  mutation GenerateGroupFeedbackTest($groupId: ID!, $onlyGenerateMissing: Boolean) {
-    generateGroupFeedback(groupId: $groupId, onlyGenerateMissing: $onlyGenerateMissing) {
+  mutation GenerateGroupFeedbackTest($groupId: ID!, $studentIdsToGenerate: [String!]) {
+    generateGroupFeedback(groupId: $groupId, studentIdsToGenerate: $studentIdsToGenerate) {
       usageData {
         id
         monthlyTokensUsed
@@ -238,43 +238,28 @@ describe("generateGroupFeedback", () => {
     expect(secondStudentFeedbacks).toHaveLength(0);
   });
 
-  it("should not generate feedbacks for student that already have one when onlyGenerateMissing is passed as true", async () => {
-    const student = group.students[0];
-    await prisma.feedback.create({
-      data: {
-        text: "Mock response from OpenAI",
-        studentId: student.id,
-        moduleId: group.currentModuleId,
-      },
-    });
+  it("should only generate feedbacks for students that are in studentIdsToGenerate", async () => {
     // Generate feedbacks for the group
-    const response = await graphqlRequest(query, { groupId: group.id, onlyGenerateMissing: true });
+    const response = await graphqlRequest(query, { groupId: group.id, studentIdsToGenerate: [group.students[0].id] });
 
-    // Assert that the student already having feedbacks is not included in the response
+    // Assert that feedbacks were only generated for the first student
     expect(response.data?.generateGroupFeedback).toBeDefined();
-    const matchingFeedbacks = response.data?.generateGroupFeedback.feedbacks.filter((feedback) => feedback.student.id === student.id);
-    expect(matchingFeedbacks).toHaveLength(0);
+    expect(response.data?.generateGroupFeedback.feedbacks).toHaveLength(1);
+    expect(response.data?.generateGroupFeedback.feedbacks[0].student.id).toEqual(group.students[0].id);
   });
 
-  it("should generate feedbacks for students that already have one when onlyGenerateMissing is not passed or passed as false", async () => {
-    const student = group.students[0];
-    await prisma.feedback.create({
-      data: {
-        text: "Mock response from OpenAI",
-        studentId: student.id,
-        moduleId: group.currentModuleId,
-      },
-    });
-    // Generate feedbacks for the group
-    const response = await graphqlRequest(query, { groupId: group.id, onlyGenerateMissing: false });
+  it("should throw an error if studentIdsToGenerate contains a student that is not in the group", async () => {
+    const newGroup = await createTestGroup(teacher.id);
+    const newStudent = await prisma.student.create({ data: { groupId: newGroup.id, name: "Test Student" } });
+    // Generate feedbacks for the group with a student that is not in the group
+    const response = await graphqlRequest(query, { groupId: group.id, studentIdsToGenerate: [newStudent.id] });
 
-    // Assert that the student already having feedbacks is included in the response
-    expect(response.data?.generateGroupFeedback).toBeDefined();
-    expect(response.data?.generateGroupFeedback.feedbacks).toHaveLength(group.students.length);
+    // Assert the expected error message for invalid ID
+    expect(response.errors).toBeDefined();
+    expect(response.errors?.[0].message).toContain("Palautegenerointi epäonnistui, yksi tai useampi oppilas ei kuulu ryhmään.");
 
-    const secondResponse = await graphqlRequest(query, { groupId: group.id });
-
-    expect(secondResponse.data?.generateGroupFeedback).toBeDefined();
-    expect(secondResponse.data?.generateGroupFeedback.feedbacks).toHaveLength(group.students.length);
+    // Clean up
+    await prisma.student.delete({ where: { id: newStudent.id } });
+    await prisma.group.delete({ where: { id: newGroup.id } });
   });
 });
