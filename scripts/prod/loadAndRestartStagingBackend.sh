@@ -5,11 +5,6 @@ parentPath=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parentPath"
 cd "../../"
 
-set -o allexport -o errexit
-source .env.staging-backend
-./scripts/prod/checkEnv.sh ./backend/env-config.json
-set +o allexport +o errexit
-
 containerName=arwi-backend-staging
 imageName=ekkusi/arwi-backend
 tagName=$1
@@ -22,6 +17,12 @@ fi
 git fetch --all
 git switch $tagName
 git pull
+
+# Check env variables
+set -o allexport -o errexit
+source .env.staging-backend
+./scripts/prod/checkEnv.sh ./backend/env-config.json
+set +o allexport +o errexit
 
 # Pull the new image
 docker pull $imageName:$tagName

@@ -5,6 +5,8 @@ parentPath=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parentPath"
 cd "../../"
 
+git pull
+
 set -o allexport -o errexit
 source .env.production
 ./scripts/prod/checkEnv.sh ./env-config.json
@@ -15,7 +17,6 @@ set +o allexport +o errexit
 
 exit 1
 
-git pull
 /bin/bash scripts/dumpdb.sh -b
 docker compose -f docker-compose.prod.yml --env-file ./.env.production pull
 docker compose -f docker-compose.prod.yml --env-file ./.env.production up -d
