@@ -7,9 +7,10 @@ import { useHandleOpenAIError } from "./openAI";
 
 const GenerateFeedbacks_useGeneratedFeedbacks_Mutation = graphql(
   `
-    mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!, $onlyGenerateMissing: Boolean!) {
-      generateGroupFeedback(groupId: $groupId, onlyGenerateMissing: $onlyGenerateMissing) {
+    mutation GenerateFeedbacks_useGeneratedFeedbacks_Mutation($groupId: ID!, $studentIdsToGenerate: [String!]) {
+      generateGroupFeedback(groupId: $groupId, studentIdsToGenerate: $studentIdsToGenerate) {
         feedbacks {
+          updatedAt
           ...FeedbackCacheUpdate
         }
         usageData {
@@ -36,27 +37,26 @@ const GenerateFeedbacksContext = createContext<GenerateFeedbacksContextType | nu
 
 const { Provider } = GenerateFeedbacksContext;
 
-export function useGenerateFeedback(groupId: string, onlyGenerateMissing: boolean = false) {
+export function useGenerateFeedback(groupId: string) {
   const context = React.useContext(GenerateFeedbacksContext);
   const handleError = useHandleOpenAIError();
   const toggleTokenUseWarning = useToggleTokenUseWarning();
 
-  const [generateFeedbacks] = useMutation(GenerateFeedbacks_useGeneratedFeedbacks_Mutation, {
-    variables: { groupId, onlyGenerateMissing },
-  });
+  const [generateFeedbacks] = useMutation(GenerateFeedbacks_useGeneratedFeedbacks_Mutation);
 
   const isGenerating = context?.generatingGroupIds.includes(groupId);
 
   const startGenerateFeedbacks = async (
     onSuccess?: (result: FetchResult<ResultOf<typeof GenerateFeedbacks_useGeneratedFeedbacks_Mutation>>) => void,
-    onError?: (err: Error) => void
+    onError?: (err: Error) => void,
+    studentIdsToGenerate?: string[]
   ) => {
     if (isGenerating) {
       throw new Error("Already generating feedbacks for this group");
     }
     context?.addGeneratingGroupId(groupId);
     try {
-      const result = await generateFeedbacks();
+      const result = await generateFeedbacks({ variables: { groupId, studentIdsToGenerate } });
 
       // Toggle token use warning if there is one
       const warning = result.data?.generateGroupFeedback.usageData.warning;

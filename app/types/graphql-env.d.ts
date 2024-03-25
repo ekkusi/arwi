@@ -1068,11 +1068,17 @@ export type introspection = {
                 }
               },
               {
-                "name": "onlyGenerateMissing",
+                "name": "studentIdsToGenerate",
                 "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
+                  "kind": "LIST",
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
                 }
               }
             ]

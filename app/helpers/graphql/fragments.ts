@@ -3,6 +3,7 @@ import { graphql } from "@/graphql";
 export const ClassParticipationCollectionUpdate_GeneralInfoMinimal_Fragment = graphql(`
   fragment ClassParticipationCollectionUpdate_GeneralInfoMinimal on ClassParticipationCollection {
     id
+    updatedAt
     date
     description
     environment {
@@ -36,6 +37,7 @@ export const ClassParticipationCollectionUpdate_GeneralInfoFull_Fragment = graph
 export const DefaultCollectionUpdate_Info_Fragment = graphql(`
   fragment DefaultCollectionUpdate_Info on DefaultCollection {
     id
+    updatedAt
     date
     description
   }
@@ -44,6 +46,7 @@ export const DefaultCollectionUpdate_Info_Fragment = graphql(`
 export const ClassParticipationEvaluationUpdate_Info_Fragment = graphql(`
   fragment ClassParticipationEvaluationUpdate_Info on ClassParticipationEvaluation {
     id
+    updatedAt
     wasPresent
     skillsRating
     behaviourRating
@@ -54,6 +57,7 @@ export const ClassParticipationEvaluationUpdate_Info_Fragment = graphql(`
 export const CollectionModuleCacheUpdate_Fragment = graphql(`
   fragment CollectionModuleCacheUpdate on Module {
     id
+    updatedAt
     evaluationCollections {
       id
     }
@@ -74,6 +78,7 @@ export const CollectionModuleCacheUpdate_Fragment = graphql(`
 export const DefaultEvaluationUpdate_Info_Fragment = graphql(`
   fragment DefaultEvaluationUpdate_Info on DefaultEvaluation {
     id
+    updatedAt
     wasPresent
     rating
     notes
@@ -83,6 +88,7 @@ export const DefaultEvaluationUpdate_Info_Fragment = graphql(`
 export const GroupCollectionTypesUpdate_TypeInfo_Fragment = graphql(`
   fragment GroupCollectionTypesUpdate_TypeInfo on CollectionType {
     id
+    updatedAt
     category
     weight
     name
@@ -109,6 +115,7 @@ export const FeedbackCacheUpdate_Fragment = graphql(`
     id
     text
     createdAt
+    updatedAt
     student {
       id
       latestFeedback {
