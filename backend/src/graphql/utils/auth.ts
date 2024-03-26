@@ -5,7 +5,7 @@ import { groupLoader } from "../dataLoaders/group";
 import AuthorizationError from "../errors/AuthorizationError";
 import { MONTHLY_TOKEN_USE_LIMIT } from "@/config";
 import { teacherLoader } from "../dataLoaders/teacher";
-import UsageLimitError from "../errors/UsageLimitErrors";
+import UsageLimitError from "../errors/UsageLimitError";
 
 type User = CustomContext["user"];
 

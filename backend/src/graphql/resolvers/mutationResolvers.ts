@@ -605,8 +605,6 @@ const resolvers: MutationResolvers<CustomContext> = {
     const modulePromise = dataLoaders.moduleLoader.load(group.currentModuleId);
 
     const [module, students] = await Promise.all([modulePromise, studentsPromise]);
-
-    // Check if all student ids to generate feedback for are in the group
     if (studentIdsToGenerate && studentIdsToGenerate.some((id) => !students.find((it) => it.id === id))) {
       throw new ValidationError("Palautegenerointi epäonnistui, yksi tai useampi oppilas ei kuulu ryhmään.");
     }
