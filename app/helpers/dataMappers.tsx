@@ -1,4 +1,3 @@
-import { LearningObjectiveInfo, LearningObjectiveType } from "arwi-backend/src/types";
 import { ImageSourcePropType } from "react-native";
 import { SubjectMinimal } from "arwi-backend/src/types/codegenOverrides";
 
@@ -38,30 +37,15 @@ export const subjectToIcon = (subject: SubjectMinimal): ImageSourcePropType => {
       return require("../assets/subjects/elamankatsomus.png");
     case "YH":
       return require("../assets/subjects/yhteiskuntaoppi.png");
+    case "YM":
+      return require("../assets/subjects/environmental-studies.png");
+    case "FI":
+      return require("../assets/subjects/philosophy.png");
+    case "EA":
+      return require("../assets/subjects/philosophy-of-life.png");
     default:
       return require("../assets/subjects/language.png");
   }
-};
-
-const palette = [
-  "#513667",
-  "#74352e",
-  "#cb4d78",
-  "#b089ce",
-  "#799ec4",
-  "#c84ac2",
-  "#6443bf",
-  "#caae46",
-  "#d35933",
-  "#76b9a9",
-  "#7bcc40",
-  "#3f483d",
-  "#c69782",
-  "#6bc57a",
-  "#5c7534",
-];
-export const getPredefinedColors = (count: number) => {
-  return palette.slice(0, count);
 };
 
 export const GRADE_COLORS: { [grade: number]: string } = {
@@ -73,67 +57,12 @@ export const GRADE_COLORS: { [grade: number]: string } = {
   9: "#66cc00",
   10: "#009900",
 };
+
 export const getColorForGrade = (grade: number) => {
   if (GRADE_COLORS[grade]) {
     return GRADE_COLORS[grade];
   }
   return "#000000";
-};
-
-export const getTextColorForGrade = (grade: number) => {
-  if (grade === 8 || grade === 7) {
-    return "black";
-  }
-  return "white";
-};
-
-export const getFontWeightForGrade = (grade: number) => {
-  if (grade === 8 || grade === 7) {
-    return "normal";
-  }
-  return "bold";
-};
-
-export const formatRatingKey = (rating: number) => {
-  switch (rating) {
-    case 10:
-      return "excellent";
-    case 9:
-      return "great";
-    case 8:
-      return "good";
-    case 7:
-      return "fair";
-    case 6:
-      return "poor";
-    case 5:
-      return "passable";
-    default:
-      return "failed";
-  }
-};
-
-export const formatObjectiveLabel = (learningObjective: LearningObjectiveInfo) => {
-  return `${learningObjective.code}: ${learningObjective.label.fi}`;
-};
-
-export const formatObjectiveTypeLabel = (type: LearningObjectiveType) => {
-  switch (type) {
-    case "SKILLS":
-      return "Taidot";
-    case "BEHAVIOUR":
-      return "Työskentely";
-    case "NOT_EVALUATED":
-      return "Ei arvioitava tavoite";
-    case "SKILLS_AND_BEHAVIOUR":
-      return "Taidot ja työskentely";
-    default:
-      throw new Error("Unknown learning objective type");
-  }
-};
-
-export const formatRatingStringWithNull = (rating: number | null | undefined) => {
-  return rating ? `${rating}` : "Ei arvioitu";
 };
 
 type Valuable<T> = {
@@ -143,7 +72,3 @@ type Valuable<T> = {
 export function removeNulls<T extends {}, V = Valuable<T>>(obj: T): V {
   return Object.fromEntries(Object.entries(obj).filter(([, v]) => !(v === null || typeof v === "undefined"))) as V;
 }
-
-export const formatAmountString = (value: number) => {
-  return value === 1 ? "kerta" : "kertaa";
-};
