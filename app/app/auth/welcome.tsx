@@ -68,7 +68,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
       setMPassIDError(
         t("mPassID-login-error", "Jokin meni vikaan kirjautumisessa MPASSid:llä. Yritä uudelleen tai ota yhteyttä järjestelmänvalvontaan.")
       );
-      Sentry.captureException(error);
+      Sentry.captureException(error, { level: "error" });
     }
     setLoading(false);
   };

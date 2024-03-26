@@ -145,7 +145,7 @@ export default function FinalFeedbackItem({
 
   const [updateFeedback, { loading: updatingFeedback }] = useMutation(FinalFeedbackItem_UpdateFeedback_Mutation, {
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, { level: "error" });
       openToast(
         t(
           "update-feedback-failed-message",
