@@ -2610,6 +2610,1100 @@
     }
   },
   {
+    "code": "EA",
+    "elementarySchool": {
+      "environments_1_to_2": [
+        {
+          "code": "EA_1_TO_2_ENV_KAS",
+          "name": {
+            "fi": "Kasvaminen hyvään elämään"
+          },
+          "color": "#ae46b9"
+        },
+        {
+          "code": "EA_1_TO_2_ENV_ERI",
+          "name": {
+            "fi": "Erilaisia elämäntapoja"
+          },
+          "color": "#46b98d"
+        },
+        {
+          "code": "EA_1_TO_2_ENV_YHT",
+          "name": {
+            "fi": "Yhteiselämän perusteita"
+          },
+          "color": "#b96b46"
+        },
+        {
+          "code": "EA_1_TO_2_ENV_LUO",
+          "name": {
+            "fi": "Luonto ja kestävä tulevaisuus"
+          },
+          "color": "#4a46b9"
+        }
+      ],
+      "environments_3_to_6": [
+        {
+          "code": "EA_3_TO_6_ENV_KAS",
+          "name": {
+            "fi": "Kasvaminen hyvään elämään"
+          },
+          "color": "#ae46b9"
+        },
+        {
+          "code": "EA_3_TO_6_ENV_ERI",
+          "name": {
+            "fi": "Erilaisia elämäntapoja"
+          },
+          "color": "#46b98d"
+        },
+        {
+          "code": "EA_3_TO_6_ENV_YHT",
+          "name": {
+            "fi": "Yhteiselämän perusteita"
+          },
+          "color": "#b96b46"
+        },
+        {
+          "code": "EA_3_TO_6_ENV_LUO",
+          "name": {
+            "fi": "Luonto ja kestävä tulevaisuus"
+          },
+          "color": "#4a46b9"
+        }
+      ],
+      "environments_7_to_9": [
+        {
+          "code": "EA_7_TO_9_ENV_KAT",
+          "name": {
+            "fi": "Katsomus ja kulttuuri"
+          },
+          "color": "#ae46b9"
+        },
+        {
+          "code": "EA_7_TO_9_ENV_ETI",
+          "name": {
+            "fi": "Etiikan perusteita"
+          },
+          "color": "#46b98d"
+        },
+        {
+          "code": "EA_7_TO_9_ENV_IHM",
+          "name": {
+            "fi": "Ihmisoikeudet ja kestävä tulevaisuus"
+          },
+          "color": "#b96b46"
+        }
+      ],
+      "one_to_two_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Ohjata kuuntelemaan toisten oppilaiden mielipiteitä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kuuntelemaan toisten oppilaiden mielipiteitä ja ajattelua"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#515095"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Rohkaista ilmaisemaan omaa ajatteluaan ja tunteitaan"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta ilmaisemaan omaa ajatteluaan ja tunteitaan eri tavoin"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#649550"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Ohjata oppilasta arvostamaan omaa ja muiden ajattelua"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta arvostamaan omaa ja muiden ajattelua"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955078"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Edistää taitoa tehdä kysymyksiä ja esittää väitteitä"
+          },
+          "longDescription": {
+            "fi": "Edistää oppilaan taitoa tehdä kysymyksiä ja esittää perusteltuja väitteitä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#508c95"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Ohjata tunnistamaan syitä ja seurauksia"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tunnistamaan kokemiensa arkipäiväisten tilanteiden syitä ja seurauksia sekä eettisiä ulottuvuuksia"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#958a50"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Rohkaista pohtimaan oikean ja väärän eroa sekä hyvyyttä"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta pohtimaan oikean ja väärän eroa sekä hyvyyttä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#765095"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Opastaa tuntemaan lähiympäristön tapakulttuureja"
+          },
+          "longDescription": {
+            "fi": "Opastaa oppilasta tuntemaan lähiympäristön tapakulttuureja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509562"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Ohjata ymmärtämään ihmisten yhteiselämän perusteita"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään ihmisten yhteiselämän perusteita"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955053"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Ohjata kunnioittamaan omaa ympäristöään ja luontoa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kunnioittamaan ja arvostamaan omaa ympäristöään ja luontoa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#506795"
+        }
+      ],
+      "seven_to_nine_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Ohjata käyttämään katsomuksellisia käsitteitä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tunnistamaan, ymmärtämään ja käyttämään katsomuksellisia käsitteitä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#515095"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Ohjata tutustumaan erilaisiin kulttuureihin ja katsomuksiin"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutustumaan erilaisiin kulttuureihin ja katsomuksiin ja perehtymään Unescon maailmanperintöohjelmaan"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#649550"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Ohjata tuntemaan erilaisia katsomuksia"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tuntemaan erilaisia uskonnottomia ja uskonnollisia katsomuksia, niiden keskinäistä vuorovaikutusta sekä tiedon ja tutkimuksen roolia katsomusten arvioinnissa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955078"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Ohjata tuntemaan uskonnollista ajattelua ja -kritiikkiä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tuntemaan uskonnollisen ajattelun ja uskontokritiikin perusteita"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#508c95"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Ohjata tuntemaan katsomusvapaus ihmisoikeutena"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tuntemaan katsomusvapaus ihmisoikeutena sekä katsomusvapauden turvaamisen kansallisia ja kansainvälisiä keinoja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#958a50"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Ohjata hahmottamaan erilaisia katsomuksellisia ratkaisuja"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta hahmottamaan erilaisia katsomuksellisia ratkaisuja sekä niiden taustalla olevia yksilöllisiä ja yhteisöllisiä perusteita"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#765095"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Kannustaa maailman moninaisuuden hyväksymiseen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta maailman moninaisuuden ja kaikkien yhdenvertaisen kohtelun hyväksymiseen ja ymmärtämiseen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509562"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Ohjata huomaamaan eettisiä ulottuvuuksia elämästään"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta huomaamaan eettisiä ulottuvuuksia elämästään ja ympäristöstään sekä kehittämään eettistä ajatteluaan"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955053"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Innostaa pohtimaan valintojensa vaikutusta tulevaisuuteen"
+          },
+          "longDescription": {
+            "fi": "Innostaa oppilasta pohtimaan omien valintojensa vaikutusta kestävään tulevaisuuteen paikallisesti ja globaalisti"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#506795"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Ohjata tuntemaan ihmisarvon ja -oikeuksien merkitys"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilas tuntemaan ihmisarvon, ihmisoikeuksien ja ihmisten yhdenvertaisuuden merkitys ja eettinen perusta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#7b9550"
+        }
+      ],
+      "three_to_six_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Luoda edellytyksiä eettisten ajattelun taitojen kehitykselle"
+          },
+          "longDescription": {
+            "fi": "Luoda edellytyksiä oppilaan eettisten ajattelun taitojen kehittymiselle ja kannustaa oppilasta soveltamaan eettisiä periaatteita arjen tilanteisiin"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#515095"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Ohjata tunnistamaan ja arvioimaan väitteitä ja perusteluita"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tunnistamaan ja arvioimaan väitteitä ja niiden perusteluita"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#649550"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Edistää kykyä oivaltaa asioiden välisiä suhteita"
+          },
+          "longDescription": {
+            "fi": "Edistää oppilaan kykyä oivaltaa asioiden välisiä suhteita ja kehittää ajatteluaan"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955078"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Ohjata kantamaan vastuuta itsestä ja toisista ihmisistä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kantamaan vastuuta itsestä, toisista ihmisistä ja luonnosta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#508c95"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Ohjata tutustumaan eri kulttuuriperintöihin"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilas tutustumaan suomalaiseen, eurooppalaiseen ja maailman kulttuuriperintöön sekä hahmottamaan kulttuurista moninaisuutta ilmiönä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#958a50"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Tukea rakentamaan kulttuurista yleissivistystään"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilasta rakentamaan katsomuksellista ja kulttuurista yleissivistystään"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#765095"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Ohjata arvioimaan omaa katsomuksellista oppimistaan"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta suunnittelemaan ja arvioimaan omaa katsomuksellista oppimistaan"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509562"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Rohkaista ilmaisemaan katsomustaan"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta ilmaisemaan katsomustaan ja kuuntelemaan muiden katsomuksellisia kannanottoja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955053"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Ohjata tuntemaan ihmisoikeusetiikkaa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilas tuntemaan YK:n yleismaailmalliseen ihmisoikeuksien julistukseen perustuvaa ihmisoikeusetiikkaa, erityisesti lapsen oikeuksia"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#506795"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Rohkaista toimimaan aloitteellisesti ja vastuullisesti"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta toimimaan aloitteellisesti ja vastuullisesti omassa ympäristössään"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#7b9550"
+        }
+      ]
+    },
+    "highSchoolModules": [
+      {
+        "code": "EA_HS_MODULE_MIN",
+        "environments": [
+          {
+            "code": "EA_HS_MODULE_MIN_ENV_MIN",
+            "name": {
+              "fi": "Minuus, elämänkatsomus, maailmankatsomus ja maailmankuva"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_ENV_HYV",
+            "name": {
+              "fi": "Hyvän elämän tekijöitä ja ulottuvuuksia"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_ENV_IHM",
+            "name": {
+              "fi": "Ihmiskäsitykset ja -ihanteet"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_ENV_YKS",
+            "name": {
+              "fi": "Yksilöllisyys, elämänvalinnat ja elämänhallinnan keinot"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_ENV_IHM_1",
+            "name": {
+              "fi": "Ihmisen identiteetti ja sosiaalisuus"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_ENV_IHM_2",
+            "name": {
+              "fi": "Ihmisen olemassaolon peruskysymyksiä"
+            },
+            "color": "#b94685"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Ymmärtää hyvän elämän pohtimiseen liittyvät käsitteet"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää hyvän elämän pohtimiseen liittyvät keskeiset käsitteet ja osaa käyttää niitä oman elämänkatsomuksensa jäsentämisessä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Tutustuu erilaisiin käsityksiin hyvästä elämästä"
+            },
+            "longDescription": {
+              "fi": "Tutustuu erilaisiin käsityksiin hyvästä elämästä, osaa arvioida niitä sekä tarkastella niitä suhteessa omiin elämäntavoitteisiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa arvioida erilaisia hyvän elämän edellytyksiä"
+            },
+            "longDescription": {
+              "fi": "Osaa arvioida erilaisia hyvän elämän edellytyksiä ja identiteettivalintoja yhdenvertaisuutta kunnioittaen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Tuntee erilaisia ihmiskäsityksiä"
+            },
+            "longDescription": {
+              "fi": "Tuntee erilaisia ihmiskäsityksiä ja osaa eritellä, miten ne johtavat erilaisiin hyvän elämän ihanteisiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Ymmärtää oman identiteettinsä osa-­alueita"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää oman identiteettinsä osa­-alueita ja osaa eritellä siihen vaikuttavia yksilöllisiä ja yhteisöllisiä tekijöitä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Kehittää kykyään elämänkatsomukselliseen keskusteluun"
+            },
+            "longDescription": {
+              "fi": "Kehittää kykyään elämänkatsomukselliseen keskusteluun, vuorovaikutukseen ja näkemystensä ilmaisemiseen vastuullisesti, johdonmukaisesti ja luovast"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          }
+        ],
+        "name": {
+          "fi": "Minä ja hyvä elämä (ET1)"
+        }
+      },
+      {
+        "code": "EA_HS_MODULE_MIN_1",
+        "environments": [
+          {
+            "code": "EA_HS_MODULE_MIN_1_ENV_KRI",
+            "name": {
+              "fi": "Kriittinen ajattelu ja väitteiden järkiperäinen perustelu"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_1_ENV_MED",
+            "name": {
+              "fi": "Median ja muiden informaationlähteiden toimintalogiikka"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_1_ENV_AIK",
+            "name": {
+              "fi": "Aikalaiskritiikki"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_1_ENV_YHT",
+            "name": {
+              "fi": "Yhteiskunnassa toimimisen ja aktiivisen kansalaisuuden tiedollisia perusteita"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_1_ENV_TAL",
+            "name": {
+              "fi": "Taloudellinen ja poliittinen valta Suomessa ja globaalissa markkinataloudessa"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_1_ENV_IHM",
+            "name": {
+              "fi": "Ihmisarvo, ihmisen arvokkuus ja ihmisoikeudet"
+            },
+            "color": "#b94685"
+          },
+          {
+            "code": "EA_HS_MODULE_MIN_1_ENV_GLO",
+            "name": {
+              "fi": "Globaali oikeudenmukaisuus"
+            },
+            "color": "#46a7b9"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Hahmottaa yhteisöllisyyden merkityksen ihmisyydelle"
+            },
+            "longDescription": {
+              "fi": "Hahmottaa yhteisöllisyyden merkityksen ihmisyydelle ja omalle identiteetille"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Ymmärtää sosiaalitieteiden merkityksen yksilölle"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää, että sosiaalisia ilmiöitä ja yhteiskunnallisia rakenteita voidaan tarkastella tieteellisesti ja niillä on suuri merkitys yksilön elämänkatsomukselle ja elämänvalinnoille"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa arvioida kriittisesti yhteiskunnallisia väitteitä"
+            },
+            "longDescription": {
+              "fi": "Osaa arvioida kriittisesti niin omia kuin muiden yhteiskunnallisia väitteitä ja katsomuksia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa tulkita medioiden tarjoamaa informaatiota"
+            },
+            "longDescription": {
+              "fi": "Osaa tulkita ja arvioida erilaisten medioiden ja muiden yhteiskunnallisten instituutioiden tarjoamaa informaatiota"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa tarkastella kriittisesti yhteiskuntaa"
+            },
+            "longDescription": {
+              "fi": "Osaa tarkastella kriittisesti yhteiskuntaa ja sen osa­alueita, yhteiskunnallisia rakenteita, ideologisia piirteitä sekä vallitsevia yhteiskunnallisia arvoja"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Osaa perustella mm. yhdenvertaisuutta ja rauhaa"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää ja osaa perustella ihmisoikeuksien, uskonnon­ ja omantunnonvapauden, yhdenvertaisuuden, demokratian, rauhan, yhteiskunnallisen ja globaalin oikeudenmukaisuuden sekä kestävän tulevaisuuden rakentamisen periaatteita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          },
+          {
+            "code": "T7",
+            "label": {
+              "fi": "Osaa jäsentää omaa asemaansa yksilönä yhteisöissä"
+            },
+            "longDescription": {
+              "fi": "Osaa jäsentää omaa asemaansa yksilönä yhteisöissä, kansalaisena valtiossa ja toimijana talousjärjestelmässä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#509562"
+          },
+          {
+            "code": "T8",
+            "label": {
+              "fi": "Osaa arvioida yksilön vaikutusmahdollisuuksia"
+            },
+            "longDescription": {
+              "fi": "Osaa arvioida yksilön vaikutusmahdollisuuksia sekä kasvattaa valmiuttaan rakentavaan ja vastuulliseen yhteiskunnalliseen osallistumiseen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955053"
+          }
+        ],
+        "name": {
+          "fi": "Minä ja yhteiskunta (ET2)"
+        }
+      },
+      {
+        "code": "EA_HS_MODULE_KUL",
+        "environments": [
+          {
+            "code": "EA_HS_MODULE_KUL_ENV_KUL",
+            "name": {
+              "fi": "Kulttuurin käsite ja merkitys sekä sen erilaiset luokittelut ja käyttötavat"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_KUL_ENV_KUL_1",
+            "name": {
+              "fi": "Kulttuuria koskevan tutkimuksen perusteita"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "EA_HS_MODULE_KUL_ENV_KUL_2",
+            "name": {
+              "fi": "Kulttuuriperintö"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "EA_HS_MODULE_KUL_ENV_SUO",
+            "name": {
+              "fi": "Suomalaisen kulttuurin ja identiteettipolitiikan historiallinen rakentuminen"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_KUL_ENV_KUL_3",
+            "name": {
+              "fi": "Kulttuurien ja sivilisaatioiden vuorovaikutus sekä monokulttuurisuuden mahdottomuus"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "EA_HS_MODULE_KUL_ENV_ETN",
+            "name": {
+              "fi": "Etnisyyden, rasismin ja muun syrjinnän historiaa"
+            },
+            "color": "#b94685"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Ymmärtää kulttuurin merkityksen ihmisyydelle"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää kulttuurin merkityksen ihmisyydelle ja omalle elämänkatsomukselleen sekä saa välineitä myönteisen kulttuurisen identiteetin rakentamisessa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Käyttää kulttuuria koskevan tutkimuksen käsitteistöä"
+            },
+            "longDescription": {
+              "fi": "Osaa käyttää kulttuuria koskevan tutkimuksen käsitteistöä ja muodostaa kulttuureja koskeviin kysymyksiin oman perustellun kantansa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Hahmottaa suomalaisuuden rakentuvana jatkumona"
+            },
+            "longDescription": {
+              "fi": "Hahmottaa suomalaisuuden historiallisesti rakentuvana ja muuttuvana jatkumona, johon kuuluvat niin ulkoiset vaikutteet kuin sisäinen moninaisuus ja vähemmistökulttuurit"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Hahmottaa elämänkatsomukselliset ratkaisut"
+            },
+            "longDescription": {
+              "fi": "Osaa hahmottaa erilaiset elämänkatsomukselliset ratkaisut ja identiteettivalinnat sekä maailman kulttuurisen moninaisuuden rikkautena ja perustella niiden yhdenvertaisen kohtelun"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Tunnistaa vihapuheen"
+            },
+            "longDescription": {
+              "fi": "Tunnistaa vihapuheen ja osaa erottaa sen sananvapauden vastuullisesta käytöstä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Kulttuurit (ET3)"
+        }
+      },
+      {
+        "code": "EA_HS_MODULE_KAT",
+        "environments": [
+          {
+            "code": "EA_HS_MODULE_KAT_ENV_KAT",
+            "name": {
+              "fi": "Katsomuksellinen käsitteistö"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_KAT_ENV_IHM",
+            "name": {
+              "fi": "Ihmiskunnan katsomuksellisuuden muotoutuminen"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "EA_HS_MODULE_KAT_ENV_KAT_1",
+            "name": {
+              "fi": "Katsomusten historiaa"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "EA_HS_MODULE_KAT_ENV_POL",
+            "name": {
+              "fi": "Poliittisia maailmankatsomuksia"
+            },
+            "color": "#4a46b9"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa eritellä eri katsomusten käsitteitä"
+            },
+            "longDescription": {
+              "fi": "Osaa eritellä maailman­ ja elämänkatsomuksen sekä maailmankuvan käsitteitä, arvioida niihin liittyviä perusteita sekä erottaa katsomukselliset ja arvokysymykset mielipidekysymyksistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Ymmärtää katsomusten jatkuvaa muuttumista"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää katsomusten, kulttuurien ja yhteiskuntamuotojen jatkuvaa historiallista muuttumista sekä osaa sen perusteella eritellä erilaisten maailmankatsomusten piirteitä ja lähtökohtia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa arvioida tapahtumien vaikutuksia maailmankuviin"
+            },
+            "longDescription": {
+              "fi": "Osaa eritellä ja arvioida evoluution, universaalien eettisten järjestelmien, Euroopan uuden ajan murroksen, valistuksen, tieteen sekä modernin markkinatalouden merkitystä maailmankuviin ja omaan elämänkatsomukseensa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Arvioi arvojen vaikutusta eri maailmankatsomuksiin"
+            },
+            "longDescription": {
+              "fi": "Osaa arvioida erilaisten arvojen, maailmankuvien ja tietämisen tapojen sekä yksilöllisten, yhteisöllisten, poliittisten ja uskonnollisten ulottuvuuksien painoarvoa erilaisissa elämän­ ja maailmankatsomuksissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa eritellä oman elämänkatsomuksensa"
+            },
+            "longDescription": {
+              "fi": "Osaa eritellä oman elämänkatsomuksensa ja siihen liittyvien uskomusten perusteita ja muotoutumista sekä ymmärtää, että elämänkatsomuksen lähtökohdat olisivat voineet poiketa nykyisistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Katsomukset (ET4)"
+        }
+      },
+      {
+        "code": "EA_HS_MODULE_USK",
+        "environments": [
+          {
+            "code": "EA_HS_MODULE_USK_ENV_KES",
+            "name": {
+              "fi": "Keskeiset uskontoon liittyvät käsitteet"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_USK_ENV_ERI",
+            "name": {
+              "fi": "Eri uskontojen levinneisyys, jakautuminen ja peruspiirteet"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "EA_HS_MODULE_USK_ENV_ATE",
+            "name": {
+              "fi": "Ateismi, agnostismi, uskonnottomuus ja sekulaarin humanismin maailmankatsomukselliset perusteet"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "EA_HS_MODULE_USK_ENV_USK",
+            "name": {
+              "fi": "Uskonnon ja uskonnottomuuden näkyminen ja vaikutus arkielämässä, politiikassa ja oikeudenkäytössä"
+            },
+            "color": "#4a46b9"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Kehittää kykyä tulkita erilaisia maailmankatsomuksia"
+            },
+            "longDescription": {
+              "fi": "Kehittää kykyä lukea, tulkita ja ymmärtää erilaisia uskonnollisia ja uskonnottomia maailmankatsomuksia sekä kykyä verrata niiden lähtökohtia ja elämäntapaa omaan elämänkatsomukseensa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Tutustuu tieteelliseen tutkimukseen ja määrittelyyn"
+            },
+            "longDescription": {
+              "fi": "Tutustuu uskontojen, uskonnollisuuden ja uskonnottomuuden tieteelliseen tutkimukseen, määrittelyyn ja selittämiseen sekä uskontokritiikkiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Hallitsee käsitteitä, tietoa ja taitoja"
+            },
+            "longDescription": {
+              "fi": "Hallitsee käsitteitä, tietoa ja taitoja, joiden avulla hän osaa pohtia ja analysoida maailmankatsomuksellisiin järjestelmiin, kuten sekulaariin humanismiin ja uskontoihin, liittyviä kysymyksiä sekä muodostaa niihin oman perustellun kantansa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Perehtyy suuriin maailmanuskontoihin"
+            },
+            "longDescription": {
+              "fi": "Perehtyy suuriin maailmanuskontoihin ja hahmottaa niiden keskeisiä piirteitä, sisäistä monimuotoisuutta sekä vaikutusta kulttuuriin ja yhteiskuntaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Perehtyy ateismiin, agnostismiin ja humanismiin"
+            },
+            "longDescription": {
+              "fi": "Perehtyy ateismin, agnostismin ja humanismin historiaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Ymmärtää ilmiöiden monimuotoisuuden ja merkityksen"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää, että uskonnottomuus ja uskonnollisuus ovat historiallisesti rakentuneita, monimuotoisia ja muuttuvia ilmiöitä, joilla on vahva kulttuurinen ja yhteiskunnallinen merkitys"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          }
+        ],
+        "name": {
+          "fi": "Uskonnot ja uskonnottomuus (ET5)"
+        }
+      },
+      {
+        "code": "EA_HS_MODULE_TUL",
+        "environments": [
+          {
+            "code": "EA_HS_MODULE_TUL_ENV_TUL",
+            "name": {
+              "fi": "Tulevaisuuden tutkimus, heikot ja vahvat signaalit, tulevaisuustyö"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_TUL_ENV_TIE",
+            "name": {
+              "fi": "Tieteellis­teknologinen vallankumous ja teknologian kehittyminen"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "EA_HS_MODULE_TUL_ENV_YHT",
+            "name": {
+              "fi": "Yhteiskunnan, talouden rakenteiden ja työn muutos"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "EA_HS_MODULE_TUL_ENV_GLO",
+            "name": {
+              "fi": "Globaalisti vaikuttavat ekologiset muutokset"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "EA_HS_MODULE_TUL_ENV_YKS",
+            "name": {
+              "fi": "Yksilön valinnat ja yhteistyö paremman tulevaisuuden puolesta"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "EA_HS_MODULE_TUL_ENV_ERI",
+            "name": {
+              "fi": "Erilaisia fiktiivisiä tulevaisuuden kertomuksia ja niiden kritiikkejä"
+            },
+            "color": "#b94685"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Tutustuu tulevaisuuden tutkimisen keinoihin ja tehtäviin"
+            },
+            "longDescription": {
+              "fi": "Tutustuu tulevaisuuden tutkimisen keinoihin ja tehtäviin sekä ymmärtää, että vaikka tulevaisuutta on vaikea ennustaa, siihen voidaan vaikuttaa arvoilla, teoilla ja valinnoilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Hahmottaa suhtautumistapoja teknologiaan"
+            },
+            "longDescription": {
+              "fi": "Hahmottaa erilaisia suhtautumistapoja teknologian kehitykseen ja osaa arvioida, miten tekninen muutos vaikuttaa yhteiskuntaan, kulttuuriin ja ympäristöön"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Omaksuu valmiuksia kestävään tulevaisuuteen"
+            },
+            "longDescription": {
+              "fi": "Omaksuu valmiuksia, niin asenteita, tietoja kuin tunnetaitojakin, kestävän tulevaisuuden rakentamiseen ja ymmärtää ilmastonmuutoksen vaikutuksia sekä sen torjumisen keinoja ja niiden esteitä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Arvioi tieteellis­teknologisen vallankumouksen vaikutuksia"
+            },
+            "longDescription": {
+              "fi": "Osaa arvioida tieteellis­teknologisen vallankumouksen vaikutusta nykyaikaisiin yhteiskuntiin, maailmankatsomuksiin ja omaan elämänkatsomukseensa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Ymmärtää utopioiden ja dystopioiden merkityksen"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää utopioiden ja dystopioiden merkityksen historiallisten, ajankohtaisten ja tulevaisuuden kysymysten heijastajina"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Tulevaisuus (ET6)"
+        }
+      }
+    ],
+    "name": {
+      "fi": "Elämänkatsomustieto"
+    }
+  },
+  {
     "code": "LI",
     "elementarySchool": {
       "one_to_two_years": [
@@ -10831,6 +11925,3159 @@
     ],
     "name": {
       "fi": "Historia"
+    }
+  },
+  {
+    "code": "KE",
+    "elementarySchool": {
+      "environments_7_to_9": [
+        {
+          "code": "KE_7_TO_9_ENV_LUO",
+          "name": {
+            "fi": "Luonnontieteellinen tutkimus"
+          },
+          "color": "#ae46b9"
+        },
+        {
+          "code": "KE_7_TO_9_ENV_KEM",
+          "name": {
+            "fi": "Kemia omassa elämässä ja elinympäristössä"
+          },
+          "color": "#46b98d"
+        },
+        {
+          "code": "KE_7_TO_9_ENV_KEM_1",
+          "name": {
+            "fi": "Kemia yhteiskunnassa"
+          },
+          "color": "#b96b46"
+        },
+        {
+          "code": "KE_7_TO_9_ENV_KEM_2",
+          "name": {
+            "fi": "Kemia maailmankuvan rakentajana"
+          },
+          "color": "#4a46b9"
+        },
+        {
+          "code": "KE_7_TO_9_ENV_AIN",
+          "name": {
+            "fi": "Aineiden ominaisuudet ja rakenne"
+          },
+          "color": "#64b946"
+        },
+        {
+          "code": "KE_7_TO_9_ENV_AIN_1",
+          "name": {
+            "fi": "Aineiden ominaisuudet ja muutokset"
+          },
+          "color": "#b94685"
+        }
+      ],
+      "seven_to_nine_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Kannustaa ja innostaa oppilasta kemian opiskeluun"
+          },
+          "longDescription": {
+            "fi": "Kannustaa ja innostaa oppilasta kemian opiskeluun"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#515095"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Kannustaa tunnistamaan omaa osaamistaan"
+          },
+          "longDescription": {
+            "fi": "Ohjata ja kannustaa oppilasta tunnistamaan omaa kemian osaamistaan, asettamaan tavoitteita omalle työskentelylleen sekä työskentelemään pitkäjänteisesti"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#649550"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Ohjata ymmärtämään kemian osaamisen merkitystä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään kemian osaamisen merkitystä omassa elämässä, elinympäristössä ja yhteiskunnassa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955078"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Ohjata kestävään kemian osaamisen käyttöön"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta käyttämään kemian osaamistaan kestävän tulevaisuuden rakentamisessa sekä arvioimaan omia valintojaan luonnonvarojen kestävän käytön ja tuotteen elinkaaren kannalta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#508c95"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Kannustaa kysymyksien muodostamiseen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta muodostamaan kysymyksiä tarkasteltavista ilmiöistä sekä kehittämään kysymyksiä edelleen tutkimusten ja muun toiminnan lähtökohdiksi"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#958a50"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Ohjata toteuttamaan tutkimuksia yhteistyössä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta toteuttamaan kokeellisia tutkimuksia yhteistyössä muiden kanssa sekä työskentelemään turvallisesti ja johdonmukaisesti"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#765095"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Ohjata tulkitsemaan ja esittämään tutkimusten tuloksia"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta käsittelemään, tulkitsemaan ja esittämään omien tutkimustensa tuloksia sekä arvioimaan niitä ja koko tutkimusprosessia"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509562"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Ohjata hahmottamaan kemian soveltamista teknologiassa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta hahmottamaan kemian soveltamista teknologiassa sekä osallistumaan kemiaa soveltavien ratkaisujen ideointiin, suunnitteluun, kehittämiseen ja soveltamiseen yhteistyössä muiden kanssa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955053"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Ohjata käyttämään tvt:a tiedonhankinnassa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta käyttämään tieto- ja viestintäteknologiaa tiedon ja tutkimustulosten hankkimiseen, käsittelemiseen ja esittämiseen sekä tukea oppilaan oppimista havainnollistavien simulaatioiden avulla"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#506795"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Ohjata käyttämään kemian käsitteitä täsmällisesti"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta käyttämään kemian käsitteitä täsmällisesti sekä jäsentämään omia käsiterakenteitaan kohti luonnontieteellisten teorioiden mukaisia käsityksiä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#7b9550"
+        },
+        {
+          "code": "T11",
+          "label": {
+            "fi": "Ohjata käyttämään erilaisia malleja kuvatakseen ilmiöitä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta käyttämään erilaisia malleja kuvaamaan ja selittämään aineen rakennetta ja kemiallisia ilmiöitä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#95508f"
+        },
+        {
+          "code": "T12",
+          "label": {
+            "fi": "Ohjata käyttämään kriittisesti eri tietolähteitä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta käyttämään ja arvioimaan kriittisesti eri tietolähteitä sekä ilmaisemaan ja perustelemaan erilaisia näkemyksiä kemialle ominaisella tavalla"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509587"
+        },
+        {
+          "code": "T13",
+          "label": {
+            "fi": "Ohjata hahmottamaan tieteellisen tiedon luonnetta"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta hahmottamaan luonnontieteellisen tiedon luonnetta ja kehittymistä sekä tieteellisiä tapoja tuottaa tietoa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#957350"
+        },
+        {
+          "code": "T14",
+          "label": {
+            "fi": "Ohjata ymmärtämään aineiden ominaisuuksia ja rakennetta"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään perusperiaatteita aineen ominaisuuksista, rakenteesta ja aineiden muutoksista"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#5f5095"
+        },
+        {
+          "code": "T15",
+          "label": {
+            "fi": "Ohjata soveltamaan kemian tietoja oppimiskokonaisuuksissa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta soveltamaan kemian tietojaan ja taitojaan monialaisissa oppimiskokonaisuuksissa sekä tarjota mahdollisuuksia tutustua kemian soveltamiseen erilaisissa tilanteissa kuten luonnossa, elinkeinoelämässä, järjestöissä tai tiedeyhteisöissä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#569550"
+        }
+      ],
+      "environments_1_to_2": [],
+      "environments_3_to_6": []
+    },
+    "highSchoolModules": [
+      {
+        "code": "KE_HS_MODULE_KEM",
+        "environments": [
+          {
+            "code": "KE_HS_MODULE_KEM_ENV_ARJ",
+            "name": {
+              "fi": "Arjen aineiden turvallisuuden arviointi ja kemian merkitys omassa elämässä"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_ENV_KEM",
+            "name": {
+              "fi": "Kemian merkitys työelämässä ja jatko­-opinnoissa"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_ENV_JAK",
+            "name": {
+              "fi": "Jaksollinen järjestelmä ja atomin rakenne elektronikuorimallin avulla"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_ENV_PUH",
+            "name": {
+              "fi": "Puhtaat aineet, seokset ja erotusmenetelmät"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_ENV_AIN",
+            "name": {
+              "fi": "Ainemäärä ja konsentraatio"
+            },
+            "color": "#64b946"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Syventää kiinnostusta kemiaa kohtaan"
+            },
+            "longDescription": {
+              "fi": "Saa kokemuksia, jotka herättävät ja syventävät kiinnostusta kemiaa ja sen opiskelua kohtaan, ja tutustuu kemian alan ammatteihin ja jatko­opintomahdollisuuksiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Saa valmiuksia osallistua kemian alan keskusteluun"
+            },
+            "longDescription": {
+              "fi": "Saa valmiuksia osallistua kemiaan liittyvään yhteiskunnalliseen keskusteluun ja osaa arvioida tietolähteiden luotettavuutta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Oppii jaksollisen järjestelmän käyttöä"
+            },
+            "longDescription": {
+              "fi": "Oppii käyttämään jaksollista järjestelmää kemiallisen päättelyn apuna"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Soveltaa tietoa eri aineista arjen valinnoissa"
+            },
+            "longDescription": {
+              "fi": "Osaa käyttää ja soveltaa tietoa aineiden ominaisuuksista ja niiden turvallisuudesta arjen valinnoissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa tutkia kokeellisesti seoksen koostumusta"
+            },
+            "longDescription": {
+              "fi": "Osaa tutkia kokeellisesti seoksen koostumusta ja pitoisuutta sekä ottaa huomioon työturvallisuusnäkökohdat"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Kemia ja minä (KE1)"
+        }
+      },
+      {
+        "code": "KE_HS_MODULE_KEM_1",
+        "environments": [
+          {
+            "code": "KE_HS_MODULE_KEM_1_ENV_TUT",
+            "name": {
+              "fi": "Tutustuminen joihinkin esimerkkeihin kestävän elämäntavan edistämisessä luonnontieteissä"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_1_ENV_AIN",
+            "name": {
+              "fi": "Aineen rakenteen mallien ja yhdisteen kaavan esittäminen"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_1_ENV_ALK",
+            "name": {
+              "fi": "Alkuaineiden ja yhdisteiden vahvat ja heikot sidokset sekä poolisuus"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_1_ENV_AIN_1",
+            "name": {
+              "fi": "Aineiden ominaisuuksien tutkiminen kokeellisesti ja selittäminen aineen rakenteen avulla"
+            },
+            "color": "#4a46b9"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Saa kokemuksia, jotka syventävät kiinnostusta"
+            },
+            "longDescription": {
+              "fi": "Saa kokemuksia, jotka herättävät ja syventävät kiinnostusta kemiaa ja sen opiskelua kohtaan, ja tutustuu kemian merkitykseen kestävän elämäntavan edistämisessä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Tutustuu tiedon luonteeseen ja kehittymiseen"
+            },
+            "longDescription": {
+              "fi": "Tutustuu luonnontieteellisen tiedon luonteeseen ja sen kehittymiseen sekä tieteellisiin tapoihin tuottaa tietoa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa tutkia aineen ominaisuuksia kokeellisesti"
+            },
+            "longDescription": {
+              "fi": "Osaa tutkia aineen ominaisuuksia kokeellisesti"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Soveltaa aineen rakenteen malleja vertaillessa ominaisuuksia"
+            },
+            "longDescription": {
+              "fi": "Osaa soveltaa aineen rakenteen malleja aineen ominaisuuksien vertailussa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Ymmärtää kemian merkityksen ympäristölle"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää kemian merkityksen ympäristölle ja yhteiskunnalle ratkaisujen tarjoajana yhdessä muiden luonnontieteiden kanssa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Kemia ja kestävä tulevaisuus (KE2)"
+        }
+      },
+      {
+        "code": "KE_HS_MODULE_MOL",
+        "environments": [
+          {
+            "code": "KE_HS_MODULE_MOL_ENV_LIU",
+            "name": {
+              "fi": "Liuoksen valmistus ja laimentaminen sekä standardisuoran sovittaminen pitoisuuden määrittämiseksi"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_MOL_ENV_HII",
+            "name": {
+              "fi": "Hiilivetyjen sekä hiilen happi­ ja typpiyhdisteiden funktionaaliset ryhmät ja nimeämisen perusteet"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "KE_HS_MODULE_MOL_ENV_HAP",
+            "name": {
+              "fi": "Hapettuminen ja pelkistyminen hiilen happiyhdisteissä"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "KE_HS_MODULE_MOL_ENV_HII_1",
+            "name": {
+              "fi": "Hiilen yhdisteiden rakenteiden mallintaminen ja ominaisuuksien selittäminen rakenteen avulla"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_MOL_ENV_SUH",
+            "name": {
+              "fi": "Suhdekaavan ja molekyylikaavan selvittäminen laskennallisesti sekä rakenneisomeria"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "KE_HS_MODULE_MOL_ENV_KVA",
+            "name": {
+              "fi": "Kvanttimekaaninen atomimalli, hybridisaatio ja stereoisomeria hiiliyhdisteissä"
+            },
+            "color": "#b94685"
+          },
+          {
+            "code": "KE_HS_MODULE_MOL_ENV_TUT",
+            "name": {
+              "fi": "Tutustuminen spektrien antamaan informaatioon aineen rakenteesta"
+            },
+            "color": "#46a7b9"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa käyttää ja soveltaa tietoa hiilen yhdisteistä"
+            },
+            "longDescription": {
+              "fi": "Osaa käyttää ja soveltaa tietoa hiilen yhdisteistä jokapäiväisen elämän ilmiöissä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa soveltaa ainemäärän ja konsentraation käsitteitä"
+            },
+            "longDescription": {
+              "fi": "Osaa soveltaa ainemäärän ja konsentraation käsitteitä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa tutkia kokeellisesti hiilen yhdisteitä"
+            },
+            "longDescription": {
+              "fi": "Osaa tutkia kokeellisesti ja erilaisia malleja käyttäen hiilen yhdisteitä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Ymmärtää, kuinka tieto rakentuu hiiliyhdisteistä"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää, kuinka tieto hiiliyhdisteistä rakentuu kokeellisen toiminnan ja siihen kytkeytyvän mallintamisen kautta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa käyttää tvt:a mallintamisen välineenä"
+            },
+            "longDescription": {
+              "fi": "Osaa käyttää tieto­ ja viestintäteknologiaa mallintamisen välineenä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Molekyylit ja mallit (KE3)"
+        }
+      },
+      {
+        "code": "KE_HS_MODULE_KEM_2",
+        "environments": [
+          {
+            "code": "KE_HS_MODULE_KEM_2_ENV_REA",
+            "name": {
+              "fi": "Reaktioiden tutkiminen kokeellisesti sekä tutkimustulosten käsitteleminen, tulkitseminen ja esittäminen"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_2_ENV_KEM",
+            "name": {
+              "fi": "Kemiallisen reaktion symbolinen ilmaisu ja tasapainottaminen, reaktiotuotteiden kaavat ja nimet"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_2_ENV_SAA",
+            "name": {
+              "fi": "Saanto ja rajoittava tekijä kemiallisessa reaktiossa"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_2_ENV_IDE",
+            "name": {
+              "fi": "Ideaalikaasun tilanyhtälö ja ainemäärä"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_2_ENV_SAO",
+            "name": {
+              "fi": "Saostumis­ ja hajoamisreaktio, palamisreaktio"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_2_ENV_PRO",
+            "name": {
+              "fi": "Protolyysi, neutraloituminen ja titraus analyysimenetelmänä"
+            },
+            "color": "#b94685"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_2_ENV_ADD",
+            "name": {
+              "fi": "Additio, eliminaatio, substituutio, kondensaatio ja hydrolyysi hiiliyhdisteissä sekä yleisimpien biomolekyylien muodostuminen"
+            },
+            "color": "#46a7b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_2_ENV_POL",
+            "name": {
+              "fi": "Polymeroitumisreaktiot, polymeerien ominaisuudet, käyttö ja elinkaari"
+            },
+            "color": "#b9a946"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Saa kuvan kemiallisten reaktioiden moninaisuudesta"
+            },
+            "longDescription": {
+              "fi": "Saa kokonaiskuvan kemiallisten reaktioiden moninaisuudesta ja merkityksestä elinympäristössämme"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa käyttää reaktioihin liittyviä käsitteitä"
+            },
+            "longDescription": {
+              "fi": "Osaa käyttää ja soveltaa reaktioihin liittyviä käsitteitä jokapäiväisen elämän, ympäristön ja yhteiskunnan ilmiöissä sekä nykyteknologian sovelluksissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa tutkia kemiallisia reaktioita kokeellisesti"
+            },
+            "longDescription": {
+              "fi": "Osaa tutkia kemiallisia reaktioita kokeellisesti ja erilaisia malleja käyttäen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Ymmärtää aineen häviämättömyyden merkityksen"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää aineen häviämättömyyden merkityksen kemiassa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          }
+        ],
+        "name": {
+          "fi": "Kemiallinen reaktio (KE4)"
+        }
+      },
+      {
+        "code": "KE_HS_MODULE_KEM_3",
+        "environments": [
+          {
+            "code": "KE_HS_MODULE_KEM_3_ENV_REA",
+            "name": {
+              "fi": "Reaktiossa sitoutuva tai vapautuva energia muodostumisentalpioiden, sidosenergioiden ja Hessin lain avulla"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_3_ENV_REA_1",
+            "name": {
+              "fi": "Reaktiosarja­ ja seoslaskujen periaatteet"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_3_ENV_HAP",
+            "name": {
+              "fi": "Hapetusluvut ja hapettumis­pelkistymisreaktiot"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_3_ENV_MET",
+            "name": {
+              "fi": "Metallien ominaisuuksia ja käyttökohteita, valmistus­ ja jalostusprosesseja sekä riittävyys ja kierrätettävyys"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_3_ENV_SÄH",
+            "name": {
+              "fi": "Sähkökemian keskeiset periaatteet: jännitesarja, normaalipotentiaali, kemiallinen pari, elektrolyysi ja kemiallisen energian varastointi"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_3_ENV_LUO",
+            "name": {
+              "fi": "Luonnontieteelliseen tutkimukseen tutustuminen tai tutkimuksen tai ongelmanratkaisun ideointi ja suunnittelu"
+            },
+            "color": "#b94685"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Ymmärtää energian varastoinnin periaatteet"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää kemiallisen energian varastoinnin ja hyödyntämisen periaatteita ja osaa perustella mielipiteitään keskustelussa energiaratkaisuista"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Ymmärtää energian häviämättömyyden reaktioissa"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää energian häviämättömyyden ja energianmuutokset kemiallisissa reaktioissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Tuntee merkittävien metallien ominaisuuksia"
+            },
+            "longDescription": {
+              "fi": "Tuntee merkittävien metallien ominaisuuksia sekä valmistus­ ja jalostusprosesseja ympäristövaikutuksineen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa tutkia sähkökemiaan liittyviä ilmiöitä kokeellisesti"
+            },
+            "longDescription": {
+              "fi": "Osaa tutkia sähkökemiaan liittyviä ilmiöitä kokeellisesti ja kuvata niitä malleja käyttäen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Tuntee metallien kiertotalouden periaatteet ja ratkaisut"
+            },
+            "longDescription": {
+              "fi": "Tuntee yhteiskunnassa merkittävien metallien kierrätyksen ja kiertotalouden periaatteet sekä niihin liittyviä ratkaisuja"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Kemiallinen energia ja kiertotalous (KE5)"
+        }
+      },
+      {
+        "code": "KE_HS_MODULE_KEM_4",
+        "environments": [
+          {
+            "code": "KE_HS_MODULE_KEM_4_ENV_KEM",
+            "name": {
+              "fi": "Kemiallisen reaktion nopeus ja siihen vaikuttavat tekijät"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_4_ENV_HOM",
+            "name": {
+              "fi": "Homogeenisen tasapainon kvalitatiivinen ja kvantitatiivinen käsittely konsentraatioilla, tasapainotilaan vaikuttaminen"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_4_ENV_HAP",
+            "name": {
+              "fi": "Hapot ja emäkset ja niihin liittyvät käsitteet sekä palamistuotteiden reaktiot vedessä"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_4_ENV_HAP_1",
+            "name": {
+              "fi": "Happo­emästasapainon laskennallinen käsittely"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_4_ENV_PUS",
+            "name": {
+              "fi": "Puskuriliuosten toimintaperiaate sekä elimistön ja luonnon puskurisysteemejä kvalitatiivisella tasolla"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_4_ENV_REA",
+            "name": {
+              "fi": "Reaktionopeuteen ja tasapainoreaktioihin liittyvien ilmiöiden tutkiminen kokeellisesti sekä ilmiöiden mallintaminen ja analysointi graafisesti tietokonesovelluksella"
+            },
+            "color": "#b94685"
+          },
+          {
+            "code": "KE_HS_MODULE_KEM_4_ENV_TUT",
+            "name": {
+              "fi": "Tutustuminen kemian tarjoamiin mahdollisuuksiin jonkin terveyteen tai ympäristöön liittyvän ongelman ratkaisemisessa"
+            },
+            "color": "#46a7b9"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Tunnistaa kemian merkityksen ongelmien ratkaisussa"
+            },
+            "longDescription": {
+              "fi": "Tunnistaa kemian merkityksen terveyteen ja ympäristöön liittyvien ongelmien ratkaisemisessa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa tutkia reaktionopeuden ilmiöitä"
+            },
+            "longDescription": {
+              "fi": "Osaa tutkia kokeellisesti reaktionopeuteen ja kemialliseen tasapainoon liittyviä ilmiöitä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa käyttää laskennallisia ja graafisia malleja"
+            },
+            "longDescription": {
+              "fi": "Osaa käyttää laskennallisia ja graafisia malleja reaktionopeuden ja kemiallisen tasapainon kuvaamisessa, selittämisessä ja ennusteiden tekemisessä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa esittää tutkimustuloksia graafisesti"
+            },
+            "longDescription": {
+              "fi": "Osaa esittää tutkimustuloksia graafisesti ja arvioida tutkimustuloksia ja ­prosessia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Tutustuu teollisuusprosessien tasapainoreaktioihin"
+            },
+            "longDescription": {
+              "fi": "Tutustuu teollisuuden prosesseissa ja luonnossa tapahtuviin tasapainoreaktioihin ja niiden merkitykseen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Kemiallinen tasapaino (KE6)"
+        }
+      }
+    ],
+    "name": {
+      "fi": "Kemia"
+    }
+  },
+  {
+    "code": "BI",
+    "elementarySchool": {
+      "environments_7_to_9": [
+        {
+          "code": "BI_7_TO_9_ENV_BIO",
+          "name": {
+            "fi": "Biologinen tutkimus"
+          },
+          "color": "#ae46b9"
+        },
+        {
+          "code": "BI_7_TO_9_ENV_TUT",
+          "name": {
+            "fi": "Tutkimusretkiä luontoon ja lähiympäristöön"
+          },
+          "color": "#46b98d"
+        },
+        {
+          "code": "BI_7_TO_9_ENV_EKO",
+          "name": {
+            "fi": "Ekosysteemin perusrakenne ja toiminta"
+          },
+          "color": "#b96b46"
+        },
+        {
+          "code": "BI_7_TO_9_ENV_MIT",
+          "name": {
+            "fi": "Mitä elämä on?"
+          },
+          "color": "#4a46b9"
+        },
+        {
+          "code": "BI_7_TO_9_ENV_IHM",
+          "name": {
+            "fi": "Ihminen"
+          },
+          "color": "#64b946"
+        },
+        {
+          "code": "BI_7_TO_9_ENV_KOH",
+          "name": {
+            "fi": "Kohti kestävää tulevaisuutta"
+          },
+          "color": "#b94685"
+        }
+      ],
+      "seven_to_nine_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Ohjata ymmärtämään ekosysteemin perusrakennetta"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään ekosysteemin perusrakennetta ja toimintaa sekä vertailemaan erilaisia ekosysteemejä ja tunnistamaan lajeja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#515095"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Auttaa kuvailemaan eliöiden rakenteita ja elintoimintoja"
+          },
+          "longDescription": {
+            "fi": "Auttaa oppilasta kuvailemaan eliöiden rakenteita ja elintoimintoja sekä ymmärtämään eliökunnan rakennetta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#649550"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Ohjata tutkimaan eliöiden sopeutumista"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutkimaan eliöiden sopeutumista eri elinympäristöihin ja ymmärtämään erilaisten elinympäristöjen merkitys luonnon monimuotoisuudelle"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955078"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Ohjata ymmärtämään perinnöllisyyttä ja evoluutiota"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään perinnöllisyyden ja evoluution perusperiaatteita"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#508c95"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Ohjata ymmärtämään ihmisen kehitystä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään ihmisen kehitystä ja elimistön perustoimintoja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#958a50"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Ohjata arvioimaan luonnonympäristön muutoksia"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta arvioimaan luonnonympäristössä tapahtuvia muutoksia ja ihmisen vaikutusta ympäristöön sekä ymmärtämään ekosysteemipalvelujen merkitys"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#765095"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Ohjata kehittämään luonnontieteellistä ajattelutaitoa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kehittämään luonnontieteellistä ajattelutaitoa sekä syy- ja seuraussuhteiden ymmärtämistä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509562"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Opastaa käyttämään biologian tutkimusvälineistöä"
+          },
+          "longDescription": {
+            "fi": "Opastaa oppilasta käyttämään biologian tutkimusvälineistöä ja tietoja viestintäteknologiaa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955053"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Ohjata koostamaan eliökokoelma ja kasvattamaan kasveja"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta koostamaan eliökokoelma ja kasvattamaan kasveja biologisten ilmiöiden ymmärtämiseksi"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#506795"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Ohjata tekemään tutkimuksia"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tekemään tutkimuksia sekä koulussa että koulun ulkopuolella"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#7b9550"
+        },
+        {
+          "code": "T11",
+          "label": {
+            "fi": "Kannustaa soveltamaan tietoja ja taitoja omassa elämässä"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta soveltamaan biologian tietoja ja taitoja omassa elämässä sekä yhteiskunnallisessa keskustelussa ja päätöksenteossa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#95508f"
+        },
+        {
+          "code": "T12",
+          "label": {
+            "fi": "Innostaa syventämään kiinnostusta luontoon ja ilmiöihin"
+          },
+          "longDescription": {
+            "fi": "Innostaa oppilasta syventämään kiinnostusta luontoa ja sen ilmiöitä kohtaan sekä vahvistamaan luontosuhdetta ja ympäristötietoisuutta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509587"
+        },
+        {
+          "code": "T13",
+          "label": {
+            "fi": "Ohjata tekemään eettisesti perusteltuja valintoja"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tekemään eettisesti perusteltuja valintoja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#957350"
+        },
+        {
+          "code": "T14",
+          "label": {
+            "fi": "Innostaa vaikuttamaan ja toimimaan kestävästi"
+          },
+          "longDescription": {
+            "fi": "Innostaa oppilasta vaikuttamaan ja toimimaan kestävän tulevaisuuden rakentamiseksi"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#5f5095"
+        }
+      ],
+      "environments_1_to_2": [],
+      "environments_3_to_6": []
+    },
+    "highSchoolModules": [
+      {
+        "code": "BI_HS_MODULE_ELÄ",
+        "environments": [
+          {
+            "code": "BI_HS_MODULE_ELÄ_ENV_BIO",
+            "name": {
+              "fi": "Biologia tieteenä"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "BI_HS_MODULE_ELÄ_ENV_EVO",
+            "name": {
+              "fi": "Evoluutio"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "BI_HS_MODULE_ELÄ_ENV_ELI",
+            "name": {
+              "fi": "Eliökunta"
+            },
+            "color": "#b96b46"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa selittää elämän tunnusmerkit ja perusedellytykset"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää elämän tunnusmerkit ja perusedellytykset sekä tunnistaa niitä esimerkeistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa solun perusrakennetta ja toimintaa"
+            },
+            "longDescription": {
+              "fi": "Osaa solun perusrakennetta ja toimintaa tasolla, joka mahdollistaa evoluution ja ekosysteemin toiminnan ymmärtämisen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa selittää evoluutiota eri mekanismien avulla"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää perinnölliseen muunteluun, luonnonvalintaan ja lajiutumiseen liittyviä mekanismeja ja osaa selittää näiden merkityksen evoluutiolle"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa jäsentää nykyisen eliökunnan rakenteen"
+            },
+            "longDescription": {
+              "fi": "Osaa jäsentää nykyisen eliökunnan rakenteen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Ymmärtää ja osaa selittää, miten biologinen tieto tuotetaan"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää ja osaa selittää, miten biologinen tieto tuotetaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Elämä ja evoluutio (BI1)"
+        }
+      },
+      {
+        "code": "BI_HS_MODULE_EKO",
+        "environments": [
+          {
+            "code": "BI_HS_MODULE_EKO_ENV_EKO",
+            "name": {
+              "fi": "Ekologian perusteet"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "BI_HS_MODULE_EKO_ENV_LUO",
+            "name": {
+              "fi": "Luonnon monimuotoisuus"
+            },
+            "color": "#46b98d"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa selittää abioottisten ja bioottisten ympäristötekijöiden vaikutukset"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää ja arvioida abioottisten ja bioottisten ympäristötekijöiden vaikutuksen eliöiden sopeutumiseen ja levinneisyyteen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa selittää populaatioiden ja ekosysteemien rakennetta"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää populaatioiden, eliöyhteisöjen ja ekosysteemien rakennetta ja toimintaa sekä kuvata niitä esimerkkien avulla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa kuvata luonnon monimuotoisuutta"
+            },
+            "longDescription": {
+              "fi": "Osaa kuvata luonnon monimuotoisuutta ja perustella sen merkityksen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          }
+        ],
+        "name": {
+          "fi": "Ekologian perusteet (BI2)"
+        }
+      },
+      {
+        "code": "BI_HS_MODULE_IHM",
+        "environments": [
+          {
+            "code": "BI_HS_MODULE_IHM_ENV_IHM",
+            "name": {
+              "fi": "Ihmisen aiheuttamat ekosysteemien muutokset ja ympäristöongelmien ratkaisukeinoja"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "BI_HS_MODULE_IHM_ENV_KES",
+            "name": {
+              "fi": "Kestävää tulevaisuutta kohti"
+            },
+            "color": "#46b98d"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Tuntee menetelmiä ympäristön tilan seuraamiseksi"
+            },
+            "longDescription": {
+              "fi": "Tuntee menetelmiä, joilla voidaan tutkia ja seurata ympäristön tilaa sekä tunnistaa ympäristöongelmia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa arvioida ihmisen vaikutuksia ekosysteemeissä"
+            },
+            "longDescription": {
+              "fi": "Osaa vertailla, analysoida ja arvioida ihmisen toiminnan vaikutuksia ekosysteemeissä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa perustella ympäristöongelmien ratkaisukeinoja"
+            },
+            "longDescription": {
+              "fi": "Osaa esittää perustellen ympäristöongelmien ratkaisukeinoja ja tunnistaa ympäristön tilassa tapahtuvia positiivisia kehityssuuntia"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa perustella toimintaansa ekologisuuden kannalta"
+            },
+            "longDescription": {
+              "fi": "Osaa arvioida ja perustella omaa toimintaansa ekologisen kestävyyden kannalta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa tulkita ja esittää ekologista tutkimusaineistoa"
+            },
+            "longDescription": {
+              "fi": "Osaa hankkia, analysoida, tulkita ja esittää ekologista tutkimusaineistoa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Ihmisen vaikutukset ekosysteemeihin (BI3)"
+        }
+      },
+      {
+        "code": "BI_HS_MODULE_SOL",
+        "environments": [
+          {
+            "code": "BI_HS_MODULE_SOL_ENV_TUM",
+            "name": {
+              "fi": "Tumallisen solun rakenne ja toiminta"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "BI_HS_MODULE_SOL_ENV_SOL",
+            "name": {
+              "fi": "Solujen lisääntyminen"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "BI_HS_MODULE_SOL_ENV_PER",
+            "name": {
+              "fi": "Periytymisen perusteet"
+            },
+            "color": "#b96b46"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa nimetä solun perusrakenteet"
+            },
+            "longDescription": {
+              "fi": "Osaa nimetä solun perusrakenteet"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa selittää solujen keskeisiä toimintoja"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää solujen keskeisiä toimintoja"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Hallitsee periytymisen perusmekanismit"
+            },
+            "longDescription": {
+              "fi": "Hallitsee periytymisen perusmekanismit ja osaa soveltaa niitä esimerkkien avulla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa mikroskopoida erilaisia soluja ja tulkita niitä"
+            },
+            "longDescription": {
+              "fi": "Osaa mikroskopoida erilaisia soluja ja tulkita solujen mikroskooppisia rakenteita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa toteuttaa pienen kokeellisen työn"
+            },
+            "longDescription": {
+              "fi": "Osaa toteuttaa pienen kokeellisen työn"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Solu ja perinnöllisyys (BI4)"
+        }
+      },
+      {
+        "code": "BI_HS_MODULE_IHM_1",
+        "environments": [
+          {
+            "code": "BI_HS_MODULE_IHM_1_ENV_SOL",
+            "name": {
+              "fi": "Solu, kudos, elin"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "BI_HS_MODULE_IHM_1_ENV_ELI",
+            "name": {
+              "fi": "Elimistön säätely"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "BI_HS_MODULE_IHM_1_ENV_AIN",
+            "name": {
+              "fi": "Aineenvaihdunta"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "BI_HS_MODULE_IHM_1_ENV_LII",
+            "name": {
+              "fi": "Liikkuminen"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "BI_HS_MODULE_IHM_1_ENV_ELI_1",
+            "name": {
+              "fi": "Elimistön sopeutuminen ympäristöön"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "BI_HS_MODULE_IHM_1_ENV_LIS",
+            "name": {
+              "fi": "Lisääntyminen"
+            },
+            "color": "#b94685"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa nimetä ja tunnistaa elinten ja elimistön rakenteet"
+            },
+            "longDescription": {
+              "fi": "Osaa nimetä ja tunnistaa tärkeimpien elinten ja elimistöjen rakenteet ja selittää niiden toimintaperiaatteita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Ymmärtää, mitä homeostasia on"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää, mitä homeostasia on, ja osaa kertoa esimerkkejä siihen vaikuttavista tekijöistä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa kuvata ja selittää elimistön viestintäjärjestelmiä"
+            },
+            "longDescription": {
+              "fi": "Osaa kuvata elimistön viestintäjärjestelmiä ja selittää, kuinka eri osat viestivät keskenään"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa selittää elimistön kykyä aistia ympäristöä"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää elimistön kykyä aistia ympäristöä ja reagoida muutoksiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa vertailla elimistön eri puolustusmekanismeja"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää ja vertailla elimistön eri puolustusmekanismeja mikrobeja vastaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Osaa kertoa lisääntymisen keskeisimmät vaiheet"
+            },
+            "longDescription": {
+              "fi": "Osaa kertoa ja perustella lisääntymisen keskeisimmät vaiheet hedelmöityksestä syntymään"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          },
+          {
+            "code": "T7",
+            "label": {
+              "fi": "Osaa toteuttaa elimistön toimintaa mittaavan tutkimuksen"
+            },
+            "longDescription": {
+              "fi": "Osaa toteuttaa pienimuotoisen, ihmisen elimistön toimintaa mittaavan kokeellisen työn ja esittää sen tulokset"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#509562"
+          }
+        ],
+        "name": {
+          "fi": "Ihmisen biologia (BI5)"
+        }
+      },
+      {
+        "code": "BI_HS_MODULE_BIO",
+        "environments": [
+          {
+            "code": "BI_HS_MODULE_BIO_ENV_MIK",
+            "name": {
+              "fi": "Mikrobit"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "BI_HS_MODULE_BIO_ENV_DNA",
+            "name": {
+              "fi": "DNA:n muokkaus ja tutkiminen geenitekniikalla"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "BI_HS_MODULE_BIO_ENV_BIO",
+            "name": {
+              "fi": "Biotekniikan keskeiset sovellukset ja merkitys"
+            },
+            "color": "#b96b46"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Tuntee eri mikrobien rakenteet ja niiden perustoiminnot"
+            },
+            "longDescription": {
+              "fi": "Tuntee eri mikrobien rakenteet ja ymmärtää niiden perustoiminnot"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa kertoa, miten mikrobeja hyödynnetään biotekniikassa"
+            },
+            "longDescription": {
+              "fi": "Osaa kertoa esimerkkejä siitä, miten mikrobeja voidaan hyödyntää biotekniikassa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Syventää tietoja nukleiinihapoista"
+            },
+            "longDescription": {
+              "fi": "Syventää tietoja nukleiinihapoista ja niiden ominaisuuksista sekä tietää, miten niitä voidaan hyödyntää geenitekniikassa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa selittää biotekniikan keskeisimpiä sovelluksia"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää esimerkkien avulla biotekniikan keskeisimpiä sovelluksia ja innovaatioita sekä perustella niiden merkityksen jalostuksessa, lääketieteissä, teollisuudessa sekä ympäristönsuojelussa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa tunnistaa biotekniikan mahdollisuuksia ja riskejä"
+            },
+            "longDescription": {
+              "fi": "Osaa tunnistaa ja arvioida biotekniikan mahdollisuuksia ja riskejä sekä esittää niistä perusteltuja eettisiä mielipiteitä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Osaa toteuttaa kokeellisen työn"
+            },
+            "longDescription": {
+              "fi": "Osaa suunnitella ja toteuttaa biologian soveltamiseen liittyvän kokeellisen työn"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          }
+        ],
+        "name": {
+          "fi": "Biotekniikka ja sen sovellukset (BI6)"
+        }
+      }
+    ],
+    "name": {
+      "fi": "Biologia"
+    }
+  },
+  {
+    "code": "GE",
+    "elementarySchool": {
+      "environments_7_to_9": [
+        {
+          "code": "GE_7_TO_9_ENV_MAA",
+          "name": {
+            "fi": "Maapallon karttakuva ja alueet"
+          },
+          "color": "#ae46b9"
+        },
+        {
+          "code": "GE_7_TO_9_ENV_AJA",
+          "name": {
+            "fi": "Ajankohtainen muuttuva maailma"
+          },
+          "color": "#46b98d"
+        },
+        {
+          "code": "GE_7_TO_9_ENV_ELÄ",
+          "name": {
+            "fi": "Elämän perusedellytykset maapallolla"
+          },
+          "color": "#b96b46"
+        },
+        {
+          "code": "GE_7_TO_9_ENV_MUU",
+          "name": {
+            "fi": "Muuttuvat maisemat ja elinympäristö"
+          },
+          "color": "#4a46b9"
+        },
+        {
+          "code": "GE_7_TO_9_ENV_IHM",
+          "name": {
+            "fi": "Ihmiset ja kulttuurit maapallolla"
+          },
+          "color": "#64b946"
+        },
+        {
+          "code": "GE_7_TO_9_ENV_KES",
+          "name": {
+            "fi": "Kestävä elintapa ja luonnonvarojen kestävä käyttö"
+          },
+          "color": "#b94685"
+        }
+      ],
+      "seven_to_nine_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Tukea jäsentyneen karttakuvan rakentumista maapallosta"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilaan jäsentyneen karttakuvan rakentumista maapallosta"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#515095"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Ohjata tukimaan luonnonmaantieteellisiä ilmiöitä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutkimaan luonnonmaantieteellisiä ilmiöitä sekä vertailemaan luonnonmaisemia Suomessa ja muualla maapallolla"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#649550"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Ohjata tutkimaan ihmismaantieteellisiä ilmiöitä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutkimaan ihmismaantieteellisiä ilmiöitä ja kulttuurimaisemia sekä ymmärtämään erilaisia kulttuureita, elinkeinoja ja ihmisten elämää Suomessa ja maapallon eri alueilla"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955078"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Kannustaa pohtimaan ihmisen ja luonnon vuorovaikutusta"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta pohtimaan ihmisen toiminnan ja luonnonympäristön välistä vuorovaikutusta sekä ymmärtämään luonnonvarojen kestävän käytön merkitys"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#508c95"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Ohjata kehittämään maantieteellistä ajattelutaitoa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kehittämään maantieteellistä ajattelutaitoa sekä kykyä esittää maantieteellisiä kysymyksiä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#958a50"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Ohjata kehittämään tilatajua"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kehittämään tilatajua sekä symboleiden, mittasuhteiden, suuntien ja etäisyyksien ymmärrystä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#765095"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Ohjata harjaannuttamaan arjen geomediataitoja"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta harjaannuttamaan arkielämän geomediataitoja sekä lukemaan, tulkitsemaan ja laatimaan karttoja ja muita malleja maantieteellisistä ilmiöistä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509562"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Ohjata maantieteellisten tutkimustaitojen kehittymiseen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kehittämään maantieteellisiä tutkimustaitoja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955053"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Harjaannuttaa oppilasta ympäristön havainnoinnissa"
+          },
+          "longDescription": {
+            "fi": "Harjaannuttaa oppilasta havainnoimaan ympäristöä ja siinä tapahtuvia muutoksia sekä aktivoida oppilasta seuraamaan ajankohtaisia tapahtumia omassa lähiympäristössä, Suomessa ja koko maailmassa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#506795"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Tukea kehittämään vuorovaikutustaitoja"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilasta kehittämään vuorovaikutus- ja ryhmätyötaitoja sekä argumentoimaan ja esittämään selkeästi maantieteellistä tietoa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#7b9550"
+        },
+        {
+          "code": "T11",
+          "label": {
+            "fi": "Ohjata vaalimaan luontoa ja sen moninaisuutta"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta vaalimaan luontoa, rakennettua ympäristöä ja niiden monimuotoisuutta sekä vahvistaa oppilaan osallistumisen ja vaikuttamisen taitoja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#95508f"
+        },
+        {
+          "code": "T12",
+          "label": {
+            "fi": "Tukea kasvamaan aktiiviseksi ja vastuuliseksi toimijaksi"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilasta kasvamaan aktiiviseksi, vastuullisesti toimivaksi ja kestävään elämäntapaan sitoutuneeksi kansalaiseksi"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509587"
+        },
+        {
+          "code": "T13",
+          "label": {
+            "fi": "Ohjata arvostamaan identiteettiä ja moninaisuutta"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta arvostamaan alueellista identiteettiään sekä luonnon, ihmistoiminnan ja kulttuurien moninaisuutta sekä kunnioittamaan ihmisoikeuksia kaikkialla maailmassa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#957350"
+        }
+      ],
+      "environments_1_to_2": [],
+      "environments_3_to_6": []
+    },
+    "highSchoolModules": [
+      {
+        "code": "GE_HS_MODULE_MAA",
+        "environments": [
+          {
+            "code": "GE_HS_MODULE_MAA_ENV_MAA",
+            "name": {
+              "fi": "Maantiede tieteenalana"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "GE_HS_MODULE_MAA_ENV_YMP",
+            "name": {
+              "fi": "Ympäristön muutoksia ja niiden ratkaisukeinoja"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "GE_HS_MODULE_MAA_ENV_IHM",
+            "name": {
+              "fi": "Ihmiskunnan muutoksia"
+            },
+            "color": "#b96b46"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Kehittää maailmankuvaansa ja käyttää paikannimistöä"
+            },
+            "longDescription": {
+              "fi": "Kehittää maantieteellistä maailmankuvaansa ja osaa käyttää paikannimistöä luontevasti tarkoituksenmukaisissa yhteyksissä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa analysoida ympäristön muutosten syitä"
+            },
+            "longDescription": {
+              "fi": "Osaa analysoida ympäristön muutosten syitä ja arvioida ympäristön muutosten seurauksia eri alueilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Tuntee keinoja ympäristön muutoksien hillitsemiseksi"
+            },
+            "longDescription": {
+              "fi": "Tuntee keinoja ja osaa selittää, millaisten ratkaisujen avulla ympäristön muutoksia voidaan hillitä tai vaikutuksia lieventää eri alueilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa analysoida ihmiskunnan muutosten syitä"
+            },
+            "longDescription": {
+              "fi": "Osaa analysoida ihmiskunnan muutosten syitä ja arvioida muutosten seurauksia eri alueilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Tuntee vaikutuskeinoja ihmistoiminnan aiheuttamiin muutoksiin"
+            },
+            "longDescription": {
+              "fi": "Tuntee keinoja ja osaa arvioida, miten ihmistoiminnan aiheuttamiin muutoksiin voidaan vaikuttaa eri alueilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Tuntee kestävän kehityksen sitoumuksia"
+            },
+            "longDescription": {
+              "fi": "Tuntee kestävän kehityksen sitoumuksia sekä osaa käyttää näitä eettisten perustelujen pohjana"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          },
+          {
+            "code": "T7",
+            "label": {
+              "fi": "Osaa hyödyntää geomediaa alueellisissa kysymyksissä"
+            },
+            "longDescription": {
+              "fi": "Osaa hankkia, analysoida ja esittää asianmukaista ja luotettavaa tietoa alueellisista kysymyksistä geomediaa hyödyntäen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#509562"
+          },
+          {
+            "code": "T8",
+            "label": {
+              "fi": "Osaa arvioida kriittisesti alueellisia uutisia"
+            },
+            "longDescription": {
+              "fi": "Osaa arvioida kriittisesti ajankohtaisia alueellisia uutisia ympäristön tai ihmiskunnan muutoksista eri medioissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955053"
+          }
+        ],
+        "name": {
+          "fi": "Maailma muutoksessa (GE1)"
+        }
+      },
+      {
+        "code": "GE_HS_MODULE_SIN",
+        "environments": [
+          {
+            "code": "GE_HS_MODULE_SIN_ENV_LUO",
+            "name": {
+              "fi": "Luonnonmaantieteellinen ajattelu"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "GE_HS_MODULE_SIN_ENV_MAA",
+            "name": {
+              "fi": "Maan planetaariset liikkeet ja niistä johtuvat ilmiöt"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "GE_HS_MODULE_SIN_ENV_ILM",
+            "name": {
+              "fi": "Ilmakehä ja vesikehä"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "GE_HS_MODULE_SIN_ENV_KIV",
+            "name": {
+              "fi": "Kivikehä"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "GE_HS_MODULE_SIN_ENV_MAA_1",
+            "name": {
+              "fi": "Maannokset ja kasvillisuusalueet"
+            },
+            "color": "#64b946"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa käyttää luonnonmaantieteen peruskäsitteitä"
+            },
+            "longDescription": {
+              "fi": "Osaa käyttää tarkoituksenmukaisesti luonnonmaantieteen peruskäsitteitä ja paikannimistöä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa tulkita ja esittää tietoa geomedian avulla"
+            },
+            "longDescription": {
+              "fi": "Osaa hankkia, analysoida, tulkita, arvioida ja esittää luonnonmaantieteellistä tietoa geomedian avulla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa selittää planetaarisuudesta johtuvia ilmiöitä"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää Maan planetaarisuudesta johtuvia ilmiöitä ja perustella ilmiöiden vaikutuksia luonnon järjestelmiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa kuvata luonnon alueellisuutta maapallolla"
+            },
+            "longDescription": {
+              "fi": "Osaa kuvata ja analysoida elottoman ja elollisen luonnon alueellisuutta maapallolla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa tulkita kartoilta luonnonmaisemien rakennetta"
+            },
+            "longDescription": {
+              "fi": "Osaa tulkita kuvista ja kartoilta luonnonmaisemien rakennetta, syntyä ja kehitystä sekä selittää perustellen, miten ja miksi luonnonmaisemat muuttuvat"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Osaa analysoida luonnonriskien syitä ja seurauksia"
+            },
+            "longDescription": {
+              "fi": "Osaa analysoida luonnonriskien syitä ja arvioida luonnonriskien seurauksia eri alueilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          },
+          {
+            "code": "T7",
+            "label": {
+              "fi": "Osaa selittää luonnonriskien seurauksien ennakointia"
+            },
+            "longDescription": {
+              "fi": "Osaa selittää ja vertailla esimerkkien avulla, miten luonnonriskien seurauksia voidaan ennakoida tai vaikutuksia lieventää eri alueilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#509562"
+          },
+          {
+            "code": "T8",
+            "label": {
+              "fi": "Ymmärtää luonnonmaantieteen merkityksen"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää luonnonmaantieteellisen tiedon merkityksen yhteiskunnassa ja ihmisten arkielämässä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955053"
+          }
+        ],
+        "name": {
+          "fi": "Sininen planeetta (GE2)"
+        }
+      },
+      {
+        "code": "GE_HS_MODULE_YHT",
+        "environments": [
+          {
+            "code": "GE_HS_MODULE_YHT_ENV_IHM",
+            "name": {
+              "fi": "Ihmismaantieteellinen ajattelu"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "GE_HS_MODULE_YHT_ENV_VÄE",
+            "name": {
+              "fi": "Väestö, asutus ja kulttuurit"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "GE_HS_MODULE_YHT_ENV_KAU",
+            "name": {
+              "fi": "Kaupungit ja kaupungistuminen"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "GE_HS_MODULE_YHT_ENV_TUO",
+            "name": {
+              "fi": "Tuotannon alueelliset piirteet ja luonnonvarojen kestävä käyttö"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "GE_HS_MODULE_YHT_ENV_LII",
+            "name": {
+              "fi": "Liikkuminen, palvelut ja vuorovaikutus"
+            },
+            "color": "#64b946"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa käyttää ihmismaantieteen käsitteitä"
+            },
+            "longDescription": {
+              "fi": "Osaa käyttää tarkoituksenmukaisesti ihmismaantieteen käsitteitä ja paikannimistöä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Tunnistaa ja arvostaa kulttuurisia piirteitä ja eroja"
+            },
+            "longDescription": {
+              "fi": "Tunnistaa kulttuurisia piirteitä ja niiden eroja, arvostaa niiden moninaisuutta sekä ottaa toiminnassaan huomioon ihmisoikeudet"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa analysoida ja esittää tietoa geomedian avulla"
+            },
+            "longDescription": {
+              "fi": "Osaa hankkia, analysoida, arvioida ja esittää ihmismaantieteellistä tietoa geomedian avulla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa kuvata ihmistoiminnan alueellisia piirteitä"
+            },
+            "longDescription": {
+              "fi": "Osaa kuvata ja analysoida ihmistoiminnan alueellisia piirteitä sekä ihmisen ja luonnon välisiä riippuvuussuhteita eri aluetasoilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa analysoida luonnonvarojen vaikutusta eri alueilla"
+            },
+            "longDescription": {
+              "fi": "Osaa analysoida luonnonvarojen ja ympäristön tarjoamien mahdollisuuksien vaikutusta ihmisen toimintaan sekä vertailla eri alueita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Osaa analysoida ihmiskunnan riskien syitä ja seurauksia"
+            },
+            "longDescription": {
+              "fi": "Osaa analysoida esimerkkien avulla ihmiskunnan riskien ja ympäristöriskien syitä ja arvioida niiden seurauksia sekä tunnistaa keinoja, miten riskien seurauksia voidaan hillitä tai vaikutuksia lieventää eri alueilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          },
+          {
+            "code": "T7",
+            "label": {
+              "fi": "Ymmärtää ihmismaantieteen merkityksen yhteiskunnassa"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää ihmismaantieteellisen tiedon merkityksen yhteiskunnassa, ihmisten arkielämässä ja omassa toiminnassaan"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#509562"
+          }
+        ],
+        "name": {
+          "fi": "Yhteinen maailma (GE3)"
+        }
+      },
+      {
+        "code": "GE_HS_MODULE_GEO",
+        "environments": [
+          {
+            "code": "GE_HS_MODULE_GEO_ENV_MAA",
+            "name": {
+              "fi": "Maantieteellinen tutkimus"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "GE_HS_MODULE_GEO_ENV_ALU",
+            "name": {
+              "fi": "Aluesuunnittelu ja osallistuvan suunnittelun periaatteet"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "GE_HS_MODULE_GEO_ENV_MAA_1",
+            "name": {
+              "fi": "Maantieteellinen tutkielma tai osaallistumis- ja vaikuttamisprojekti"
+            },
+            "color": "#b96b46"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa asettaa kysymyksen ja toteuttaa tutkimuksen"
+            },
+            "longDescription": {
+              "fi": "Osaa asettaa maantieteellisiä kysymyksiä ja toteuttaa tutkimuksen tai osallistumis­ ja vaikuttamisprojektin, jossa on paikallinen, alueellinen tai globaali ulottuvuus"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa selittää geomedian soveltamista tutkimuksessa"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää ja osaa selittää, miten geomediaa sovelletaan maantieteellisessä tutkimuksessa, omassa arjessa ja yhteiskunnan eri aloilla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa hyödyntää paikkatietosovelluksia"
+            },
+            "longDescription": {
+              "fi": "Osaa hyödyntää paikkatietosovelluksia ja tietää niiden toimintaperiaatteita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa havainnoida ja tulkita maisemaa ja selittää ilmiöitä"
+            },
+            "longDescription": {
+              "fi": "Osaa havainnoida arkiympäristöjä, tulkita maisemaa ja karttoja sekä kuvata ja selittää luonnon ja ihmistoiminnan alueellisia ilmiötä, rakenteita ja vuorovaikutussuhteita"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa kuvata aluesuunnittelun tavoitteet ja eri tasot"
+            },
+            "longDescription": {
+              "fi": "Tuntee ja osaa kuvata aluesuunnittelun tavoitteet ja eri tasot sekä kansalaisten mahdollisuudet vaikuttaa oman ympäristönsä suunnitteluun ja kehittämiseen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Geomedia - tutki, osallistu ja vaikuta (GE4)"
+        }
+      }
+    ],
+    "name": {
+      "fi": "Maantieto/maantiede"
+    }
+  },
+  {
+    "code": "FI",
+    "highSchoolModules": [
+      {
+        "code": "FI_HS_MODULE_JOH",
+        "environments": [
+          {
+            "code": "FI_HS_MODULE_JOH_ENV_MIT",
+            "name": {
+              "fi": "Mitä filosofia on, filosofinen kysymyksenasettelu sekä ajattelu filosofian perinteessä"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "FI_HS_MODULE_JOH_ENV_JOH",
+            "name": {
+              "fi": "Johdonmukaisen argumentaation ja pätevän päättelyn perusteet"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "FI_HS_MODULE_JOH_ENV_KES",
+            "name": {
+              "fi": "Keskeisiä filosofisia peruskysymyksiä ja ­erotteluja"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "FI_HS_MODULE_JOH_ENV_TIE",
+            "name": {
+              "fi": "Tiedon ja informaation, arkitiedon ja tieteellisen tiedon sekä tieteen ja pseudotieteen ero"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "FI_HS_MODULE_JOH_ENV_TIE_1",
+            "name": {
+              "fi": "Tiedon ja argumentaation luonne eri tiedonaloilla"
+            },
+            "color": "#64b946"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Muodostaa käsityksen filosofian luonteesta"
+            },
+            "longDescription": {
+              "fi": "Muodostaa käsityksen filosofian luonteesta ja menetelmistä tutustumalla filosofisiin ongelmiin ja niiden mahdollisiin ratkaisuihin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Oppii arvioimaan väitteiden totuutta"
+            },
+            "longDescription": {
+              "fi": "Oppii arvioimaan väitteiden totuutta sekä harjaantuu esittämään ja vaatimaan erilaisille väitteille perusteluja, hahmottamaan perustelujen rakennetta sekä arvioimaan niiden pätevyyttä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Tuntee ja oppii soveltamaan filosofian työtapoja"
+            },
+            "longDescription": {
+              "fi": "Tuntee ja oppii erilaisten vuorovaikutteisten harjoitusten ja keskustelujen kautta soveltamaan filosofian työtapoja, kuten oletusten kyseenalaistamista, käsitteiden luokittelua ja määrittelemistä sekä ajatuskokeiden ja vastaesimerkkien käyttöä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Perehtyy joihinkin keskeisiin filosofisiin kysymyksiin"
+            },
+            "longDescription": {
+              "fi": "Perehtyy joihinkin keskeisiin filosofisiin kysymyksiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa arvioida kriittisesti erilaisia tiedollisia uskomuksia"
+            },
+            "longDescription": {
+              "fi": "Osaa eritellä ja arvioida kriittisesti erilaisia tiedollisia uskomuksia ja tutustuu tietämiseen joissain lukion oppiaineissa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Johdatus filosofiseen ajatteluun (FI1)"
+        }
+      },
+      {
+        "code": "FI_HS_MODULE_ETI",
+        "environments": [
+          {
+            "code": "FI_HS_MODULE_ETI_ENV_MOR",
+            "name": {
+              "fi": "Moraalin luonne normijärjestelmänä"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "FI_HS_MODULE_ETI_ENV_MOR_1",
+            "name": {
+              "fi": "Moraalia tarkasteleva normatiivinen ja soveltava etiikka"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "FI_HS_MODULE_ETI_ENV_FIL",
+            "name": {
+              "fi": "Filosofisia teorioita elämän hyvyydestä ja merkityksellisyydestä sekä hyvästä elämäntavasta"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "FI_HS_MODULE_ETI_ENV_ETI",
+            "name": {
+              "fi": "Etiikka ja yksilön moraaliset ratkaisut"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "FI_HS_MODULE_ETI_ENV_YMP",
+            "name": {
+              "fi": "Ympäristöä ja luontoa koskevia eettisiä kysymyksiä"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "FI_HS_MODULE_ETI_ENV_ETI_1",
+            "name": {
+              "fi": "Etiikka ja yhteiskunta"
+            },
+            "color": "#b94685"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Perehtyy filosofisen etiikan käsitteisiin ja teorioihin"
+            },
+            "longDescription": {
+              "fi": "Perehtyy filosofisen etiikan keskeisiin käsitteisiin, kysymyksiin ja teorioihin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Osaa perustella käsityksiä hyvästä ja oikeasta"
+            },
+            "longDescription": {
+              "fi": "Osaa perustella käsityksiä hyvästä ja oikeasta sekä hahmottaa normatiivisten ja kuvailevien väitteiden eron"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa esittää eettisiä argumentteja"
+            },
+            "longDescription": {
+              "fi": "Osaa esittää suullisesti ja kirjallisesti johdonmukaisia eettisiä argumentteja sekä perustella moraalin velvoittavuutta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Oppii jäsentämään oman elämänsä merkityksellisyyttä"
+            },
+            "longDescription": {
+              "fi": "Oppii jäsentämään oman elämänsä merkityksellisyyttä ja elämänvalintojaan filosofisen käsitteistön avulla"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa arvioida toimintaa eettisesti"
+            },
+            "longDescription": {
+              "fi": "Osaa eritellä ja arvioida toimintaa eettisesti sekä kykenee jäsentämään omia moraalisia ratkaisujaan ja arvioitaan filosofisen etiikan välinein"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Osaa soveltaa etiikkaa yhteiskuntakysymyksissä"
+            },
+            "longDescription": {
+              "fi": "Osaa soveltaa etiikkaa yhteiskuntaa ja ympäristöä koskeviin kysymyksiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          }
+        ],
+        "name": {
+          "fi": "Etiikka (FI2)"
+        }
+      },
+      {
+        "code": "FI_HS_MODULE_YHT",
+        "environments": [
+          {
+            "code": "FI_HS_MODULE_YHT_ENV_YHT",
+            "name": {
+              "fi": "Yhteiskuntajärjestyksen oikeuttaminen, yhteiskuntasopimusteoriat"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "FI_HS_MODULE_YHT_ENV_VAL",
+            "name": {
+              "fi": "Vallan, vapauden, tasa­arvon ja oikeudenmukaisuuden eri muodot"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "FI_HS_MODULE_YHT_ENV_IHM",
+            "name": {
+              "fi": "Ihmisoikeudet, kansalaisoikeudet ja oikeusvaltio"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "FI_HS_MODULE_YHT_ENV_POL",
+            "name": {
+              "fi": "Poliittiset ihanteet"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "FI_HS_MODULE_YHT_ENV_HYV",
+            "name": {
+              "fi": "Hyvinvoinnin ja talouden suhde"
+            },
+            "color": "#64b946"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Perehtyy yhteiskuntafilosofian käsitteisiin"
+            },
+            "longDescription": {
+              "fi": "Perehtyy joihinkin yhteiskuntafilosofian keskeisiin käsitteisiin ja suuntauksiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Oppii erittelemään käsitteitä eri tasoilla"
+            },
+            "longDescription": {
+              "fi": "Oppii erittelemään oikeudenmukaisuutta, vapautta, tasa­arvoa ja vallankäyttöä yksilöiden, yhteisöjen ja instituutioiden toiminnassa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Pystyy arvioimaan filosofisesti yhteiskuntarakennetta"
+            },
+            "longDescription": {
+              "fi": "Pystyy arvioimaan filosofisesti yhteiskunnan rakennetta ja sen oikeutusta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Soveltaa oppimaansa ajankohtaisiin kysymyksiin"
+            },
+            "longDescription": {
+              "fi": "Osaa soveltaa oppimaansa ajankohtaisiin yhteiskunnallisiin kysymyksiin"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Ymmärtää oikeudet yhteiskunnan perustana"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää oikeuksien merkityksen yhteiskunnan perustana"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          }
+        ],
+        "name": {
+          "fi": "Yhteiskuntafilosofia (FI3)"
+        }
+      },
+      {
+        "code": "FI_HS_MODULE_TOT",
+        "environments": [
+          {
+            "code": "FI_HS_MODULE_TOT_ENV_KIE",
+            "name": {
+              "fi": "Kieli, merkitys ja totuus"
+            },
+            "color": "#ae46b9"
+          },
+          {
+            "code": "FI_HS_MODULE_TOT_ENV_TOT",
+            "name": {
+              "fi": "Totuuden luonne ja totuusteoriat"
+            },
+            "color": "#46b98d"
+          },
+          {
+            "code": "FI_HS_MODULE_TOT_ENV_TOD",
+            "name": {
+              "fi": "Todellisuuden ja tietoisuuden luonne"
+            },
+            "color": "#b96b46"
+          },
+          {
+            "code": "FI_HS_MODULE_TOT_ENV_TIE",
+            "name": {
+              "fi": "Tiedon lähteet, tiedon mahdollisuus ja rajat, tiedon oikeuttaminen, tiedon suhde varmuuteen"
+            },
+            "color": "#4a46b9"
+          },
+          {
+            "code": "FI_HS_MODULE_TOT_ENV_TIE_1",
+            "name": {
+              "fi": "Tieteen etiikka"
+            },
+            "color": "#64b946"
+          },
+          {
+            "code": "FI_HS_MODULE_TOT_ENV_TIE_2",
+            "name": {
+              "fi": "Tieteen menetelmien ja teorioiden luotettavuus ja suhde todellisuuteen"
+            },
+            "color": "#b94685"
+          },
+          {
+            "code": "FI_HS_MODULE_TOT_ENV_SEL",
+            "name": {
+              "fi": "Selittäminen, ennustaminen, ymmärtäminen ja tulkinta erilaisissa tieteissä"
+            },
+            "color": "#46a7b9"
+          }
+        ],
+        "learningObjectives": [
+          {
+            "code": "T1",
+            "label": {
+              "fi": "Osaa erottaa mielipiteet tosiasiaväittämistä"
+            },
+            "longDescription": {
+              "fi": "Osaa erottaa mielipiteet tosiasiaväittämistä ja ymmärtää tarpeen perustella tosiasiaväittämät"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#515095"
+          },
+          {
+            "code": "T2",
+            "label": {
+              "fi": "Ymmärtää kielen roolin todellisuuden hahmottamisessa"
+            },
+            "longDescription": {
+              "fi": "Ymmärtää kielen ja merkitysten roolin todellisuuden hahmottamisessa"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#649550"
+          },
+          {
+            "code": "T3",
+            "label": {
+              "fi": "Osaa eritellä ja arvioida filosofisia teorioita totuudesta"
+            },
+            "longDescription": {
+              "fi": "Osaa eritellä ja arvioida filosofisia teorioita totuudesta, tiedosta, todellisuuden luonteesta ja tieteestä"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#955078"
+          },
+          {
+            "code": "T4",
+            "label": {
+              "fi": "Osaa eritellä tutkimuksen selittämisen luonnetta"
+            },
+            "longDescription": {
+              "fi": "Osaa jäsentää ja eritellä tieteellisen tutkimuksen, päättelyn ja selittämisen luonnetta"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#508c95"
+          },
+          {
+            "code": "T5",
+            "label": {
+              "fi": "Osaa arvioida havainnon ja tiedon suhdetta totuuteen"
+            },
+            "longDescription": {
+              "fi": "Osaa arvioida havainnon ja tiedon sekä tieteellisten teorioiden suhdetta totuuteen"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#958a50"
+          },
+          {
+            "code": "T6",
+            "label": {
+              "fi": "Oppii arvioimaan erilaisia tuloksia ja vaihtoehtoja"
+            },
+            "longDescription": {
+              "fi": "Oppii arvioimaan tilanteita, joissa eri tutkimukset antavat erilaisia tuloksia ja toimintavaihtoehtoja"
+            },
+            "type": "SKILLS_AND_BEHAVIOUR",
+            "color": "#765095"
+          }
+        ],
+        "name": {
+          "fi": "Totuus (FI4)"
+        }
+      }
+    ],
+    "name": {
+      "fi": "Filosofia"
+    },
+    "elementarySchool": {}
+  },
+  {
+    "code": "YM",
+    "elementarySchool": {
+      "environments_1_to_2": [
+        {
+          "code": "YM_1_TO_2_ENV_KAS",
+          "name": {
+            "fi": "Kasvu ja kehitys"
+          },
+          "color": "#ae46b9"
+        },
+        {
+          "code": "YM_1_TO_2_ENV_KOT",
+          "name": {
+            "fi": "Kotona ja koulussa toimiminen"
+          },
+          "color": "#46b98d"
+        },
+        {
+          "code": "YM_1_TO_2_ENV_LÄH",
+          "name": {
+            "fi": "Lähiympäristön ja sen muutosten havainnointi"
+          },
+          "color": "#b96b46"
+        }
+      ],
+      "environments_3_to_6": [
+        {
+          "code": "YM_3_TO_6_ENV_MIN",
+          "name": {
+            "fi": "Minä ihmisenä"
+          },
+          "color": "#ae46b9"
+        },
+        {
+          "code": "YM_3_TO_6_ENV_ARJ",
+          "name": {
+            "fi": "Arjen tilanteissa ja yhteisöissä toimiminen"
+          },
+          "color": "#46b98d"
+        },
+        {
+          "code": "YM_3_TO_6_ENV_LÖY",
+          "name": {
+            "fi": "Löytöretkelle monimuotoiseen maailmaan"
+          },
+          "color": "#b96b46"
+        }
+      ],
+      "one_to_two_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Toteuttaa luontaista uteliaisuutta ja merkityksellisyyttä"
+          },
+          "longDescription": {
+            "fi": "Tarjota oppilaalle mahdollisuuksia toteuttaa luontaista uteliaisuuttaan ja auttaa oppilasta kokemaan ympäristöopin asiat merkitykselliseksi itselleen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#515095"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Kannustaa oppimiseen, osaamiseen ja pitkäjänteisyyteen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta iloitsemaan ympäristöopin oppimisesta, omasta osaamisesta ja uusista haasteista sekä harjoittelemaan pitkäjänteistä työskentelyä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#649550"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Tukea ympäristöherkkyyden kehitystä ja kestävää toimintaa"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilaan ympäristöherkkyyden kehittymistä ja ohjata oppilasta toimimaan kestävällä tavalla lähiympäristössä ja kouluyhteisössä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955078"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Ohjata tutkimaan ja toimimaan lähiympäristössä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutkimaan ja toimimaan sekä liikkumaan ja retkeilemään lähiympäristössään"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#508c95"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Kannustaa ihmettelyyn ja kysymiseen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta ihmettelemään ja kyselemään sekä käyttämään yhteisiä pohdintoja pienten tutkimusten ja muun toiminnan lähtökohtana"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#958a50"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Ohjata havainnointiin ja kokeiluun eri aisteja käyttäen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tekemään havaintoja ja kokeiluja koulussa ja lähiympäristössä eri aisteja ja yksinkertaisia tutkimusvälineitä käyttäen sekä esittelemään tuloksiaan eri tavoin"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#765095"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Ohjata kuvailemaan ja vertailemaan eri aineita ja eliöitä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta kuvailemaan, vertailemaan ja luokittelemaan monipuolisesti eliöitä, elinympäristöjä, ilmiöitä, materiaaleja ja tilanteita sekä nimeämään niitä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509562"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Ohjata turvalliseen toimintaan"
+          },
+          "longDescription": {
+            "fi": "Opastaa oppilasta toimimaan turvallisesti, noudattamaan annettuja ohjeita ja hahmottamaan niiden perusteluita"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955053"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Ohjata tutustumaan teknologiaan ja luomaan uutta"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutustumaan monipuolisesti arjen teknologiaan sekä innostaa oppilaita kokeilemaan, keksimään, rakentamaan ja luomaan uutta yhdessä toimien"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#506795"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Ohjata harjoittelemaan ryhmä- ja tunnetaitoja"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta harjoittelemaan ryhmässä toimimisen taitoja ja tunnetaitoja sekä vahvistamaan itsensä ja muiden arvostamista"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#7b9550"
+        },
+        {
+          "code": "T11",
+          "label": {
+            "fi": "Ohjata käyttämään teknologiaa tiedonhaussa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta käyttämään tieto- ja viestintäteknologiaa tiedon hankkimisessa sekä havaintojen taltioimisessa ja esittämisessä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#95508f"
+        },
+        {
+          "code": "T12",
+          "label": {
+            "fi": "Ohjata jäsentämään ympäristöä ja ihmisten toimintaa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta jäsentämään ympäristöä, ihmisten toimintaa ja niihin liittyviä ilmiöitä ympäristöopin eri tiedonalojen käsitteiden avulla"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509587"
+        },
+        {
+          "code": "T13",
+          "label": {
+            "fi": "Ohjata ymmärtämään kuvia, malleja ja karttoja"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään yksinkertaisia kuvia, malleja ja karttoja ympäristön kuvaajina"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#957350"
+        },
+        {
+          "code": "T14",
+          "label": {
+            "fi": "Rohkaista itseilmaisuun ja näkemysten perusteluun"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta ilmaisemaan itseään ja harjoittelemaan näkemystensä perustelemista"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#5f5095"
+        },
+        {
+          "code": "T15",
+          "label": {
+            "fi": "Ohjata pohtimaan kasvua, kehitystä ja terveyttä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta pohtimaan kasvua ja kehitystä, terveyttä ja hyvinvointia tukevia tekijöitä sekä elämän perusedellytyksiä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#569550"
+        }
+      ],
+      "three_to_six_years": [
+        {
+          "code": "T1",
+          "label": {
+            "fi": "Synnyttää ja ylläpitää kiinnostusta ja merkityksellisyyttä"
+          },
+          "longDescription": {
+            "fi": "Synnyttää ja ylläpitää oppilaan kiinnostusta ympäristöön ja ympäristöopin opiskeluun sekä auttaa oppilasta kokemaan kaikki ympäristöopin tiedonalat merkityksellisiksi itselleen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#515095"
+        },
+        {
+          "code": "T2",
+          "label": {
+            "fi": "Ohjata tavoitteiden asetteluun ja työskentelyyn niitä kohti"
+          },
+          "longDescription": {
+            "fi": "Ohjata ja kannustaa oppilasta asettamaan omia opiskelutavoitteita ja työskentelemään pitkäjänteisesti niiden saavuttamiseksi sekä tunnistamaan omaa ympäristöopin osaamistaan"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#649550"
+        },
+        {
+          "code": "T3",
+          "label": {
+            "fi": "Tukea ympäristötietoisuuden kehittymistä"
+          },
+          "longDescription": {
+            "fi": "Tukea oppilaan ympäristötietoisuuden kehittymistä sekä ohjata oppilasta toimimaan ja vaikuttamaan lähiympäristössään ja -yhteisöissään kestävän kehityksen edistämiseksi ja arvostamaan kestävän kehityksen merkitystä itselle ja maailmalle"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955078"
+        },
+        {
+          "code": "T4",
+          "label": {
+            "fi": "Rohkaista muodostamaan kysymyksiä eri aiheista"
+          },
+          "longDescription": {
+            "fi": "Rohkaista oppilasta muodostamaan kysymyksiä eri aihepiireistä sekä käyttämään niitä tutkimusten ja muun toiminnan lähtökohtana"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#508c95"
+        },
+        {
+          "code": "T5",
+          "label": {
+            "fi": "Ohjata suunnittelemaan ja toteuttamaan pieniä tutkimuksia"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta suunnittelemaan ja toteuttamaan pieniä tutkimuksia, tekemään havaintoja ja mittauksia monipuolisissa oppimisympäristöissä eri aisteja ja tutkimus- ja mittausvälineitä käyttäen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#958a50"
+        },
+        {
+          "code": "T6",
+          "label": {
+            "fi": "Ohjata tunnistamaan syy-seurauksia"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tunnistamaan syy-seuraussuhteita, tekemään johtopäätöksiä tuloksistaan sekä esittämään tuloksiaan ja tutkimuksiaan eri tavoin"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#765095"
+        },
+        {
+          "code": "T7",
+          "label": {
+            "fi": "Ohjata teknologisten sovellusten käyttöön ja uuden luontiin"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään arjen teknologisten sovellusten käyttöä, merkitystä ja toimintaperiaatteita sekä innostaa oppilaita kokeilemaan, keksimään ja luomaan uutta yhdessä toimien"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509562"
+        },
+        {
+          "code": "T8",
+          "label": {
+            "fi": "Kannustaa hyvinvoinnin ja turvallisuuden edistämiseen"
+          },
+          "longDescription": {
+            "fi": "Kannustaa oppilasta edistämään hyvinvointia ja turvallisuutta toiminnassaan ja lähiympäristössään ja ohjata oppilasta toimimaan turvallisesti, tarkoituksenmukaisesti, vastuullisesti ja itseään suojellen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#955053"
+        },
+        {
+          "code": "T9",
+          "label": {
+            "fi": "Ohjata tutkimaan ja toimimaan luonnossa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutkimaan ja toimimaan sekä liikkumaan ja retkeilemään luonnossa ja rakennetussa ympäristössä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#506795"
+        },
+        {
+          "code": "T10",
+          "label": {
+            "fi": "Tarjota mahdollisuuksia ryhmässä toimimiseen eri rooleissa"
+          },
+          "longDescription": {
+            "fi": "Tarjota oppilaalle mahdollisuuksia harjoitella ryhmässä toimimista erilaisissa rooleissa ja vuorovaikutustilanteissa, innostaa oppilasta ilmaisemaan itseään ja kuuntelemaan muita sekä tukea oppilaan valmiuksia tunnistaa, ilmaista ja säädellä tunteitaan"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#7b9550"
+        },
+        {
+          "code": "T11",
+          "label": {
+            "fi": "Ohjata oppilasta teknologian käyttöön tiedonhankinnassa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta käyttämään tieto- ja viestintäteknologiaa tiedon hankinnassa, käsittelyssä ja esittämisessä sekä vuorovaikutuksen välineenä vastuullisesti, turvallisesti ja ergonomisesti"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#95508f"
+        },
+        {
+          "code": "T12",
+          "label": {
+            "fi": "Ohjata ympäristön havainnointiin"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta hahmottamaan ympäristöä, ihmisten toimintaa ja niihin liittyviä ilmiöitä ympäristöopin käsitteiden avulla sekä kehittämään käsiterakenteitaan ennakkokäsityksistä kohti käsitteiden täsmällistä käyttöä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#509587"
+        },
+        {
+          "code": "T13",
+          "label": {
+            "fi": "Ohjata ymmärtämään ja käyttämään erilaisia malleja"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään, käyttämään ja tekemään erilaisia malleja, joiden avulla voidaan tulkita ja selittää ihmistä, ympäristöä ja niiden ilmiöitä"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#957350"
+        },
+        {
+          "code": "T14",
+          "label": {
+            "fi": "Ohjata hankkimaan luotettavaa tietoa ja perustelemaan"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta hankkimaan luotettavaa tietoa, ilmaisemaan perustellen erilaisia näkemyksiä sekä tulkitsemaan ja arvioimaan kriittisesti tietolähteitä ja näkökulmia"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#5f5095"
+        },
+        {
+          "code": "T15",
+          "label": {
+            "fi": "Ohjata luonnon tutkimiseen ja tunnistamiseen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta luonnon tutkimiseen, eliöiden ja elinympäristöjen tunnistamiseen ja ekologiseen ajatteluun sekä ohjata oppilasta ihmisen rakenteen, elintoimintojen ja kehityksen ymmärtämiseen"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#569550"
+        },
+        {
+          "code": "T16",
+          "label": {
+            "fi": "Ohjata maantieteelliseen ajatteluun ja hahmotukseen"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta maantieteelliseen ajatteluun, hahmottamaan omaa ympäristöä ja koko maailmaa sekä harjaannuttamaan kartankäyttö- ja muita geomediataitoja"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#95506a"
+        },
+        {
+          "code": "T17",
+          "label": {
+            "fi": "Ohjata tutkimaan fysikaalisia ilmiöitä arjessa"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutkimaan, kuvaamaan ja selittämään fysikaalisia ilmiöitä arjessa, luonnossa ja teknologiassa sekä rakentamaan perustaa energian säilymisen periaatteen ymmärtämiselle"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#507e95"
+        },
+        {
+          "code": "T18",
+          "label": {
+            "fi": "Ohjata tutkimaan ja kuvaamaan kemiallisia ilmiöitä"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta tutkimaan, kuvaamaan ja selittämään kemiallisia ilmiöitä, aineiden ominaisuuksia ja muutoksia sekä rakentamaan perustaa aineen säilymisen periaatteen ymmärtämiselle"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#929550"
+        },
+        {
+          "code": "T19",
+          "label": {
+            "fi": "Ohjata ymmärtämään terveyden osa-alueita"
+          },
+          "longDescription": {
+            "fi": "Ohjata oppilasta ymmärtämään terveyden osa-alueita, arjen terveystottumusten merkitystä sekä elämänkulkua, lapsuuden ja nuoruuden yksilöllistä kasvua ja kehitystä sekä rohkaista oppilasta harjoittelemaan ja soveltamaan terveysosaamistaan arjessa"
+          },
+          "type": "SKILLS_AND_BEHAVIOUR",
+          "color": "#845095"
+        }
+      ],
+      "environments_7_to_9": []
+    },
+    "name": {
+      "fi": "Ympäristöoppi"
     }
   }
 ]
