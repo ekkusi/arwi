@@ -110,6 +110,7 @@ export default function Main() {
       .catch(throwErrorAndHideSplash)
       .finally(() => {
         setLoading(false);
+        throwErrorAndHideSplash(new Error("Test error"));
       });
   }, [setUserInfo, throwErrorAndHideSplash]);
 

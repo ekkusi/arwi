@@ -1,17 +1,19 @@
 import { useTranslation } from "react-i18next";
-import { Linking, Platform } from "react-native";
+import { Platform } from "react-native";
+import * as Linking from "expo-linking";
 import CModal from "./CModal";
 import CButton from "../primitives/CButton";
 import CText from "../primitives/CText";
+import { ANDROID_STORE_URL, IOS_STORE_URL } from "@/config";
 
 type NewUpdateAvailableModalProps = {
   isOpen: boolean;
 };
-const ANDROID_STORE_URL = "https://play.google.com/store/apps/details?id=net.arwi.twa";
-const IOS_STORE_URL = "https://apps.apple.com/fi/app/arwi/6446094776";
 
 export default function NewUpdateAvailableModal({ isOpen }: NewUpdateAvailableModalProps) {
   const { t } = useTranslation();
+  const updateButtonTitle =
+    Platform.OS === "ios" ? t("update-in-app-store", "Päivitä App Storessa") : t("update-in-play-store", "Päivitä Play-kaupassa");
   return (
     <CModal
       isOpen={isOpen}
@@ -33,8 +35,7 @@ export default function NewUpdateAvailableModal({ isOpen }: NewUpdateAvailableMo
           {t("download-new-update-below", "Lataa uusi päivitys Play-kaupasta klikkaamalla alta.")}
         </CText>
       )}
-      {/*      TODO: Make link for iOS as well when the app is available in App Store      */}
-      {Platform.OS === "android" && <CButton title={t("to-play-store", "Play-kauppaan")} onPress={() => Linking.openURL(ANDROID_STORE_URL)} />}
+      <CButton title={updateButtonTitle} onPress={() => Linking.openURL(Platform.OS === "ios" ? IOS_STORE_URL : ANDROID_STORE_URL)} />
     </CModal>
   );
 }
