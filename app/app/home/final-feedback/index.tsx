@@ -240,14 +240,9 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         </CView>
         <CView style={{ gap: "sm" }}>
           <CButton title={t("generate-final-feedback", "Luo loppupalaute")} onPress={generateFinalFeedback} disabled={isGeneratingDisabled} />
-          {isGeneratingDisabled && (
+          {!isGeneratingDisabled && (
             <CButton
               variant="empty"
-              textStyle={{
-                color: "primary",
-                fontWeight: "600",
-                marginTop: "md",
-              }}
               title={t("inspect-feedback-suggestions", "Tarkastele arvosanaehdotuksia")}
               onPress={() =>
                 navigation.navigate("final-feedback-results", {
@@ -255,6 +250,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
                   noRedirect: true,
                 })
               }
+              style={{ marginTop: "md" }}
             />
           )}
           <CText style={{ fontSize: "sm", fontWeight: "300", marginTop: "lg" }}>

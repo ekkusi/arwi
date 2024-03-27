@@ -1165,6 +1165,18 @@ export type introspection = {
                 }
               }
             ]
+          },
+          {
+            "name": "sendRegisterVerificationEmail",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "args": []
           }
         ],
         "interfaces": []
@@ -1257,6 +1269,18 @@ export type introspection = {
         "name": "Int"
       },
       {
+        "kind": "ENUM",
+        "name": "AuthType",
+        "enumValues": [
+          {
+            "name": "LOCAL"
+          },
+          {
+            "name": "MPASSID"
+          }
+        ]
+      },
+      {
         "kind": "OBJECT",
         "name": "AuthPayload",
         "fields": [
@@ -1267,6 +1291,18 @@ export type introspection = {
               "ofType": {
                 "kind": "OBJECT",
                 "name": "Teacher",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "type",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "ENUM",
+                "name": "AuthType",
                 "ofType": null
               }
             },
@@ -1393,6 +1429,18 @@ export type introspection = {
           },
           {
             "name": "isMPassIDConnected",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "isVerified",
             "type": {
               "kind": "NON_NULL",
               "ofType": {

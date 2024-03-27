@@ -19,7 +19,7 @@ import TextFormField from "../../components/form/TextFormField";
 import { SPACING } from "../../theme";
 import CModal from "../../components/modals/CModal";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
-import { MATOMO_EVENT_CATEGORIES } from "../../config";
+import { MATOMO_ACTIONS, MATOMO_EVENT_CATEGORIES } from "../../config";
 
 const RegisterPage_Register_Mutation = graphql(
   `
@@ -27,6 +27,8 @@ const RegisterPage_Register_Mutation = graphql(
       register(data: $input) {
         userData {
           id
+          isVerified
+          email
           ...AuthProvider_UserInfo
         }
       }
@@ -91,18 +93,20 @@ export default function SignupPage({ navigation }: NativeStackScreenProps<AuthSt
 
       if (!data) throw new Error("Unexpected error");
 
-      setUser(data.register.userData);
+      const { userData } = data.register;
       const userInfo = {
         uid: data.register.userData.id,
       };
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,
-        action: "Register",
+        action: MATOMO_ACTIONS.AUTH.REGISTER,
         userInfo,
       });
       trackAppStart({
         userInfo,
       });
+      setUser(data.register.userData);
+      if (!userData.isVerified && userData.email) navigation.replace("verify-email", { email: userData.email });
     } catch (error) {
       const msg = getErrorMessage(error);
       setGeneralError(msg);

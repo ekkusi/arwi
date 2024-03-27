@@ -10,11 +10,15 @@ import CView from "../components/primitives/CView";
 import { COLORS, SPACING } from "../theme";
 import { CViewStyle } from "../theme/types";
 
-type OpenToastProps = {
+type OpenToastType = "success" | "error" | "warning";
+
+type OpenToastOptions = {
   closeTimeout?: number;
   placement?: "top" | "bottom";
-  type?: "success" | "error" | "warning";
+  type?: OpenToastType;
 };
+
+type OpenToastProps = OpenToastType | OpenToastOptions;
 
 type ToastActionProps = {
   action: () => void;
@@ -26,7 +30,7 @@ type ToastContent = string | ReactElement | ((closeToast: () => void) => ReactEl
 type ToastMessage = {
   content: ToastContent;
   id: number;
-  props: OpenToastProps;
+  options: OpenToastOptions;
   actionProps?: ToastActionProps;
   timeoutRef: ReturnType<typeof setTimeout>;
 };
@@ -40,6 +44,19 @@ const ToastContext = createContext<ToastContextType | null>(null);
 
 const { Provider } = ToastContext;
 
+const DEFAULT_OPTIONS: OpenToastOptions = {
+  type: "success",
+  placement: "bottom",
+  closeTimeout: 5000,
+};
+
+function formatOptions(props?: OpenToastProps): OpenToastOptions {
+  if (typeof props === "string") {
+    return { ...DEFAULT_OPTIONS, type: props };
+  }
+  return { ...DEFAULT_OPTIONS, ...(props || {}) };
+}
+
 export const useToast = () => {
   const context = React.useContext(ToastContext);
   if (!context) {
@@ -47,8 +64,6 @@ export const useToast = () => {
   }
   return context;
 };
-
-const DEFAULT_CLOSE_TIMEOUT_MS = 5000;
 
 let toastId = 0;
 
@@ -60,12 +75,13 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
   const openToast = (content: ToastContent, props?: OpenToastProps, actionProps?: ToastActionProps): (() => void) => {
     toastId += 1;
     const id = toastId; // Increment id for each new toast
+    const options = formatOptions(props);
     const newToast: ToastMessage = {
       content,
       id,
-      props: props || { type: "success", placement: "bottom" },
+      options,
       actionProps,
-      timeoutRef: setTimeout(() => closeToast(id), props?.closeTimeout || DEFAULT_CLOSE_TIMEOUT_MS),
+      timeoutRef: setTimeout(() => closeToast(id), options.closeTimeout),
     };
     setToasts((currentToasts) => [...currentToasts, newToast]);
 
@@ -102,15 +118,15 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
     closeToast(toast.id);
   };
 
-  const getToastAnimations = (placement: OpenToastProps["placement"]) => {
+  const getToastAnimations = (placement: OpenToastOptions["placement"]) => {
     const exitAnimation = placement === "top" ? SlideOutUp : SlideOutDown;
     const enterAnimation = placement === "top" ? SlideInUp : SlideInDown;
 
     return { exiting: exitAnimation, entering: enterAnimation };
   };
 
-  const getToastStyles = (toastProps: OpenToastProps) => {
-    const { placement, type } = toastProps;
+  const getToastStyles = (options: OpenToastOptions) => {
+    const { placement, type } = options;
 
     let styles: CViewStyle;
 
@@ -136,7 +152,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
     return styles;
   };
 
-  const getToastActionButtonColor = (type: OpenToastProps["type"]) => {
+  const getToastActionButtonColor = (type: OpenToastOptions["type"]) => {
     switch (type) {
       case "error":
         return "error";
@@ -147,7 +163,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
     }
   };
 
-  const getToastIcon = (type: OpenToastProps["type"]) => {
+  const getToastIcon = (type: OpenToastOptions["type"]) => {
     switch (type) {
       case "success":
         return "check";
@@ -196,9 +212,9 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
                 alignItems: "center",
                 padding: "lg",
                 borderRadius: 10,
-                ...getToastStyles(toast.props),
+                ...getToastStyles(toast.options),
               }}
-              {...getToastAnimations(toast.props.placement)}
+              {...getToastAnimations(toast.options.placement)}
             >
               <CView
                 style={{
@@ -206,7 +222,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
                   alignItems: "center",
                 }}
               >
-                <MaterialCommunityIcon name={getToastIcon(toast.props.type)} size={25} color={COLORS.white} style={{ marginRight: SPACING.md }} />
+                <MaterialCommunityIcon name={getToastIcon(toast.options.type)} size={25} color={COLORS.white} style={{ marginRight: SPACING.md }} />
                 {renderContent(toast)}
                 <CButton variant="empty" onPress={() => closeToast(toast.id)} style={{ position: "absolute", right: "sm" }}>
                   <MaterialCommunityIcon name="close" size={20} color={COLORS.white} />
@@ -216,7 +232,7 @@ export default function ToastProvider({ children }: React.PropsWithChildren) {
                 <CButton
                   size="small"
                   variant="outline"
-                  colorScheme={getToastActionButtonColor(toast.props.type)}
+                  colorScheme={getToastActionButtonColor(toast.options.type)}
                   title={toast.actionProps.label || t("ok", "OK")}
                   onPress={() => handleActionPress(toast)}
                   style={{ borderWidth: 2, marginTop: "md" }}

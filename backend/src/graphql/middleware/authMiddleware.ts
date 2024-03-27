@@ -5,11 +5,14 @@ import mutationResolvers from "../resolvers/mutationResolvers";
 import { Mutation, Query } from "../../types";
 import { CustomContext } from "../../types/contextTypes";
 import { SESSION_NAME } from "../../config";
+import { checkIsUserVerified } from "@/utils/auth";
 
 const checkIsAuthenticated: IMiddlewareFunction<any, CustomContext> = async (resolve, parent, args, context, info) => {
   if (!context.req.session?.userInfo) {
     context.res.clearCookie(SESSION_NAME);
     throw new AuthenticationError();
+  } else if (!checkIsUserVerified(context.req.session.userInfo)) {
+    throw new AuthenticationError("EMAIL_NOT_VERIFIED");
   }
 
   return resolve(parent, args, context, info);
@@ -23,8 +26,9 @@ const PUBLIC_MUTATION_RESOLVERS: (keyof Mutation)[] = [
   "verifyPasswordResetCode",
   "updatePassword",
   "requestPasswordReset",
+  "sendRegisterVerificationEmail",
 ];
-const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata", "getMPassIDOrganizations"];
+const PUBLIC_QUERY_RESOLVERS: (keyof Query)[] = ["getAppMetadata", "getMPassIDOrganizations", "getCurrentUser"];
 
 const mutationResolverKeys: (keyof Mutation)[] = Object.keys(mutationResolvers) as (keyof Mutation)[];
 

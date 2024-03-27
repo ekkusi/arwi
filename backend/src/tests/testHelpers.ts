@@ -76,6 +76,7 @@ export async function createTestUser(user: CreateUserInput = TEST_USER): Promise
       email: userData.email,
       passwordHash,
       mPassID: userData.mPassID,
+      verifiedEmails: [userData.email],
     },
   });
   return {

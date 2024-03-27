@@ -109,6 +109,7 @@ export type Mutation = {
   fixTextGrammatics: FixTextGrammaticsResult;
   setTokenUseWarningSeen: Scalars['Boolean'];
   sendFeedbackEmail: SendMailResult;
+  sendRegisterVerificationEmail: Scalars['Boolean'];
 };
 
 
@@ -281,9 +282,14 @@ export type AppMetadata = {
   minimumEvalsForFeedback: Scalars['Int'];
 };
 
+export type AuthType =
+  | 'LOCAL'
+  | 'MPASSID';
+
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   userData: Teacher;
+  type: AuthType;
 };
 
 export type MPassIdAuthPayload = {
@@ -301,6 +307,7 @@ export type Teacher = {
   languagePreference: Scalars['String'];
   consentsAnalytics: Scalars['Boolean'];
   isMPassIDConnected: Scalars['Boolean'];
+  isVerified: Scalars['Boolean'];
 };
 
 export type WarningInfo = {
@@ -746,6 +753,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AppMetadata: ResolverTypeWrapper<AppMetadata>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  AuthType: AuthType;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   MPassIDAuthPayload: ResolverTypeWrapper<Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversTypes['AuthPayload'] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
@@ -910,6 +918,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   fixTextGrammatics?: Resolver<ResolversTypes['FixTextGrammaticsResult'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'text'>>;
   setTokenUseWarningSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetTokenUseWarningSeenArgs, 'warning'>>;
   sendFeedbackEmail?: Resolver<ResolversTypes['SendMailResult'], ParentType, ContextType, RequireFields<MutationSendFeedbackEmailArgs, 'groupId' | 'email'>>;
+  sendRegisterVerificationEmail?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
@@ -924,6 +933,7 @@ export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends
 
 export type AuthPayloadResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
   userData?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['AuthType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -941,6 +951,7 @@ export type TeacherResolvers<ContextType = CustomContext, ParentType extends Res
   languagePreference?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   consentsAnalytics?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isMPassIDConnected?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

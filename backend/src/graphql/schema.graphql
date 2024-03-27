@@ -43,6 +43,7 @@ type Mutation {
   fixTextGrammatics(text: String!): FixTextGrammaticsResult!
   setTokenUseWarningSeen(warning: TokenUseWarning!): Boolean!
   sendFeedbackEmail(groupId: ID!, email: EmailAddress!): SendMailResult!
+  sendRegisterVerificationEmail: Boolean!
 }
 
 type AppMetadata {
@@ -54,8 +55,14 @@ type AppMetadata {
   minimumEvalsForFeedback: Int!
 }
 
+enum AuthType {
+  LOCAL
+  MPASSID
+}
+
 type AuthPayload {
   userData: Teacher!
+  type: AuthType!
 }
 
 type MPassIDAuthPayload {
@@ -71,6 +78,7 @@ type Teacher {
   languagePreference: String!
   consentsAnalytics: Boolean!
   isMPassIDConnected: Boolean!
+  isVerified: Boolean!
 }
 
 type WarningInfo {

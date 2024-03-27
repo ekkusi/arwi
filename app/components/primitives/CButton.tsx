@@ -105,7 +105,7 @@ export default function CButton({
         };
       case "empty":
         return {
-          color: "black",
+          color: colorScheme,
           fontWeight: "600",
         };
       default:

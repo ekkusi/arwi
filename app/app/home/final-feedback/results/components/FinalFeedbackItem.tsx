@@ -20,6 +20,7 @@ import { HomeStackParams } from "../../../types";
 import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
 import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
 import { useToggleTokenUseWarning } from "@/hooks-and-providers/monthlyTokenUseWarning";
+import { COLORS } from "@/theme";
 
 export const FinalFeedbackItem_Student_Fragment = graphql(
   `
@@ -243,7 +244,6 @@ export default function FinalFeedbackItem({
               <CButton
                 variant="empty"
                 title={t("see-more", "Katso lisää")}
-                textStyle={{ color: "primary" }}
                 style={{ marginTop: "sm" }}
                 onPress={() => navigation.push("student", { id: student.id, name: student.name, archived: false })}
               />
@@ -265,7 +265,7 @@ export default function FinalFeedbackItem({
             <CText style={{ fontWeight: "300", fontSize: "lg" }}>{t("oral-feedback", "Sanallinen palaute")}</CText>
             {student.latestFeedback && (
               <CButton variant="empty" onPress={openRegenerateFeedbackModal}>
-                <Ionicons name="reload" size={24} />
+                <Ionicons name="reload" size={24} color={COLORS.primary} />
               </CButton>
             )}
           </CView>
