@@ -58,7 +58,7 @@ export const checkSessionTimeout: RequestHandler = async (req, res, next) => {
   next();
 };
 
-export const fetchSessionUserInfo: RequestHandler = async (req, res, next) => {
+export const fetchSessionUserInfo: RequestHandler = async (req, _, next) => {
   if (req.session.userInfo) {
     try {
       const userInfo = await teacherLoader.load(req.session.userInfo.id);

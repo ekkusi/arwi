@@ -35,7 +35,7 @@ function AppContent() {
   const { trackAppStart } = useMatomo();
 
   const onError = (error: Error, componentStack: string) => {
-    Sentry.captureException(error);
+    Sentry.captureException(error, { level: "error" });
     console.error(error, componentStack);
   };
 

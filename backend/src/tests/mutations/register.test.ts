@@ -42,7 +42,6 @@ describe("Register", () => {
     const response = await graphqlRequest(query, teacherData);
 
     expect(response.data?.register.userData.email).toEqual(teacherData.data.email);
-    expect(response.data?.register.userData.verifiedEmails).toEqual([teacherData.data.email]);
   });
 
   it("should throw an error if email is already in use", async () => {

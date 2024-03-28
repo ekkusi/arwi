@@ -33,6 +33,7 @@ import FinalFeedback from "./final-feedback";
 import DefaultCollectionMenu from "./default-collection/_menu";
 import FinalFeedbackResults from "./final-feedback/results";
 import FinalFeedbackResultsMenu from "./final-feedback/results/_menu";
+import HomeMenu from "./_menu";
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParams>();
 
@@ -43,40 +44,9 @@ export default function HomeStack() {
       <HomeStackNavigator.Screen
         name="home"
         component={HomeView}
-        options={({ navigation }) => {
-          return {
-            title: t("HomeStack.ownGroups", "Omat ryhmät"),
-            headerRight: () => (
-              <CView style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-                <CTouchableOpacity
-                  onPress={() => navigation.navigate("profile")}
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: 18,
-                    backgroundColor: "transparent",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Ionicons name="person" size={23} color={COLORS.white} />
-                </CTouchableOpacity>
-                <CTouchableOpacity
-                  onPress={() => navigation.navigate("archive")}
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: 18,
-                    backgroundColor: "transparent",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <MaterialCommunityIcon name="archive" size={23} color={COLORS.white} />
-                </CTouchableOpacity>
-              </CView>
-            ),
-          };
+        options={{
+          title: t("HomeStack.ownGroups", "Omat ryhmät"),
+          headerLeft: () => <HomeMenu />,
         }}
       />
       <HomeStackNavigator.Screen

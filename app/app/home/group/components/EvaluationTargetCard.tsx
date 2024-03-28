@@ -71,7 +71,7 @@ export default function EvaluationTargetCard(props: EvaluationTargetCardProps) {
             {!evaluated && (
               <CButton
                 variant="empty"
-                textStyle={{ color: "primary", fontSize: "sm", fontWeight: "500" }}
+                textStyle={{ fontSize: "sm", fontWeight: "500" }}
                 title={t("evaluate", "Arvioi").toLocaleUpperCase()}
                 onPress={() => {
                   navigation.navigate("default-collection-create", { groupId, collectionTypeId: id });

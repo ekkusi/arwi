@@ -1,7 +1,6 @@
 import React, { createContext, useCallback, useState } from "react";
-import { Teacher } from "arwi-backend/src/types";
 import { removeSessionId } from "../helpers/session";
-import { FragmentOf, graphql, readFragment } from "@/graphql";
+import { FragmentOf, ResultOf, graphql, readFragment } from "@/graphql";
 
 export const AuthProvider_UserInfo_Fragment = graphql(`
   fragment AuthProvider_UserInfo on Teacher {
@@ -11,23 +10,14 @@ export const AuthProvider_UserInfo_Fragment = graphql(`
     consentsAnalytics
     isMPassIDConnected
     verifiedEmails
+    isVerified
   }
 `);
 
-type UserInfo = Omit<Teacher, "passwordHash" | "groups" | "monthlyTokensUsed">;
-
-type AuthState = {
-  authenticated: boolean;
-  user?: UserInfo;
-};
-
-const initialState: AuthState = {
-  authenticated: false,
-  user: undefined,
-};
+type UserInfo = ResultOf<typeof AuthProvider_UserInfo_Fragment>;
 
 type AuthContextType = {
-  authState: AuthState;
+  user?: UserInfo;
   setUser: (user: FragmentOf<typeof AuthProvider_UserInfo_Fragment>) => void;
   logout: () => void;
 };
@@ -40,8 +30,8 @@ export const useAuthenticatedUser = () => {
   if (!context) {
     throw new Error("useAuthenticatedUser must be used within an AuthProvider");
   }
-  if (!context.authState.user) throw new Error("User is not authenticated");
-  return context.authState.user;
+  if (!context.user) throw new Error("User is not authenticated");
+  return context.user;
 };
 
 export const useAuth = () => {
@@ -53,29 +43,23 @@ export const useAuth = () => {
 };
 
 function AuthProvider({ children }: React.PropsWithChildren<{}>) {
-  const [authState, setAuthState] = useState<AuthState>(initialState);
+  const [user, _setUser] = useState<UserInfo>();
 
   // Need to use useCallback to prevent infinite render loops in components that depend on these (ApolloProvider at least).
   const logout = useCallback(async () => {
     await removeSessionId();
-    setAuthState({
-      authenticated: false,
-      user: undefined,
-    });
+    _setUser(undefined);
   }, []);
 
-  const setUser = useCallback((user: FragmentOf<typeof AuthProvider_UserInfo_Fragment>) => {
-    const userData = readFragment(AuthProvider_UserInfo_Fragment, user);
-    setAuthState({
-      user: userData,
-      authenticated: true,
-    });
+  const setUser = useCallback((newUser: FragmentOf<typeof AuthProvider_UserInfo_Fragment>) => {
+    const userData = readFragment(AuthProvider_UserInfo_Fragment, newUser);
+    _setUser(userData);
   }, []);
 
   return (
     <Provider
       value={{
-        authState,
+        user,
         setUser,
         logout,
       }}

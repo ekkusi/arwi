@@ -109,6 +109,7 @@ export type Mutation = {
   fixTextGrammatics: FixTextGrammaticsResult;
   setTokenUseWarningSeen: Scalars['Boolean'];
   sendFeedbackEmail: SendMailResult;
+  sendRegisterVerificationEmail: Scalars['Boolean'];
 };
 
 
@@ -252,7 +253,7 @@ export type MutationGenerateStudentFeedbackArgs = {
 
 export type MutationGenerateGroupFeedbackArgs = {
   groupId: Scalars['ID'];
-  onlyGenerateMissing?: InputMaybe<Scalars['Boolean']>;
+  studentIdsToGenerate?: InputMaybe<Array<Scalars['String']>>;
 };
 
 
@@ -281,9 +282,14 @@ export type AppMetadata = {
   minimumEvalsForFeedback: Scalars['Int'];
 };
 
+export type AuthType =
+  | 'LOCAL'
+  | 'MPASSID';
+
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   userData: Teacher;
+  type: AuthType;
 };
 
 export type MPassIdAuthPayload = {
@@ -301,6 +307,7 @@ export type Teacher = {
   languagePreference: Scalars['String'];
   consentsAnalytics: Scalars['Boolean'];
   isMPassIDConnected: Scalars['Boolean'];
+  isVerified: Scalars['Boolean'];
 };
 
 export type WarningInfo = {
@@ -388,6 +395,8 @@ export type Subject = {
 export type Environment = {
   __typename?: 'Environment';
   code: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   color: Scalars['String'];
   label: TranslatedString;
   subject: Subject;
@@ -396,6 +405,7 @@ export type Environment = {
 export type Group = {
   __typename?: 'Group';
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
   name: Scalars['String'];
   students: Array<Student>;
   subject: Subject;
@@ -409,6 +419,8 @@ export type Group = {
 export type CollectionType = {
   __typename?: 'CollectionType';
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   category: CollectionTypeCategory;
   name: Scalars['String'];
   weight: Scalars['Int'];
@@ -433,6 +445,8 @@ export type ModuleInfo = {
 export type Module = {
   __typename?: 'Module';
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   info: ModuleInfo;
   evaluationCollections: Array<EvaluationCollection>;
   students: Array<Student>;
@@ -442,6 +456,8 @@ export type Module = {
 
 export type EvaluationCollection = {
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   date: Scalars['Date'];
   type: CollectionType;
   description?: Maybe<Scalars['String']>;
@@ -452,6 +468,8 @@ export type EvaluationCollection = {
 export type ClassParticipationCollection = EvaluationCollection & {
   __typename?: 'ClassParticipationCollection';
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   date: Scalars['Date'];
   type: CollectionType;
   description?: Maybe<Scalars['String']>;
@@ -464,6 +482,8 @@ export type ClassParticipationCollection = EvaluationCollection & {
 export type DefaultCollection = EvaluationCollection & {
   __typename?: 'DefaultCollection';
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   date: Scalars['Date'];
   type: CollectionType;
   description?: Maybe<Scalars['String']>;
@@ -473,6 +493,8 @@ export type DefaultCollection = EvaluationCollection & {
 
 export type Evaluation = {
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   student: Student;
   wasPresent: Scalars['Boolean'];
   notes?: Maybe<Scalars['String']>;
@@ -482,6 +504,8 @@ export type Evaluation = {
 export type ClassParticipationEvaluation = Evaluation & {
   __typename?: 'ClassParticipationEvaluation';
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   student: Student;
   wasPresent: Scalars['Boolean'];
   notes?: Maybe<Scalars['String']>;
@@ -493,6 +517,8 @@ export type ClassParticipationEvaluation = Evaluation & {
 export type DefaultEvaluation = Evaluation & {
   __typename?: 'DefaultEvaluation';
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   student: Student;
   wasPresent: Scalars['Boolean'];
   notes?: Maybe<Scalars['String']>;
@@ -503,6 +529,8 @@ export type DefaultEvaluation = Evaluation & {
 export type Student = {
   __typename?: 'Student';
   id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   name: Scalars['String'];
   group: Group;
   currentModuleEvaluations: Array<Evaluation>;
@@ -513,6 +541,7 @@ export type Student = {
 export type Feedback = {
   __typename?: 'Feedback';
   id: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
   student: Student;
   module: Module;
   text: Scalars['String'];
@@ -724,6 +753,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AppMetadata: ResolverTypeWrapper<AppMetadata>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  AuthType: AuthType;
   AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'userData'> & { userData: ResolversTypes['Teacher'] }>;
   MPassIDAuthPayload: ResolverTypeWrapper<Omit<MPassIdAuthPayload, 'payload'> & { payload: ResolversTypes['AuthPayload'] }>;
   Teacher: ResolverTypeWrapper<UserInfoPrisma>;
@@ -888,6 +918,7 @@ export type MutationResolvers<ContextType = CustomContext, ParentType extends Re
   fixTextGrammatics?: Resolver<ResolversTypes['FixTextGrammaticsResult'], ParentType, ContextType, RequireFields<MutationFixTextGrammaticsArgs, 'text'>>;
   setTokenUseWarningSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSetTokenUseWarningSeenArgs, 'warning'>>;
   sendFeedbackEmail?: Resolver<ResolversTypes['SendMailResult'], ParentType, ContextType, RequireFields<MutationSendFeedbackEmailArgs, 'groupId' | 'email'>>;
+  sendRegisterVerificationEmail?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
 export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AppMetadata'] = ResolversParentTypes['AppMetadata']> = {
@@ -902,6 +933,7 @@ export type AppMetadataResolvers<ContextType = CustomContext, ParentType extends
 
 export type AuthPayloadResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
   userData?: Resolver<ResolversTypes['Teacher'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['AuthType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -919,6 +951,7 @@ export type TeacherResolvers<ContextType = CustomContext, ParentType extends Res
   languagePreference?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   consentsAnalytics?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isMPassIDConnected?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -992,6 +1025,8 @@ export type SubjectResolvers<ContextType = CustomContext, ParentType extends Res
 
 export type EnvironmentResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Environment'] = ResolversParentTypes['Environment']> = {
   code?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   color?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   label?: Resolver<ResolversTypes['TranslatedString'], ParentType, ContextType>;
   subject?: Resolver<ResolversTypes['Subject'], ParentType, ContextType>;
@@ -1000,6 +1035,7 @@ export type EnvironmentResolvers<ContextType = CustomContext, ParentType extends
 
 export type GroupResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Group'] = ResolversParentTypes['Group']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   students?: Resolver<Array<ResolversTypes['Student']>, ParentType, ContextType>;
   subject?: Resolver<ResolversTypes['Subject'], ParentType, ContextType>;
@@ -1013,6 +1049,8 @@ export type GroupResolvers<ContextType = CustomContext, ParentType extends Resol
 
 export type CollectionTypeResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['CollectionType'] = ResolversParentTypes['CollectionType']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   category?: Resolver<ResolversTypes['CollectionTypeCategory'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   weight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -1030,6 +1068,8 @@ export type ModuleInfoResolvers<ContextType = CustomContext, ParentType extends 
 
 export type ModuleResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Module'] = ResolversParentTypes['Module']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   info?: Resolver<ResolversTypes['ModuleInfo'], ParentType, ContextType>;
   evaluationCollections?: Resolver<Array<ResolversTypes['EvaluationCollection']>, ParentType, ContextType>;
   students?: Resolver<Array<ResolversTypes['Student']>, ParentType, ContextType>;
@@ -1041,6 +1081,8 @@ export type ModuleResolvers<ContextType = CustomContext, ParentType extends Reso
 export type EvaluationCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['EvaluationCollection'] = ResolversParentTypes['EvaluationCollection']> = {
   __resolveType: TypeResolveFn<'ClassParticipationCollection' | 'DefaultCollection', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1050,6 +1092,8 @@ export type EvaluationCollectionResolvers<ContextType = CustomContext, ParentTyp
 
 export type ClassParticipationCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['ClassParticipationCollection'] = ResolversParentTypes['ClassParticipationCollection']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1062,6 +1106,8 @@ export type ClassParticipationCollectionResolvers<ContextType = CustomContext, P
 
 export type DefaultCollectionResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['DefaultCollection'] = ResolversParentTypes['DefaultCollection']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1073,6 +1119,8 @@ export type DefaultCollectionResolvers<ContextType = CustomContext, ParentType e
 export type EvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Evaluation'] = ResolversParentTypes['Evaluation']> = {
   __resolveType: TypeResolveFn<'ClassParticipationEvaluation' | 'DefaultEvaluation', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
   wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1081,6 +1129,8 @@ export type EvaluationResolvers<ContextType = CustomContext, ParentType extends 
 
 export type ClassParticipationEvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['ClassParticipationEvaluation'] = ResolversParentTypes['ClassParticipationEvaluation']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
   wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1092,6 +1142,8 @@ export type ClassParticipationEvaluationResolvers<ContextType = CustomContext, P
 
 export type DefaultEvaluationResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['DefaultEvaluation'] = ResolversParentTypes['DefaultEvaluation']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
   wasPresent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1102,6 +1154,8 @@ export type DefaultEvaluationResolvers<ContextType = CustomContext, ParentType e
 
 export type StudentResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Student'] = ResolversParentTypes['Student']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   group?: Resolver<ResolversTypes['Group'], ParentType, ContextType>;
   currentModuleEvaluations?: Resolver<Array<ResolversTypes['Evaluation']>, ParentType, ContextType>;
@@ -1112,6 +1166,7 @@ export type StudentResolvers<ContextType = CustomContext, ParentType extends Res
 
 export type FeedbackResolvers<ContextType = CustomContext, ParentType extends ResolversParentTypes['Feedback'] = ResolversParentTypes['Feedback']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   student?: Resolver<ResolversTypes['Student'], ParentType, ContextType>;
   module?: Resolver<ResolversTypes['Module'], ParentType, ContextType>;
   text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

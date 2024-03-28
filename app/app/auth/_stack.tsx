@@ -7,6 +7,7 @@ import { COLORS } from "../../theme";
 import ForgotPassword from "./ForgotPassword";
 import CodeInput from "./CodeInput";
 import UpdatePassword from "./UpdatePassword";
+import VerifyEmail from "./verify-email";
 
 const { Navigator, Screen } = createNativeStackNavigator<AuthStackParams>();
 
@@ -19,6 +20,7 @@ export default function AuthStack() {
       <Screen name="forgot-password" component={ForgotPassword} options={{ title: "" }} />
       <Screen name="code-input" component={CodeInput} options={{ title: "" }} />
       <Screen name="update-password" component={UpdatePassword} options={{ title: "" }} />
+      <Screen name="verify-email" component={VerifyEmail} options={{ title: "" }} />
     </Navigator>
   );
 }

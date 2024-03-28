@@ -10,6 +10,8 @@ datasource db {
 
 model Teacher {
   id                                String      @id @default(uuid())
+  createdAt                         DateTime    @default(now())
+  updatedAt                         DateTime    @updatedAt @default(now())
   mPassID                           String?     @unique
   email                             String?     @unique
   passwordHash                      String?
@@ -26,6 +28,7 @@ model Teacher {
 
 model Group {
   id                    String                 @id @default(uuid())
+  createdAt             DateTime               @default(now())
   name                  String
   subjectCode           String
   students              Student[]
@@ -40,6 +43,8 @@ model Group {
 
 model Module {
   id                          String                 @id @default(uuid())
+  createdAt                   DateTime               @default(now())
+  updatedAt                   DateTime               @updatedAt @default(now())
   collectionTypes       CollectionType[]
   educationLevel              EducationLevel 
   learningObjectiveGroupKey   String
@@ -53,6 +58,8 @@ model Module {
 
 model EvaluationCollection {
   id                      String       @id @default(uuid())
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt @default(now())
   type                    CollectionType @relation(fields: [typeId], references: [id], onDelete: Cascade)
   typeId                  String        
   date                    DateTime     @default(now())
@@ -66,6 +73,8 @@ model EvaluationCollection {
 
 model Evaluation {
   id                     String               @id @default(uuid())
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt @default(now())
   student                Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
   wasPresent             Boolean              @default(true)
   studentId              String
@@ -79,6 +88,8 @@ model Evaluation {
 
 model Student {
   id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
   name        String
   group       Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId     String
@@ -89,6 +100,8 @@ model Student {
 
 model CollectionType {
   id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
   category    CollectionTypeCategory
   name        String
   weight      Int
@@ -99,6 +112,7 @@ model CollectionType {
 
 model Feedback {
   id                      String       @id @default(uuid())
+  updatedAt               DateTime     @updatedAt @default(now())
   student                 Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId               String
   text                    String

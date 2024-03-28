@@ -207,6 +207,7 @@ const initAuth = async () => {
       });
       // Clear teacher loader cache
       teacherLoader.clear(updatedTeacher.id);
+
       await deleteEmailVerificationToken(email as string);
       return res.redirect("https://arwi.fi/sahkoposti-vahvistettu");
     } catch (error) {

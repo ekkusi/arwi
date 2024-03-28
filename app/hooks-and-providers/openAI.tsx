@@ -40,13 +40,13 @@ export const useHandleOpenAIError = () => {
           },
           code === "USAGE_LIMIT_EXCEEDED"
             ? {
-              action: () => navigation.navigate("profile"),
-              label: t("inspect", "Tarkastele"),
-            }
+                action: () => navigation.navigate("profile"),
+                label: t("inspect", "Tarkastele"),
+              }
             : undefined
         );
 
-        if (code === "OPENAI_ERROR") Sentry.captureException(error);
+        if (code === "OPENAI_ERROR") Sentry.captureException(error, { level: "error" });
       }
     } else throwCatchableError(error);
   };

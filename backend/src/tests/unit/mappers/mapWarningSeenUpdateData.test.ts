@@ -8,6 +8,8 @@ const baseTeacherData: Teacher = {
   hasSeenFirstMonthlyTokenWarning: false,
   hasSeenSecondMonthlyTokenWarning: false,
   verifiedEmails: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
   passwordResetTries: 0,
   passwordResetStartedAt: null,
   languagePreference: "fi",

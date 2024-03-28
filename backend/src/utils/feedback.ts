@@ -1,6 +1,6 @@
-import { analyzeEvaluations, calculateGradeSuggestion } from "arwi-shared";
 import { CollectionType, Feedback, Group, Student } from "@prisma/client";
 import { PDFDocument, StandardFonts, breakTextIntoLines, PDFPage } from "pdf-lib";
+import { analyzeEvaluations, calculateGradeSuggestion } from "arwi-shared";
 import { EvaluationWithCollectionTypeInfo, mapEvaluationsByCollectionType } from "@/graphql/utils/mappers";
 
 export type StudentWithFeedbacksAndEvaluations = Student & {

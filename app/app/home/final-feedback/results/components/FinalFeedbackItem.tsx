@@ -20,6 +20,7 @@ import { HomeStackParams } from "../../../types";
 import { useMetadata } from "@/hooks-and-providers/MetadataProvider";
 import { useHandleOpenAIError } from "@/hooks-and-providers/openAI";
 import { useToggleTokenUseWarning } from "@/hooks-and-providers/monthlyTokenUseWarning";
+import { COLORS } from "@/theme";
 
 export const FinalFeedbackItem_Student_Fragment = graphql(
   `
@@ -103,13 +104,20 @@ const FinalFeedbackItem_UpdateFeedback_Mutation = graphql(
 );
 
 export type FinalFeedbackItemProps = Omit<CViewProps, "children"> & {
-  navigation: NativeStackNavigationProp<HomeStackParams, "final-feedback-results">;
+  navigation: NativeStackNavigationProp<HomeStackParams, "final-feedback-results" | "student-feedback">;
   student: FragmentOf<typeof FinalFeedbackItem_Student_Fragment>;
   moduleId: string;
   generatingFeedback?: boolean;
+  hideSeeMoreButton?: boolean;
 };
 
-export default function FinalFeedbackItem({ student: studentFragment, moduleId, navigation, ...rest }: FinalFeedbackItemProps) {
+export default function FinalFeedbackItem({
+  student: studentFragment,
+  moduleId,
+  navigation,
+  hideSeeMoreButton = false,
+  ...rest
+}: FinalFeedbackItemProps) {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   const { openToast } = useToast();
@@ -138,7 +146,7 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
 
   const [updateFeedback, { loading: updatingFeedback }] = useMutation(FinalFeedbackItem_UpdateFeedback_Mutation, {
     onError: (error) => {
-      Sentry.captureException(error);
+      Sentry.captureException(error, { level: "error" });
       openToast(
         t(
           "update-feedback-failed-message",
@@ -232,13 +240,14 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
               <CText style={{ fontSize: "md", fontWeight: "500" }}>{absencesAmount} </CText>
               <CText style={{ fontSize: "md", fontWeight: "300" }}>{t("absence", "poissaoloa", { count: absencesAmount })}</CText>
             </CText>
-            <CButton
-              variant="empty"
-              title="Katso lisää"
-              textStyle={{ color: "primary" }}
-              style={{ marginTop: "sm" }}
-              onPress={() => navigation.push("student", { id: student.id, name: student.name, archived: false })}
-            />
+            {!hideSeeMoreButton && (
+              <CButton
+                variant="empty"
+                title={t("see-more", "Katso lisää")}
+                style={{ marginTop: "sm" }}
+                onPress={() => navigation.push("student", { id: student.id, name: student.name, archived: false })}
+              />
+            )}
           </CView>
           <GradeSuggestionView
             skillsMean={skillsMean}
@@ -256,7 +265,7 @@ export default function FinalFeedbackItem({ student: studentFragment, moduleId, 
             <CText style={{ fontWeight: "300", fontSize: "lg" }}>{t("oral-feedback", "Sanallinen palaute")}</CText>
             {student.latestFeedback && (
               <CButton variant="empty" onPress={openRegenerateFeedbackModal}>
-                <Ionicons name="reload" size={24} />
+                <Ionicons name="reload" size={24} color={COLORS.primary} />
               </CButton>
             )}
           </CView>

@@ -39,10 +39,11 @@ type Mutation {
   deleteCollection(collectionId: ID!): EvaluationCollection!
   changeGroupModule(data: ChangeGroupModuleInput!, groupId: ID!): Group!
   generateStudentFeedback(studentId: ID!, moduleId: ID!): GenerateStudentFeedbackResult!
-  generateGroupFeedback(groupId: ID!, onlyGenerateMissing: Boolean): GenerateGroupFeedbackResult!
+  generateGroupFeedback(groupId: ID!, studentIdsToGenerate: [String!]): GenerateGroupFeedbackResult!
   fixTextGrammatics(text: String!): FixTextGrammaticsResult!
   setTokenUseWarningSeen(warning: TokenUseWarning!): Boolean!
   sendFeedbackEmail(groupId: ID!, email: EmailAddress!): SendMailResult!
+  sendRegisterVerificationEmail: Boolean!
 }
 
 type AppMetadata {
@@ -54,8 +55,14 @@ type AppMetadata {
   minimumEvalsForFeedback: Int!
 }
 
+enum AuthType {
+  LOCAL
+  MPASSID
+}
+
 type AuthPayload {
   userData: Teacher!
+  type: AuthType!
 }
 
 type MPassIDAuthPayload {
@@ -71,6 +78,7 @@ type Teacher {
   languagePreference: String!
   consentsAnalytics: Boolean!
   isMPassIDConnected: Boolean!
+  isVerified: Boolean!
 }
 
 type WarningInfo {
@@ -150,6 +158,8 @@ type Subject {
 
 type Environment {
   code: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   color: String!
   label: TranslatedString!
   subject: Subject!
@@ -157,6 +167,7 @@ type Environment {
 
 type Group {
   id: ID!
+  createdAt: DateTime!
   name: String!
   students: [Student!]!
   subject: Subject!
@@ -169,6 +180,8 @@ type Group {
 
 type CollectionType {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   category: CollectionTypeCategory!
   name: String!
   weight: Int!
@@ -192,6 +205,8 @@ type ModuleInfo {
 
 type Module {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   info: ModuleInfo!
   evaluationCollections: [EvaluationCollection!]!
   students: [Student!]!
@@ -201,6 +216,8 @@ type Module {
 
 interface EvaluationCollection {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   date: Date!
   type: CollectionType!
   description: String
@@ -210,6 +227,8 @@ interface EvaluationCollection {
 
 type ClassParticipationCollection implements EvaluationCollection {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   date: Date!
   type: CollectionType!
   description: String
@@ -221,6 +240,8 @@ type ClassParticipationCollection implements EvaluationCollection {
 
 type DefaultCollection implements EvaluationCollection {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   date: Date!
   type: CollectionType!
   description: String
@@ -230,6 +251,8 @@ type DefaultCollection implements EvaluationCollection {
 
 interface Evaluation {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   student: Student!
   wasPresent: Boolean!
   notes: String
@@ -238,6 +261,8 @@ interface Evaluation {
 
 type ClassParticipationEvaluation implements Evaluation {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   student: Student!
   wasPresent: Boolean!
   notes: String
@@ -248,6 +273,8 @@ type ClassParticipationEvaluation implements Evaluation {
 
 type DefaultEvaluation implements Evaluation {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   student: Student!
   wasPresent: Boolean!
   notes: String
@@ -257,6 +284,8 @@ type DefaultEvaluation implements Evaluation {
 
 type Student {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   group: Group!
   currentModuleEvaluations: [Evaluation!]!
@@ -266,6 +295,7 @@ type Student {
 
 type Feedback {
   id: ID!
+  updatedAt: DateTime!
   student: Student!
   module: Module!
   text: String!

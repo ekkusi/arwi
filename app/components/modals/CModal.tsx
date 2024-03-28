@@ -6,8 +6,12 @@ import {
   FadeOut,
   runOnJS,
   SlideInDown,
+  SlideInLeft,
+  SlideInRight,
   SlideInUp,
   SlideOutDown,
+  SlideOutLeft,
+  SlideOutRight,
   SlideOutUp,
   ZoomIn,
   ZoomOut,
@@ -25,7 +29,7 @@ import { COLORS } from "../../theme";
 
 export type CModalProps = Omit<ModalProps, "visible" | "onRequestClose"> & {
   isOpen: boolean;
-  placement?: "top" | "bottom" | "center";
+  placement?: "top" | "bottom" | "center" | "left" | "right";
   outerViewStyles?: CViewStyle;
   innerViewStyles?: CViewStyle;
   headerStyles?: CViewStyle;
@@ -89,6 +93,12 @@ export default function CModal({
       case "bottom":
         placementStyles = { justifyContent: "flex-end" };
         break;
+      case "left":
+        placementStyles = { alignItems: "flex-start" };
+        break;
+      case "right":
+        placementStyles = { alignItems: "flex-end" };
+        break;
       default:
         placementStyles = { justifyContent: "center" };
         break;
@@ -105,6 +115,15 @@ export default function CModal({
       case "bottom":
         placementStyles = { borderTopLeftRadius: 20, borderTopRightRadius: 20 };
         break;
+      case "left":
+      case "right":
+        placementStyles = {
+          maxHeight: "auto",
+          height: "100%",
+          width: "80%",
+          paddingTop: hasNotch() ? Constants.statusBarHeight : "md",
+        };
+        break;
       default:
         placementStyles = { borderRadius: 10, width: "90%" };
         break;
@@ -119,6 +138,10 @@ export default function CModal({
         return SlideOutUp;
       case "bottom":
         return SlideOutDown;
+      case "left":
+        return SlideOutLeft;
+      case "right":
+        return SlideOutRight;
       default:
         return ZoomOut;
     }
@@ -131,6 +154,10 @@ export default function CModal({
         return SlideInUp;
       case "bottom":
         return SlideInDown;
+      case "left":
+        return SlideInLeft;
+      case "right":
+        return SlideInRight;
       default:
         return ZoomIn;
     }

@@ -12,7 +12,7 @@ import MissingDataError from "../errors/MissingDataError";
 import OpenIDError from "../errors/OpenIDError";
 import AuthorizationError from "../errors/AuthorizationError";
 import OpenAIGraphQLError from "../errors/OpenAIGraphqlError";
-import UsageLimitError from "../errors/UsageLimitErrors";
+import UsageLimitError from "../errors/UsageLimitError";
 
 function withErrorHandling(resolver: ResolverFn<CustomContext, {}, {}, {}>): Resolver<{}, {}, CustomContext> {
   return async (parent, args, context, info) => {

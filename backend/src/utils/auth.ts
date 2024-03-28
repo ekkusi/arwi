@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { TokenSetParameters } from "openid-client";
 import { COOKIE_DOMAIN, SESSION_NAME } from "../config";
-import { UserSessionInfo } from "../types/contextTypes";
+import { UserInfo, UserSessionInfo } from "../types/contextTypes";
 
 export const logOut = (req: Request, res: Response): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -24,4 +24,10 @@ const HEADER_AUTH_API_TOKENS = process.env.HEADER_AUTH_API_TOKENS?.split(",") ||
 
 export const isValidApiToken = (apiToken: string): boolean => {
   return HEADER_AUTH_API_TOKENS.includes(apiToken);
+};
+
+export const checkIsUserVerified = (userInfo: UserInfo): boolean => {
+  if (!userInfo.email) return !!userInfo.mPassID; // In case of mPassID, we don't have email
+  if (userInfo.verifiedEmails.includes(userInfo.email)) return true;
+  return false;
 };

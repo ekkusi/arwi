@@ -9,4 +9,7 @@ export type AuthStackParams = {
   "code-input": {
     email: string;
   };
+  "verify-email": {
+    email: string;
+  };
 };

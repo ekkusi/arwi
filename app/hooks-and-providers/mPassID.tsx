@@ -25,7 +25,7 @@ if (!BACKEND_API_URL_NO_PROXY)
   throw new Error("No proxy Backend API URL not defined, define EXPO_PUBLIC_BACKEND_API_URL_NO_PROXY and/or EXPO_PUBLIC_BACKEND_API_URL in .env");
 
 export const useMPassIDAuth = (redirectUri: string) => {
-  const [mPassIdLogin] = useMutation(MPassID_Login_Mutation);
+  const [mPassIdLogin] = useMutation(MPassID_Login_Mutation, { fetchPolicy: "no-cache" });
   useEffect(() => {
     WebBrowser.warmUpAsync();
     return () => {

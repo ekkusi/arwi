@@ -14,7 +14,7 @@ import LandingComponent from "./LandingComponent";
 import CTouchableOpacity from "../../components/primitives/CTouchableOpacity";
 import { AuthStackParams } from "./types";
 import TextFormField from "../../components/form/TextFormField";
-import { MATOMO_EVENT_CATEGORIES } from "../../config";
+import { MATOMO_ACTIONS, MATOMO_EVENT_CATEGORIES } from "../../config";
 
 const LoginPage_Login_Mutation = graphql(
   `
@@ -22,6 +22,8 @@ const LoginPage_Login_Mutation = graphql(
       login(email: $email, password: $password) {
         userData {
           id
+          email
+          isVerified
           ...AuthProvider_UserInfo
         }
       }
@@ -41,7 +43,7 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
   const [loading, setLoading] = useState<boolean>(false);
   const { t } = useTranslation();
 
-  const [login] = useMutation(LoginPage_Login_Mutation);
+  const [login] = useMutation(LoginPage_Login_Mutation, { fetchPolicy: "no-cache" });
 
   const handlePasswordChange = (text: string) => {
     if (generalError) setGeneralError(undefined);
@@ -58,25 +60,28 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
     try {
       const { data } = await login({ variables: { email, password } });
       if (!data) throw new Error("Unexpected error");
-      setUser(data.login.userData);
+      const { userData } = data.login;
       const userInfo = {
-        uid: data.login.userData.id,
+        uid: userData.id,
       };
+
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,
-        action: "Login - Custom",
+        action: MATOMO_ACTIONS.AUTH.LOGIN_EMAIL,
         userInfo,
       });
       trackAppStart({
         userInfo,
       });
+      setUser(userData);
+      if (!userData.isVerified && userData.email) navigation.replace("verify-email", { email: userData.email });
     } catch (error) {
       const msg = getErrorMessage(error);
-      trackEvent({
-        category: MATOMO_EVENT_CATEGORIES.AUTH,
-        action: "Login - Custom - Error",
-        name: `Login attempt failed for email: ${email} with error: ${msg}`,
-      });
+      // trackEvent({
+      //   category: MATOMO_EVENT_CATEGORIES.AUTH,
+      //   action: "Login - Custom - Error",
+      //   name: `Login attempt failed for email: ${email} with error: ${msg}`,
+      // });
 
       setGeneralError(msg);
     }

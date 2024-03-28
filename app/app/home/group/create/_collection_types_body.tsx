@@ -197,8 +197,6 @@ export default function CollectionTypesBody({
           <CButton
             title={t("save", "Tallenna")}
             variant="empty"
-            colorScheme="primary"
-            textStyle={{ color: "primary" }}
             onPress={() => {
               if (targetOnEdit.id === "") {
                 const modifiedTarget = mapCollectionTypeInfo({ name: targetOnEdit.name, category: targetOnEdit.category }, selectedTypes);

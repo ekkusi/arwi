@@ -3,16 +3,23 @@ import { getEnvironment, getAllEnvironments, getLearningObjectives, getModuleInf
 import { EducationLevel, Resolvers } from "../../types";
 import MissingDataError from "../errors/MissingDataError";
 import { mapModuleInfo } from "../utils/mappers";
+import { checkIsUserVerified } from "@/utils/auth";
+import AuthenticationError from "../errors/AuthenticationError";
 
 type TypeResolvers = Omit<Resolvers, "Query" | "Mutation">;
 
 const resolvers: TypeResolvers = {
   Teacher: {
-    groups: ({ id }, _, { dataLoaders }) => {
+    groups: ({ id }, _, { dataLoaders, user }) => {
+      if (!user) throw new AuthenticationError();
+      if (!checkIsUserVerified(user)) throw new AuthenticationError("EMAIL_NOT_VERIFIED");
       return dataLoaders.groupsByTeacherLoader.load(id);
     },
     isMPassIDConnected: async ({ mPassID }) => {
       return !!mPassID;
+    },
+    isVerified: (user) => {
+      return checkIsUserVerified(user);
     },
   },
   Group: {

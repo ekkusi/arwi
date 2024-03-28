@@ -34,9 +34,9 @@ export default function SaveAndCancelButtons({
       <CButton
         disabled={loading}
         variant="empty"
+        colorScheme="gray"
         title={cancelTitle || t("cancel", "Peruuta")}
         onPress={onCancel}
-        textStyle={{ color: "gray" }}
         {...cancelButtonProps}
       />
       <CButton

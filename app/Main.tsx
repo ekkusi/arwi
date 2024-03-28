@@ -56,7 +56,7 @@ const CURRENT_APP_VERSION = Application.nativeApplicationVersion;
 
 export default function Main() {
   const { trackAppStart, trackScreenView } = useMatomo();
-  const { authState, setUser } = useAuth();
+  const { user, setUser } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [fontsLoaded] = useFonts({
     "Aileron-Thin": require("./assets/fonts/Aileron-Thin.otf"),
@@ -78,7 +78,7 @@ export default function Main() {
 
   const { data: appMetadataResult, loading: loadingAppMetadata } = useQuery(Main_GetAppMetadata_Query);
 
-  const [getUser] = useLazyQuery(Main_GetCurrentUser_Query);
+  const [getUser] = useLazyQuery(Main_GetCurrentUser_Query, { fetchPolicy: "no-cache" });
 
   const minimumAppVersion = appMetadataResult?.getAppMetadata.minimumSupportedAppVersion || null;
 
@@ -121,13 +121,11 @@ export default function Main() {
     const previousRouteName = routeNameRef.current;
     const currentRouteName = navigationRef.current?.getCurrentRoute()?.name;
 
-    const currentUser = authState.user;
-
-    if (currentRouteName && currentUser && previousRouteName !== currentRouteName) {
+    if (currentRouteName && user && previousRouteName !== currentRouteName) {
       trackScreenView({
         name: currentRouteName,
         userInfo: {
-          uid: currentUser.id,
+          uid: user.id,
         },
       });
     }
@@ -148,7 +146,7 @@ export default function Main() {
               <GenerateFeedbacksProvider>
                 <MetadataProvider {...appMetadataResult.getAppMetadata}>
                   <NavigationContainer ref={navigationRef} onStateChange={onNavigationStateChange}>
-                    {authState.authenticated ? <HomeStack /> : <AuthStack />}
+                    {user?.isVerified ? <HomeStack /> : <AuthStack />}
                   </NavigationContainer>
                 </MetadataProvider>
               </GenerateFeedbacksProvider>

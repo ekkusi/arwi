@@ -1,6 +1,6 @@
 {
   "root": true,
-  "extends": ["airbnb", "airbnb/hooks", "airbnb-typescript", "prettier", "plugin:prettier/recommended"],
+  "extends": ["airbnb", "airbnb/hooks", "airbnb-typescript", "plugin:prettier/recommended"],
   "plugins": ["@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {

@@ -107,6 +107,8 @@ export default function ApolloProvider({ children }: { children: React.ReactNode
           for (const err of graphQLErrors) {
             switch (err.extensions.code) {
               case "UNAUTHENTICATED": {
+                console.log("UNAUTHENTICATED error caught, forwareding operation:", operation.operationName);
+
                 logout();
                 return forward(operation);
               }

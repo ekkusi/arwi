@@ -14,7 +14,7 @@ import { AuthStackParams } from "./types";
 import { useAuth } from "../../hooks-and-providers/AuthProvider";
 import { useMPassIDAuth } from "../../hooks-and-providers/mPassID";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
-import { MATOMO_EVENT_CATEGORIES } from "../../config";
+import { MATOMO_ACTIONS, MATOMO_EVENT_CATEGORIES } from "../../config";
 import { getErrorMessage } from "../../helpers/errorUtils";
 import CModal from "../../components/modals/CModal";
 
@@ -49,7 +49,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
         setUser(loginResult.payload.userData);
         trackEvent({
           category: MATOMO_EVENT_CATEGORIES.AUTH,
-          action: "Login - MPassID",
+          action: MATOMO_ACTIONS.AUTH.LOGIN_MPASSID,
           userInfo: {
             uid: loginResult.payload.userData.id,
           },
@@ -68,7 +68,7 @@ export default function LandingPage({ navigation }: NativeStackScreenProps<AuthS
       setMPassIDError(
         t("mPassID-login-error", "Jokin meni vikaan kirjautumisessa MPASSid:llä. Yritä uudelleen tai ota yhteyttä järjestelmänvalvontaan.")
       );
-      Sentry.captureException(error);
+      Sentry.captureException(error, { level: "error" });
     }
     setLoading(false);
   };

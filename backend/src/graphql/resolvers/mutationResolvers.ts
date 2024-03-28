@@ -1,8 +1,8 @@
 import { compare, hash } from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { OpenAIError } from "openai";
-import * as Sentry from "@sentry/node";
 import Mail from "nodemailer/lib/mailer";
+import * as Sentry from "@sentry/node";
 import { fixTextGrammatics, generateStudentSummary } from "../../utils/openAI";
 import ValidationError from "../errors/ValidationError";
 import { MutationResolvers } from "../../types";
@@ -69,6 +69,7 @@ import { createFeedback, updateFeedback } from "../mutationWrappers/feedback";
 import UnauthorizedError from "@/errors/UnauthorizedError";
 import OpenAIGraphQLError from "../errors/OpenAIGraphqlError";
 import { generateFeedbackPDF } from "@/utils/feedback";
+import AuthenticationError from "../errors/AuthenticationError";
 
 const resolvers: MutationResolvers<CustomContext> = {
   register: async (_, { data }, { req }) => {
@@ -84,6 +85,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     initSession(req, { ...teacher, type: "local" });
     return {
       userData: teacher,
+      type: "LOCAL",
     };
   },
   login: async (_, { email: initialEmail, password }, { prisma, req }) => {
@@ -97,8 +99,10 @@ const resolvers: MutationResolvers<CustomContext> = {
     const isValidPassword = await compare(password, matchingTeacher.passwordHash);
     if (!isValidPassword) throw wrongCredentialsError;
     initSession(req, { ...matchingTeacher, type: "local" });
+
     return {
       userData: matchingTeacher,
+      type: "LOCAL",
     };
   },
   mPassIDLogin: async (_, { code }, { req, OIDCClient }) => {
@@ -109,6 +113,7 @@ const resolvers: MutationResolvers<CustomContext> = {
       return {
         payload: {
           userData: user,
+          type: "MPASSID",
         },
         newUserCreated: isNewUser,
       };
@@ -156,6 +161,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     req.session.tokenSet = tokenSet;
     return {
       userData: updatedUser,
+      type: "MPASSID",
     };
   },
   connectLocalCredentials: async (_, { email: initialEmail, password }, { req, prisma, user }) => {
@@ -185,6 +191,7 @@ const resolvers: MutationResolvers<CustomContext> = {
     };
     return {
       userData: updatedUser,
+      type: "MPASSID",
     };
   },
   logout: async (_, __, { req, res }) => {
@@ -583,25 +590,31 @@ const resolvers: MutationResolvers<CustomContext> = {
       throw error;
     }
   },
-  generateGroupFeedback: async (_, { groupId, onlyGenerateMissing }, { dataLoaders, prisma, user }) => {
+  generateGroupFeedback: async (_, { groupId, studentIdsToGenerate }, { dataLoaders, prisma, user }) => {
     await checkAuthenticatedByGroup(user, groupId);
 
-    const groupPromise = dataLoaders.groupLoader.load(groupId);
-    // If onlyGenerateMissing is true, only get students that don't have feedback yet
+    const group = await dataLoaders.groupLoader.load(groupId);
     const studentsPromise = prisma.student.findMany({
       where: {
-        groupId,
-        feedbacks: onlyGenerateMissing
+        modules: {
+          some: {
+            id: group.currentModuleId,
+          },
+        },
+        id: studentIdsToGenerate
           ? {
-            none: {}, // This returns only students that don't have feedbacks
-          }
+              in: studentIdsToGenerate,
+            }
           : undefined,
       },
     });
 
-    const [group, students] = await Promise.all([groupPromise, studentsPromise]);
+    const modulePromise = dataLoaders.moduleLoader.load(group.currentModuleId);
 
-    const module = await dataLoaders.moduleLoader.load(group.currentModuleId);
+    const [module, students] = await Promise.all([modulePromise, studentsPromise]);
+    if (studentIdsToGenerate && studentIdsToGenerate.some((id) => !students.find((it) => it.id === id))) {
+      throw new ValidationError("Palautegenerointi epäonnistui, yksi tai useampi oppilas ei kuulu ryhmään.");
+    }
     await checkEvaluatedNonClassParticipationCollectionTypes(module);
 
     // Check if the user has enough tokens to generate feedback for all students
@@ -684,7 +697,14 @@ const resolvers: MutationResolvers<CustomContext> = {
     // If email is not verified, sent verification email
     // Safe cast after authenticated check
     if (!user!.verifiedEmails.includes(email)) {
-      sendEmailVerificationMail(email, user!.id, "feedback-generation");
+      process.nextTick(async () => {
+        try {
+          await sendEmailVerificationMail(email, user!.id, "feedback-generation");
+        } catch (error) {
+          console.error("Error sending email verification mail", error);
+          Sentry.captureException(error);
+        }
+      });
       return "EMAIL_VERIFICATION_REQUIRED";
     }
 
@@ -736,6 +756,21 @@ const resolvers: MutationResolvers<CustomContext> = {
     });
 
     return "GENERATION_STARTED_SUCCESSFULLY";
+  },
+  sendRegisterVerificationEmail: async (_, __, { user }) => {
+    if (!user) throw new AuthenticationError();
+    if (!user.email) throw new ValidationError("Et ole kirjautunut sähköpostilla. Vahvistusviestiä ei voida lähettää.");
+    const { email, id } = user;
+
+    process.nextTick(async () => {
+      try {
+        await sendEmailVerificationMail(email, id, "register");
+      } catch (error) {
+        console.error("Error sending register verification mail", error);
+        Sentry.captureException(error);
+      }
+    });
+    return true;
   },
 };
 
