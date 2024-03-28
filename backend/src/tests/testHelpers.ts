@@ -76,7 +76,7 @@ export async function createTestUser(user: CreateUserInput = TEST_USER): Promise
       email: userData.email,
       passwordHash,
       mPassID: userData.mPassID,
-      verifiedEmails: [userData.email],
+      verifiedEmails: userData.email ? [userData.email] : [],
     },
   });
   return {
@@ -263,3 +263,9 @@ export const MOCK_USER_INFO_RESPONSE: MpassIDUserInfo = {
 };
 
 export const MOCK_VALID_CODE = "validCode";
+
+export function flushPromises() {
+  return new Promise((resolve) => {
+    setImmediate(resolve);
+  });
+}
