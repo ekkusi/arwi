@@ -16,7 +16,7 @@ import { useToast } from "../../hooks-and-providers/ToastProvider";
 import CModal from "../../components/modals/CModal";
 import TextFormField from "../../components/form/TextFormField";
 import { getErrorMessage } from "../../helpers/errorUtils";
-import { MATOMO_EVENT_CATEGORIES } from "../../config";
+import { MATOMO_ACTIONS, MATOMO_EVENT_CATEGORIES } from "../../config";
 import { useMetadata } from "../../hooks-and-providers/MetadataProvider";
 import { formatDate, getFirstDayOfNextMonth } from "../../helpers/dateHelpers";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
@@ -117,7 +117,7 @@ export default function ProfileView() {
         setUser(data.connectMPassID.userData);
         trackEvent({
           category: MATOMO_EVENT_CATEGORIES.ACCOUNT_MODIFICATION,
-          action: "Sync MPassID to local credentials",
+          action: MATOMO_ACTIONS.ACCOUNT_MODIFICATION.SYNC_MPASS_TO_LOCAL,
           userInfo: {
             uid: user.id,
           },
@@ -138,7 +138,7 @@ export default function ProfileView() {
       setIsLocalLoginModalOpen(false);
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.ACCOUNT_MODIFICATION,
-        action: "Sync local credentials to MPassID",
+        action: MATOMO_ACTIONS.ACCOUNT_MODIFICATION.SYNC_LOCAL_TO_MPASSID,
         userInfo: {
           uid: user.id,
         },

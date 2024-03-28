@@ -11,6 +11,10 @@ export const MATOMO_ACTIONS = {
     VERIFY_EMAIL: "Verify Email",
     LOGOUT: "Logout",
   },
+  ACCOUNT_MODIFICATION: {
+    SYNC_MPASS_TO_LOCAL: "Sync MPassID to local credentials",
+    SYNC_LOCAL_TO_MPASSID: "Sync local credentials to MPassID",
+  },
 };
 
 export const SESSION_ID_KEY = "SESSION_ID";

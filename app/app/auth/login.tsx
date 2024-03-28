@@ -64,7 +64,6 @@ export default function LoginPage({ navigation }: NativeStackScreenProps<AuthSta
       const userInfo = {
         uid: userData.id,
       };
-      console.log("userData", userData);
 
       trackEvent({
         category: MATOMO_EVENT_CATEGORIES.AUTH,
