@@ -22,7 +22,7 @@ export type LearningObjectiveInfo = Omit<
 
 export type LearningObjectiveMinimal = Omit<LearningObjectiveInfo, "description" | "color">;
 
-export type UnmappedEnvironment = SubjectInfo["elementarySchool"]["environments_1_to_2"][number];
+export type UnmappedEnvironment = Exclude<SubjectInfo["elementarySchool"]["environments_1_to_2"], never | undefined>[number];
 
 export type MinimalEnvironment = Pick<EnvironmentInfo, "code" | "label">;
 
