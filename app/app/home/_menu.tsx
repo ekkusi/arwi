@@ -56,14 +56,14 @@ export default function HomeMenu() {
       </CButton>
       <CModal placement="left" isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} closeButton={false}>
         <CView style={{ flex: 1, width: "100%", justifyContent: "space-between", alignItems: "center", paddingVertical: "2xl" }}>
-          <CView style={{ flex: 1, width: "100%", alignItems: "flex-start", gap: "lg" }}>
+          <CView style={{ flex: 1, width: "100%", alignItems: "flex-start", gap: "2xl" }}>
             <CButton
               variant="empty"
               title={t("home", "Etusivu")}
               onPress={() => navigateAndCloseModal("home")}
               colorScheme="primary"
-              textStyle={{ fontSize: "lg" }}
-              leftIcon={<EntypoIcon name="home" size={20} color={COLORS.primary} />}
+              textStyle={{ fontSize: "xl" }}
+              leftIcon={<EntypoIcon name="home" size={23} color={COLORS.primary} />}
               style={{ gap: "xl" }}
             />
             <CButton
@@ -71,8 +71,8 @@ export default function HomeMenu() {
               colorScheme="darkgray"
               onPress={() => navigateAndCloseModal("profile")}
               title={t("profile", "Profiili")}
-              textStyle={{ fontSize: "lg", fontWeight: "500" }}
-              leftIcon={<Ionicons name="person" size={20} color={COLORS.darkgray} />}
+              textStyle={{ fontSize: "xl", fontWeight: "500" }}
+              leftIcon={<Ionicons name="person" size={23} color={COLORS.darkgray} />}
               style={{ gap: "xl" }}
             />
             <CButton
@@ -80,8 +80,8 @@ export default function HomeMenu() {
               colorScheme="darkgray"
               onPress={() => navigateAndCloseModal("archive")}
               title={t("archive", "Arkisto")}
-              textStyle={{ fontSize: "lg", fontWeight: "500" }}
-              leftIcon={<EntypoIcon name="archive" size={20} color={COLORS.darkgray} />}
+              textStyle={{ fontSize: "xl", fontWeight: "500" }}
+              leftIcon={<EntypoIcon name="archive" size={23} color={COLORS.darkgray} />}
               style={{ gap: "xl" }}
             />
           </CView>

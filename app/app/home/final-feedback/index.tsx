@@ -240,7 +240,7 @@ export default function FinalFeedback({ route, navigation }: NativeStackScreenPr
         </CView>
         <CView style={{ gap: "sm" }}>
           <CButton title={t("generate-final-feedback", "Luo loppupalaute")} onPress={generateFinalFeedback} disabled={isGeneratingDisabled} />
-          {!isGeneratingDisabled && (
+          {isGeneratingDisabled && (
             <CButton
               variant="empty"
               title={t("inspect-feedback-suggestions", "Tarkastele arvosanaehdotuksia")}
