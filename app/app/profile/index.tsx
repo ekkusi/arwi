@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import * as SecureStore from "expo-secure-store";
 import { useMatomo } from "matomo-tracker-react-native";
 import { useState } from "react";
-import { Platform } from "react-native";
 import CButton from "../../components/primitives/CButton";
 import { graphql } from "@/graphql";
 import { useAuth, useAuthenticatedUser, AuthProvider_UserInfo_Fragment } from "../../hooks-and-providers/AuthProvider";
@@ -31,12 +30,6 @@ const ProfileView_GetCurrentUserUsageData_Query = graphql(`
       id
       monthlyTokensUsed
     }
-  }
-`);
-
-const ProfileView_Logout_Mutation = graphql(`
-  mutation ProfileView_Logout {
-    logout
   }
 `);
 
@@ -75,7 +68,7 @@ const ProfileView_ConnectLocalCredentials_Mutation = graphql(
 const REDIRECT_URI = "arwi-app://profile";
 
 export default function ProfileView() {
-  const { logout, setUser } = useAuth();
+  const { setUser } = useAuth();
   const user = useAuthenticatedUser();
   const { trackEvent } = useMatomo();
   const { openToast } = useToast();
@@ -92,26 +85,12 @@ export default function ProfileView() {
 
   const { data: usageData } = useQuery(ProfileView_GetCurrentUserUsageData_Query);
 
-  const [logoutMutation, { loading, client }] = useMutation(ProfileView_Logout_Mutation);
   const [connectMPassID, { loading: connectMPassIDLoading }] = useMutation(ProfileView_ConnectMPassID_Mutation);
   const [connectLocalCredentials, { loading: connectLocalLoading }] = useMutation(ProfileView_ConnectLocalCredentials_Mutation);
 
   const { t, i18n } = useTranslation();
 
   const firstDayOfNextMonth = formatDate(getFirstDayOfNextMonth());
-
-  const handleLogout = async () => {
-    await logoutMutation();
-    await client.clearStore();
-    trackEvent({
-      category: MATOMO_EVENT_CATEGORIES.AUTH,
-      action: "Logout",
-      userInfo: {
-        uid: user.id,
-      },
-    });
-    logout();
-  };
 
   const handlePasswordChange = (text: string) => {
     if (localLoginError) setLocalLoginError(undefined);
@@ -294,9 +273,6 @@ export default function ProfileView() {
           />
         )}
       </>
-      <CView style={{ flex: 1, width: "100%", justifyContent: "flex-end", marginBottom: Platform.OS === "ios" ? "xl" : "md" }}>
-        <CButton title={t("logout", "Kirjaudu ulos")} style={{ width: "100%" }} disabled={loading} onPress={handleLogout} />
-      </CView>
     </CView>
   );
 }

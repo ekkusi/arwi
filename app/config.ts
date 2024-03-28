@@ -9,6 +9,7 @@ export const MATOMO_ACTIONS = {
     LOGIN_EMAIL: "Login - Email credentials",
     LOGIN_MPASSID: "Login - MPassID",
     VERIFY_EMAIL: "Verify Email",
+    LOGOUT: "Logout",
   },
 };
 
